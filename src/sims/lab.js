@@ -35,7 +35,7 @@ K.register('lab', function (root) {
     { id: 'rubber', label: '고무줄', set: { loss: 25, lossDir: 'up', redundancy: false, smooth: false },
       say: '<b>고무줄</b>: 내 이동 명령의 25%가 서버에 못 가고, 잃은 명령을 다시 보내지도 않습니다. 내 화면은 예측으로 이미 움직였지만 서버는 받은 명령만큼만 옮겼으므로, 빠진 명령이 확인될 때마다 내 캐릭터(파랑)가 그만큼 뒤로 끌려갑니다.' },
     { id: 'slowmo', label: '슬로우모션', set: { load: 230 },
-      say: '<b>슬로우모션</b>: 서버가 한 틱을 50ms 안에 못 끝내고 115ms씩 걸립니다. 이 서버는 틱마다 정해진 50ms만큼만 세계를 진행하므로, 세계 시간이 약 0.43배속으로 흐르고 다른 플레이어·몬스터가 모두 느리게 움직입니다. 흐른 시간만큼 한 번에 진행하는 서버였다면 속도는 그대로이고 뚝뚝 끊김·순간이동으로 보였을 것입니다.' },
+      say: '<b>슬로우모션</b>: 서버가 한 틱을 50ms 안에 못 끝내고 115ms씩 걸립니다. 이 서버는 틱마다 정해진 50ms만큼만 게임 시간을 진행하므로, 게임 시간이 약 0.43배속으로 흐르고 다른 플레이어·몬스터가 모두 느리게 움직입니다. 흐른 시간만큼 한 번에 진행하는 서버였다면 속도는 그대로이고 뚝뚝 끊김·순간이동으로 보였을 것입니다.' },
     { id: 'delay', label: '입력 지연', set: { predict: false, rtt: 350 },
       say: '<b>입력 지연</b>: 클라이언트 예측을 끄고 회선 핑을 350ms로 올렸습니다. 화면을 눌러도 명령이 서버에 갔다가 결과가 돌아올 때까지 내 캐릭터가 꿈쩍하지 않습니다.' },
     { id: 'freeze', label: '멈춤', set: { stallEvery: 4, stallMs: 1600 },
@@ -424,11 +424,11 @@ K.register('lab', function (root) {
     F = K.frame(root, {
       kicker: '렉 실험실',
       title: '서버의 실제 상태와 내 화면은 언제나 조금 다르다',
-      lead: '왼쪽은 서버가 계산한 실제 세계, 오른쪽은 내 PC가 받은 패킷으로 그려낸 화면입니다. 파랑이 나, 주황이 다른 플레이어입니다. 오른쪽 화면을 누르면 그곳으로 이동합니다. 아래 조건을 바꿔 가며 두 화면이 어떻게 어긋나는지 보세요. 흐린 점은 최근 1.4초 동안 그려진 위치로, 점 사이 간격이 곧 화면 속 속도입니다.',
+      lead: '왼쪽은 서버가 계산한 실제 게임 상태, 오른쪽은 내 PC가 받은 패킷으로 그려낸 화면입니다. 파랑이 나, 주황이 다른 플레이어입니다. 오른쪽 화면을 누르면 그곳으로 이동합니다. 아래 조건을 바꿔 가며 두 화면이 어떻게 어긋나는지 보세요. 흐린 점은 최근 1.4초 동안 그려진 위치로, 점 사이 간격이 곧 화면 속 속도입니다.',
       layout: 'stack',
       tries: [
         '위의 증상 버튼을 하나씩 눌러 보고, 아래 <b>이벤트 로그</b>와 <b>패킷 타임라인</b>에서 무슨 일이 있었는지 확인하세요.',
-        '<b>지터</b>를 100ms로 올린 뒤 <b>다른 플레이어 표시</b>를 “받은 즉시” ↔ “보간”으로 바꿔 보세요. 보간 버퍼가 지터를 흡수하는 대신 상대가 과거에 머뭅니다.',
+        '<b>지터</b>를 100ms로 올린 뒤 <b>다른 플레이어 표시</b>를 “받은 즉시” ↔ “보간”으로 바꿔 보세요. 보간 버퍼가 지터를 흡수하는 대신 상대가 과거 위치로 보입니다.',
         '<b>손실</b> 10%에서 <b>프로토콜</b>을 UDP ↔ TCP로 바꿔 보세요. UDP는 보간과 입력 중복 전송이 빈자리를 메워 대부분 가려지고, TCP는 잃은 패킷을 기다리느라 멈췄다 몰아칩니다.',
         '<b>엄격한 이동 검증</b>을 켜고 지터를 80ms로 올려 보세요. 명령이 몰려 도착한 틱마다 서버가 이동을 잘라 고무줄이 생깁니다.',
         '<b>끊김 길이</b>를 타임아웃보다 길게 하고 <b>지금 회선 끊기</b>를 눌러 보세요. 접속이 끊깁니다. 타임아웃보다 조금 짧게 하면, TCP에서는 회선이 돌아온 뒤에도 재전송 대기 때문에 한참 더 멈춰 있다가 끊기기도 합니다.',
@@ -494,7 +494,7 @@ K.register('lab', function (root) {
     ctl.proto = K.choice(g2, { label: '프로토콜', value: P.proto, options: [['udp', 'UDP (잃으면 그만)'], ['tcp', 'TCP (재전송·순서 보장)']], onChange: v => set('proto', v) });
     ctl.timeout = K.slider(g2, { label: '접속 끊김 판정(타임아웃)', min: 1000, max: 15000, step: 500, value: P.timeout, fmt: v => K.ms(v), onInput: v => set('timeout', v) });
     const g3 = K.group(F.controls, '서버');
-    ctl.tick = K.slider(g3, { label: '틱레이트', min: 2, max: 60, step: 1, value: P.tick, unit: '/초', onInput: v => set('tick', v), hint: '서버가 1초에 세계를 몇 번 계산하고 패킷을 보내는지' });
+    ctl.tick = K.slider(g3, { label: '틱레이트', min: 2, max: 60, step: 1, value: P.tick, unit: '/초', onInput: v => set('tick', v), hint: '서버가 1초에 게임 상태를 몇 번 계산하고 패킷을 보내는지' });
     ctl.load = K.slider(g3, { label: '서버 부하 (틱 예산 대비)', min: 10, max: 300, step: 5, value: P.load, unit: '%', onInput: v => set('load', v), hint: '100%를 넘으면 한 틱을 제시간에 못 끝냅니다.' });
     ctl.stallEvery = K.slider(g3, { label: '주기적 서버 멈춤', min: 0, max: 10, step: 0.5, value: P.stallEvery, fmt: v => (v ? v + '초마다' : '끔'), onInput: v => { set('stallEvery', v); S.nextStallAt = v > 0 ? t + 800 : Infinity; } });
     ctl.stallMs = K.slider(g3, { label: '멈춤 길이', min: 100, max: 4000, step: 50, value: P.stallMs, fmt: v => K.ms(v), onInput: v => set('stallMs', v) });
@@ -575,7 +575,7 @@ K.register('lab', function (root) {
       body(S.rem.x, S.rem.y, Cc.s2, '상대');
       body(S.me.x, S.me.y, Cc.s1, '나');
       if (t < S.stallUntil) banner(co, '서버 멈춤', 'bad');
-      else if (P.load > 100) banner(co, `과부하 · 세계 ${K.n(100 / P.load, 2)}배속`, 'warn');
+      else if (P.load > 100) banner(co, `과부하 · 게임 시간 ${K.n(100 / P.load, 2)}배속`, 'warn');
     } else {
       // 목표 지점
       const tx = X(C.target.x), ty = Y(C.target.y);
@@ -766,7 +766,7 @@ K.register('lab', function (root) {
     const E = kind => recentEvent(kind, 1600);
     const afterStall = P.catchup === 'catchup' && stalls.length > 0 && t - stalls[stalls.length - 1].to < 2500;
     if (C.disc) {
-      msg = `${K.flag('bad')}<b>접속 끊김</b>: ${C.disc.outage ? '회선이 끊겨 타임아웃(' + K.ms(P.timeout) + ') 동안 서버와 내 PC가 서로 패킷을 하나도 받지 못했습니다. 먼저 알아챈 쪽이 연결을 정리합니다.' : C.disc.reason === 'server' ? '서버가 내 입력을 타임아웃(' + K.ms(P.timeout) + ') 동안 한 번도 받지 못해 나를 내보냈습니다. 내 PC가 오래 멈췄거나(로딩) 업로드 경로가 막힌 경우입니다.' : '서버 패킷이 타임아웃(' + K.ms(P.timeout) + ') 동안 하나도 오지 않아 게임이 연결을 포기했습니다.'} 왼쪽 서버 화면을 보면 내 캐릭터가 그대로 서 있습니다. 서버도 곧 알아채지만, 그 전에 다시 접속하면 “이미 접속 중” 오류가 날 수 있습니다.`;
+      msg = `${K.flag('bad')}<b>접속 끊김</b>: ${C.disc.outage ? '회선이 끊겨 타임아웃(' + K.ms(P.timeout) + ') 동안 서버와 내 PC가 서로 패킷을 하나도 받지 못했습니다. 먼저 감지한 쪽이 연결을 정리합니다.' : C.disc.reason === 'server' ? '서버가 내 입력을 타임아웃(' + K.ms(P.timeout) + ') 동안 한 번도 받지 못해 나를 내보냈습니다. 내 PC가 오래 멈췄거나(로딩) 업로드 경로가 막힌 경우입니다.' : '서버 패킷이 타임아웃(' + K.ms(P.timeout) + ') 동안 하나도 오지 않아 게임이 연결을 포기했습니다.'} 왼쪽 서버 화면을 보면 내 캐릭터가 그대로 서 있습니다. 서버도 곧 감지하지만, 그 전에 다시 접속하면 “이미 접속 중” 오류가 날 수 있습니다.`;
     } else if (t < C.hitchUntil) {
       msg = `${K.flag('warn')}<b>멈춤 (내 PC 쪽)</b>: 게임이 로딩·GC 같은 일로 화면을 못 그리고 있습니다. 패킷은 계속 도착해 수신 버퍼에 쌓이고, 풀리는 순간 한꺼번에 처리되며 상대가 튑니다. 회선 핑(게임 밖에서 잰 핑)은 멀쩡한데 화면이 멈춘다면 이 경우를 의심하세요. 게임 안 핑 표시는 게임 루프에서 재는 경우가 많아 이때 함께 튈 수 있습니다.`;
     } else if (wait > 400) {
@@ -779,7 +779,7 @@ K.register('lab', function (root) {
     } else if (E('teleport')) {
       msg = `${K.flag('bad')}<b>${afterStall ? '멈춤 뒤 순간이동' : '순간이동'}</b>: ${E('teleport').text}. ${afterStall ? '서버가 멈췄다 풀리면서 밀린 틱을 몰아서 계산해, 그 사이 이동한 거리를 한 프레임에 건너뛰었습니다.' : '패킷이 한동안 끊겼거나(손실·회선 끊김·서버 멈춤) 늦게 와서, 그 사이 이동한 거리를 한 프레임에 건너뛰었습니다.'}${P.mode === 'extrap' ? ' 외삽은 모서리에서 방향이 바뀐 걸 모르고 직진하다 되돌아오기도 합니다.' : ''}`;
     } else if (P.load > 100) {
-      msg = `${K.flag('warn')}<b>슬로우모션</b>: 서버가 틱 하나에 예산의 ${P.load}%를 씁니다. 1초에 ${tickRate}번만 계산하고, 이 실험의 서버는 틱마다 정해진 ${K.ms(1000 / P.tick)}만큼만 세계를 진행하므로 세계가 ${K.n(Math.min(1, 100 / P.load), 2)}배속으로 흐릅니다. 다른 플레이어와 몬스터가 모두 같이 느려집니다(흐른 시간만큼 한 번에 진행하는 서버라면 속도는 그대로이고 뚝뚝 끊김·순간이동으로 보입니다). 회선은 멀쩡하니 게임 밖에서 잰 핑은 그대로이고, 게임 안 핑은 서버 처리 대기가 섞여 있으면 조금 오를 수 있습니다.`;
+      msg = `${K.flag('warn')}<b>슬로우모션</b>: 서버가 틱 하나에 예산의 ${P.load}%를 씁니다. 1초에 ${tickRate}번만 계산하고, 이 실험의 서버는 틱마다 정해진 ${K.ms(1000 / P.tick)}만큼만 게임 시간을 진행하므로 게임 시간이 ${K.n(Math.min(1, 100 / P.load), 2)}배속으로 흐릅니다. 다른 플레이어와 몬스터가 모두 같이 느려집니다(흐른 시간만큼 한 번에 진행하는 서버라면 속도는 그대로이고 뚝뚝 끊김·순간이동으로 보입니다). 회선은 멀쩡하니 게임 밖에서 잰 핑은 그대로이고, 게임 안 핑은 서버 처리 대기가 섞여 있으면 조금 오를 수 있습니다.`;
     } else if (fps < 25) {
       msg = `${K.flag('warn')}<b>뚝뚝 끊김 (화면)</b>: 네트워크는 멀쩡하지만 화면을 초당 ${fps}번만 그립니다. 궤적 점 간격이 넓고 일정합니다.`;
     } else if (underRatio > 0.25 && (P.mode === 'interp' || P.mode === 'queue')) {

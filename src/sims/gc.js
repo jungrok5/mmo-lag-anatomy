@@ -8,7 +8,7 @@ K.register('gc', function (root) {
     tries: [
       '<b>큰 힙 + 전체 멈춤</b>을 눌러 보세요. 32GB 힙에 살아 있는 데이터가 8GB면 GC 한 번에 2초 넘게 서버 전체가 멈춥니다.',
       '같은 상태에서 <b>GC 방식</b>을 “세대별”로 바꿔 보세요. 짧은 GC가 자주 일어나고, 틱 막대는 예산 안에 머뭅니다.',
-      '<b>이벤트 중 할당 폭주</b>를 눌러 보세요. GC가 더 자주 필요해지고, 가끔 오는 전체 GC가 1초 넘게 멈춥니다.',
+      '<b>이벤트 중 할당 폭주</b>를 눌러 보세요. GC가 더 자주 필요해지고, 가끔 오는 Full GC가 1초 넘게 멈춥니다.',
       '<b>동시 GC</b>를 켜고 <b>초당 할당량</b>을 1,500MB까지 올려 보세요. GC가 할당을 따라잡지 못하면 결국 전체 멈춤으로 넘어갑니다.',
     ],
   });
@@ -142,7 +142,7 @@ K.register('gc', function (root) {
     if (P.mode === 'gen') {
       const Iy = young() / A, py = youngPause() + 1;
       const If = (Hm * 0.9 - young() - Lm) / (A * 0.02);
-      return { interval: Iy, sub: `전체 GC는 ${fmtDur(If)}마다`, maxP: fp + py, perMin: (py * 60) / Iy + (fp * 60) / If, fullI: If, youngP: py };
+      return { interval: Iy, sub: `Full GC는 ${fmtDur(If)}마다`, maxP: fp + py, perMin: (py * 60) / Iy + (fp * 60) / If, fullI: If, youngP: py };
     }
     const D = markDur() / 1000;
     const head = Hm * 0.98 - Hm * 0.75;
@@ -195,7 +195,7 @@ K.register('gc', function (root) {
     const trig = P.mode === 'conc' ? 0.75 : 0.9;
     const trigV = P.mode === 'gen' ? H * 0.9 - young() / GB : H * trig;
     K.hline(ctx, sc, trigV, { color: C.muted, dash: [4, 3] });
-    const tl = P.mode === 'conc' ? '동시 GC 시작 75%' : P.mode === 'gen' ? '전체 GC 시작선' : 'GC 시작 90%';
+    const tl = P.mode === 'conc' ? '동시 GC 시작 75%' : P.mode === 'gen' ? 'Full GC 시작선' : 'GC 시작 90%';
     K.text(ctx, tl, box.x + 6, sc.y(trigV) + 9, { size: 10.5, color: C.muted });
     // 사용량 선
     ctx.save();
@@ -275,7 +275,7 @@ K.register('gc', function (root) {
     ctx.fillRect(box.x + box.w - lw, yb - 16, lw, 14);
     K.text(ctx, lab, box.x + box.w - 5, yb - 9, { align: 'right', size: 10.5, weight: 600, color: C.badInk });
   }
-  const evName = { full: '전체 GC', fallback: '전체 멈춤으로 전환', minor: 'Young GC', mark: '동시 GC 시작', markEnd: '동시 GC 끝' };
+  const evName = { full: 'Full GC', fallback: '전체 멈춤으로 전환', minor: 'Young GC', mark: '동시 GC 시작', markEnd: '동시 GC 끝' };
   K.hover(hcv, x => {
     const box = heapBox();
     const rel = ((x - box.x) / box.w) * WIN - WIN;
@@ -319,10 +319,10 @@ K.register('gc', function (root) {
       const absorb = busy
         ? `금방 버려지는 객체가 대부분이라 빨리 끝나지만, 지금은 틱 자체가 바빠(평소 약 ${K.ms(baseWork())}) GC가 겹친 틱은 예산 50ms를 살짝 넘습니다. 그때마다 짧게 <b>뚝뚝 끊김</b>이 생깁니다.`
         : '금방 버려지는 객체가 대부분이라 빨리 끝나고, 틱 예산 안에 흡수됩니다.';
-      return `${K.flag(st)} <b>세대별</b> GC는 새로 만든 객체만 모아 두는 작은 영역(Young 영역 ${K.n(young() / GB, 1)}GB)을 <b>${fmtDur(a.interval)}마다 ${K.ms(a.youngP)}</b>씩 짧게 수거합니다. ${absorb} 다만 GC에서 살아남은 2%가 Old 영역에 쌓이면 <b>${fmtDur(a.fullI)}마다</b> 전체 GC가 필요하고, 그때는 <b>${K.ms(a.maxP)}</b> 동안 <b>멈춤</b>, 이어서 <b>몰아치기</b>가 옵니다. ${who} ${st === 'good' ? '' : fix}`;
+      return `${K.flag(st)} <b>세대별</b> GC는 새로 만든 객체만 모아 두는 작은 영역(Young 영역 ${K.n(young() / GB, 1)}GB)을 <b>${fmtDur(a.interval)}마다 ${K.ms(a.youngP)}</b>씩 짧게 수거합니다. ${absorb} 다만 GC에서 살아남은 2%가 Old 영역에 쌓이면 <b>${fmtDur(a.fullI)}마다</b> Full GC가 필요하고, 그때는 <b>${K.ms(a.maxP)}</b> 동안 <b>멈춤</b>, 이어서 <b>몰아치기</b>가 옵니다. ${who} ${st === 'good' ? '' : fix}`;
     }
     if (a.fallback) {
-      return `${K.flag('bad')} <b>동시 수행</b> GC는 게임이 도는 동안 별도 스레드에서 메모리를 회수하지만, 초당 ${K.n(P.A)}MB를 새로 쓰면 GC(${K.n(markDur() / 1000, 1)}초)가 끝나기 전에 힙이 가득 찹니다. 결국 전체 멈춤으로 넘어가 <b>${K.ms(fp)}</b> 동안 서버가 멈춥니다(<b>멈춤</b> 뒤 <b>몰아치기</b>). 실제 GC마다 동작은 달라서, G1은 전체 GC로 넘어가고 ZGC는 메모리를 요청한 스레드를 GC가 끝날 때까지 멈춥니다. 어느 쪽이든 게임 스레드가 멈춥니다. ${who} ${fix}`;
+      return `${K.flag('bad')} <b>동시 수행</b> GC는 게임이 도는 동안 별도 스레드에서 메모리를 회수하지만, 초당 ${K.n(P.A)}MB를 새로 쓰면 GC(${K.n(markDur() / 1000, 1)}초)가 끝나기 전에 힙이 가득 찹니다. 결국 전체 멈춤으로 넘어가 <b>${K.ms(fp)}</b> 동안 서버가 멈춥니다(<b>멈춤</b> 뒤 <b>몰아치기</b>). 실제 GC마다 동작은 달라서, G1은 Full GC로 넘어가고 ZGC는 메모리를 요청한 스레드를 GC가 끝날 때까지 멈춥니다. 어느 쪽이든 게임 스레드가 멈춥니다. ${who} ${fix}`;
     }
     const work = baseWork();
     const slow = work * 1.25;

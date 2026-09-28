@@ -15,7 +15,7 @@ K.register('windows', function (root) {
   const GENRES = [
     { label: '탭 타겟 레이드', W: 2000, sched: 'arrive', judge: 'now', say: '레이드 보스는 1.5~3초 예고가 흔합니다. 핑이 꽤 높아도 반응할 시간이 충분합니다.' },
     { label: '액션 MMO 회피', W: 700, sched: 'arrive', judge: 'now', say: '0.7초 예고라도 패킷이 늦게 오고 입력이 늦게 가면 여유가 금방 사라집니다.' },
-    { label: '빠른 공격 패링', W: 450, sched: 'arrive', judge: 'now', say: '0.45초 만에 들어오는 빠른 공격을 보고 패링하는 경우입니다. 사람 반응 0.25초를 빼면 0.2초만 남아, 핑이 조금만 있어도 모자랍니다. 박자를 외워 미리 누르는 패링은 반응 시간이 들지 않습니다. 대신 판정 시점이 네트워크가 먹는 시간만큼 밀려 그만큼 일찍 눌러야 하고, 지터만큼 창이 좁아집니다.' },
+    { label: '빠른 공격 패링', W: 450, sched: 'arrive', judge: 'now', say: '0.45초 만에 들어오는 빠른 공격을 보고 패링하는 경우입니다. 사람 반응 0.25초를 빼면 0.2초만 남아, 핑이 조금만 있어도 모자랍니다. 타이밍을 외워 미리 누르는 패링은 반응 시간이 들지 않습니다. 대신 판정 시점이 네트워크가 쓰는 시간만큼 밀려 그만큼 일찍 눌러야 하고, 지터만큼 판정 구간이 좁아집니다.' },
     { label: '격투 게임 가드', W: 400, sched: 'arrive', judge: 'roll', say: '격투 게임은 롤백으로 내 입력을 누른 프레임 그대로 반영합니다(이 실험은 입력 지연 0프레임으로 가정). 대신 상대 공격은 핑의 절반만큼 늦게 보이고 앞부분이 잘려 나타나서, 보고 막을 시간이 그만큼 줄어듭니다. 0.25초보다 빠른 공격은 핑이 0이어도 보고 막을 수 없어 미리 읽고 막아야 합니다.' },
     { label: '리듬 게임', W: 1500, sched: 'sched', judge: 'client', say: '리듬 게임은 박자를 미리 알고(예약), 판정도 내 기기에서 합니다. 노트가 1초 넘게 미리 보여 반응할 시간이 넉넉하고, 핑이 1초여도 판정에는 영향이 없습니다. 판정 구간(±0.05초 안팎)은 박자를 맞추는 정확도라서 반응 시간과 상관이 없습니다.' },
   ];
@@ -29,7 +29,7 @@ K.register('windows', function (root) {
   const preset = K.presets(F, GENRES.map(g => ({ label: g.label, apply() { sW.set(g.W, false); cSched.set(g.sched, false); cJudge.set(g.judge, false); Object.assign(P, { W: g.W, sched: g.sched, judge: g.judge }); genreSay = g.say; restart(); } })), '장르');
   let genreSay = '';
   const g1 = K.group(F.controls, '게임 규칙');
-  const sW = K.slider(g1, { label: '예고 시간 (반응해야 하는 창)', min: 100, max: 2500, step: 10, value: P.W, fmt: v => K.ms(v), onInput: v => { P.W = v; genreSay = ''; preset.clear(); restart(); } });
+  const sW = K.slider(g1, { label: '예고 시간 (반응해야 하는 구간)', min: 100, max: 2500, step: 10, value: P.W, fmt: v => K.ms(v), onInput: v => { P.W = v; genreSay = ''; preset.clear(); restart(); } });
   const g2 = K.group(F.controls, '회선·서버');
   K.slider(g2, { label: '핑(왕복)', min: 0, max: 400, step: 10, value: P.rtt, unit: 'ms', onInput: v => { P.rtt = v; } });
   K.slider(g2, { label: '보간 버퍼', min: 0, max: 250, step: 10, value: P.interp, unit: 'ms', onInput: v => { P.interp = v; } });
@@ -43,7 +43,7 @@ K.register('windows', function (root) {
     hint: '이 실험의 지연 보상은 최대 250ms까지 되감습니다(게임마다 0.2~1초). 클라이언트 판정은 내 화면에서 피했으면 성공입니다. 롤백은 내 입력을 누른 프레임에 반영하지만, 상대 동작을 늦게 본 시간은 돌려받지 못합니다.' });
   K.choice(g4, { label: '관찰 속도', value: P.speed, options: [[1, '1배'], [0.5, '0.5배'], [0.25, '0.25배']], onChange: v => { P.speed = +v; } });
 
-  const stLost = K.stat(F.stats, { label: '네트워크가 먹는 시간' });
+  const stLost = K.stat(F.stats, { label: '네트워크가 쓰는 시간' });
   const stMargin = K.stat(F.stats, { label: '남는 여유' });
   const stRes = K.stat(F.stats, { label: '결과' });
   const stMax = K.stat(F.stats, { label: '피할 수 있는 최대 핑' });
@@ -249,9 +249,9 @@ K.register('windows', function (root) {
     let msg = genreSay ? genreSay + ' ' : '';
     if (p.margin < 0) {
       msg = `${K.flag('bad')}${msg}예고 ${K.ms(P.W)} 중 네트워크가 ${K.ms(Math.max(0, net))}, 사람 반응이 ${K.ms(P.react)}를 씁니다. <b>${K.ms(-p.margin)} 모자라서 실력과 상관없이 맞습니다</b>. 플레이어는 “분명 피했는데 맞았다”(씹힘·롤백)고 느낍니다.`;
-      if (P.judge === 'now') msg += ' 지연 보상이나 예고 예약으로 네트워크 몫을 줄일 수 있습니다.';
+      if (P.judge === 'now') msg += ' 지연 보상이나 예고 예약으로 네트워크가 쓰는 시간을 줄일 수 있습니다.';
     } else if (p.margin < 100) {
-      msg = `${K.flag('warn')}${msg}아슬아슬합니다. 여유가 ${K.ms(p.margin)}뿐이라 핑이 조금만 흔들려도 억울한 피격이 생깁니다.`;
+      msg = `${K.flag('warn')}${msg}아슬아슬합니다. 여유가 ${K.ms(p.margin)}뿐이라 핑이 조금만 튀어도 억울한 피격이 생깁니다.`;
     } else {
       msg = `${K.flag('good')}${msg}여유가 ${K.ms(p.margin)} 남습니다. 이 게임은 핑 ${Number.isFinite(mp) ? K.ms(mp) : '1초 넘게'}까지 버팁니다.`;
     }

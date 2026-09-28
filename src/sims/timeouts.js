@@ -3,14 +3,14 @@
 K.register('timeouts', function (root) {
   const F = K.frame(root, {
     kicker: '레이어 5 · 네트워크 장비',
-    title: '가만히 있으면 접속이 끊기는 이유: 타임아웃 사다리',
-    lead: '퀘스트 글을 읽거나 마을에 세워 두는 동안, 조용한 곳(로비·채팅 서버·한적한 사냥터)에서는 연결에 패킷이 거의 지나가지 않습니다. 길 위의 공유기·방화벽·로드밸런서는 한동안 조용한 연결을 “끝난 것”으로 보고 기억에서 지웁니다. 각 장비의 타이머가 차오르는 모습을 빨리 감기로 보세요.',
+    title: '가만히 있으면 접속이 끊기는 이유: 장비별 유휴 타임아웃',
+    lead: '퀘스트 글을 읽거나 마을에 세워 두는 동안, 조용한 곳(로비·채팅 서버·한적한 사냥터)에서는 연결에 패킷이 거의 지나가지 않습니다. 경로상의 공유기·방화벽·로드밸런서는 한동안 패킷이 없는 연결을 끝난 것으로 보고 연결 테이블(장비가 관리하는 연결 목록)에서 지웁니다. 각 장비의 타이머가 차오르는 모습을 빨리 감기로 보세요.',
     tries: [
-      '<b>서버 무응답 판정</b>을 “끔”으로 내려 보세요. 공유기가 60초에 몰래 연결을 지우지만 서버는 모릅니다. 유령 접속입니다.',
+      '<b>서버 무응답 판정</b>을 “끔”으로 내려 보세요. 공유기가 60초에 알리지 않고 연결을 지우지만 서버는 모릅니다. 유령 접속입니다.',
       '<b>하트비트 간격</b>을 25초로 올려 보세요. 하트비트가 지나갈 때마다 모든 타이머가 0으로 돌아가 아무도 끊지 않습니다.',
-      '<b>프로토콜</b>을 TCP로 바꾸고 하트비트와 서버 무응답 판정을 끈 채 <b>로드밸런서</b>를 60초로 줄여 보세요. 범인이 로드밸런서로 바뀝니다.',
+      '<b>프로토콜</b>을 TCP로 바꾸고 하트비트와 서버 무응답 판정을 끈 채 <b>로드밸런서</b>를 60초로 줄여 보세요. 연결을 끊는 장비가 로드밸런서로 바뀝니다.',
       '<b>모바일 백그라운드</b> 프리셋을 눌러 보세요. 하트비트 간격이 짧아도 앱이 멈추면 소용이 없습니다.',
-      '<b>회사 방화벽</b> 프리셋에서 <b>짧은 keepalive</b>를 켜 보세요. 운영체제가 60초마다 보내는 확인 패킷이 장비들을 깨워 둡니다.',
+      '<b>회사 방화벽</b> 프리셋에서 <b>짧은 keepalive</b>를 켜 보세요. 운영체제가 60초마다 보내는 확인 패킷이 장비들의 타이머를 초기화합니다.',
     ],
     layout: 'side',
   });
@@ -111,7 +111,7 @@ K.register('timeouts', function (root) {
 .to-log .fut{opacity:.45}
 `);
   const playRow = K.el('div', { class: 'to-play' });
-  const logEl = K.el('div', { class: 'log to-log', 'aria-label': '사건 기록' });
+  const logEl = K.el('div', { class: 'log to-log', 'aria-label': '이벤트 로그' });
   F.stage.append(playRow, logEl);
   let ph = K.reducedMotion ? MAXT : 0, playing = !K.reducedMotion;
   const bPlay = K.button(playRow, { label: playing ? '일시정지' : '재생', kind: 'small', onClick: () => { if (ph >= MAXT) ph = 0; playing = !playing; syncBtn(); } });
@@ -126,7 +126,7 @@ K.register('timeouts', function (root) {
     P.proto = v; changed();
   } });
   const cLink = K.choice(g1, { label: '연결 방식', value: P.link, options: [['home', '유선·와이파이'], ['mobile', '모바일']], onChange: v => { P.link = v; changed(); } });
-  const tBg = K.toggle(g1, { label: '백그라운드 전환 (모바일)', value: P.bg, onChange: v => { P.bg = v; changed(); }, hint: '게임 루프에서 하트비트를 보내면 앱을 내리는 즉시 멈춥니다(유니티 등 엔진은 내리면 루프를 세움). 이 실험은 하트비트를 따로 보내는 네트워크 스레드가 있어, OS가 앱을 얼리는 10초 뒤까지 버틴다고 둡니다(안드로이드 14 이상 약 10초, iOS는 몇 초~몇십 초).' });
+  const tBg = K.toggle(g1, { label: '백그라운드 전환 (모바일)', value: P.bg, onChange: v => { P.bg = v; changed(); }, hint: '게임 루프에서 하트비트를 보내면 앱을 내리는 즉시 멈춥니다(유니티 등 엔진은 내리면 루프를 멈춤). 이 실험은 하트비트를 따로 보내는 네트워크 스레드가 있어, OS가 앱을 일시 정지하는 10초 뒤까지 버틴다고 둡니다(안드로이드 14 이상 약 10초, iOS는 몇 초~몇십 초).' });
   const tFw = K.toggle(g1, { label: '회사·PC방 방화벽 거침', value: P.fw, onChange: v => { P.fw = v; changed(); }, hint: '이 실험 값은 UDP 2분, TCP 5분입니다(TCP를 짧게 설정한 곳). 기본값은 장비마다 달라 UDP 30초~3분, TCP 30분~1시간이 흔합니다.' });
   const g2 = K.group(F.controls, '클라이언트');
   const sHb = K.slider(g2, { label: '하트비트 간격', min: 0, max: 300, step: 5, value: P.hb, fmt: v => (v ? fmtT(v) : '끔'), onInput: v => { P.hb = v; changed(); }, hint: '하트비트: 할 일이 없어도 “살아 있어요”라고 보내는 작은 패킷' });
@@ -147,7 +147,7 @@ K.register('timeouts', function (root) {
   ]);
 
   const stCut = K.stat(F.stats, { label: '끊기는 시점' });
-  const stWho = K.stat(F.stats, { label: '범인' });
+  const stWho = K.stat(F.stats, { label: '끊은 장비' });
   const stSrv = K.stat(F.stats, { label: '서버가 아는 시점' });
   const stGhost = K.stat(F.stats, { label: '유령 접속 위험' });
 
@@ -327,7 +327,7 @@ K.register('timeouts', function (root) {
       else if (l.key !== 'srv') ev.push([l.E, `${l.name}도 뒤늦게 이 연결을 지움`, '']);
     });
     if (lostHb != null) ev.push([lostHb, '다음 하트비트가 나갔지만 서버에 닿지 못함', 'warn']);
-    if (A.kaFail) ev.push([A.kaFail.p1, '서버의 keepalive 확인 패킷에 답이 없음. 몇 번 더 물어봄', 'warn']);
+    if (A.kaFail) ev.push([A.kaFail.p1, '서버의 keepalive 확인 패킷에 응답이 없음. 몇 번 더 재시도', 'warn']);
     if (A.culprit && A.culprit.key !== 'srv') ev.push([A.notice, Number.isFinite(A.notice) ? '서버가 끊김을 알아채고 캐릭터를 정리' : '서버는 끝까지 모름. 캐릭터가 남아 있음', Number.isFinite(A.notice) ? '' : 'bad']);
     if (!A.culprit) ev.push([MAXT, '10분 동안 아무도 끊지 않음', '']);
     return ev.sort((a, b) => a[0] - b[0]);
@@ -364,8 +364,8 @@ K.register('timeouts', function (root) {
       return `${K.flag('bad')}${why} <b>${fmtT(A.Tc)}</b>에 <b>게임 서버</b>가 플레이어를 응답 없음으로 보고 내보냈습니다. 가만히 있던 플레이어가 다시 움직이면 접속 끊김 화면이 뜹니다. 서버가 직접 끊었으니 유령 접속은 남지 않습니다. ` +
         (bgStop ? '백그라운드에서는 하트비트를 보낼 수 없으니, 복귀하면 자동으로 빠르게 재접속하는 흐름을 만들어 두어야 합니다.' : `<b>해결:</b> 하트비트를 가장 짧은 타임아웃의 절반 이하, 예를 들어 ${fmtT(rec)}마다 보내세요.`);
     }
-    let s = `${K.flag('bad')}${why} <b>${fmtT(A.Tc)}</b>에 <b>${c.name}</b>${ga(c.name).slice(c.name.length)} 이 연결을 기억에서 지웠습니다. 플레이어는 가만히 있다가 다시 움직이는 순간 반응이 없다가 <b>접속 끊김</b>을 겪습니다. `;
-    if (A.ghost) s += `그런데 서버는 ${Number.isFinite(A.notice) ? `${fmtT(A.notice - A.Tc)} 동안(${A.noticeBy === 'ka' ? 'TCP keepalive 확인이 실패할 때까지' : '무응답 판정까지'})` : '끝까지'} 이 사실을 모릅니다. 서버에는 캐릭터가 그대로 남아(유령 접속) 재접속하면 “이미 접속 중” 오류가 나고, 필드에 멍하니 선 캐릭터가 공격받기도 합니다. `;
+    let s = `${K.flag('bad')}${why} <b>${fmtT(A.Tc)}</b>에 <b>${c.name}</b>${ga(c.name).slice(c.name.length)} 이 연결을 연결 테이블에서 지웠습니다. 플레이어는 가만히 있다가 다시 움직이는 순간 반응이 없다가 <b>접속 끊김</b>을 겪습니다. `;
+    if (A.ghost) s += `그런데 서버는 ${Number.isFinite(A.notice) ? `${fmtT(A.notice - A.Tc)} 동안(${A.noticeBy === 'ka' ? 'TCP keepalive 확인이 실패할 때까지' : '무응답 판정까지'})` : '끝까지'} 이 사실을 모릅니다. 서버에는 캐릭터가 그대로 남아(유령 접속) 재접속하면 “이미 접속 중” 오류가 나고, 필드에 가만히 선 캐릭터가 공격받기도 합니다. `;
     else s += `서버는 ${fmtT(A.notice)}에 ${A.noticeBy === 'ka' ? 'TCP keepalive 확인으로' : '무응답 판정으로'} 알아채고 캐릭터를 정리합니다. `;
     s += bgStop ? '백그라운드에서는 하트비트를 보낼 수 없으니, 복귀하면 자동 재접속하고 서버는 짧은 무응답 판정으로 캐릭터를 정리해야 합니다.'
       : `<b>해결:</b> 하트비트를 가장 짧은 타임아웃(${m.name} ${fmtT(m.T)})의 절반 이하, 예를 들어 ${fmtT(rec)}마다 보내고, 서버도 무응답 판정을 켜 두세요.`;

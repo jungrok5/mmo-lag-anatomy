@@ -49,7 +49,7 @@ K.register('dbpool', function (root) {
   const sPool = K.slider(g2, { label: '커넥션 풀 크기', min: 1, max: 200, value: P.pool, unit: '개', onInput: v => { P.pool = v; ensurePool(); }, hint: '게임 서버가 DB에 미리 열어 둔 연결 수입니다.' });
   const cQ = K.choice(g2, {
     label: '쿼리 방식', value: P.query, options: [['idx', '인덱스 있음 (2ms)'], ['scan', '인덱스 없음 (풀 스캔 150ms)']],
-    onChange: v => { P.query = v; }, hint: '인덱스 = 책 뒤의 색인. 없으면 표 전체를 처음부터 훑습니다(풀 스캔).',
+    onChange: v => { P.query = v; }, hint: '인덱스 = 원하는 행을 바로 찾도록 미리 정렬해 둔 자료. 없으면 테이블 전체를 처음부터 읽습니다(풀 스캔).',
   });
   const sCores = K.slider(g2, { label: 'DB CPU 코어', min: 2, max: 64, step: 2, value: P.cores, unit: '개', onInput: v => { P.cores = v; }, hint: '동시에 도는 쿼리가 코어보다 많으면 모두가 그만큼 느려집니다.' });
   const g3 = K.group(F.controls, '핫 로우 (여러 요청이 고치는 행)');
@@ -313,11 +313,11 @@ K.register('dbpool', function (root) {
       let why;
       if (cpuUtil >= 0.9) {
         why = `<b>DB CPU가 모자랍니다.</b> 쿼리 한 건이 CPU를 ${base}ms씩 쓰는데 1초에 ${K.n(P.rate)}건이면 코어 ${P.cores}개가 감당할 양의 <b>${K.n(cpuUtil, 1)}배</b>입니다.` +
-          (P.query === 'scan' ? ' 인덱스(책의 색인)가 없어 표 전체를 처음부터 훑고 있습니다(풀 스캔).' : '') +
-          ' 동시에 도는 쿼리가 코어보다 많아 모두가 같이 느려지고, 느려진 쿼리가 커넥션을 오래 붙잡아 대기열이 끝없이 늘어납니다.';
+          (P.query === 'scan' ? ' 인덱스가 없어 테이블 전체를 처음부터 읽고 있습니다(풀 스캔).' : '') +
+          ' 동시에 도는 쿼리가 코어보다 많아 모두가 같이 느려지고, 느려진 쿼리가 커넥션을 오래 점유해 대기열이 끝없이 늘어납니다.';
       } else if (lockUtil >= 0.9 && P.hot > 0) {
         why = `<b>핫 로우 하나에 요청이 몰렸습니다.</b> 같은 행을 고치는 요청이 1초에 ${K.n(hotRate)}건인데, 잠금은 한 번에 하나만 쥘 수 있어 1초에 약 ${K.n(lockCap)}건만 지나갑니다.` +
-          (lw ? ` 잠금을 기다리는 요청도 커넥션을 붙잡고 있어서, 커넥션 ${P.pool}개 중 <b>${lw}개</b>가 잠금 대기에 묶였고 평범한 요청까지 기다립니다.` : '') + ' DB CPU는 한가합니다.' +
+          (lw ? ` 잠금을 기다리는 요청도 커넥션을 점유하고 있어서, 커넥션 ${P.pool}개 중 <b>${lw}개</b>가 잠금 대기에 묶였고 평범한 요청까지 기다립니다.` : '') + ' DB CPU는 한가합니다.' +
           (P.rate >= 2000 ? ' 요청이 몰리면 평소 여유 있던 핫 로우 잠금이 가장 먼저 무너집니다. 로그인할 때마다 고치는 공용 행(동시 접속자 수, 출석 기록 등)이 흔한 예입니다.' : '');
       } else {
         why = `<b>커넥션 풀이 모자랍니다.</b> 커넥션 ${P.pool}개가 모두 사용 중이라 요청이 대기열에서 기다립니다. DB CPU는 ${K.pct(Math.min(cpuUtil, 1))}만 쓰고 있어 아직 여유가 있습니다.` + (lw ? ` 그중 ${lw}개는 핫 로우 잠금을 기다리느라 아무 일도 못 합니다.` : '');
@@ -331,7 +331,7 @@ K.register('dbpool', function (root) {
       if (cpuUtil > 0.75) hints.push(`DB CPU가 ${K.pct(Math.min(cpuUtil, 1))} 바쁩니다`);
       return K.flag('warn') + `평균은 ${last.mean == null ? '—' : K.ms(last.mean)}로 괜찮아 보여도 <b>100건 중 1건은 ${last.p99 == null ? '—' : K.ms(last.p99)} 넘게</b> 걸립니다. ` + (hints.length ? hints.join('. ') + '. ' : '') + '이벤트나 점검 직후처럼 요청이 몰리면 바로 대기열이 길어집니다.';
     }
-    return K.flag('good') + `커넥션 ${P.pool}개 중 평균 ${K.n(last.util * P.pool, 1)}개만 바쁩니다. 쿼리가 ${P.query === 'idx' ? '인덱스(책의 색인)를 타서' : '풀 스캔인데도 요청이 적어'} 금방 끝나고, 핫 로우 잠금에도 여유가 있습니다. 요청 대부분이 <b>${last.p50 == null ? '—' : K.ms(last.p50)}</b> 안에 돌아옵니다.`;
+    return K.flag('good') + `커넥션 ${P.pool}개 중 평균 ${K.n(last.util * P.pool, 1)}개만 바쁩니다. 쿼리가 ${P.query === 'idx' ? '인덱스를 타서' : '풀 스캔인데도 요청이 적어'} 금방 끝나고, 핫 로우 잠금에도 여유가 있습니다. 요청 대부분이 <b>${last.p50 == null ? '—' : K.ms(last.p50)}</b> 안에 돌아옵니다.`;
   }
 
   K.loop(root, dt => {

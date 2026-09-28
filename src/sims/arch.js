@@ -8,7 +8,7 @@ K.register('arch', function (root) {
     tries: [
       '<b>DB 느려짐 (동기 호출)</b>을 눌러 보세요. DB 하나가 느려졌을 뿐인데 모든 필드와 던전의 틱이 늦어져 슬로우모션·뚝뚝 끊김에 빠집니다.',
       '같은 고장에서 <b>비동기</b>로 바꾸고 <b>서킷 브레이커</b>를 켜 보세요. 영향이 “저장이 늦음”으로 줄어듭니다.',
-      '<b>캐시 장애 → DB 쇄도</b>를 눌러 보세요. 캐시가 막아 주던 조회가 한꺼번에 DB로 쏟아져 멀쩡하던 DB까지 느려집니다.',
+      '<b>캐시 장애 → DB 과부하</b>를 눌러 보세요. 캐시가 막아 주던 조회가 한꺼번에 DB로 쏟아져 멀쩡하던 DB까지 느려집니다.',
       '<b>로그인 서버 장애</b>와 <b>게이트웨이 한 대 장애</b>를 비교해 보세요. 이미 게임 중인 사람이 겪는 일이 전혀 다릅니다.',
       '<b>로그 수집</b>을 멈추고 기다리는 방식을 동기/비동기로 바꿔 보세요. 로그처럼 사소해 보이는 곳도 동기로 기다리면 게임이 멈춥니다.',
     ],
@@ -204,7 +204,7 @@ K.register('arch', function (root) {
     const raise = (n, lv, from, why) => { if (lv > eff[n]) { eff[n] = lv; cause[n] = { from, why }; ch = true; } };
     for (let it = 0; it < 8 && ch; it++) {
       ch = false;
-      if (eff.cache === 2) raise('db', 1, 'cache', '캐시가 받던 조회가 한꺼번에 주 DB로 쏟아집니다(캐시 쇄도)');
+      if (eff.cache === 2) raise('db', 1, 'cache', '캐시가 받던 조회가 한꺼번에 주 DB로 쏟아집니다(캐시 스탬피드)');
       if (eff.replica === 2) raise('db', 1, 'replica', '복제 DB가 받던 읽기가 주 DB로 넘어옵니다');
       if (eff.db === 2) raise('replica', 1, 'db', '주 DB가 멈춰 복제가 멈춥니다. 복제 DB는 옛날 데이터를 보여 줍니다');
       if (eff.db) raise('auction', eff.db, 'db', '거래는 주 DB에 기록해야 끝납니다');
@@ -363,7 +363,7 @@ K.register('arch', function (root) {
     { label: '모두 정상', apply() { apply({}, 'sync', false, 'db'); } },
     { label: 'DB 느려짐 (동기 호출)', apply() { apply({ db: 1 }, 'sync', false, 'db'); } },
     { label: 'DB 느려짐 (비동기 + 서킷 브레이커)', apply() { apply({ db: 1 }, 'async', true, 'db'); } },
-    { label: '캐시 장애 → DB 쇄도', apply() { apply({ cache: 2 }, 'sync', false, 'cache'); } },
+    { label: '캐시 장애 → DB 과부하', apply() { apply({ cache: 2 }, 'sync', false, 'cache'); } },
     { label: '게이트웨이 한 대 장애', apply() { apply({ gw: 2 }, 'sync', false, 'gw'); } },
     { label: '로그인 서버 장애', apply() { apply({ login: 2 }, 'sync', false, 'login'); } },
     { label: '복제 지연', apply() { apply({ replica: 1 }, 'sync', false, 'replica'); } },

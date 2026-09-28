@@ -412,7 +412,7 @@ K.register('sndbuf', function (root) {
     } else {
       const grow = (SCALE * slowC.filter(c => c.st === 'ok').length * Math.max(0, P.rate - P.slowDown)) / 1024;
       const eta = grow > 0 && mem != null ? (MEMMAX - mem) / grow : Infinity;
-      msg = `${K.flag(eta < 8 ? 'bad' : 'warn')}<b>느린 클라이언트에게 못 보낸 데이터를 버리지도 끊지도 않고 서버 메모리에 계속 쌓습니다.</b> 화면의 클라이언트 8개는 표본이고 실제로는 같은 비율로 2,000명이 접속해 있다고 치면, 메모리가 초당 ${K.n(grow, 0)}MB씩 늘어납니다. 한도까지 약 ${Number.isFinite(eta) ? K.n(eta, 0) + '초' : '—'}. 느린 클라이언트의 화면은 ${sL == null ? '—' : K.ms(sL)} 뒤처져 있고 계속 늘어납니다. 다른 클라이언트는 아직 멀쩡하지만, 한도를 넘는 순간 모두의 접속이 끊깁니다.`;
+      msg = `${K.flag(eta < 8 ? 'bad' : 'warn')}<b>느린 클라이언트에게 못 보낸 데이터를 버리지도 끊지도 않고 서버 메모리에 계속 쌓습니다.</b> 화면의 클라이언트 8개는 샘플이고 실제로는 같은 비율로 2,000명이 접속해 있다고 치면, 메모리가 초당 ${K.n(grow, 0)}MB씩 늘어납니다. 한도까지 약 ${Number.isFinite(eta) ? K.n(eta, 0) + '초' : '—'}. 느린 클라이언트의 화면은 ${sL == null ? '—' : K.ms(sL)} 뒤처져 있고 계속 늘어납니다. 다른 클라이언트는 아직 멀쩡하지만, 한도를 넘는 순간 모두의 접속이 끊깁니다.`;
     }
     F.say(msg);
   });

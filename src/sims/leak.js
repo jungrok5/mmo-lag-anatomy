@@ -278,7 +278,7 @@ K.register('leak', function (root) {
         : '아직 틱 예산 50ms 안이라 티가 덜 나지만, 밀려난 양이 늘수록 틱이 빠르게 늘어납니다.';
       return `${K.flag(st)} 메모리 ${K.n(S.mem[i], 1)}GB가 RAM ${P.ram}GB를 넘어 <b>${out < 1 ? K.n(Math.max(10, out * 1024)) + 'MB' : K.n(out, 1) + 'GB'}</b>가 디스크(스왑)로 밀려났습니다. RAM은 한 번 읽는 데 약 100ns, SSD는 약 100µs로 <b>1,000배</b> 느립니다. 누수된 메모리는 대개 다시 안 쓰지만, 쓰는 데이터와 같은 메모리 페이지에 섞여 있거나 GC가 힙 전체를 훑으면 밀려난 메모리를 자주 건드립니다. 그때마다 디스크를 기다려 틱이 <b>${K.ms(tk)}</b>로 늘었습니다. ${feel} 접속자가 많은 저녁 9시 무렵 가장 심합니다.${risk && risk.what === '강제 종료' ? ` 이대로면 약 ${fmtH(risk.dh)} 뒤 서버가 강제로 꺼집니다(전원 <b>접속 끊김</b>).` : ''}`;
     }
-    if (P.leak === 0) return `${K.flag('good')} 누수가 없으면 메모리는 접속자 수를 따라 매일 같은 모양으로 오르내립니다. 저녁 피크에도 기본 ${P.base}GB + 접속자 ${K.n(S.ppl[i])}명분 ${K.n(pplGB, 1)}GB로 RAM ${P.ram}GB 안이라 틱은 예산 안입니다.`;
+    if (P.leak === 0) return `${K.flag('good')} 누수가 없으면 메모리는 접속자 수를 따라 매일 같은 패턴으로 오르내립니다. 저녁 피크에도 기본 ${P.base}GB + 접속자 ${K.n(S.ppl[i])}명분 ${K.n(pplGB, 1)}GB로 RAM ${P.ram}GB 안이라 틱은 예산 안입니다.`;
     const lastEv = events.filter(e => e.h <= h).pop();
     const since = lastEv && lastEv.kind === 'oom' ? '다시 켠 지' : '점검 후';
     const recent = lastEv && lastEv.kind === 'oom' && h - lastEv.h < 8 ? `<b>${fmtH(h - lastEv.h)} 전 서버가 강제로 꺼졌다가</b> 다시 켜졌습니다. 메모리가 비워져 지금은 멀쩡해 보이지만 누수는 그대로입니다. ` : '';
