@@ -144,7 +144,7 @@ K.register('npcmissing', function (root) {
   }
   render();
 
-  let acc = 0;
+  let acc = 200; // 첫 프레임에 바로 해설과 수치를 채운다
   K.loop(root, dt => {
     draw();
     acc += dt;

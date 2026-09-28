@@ -59,8 +59,8 @@ K.register('retrans', function (root) {
   const RTO_MAX = 120000; // 리눅스 TCP_RTO_MAX: 두 배씩 늘어도 120초에서 멈춘다
   const rtoNow = () => Math.min(S.rto * S.backoff, RTO_MAX);
   const inRecovery = () => S.una < S.recover;
-  function newSeg(size, made) {
-    const s = { id: S.next++, size, first: made == null ? t : made, tx: [], acked: false, sacked: false, delivered: null };
+  function newSeg(size, made, big) {
+    const s = { id: S.next++, size, big: big == null ? size > SMALL : big, first: made == null ? t : made, tx: [], acked: false, sacked: false, delivered: null };
     S.segs.set(s.id, s);
     transmit(s, 'new');
   }
@@ -178,14 +178,18 @@ K.register('retrans', function (root) {
   }
   function senderStep() {
     if (P.mode === 'game') {
-      if (t >= S.nextGame) { S.q.push([SMALL, S.nextGame]); S.nextGame += P.gap; }
+      if (t >= S.nextGame) {
+        // 서버에서 기다리는 작은 소식은 TCP가 MSS 크기까지 한 패킷으로 합친다(그래서 MTU 블랙홀에서는 이것도 사라진다)
+        const tail = S.q[S.q.length - 1];
+        if (tail && !tail[2] && tail[0] + SMALL <= S.mssNow) tail[0] += SMALL; else S.q.push([SMALL, S.nextGame, false]);
+        S.nextGame += P.gap;
+      }
       if (t >= S.nextBig) { // 2초마다 큰 업데이트 4KB (MSS 단위로 쪼개짐)
-        for (let left = 4000; left > 0; left -= S.mssNow) S.q.push([Math.min(left, S.mssNow), S.nextBig]);
+        for (let left = 4000; left > 0; left -= S.mssNow) S.q.push([Math.min(left, S.mssNow), S.nextBig, true]);
         S.nextBig += 2000;
       }
       // 게임이 만든 소식은 바로 나간다. 복구 중에는 위의 한도(credit)만큼만 나가고 나머지는 서버에서 기다린다.
-      // (단순화: 실제 TCP는 기다리는 작은 소식을 MSS 크기로 합쳐 보낸다)
-      while (S.q.length && (!inRecovery() || S.credit > 0)) { const [size, made] = S.q.shift(); if (inRecovery()) S.credit--; newSeg(size, made); }
+      while (S.q.length && (!inRecovery() || S.credit > 0)) { const [size, made, big] = S.q.shift(); if (inRecovery()) S.credit--; newSeg(size, made, big); }
     } else if (outstanding() < Math.floor(S.cwnd)) newSeg(MSS);
     // TLP: 한동안 ACK가 없으면 맨 끝 패킷을 한 번 더 보내 받는 쪽의 SACK을 끌어낸다
     if (P.rack && t >= S.tlpAt && !S.tlpOut && !inRecovery() && outstanding() > 0) {
@@ -225,7 +229,7 @@ K.register('retrans', function (root) {
       while (R.buf.has(R.expected)) {
         R.buf.delete(R.expected);
         const d = S.segs.get(R.expected);
-        if (d && d.delivered == null) { d.delivered = t; if (P.mode === 'game' || d.id % 10 === 0) deliv.push([t, t - d.first, P.mode === 'game' && d.size > SMALL]); }
+        if (d && d.delivered == null) { d.delivered = t; if (P.mode === 'game' || d.id % 10 === 0) deliv.push([t, t - d.first, P.mode === 'game' && d.big]); }
         R.expected++;
       }
     }
@@ -329,7 +333,7 @@ K.register('retrans', function (root) {
     const TAG = { fast: '빠른', rto: 'RTO', tlp: 'TLP' };
     for (const s of S.segs.values()) {
       if (s.first < t0 - 3000) continue;
-      const big = s.size > SMALL;
+      const big = s.big;
       s.tx.forEach(tx => {
         if (tx.at > t) return;
         const x1 = X(tx.at);
