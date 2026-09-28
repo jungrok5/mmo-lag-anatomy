@@ -16,7 +16,7 @@
     distance: '거리·경로 실험', timeouts: '타임아웃 사다리', nic: 'NIC 실험', rush: '접속 폭주 실험', hol: 'TCP vs UDP 실험', nagle: 'Nagle 실험',
     sndbuf: '느린 손님 실험', tick: '틱 예산 실험', locks: '락 실험', gc: 'GC 실험', leak: '메모리 누수 실험', ladder: '숫자 감각',
     disk: '디스크 실험', dbpool: 'DB 실험', arch: '서버 구성 실험',
-    syncmodels: '동기화 방식 비교', windows: '판정 창 실험', chain: '연속 행동 실험', oneslow: '한 명만 느릴 때 실험', npcmissing: '한쪽 클라 진단',
+    syncmodels: '동기화 방식 비교', windows: '판정 창 실험', chain: '연속 행동 실험', oneslow: '한 명만 느릴 때 실험', npcmissing: '한쪽 클라 진단', retrans: 'TCP 재전송 실험',
   };
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const ARROW = '<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7h8m-3-3 3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -130,6 +130,8 @@
   if (syncH3) syncH3.innerHTML = `동기화 설계에서 렉을 만드는 원인 <span class="mono">${(byLayer.sync || []).length}가지</span>`;
   const partH3 = $('#partial h3.sec:last-of-type');
   if (partH3) partH3.innerHTML = `일부에게만 생기는 문제 <span class="mono">${(byLayer.partial || []).length}가지</span>`;
+  const rtH3 = $('#retrans h3.sec:last-of-type');
+  if (rtH3) rtH3.innerHTML = `TCP 재전송의 근본 원인 <span class="mono">${(byLayer.retrans || []).length}가지</span>`;
 
   /* ---------------- 증상 사전 ---------------- */
   const symCauses = {};

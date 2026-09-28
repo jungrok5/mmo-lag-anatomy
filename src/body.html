@@ -15,6 +15,7 @@
         <li><a href="#symptoms">증상 사전</a></li>
         <li><a href="#sync">동기화 방식과 체감</a></li>
         <li><a href="#partial">한 명만·한쪽만 이상할 때</a></li>
+        <li><a href="#retrans">TCP 재전송 해부</a></li>
       </ol>
     </div>
     <div class="nav-group">
@@ -260,6 +261,93 @@
         <div class="causes" data-causes="partial"></div>
       </section>
 
+      <!-- ===================== TCP 재전송 ===================== -->
+      <section class="chapter" id="retrans">
+        <div class="ch-head">
+          <div class="ch-kicker"><span class="idx">06</span>단골 범인 해부</div>
+          <h2>TCP 재전송: 왜 생기고, 왜 이렇게 느려지나</h2>
+          <p class="lede">서버 지표에 “TCP 재전송(Retransmission)”이 늘면 어김없이 렉 제보가 따라옵니다. 재전송은 “패킷이 사라졌다” 또는 “사라졌다고 착각했다”는 신호입니다. 원인은 와이파이부터 서버 네트워크 카드까지 길 위 어디에나 있고, 게임처럼 작은 소식을 드문드문 보내는 연결에서는 한 번의 재전송이 수백 ms 멈춤으로 번집니다. 이 장은 재전송의 근본 원인, 원인을 찾는 방법, 해결 방향을 정리합니다.</p>
+        </div>
+
+        <h3 class="sec">재전송이 게임을 유난히 느리게 만드는 네 가지 이유</h3>
+        <div class="prose">
+          <ol>
+            <li><b>순서 대기(머리막힘)</b>: TCP는 잃어버린 하나를 다시 받을 때까지 뒤에 도착한 소식을 게임에 넘기지 않습니다. 하나를 잃으면 그 뒤 전부가 함께 멈췄다가 한꺼번에 풀립니다(<b>멈춤</b> 뒤 <b>몰아치기</b>).</li>
+            <li><b>재전송 대기 시간</b>: 보내는 쪽은 “왕복 시간 + 최소 200ms”(리눅스 기준, RTO)를 기다린 뒤에야 다시 보냅니다. 다시 보낸 것도 잃으면 기다림이 두 배씩 늘어납니다(0.3초 → 0.6초 → 1.2초 …).</li>
+            <li><b>얇은 흐름</b>: 빠른 재전송은 “뒤따르는 패킷 3개가 도착했다”는 신호(중복 ACK 3개)로 작동합니다. 게임 소식은 50~200ms에 하나씩이라 신호가 모이기 전에 RTO가 먼저 오는 경우가 많습니다. 대용량 다운로드는 잘 버티는데 게임만 유독 멈추는 이유입니다.</li>
+            <li><b>전송량 축소</b>: TCP는 손실을 혼잡 신호로 보고 한 번에 보낼 양(혼잡 창)을 줄입니다. RTO까지 가면 거의 처음부터 다시 늘려야 해서, 사람 많은 곳의 큰 업데이트가 줄줄이 밀립니다.</li>
+          </ol>
+        </div>
+
+        <h3 class="sec">재전송의 종류</h3>
+        <div class="table-wrap">
+          <table class="nums sync-table">
+            <thead><tr><th>종류</th><th>언제 일어나나</th><th>복구까지 걸리는 시간</th><th>게임에서 보이는 모습</th></tr></thead>
+            <tbody>
+              <tr><td><b>빠른 재전송</b><br><span class="note">Fast retransmit</span></td><td>뒤따르는 패킷이 먼저 도착해 받는 쪽이 “구멍 있음”(중복 ACK·SACK)을 알릴 때</td><td>왕복 시간 + 뒤따르는 패킷 3개가 도착하는 시간</td><td>짧은 멈칫. 소식이 촘촘할수록 빠름</td></tr>
+              <tr><td><b>RACK·TLP</b><br><span class="note">시간 기준 판단, 꼬리 탐침</span></td><td>나중에 보낸 패킷이 도착했는데 앞의 것이 일정 시간 안 올 때, 또는 한동안 ACK가 없을 때 끝 패킷을 한 번 더 보냄</td><td>왕복 시간의 1~2배</td><td>얇은 흐름에서도 비교적 짧은 멈칫. 최신 리눅스 기본</td></tr>
+              <tr><td><b>RTO 재전송</b><br><span class="note">Retransmission timeout</span></td><td>아무 신호 없이 기다림이 끝났을 때</td><td>왕복 시간 + 최소 200ms, 실패할 때마다 두 배</td><td>수백 ms~수 초 <b>멈춤</b> 뒤 <b>몰아치기</b>, 길어지면 <b>접속 끊김</b></td></tr>
+              <tr><td><b>SYN 재전송</b></td><td>접속 요청 자체가 사라졌을 때 (대기 줄 넘침, 방화벽 차단)</td><td>1초, 2초, 4초, 8초 …</td><td>접속 버튼 뒤 정확히 1초, 3초씩 늦는 <b>무한 로딩</b></td></tr>
+              <tr><td><b>가짜 재전송</b><br><span class="note">Spurious retransmission</span></td><td>잃지 않았는데 늦게 오거나 순서가 바뀌어 잃은 줄 알고 다시 보냄</td><td>복구할 게 없음. 대신 전송량만 줄어듦</td><td>회선 낭비, 대용량 전송 속도 저하. 지표상 재전송률만 높음</td></tr>
+              <tr><td><b>제로 윈도 탐침</b><br><span class="note">재전송과 헷갈리는 것</span></td><td>받는 쪽 버퍼가 꽉 차 “잠깐 보내지 마” 상태일 때 확인용으로 보내는 패킷</td><td>받는 쪽이 읽기 시작할 때까지</td><td>멈춤. 회선이 아니라 받는 쪽 프로그램이 느린 것</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div data-sim="retrans" id="sim-retrans"></div>
+
+        <h3 class="sec">어디서 잃었는지 찾는 법</h3>
+        <div class="prose"><p>재전송률은 “보낸 패킷 중 다시 보낸 비율”입니다. 대략 <b>0.1% 아래면 건강</b>, <b>0.1~1%면 가끔 멈칫</b>, <b>1%를 넘으면 누구나 체감</b>, <b>3%를 넘으면 심각</b>합니다. 서버 전체 평균보다 <b>지역·통신사·서버·시간대별</b>로 나눠 보는 것이 원인을 찾는 지름길입니다.</p></div>
+        <div class="table-wrap">
+          <table class="nums sync-table">
+            <thead><tr><th>어디서 보나</th><th>무엇을 보나</th><th>무엇을 알 수 있나</th></tr></thead>
+            <tbody>
+              <tr><td>서버 전체 (리눅스)</td><td><code>nstat -az</code>의 TcpRetransSegs ÷ TcpOutSegs, TcpExtTCPTimeouts, TCPLossProbes, TCPSpuriousRTOs, TCPDSACKRecv</td><td>재전송률, RTO까지 간 횟수, 가짜 재전송 비율. DSACK·Spurious가 많으면 “잃지 않았는데 다시 보냄”</td></tr>
+              <tr><td>연결별 (리눅스)</td><td><code>ss -ti</code>의 retrans, rto, rtt, cwnd, lost, reordering</td><td>특정 사용자·지역만 재전송이 많은지, RTO가 얼마나 늘어나 있는지</td></tr>
+              <tr><td>서버 네트워크 카드</td><td><code>ethtool -S</code>의 rx_missed·rx_no_buffer·rx_crc_errors, <code>/proc/net/softnet_stat</code>의 dropped</td><td>서버가 받는 입구에서 버렸는지(링 버퍼·CPU), 선이나 광모듈 불량(CRC)인지</td></tr>
+              <tr><td>클라우드 네트워크</td><td>AWS ENA의 pps_allowance_exceeded, bw_out_allowance_exceeded, conntrack_allowance_exceeded 등</td><td>인스턴스 한도에서 조용히 버렸는지</td></tr>
+              <tr><td>스위치·라우터·방화벽</td><td>포트의 CRC·입력 오류, 출력 드롭, 세션 표 사용량, 드롭 로그</td><td>데이터센터 장비 구간에서 버렸는지</td></tr>
+              <tr><td>경로</td><td><code>mtr</code>·<code>pathping</code>으로 끝까지 이어지는 손실</td><td>몇 번째 구간부터 손실이 시작되는지. 중간 한 구간만 손실로 보이고 뒤는 멀쩡하면 그 장비가 확인 응답을 아끼는 것일 뿐입니다</td></tr>
+              <tr><td>패킷 캡처 (양쪽 끝)</td><td>Wireshark의 <code>tcp.analysis.retransmission</code>, <code>fast_retransmission</code>, <code>spurious_retransmission</code>, <code>duplicate_ack</code>, <code>zero_window</code></td><td>보낸 쪽에는 있고 받은 쪽에는 없으면 그 사이에서 잃은 것. 받은 쪽에도 있으면 가짜 재전송이나 ACK 쪽 문제</td></tr>
+              <tr><td>윈도우 서버</td><td>성능 모니터의 TCPv4 Segments Retransmitted/sec, <code>netsh int tcp show global</code></td><td>재전송 추이와 TCP 설정</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sec">해결 방향</h3>
+        <div class="two-col">
+          <div class="prose">
+            <p><b>1. 잃지 않게 (근본 해결)</b></p>
+            <ul>
+              <li>와이파이 대신 유선, 5GHz·6GHz, 공유기 SQM·ECN으로 대기열 넘침 줄이기</li>
+              <li>서버가 한 틱의 업데이트를 한꺼번에 쏘지 않게 페이싱(fq, BBR, 전송 속도 상한)</li>
+              <li>링 버퍼 늘리기, 인터럽트를 여러 코어에 분산, 클라우드 한도 확인</li>
+              <li>CRC 오류가 있는 선·광모듈 교체, 듀플렉스 설정 맞추기</li>
+              <li>폴리서(초과분 즉시 버림) 대신 셰이퍼(줄 세움), 허용 버스트 늘리기</li>
+              <li>MSS 조정·MTU 탐색으로 MTU 블랙홀 막기, 하트비트로 NAT·LB 매핑 유지</li>
+            </ul>
+          </div>
+          <div class="prose">
+            <p><b>2. 빨리 복구하게</b></p>
+            <ul>
+              <li>SACK·타임스탬프가 중간 장비에서 지워지지 않게 확인</li>
+              <li>RACK-TLP 사용(최신 리눅스 기본), 얇은 흐름용 <code>tcp_thin_linear_timeouts</code></li>
+              <li>내부망 서버 간 연결은 경로별 RTO 최소값을 낮추기(<code>ip route … rto_min</code>)</li>
+              <li><code>TCP_USER_TIMEOUT</code>과 게임 하트비트로 죽은 연결을 빨리 끊고 재접속</li>
+            </ul>
+            <p><b>3. 재전송에 덜 민감하게 (구조)</b></p>
+            <ul>
+              <li>실시간 위치·전투는 UDP 위에서 필요한 것만 다시 보내기(옛 위치는 다시 보낼 가치가 없음)</li>
+              <li>채팅·거래처럼 순서가 필요한 것과 실시간 소식을 다른 흐름으로 분리(QUIC 스트림 등)</li>
+              <li>보간 버퍼와 예측으로 짧은 멈칫을 화면에서 가리기</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3 class="sec">TCP 재전송의 근본 원인</h3>
+        <div class="causes" data-causes="retrans"></div>
+      </section>
+
       <!-- ===================== 레이어 1 ===================== -->
       <section class="chapter layer" id="l-client-game" data-layer="client-game">
         <div class="ch-head">
@@ -392,6 +480,7 @@
           <p><b>소켓 옵션</b>은 이 약속의 세부 조건입니다. 작은 패킷을 모았다 보낼지(<code>TCP_NODELAY</code>), 송수신 버퍼를 얼마나 둘지(<code>SO_SNDBUF</code>, <code>SO_RCVBUF</code>), 죽은 연결을 언제 알아챌지(<code>SO_KEEPALIVE</code>, <code>TCP_USER_TIMEOUT</code>), 닫을 때 남은 데이터를 어떻게 할지(<code>SO_LINGER</code>). 기본값은 대부분 파일 전송에 맞춰져 있어 게임에는 불리합니다.</p>
         </div>
         <div class="analogy"><span class="tag">비유</span><p>TCP는 <b>번호표 순서대로만 입장시키는 문지기</b>입니다. 17번 손님이 안 오면 18~30번이 이미 와 있어도 문 앞에 세워 둡니다. UDP는 <b>오는 대로 들여보내는 문지기</b>라, 17번이 영영 안 와도 나머지는 제시간에 들어옵니다.</p></div>
+        <p class="note" style="max-width:var(--prose)">재전송이 <b>왜 생기는지</b>(와이파이, 혼잡, MTU 블랙홀, 가짜 재전송 등)와 원인을 찾는 방법은 <a href="#retrans">06 TCP 재전송 해부</a>에서 원인별로 다룹니다.</p>
         <div data-sim="hol" id="sim-hol"></div>
         <div data-sim="nagle" id="sim-nagle"></div>
         <div data-sim="sndbuf" id="sim-sndbuf"></div>

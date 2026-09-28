@@ -37,6 +37,7 @@ window.DATA = {
   extraLayers: [
     { id: 'sync', name: '동기화 설계', short: '동기화 설계', side: '설계', anchor: 'sync' },
     { id: 'partial', name: '일부에게만 생기는 문제', short: '일부만', side: '범위', anchor: 'partial' },
+    { id: 'retrans', name: 'TCP 재전송의 근본 원인', short: 'TCP 재전송', side: '범인', anchor: 'retrans' },
   ],
 
   /* 네 가지 재료 */
