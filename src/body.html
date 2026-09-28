@@ -297,21 +297,35 @@
         <div data-sim="retrans" id="sim-retrans"></div>
 
         <h3 class="sec">어디서 잃었는지 찾는 법</h3>
-        <div class="prose"><p>재전송률은 “보낸 패킷 중 다시 보낸 비율”입니다. 대략 <b>0.1% 아래면 건강</b>, <b>0.1~1%면 가끔 멈칫</b>, <b>1%를 넘으면 누구나 체감</b>, <b>3%를 넘으면 심각</b>합니다. 서버 전체 평균보다 <b>지역·통신사·서버·시간대별</b>로 나눠 보는 것이 원인을 찾는 지름길입니다.</p></div>
+        <div class="prose"><p>재전송률은 “보낸 패킷 중 다시 보낸 비율”입니다. 부팅 뒤 쌓인 누적값은 평소 값에 묻히므로, 1분처럼 일정한 간격 동안 늘어난 양으로 계산합니다. 서버 전체 평균의 대략적인 감각은 <b>0.1% 아래면 건강</b>, <b>0.1~1%면 일부 유저가 가끔 멈칫</b>, <b>1%를 넘으면 많은 유저가 체감</b>, <b>3%를 넘으면 심각</b>입니다. 모바일·해외 유저가 많은 게임은 평소 값이 더 높게 나옵니다. 그래서 숫자 하나로 판단하기보다 <b>평소 대비 몇 배 늘었는지</b>를 함께 봅니다. 평균은 소수의 나쁜 회선에 끌려가므로 <b>지역·통신사·서버·시간대별</b>로 나눠 보는 것이 원인을 찾는 지름길입니다.</p></div>
         <div class="table-wrap">
           <table class="nums sync-table">
             <thead><tr><th>어디서 보나</th><th>무엇을 보나</th><th>무엇을 알 수 있나</th></tr></thead>
             <tbody>
-              <tr><td>서버 전체 (리눅스)</td><td><code>nstat -az</code>의 TcpRetransSegs ÷ TcpOutSegs, TcpExtTCPTimeouts, TCPLossProbes, TCPSpuriousRTOs, TCPDSACKRecv</td><td>재전송률, RTO까지 간 횟수, 가짜 재전송 비율. DSACK·Spurious가 많으면 “잃지 않았는데 다시 보냄”</td></tr>
-              <tr><td>연결별 (리눅스)</td><td><code>ss -ti</code>의 retrans, rto, rtt, cwnd, lost, reordering</td><td>특정 사용자·지역만 재전송이 많은지, RTO가 얼마나 늘어나 있는지</td></tr>
-              <tr><td>서버 네트워크 카드</td><td><code>ethtool -S</code>의 rx_missed·rx_no_buffer·rx_crc_errors, <code>/proc/net/softnet_stat</code>의 dropped</td><td>서버가 받는 입구에서 버렸는지(링 버퍼·CPU), 선이나 광모듈 불량(CRC)인지</td></tr>
-              <tr><td>클라우드 네트워크</td><td>AWS ENA의 pps_allowance_exceeded, bw_out_allowance_exceeded, conntrack_allowance_exceeded 등</td><td>인스턴스 한도에서 조용히 버렸는지</td></tr>
-              <tr><td>스위치·라우터·방화벽</td><td>포트의 CRC·입력 오류, 출력 드롭, 세션 표 사용량, 드롭 로그</td><td>데이터센터 장비 구간에서 버렸는지</td></tr>
-              <tr><td>경로</td><td><code>mtr</code>·<code>pathping</code>으로 끝까지 이어지는 손실</td><td>몇 번째 구간부터 손실이 시작되는지. 중간 한 구간만 손실로 보이고 뒤는 멀쩡하면 그 장비가 확인 응답을 아끼는 것일 뿐입니다</td></tr>
-              <tr><td>패킷 캡처 (양쪽 끝)</td><td>Wireshark의 <code>tcp.analysis.retransmission</code>, <code>fast_retransmission</code>, <code>spurious_retransmission</code>, <code>duplicate_ack</code>, <code>zero_window</code></td><td>보낸 쪽에는 있고 받은 쪽에는 없으면 그 사이에서 잃은 것. 받은 쪽에도 있으면 가짜 재전송이나 ACK 쪽 문제</td></tr>
-              <tr><td>윈도우 서버</td><td>성능 모니터의 TCPv4 Segments Retransmitted/sec, <code>netsh int tcp show global</code></td><td>재전송 추이와 TCP 설정</td></tr>
+              <tr><td>서버 전체 (리눅스)</td><td><code>nstat</code>을 1분 간격으로 두 번 실행한 증가분: TcpRetransSegs ÷ TcpOutSegs, 그리고 TcpExt 계열의 TCPTimeouts, TCPLossProbes·TCPLossProbeRecovery, TCPSpuriousRTOs, TCPDSACKRecv, TCPSynRetrans</td><td>재전송률, RTO까지 간 횟수, 꼬리 탐침(TLP)을 보낸 횟수와 그중 실제 손실을 메운 횟수, 접속 요청 재전송. DSACK·Spurious가 많으면 “잃지 않았는데 다시 보냄”. 리눅스 OutSegs에는 재전송분이 빠져 있어 엄밀한 비율은 RetransSegs ÷ (OutSegs + RetransSegs)지만, 1% 안팎에서는 차이가 작습니다</td></tr>
+              <tr><td>연결별 (리눅스)</td><td><code>ss -ti</code>의 retrans(지금 복구 중/누적), rto, backoff, rtt, cwnd, lost, reordering, bytes_retrans</td><td>특정 사용자·지역만 재전송이 많은지, RTO가 얼마나 늘어나 있는지(backoff는 RTO가 연달아 두 배가 된 횟수). bytes_retrans ÷ bytes_sent가 그 연결의 재전송률</td></tr>
+              <tr><td>재전송 한 건씩 (리눅스)</td><td>eBPF 도구 <code>tcpretrans</code>(bcc). <code>-c</code>는 연결별 집계, <code>-l</code>은 꼬리 탐침 포함</td><td>재전송이 날 때마다 상대 IP·포트·연결 상태를 한 줄씩 보여 줍니다. 패킷 캡처 없이 가볍게, 어느 유저 대역·서버에 몰리는지 확인</td></tr>
+              <tr><td>서버 네트워크 카드</td><td><code>ip -s -s link</code>의 dropped·missed·crc, <code>ethtool -S</code>의 rx_missed_errors·rx_no_buffer_count·rx_crc_errors 등(이름은 드라이버마다 다름, mlx5는 rx_out_of_buffer·rx_discards_phy), <code>/proc/net/softnet_stat</code>의 2번째 열(dropped)·3번째 열(time_squeeze)</td><td>서버가 받는 입구에서 버렸는지(링 버퍼·CPU), 선이나 광모듈 불량(CRC)인지. softnet_stat은 CPU마다 한 줄이고 16진수입니다. time_squeeze가 계속 늘면 수신 처리 코어가 제시간에 일을 못 끝내는 것</td></tr>
+              <tr><td>클라우드 네트워크</td><td>AWS ENA는 <code>ethtool -S</code>의 bw_in_allowance_exceeded, bw_out_allowance_exceeded, pps_allowance_exceeded, conntrack_allowance_exceeded, linklocal_allowance_exceeded. 기본 CloudWatch 화면에는 없어 CloudWatch 에이전트로 따로 모읍니다</td><td>인스턴스 한도에서 조용히 버렸는지. 값이 늘고 있으면 한도 초과입니다. 다른 클라우드도 VM 크기별 대역폭·연결 수 한도가 있습니다</td></tr>
+              <tr><td>스위치·라우터·방화벽</td><td>포트의 CRC·입력 오류, 출력 드롭, 폴리서 초과, 세션 표 사용량, 드롭 로그</td><td>데이터센터 장비 구간에서 버렸는지. 5분 평균 사용률이 낮은데 출력 드롭이 늘면 순간 몰림(마이크로버스트)</td></tr>
+              <tr><td>경로</td><td><code>mtr</code>·<code>pathping</code>으로 끝까지 이어지는 손실. 수백 번 이상 보내야 1% 안팎의 손실이 보이고, 게임과 같은 TCP 포트로 보내면(<code>mtr -T -P 포트</code>) 더 정확합니다</td><td>몇 번째 구간부터 손실이 시작되는지. 중간 한 구간만 손실로 보이고 뒤는 멀쩡하면 그 장비가 확인 응답을 아끼는 것일 뿐입니다. 오가는 경로가 다를 수 있어 서버 쪽에서 유저 쪽으로도 측정합니다</td></tr>
+              <tr><td>패킷 캡처 (양쪽 끝)</td><td>Wireshark 필터 <code>tcp.analysis.retransmission</code>, 같은 <code>tcp.analysis.</code> 계열의 fast_retransmission, spurious_retransmission, duplicate_ack, lost_segment, zero_window</td><td>원본 패킷이 보낸 쪽 캡처에는 있고 받은 쪽에는 없으면 그 사이에서 잃은 것. 받은 쪽에도 있으면 가짜 재전송이거나 ACK가 돌아오다 늦거나 사라진 것. 받는 서버의 링 버퍼에서 버린 패킷도 캡처에는 “사이에서 잃음”으로 보이니 네트워크 카드 카운터와 함께 봅니다</td></tr>
+              <tr><td>윈도우 서버</td><td>성능 모니터의 <code>TCPv4\Segments Retransmitted/sec</code> ÷ <code>Segments Sent/sec</code>, <code>Network Interface\Packets Received Discarded</code>, <code>netsh int tcp show global</code>, <code>pktmon</code>(서버 2019 이상)</td><td>재전송률 추이, 네트워크 카드 입구에서 버렸는지, TCP 설정, 윈도우 안 어디에서 버렸는지</td></tr>
             </tbody>
           </table>
+        </div>
+
+        <div class="prose">
+          <p><b>확인 순서</b>: 서버팀과 함께 볼 때는 아래 순서가 빠릅니다.</p>
+          <ol>
+            <li><b>언제·누구에게</b>: 재전송률이 언제부터 늘었는지, 특정 지역·통신사·서버·시간대에 몰리는지 봅니다.</li>
+            <li><b>진짜 손실인지</b>: TCPSpuriousRTOs·DSACK이 함께 늘면 늦게 도착한 것을 잃은 줄 안 가짜 재전송을 먼저 의심합니다.</li>
+            <li><b>서버 입구</b>: 같은 시각에 네트워크 카드·softnet·클라우드 한도 카운터가 늘었다면 서버 쪽에서 버린 것입니다.</li>
+            <li><b>데이터센터 장비</b>: 스위치·방화벽의 드롭·CRC 카운터와 세션 표를 봅니다.</li>
+            <li><b>바깥 경로</b>: 문제 유저 쪽과 서버 쪽 양방향 mtr로 손실이 시작되는 구간을 찾습니다.</li>
+            <li><b>그래도 모르면</b>: 양쪽 끝에서 같은 시각에 패킷을 캡처해 비교합니다.</li>
+          </ol>
+          <p>제보에 시각(초 단위), 유저의 통신사·지역, 접속 서버, 증상 이름이 있으면 서버팀이 이 순서를 바로 밟을 수 있습니다.</p>
         </div>
 
         <h3 class="sec">해결 방향</h3>
@@ -320,11 +334,12 @@
             <p><b>1. 잃지 않게 (근본 해결)</b></p>
             <ul>
               <li>와이파이 대신 유선, 5GHz·6GHz, 공유기 SQM·ECN으로 대기열 넘침 줄이기</li>
-              <li>서버가 한 틱의 업데이트를 한꺼번에 쏘지 않게 페이싱(fq, BBR, 전송 속도 상한)</li>
+              <li>서버가 한 틱의 업데이트를 한꺼번에 쏘지 않게 틱 안에 나눠 보내기. 연결 하나가 몰아 보내는 것은 페이싱(fq, BBR, 전송 속도 상한)으로 고르게</li>
               <li>링 버퍼 늘리기, 인터럽트를 여러 코어에 분산, 클라우드 한도 확인</li>
               <li>CRC 오류가 있는 선·광모듈 교체, 듀플렉스 설정 맞추기</li>
               <li>폴리서(초과분 즉시 버림) 대신 셰이퍼(줄 세움), 허용 버스트 늘리기</li>
-              <li>MSS 조정·MTU 탐색으로 MTU 블랙홀 막기, 하트비트로 NAT·LB 매핑 유지</li>
+              <li>방화벽·연결 추적 표와 중간 장비의 초당 패킷 수에 여유 두기, 오가는 길이 같은 방화벽을 지나게 맞추기</li>
+              <li>MSS 조정과 크기 초과 알림(ICMP) 허용으로 MTU 블랙홀 막기(MTU 탐색은 마지막 안전망), 하트비트로 NAT·LB 매핑 유지</li>
             </ul>
           </div>
           <div class="prose">

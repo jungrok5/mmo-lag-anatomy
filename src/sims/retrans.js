@@ -8,7 +8,7 @@ K.register('retrans', function (root) {
     tries: [
       '<b>와이파이 손실 3%</b>를 누르세요. 게임 소식은 100ms마다 작은 패킷 하나라 “중복 ACK 3개”가 모이기 전에 RTO(핑 + 200ms)가 먼저 옵니다. 한 번 잃을 때마다 약 300ms 멈춘 뒤 몰아서 전달됩니다. <b>게임 소식 간격</b>을 30ms로 줄이면 빠른 재전송이 먼저 걸립니다.',
       '같은 상태에서 <b>RACK-TLP</b>를 켜 보세요. 약 “핑의 2배” 만에 탐침(TLP)이 나가 복구가 빨라집니다. <b>선형 타임아웃</b>도 켜면 연속 손실 때 기다림이 두 배씩 늘지 않습니다.',
-      '<b>MTU 블랙홀</b>을 누르세요. 2초마다 오는 큰 업데이트만 계속 사라지고, 같은 패킷을 몇 번이고 다시 보냅니다. <b>MTU 탐색</b>을 켜면 패킷을 작게 나눠 통과합니다.',
+      '<b>MTU 블랙홀</b>을 누르세요. 2초마다 오는 큰 업데이트만 계속 사라지고, 같은 패킷을 몇 번이고 다시 보냅니다. <b>MTU 탐색</b>을 켜면 몇 초 멈춘 뒤에야 패킷을 작게 나눠 통과합니다.',
       '<b>순서 뒤바뀜 (대용량)</b>을 누르고 RACK-TLP를 끄세요. 잃지도 않은 패킷을 다시 보내는 <b>가짜 재전송</b>이 생기고 전송량(혼잡 창)이 괜히 줄어듭니다.',
       '<b>지연 급등</b>을 누르세요. 4초마다 0.5초씩 늦어지는 순간 RTO가 먼저 터져 가짜 재전송이 납니다. 원본도 결국 도착했으니 손실 원인 막대에는 아무것도 없습니다.',
     ],
@@ -61,14 +61,17 @@ K.register('retrans', function (root) {
     transmit(s, 'new');
   }
   function transmit(s, kind) {
+    // tcp_mtu_probing=1: 재전송 타임아웃이 약 3초(tcp_retries1=3) 이어진 뒤에야 블랙홀로 보고 MSS를 1,024바이트(tcp_base_mss)로 낮춘다
+    if (P.mtuProbe && kind === 'rto' && t - s.first >= 3000) S.mssNow = Math.min(S.mssNow, 1024);
     const size = Math.min(s.size, S.mssNow);
     const cause = lossCause(s, size, t);
-    if (cause === 'M' && kind !== 'new') { S.bhStrikes++; if (P.mtuProbe && S.bhStrikes >= 2) S.mssNow = 1300; }
+    if (cause === 'M' && kind !== 'new') S.bhStrikes++;
     // 같은 길을 가는 패킷은 순서를 지킨다. “순서 뒤바뀜”에 걸린 패킷만 뒤에 온 것보다 늦게 도착한다.
     let arr = null;
     if (!cause) {
       const late = P.reorder && rnd() * 100 < P.reorder;
-      arr = t + oneWay(t) + (late ? 12 + rnd() * 10 : 0);
+      // 혼잡 구간에서 살아남은 패킷은 꽉 찬 대기열 끝에서 50ms 더 기다린다(tail drop은 줄이 가득 찼을 때만 일어난다)
+      arr = t + oneWay(t) + (inCong(t) ? 50 : 0) + (late ? 12 + rnd() * 10 : 0);
       if (!late) { arr = Math.max(arr, S.lastArr + 0.2); S.lastArr = arr; }
     }
     const tx = { at: t, kind, size, lost: cause, arr, spurious: false };
@@ -209,11 +212,11 @@ K.register('retrans', function (root) {
   const sRtt = K.slider(g0, { label: '핑', min: 10, max: 300, step: 10, value: P.rtt, unit: 'ms', onInput: v => { P.rtt = v; } });
   K.slider(g0, { label: '게임 소식 간격', min: 20, max: 300, step: 10, value: P.gap, unit: 'ms', onInput: v => { P.gap = v; }, hint: '소식이 드문드문일수록 “중복 ACK 3개”가 늦게 모여 RTO에 기대게 됩니다(얇은 흐름).' });
   const g1 = K.group(F.controls, '길 위의 손실 원인');
-  const sWifi = K.slider(g1, { label: '와이파이 손실', min: 0, max: 10, step: 0.5, value: P.wifi, unit: '%', onInput: v => { P.wifi = v; pr.clear(); } });
-  const tCong = K.toggle(g1, { label: '혼잡 대기열 넘침 (3초마다 0.35초)', value: P.cong, onChange: v => { P.cong = v; pr.clear(); } });
-  const tCable = K.toggle(g1, { label: '불량 케이블·광모듈 (1%)', value: P.cable, onChange: v => { P.cable = v; pr.clear(); } });
+  const sWifi = K.slider(g1, { label: '와이파이 손실', min: 0, max: 10, step: 0.5, value: P.wifi, unit: '%', onInput: v => { P.wifi = v; pr.clear(); }, hint: '무선 장비가 여러 번 다시 보내 보고도 실패해 버린 비율. 재시도로 살린 패킷은 손실로 치지 않습니다.' });
+  const tCong = K.toggle(g1, { label: '혼잡 대기열 넘침 (3초마다 0.35초)', value: P.cong, onChange: v => { P.cong = v; pr.clear(); }, hint: '병목 대기열이 가득 찬 동안 도착한 패킷의 35%가 버려지고, 살아남은 것도 줄 끝에서 50ms 더 기다립니다.' });
+  const tCable = K.toggle(g1, { label: '불량 케이블·광모듈 (1%)', value: P.cable, onChange: v => { P.cable = v; pr.clear(); }, hint: '실제 비트 오류는 큰 패킷일수록 잘 걸립니다. 여기서는 크기와 상관없이 1%로 단순화했습니다.' });
   const tMtu = K.toggle(g1, { label: 'MTU 블랙홀 (1,360바이트 넘으면 사라짐)', value: P.mtu, onChange: v => { P.mtu = v; pr.clear(); } });
-  const sReo = K.slider(g1, { label: '순서 뒤바뀜', min: 0, max: 30, step: 1, value: P.reorder, unit: '%', onInput: v => { P.reorder = v; pr.clear(); }, hint: '여러 경로·링크 묶음에서 일부 패킷이 10~20ms 늦게 도착' });
+  const sReo = K.slider(g1, { label: '순서 뒤바뀜', min: 0, max: 30, step: 1, value: P.reorder, unit: '%', onInput: v => { P.reorder = v; pr.clear(); }, hint: '패킷 단위로 길을 나누는 장비, 경로가 바뀌는 순간 등에서 일부 패킷이 10~20ms 늦게 도착. 연결마다 갈래를 고정하는 보통의 ECMP·링크 묶음은 순서를 지킵니다.' });
   const tSpike = K.toggle(g1, { label: '지연 급등 (4초마다 0.5초)', value: P.spike, onChange: v => { P.spike = v; pr.clear(); }, hint: '와이파이 절전, 모바일 무선 전환, 가상 머신 일시 정지 등' });
   const sAck = K.slider(g1, { label: 'ACK 지연·손실 (업로드 포화)', min: 0, max: 30, step: 1, value: P.ackLoss, unit: '%', onInput: v => { P.ackLoss = v; pr.clear(); } });
   const g2 = K.group(F.controls, '복구 설정 (보내는 쪽 OS)');
@@ -348,7 +351,7 @@ K.register('retrans', function (root) {
     else {
       const name = CAUSE[top[0]];
       msg = `${K.flag(rate > 0.03 || p99 > 250 ? 'bad' : 'warn')}최근 10초 손실의 주범은 <b>${name}</b>(${top[1]}개)입니다. `;
-      if (top[0] === 'M') msg += `1,360바이트를 넘는 큰 업데이트만 계속 사라지고 같은 패킷을 반복해서 다시 보냅니다. ${P.mtuProbe ? 'MTU 탐색이 켜져 있어 두 번 실패한 뒤부터는 작게 나눠 통과합니다.' : 'TCP는 순서를 지켜야 하므로 뒤따르는 작은 소식까지 전부 줄을 서고, RTO는 두 배씩 늘어나 결국 <b>멈춤</b> 끝에 <b>접속 끊김</b>이 됩니다. 평소에는 멀쩡하다가 “큰 창을 열거나 사람 많은 곳에 가면 멈춘다”는 제보로 옵니다. MSS 조정이나 MTU 탐색이 해결책입니다.'}`;
+      if (top[0] === 'M') msg += `1,360바이트를 넘는 큰 업데이트만 계속 사라지고 같은 패킷을 반복해서 다시 보냅니다. ${P.mtuProbe ? 'MTU 탐색이 켜져 있어도 바로 통과하지는 못합니다. 재전송 타임아웃이 3초쯤 이어져야 블랙홀로 판단하고, 그때부터 1,024바이트로 작게 나눠 통과합니다. 그 사이는 <b>멈춤</b>이라 미리 막는 MSS 조정이 먼저입니다.' : 'TCP는 순서를 지켜야 하므로 뒤따르는 작은 소식까지 전부 줄을 서고, RTO는 두 배씩 늘어나 결국 <b>멈춤</b> 끝에 <b>접속 끊김</b>이 됩니다. 평소에는 멀쩡하다가 “큰 창을 열거나 사람 많은 곳에 가면 멈춘다”는 제보로 옵니다. MSS 조정이나 MTU 탐색이 해결책입니다.'}`;
       else if (top[0] === 'A') msg += `게임 소식 자체는 제때 도착합니다. ACK는 뒤에 오는 ACK가 앞의 것을 대신 확인해 주므로 몇 개 사라져도 대개 괜찮습니다. 문제는 업로드가 꽉 차서 ACK가 줄을 서 늦게 가는 것입니다. 보내는 쪽이 느끼는 왕복 시간이 늘어 RTO가 커지고, ACK가 한꺼번에 늦으면 잃지 않은 것을 다시 보내며(가짜 재전송) 대용량 전송은 속도가 떨어집니다.`;
       else if (P.mode === 'game' && !P.rack) {
         const dupWait = 3 * P.gap + P.rtt / 2, rtoW = P.rtt + P.rtoMin;
