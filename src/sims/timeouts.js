@@ -8,7 +8,7 @@ K.register('timeouts', function (root) {
     tries: [
       '<b>서버 무응답 판정</b>을 “끔”으로 내려 보세요. 공유기가 60초에 몰래 연결을 지우지만 서버는 모릅니다. 유령 접속입니다.',
       '<b>하트비트 간격</b>을 25초로 올려 보세요. 하트비트가 지나갈 때마다 모든 타이머가 0으로 돌아가 아무도 끊지 않습니다.',
-      '<b>프로토콜</b>을 TCP로 바꾸고 하트비트를 끈 채 <b>로드밸런서</b>를 60초로 줄여 보세요. 범인이 로드밸런서로 바뀝니다.',
+      '<b>프로토콜</b>을 TCP로 바꾸고 하트비트와 서버 무응답 판정을 끈 채 <b>로드밸런서</b>를 60초로 줄여 보세요. 범인이 로드밸런서로 바뀝니다.',
       '<b>모바일 백그라운드</b> 프리셋을 눌러 보세요. 하트비트 간격이 짧아도 앱이 멈추면 소용이 없습니다.',
       '<b>회사 방화벽</b> 프리셋에서 <b>짧은 keepalive</b>를 켜 보세요. 운영체제가 60초마다 보내는 확인 패킷이 장비들을 깨워 둡니다.',
     ],
@@ -16,7 +16,8 @@ K.register('timeouts', function (root) {
   });
 
   const MAXT = 600, SPEED = 20;       // 10분을 30초에 (1초 = 20초)
-  const DEF = { proto: 'udp', link: 'home', hb: 0, bg: false, fw: false, lb: 350, srv: 30, ka: false };
+  const LB_DEF = { udp: 120, tcp: 350 };   // AWS NLB 기본값 (UDP는 바꿀 수 없음)
+  const DEF = { proto: 'udp', link: 'home', hb: 0, bg: false, fw: false, lb: LB_DEF.udp, srv: 30, ka: false };
   const P = Object.assign({}, DEF);
 
   // 받침에 따라 조사 고르기 (괄호 속 영문은 건너뛴다)
@@ -119,14 +120,17 @@ K.register('timeouts', function (root) {
 
   /* ---------- 조작부 ---------- */
   const g1 = K.group(F.controls, '연결');
-  const cProto = K.choice(g1, { label: '프로토콜', value: P.proto, options: [['udp', 'UDP'], ['tcp', 'TCP']], onChange: v => { P.proto = v; changed(); } });
+  const cProto = K.choice(g1, { label: '프로토콜', value: P.proto, options: [['udp', 'UDP'], ['tcp', 'TCP']], onChange: v => {
+    if (P.lb === LB_DEF[P.proto]) { P.lb = LB_DEF[v]; sLb.set(P.lb, false); }   // 기본값이면 프로토콜에 맞는 기본값으로
+    P.proto = v; changed();
+  } });
   const cLink = K.choice(g1, { label: '연결 방식', value: P.link, options: [['home', '유선·와이파이'], ['mobile', '모바일']], onChange: v => { P.link = v; changed(); } });
-  const tBg = K.toggle(g1, { label: '백그라운드 전환 (모바일)', value: P.bg, onChange: v => { P.bg = v; changed(); }, hint: '앱이 백그라운드로 가면 10초 뒤 OS가 앱을 멈춥니다. 하트비트도 멈춥니다.' });
-  const tFw = K.toggle(g1, { label: '회사·PC방 방화벽 거침', value: P.fw, onChange: v => { P.fw = v; changed(); }, hint: '짧게 설정된 곳 기준: UDP 120초, TCP 5분. TCP는 1시간인 장비도 흔합니다.' });
+  const tBg = K.toggle(g1, { label: '백그라운드 전환 (모바일)', value: P.bg, onChange: v => { P.bg = v; changed(); }, hint: '이 실험에서는 백그라운드로 간 지 10초 뒤 OS가 앱을 멈춘다고 둡니다. 실제로는 OS와 설정에 따라 몇 초~몇십 초입니다. 하트비트도 함께 멈춥니다.' });
+  const tFw = K.toggle(g1, { label: '회사·PC방 방화벽 거침', value: P.fw, onChange: v => { P.fw = v; changed(); }, hint: '이 실험 값은 UDP 2분, TCP 5분입니다(TCP를 짧게 설정한 곳). 기본값은 장비마다 달라 UDP 30초~3분, TCP 30분~1시간이 흔합니다.' });
   const g2 = K.group(F.controls, '클라이언트');
   const sHb = K.slider(g2, { label: '하트비트 간격', min: 0, max: 300, step: 5, value: P.hb, fmt: v => (v ? fmtT(v) : '끔'), onInput: v => { P.hb = v; changed(); }, hint: '하트비트: 할 일이 없어도 “살아 있어요”라고 보내는 작은 패킷' });
   const g3 = K.group(F.controls, '타임아웃 설정');
-  const sLb = K.slider(g3, { label: '로드밸런서 유휴 타임아웃', min: 30, max: 3600, step: 10, value: P.lb, fmt: fmtT, onInput: v => { P.lb = v; changed(); }, hint: '예: AWS NLB는 TCP 350초·UDP 120초, ALB는 60초가 기본입니다.' });
+  const sLb = K.slider(g3, { label: '로드밸런서 유휴 타임아웃', min: 30, max: 3600, step: 10, value: P.lb, fmt: fmtT, onInput: v => { P.lb = v; changed(); }, hint: '알리지 않고 지우는 방식 기준입니다. 기본값 예: AWS NLB는 TCP 350초·UDP 120초(UDP는 바꿀 수 없음), Azure Load Balancer는 TCP 4분. AWS ALB(60초)는 시간이 되면 서버 쪽 연결도 닫아 서버가 곧 압니다.' });
   const sSrv = K.slider(g3, { label: '서버 무응답 판정', min: 0, max: 120, step: 5, value: P.srv, fmt: v => (v ? fmtT(v) : '끔'), onInput: v => { P.srv = v; changed(); }, hint: '게임 서버가 하트비트·입력을 이만큼 못 받으면 접속을 정리합니다.' });
   const tKa = K.toggle(g3, { label: '짧은 keepalive 설정 (60초)', value: P.ka, onChange: v => { P.ka = v; changed(); }, hint: 'TCP 전용. 기본값은 2시간 동안 조용해야 첫 확인 패킷을 보냅니다.' });
 
@@ -138,7 +142,7 @@ K.register('timeouts', function (root) {
     { label: '하트비트 30초', apply: preset({ hb: 30, srv: 90 }) },
     { label: '모바일 백그라운드', apply: preset({ link: 'mobile', bg: true, hb: 10, srv: 60 }) },
     { label: '로드밸런서 60초', apply: preset({ proto: 'tcp', hb: 120, lb: 60, srv: 0 }) },
-    { label: '회사 방화벽', apply: preset({ proto: 'tcp', fw: true, srv: 0 }) },
+    { label: '회사 방화벽', apply: preset({ proto: 'tcp', fw: true, srv: 0, lb: LB_DEF.tcp }) },
   ]);
 
   const stCut = K.stat(F.stats, { label: '끊기는 시점' });
@@ -309,7 +313,7 @@ K.register('timeouts', function (root) {
     else if (c.key === 'srv') stSrv.set(fmtT(A.notice), 'good', '서버가 직접 끊음');
     else if (Number.isFinite(A.notice)) stSrv.set(fmtT(A.notice), A.ghost ? 'bad' : 'warn', `끊긴 뒤 ${fmtT(A.notice - A.Tc)}`);
     else stSrv.set('끝까지 모름', 'bad', 'UDP는 스스로 확인 안 함');
-    stGhost.set(A.ghost ? '예' : '아니오', A.ghost ? 'bad' : 'good', A.ghost ? (Number.isFinite(A.notice) ? `${fmtT(A.notice - A.Tc)} 동안 캐릭터가 남음` : '캐릭터가 계속 남음') : '서버가 곧 정리');
+    stGhost.set(A.ghost ? '예' : '아니오', A.ghost ? 'bad' : 'good', A.ghost ? (Number.isFinite(A.notice) ? `${fmtT(A.notice - A.Tc)} 동안 캐릭터가 남음` : '캐릭터가 계속 남음') : c ? '서버가 곧 정리' : '끊긴 적이 없음');
     F.say(narrate());
   }
   function events() {
@@ -342,9 +346,14 @@ K.register('timeouts', function (root) {
     const rec = m ? Math.max(5, Math.floor(m.T / 2 / 5) * 5) : 30;
     const bgStop = Number.isFinite(A.appStop);
     if (!c) {
-      const safe = m && P.hb <= m.T / 2;
-      return `${K.flag(safe ? 'good' : 'warn')}하트비트가 ${fmtT(P.hb)}마다 지나가서 모든 장비의 타이머가 가득 차기 전에 0으로 돌아갑니다. 가장 짧은 타임아웃은 <b>${m.name} ${fmtT(m.T)}</b>입니다. ` +
-        (safe ? '하트비트 간격이 그 절반 이하라 패킷 하나가 늦거나 사라져도 버팁니다.' : `하트비트 간격이 그 절반을 넘어서, 하트비트 하나만 늦거나 사라져도 끊길 수 있습니다. ${fmtT(rec)} 이하로 줄이는 편이 안전합니다.`);
+      // TCP에서 짧은 keepalive가 켜져 있으면 하트비트가 없거나 뜸해도 운영체제의 확인 패킷(1분)이 타이머를 되돌린다
+      const kaOn = A.tcp && P.ka, byKa = kaOn && (!P.hb || P.hb > 60);
+      const iv = byKa ? 60 : P.hb;
+      const safe = m && iv <= m.T / 2;
+      const src = byKa ? `운영체제의 TCP keepalive 확인 패킷이 ${fmtT(60)}마다` : `하트비트가 ${fmtT(P.hb)}마다`;
+      return `${K.flag(safe ? 'good' : 'warn')}${src} 지나가서 모든 장비의 타이머가 가득 차기 전에 0으로 돌아갑니다. 가장 짧은 타임아웃은 <b>${m.name} ${fmtT(m.T)}</b>입니다. ` +
+        (safe ? '간격이 그 절반 이하라 패킷 하나가 늦거나 사라져도 버팁니다.' : `간격이 그 절반을 넘어서, 패킷 하나만 늦거나 사라져도 끊길 수 있습니다. ${fmtT(rec)} 이하로 줄이는 편이 안전합니다.`) +
+        (byKa ? ' 다만 keepalive는 운영체제가 보내므로 게임이 멈춰도 계속 나갑니다. 게임이 살아 있는지는 하트비트로 따로 확인해야 합니다.' : '');
     }
     let why;
     if (bgStop) why = `휴대폰이 백그라운드로 가고 10초 뒤 OS가 앱을 멈춰 하트비트가 끊겼습니다. 그 뒤로 조용한 시간이 ${eul(fmtT(c.T))} 넘자`;

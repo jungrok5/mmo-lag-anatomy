@@ -36,7 +36,7 @@ K.register('retrans', function (root) {
     t = 0;
     S = { next: 0, segs: new Map(), una: 0, srtt: null, rttvar: 0, rto: 1000, backoff: 1, rtoAt: Infinity, tlpAt: Infinity, tlpOut: false,
       cwnd: 10, ssthresh: 1e9, dup: 0, lastCum: 0, frDone: -1, nextGame: 0, nextBig: 1000, mssNow: P.mss ? MSS_CLAMP : MSS, bhStrikes: 0, retries: 0, lastArr: 0, lastAck: 0,
-      recover: 0, lossHigh: 0, lossAt: -1, rtxStamp: null, undo: null, minRtt: Infinity, reoSteps: 1, reoBumpAt: -1e9 };
+      recover: 0, lossHigh: 0, lossAt: -1, rtxStamp: null, undo: null, minRtt: Infinity, reoSteps: 1, reoBumpAt: -1e9, q: [], credit: 0 };
     R = { expected: 0, buf: new Set(), got: new Set(), tsRecent: 0 };
     net = []; acks = []; lossLog = []; deliv = []; cwndLog = []; rateHist = [];
     C = { out: 0, retr: 0, fast: 0, rto: 0, tlp: 0, spurious: 0 };
@@ -56,8 +56,11 @@ K.register('retrans', function (root) {
 
   /* ---------------- 보내는 쪽 ---------------- */
   const outstanding = () => { let n = 0; for (let i = S.una; i < S.next; i++) { const s = S.segs.get(i); if (s && !s.acked) n++; } return n; };
-  function newSeg(size) {
-    const s = { id: S.next++, size, first: t, tx: [], acked: false, sacked: false, delivered: null };
+  const RTO_MAX = 120000; // 리눅스 TCP_RTO_MAX: 두 배씩 늘어도 120초에서 멈춘다
+  const rtoNow = () => Math.min(S.rto * S.backoff, RTO_MAX);
+  const inRecovery = () => S.una < S.recover;
+  function newSeg(size, made) {
+    const s = { id: S.next++, size, first: made == null ? t : made, tx: [], acked: false, sacked: false, delivered: null };
     S.segs.set(s.id, s);
     transmit(s, 'new');
   }
@@ -78,14 +81,14 @@ K.register('retrans', function (root) {
     const tx = { at: t, kind, size, lost: cause, arr, spurious: false };
     s.tx.push(tx);
     C.out++;
-    if (kind !== 'new') { C.retr++; if (S.rtxStamp == null) S.rtxStamp = t; }
+    if (kind !== 'new') { C.retr++; if (S.rtxStamp == null) S.rtxStamp = t; if (inRecovery()) S.credit--; }
     if (cause) lossLog.push([t, cause]);
     else net.push({ at: tx.arr, id: s.id, tx });
-    if (S.rtoAt === Infinity) S.rtoAt = t + S.rto * S.backoff;
+    if (S.rtoAt === Infinity) S.rtoAt = t + rtoNow();
     // 맨 앞(가장 오래된) 패킷을 빠른 재전송하면 RTO 타이머를 지금부터 다시 건다(리눅스 tcp_xmit_retransmit_queue).
     // 그러지 않으면 방금 다시 보낸 것의 확인이 오기 전에 RTO가 같은 패킷을 또 보낸다.
-    // 단순화: 첫 재전송일 때만 다시 건다. 같은 패킷을 거듭 잃으면(MTU 블랙홀 등) RTO가 결국 터져 MTU 탐색이 돌게 둔다.
-    if (kind === 'fast' && s.id === S.una && s.tx.length === 2) S.rtoAt = t + S.rto * S.backoff;
+    // 같은 패킷을 거듭 잃어도(MTU 블랙홀) 복구 중에는 새 소식이 묶여(아래 credit) 뒤따르는 SACK이 끊기므로 결국 RTO가 터진다.
+    if (kind === 'fast' && s.id === S.una) S.rtoAt = t + rtoNow();
     if (kind === 'new') armTlp();
   }
   function armTlp() {
@@ -104,13 +107,14 @@ K.register('retrans', function (root) {
       // RACK은 DSACK을 보면 순서 뒤바뀜 여유 시간을 한 단계 늘린다(한 왕복에 한 번, 리눅스 reo_wnd_steps)
       if (t - S.reoBumpAt > (S.srtt || P.rtt)) { S.reoSteps = Math.min(S.reoSteps + 1, 8); S.reoBumpAt = t; }
     }
-    const inLoss = S.una < S.lossHigh, rtxStamp = S.rtxStamp;
-    let advanced = false, sample = null, rtxAcked = false, sackSample = null;
+    const inLoss = S.una < S.lossHigh, rtxStamp = S.rtxStamp, wasRec = inRecovery();
+    let advanced = false, sample = null, rtxAcked = false, sackSample = null, newly = 0;
     if (a.cum > S.una) {
       for (let i = S.una; i < a.cum; i++) {
         const s = S.segs.get(i);
         if (!s || s.acked) continue;
         s.acked = true;
+        if (!s.sacked) newly++;
         // 왕복 시간 표본: 재전송한 것은 어느 쪽의 확인인지 몰라 빼고(Karn 규칙),
         // 이미 SACK으로 확인된 것은 구멍이 메워지기를 기다린 시간이 섞여 뺀다
         if (s.tx.length > 1) rtxAcked = true;
@@ -120,7 +124,10 @@ K.register('retrans', function (root) {
       S.una = a.cum; advanced = true; S.backoff = 1; S.dup = 0; S.retries = 0; S.rtxStamp = null;
       S.tlpOut = false;
     } else if (a.cum === S.una && outstanding() > 0) S.dup++;
-    a.sack.forEach(id => { const s = S.segs.get(id); if (s && !s.sacked) { s.sacked = true; if (s.tx.length === 1 && sackSample == null) sackSample = t - s.tx[0].at; } });
+    a.sack.forEach(id => { const s = S.segs.get(id); if (s && !s.sacked) { s.sacked = true; newly++; if (s.tx.length === 1 && sackSample == null) sackSample = t - s.tx[0].at; } });
+    // 복구 중에는 혼잡 창이 “날아가는 패킷 + 방금 도착이 확인된 만큼”으로 묶인다(리눅스 PRR). RTO 뒤(슬로 스타트)는 그 두 배.
+    // 다시 보낸 것이 이 한도를 먼저 쓰므로, 얇은 흐름은 복구가 끝날 때까지 새 소식이 보내는 쪽에 쌓인다.
+    if (wasRec) S.credit += newly * (inLoss ? 2 : 1);
     const rtt = rtxAcked || sample == null ? sackSample : sample;
     if (rtt != null) {
       S.minRtt = Math.min(S.minRtt, rtt);
@@ -130,7 +137,7 @@ K.register('retrans', function (root) {
     }
     // RTO 뒤 첫 확인이 “원본이 늦게 온 것”이면(타임스탬프로 구별) RTO가 가짜였다: 복구를 멈추고 줄인 혼잡 창을 되돌린다(Eifel·F-RTO)
     if (inLoss && advanced && rtxStamp != null && a.ts < rtxStamp) {
-      S.lossHigh = S.una;
+      S.lossHigh = S.una; S.recover = S.una;
       if (P.mode === 'bulk' && S.undo) { S.cwnd = S.undo[0]; S.ssthresh = S.undo[1]; }
       S.undo = null;
     }
@@ -138,7 +145,8 @@ K.register('retrans', function (root) {
     if (P.rack) {
       // RACK: 나중에 보낸 패킷이 도착했는데, 이 패킷은 그보다 (왕복 시간 + 여유)만큼 먼저 보냈으면 잃은 것
       let newestDel = -1;
-      for (const id of a.sack) { const s = S.segs.get(id); if (s) newestDel = Math.max(newestDel, s.tx[s.tx.length - 1].at); }
+      // 다시 보낸 지 최소 왕복 시간도 안 됐는데 확인된 것은 원본이 도착한 것일 수 있어 기준으로 쓰지 않는다(리눅스 tcp_rack_advance)
+      for (const id of a.sack) { const s = S.segs.get(id); if (!s) continue; const x = s.tx[s.tx.length - 1]; if (x.kind !== 'new' && t - x.at < S.minRtt) continue; newestDel = Math.max(newestDel, x.at); }
       // 여유 시간 = 최소 왕복 시간의 1/4 × 단계(DSACK을 볼 때마다 늘어남), 왕복 시간을 넘지 않음
       const base = S.srtt || P.rtt, reo = Math.min((S.minRtt < Infinity ? S.minRtt : base) / 4 * S.reoSteps, base);
       for (let i = S.una; i < S.next; i++) {
@@ -160,28 +168,31 @@ K.register('retrans', function (root) {
       }
     }
     if (outstanding() === 0) { S.rtoAt = Infinity; S.tlpAt = Infinity; }
-    else if (advanced) { S.rtoAt = t + S.rto * S.backoff; armTlp(); }
+    else if (advanced) { S.rtoAt = t + rtoNow(); armTlp(); }
   }
   // 손실 한 번의 복구(같은 창 안의 손실 묶음)마다 한 번만 줄인다. CUBIC은 70%로.
   function reduce() {
     if (S.una < S.recover) return;
-    S.recover = S.next;
+    S.recover = S.next; S.credit = 0; S.tlpAt = Infinity; // 복구에 들어서며 보낸 첫 재전송은 한도와 상관없이 나간다. 복구 중에는 TLP 대신 RTO만 건다.
     if (P.mode === 'bulk') { S.ssthresh = Math.max(2, S.cwnd * 0.7); S.cwnd = S.ssthresh; }
   }
   function senderStep() {
     if (P.mode === 'game') {
-      if (t >= S.nextGame) { newSeg(SMALL); S.nextGame += P.gap; }
+      if (t >= S.nextGame) { S.q.push([SMALL, S.nextGame]); S.nextGame += P.gap; }
       if (t >= S.nextBig) { // 2초마다 큰 업데이트 4KB (MSS 단위로 쪼개짐)
-        for (let left = 4000; left > 0; left -= S.mssNow) newSeg(Math.min(left, S.mssNow));
+        for (let left = 4000; left > 0; left -= S.mssNow) S.q.push([Math.min(left, S.mssNow), S.nextBig]);
         S.nextBig += 2000;
       }
+      // 게임이 만든 소식은 바로 나간다. 복구 중에는 위의 한도(credit)만큼만 나가고 나머지는 서버에서 기다린다.
+      // (단순화: 실제 TCP는 기다리는 작은 소식을 MSS 크기로 합쳐 보낸다)
+      while (S.q.length && (!inRecovery() || S.credit > 0)) { const [size, made] = S.q.shift(); if (inRecovery()) S.credit--; newSeg(size, made); }
     } else if (outstanding() < Math.floor(S.cwnd)) newSeg(MSS);
     // TLP: 한동안 ACK가 없으면 맨 끝 패킷을 한 번 더 보내 받는 쪽의 SACK을 끌어낸다
-    if (P.rack && t >= S.tlpAt && !S.tlpOut && outstanding() > 0) {
+    if (P.rack && t >= S.tlpAt && !S.tlpOut && !inRecovery() && outstanding() > 0) {
       let last = null;
       for (let i = S.next - 1; i >= S.una; i--) { const s = S.segs.get(i); if (s && !s.acked) { last = s; break; } }
       // 탐침을 보낸 뒤 RTO 타이머는 지금부터 다시 건다(리눅스 tcp_send_loss_probe)
-      if (last) { S.tlpOut = true; S.tlpAt = Infinity; transmit(last, 'tlp'); C.tlp++; S.rtoAt = t + S.rto * S.backoff; }
+      if (last) { S.tlpOut = true; S.tlpAt = Infinity; transmit(last, 'tlp'); C.tlp++; S.rtoAt = t + rtoNow(); }
     }
     // RTO: 기다려도 확인이 안 오면 가장 오래된 것부터 다시 보낸다
     if (t >= S.rtoAt && outstanding() > 0) {
@@ -194,10 +205,11 @@ K.register('retrans', function (root) {
       }
       // 혼잡 창은 1로. 기준값(ssthresh)은 연속 RTO의 첫 번째에서만 70%로 낮춘다(CUBIC). 가짜로 밝혀지면 되돌릴 값을 남겨 둔다.
       if (P.mode === 'bulk') { if (S.retries === 0) { S.undo = [S.cwnd, S.ssthresh]; S.ssthresh = Math.max(2, S.cwnd * 0.7); } S.cwnd = 1; }
-      S.lossHigh = S.next; S.lossAt = t; S.recover = S.next; S.frDone = S.una; S.dup = 0; S.tlpAt = Infinity;
+      // 혼잡 창 1 = 방금 다시 보낸 하나로 꽉 참. 새 소식은 확인이 올 때까지 서버에서 기다린다.
+      S.lossHigh = S.next; S.lossAt = t; S.recover = S.next; S.frDone = S.una; S.dup = 0; S.tlpAt = Infinity; S.credit = 0;
       S.retries++;
-      if (!thinNow) S.backoff = Math.min(64, S.backoff * 2);
-      S.rtoAt = t + S.rto * S.backoff;
+      if (!thinNow) S.backoff = Math.min(1024, S.backoff * 2);
+      S.rtoAt = t + rtoNow();
     }
   }
 
@@ -268,7 +280,7 @@ K.register('retrans', function (root) {
   const tRack = K.toggle(g2, { label: 'RACK-TLP (시간 기준 손실 판단 + 꼬리 탐침)', value: P.rack, onChange: v => { P.rack = v; pr.clear(); }, hint: '최신 리눅스는 기본으로 켜져 있습니다. 끄면 “중복 ACK 3개” 방식만 씁니다.' });
   const tThin = K.toggle(g2, { label: '얇은 흐름 선형 타임아웃', value: P.thin, onChange: v => { P.thin = v; pr.clear(); }, hint: 'tcp_thin_linear_timeouts. 패킷이 적게 오가는 연결은 처음 6번까지 RTO를 두 배씩 늘리지 않습니다.' });
   const tProbe = K.toggle(g2, { label: 'MTU 탐색 (tcp_mtu_probing)', value: P.mtuProbe, onChange: v => { P.mtuProbe = v; pr.clear(); } });
-  const tMss = K.toggle(g2, { label: 'MSS 조정 (1,300바이트로 제한)', value: P.mss, onChange: v => { P.mss = v; S.mssNow = v ? Math.min(S.mssNow, MSS_CLAMP) : MSS; pr.clear(); }, hint: '방화벽·공유기의 MSS clamp나 서버의 TCP_MAXSEG로 처음부터 경로를 통과할 크기로 보냅니다. 새로 만드는 패킷부터 적용됩니다.' });
+  const tMss = K.toggle(g2, { label: 'MSS 조정 (1,300바이트로 제한)', value: P.mss, onChange: v => { P.mss = v; S.mssNow = v ? Math.min(S.mssNow, MSS_CLAMP) : S.mssNow === MSS_CLAMP ? MSS : S.mssNow; pr.clear(); }, hint: '방화벽·공유기의 MSS clamp나 서버의 TCP_MAXSEG로 처음부터 경로를 통과할 크기로 보냅니다. 새로 만드는 패킷부터 적용됩니다.' });
   const cRto = K.choice(g2, { label: 'RTO 최소값', value: P.rtoMin, options: [[200, '200ms (기본)'], [50, '50ms (내부망용)']], onChange: v => { P.rtoMin = +v; pr.clear(); } });
 
   const stRate = K.stat(F.stats, { label: '재전송률' });
@@ -386,17 +398,18 @@ K.register('retrans', function (root) {
     const wOut = C.out - base.out, wRetr = C.retr - base.retr;
     const rate = wOut ? wRetr / wOut : 0;
     const head = S.segs.get(R.expected);
-    const waitMs = head && head.first < t ? t - head.first : 0;
-    const d = deliv.map(x => x[1]).sort((a, b) => a - b);
+    // 받는 쪽에서 기다리는 것(구멍 뒤)과 서버에서 기다리는 것(복구 중 보내지 못한 소식) 중 더 오래된 쪽
+    const waitMs = Math.max(head && head.first < t ? t - head.first : 0, S.q.length ? t - S.q[0][1] : 0);
+    const d = deliv.filter(x => x[0] > t - 10000).map(x => x[1]).sort((a, b) => a - b);
     const p99d = d.length ? d[Math.min(d.length - 1, Math.floor(d.length * 0.99))] : 0;
     // 맨 앞이 아직 안 왔으면 그 대기 시간도 지연이다(도착한 것만 세면 멈춘 동안 “좋음”으로 보인다)
     const stuck = waitMs > P.rtt ? waitMs : 0, p99 = Math.max(p99d, stuck);
-    // 오래 멈춘 동안은 RTO가 길어져 다시 보낼 기회 자체가 적으므로 재전송률이 낮게 나온다
-    stRate.set(K.pct(rate, 1), rate > 0.03 ? 'bad' : rate > 0.005 || stuck > 1000 ? 'warn' : 'good', stuck > 1000 ? '멈춘 동안은 다시 보낼 기회도 적어 낮게 나옴' : `최근 10초 보낸 ${K.n(wOut)}개 중 ${K.n(wRetr)}개`);
+    // 오래 멈춘 동안은 혼잡 창이 1이라 새 소식은 서버에 묶이고, 드문드문 다시 보낸 것만 나간다(개수가 적어 비율이 크게 흔들린다)
+    stRate.set(K.pct(rate, 1), rate > 0.03 ? 'bad' : rate > 0.005 || stuck > 1000 ? 'warn' : 'good', stuck > 1000 ? `멈춘 동안은 다시 보낸 것만 나감 (${K.n(wOut)}개 중 ${K.n(wRetr)}개)` : `최근 10초 보낸 ${K.n(wOut)}개 중 ${K.n(wRetr)}개`);
     stFast.set(String(C.fast)); stRto.set(String(C.rto), C.rto > 3 ? 'bad' : C.rto ? 'warn' : 'good'); stTlp.set(String(C.tlp)); stSp.set(String(C.spurious), C.spurious ? 'warn' : 'good');
     stP99.set(d.length || stuck ? K.ms(p99) : '전달 없음', !d.length || p99 > 250 ? 'bad' : p99 > 120 ? 'warn' : 'good', stuck > p99d ? '아직 못 받은 맨 앞 소식 포함' : `평소 ${K.ms(P.rtt / 2)}`);
     stWait.set(waitMs > P.rtt ? K.ms(waitMs) : '없음', waitMs > 1000 ? 'bad' : waitMs > 200 ? 'warn' : 'good', waitMs > P.rtt ? '맨 앞 하나를 기다리느라 뒤도 전부 대기' : '순서대로 바로 전달');
-    stRtoV.set(K.ms(S.rto * S.backoff), S.backoff > 1 ? 'warn' : null, S.backoff > 1 ? `두 배씩 늘어난 상태 (×${S.backoff})` : '왕복 시간 + max(최소값, 흔들림×4)');
+    stRtoV.set(K.ms(rtoNow()), S.backoff > 1 ? 'warn' : null, rtoNow() >= RTO_MAX ? '상한 120초에 닿음' : S.backoff > 1 ? `두 배씩 늘어난 상태 (×${S.backoff})` : '왕복 시간 + max(최소값, 흔들림×4)');
     const top = Object.entries(cnt).sort((a, b) => b[1] - a[1])[0];
     const rtoWait = K.ms(P.rtt + P.rtoMin);
     let msg;
@@ -405,11 +418,13 @@ K.register('retrans', function (root) {
     else {
       const name = CAUSE[top[0]];
       msg = `${K.flag(rate > 0.03 || p99 > 250 ? 'bad' : 'warn')}최근 10초 손실의 주범은 <b>${name}</b>(${top[1]}개)입니다. `;
-      if (top[0] === 'M') msg += `1,360바이트를 넘는 큰 업데이트만 계속 사라지고 같은 패킷을 반복해서 다시 보냅니다. ${P.mtuProbe ? 'MTU 탐색이 켜져 있어도 바로 통과하지는 못합니다. 재전송 타임아웃이 3초쯤 이어져야 블랙홀로 판단하고, 그때부터 1,024바이트로 작게 나눠 통과합니다. 그 사이는 <b>멈춤</b>이라 미리 막는 MSS 조정이 먼저입니다.' : 'TCP는 순서를 지켜야 하므로 뒤따르는 작은 소식까지 전부 줄을 서고, RTO는 두 배씩 늘어나 결국 <b>멈춤</b> 끝에 <b>접속 끊김</b>이 됩니다. 평소에는 멀쩡하다가 “큰 창을 열거나 사람 많은 곳에 가면 멈춘다”는 제보로 옵니다. MSS 조정이나 MTU 탐색이 해결책입니다.'}`;
+      if (top[0] === 'M') msg += `1,360바이트를 넘는 큰 업데이트만 계속 사라지고 같은 패킷을 반복해서 다시 보냅니다. ${P.mtuProbe ? 'MTU 탐색이 켜져 있어도 바로 통과하지는 못합니다. 재전송 타임아웃이 3초쯤 이어져야 블랙홀로 판단하고, 그때부터 1,024바이트로 작게 나눠 통과합니다. 그 사이는 <b>멈춤</b>이라 미리 막는 MSS 조정이 먼저입니다.' : 'TCP는 순서를 지켜야 하므로 뒤따르는 작은 소식까지 전부 줄을 섭니다. RTO가 한 번 터진 뒤에는 서버도 새 소식을 보내지 않고 쌓아 두고, RTO는 두 배씩 늘어나 결국 <b>멈춤</b> 끝에 <b>접속 끊김</b>이 됩니다. 평소에는 멀쩡하다가 “큰 창을 열거나 사람 많은 곳에 가면 멈춘다”는 제보로 옵니다. MSS 조정이나 MTU 탐색이 해결책입니다.'}`;
       else if (top[0] === 'A') msg += `게임 소식 자체는 제때 도착합니다. ACK는 뒤에 오는 ACK가 앞의 것을 대신 확인해 주므로 몇 개 사라져도 대개 괜찮습니다. 문제는 업로드가 꽉 차서 ACK가 줄을 서 늦게 가는 것입니다. 보내는 쪽이 느끼는 왕복 시간이 늘어 RTO가 커지고, ACK가 한꺼번에 늦으면 잃지 않은 것을 다시 보내며(가짜 재전송) 대용량 전송은 속도가 떨어집니다. 실제 게임에서 더 크게 느껴지는 것은 같은 업로드 줄에 선 내 입력이 늦게 가는 <b>입력 지연</b>입니다(이 실험은 서버 → 내 PC 방향만 보여 줍니다).`;
       else if (P.mode === 'game' && !P.rack) {
-        // 보내는 쪽 기준: 잃은 패킷을 보낸 뒤 세 번째 중복 ACK가 돌아오기까지 = 소식 간격×3 + 왕복 시간
-        const dupWait = 3 * P.gap + P.rtt, rtoW = P.rtt + P.rtoMin, thr = Math.floor(P.rtoMin / 30) * 10 + 10;
+        // 보내는 쪽 기준: 잃은 패킷을 보낸 뒤 세 번째 중복 ACK가 돌아오기까지 = 소식 간격×3 + 왕복 시간.
+        // RTO 타이머는 앞 소식의 확인이 올 때마다 새로 걸리므로, 핑이 소식 간격보다 길면 (핑 - 간격)만큼 늦게 터진다.
+        const dupWait = 3 * P.gap + P.rtt, rtoW = P.rtt + P.rtoMin + Math.max(0, P.rtt - P.gap);
+        const thr = Math.floor(Math.max(P.rtoMin / 3, (P.rtt + P.rtoMin) / 4) / 10) * 10 + 10;
         const rackTip = P.gap < P.rtoMin ? `RACK-TLP를 켜면 다음 소식의 확인이 오는 약 ${K.ms(Math.max(P.gap, P.rtt / 4) + P.rtt)} 뒤에 복구가 시작됩니다.` : 'RACK-TLP를 켜도 소식이 이렇게 드문드문하면 크게 빨라지지 않습니다.';
         msg += dupWait > rtoW
           ? `게임 소식이 ${P.gap}ms마다 하나라, 보내는 쪽에 중복 ACK 3개가 모이려면 약 ${K.ms(dupWait)}이 걸립니다. 그 전에 RTO(약 ${K.ms(rtoW)})가 먼저 옵니다. 한 번 잃을 때마다 그만큼 <b>멈춤</b>, 뒤 소식은 줄을 섰다 <b>몰아치기</b>입니다. ${rackTip}`

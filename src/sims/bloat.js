@@ -41,7 +41,7 @@ K.register('bloat', function (root) {
     onInput: v => { P.bufV = v; trimToBuffer(); },
     hint: '버퍼가 꽉 찼을 때 줄을 다 비우는 데 걸리는 시간(ms)도 함께 표시합니다.',
   });
-  const tSqm = K.toggle(g1, { label: 'SQM (스마트 대기열 관리: fq_codel/CAKE)', value: P.sqm, onChange: v => { P.sqm = v; switchMode(); }, hint: '흐름마다 줄을 따로 세우고, 큰 흐름의 줄은 5ms 안팎으로 짧게 유지합니다.' });
+  const tSqm = K.toggle(g1, { label: 'SQM (스마트 대기열 관리: fq_codel/CAKE)', value: P.sqm, onChange: v => { P.sqm = v; switchMode(); }, hint: '흐름마다 줄을 따로 세우고, 큰 흐름의 줄은 5ms 안팎으로 짧게 유지합니다. 실제 공유기에서는 속도를 회선의 90~95%로 맞춰야 줄이 공유기 안에 생겨 효과가 납니다.' });
   const g2 = K.group(F.controls, '다른 트래픽');
   const sUp = K.slider(g2, {
     label: '다른 기기 업로드', min: 0, max: 100, step: 5, value: P.up,
@@ -131,7 +131,7 @@ K.register('bloat', function (root) {
   }
   function onBulkLoss() {
     if (t < recUntil) return;
-    wmax = cwnd / MTU; cwnd *= 0.5; tLoss = t; inSS = false;
+    wmax = cwnd / MTU; cwnd *= 0.7; tLoss = t; inSS = false;   // CUBIC(리눅스·윈도우·macOS 기본)은 손실 때 30% 줄인다
     recUntil = t + RTT_B + qBytes / Cb();
   }
   function pick() {
@@ -177,7 +177,7 @@ K.register('bloat', function (root) {
       if (P.sqm) cwnd = bdp + C * 5 + 3000;
       else if (inSS) cwnd = Math.min(CAPW, cwnd * Math.pow(2, 1 / rtt));
       else {
-        const el = (t - tLoss) / 1000, Kc = Math.cbrt(wmax * 0.5 / 0.4);
+        const el = (t - tLoss) / 1000, Kc = Math.cbrt(wmax * 0.3 / 0.4);
         cwnd = Math.min(CAPW, (wmax + 0.4 * Math.pow(el - Kc, 3)) * MTU);
       }
       let guard = 0;
@@ -355,7 +355,7 @@ K.register('bloat', function (root) {
 
   /* ---------- 수치·해설 ---------- */
   function narrate(M) {
-    const st = M.last > 100 || M.loss > 0.01 ? 'bad' : M.last > 30 || M.jit > 8 || M.loss > 0.002 ? 'warn' : 'good';
+    const st = M.last > 100 || M.loss > 0.01 ? 'bad' : M.last > 30 || M.jit > 8 || M.max > 40 || M.loss > 0.002 ? 'warn' : 'good';
     stPing.set(K.ms(M.last), M.last > 100 ? 'bad' : M.last > 30 ? 'warn' : 'good');
     stMax.set(K.ms(M.max), M.max > 150 ? 'bad' : M.max > 40 ? 'warn' : 'good');
     stJit.set(K.ms(M.jit), M.jit > 20 ? 'bad' : M.jit > 5 ? 'warn' : 'good');
@@ -364,13 +364,13 @@ K.register('bloat', function (root) {
     const parts = [];
     const bloated = !P.sqm && M.qms > 20;
     if (P.up >= 100 && bloated) {
-      parts.push(`다른 기기의 대용량 업로드가 공유기 대기열을 <b>${K.n(M.fill * 100, 0)}%</b> 채웠습니다. 게임 패킷은 앞에 선 영상 패킷 ${K.n(qBytes / 1000)}KB가 다 나갈 때까지 <b>${K.ms(M.qms)}</b>를 기다립니다. 핑이 ${K.ms(M.last)}까지 올라 누른 스킬이 늦게 나가는 입력 지연과, 다른 캐릭터의 순간이동이 생깁니다.`);
+      parts.push(`다른 기기의 대용량 업로드가 공유기 대기열을 <b>${K.n(M.fill * 100, 0)}%</b> 채웠습니다. 게임 패킷은 앞에 선 영상 패킷 ${K.n(qBytes / 1000)}KB가 다 나갈 때까지 <b>${K.ms(M.qms)}</b>를 기다립니다. 핑이 ${K.ms(M.last)}까지 올라 누른 스킬이 늦게 나가는 입력 지연이 생깁니다. 막힌 쪽은 올림 줄이라, 서버가 보내는 다른 캐릭터 소식은 대부분 제때 옵니다. “남의 움직임은 멀쩡한데 내 스킬만 늦다”가 이 경우의 단서입니다.`);
       if (M.loss > 0.001) parts.push(`줄이 꽉 차면 게임 패킷까지 버려져(손실 ${K.n(M.loss * 100, 1)}%) 고무줄 현상도 납니다.`);
       parts.push('<b>SQM</b>을 켜면 게임 패킷이 따로 줄을 서서 바로 나갑니다.');
     } else if (P.up >= 100 && P.sqm) {
       parts.push(`SQM이 켜져 있어 업로드는 계속되지만 그 줄은 5ms 안팎으로 짧게 유지되고, 게임 패킷은 전용 줄로 바로 나갑니다. 핑 <b>${K.ms(M.last)}</b>, 버퍼 크기와 상관없이 기본 핑 근처입니다.`);
     } else if (P.up >= 100) {
-      parts.push(`버퍼가 작아 줄이 금방 넘칩니다. 대기는 <b>${K.ms(M.qms)}</b>로 짧지만, 넘친 패킷은 버려지고 업로드는 속도를 반으로 줄였다 다시 올리기를 반복합니다.`);
+      parts.push(`버퍼가 작아 줄이 금방 넘칩니다. 대기는 <b>${K.ms(M.qms)}</b>로 짧지만, 넘친 패킷은 버려지고 업로드는 속도를 30%쯤 줄였다 다시 올리기를 반복합니다. 다만 버퍼 크기 하나로는 회선 속도와 상황마다 알맞게 맞추기 어렵고, 더 줄이면 업로드가 회선 속도를 다 쓰지 못합니다. 그래서 답은 작은 버퍼보다 SQM입니다.`);
     } else if (P.up > 0) {
       parts.push(`업로드가 회선의 ${P.up}%만 씁니다. 몰려 들어온 패킷이 짧게 줄을 섰다가 금방 빠져서 대기는 평균 ${K.ms(Math.max(0, (M.ok.reduce((a, h) => a + h.lat, 0) / Math.max(1, M.ok.length)) - BASE - M.wifiMs))} 정도입니다. 회선이 거의 꽉 찰수록 흔들림이 커집니다.`);
     } else {

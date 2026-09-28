@@ -8,7 +8,7 @@ K.register('leak', function (root) {
     tries: [
       '그대로 재생해 보세요. <b>3일차 저녁</b>에 메모리 선이 RAM 선을 넘는 순간, 아래 틱 그래프가 치솟습니다.',
       '<b>정기 점검</b>을 “24시간”으로 바꿔 보세요. 매일 다시 켜니 문제가 사라진 것처럼 보입니다. 누수는 그대로인데 말이죠.',
-      '<b>스왑 끔 (바로 종료)</b>를 눌러 보세요. 느려지는 단계 없이 저녁 피크에 서버가 곧바로 꺼집니다.',
+      '<b>스왑 끔 (바로 종료)</b>를 눌러 보세요. 느려지는 단계가 거의 없이 저녁 피크에 서버가 곧바로 꺼집니다.',
       '<b>물리 메모리</b>를 64GB로 늘려 보세요. 위험이 며칠 뒤로 밀릴 뿐 누수가 있으면 언젠가 찾아옵니다.',
     ],
   });
@@ -273,7 +273,10 @@ K.register('leak', function (root) {
     if (s === 1) {
       const out = S.mem[i] - P.ram, tk = S.tick[i];
       const st = tk > 50 ? 'bad' : 'warn';
-      return `${K.flag(st)} 메모리 ${K.n(S.mem[i], 1)}GB가 RAM ${P.ram}GB를 넘어 <b>${K.n(out, 1)}GB</b>가 디스크(스왑)로 밀려났습니다. RAM은 한 번 읽는 데 약 100ns, 디스크는 약 100µs로 <b>1,000배</b> 느립니다. 서버가 밀려난 메모리를 건드릴 때마다 디스크를 기다려 틱이 <b>${K.ms(tk)}</b>로 늘었습니다. 플레이어는 <b>슬로우모션</b>과 <b>입력 지연</b>을 겪고, 심하면 <b>멈춤</b>이 옵니다. 접속자가 많은 저녁 9시 무렵 가장 심합니다.${risk && risk.what === '강제 종료' ? ` 이대로면 약 ${fmtH(risk.dh)} 뒤 서버가 강제로 꺼집니다(전원 <b>접속 끊김</b>).` : ''}`;
+      const feel = tk > 50
+        ? '틱 예산 50ms를 넘어 플레이어는 <b>슬로우모션</b>과 <b>입력 지연</b>을 겪고, 심하면 <b>멈춤</b>이 옵니다.'
+        : '아직 틱 예산 50ms 안이라 티가 덜 나지만, 밀려난 양이 늘수록 틱이 빠르게 늘어납니다.';
+      return `${K.flag(st)} 메모리 ${K.n(S.mem[i], 1)}GB가 RAM ${P.ram}GB를 넘어 <b>${out < 1 ? K.n(Math.max(10, out * 1024)) + 'MB' : K.n(out, 1) + 'GB'}</b>가 디스크(스왑)로 밀려났습니다. RAM은 한 번 읽는 데 약 100ns, SSD는 약 100µs로 <b>1,000배</b> 느립니다. 새는 메모리는 대개 다시 안 쓰지만, 쓰는 데이터와 같은 조각에 섞여 있거나 GC가 청소하며 힙 전체를 훑으면 밀려난 메모리를 자주 건드립니다. 그때마다 디스크를 기다려 틱이 <b>${K.ms(tk)}</b>로 늘었습니다. ${feel} 접속자가 많은 저녁 9시 무렵 가장 심합니다.${risk && risk.what === '강제 종료' ? ` 이대로면 약 ${fmtH(risk.dh)} 뒤 서버가 강제로 꺼집니다(전원 <b>접속 끊김</b>).` : ''}`;
     }
     if (P.leak === 0) return `${K.flag('good')} 누수가 없으면 메모리는 접속자 수를 따라 매일 같은 모양으로 오르내립니다. 저녁 피크에도 기본 ${P.base}GB + 접속자 ${K.n(S.ppl[i])}명분 ${K.n(pplGB, 1)}GB로 RAM ${P.ram}GB 안이라 틱은 예산 안입니다.`;
     const lastEv = events.filter(e => e.h <= h).pop();
@@ -281,7 +284,7 @@ K.register('leak', function (root) {
     const recent = lastEv && lastEv.kind === 'oom' && h - lastEv.h < 8 ? `<b>${fmtH(h - lastEv.h)} 전 서버가 강제로 꺼졌다가</b> 다시 켜졌습니다. 메모리가 비워져 지금은 멀쩡해 보이지만 누수는 그대로입니다. ` : '';
     const base = `${recent}${since} <b>${fmtH(upH)}</b>. 누수로 매시간 ${K.n(P.leak)}MB씩, 지금까지 <b>${K.n(leaked, 1)}GB</b>가 쌓였습니다. 여기에 접속자 ${K.n(S.ppl[i])}명분 ${K.n(pplGB, 1)}GB가 더해집니다(저녁 피크면 ${K.n((PEAK * PER) / 1024, 1)}GB).`;
     if (P.maint && (!risk || risk.at > h + P.maint)) return `${K.flag('good')} ${base} 하지만 ${P.maint}시간마다 점검으로 다시 켜서 RAM에 닿기 전에 비워집니다. 문제가 <b>숨어 있을 뿐</b> 사라진 게 아닙니다. 점검 주기를 늘리거나 없애면 드러납니다.`;
-    if (risk) return `${K.flag(risk.dh < 12 ? 'warn' : 'good')} ${base} 아직 RAM 안이라 정상입니다. 하지만 약 <b>${fmtH(risk.dh)} 뒤</b>(${clockLabel(risk.at)}) ${risk.what === '스왑 시작' ? 'RAM을 넘어 느려지기 시작합니다' : '서버가 강제로 꺼집니다'}. 누수는 매일 조금씩 쌓이고, 접속자가 몰리는 저녁에 먼저 선을 넘습니다. ${P.swap ? '플레이어는 “점점 느려짐 → 멈춤 → 전원 튕김” 순서로 겪습니다.' : '스왑이 없으니 느려지는 단계 없이 곧바로 전원 <b>접속 끊김</b>이 옵니다.'}`;
+    if (risk) return `${K.flag(risk.dh < 12 ? 'warn' : 'good')} ${base} 아직 RAM 안이라 정상입니다. 하지만 약 <b>${fmtH(risk.dh)} 뒤</b>(${clockLabel(risk.at)}) ${risk.what === '스왑 시작' ? 'RAM을 넘어 느려지기 시작합니다' : '서버가 강제로 꺼집니다'}. 누수는 매일 조금씩 쌓이고, 접속자가 몰리는 저녁에 먼저 선을 넘습니다. ${P.swap ? '플레이어는 “점점 느려짐 → 멈춤 → 전원 튕김” 순서로 겪습니다.' : '스왑이 없으니 느려지는 단계가 거의 없이 곧바로 전원 <b>접속 끊김</b>이 옵니다.'}`;
     return `${K.flag('good')} ${base} 앞으로 7일 안에는 RAM을 넘지 않습니다.`;
   }
 

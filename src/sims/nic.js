@@ -4,7 +4,7 @@ K.register('nic', function (root) {
   const F = K.frame(root, {
     kicker: '레이어 6 · 서버 NIC',
     title: '서버 네트워크 카드가 패킷을 흘리는 순간',
-    lead: '네트워크 카드(NIC)는 서버의 우편함입니다. 링 버퍼는 우편함의 칸 수, 인터럽트는 집배원이 초인종을 누르는 일, RSS는 여러 사람이 우편물을 나눠 받는 일입니다. 받는 사람(CPU 코어)이 꺼내는 속도보다 빨리 쌓이면 칸이 다 차고, 그 뒤에 온 패킷은 아무 기록 없이 버려집니다.',
+    lead: '네트워크 카드(NIC)는 서버의 우편함입니다. 링 버퍼는 우편함의 칸 수, 인터럽트는 집배원이 초인종을 누르는 일, RSS는 여러 사람이 우편물을 나눠 받는 일입니다. 받는 사람(CPU 코어)이 꺼내는 속도보다 빨리 쌓이면 칸이 다 차고, 그 뒤에 온 패킷은 버려집니다. 네트워크 카드 통계의 숫자만 올라갈 뿐 게임 서버 로그에는 아무 기록도 남지 않습니다.',
     tries: [
       '<b>월드 보스 (150만 pps, RSS 1개)</b>를 누르세요(게이트웨이 규모의 극단적인 예). 코어 하나가 100%에 붙고 우편함이 넘쳐 초당 수십만 개가 버려집니다.',
       '이어서 <b>RSS 큐 수</b>를 8로 올려 보세요. 같은 양을 코어 8개가 나눠 받아 버림이 0이 됩니다.',
@@ -55,7 +55,7 @@ K.register('nic', function (root) {
 
   const stCpu = K.stat(F.stats, { label: '최대 코어 사용률', unit: '%', sub: '최근 1초' });
   const stRing = K.stat(F.stats, { label: '링 최고 채움', unit: '%', sub: '최근 1초' });
-  const stDrop = K.stat(F.stats, { label: '초당 버림', unit: '개', sub: '링 넘침(rx_missed_errors)' });
+  const stDrop = K.stat(F.stats, { label: '초당 버림', unit: '개', sub: '링 넘침(rx_missed_errors 등)' });
   const stLat = K.stat(F.stats, { label: '추가 지연', sub: '평균 · NIC 안에서' });
   const stCloud = K.stat(F.stats, { label: '한도 초과 버림', unit: '개/초', sub: 'NIC에 닿기 전' });
 
@@ -239,7 +239,7 @@ K.register('nic', function (root) {
     const cap = capMs() * 1000;
     if (r.cloud > 1000) return `${K.flag('bad')}클라우드가 이 서버에 허용한 한도는 초당 100만 패킷입니다. 넘친 <b>${fmtP(r.cloud)}개/초</b>는 네트워크 카드에 닿기도 전에 조용히 버려집니다. 서버 CPU와 링 버퍼는 멀쩡해 보여서 원인 찾기가 가장 어렵습니다. ${SYM} 더 큰 인스턴스를 쓰거나 서버를 나눠야 합니다.`;
     if (r.drop > 100 && P.skew && P.rss > 1) return `${K.flag('bad')}큐는 ${P.rss}개인데 해시가 한쪽으로 쏠려 70%가 1번 큐로 몰렸습니다. 1번 코어는 꽉 찼고 나머지는 한가합니다. 1번 우편함만 넘쳐 초당 <b>${fmtP(r.drop)}개</b>가 버려집니다. ${SYM} 큐를 늘려도 소용없고, 연결을 나누거나 해시 방식을 바꿔야 합니다.`;
-    if (r.drop > 100 && P.rss === 1) return `${K.flag('bad')}모든 패킷이 코어 하나로만 들어갑니다(RSS 1개). 코어 하나는 초당 약 ${fmtP(cap)}개까지만 꺼내는데 ${fmtP(P.pps)}개가 들어옵니다. 우편함(링 ${K.n(P.ring)}칸)이 넘쳐 초당 <b>${fmtP(r.drop)}개</b>가 기록 없이 버려집니다. ${SYM} RSS 큐를 늘려 여러 코어가 나눠 받게 하세요.`;
+    if (r.drop > 100 && P.rss === 1) return `${K.flag('bad')}모든 패킷이 코어 하나로만 들어갑니다(RSS 1개). 코어 하나는 초당 약 ${fmtP(cap)}개까지만 꺼내는데 ${fmtP(P.pps)}개가 들어옵니다. 우편함(링 ${K.n(P.ring)}칸)이 넘쳐 초당 <b>${fmtP(r.drop)}개</b>가 게임 서버 로그에 아무 흔적 없이 버려집니다. ${SYM} RSS 큐를 늘려 여러 코어가 나눠 받게 하세요.`;
     if (r.drop > 100 && r.util < 0.9) return `${K.flag('warn')}평균으로는 코어에 여유가 있지만(최대 ${K.pct(r.util)}), 패킷이 몰려 들어오는 순간 우편함 칸(${K.n(P.ring)}칸)이 모자라 초당 <b>${fmtP(r.drop)}개</b>가 버려집니다. 링 버퍼를 키우면 줄어듭니다. 대신 줄이 길어져 지연이 조금 늘어납니다.`;
     if (r.drop > 100) return `${K.flag('bad')}코어 ${P.rss}개가 모두 한계에 가깝습니다. 들어오는 ${fmtP(r.arr)}개/초를 다 못 꺼내 초당 <b>${fmtP(r.drop)}개</b>가 버려집니다. ${SYM}`;
     if (P.coal >= 120 && r.util < 0.5) return `${K.flag('warn')}인터럽트 병합을 ${P.coal}µs로 크게 잡았습니다. 집배원이 편지가 쌓일 때까지 기다렸다가 초인종을 누르는 셈입니다. CPU는 아끼지만(처리 능력 +${K.pct(gain())}), 패킷마다 평균 <b>${fmtLat(r.lat)}</b>를 더 기다립니다. 지금처럼 한가할 땐 손해만 있습니다. 이것만으로 플레이어가 느끼진 않지만, 서버 안 여러 단계에서 이런 지연이 쌓입니다.`;

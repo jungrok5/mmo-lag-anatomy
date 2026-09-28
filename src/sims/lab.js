@@ -33,13 +33,13 @@ K.register('lab', function (root) {
     { id: 'burst', label: '몰아치기', set: { proto: 'tcp', loss: 7, rtt: 120, jitter: 20, mode: 'queue' },
       say: '<b>몰아치기(파파팍)</b>: TCP는 잃어버린 패킷 하나를 다시 받을 때까지 뒤에 도착한 패킷을 전부 붙잡아 둡니다. 그러다 한꺼번에 넘겨주고, “순서대로 재생”하는 게임은 밀린 움직임을 빨리 감기로 따라잡습니다.' },
     { id: 'rubber', label: '고무줄', set: { loss: 25, lossDir: 'up', redundancy: false, smooth: false },
-      say: '<b>고무줄</b>: 내 이동 명령의 25%가 서버에 못 갑니다. 내 화면은 예측으로 이미 움직였지만, 서버는 받은 명령만큼만 옮겼으므로 확인이 올 때마다 내 캐릭터(파랑)가 뒤로 끌려갑니다.' },
+      say: '<b>고무줄</b>: 내 이동 명령의 25%가 서버에 못 가고, 잃은 명령을 다시 보내지도 않습니다. 내 화면은 예측으로 이미 움직였지만 서버는 받은 명령만큼만 옮겼으므로, 빠진 명령이 확인될 때마다 내 캐릭터(파랑)가 그만큼 뒤로 끌려갑니다.' },
     { id: 'slowmo', label: '슬로우모션', set: { load: 230 },
-      say: '<b>슬로우모션</b>: 서버가 한 틱을 50ms 안에 못 끝내고 115ms씩 걸립니다. 세계 시간이 0.4배속으로 흐르니 모두가 느리게 움직이고, 내 행동의 결과도 늦게 옵니다.' },
+      say: '<b>슬로우모션</b>: 서버가 한 틱을 50ms 안에 못 끝내고 115ms씩 걸립니다. 이 서버는 틱마다 정해진 50ms만큼만 세계를 진행하므로, 세계 시간이 약 0.43배속으로 흐르고 다른 플레이어·몬스터가 모두 느리게 움직입니다. 흐른 시간만큼 한 번에 진행하는 서버였다면 속도는 그대로이고 뚝뚝 끊김·순간이동으로 보였을 것입니다.' },
     { id: 'delay', label: '입력 지연', set: { predict: false, rtt: 350 },
       say: '<b>입력 지연</b>: 클라이언트 예측을 끄고 핑을 350ms로 올렸습니다. 화면을 눌러도 명령이 서버에 갔다가 결과가 돌아올 때까지 내 캐릭터가 꿈쩍하지 않습니다.' },
     { id: 'freeze', label: '멈춤', set: { stallEvery: 4, stallMs: 1600 },
-      say: '<b>멈춤</b>: 서버가 4초마다 1.6초씩 멈춥니다(GC, 동기 DB 호출 등). 세상 전체가 얼었다가 풀리면서 한꺼번에 따라잡습니다. 예측 덕분에 나 혼자만 움직이는 이상한 장면도 보입니다.' },
+      say: '<b>멈춤</b>: 서버가 4초마다 1.6초씩 멈춥니다(GC, 동기 DB 호출 등). 세상 전체가 얼고, 예측 덕분에 나 혼자만 움직이는 이상한 장면도 보입니다. 풀리면 서버가 밀린 틱을 몰아서 계산하고, 보간하던 내 화면은 그 차이를 한 번에 건너뜁니다(순간이동). 표시 방식을 “순서대로 재생”으로 바꾸면 빨리 감기(몰아치기)로 보입니다.' },
     { id: 'disconnect', label: '접속 끊김', set: { timeout: 4000 }, action: () => outageNow(6500),
       say: '<b>접속 끊김</b>: 회선이 6.5초 끊겼고 타임아웃은 4초입니다. 4초 동안 아무 소식이 없자 게임이 연결을 포기합니다. 서버에는 내 캐릭터가 한동안 그대로 남아 있습니다.' },
   ];
@@ -72,7 +72,7 @@ K.register('lab', function (root) {
         } else {
           p.tries.push([p.attemptAt, false]);
           if (!tcp) { p.dead = true; changed = true; break; }
-          const rto = Math.max(200, P.rtt + 4 * P.jitter);
+          const rto = P.rtt + Math.max(200, 4 * P.jitter); // 리눅스: 왕복 시간 + 최소 200ms
           const sendGap = 1000 / P.tick;
           const wait = p.k === 0 ? Math.min(rto, P.rtt + 3 * sendGap + P.jitter) : rto * Math.pow(2, p.k - 1);
           p.k++;
@@ -96,8 +96,19 @@ K.register('lab', function (root) {
     if (changed) this.q = this.q.filter(p => p.deliverAt == null && !p.dead);
   };
 
-  function View() { this.h = []; this.pc = null; this.under = false; }
-  View.prototype.reset = function () { this.h = []; this.pc = null; };
+  function View() { this.h = []; this.pc = null; this.under = false; this.ff = 1; }
+  View.prototype.reset = function () { this.h = []; this.pc = null; this.ff = 1; };
+  // 최근 약 2초 동안 소식에 담긴 서버 시간이 실제로 얼마나 흘렀는지 보고, 서버 세계가 몇 배속으로 흐르는지 추정한다.
+  // 서버가 느려지면(슬로우모션) 재생 시계도 그만큼 늦춰야 버퍼가 바닥나지 않는다.
+  View.prototype.rate = function () {
+    const h = this.h, n = h.length;
+    if (n < 3) return 1;
+    const b = h[n - 1];
+    let a = null;
+    for (let i = n - 2; i >= 0; i--) { a = h[i]; if (b.at - a.at >= 2000) break; }
+    if (!a || b.at - a.at < 500) return 1;
+    return K.clamp((b.wt - a.wt) / (b.at - a.at), 0.2, 1);
+  };
   View.prototype.push = function (s) { this.h.push(s); if (this.h.length > 160) this.h.shift(); };
   View.prototype.sample = function (wt) {
     const h = this.h;
@@ -124,12 +135,15 @@ K.register('lab', function (root) {
     const target = last.wt - delay;
     if (this.pc == null) this.pc = target;
     let diff = target - this.pc;
+    const r = this.rate();
+    this.ff = 1;
     if (P.mode === 'interp') {
       if (diff > 450 || diff < -1500) { this.pc = target; diff = 0; }
-      this.pc += dt * K.clamp(1 + diff / 300, 0.4, 1.25);
+      this.pc += dt * r * K.clamp(1 + diff / 300, 0.4, 1.25);
     } else {
       if (diff < -3000) { this.pc = target; diff = 0; }
-      this.pc += dt * (diff > 0 ? K.clamp(1 + diff / 110, 1, 7) : K.clamp(1 + diff / 300, 0.4, 1));
+      this.ff = diff > 0 ? K.clamp(1 + diff / 110, 1, 7) : 1;
+      this.pc += dt * r * (diff > 0 ? this.ff : K.clamp(1 + diff / 300, 0.4, 1));
     }
     if (this.pc >= last.wt) { this.pc = last.wt; this.under = true; }
     if (this.pc < h[0].wt) this.pc = h[0].wt;
@@ -283,7 +297,7 @@ K.register('lab', function (root) {
     const jump = Math.hypot(after.x - before.x, after.y - before.y);
     if (P.predict) {
       if (P.smooth) { C.corr.x += before.x - after.x; C.corr.y += before.y - after.y; }
-      if (jump > 1.2) ev('bad', `내 캐릭터가 ${K.n(jump, 1)}m 뒤로 당겨짐 (서버가 내 이동을 다르게 계산)`, 'rubber');
+      if (jump > 0.6) ev('bad', `내 캐릭터가 ${K.n(jump, 1)}m 뒤로 당겨짐 (서버가 내 이동을 다르게 계산)`, 'rubber');
     }
   }
   function sendCmd() {
@@ -336,9 +350,11 @@ K.register('lab', function (root) {
       if (prev && dt > 0) {
         const disp = Math.hypot(rp.x - prev.x, rp.y - prev.y);
         const v = disp / (dt / 1000) / SPEED;
-        C.speed.push([t, v]);
-        if (disp > Math.max(3, (SPEED * dt) / 1000 * 3)) ev('bad', `상대가 ${K.n(disp, 1)}m 순간이동`, 'teleport');
+        const jump = disp > Math.max(3, (SPEED * dt) / 1000 * 3);
+        C.speed.push([t, v, jump]);
+        if (jump) ev('bad', `상대가 ${K.n(disp, 1)}m 순간이동`, 'teleport');
       }
+      if (remView.ff > 2) ev('warn', '상대가 밀린 움직임을 몰아서 따라잡음', 'burst');
     }
     C.underFrames.push([t, remView.under ? 1 : 0]);
     // 5) 궤적
@@ -441,7 +457,7 @@ K.register('lab', function (root) {
     const lg = '<span class="legend"><span><i style="background:var(--ink-2)"></i>서버→나 (세계 소식)</span><span><i style="background:var(--muted);height:2px"></i>나→서버 (내 입력)</span><span><i class="box" style="background:var(--warn)"></i>순서 대기(TCP)</span><span><i class="box" style="background:var(--bad);opacity:.35"></i>회선 끊김·멈춤</span></span>';
     cvT = K.canvas(F.stage, { height: w => (w < 520 ? 150 : 170), caption: '패킷 타임라인 (최근 3초, 오른쪽 끝이 지금)', right: '', label: '패킷이 보내지고 도착하는 시각' });
     F.stage.append(K.el('div', { html: lg }));
-    cvV = K.canvas(F.stage, { height: 120, caption: '내 화면 속 상대의 이동 속도', right: '1 = 정상 속도 · 0 = 멈춤 · 위로 튀면 순간이동' });
+    cvV = K.canvas(F.stage, { height: 120, caption: '내 화면 속 상대의 이동 속도', right: '1 = 정상 속도 · 0 = 멈춤 · ▲ 순간이동(한 프레임에 3m 넘게)' });
     K.hover(cvV, x => {
       const box = spBox();
       const tt = t - 5000 + ((x - box.x) / box.w) * 5000;
@@ -449,7 +465,7 @@ K.register('lab', function (root) {
       let best = null;
       for (const s of C.speed) if (!best || Math.abs(s[0] - tt) < Math.abs(best[0] - tt)) best = s;
       if (!best) return null;
-      return `${K.n((t - best[0]) / 1000, 1)}초 전<br>속도 <b>${K.n(best[1], 2)}배</b>`;
+      return `${K.n((t - best[0]) / 1000, 1)}초 전<br>속도 <b>${K.n(best[1], 2)}배</b>${best[2] ? '<br>순간이동' : ''}`;
     });
     // 수치
     ctl.stPing = K.stat(F.stats, { label: '핑 (명령→확인)' });
@@ -516,7 +532,10 @@ K.register('lab', function (root) {
     for (const k in ctl) if (ctl[k] && ctl[k].set && k in P) ctl[k].set(P[k], false);
     nextOutAt = P.outEvery > 0 ? t + 1200 : Infinity;
     // 이전 상황의 밀린 틱은 버리고 새 상황을 깨끗하게 시작
-    S.nextTickAt = t; S.busyUntil = t; S.stallUntil = 0;
+    S.nextTickAt = t; S.busyUntil = t; S.stallUntil = 0; stalls.length = 0;
+    for (const o of outages) if (o.to > t) o.to = t;
+    for (const hh of hitches) if (hh.to > t) hh.to = t;
+    C.hitchUntil = 0;
     S.nextStallAt = P.stallEvery > 0 ? t + 1500 : Infinity;
     C.nextHitchAt = P.hitchEvery > 0 ? t + 1500 : Infinity;
     if (p.action) p.action();
@@ -696,7 +715,7 @@ K.register('lab', function (root) {
     const pts = C.speed.filter(s => s[0] >= t - 5000).map(s => [s[0], Math.min(s[1], 3)]);
     K.area(ctx, sc, pts, Cc.s2, 0.1);
     K.line(ctx, sc, pts, Cc.s2, 2);
-    for (const s of C.speed) if (s[0] >= t - 5000 && s[1] > 3) {
+    for (const s of C.speed) if (s[0] >= t - 5000 && s[2]) {
       const x = sc.x(s[0]);
       ctx.fillStyle = Cc.bad;
       ctx.beginPath(); ctx.moveTo(x, box.y - 2); ctx.lineTo(x + 5, box.y + 7); ctx.lineTo(x - 5, box.y + 7); ctx.closePath(); ctx.fill();
@@ -745,21 +764,24 @@ K.register('lab', function (root) {
     // 해설
     let msg;
     const E = kind => recentEvent(kind, 1600);
+    const afterStall = P.catchup === 'catchup' && stalls.length > 0 && t - stalls[stalls.length - 1].to < 2500;
     if (C.disc) {
       msg = `${K.flag('bad')}<b>접속 끊김</b>: ${C.disc.outage ? '회선이 끊겨 타임아웃(' + K.ms(P.timeout) + ') 동안 서버와 내 PC가 서로 한 통의 소식도 받지 못했습니다. 먼저 알아챈 쪽이 연결을 정리합니다.' : C.disc.reason === 'server' ? '서버가 내 입력을 타임아웃(' + K.ms(P.timeout) + ') 동안 한 번도 받지 못해 나를 내보냈습니다. 내 PC가 오래 멈췄거나(로딩) 올라가는 길이 막힌 경우입니다.' : '서버 소식이 타임아웃(' + K.ms(P.timeout) + ') 동안 한 통도 오지 않아 게임이 연결을 포기했습니다.'} 왼쪽 서버 화면을 보면 내 캐릭터가 그대로 서 있습니다. 서버도 곧 알아채지만, 그 전에 다시 접속하면 “이미 접속 중” 오류가 날 수 있습니다.`;
     } else if (t < C.hitchUntil) {
       msg = `${K.flag('warn')}<b>멈춤 (내 PC 쪽)</b>: 게임이 로딩·GC 같은 일로 화면을 못 그리고 있습니다. 소식은 계속 도착해 수신 버퍼에 쌓이고, 풀리는 순간 한꺼번에 처리되며 상대가 튑니다. 핑은 멀쩡한데 렉이라면 이 경우를 의심하세요.`;
     } else if (wait > 400) {
-      const why = inOutage(t) ? '회선이 끊겨' : t < S.stallUntil ? '서버가 멈춰' : P.proto === 'tcp' && down.q.some(p => p.k > 0) ? 'TCP가 잃어버린 패킷을 재전송하느라(뒤 패킷은 도착했지만 붙잡혀 있음)' : '소식이 늦어져';
+      const why = inOutage(t) ? '회선이 끊겨' : t < S.stallUntil ? '서버가 멈춰' : P.proto === 'tcp' && down.q.some(p => p.k > 0) ? 'TCP가 잃어버린 패킷을 재전송하느라(뒤 패킷은 도착했지만 붙잡혀 있음)' : 1000 / P.tick > 350 ? `서버가 ${K.ms(1000 / P.tick)}마다 한 번만 소식을 보내` : '소식이 늦어져';
       msg = `${K.flag(wait > P.timeout * 0.6 ? 'bad' : 'warn')}<b>멈춤</b>: ${why} 서버 소식이 ${K.n(wait / 1000, 1)}초째 없습니다. 상대는 마지막 위치에 서 있고, 예측을 켠 내 캐릭터만 혼자 움직입니다. ${K.ms(P.timeout)}가 지나면 접속이 끊깁니다.`;
     } else if (E('burst')) {
-      msg = `${K.flag('bad')}<b>몰아치기</b>: ${E('burst').text}. 멈춰 있던 동안의 움직임이 한 번에 들어와 ${P.mode === 'queue' ? '빨리 감기처럼 파파팍 재생됩니다' : P.mode === 'interp' ? '보간 버퍼를 넘어서면 한 번에 건너뜁니다(순간이동)' : '한 번에 점프합니다'}.`;
+      msg = `${K.flag('bad')}<b>${afterStall ? '멈춤 뒤 몰아치기' : '몰아치기'}</b>: ${E('burst').text}. 멈춰 있던 동안의 움직임이 한 번에 들어와 ${P.mode === 'queue' ? '빨리 감기처럼 파파팍 재생됩니다' : P.mode === 'interp' ? '보간 버퍼를 넘어서면 한 번에 건너뜁니다(순간이동)' : '한 번에 점프합니다'}.`;
     } else if (E('rubber')) {
       msg = `${K.flag('bad')}<b>고무줄</b>: ${E('rubber').text}. ${P.validate && E('clip') ? '명령이 몰려 도착해 서버의 이동 검증이 잘라 냈기 때문입니다.' : P.loss > 0 && P.lossDir !== 'down' && !P.redundancy ? '서버가 받지 못한 이동 명령만큼 위치가 모자랍니다. “입력 중복 전송”을 켜면 대부분 사라집니다.' : '서버와 내 예측이 어긋났습니다.'}`;
     } else if (E('teleport')) {
-      msg = `${K.flag('bad')}<b>순간이동</b>: ${E('teleport').text}. 소식이 한동안 끊겼거나(손실·회선 끊김·서버 멈춤) 늦게 와서, 그 사이 이동한 거리를 한 프레임에 건너뛰었습니다.${P.mode === 'extrap' ? ' 외삽은 모서리에서 방향이 바뀐 걸 모르고 직진하다 되돌아오기도 합니다.' : ''}`;
+      msg = `${K.flag('bad')}<b>${afterStall ? '멈춤 뒤 순간이동' : '순간이동'}</b>: ${E('teleport').text}. ${afterStall ? '서버가 멈췄다 풀리면서 밀린 틱을 몰아서 계산해, 그 사이 이동한 거리를 한 프레임에 건너뛰었습니다.' : '소식이 한동안 끊겼거나(손실·회선 끊김·서버 멈춤) 늦게 와서, 그 사이 이동한 거리를 한 프레임에 건너뛰었습니다.'}${P.mode === 'extrap' ? ' 외삽은 모서리에서 방향이 바뀐 걸 모르고 직진하다 되돌아오기도 합니다.' : ''}`;
     } else if (P.load > 100) {
-      msg = `${K.flag('warn')}<b>슬로우모션</b>: 서버가 틱 하나에 예산의 ${P.load}%를 씁니다. 1초에 ${tickRate}번만 계산하니 세계가 ${K.n(Math.min(1, 100 / P.load), 2)}배속으로 흐릅니다. 모든 플레이어가 같이 느려지고, 핑 수치도 함께 올라갑니다.`;
+      msg = `${K.flag('warn')}<b>슬로우모션</b>: 서버가 틱 하나에 예산의 ${P.load}%를 씁니다. 1초에 ${tickRate}번만 계산하고, 이 실험의 서버는 틱마다 정해진 ${K.ms(1000 / P.tick)}만큼만 세계를 진행하므로 세계가 ${K.n(Math.min(1, 100 / P.load), 2)}배속으로 흐릅니다. 다른 플레이어와 몬스터가 모두 같이 느려집니다(흐른 시간만큼 한 번에 진행하는 서버라면 속도는 그대로이고 뚝뚝 끊김·순간이동으로 보입니다). 회선은 멀쩡하니 핑 수치는 크게 오르지 않을 수 있습니다.`;
+    } else if (fps < 25) {
+      msg = `${K.flag('warn')}<b>뚝뚝 끊김 (화면)</b>: 네트워크는 멀쩡하지만 화면을 초당 ${fps}번만 그립니다. 궤적 점 간격이 넓고 일정합니다.`;
     } else if (underRatio > 0.25 && (P.mode === 'interp' || P.mode === 'queue')) {
       msg = `${K.flag('warn')}<b>뚝뚝 끊김</b>: 보간 버퍼(${P.interp}ms)가 자주 바닥납니다(프레임의 ${Math.round(underRatio * 100)}%). 다음 소식이 제때 안 와서 상대가 잠깐씩 멈춥니다. 버퍼를 늘리면 매끄러워지지만 그만큼 더 과거를 보게 됩니다.`;
     } else if (P.mode === 'snap' && (P.jitter > 30 || P.tick < 15)) {
@@ -767,10 +789,14 @@ K.register('lab', function (root) {
     } else if (!P.predict && ping != null) {
       const ownBuf = P.mode === 'interp' ? P.interp : P.mode === 'queue' ? Math.max(P.interp, 60) : 0;
       msg = `${K.flag(ping > 150 ? 'bad' : 'warn')}<b>입력 지연</b>: 예측이 꺼져 있어 내 캐릭터가 서버 확인을 기다립니다. 누르고 약 ${K.ms(ping + ownBuf)} 뒤에야 움직이기 시작합니다${ownBuf ? `(왕복 ${K.ms(ping)} + 내 캐릭터도 다른 사람처럼 보간 버퍼 ${K.ms(ownBuf)}만큼 늦게 그림)` : ''}. 대부분의 게임은 이동에 예측을 쓰고, 스킬 판정처럼 서버 확인이 꼭 필요한 곳에서만 이 지연이 보입니다.`;
-    } else if (fps < 25) {
-      msg = `${K.flag('warn')}<b>뚝뚝 끊김 (화면)</b>: 네트워크는 멀쩡하지만 화면을 초당 ${fps}번만 그립니다. 궤적 점 간격이 넓고 일정합니다.`;
     } else {
-      msg = `${K.flag('good')}<b>안정적</b>: 핑 ${ping == null ? '측정 중' : K.ms(ping)}, 손실 ${K.pct(ls.rate, 1)}. ${P.mode === 'interp' ? `보간 덕분에 상대가 매끄럽지만, 실제보다 약 ${K.ms(P.interp + P.rtt / 2)} 과거 모습입니다(위치 오차 ${K.n(remErr, 1)}m).` : ''} ${P.predict ? '내 캐릭터는 예측으로 즉시 움직입니다.' : ''}`;
+      const pingNote = `회선 핑 ${K.ms(P.rtt)}${ping == null ? '' : `(게임이 재는 명령→확인 시간 ${K.ms(ping)})`}.`;
+      const past = P.mode === 'interp' ? `보간 덕분에 상대가 매끄럽지만, 실제보다 약 ${K.ms(P.interp + P.rtt / 2)} 과거 모습입니다(위치 오차 ${K.n(remErr, 1)}m).` : '';
+      if (ls.rate > 0.05 || P.rtt > 200) {
+        msg = `${K.flag('warn')}<b>${ls.rate > 0.05 ? '손실 ' + K.pct(ls.rate, 0) : '핑이 높음'}</b>: ${pingNote} ${past} ${ls.rate > 0.05 ? (P.proto === 'tcp' ? 'TCP가 잃은 소식을 다시 받느라 그 뒤 소식까지 늦게 넘겨줍니다.' : `잃은 소식 사이는 ${P.mode === 'interp' ? '보간이 이어 그리고' : '다음 소식이 대신하고'}, 잃은 내 입력은 ${P.redundancy ? '다음 패킷에 겹쳐 보낸 사본으로 채웁니다' : '그대로 사라집니다'}.`) : '화면은 매끄러워도 내 행동의 결과(판정·피격)가 그만큼 늦게 옵니다.'}`;
+      } else {
+        msg = `${K.flag('good')}<b>안정적</b>: ${pingNote.slice(0, -1)}, 손실 ${K.pct(ls.rate, 1)}. ${past} ${P.predict ? '내 캐릭터는 예측으로 즉시 움직입니다.' : ''}`;
+      }
     }
     F.say(msg);
     if (logDirty) {

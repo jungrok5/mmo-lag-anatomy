@@ -4,12 +4,12 @@ K.register('frames', function (root) {
   const F = K.frame(root, {
     kicker: '레이어 1 · 클라이언트 게임',
     title: '프레임이 늦으면 화면이 멈췄다 튄다',
-    lead: '게임은 1초에 60번, 16.7ms마다 “계산하고 그리기”를 되풀이합니다. 한 장이라도 늦으면 그동안 화면은 멈춰 있고, 다음 장에서 캐릭터가 한꺼번에 이동합니다. 이 렉은 내 컴퓨터 안에서 생기므로 핑은 멀쩡하고, 다른 플레이어 화면 속의 나는 대개 평소처럼 움직입니다.',
+    lead: '게임은 1초에 60번, 16.7ms마다 “계산하고 그리기”를 되풀이합니다. 한 장이라도 늦으면 그동안 화면은 멈춰 있고, 다음 장에서 캐릭터가 한꺼번에 이동합니다. 이 렉은 내 컴퓨터 안에서 생깁니다. 회선과 서버는 멀쩡하고, 다른 플레이어 화면 속의 나는 대개 평소처럼 움직입니다.',
     tries: [
       '<b>GC 스파이크</b>를 누르고 아래 달리는 캐릭터를 지켜보세요. 몇 초마다 멈췄다가 앞으로 툭 튀어 나갑니다(순간이동). 위 차트에는 빨간 막대가 솟습니다.',
-      '그 상태에서 <b>점진적 GC</b>를 켜 보세요. 큰 멈춤 한 번을 2ms짜리 작은 조각 여러 개로 나눠 치웁니다.',
+      '그 상태에서 <b>점진적 GC</b>를 켜 보세요. 큰 멈춤 한 번을 3ms(유니티 기본값)짜리 작은 조각 여러 개로 나눠 치웁니다. 쓰레기 생성을 500KB로 올리면 치우는 속도가 못 따라가 다시 큰 멈춤이 나옵니다.',
       '<b>V-Sync 경계 (17ms)</b>를 누르세요. 일이 16.7ms를 1ms 넘겼을 뿐인데 한 장에 33.3ms가 걸립니다. FPS가 60과 30 사이를 오가며 울컥거립니다.',
-      '<b>새 지역 로딩</b>을 켠 채 <b>밀린 시간 처리</b>를 하나씩 바꿔 보세요. 한 번에 점프하면 순간이동, 고정 스텝으로 따라잡으면 끊김이 줄줄이, 상한을 두면 슬로우모션이 됩니다.',
+      '<b>새 지역 로딩</b>을 켠 채 <b>밀린 시간 처리</b>를 하나씩 바꿔 보세요. 한 번에 점프하면 순간이동, 고정 스텝으로 따라잡으면 긴 프레임이 줄줄이(뚝뚝 끊김), 상한을 두면 넘친 시간이 버려져 슬로우모션이 됩니다.',
     ],
     layout: 'side',
   });
@@ -17,7 +17,8 @@ K.register('frames', function (root) {
   const VB = 1000 / 60;            // 60Hz 화면이 한 번 바뀌는 간격
   const SPEED = 6 / 1000;          // 캐릭터 달리기 속도 6 m/s (ms당 m)
   const TRACK = 24;                // 화면 폭 = 24m
-  const HEAP0 = 8, HEAPMAX = 64, INC_START = 40; // MB
+  const HEAP0 = 8, HEAPMAX = 64, INC_START = 48; // MB
+  const SLICE = 3;                 // 점진적 GC 한 조각(ms). 유니티 기본값 3ms
   const BAD = 50;                  // 이보다 긴 프레임 = 눈에 띄는 끊김
   const CAUSE = { load: '로딩', gc: 'GC', catch: '따라잡기', heavy: '' };
   const P = { base: 8, chars: 60, gc: false, garbage: 150, inc: false, load: false, vsync: true, mode: 'var' };
@@ -42,7 +43,7 @@ K.register('frames', function (root) {
   const g2 = K.group(F.controls, '가비지 컬렉션(쓰레기 치우기)');
   const tGC = K.toggle(g2, { label: 'C#/유니티 식 가비지 컬렉션', value: P.gc, onChange: v => { P.gc = v; heap = HEAP0 + 30; incLeft = 0; sync(); } });
   const sGarb = K.slider(g2, { label: '프레임당 쓰레기 생성', min: 0, max: 500, step: 10, value: P.garbage, unit: 'KB', onInput: v => { P.garbage = v; } });
-  const tInc = K.toggle(g2, { label: '점진적 GC(incremental)', value: P.inc, onChange: v => { P.inc = v; incLeft = 0; }, hint: '한 번에 몰아 치우지 않고 프레임마다 2ms씩 나눠 치웁니다.' });
+  const tInc = K.toggle(g2, { label: '점진적 GC(incremental)', value: P.inc, onChange: v => { P.inc = v; incLeft = 0; }, hint: '한 번에 몰아 치우지 않고 프레임마다 3ms씩(유니티 기본값) 나눠 치웁니다.' });
   const heapRow = K.el('div', { class: 'ctl' });
   const heapOut = K.el('output');
   heapRow.append(K.el('div', { class: 'lab' }, K.el('span', { text: '쌓인 쓰레기(힙)' }), heapOut));
@@ -116,8 +117,8 @@ K.register('frames', function (root) {
         if (incLeft <= 0 && heap >= INC_START) { incLeft = 20 + heap * 2; incFloat = 0; }
         if (incLeft > 0) {
           incFloat += mb;
-          if (heap >= HEAPMAX) { gc = incLeft; incLeft = 0; heap = HEAP0; gcKind = 'full'; fallback = true; }
-          else { gc = Math.min(2, incLeft); incLeft -= gc; gcKind = 'inc'; if (incLeft <= 0) heap = HEAP0 + incFloat; }
+          if (heap >= HEAPMAX) { gc = 20 + heap * 2; incLeft = 0; heap = HEAP0; gcKind = 'full'; fallback = true; }   // 못 따라가면 전체를 한 번에
+          else { gc = Math.min(SLICE, incLeft); incLeft -= gc; gcKind = 'inc'; if (incLeft <= 0) heap = HEAP0 + incFloat; }
         }
       } else if (heap >= HEAPMAX) { gc = 20 + heap * 2; heap = HEAP0; gcKind = 'full'; }
     }
@@ -196,9 +197,10 @@ K.register('frames', function (root) {
     for (let i = n - k1; i < n; i++) worst += arr[i];
     const p99 = worst / k1;
     const rec = frames.slice(-60);
-    let work = 0, a16 = 0, a33 = 0, steps = 0;
+    let work = 0, wmax = 0, a16 = 0, a33 = 0, steps = 0;
     rec.forEach(f => {
-      work += f.render + f.calc + f.gc + f.load; steps += f.steps;
+      const wk = f.render + f.calc + f.gc + f.load;
+      work += wk; wmax = Math.max(wmax, f.render + f.calc); steps += f.steps;
       const d = f.end - f.start;
       if (Math.abs(d - VB) < 1) a16++; else if (Math.abs(d - 2 * VB) < 1) a33++;
     });
@@ -209,7 +211,7 @@ K.register('frames', function (root) {
     }
     return {
       fps: 1000 / avg, low: 1000 / p99, max: arr[n - 1], perMin: (over * 60000) / Math.max(tot, 5000),
-      lat: avg * 2 + 10 + (P.vsync ? avg : 0), avg, work, mixed: P.vsync && a16 >= 6 && a33 >= 6,
+      lat: avg * 2 + 10 + (P.vsync ? avg : 0), avg, work, wmax, mixed: P.vsync && a16 >= 6 && a33 >= 6,
       slow: span ? dropped / span : 0, maxSteps, steps,
     };
   }
@@ -218,7 +220,7 @@ K.register('frames', function (root) {
     stL.set(K.n(S.low), S.low >= 45 ? 'good' : S.low >= 20 ? 'warn' : 'bad');
     stM.set(K.ms(S.max), S.max <= 34 ? 'good' : S.max <= 100 ? 'warn' : 'bad');
     stH.set(K.n(S.perMin, S.perMin > 0 && S.perMin < 10 ? 1 : 0), S.perMin < 0.5 ? 'good' : S.perMin <= 6 ? 'warn' : 'bad');
-    stI.set(K.ms(S.lat), S.lat <= 60 ? 'good' : S.lat <= 120 ? 'warn' : 'bad');
+    stI.set(K.ms(S.lat), S.lat <= 70 ? 'good' : S.lat <= 120 ? 'warn' : 'bad');
   }
 
   /* ---------- 그리기 ---------- */
@@ -359,7 +361,7 @@ K.register('frames', function (root) {
   }
 
   /* ---------- 해설 ---------- */
-  const CLIENT = ' 모두 내 컴퓨터 안의 일이라 <b>핑은 멀쩡하고</b>, 다른 플레이어 화면 속 나는 대개 평소처럼 움직입니다.';
+  const CLIENT = ' 모두 내 컴퓨터 안의 일이라 <b>회선과 서버는 멀쩡하고</b>, 다른 플레이어 화면 속 나는 대개 평소처럼 움직입니다.';
   function recent(kind) {
     // 지금 그리는 중인 장이 이미 길어지고 있으면 그 원인을 먼저 말한다
     if (now - cur.start > 30 && cur.cause === kind && cur.end - cur.start > BAD) return { ms: cur.end - cur.start, kind, fallback: cur.fallback };
@@ -371,7 +373,7 @@ K.register('frames', function (root) {
     return null;
   }
   function jumpText(e) {
-    const d = lastJump && !lastJump.rubber && now - lastJump.t < 3000 ? lastJump.d : e.ms * SPEED;
+    const d = lastJump && !lastJump.rubber && now - lastJump.t < 3000 ? lastJump.d : Math.min(e.ms, P.mode === 'cap' ? 5 * VB : e.ms) * SPEED;
     if (P.mode === 'var') return `풀리는 순간 캐릭터가 <b>${K.n(d, 1)}m 순간이동</b>합니다.`;
     if (P.mode === 'fixed') return `풀리면 밀린 계산을 몰아서 돌려 <b>${K.n(d, 1)}m 순간이동</b>하고, 몰아 돌린 계산 때문에 다음 장도 늦어집니다.`;
     return `따라잡기를 5번에서 멈추니 이동은 ${K.n(d, 1)}m에 그치지만, 나머지 시간은 버려져 게임 시계가 그만큼 뒤처집니다(<b>슬로우모션</b>).`;
@@ -384,17 +386,17 @@ K.register('frames', function (root) {
     const eL = recent('load');
     if (eL) return `${K.flag('bad')}<b>새 지역 로딩</b>: 텍스처를 읽고 셰이더를 컴파일하느라 게임 스레드가 <b>${K.ms(eL.ms)}</b> 동안 다른 일을 못 했습니다. 그동안 화면은 <b>멈춤</b>. ${jumpText(eL)} 로딩을 다른 스레드로 넘기거나 미리 해 두면 사라집니다.` + CLIENT;
     const eG = recent('gc');
-    if (eG) return `${K.flag('bad')}<b>가비지 컬렉션</b>: ${eG.fallback ? '점진적 GC가 쓰레기 만드는 속도를 못 따라가 결국 ' : ''}쌓인 쓰레기 ${HEAPMAX}MB를 치우려고 게임 전체를 <b>${K.ms(eG.ms)}</b> 세웠습니다. 그동안 <b>멈춤</b>. ${jumpText(eG)} 쓰레기를 덜 만들거나(오브젝트 재사용) 점진적 GC를 켜면 줄어듭니다.` + CLIENT;
+    if (eG) return `${K.flag('bad')}<b>가비지 컬렉션</b>: ${eG.fallback ? '점진적 GC가 쓰레기 만드는 속도를 못 따라가 결국 ' : ''}힙이 ${HEAPMAX}MB까지 차자 힙 전체를 훑어 쓰레기를 치우느라 게임 전체를 <b>${K.ms(eG.ms)}</b> 세웠습니다. 그동안 <b>멈춤</b>. ${jumpText(eG)} 쓰레기를 덜 만들거나(오브젝트 재사용) 점진적 GC를 켜면 줄어듭니다.` + CLIENT;
     if (P.mode === 'cap' && S.slow > 0.03) {
-      return `${K.flag(S.slow > 0.2 ? 'bad' : 'warn')}한 장이 평균 ${K.ms(S.avg)}나 걸려 따라잡기 5번 상한에 걸립니다. 못 돌린 시간은 버려져 게임 세계가 실제의 <b>${K.pct(1 - S.slow)}</b> 속도로 흐릅니다(<b>슬로우모션</b>). 온라인 게임에서는 서버가 아는 위치와 벌어져 나중에 <b>고무줄</b>처럼 당겨집니다.` + CLIENT;
+      return `${K.flag(S.slow > 0.2 ? 'bad' : 'warn')}한 장이 평균 ${K.ms(S.avg)}나 걸려 따라잡기 5번 상한에 걸립니다. 못 돌린 시간은 버려져 게임 세계가 실제의 <b>${K.pct(1 - S.slow)}</b> 속도로 흐릅니다(<b>슬로우모션</b>). 온라인 게임에서는 서버가 아는 위치와 벌어지면 <b>고무줄</b>처럼 당겨지기도 합니다.` + CLIENT;
     }
-    if (S.mixed) return `${K.flag('warn')}한 장 일이 평균 <b>${K.ms(S.work)}</b>로 16.7ms 언저리입니다. V-Sync는 16.7ms 눈금에 맞춰 내보내므로 어떤 장은 16.7ms, 어떤 장은 33.3ms가 걸립니다. FPS가 60과 30 사이를 오가 움직임이 울컥거립니다(<b>뚝뚝 끊김</b>). 일을 1~2ms만 줄여도 60에 고정됩니다.`;
+    if (S.mixed) return `${K.flag('warn')}한 장 일이 평균 <b>${K.ms(S.work)}</b>로 16.7ms 언저리입니다. V-Sync는 16.7ms 눈금에 맞춰 내보내므로 어떤 장은 16.7ms, 어떤 장은 33.3ms가 걸립니다. FPS가 60과 30 사이를 오가 움직임이 울컥거립니다(<b>뚝뚝 끊김</b>). GC·로딩을 뺀 가장 무거운 장이 ${K.ms(S.wmax)}이니, 일을 ${K.ms(Math.max(0.5, S.wmax - VB + 0.3))}쯤 줄여 모든 장이 16.7ms 안에 끝나면 60에 고정됩니다.`;
     if (S.fps < 45) {
       return `${K.flag(S.fps < 25 ? 'bad' : 'warn')}한 장 일이 평균 <b>${K.ms(S.work)}</b>입니다. 캐릭터 ${K.n(P.chars)}명을 그리고 패킷 ${K.n(P.chars * 0.5)}개를 처리${P.mode !== 'var' && S.steps > 1.3 ? `하고, 밀린 시간을 메우려 게임 계산을 한 장에 평균 ${K.n(S.steps, 1)}번 되풀이` : ''}하느라 1초에 <b>${K.n(S.fps)}장</b>밖에 못 그립니다. 화면은 <b>뚝뚝 끊김</b>, 누른 키는 ${K.ms(S.lat)} 뒤에야 보입니다(<b>입력 지연</b>).` + CLIENT;
     }
     if (P.load) return `${K.flag('warn')}지금은 한 장 일이 ${K.ms(S.work)}라 매끄럽습니다. 하지만 몇 초마다 새 지역에 들어서며 게임 스레드가 에셋을 직접 읽습니다. 곧 화면이 <b>멈춤</b> 뒤 <b>순간이동</b>합니다.`;
-    if (P.gc && P.inc && incLeft > 0) return `${K.flag('good')}점진적 GC가 한 장마다 2ms씩 쓰레기를 나눠 치우는 중입니다. 큰 멈춤 없이 매끄럽게 달립니다.`;
-    if (P.gc && P.inc && P.garbage > 0) return `${K.flag('good')}쓰레기가 <b>${K.n(heap)}MB</b> 쌓였습니다. ${INC_START}MB가 되면 점진적 GC가 한 장마다 2ms씩 나눠 치우기 시작합니다. 쓰레기를 너무 빨리 만들면 다 못 치우고 ${HEAPMAX}MB에서 결국 한 번에 멈춥니다.`;
+    if (P.gc && P.inc && incLeft > 0) return `${K.flag('good')}점진적 GC가 한 장마다 ${SLICE}ms씩 쓰레기를 나눠 치우는 중입니다. 큰 멈춤 없이 매끄럽게 달립니다.`;
+    if (P.gc && P.inc && P.garbage > 0) return `${K.flag('good')}쓰레기가 <b>${K.n(heap)}MB</b> 쌓였습니다. ${INC_START}MB가 되면 점진적 GC가 한 장마다 ${SLICE}ms씩 나눠 치우기 시작합니다. 쓰레기를 너무 빨리 만들면 다 못 치우고 ${HEAPMAX}MB에서 결국 한 번에 멈춥니다.`;
     if (P.gc && P.garbage > 0) return `${K.flag('warn')}쓰레기가 <b>${K.n(heap)}MB</b> 쌓였습니다. ${HEAPMAX}MB가 되면 한꺼번에 치우느라 게임이 잠깐 멈춥니다. 지금은 한 장 일이 ${K.ms(S.work)}라 매끄럽습니다.`;
     return `${K.flag('good')}한 장 일이 평균 <b>${K.ms(S.work)}</b>로 16.7ms 안에 넉넉히 끝납니다. 캐릭터가 매끄럽게 달리고, 누른 키는 ${K.ms(S.lat)} 뒤에 화면에 나타납니다.`;
   }

@@ -35,13 +35,19 @@ K.register('distance', function (root) {
     const s = Math.sin((la2 - la1) / 2) ** 2 + Math.cos(la1) * Math.cos(la2) * Math.sin((lo2 - lo1) / 2) ** 2;
     return 2 * 6371 * Math.asin(Math.min(1, Math.sqrt(s)));
   }
+  // 한국·일본과 유럽 사이는 직선(시베리아) 위로 큰 케이블이 거의 없어 동남아·수에즈나 미국을 돌아간다.
+  // 통신사 경로 우회(슬라이더)와 별개로 붙는 배수. 서울–프랑크푸르트 실측 약 230~270ms에 맞춘 값
+  const EA = { KR: 1, JP: 1 }, EU = { DE: 1, UK: 1 };
+  const geoOf = (a, b) => ((EA[a[3]] && EU[b[3]]) || (EA[b[3]] && EU[a[3]])) ? 1.8
+    : ((a[3] === 'HK' && EU[b[3]]) || (b[3] === 'HK' && EU[a[3]])) ? 1.4 : 1;
   const cong = h => { const i = Math.floor(h) % 24, f = h - Math.floor(h); return K.lerp(CONG[i], CONG[i + 1], f); };
   function model() {
     const a = CITY[P.me], b = CITY[P.srv];
     const same = P.me === P.srv;
     const km = Math.max(30, hav(a, b));
     const light = 2 * km / 200;
-    const route = P.route * (P.cut ? 1.7 : 1);
+    const geo = geoOf(a, b);
+    const route = P.route * geo * (P.cut ? 1.7 : 1);
     const ac = ACC[P.acc];
     const base = light * route + ac[1] + 12 * 0.1;
     const scale = a[3] === b[3] ? 0.35 : km > 5000 ? 1.2 : 1.0;
@@ -49,7 +55,7 @@ K.register('distance', function (root) {
       const f = cong(h), jm = 40 * f * scale;
       return { f, min: base, avg: base + jm / 3 + ac[2] / 3, p95: base + jm + ac[2], loss: 0.015 * f * f * scale + (P.cut ? 0.01 : 0) + ac[3] };
     };
-    return { a, b, same, km, light, route, base, scale, at, now: at(P.hour), intl: a[3] !== b[3] };
+    return { a, b, same, km, light, route, geo, base, scale, at, now: at(P.hour), intl: a[3] !== b[3] };
   }
   let M = model();
 
@@ -69,7 +75,7 @@ K.register('distance', function (root) {
   const cMe = K.choice(g1, { label: '내 위치', value: P.me, options: opts, onChange: v => { P.me = v; changed(); } });
   const cSrv = K.choice(g1, { label: '서버 위치', value: P.srv, options: opts, onChange: v => { P.srv = v; changed(); }, hint: '지도에서 도시를 눌러도 서버 위치가 바뀝니다.' });
   const g2 = K.group(F.controls, '경로');
-  const sRoute = K.slider(g2, { label: '경로 우회 정도', min: 1, max: 3, step: 0.1, value: P.route, fmt: v => K.n(v, 1) + '배', onInput: v => { P.route = v; changed(); }, hint: '직선 거리보다 실제 케이블이 몇 배 긴지. 보통 1.3~2배입니다.' });
+  const sRoute = K.slider(g2, { label: '경로 우회 정도', min: 1, max: 3, step: 0.1, value: P.route, fmt: v => K.n(v, 1) + '배', onInput: v => { P.route = v; changed(); }, hint: '직선 거리보다 실제 경로가 몇 배 긴지. 보통 1.3~2배입니다. 한국·일본↔유럽처럼 직선 위에 케이블이 없는 구간은 이 값에 1.8배가 더 붙습니다.' });
   const tCut = K.toggle(g2, { label: '해저 케이블 장애 (우회 경로)', value: P.cut, onChange: v => { P.cut = v; changed(); } });
   const cAcc = K.choice(g2, { label: '가입자망', value: P.acc, options: [['wired', '유선'], ['wifi', '와이파이'], ['lte', 'LTE']], onChange: v => { P.acc = v; changed(); } });
   const g3 = K.group(F.controls, '시간');
@@ -131,7 +137,9 @@ K.register('distance', function (root) {
     const dx = B[0] - A[0], dy = B[1] - A[1], L = Math.hypot(dx, dy) || 1;
     const off = Math.max(24, (M.route - 1) * 0.35 * L);
     const m = gc(M.a, M.b, 0.5), mp = proj(m[0], m[1]);
-    return [A, [mp[0] - dy / L * off, mp[1] + dx / L * off], B];
+    let nx = -dy / L, ny = dx / L;
+    if (M.geo > 1 && ny < 0) { nx = -nx; ny = -ny; }   // 아시아–유럽은 남쪽(동남아·수에즈)으로 돌아간다
+    return [A, [mp[0] + nx * off, mp[1] + ny * off], B];
   }
   const bez = ([A, Cp, B], s) => [(1 - s) ** 2 * A[0] + 2 * (1 - s) * s * Cp[0] + s * s * B[0], (1 - s) ** 2 * A[1] + 2 * (1 - s) * s * Cp[1] + s * s * B[1]];
 
@@ -308,8 +316,10 @@ K.register('distance', function (root) {
     if (M.same) {
       m = `같은 도시 안이라 거리는 30km 남짓, 빛의 한계는 왕복 ${K.ms(M.light)}뿐입니다. 핑 <b>${K.ms(n.avg)}</b>의 대부분은 ${ACC[P.acc][0]} 가입자망과 장비를 지나는 시간입니다.`;
     } else {
-      m = `${M.a[0]}–${eun(M.b[0])} 직선으로 약 <b>${K.n(Math.round(M.km / 10) * 10)}km</b>입니다. 빛도 광케이블 안에서는 왕복 <b>${K.ms(M.light)}</b>가 걸립니다. 실제 경로는 ${K.n(M.route, 1)}배쯤 돌아가고 가입자망·장비까지 더해 평균 <b>${K.ms(n.avg)}</b>입니다.`;
-      if (P.cut) m += ` 해저 케이블이 끊겨 먼 길로 돌아가느라 평소보다 ${K.ms(M.light * P.route * 0.7)}가 늘고 손실도 생겼습니다.`;
+      m = `${M.a[0]}–${eun(M.b[0])} 직선으로 약 <b>${K.n(Math.round(M.km / 10) * 10)}km</b>입니다. 빛도 광케이블 안에서는 왕복 <b>${K.ms(M.light)}</b>가 걸립니다. `;
+      if (M.geo > 1) m += `${M.geo >= 1.8 ? '한국·일본' : '홍콩'}과 유럽 사이는 직선 위로 큰 케이블이 거의 없어, 패킷은 동남아·수에즈나 미국을 돌아갑니다. `;
+      m += `실제 경로는 ${K.n(M.route, 1)}배쯤 돌아가고 가입자망·장비까지 더해 평균 <b>${K.ms(n.avg)}</b>입니다.`;
+      if (P.cut) m += ` 해저 케이블이 끊겨 먼 길로 돌아가느라 평소보다 ${K.ms(M.light * P.route * M.geo * 0.7)}가 늘고 손실도 생겼습니다.`;
     }
     if (n.f >= 0.6 && !M.same) m += ` 지금 ${hhmm(P.hour)}은 저녁 피크라 ${M.intl ? '국제 구간' : '통신사 사이 구간'}이 붐빕니다. 100번 중 5번은 <b>${K.ms(n.p95)}</b>까지 튀고 손실도 ${K.n(n.loss * 100, 1)}%라 순간이동·고무줄이 섞입니다.`;
     m += n.avg <= 50 ? ' 액션 전투에도 충분히 빠릅니다.'

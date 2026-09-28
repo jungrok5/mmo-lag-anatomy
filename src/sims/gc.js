@@ -315,10 +315,14 @@ K.register('gc', function (root) {
     }
     if (P.mode === 'gen') {
       const st = a.fullI < 300 && fp >= 300 ? 'bad' : fp >= B ? 'warn' : 'good';
-      return `${K.flag(st)} <b>세대별</b> GC는 새로 만든 객체만 모아 두는 작은 칸(젊은 세대 ${K.n(young() / GB, 1)}GB)을 <b>${fmtDur(a.interval)}마다 ${K.ms(a.youngP)}</b>씩 짧게 청소합니다. 금방 버려지는 객체가 대부분이라 빨리 끝나고, 틱 예산 안에 흡수됩니다. 다만 청소에서 살아남은 2%가 늙은 세대에 쌓이면 <b>${fmtDur(a.fullI)}마다</b> 전체 청소가 필요하고, 그때는 <b>${K.ms(fp)}</b> 동안 <b>멈춤</b>, 이어서 <b>몰아치기</b>가 옵니다. ${who} ${st === 'good' ? '' : fix}`;
+      const busy = baseWork() * 1.15 + a.youngP > B;   // 바쁜 틱에 젊은 세대 청소가 겹치면 예산을 넘는다
+      const absorb = busy
+        ? `금방 버려지는 객체가 대부분이라 빨리 끝나지만, 지금은 틱 자체가 바빠(평소 약 ${K.ms(baseWork())}) 청소가 겹친 틱은 예산 50ms를 살짝 넘습니다. 그때마다 짧게 <b>뚝뚝 끊김</b>이 생깁니다.`
+        : '금방 버려지는 객체가 대부분이라 빨리 끝나고, 틱 예산 안에 흡수됩니다.';
+      return `${K.flag(st)} <b>세대별</b> GC는 새로 만든 객체만 모아 두는 작은 칸(젊은 세대 ${K.n(young() / GB, 1)}GB)을 <b>${fmtDur(a.interval)}마다 ${K.ms(a.youngP)}</b>씩 짧게 청소합니다. ${absorb} 다만 청소에서 살아남은 2%가 늙은 세대에 쌓이면 <b>${fmtDur(a.fullI)}마다</b> 전체 청소가 필요하고, 그때는 <b>${K.ms(a.maxP)}</b> 동안 <b>멈춤</b>, 이어서 <b>몰아치기</b>가 옵니다. ${who} ${st === 'good' ? '' : fix}`;
     }
     if (a.fallback) {
-      return `${K.flag('bad')} <b>동시 수행</b> GC는 게임이 도는 동안 옆에서 청소하지만, 초당 ${K.n(P.A)}MB를 새로 쓰면 청소(${K.n(markDur() / 1000, 1)}초)가 끝나기 전에 힙이 가득 찹니다. 결국 전체 멈춤으로 넘어가 <b>${K.ms(fp)}</b> 동안 서버가 얼어붙습니다(<b>멈춤</b> 뒤 <b>몰아치기</b>). ${who} ${fix}`;
+      return `${K.flag('bad')} <b>동시 수행</b> GC는 게임이 도는 동안 옆에서 청소하지만, 초당 ${K.n(P.A)}MB를 새로 쓰면 청소(${K.n(markDur() / 1000, 1)}초)가 끝나기 전에 힙이 가득 찹니다. 결국 전체 멈춤으로 넘어가 <b>${K.ms(fp)}</b> 동안 서버가 얼어붙습니다(<b>멈춤</b> 뒤 <b>몰아치기</b>). 실제 GC마다 모양은 달라서, G1은 전체 청소로 넘어가고 ZGC는 메모리를 달라는 스레드를 청소가 끝날 때까지 세웁니다. 어느 쪽이든 게임 스레드가 멈춥니다. ${who} ${fix}`;
     }
     const work = baseWork();
     const slow = work * 1.25;
@@ -339,7 +343,7 @@ K.register('gc', function (root) {
     stMiss.set(K.n(missed), missed >= 6 ? 'bad' : missed >= 1 ? 'warn' : 'good', missed ? '풀린 뒤 몰아서 처리' : '밀리지 않음');
     stSum.set(K.ms(a.perMin), a.perMin > 1000 ? 'bad' : a.perMin > 200 ? 'warn' : 'good', `1분 중 ${K.pct(a.perMin / 60000, 1)}`);
     const slowConc = P.mode === 'conc' && !a.fallback && baseWork() * 1.25 > B * 0.9;
-    const feel = a.maxP >= 300 ? ['멈춤', 'bad'] : a.maxP >= B || slowConc ? ['살짝 끊김', 'warn'] : ['매끄러움', 'good'];
+    const feel = a.maxP >= 300 ? ['멈춤', 'bad'] : a.maxP >= B ? ['짧은 멈춤', 'warn'] : slowConc ? ['슬로우모션 직전', 'warn'] : ['매끄러움', 'good'];
     stFeel.set(feel[0], feel[1], a.maxP >= 300 ? `풀리면 몰아치기 · ${fmtDur(a.fullI)}마다` : a.maxP >= B ? `${fmtDur(a.fullI)}마다 한 번` : slowConc ? '청소 중 틱이 느려짐' : '멈춤을 못 느낌');
     F.say(explain(a));
   });

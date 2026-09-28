@@ -4,22 +4,22 @@ K.register('disk', function (root) {
   const F = K.frame(root, {
     kicker: '레이어 11 · 디스크',
     title: '디스크가 밀리면 게임 스레드도 같이 멈춘다',
-    lead: '디스크는 서버의 창고입니다. 로그 한 줄, 캐릭터 저장 한 번이 모두 창고에 짐을 넣는 일입니다. IOPS는 창고 문 개수(1초에 드나들 수 있는 짐 수)이고, 클라우드 디스크의 버스트 크레딧은 잠깐 빨리 달릴 수 있는 체력입니다. 게임 스레드가 짐 넣기를 직접 기다리면, 창고 앞이 막히는 순간 게임도 같이 멈춥니다.',
+    lead: '디스크는 서버의 창고입니다. 로그 한 줄, 캐릭터 저장 한 번이 모두 창고에 짐을 넣는 일입니다. IOPS는 창고 문 개수(1초에 드나들 수 있는 짐 수)이고, 클라우드 디스크의 버스트 크레딧은 잠깐 빨리 달릴 수 있는 체력입니다. 보통은 OS가 짐을 문 앞(메모리)에 먼저 받아 두지만, 확실히 넣으라고(fsync) 하면 창고 안까지 기다립니다. 게임 스레드가 그걸 직접 기다리면, 창고 앞이 막히는 순간 게임도 같이 멈춥니다.',
     tries: [
-      '<b>오래된 HDD + 동기 로그</b>를 눌러 보세요. 1초에 쓰기 120건뿐인데도 틱이 50ms를 넘겨 서버 시간이 느리게 흐릅니다(슬로우모션).',
-      '이어서 <b>비동기로 해결</b>을 눌러 보세요. 같은 HDD인데 틱은 바로 정상이 되고, 대신 저장이 조금 밀립니다.',
+      '<b>오래된 HDD + 저장마다 fsync</b>를 눌러 보세요. 1초에 60건뿐인데도 한 건마다 20ms씩 디스크를 기다리느라 틱이 50ms를 넘겨 서버 시간이 느리게 흐릅니다(슬로우모션). 여기서 <b>fsync</b>를 끄면 OS가 쓰기를 메모리에 먼저 받아 주어 바로 정상이 됩니다. 대신 서버 기계가 꺼지면 아직 못 내려간 내용이 사라질 수 있습니다.',
+      '이어서 <b>비동기로 해결</b>을 눌러 보세요. 같은 HDD, 같은 fsync인데 틱은 바로 정상이 되고, 대신 저장이 조금 밀립니다.',
       '<b>클라우드 디스크 크레딧 소진</b>을 누르고 20초쯤 지켜보세요. 크레딧이 바닥나는 순간 처리 능력이 1.6만에서 3천으로 뚝 떨어집니다. 실제로는 수십 분~몇 시간에 걸쳐 일어나는 일을 몇 분으로 줄였습니다.',
       '<b>새벽 백업과 겹침</b>에서 <b>백업 작업 동시 실행</b>을 껐다 켜 보세요. 매일 같은 시각에 렉이 난다면 이런 예약 작업이 겹친 경우가 많습니다.',
       '1분마다 짧게 솟는 봉우리는 <b>정기 저장</b>입니다. 동기 방식일 때 이 순간마다 게임이 뚝뚝 끊기는지 아래 띠에서 보세요.',
     ],
   });
 
-  // 디스크 사양 (쓰기 한 건 기준, 현실에서 흔한 값)
+  // 디스크 사양 (쓰기 한 건 기준, 현실에서 흔한 값). svc = 한 건이 디스크에 닿는 시간, fs = fsync로 확실히 쓰는 시간
   const DISKS = {
-    hdd: { iops: 150, svc: 6, desc: '1초에 약 150건, 한 건 6ms. 바늘이 움직여야 해서 느립니다.' },
-    sata: { iops: 40000, svc: 0.1, desc: '1초에 약 4만 건, 한 건 0.1ms.' },
-    nvme: { iops: 400000, svc: 0.02, desc: '1초에 약 40만 건, 한 건 0.02ms.' },
-    cloud: { iops: 3000, burst: 16000, svc: 0.5, desc: '평소 3천 건. 크레딧이 남은 동안만 1.6만 건까지 달립니다. 네트워크 너머라 한 건 0.5ms.' },
+    hdd: { iops: 150, svc: 6, fs: 20, desc: '1초에 약 150건, 한 건 6ms. 확실히 쓰기(fsync)는 20ms 안팎. 바늘이 움직여야 해서 느립니다.' },
+    sata: { iops: 40000, svc: 0.1, fs: 2, desc: '1초에 약 4만 건, 한 건 0.1ms. 전원 보호 기능이 없는 보통 SSD라 확실히 쓰기(fsync)는 2ms 안팎.' },
+    nvme: { iops: 400000, svc: 0.02, fs: 0.1, desc: '서버용. 1초에 약 40만 건, 한 건 0.02ms. 전원 보호 기능이 있어 확실히 쓰기(fsync)도 0.1ms 안팎.' },
+    cloud: { iops: 3000, burst: 16000, svc: 0.5, fs: 1.5, desc: '평소 3천 건. 크레딧이 남은 동안만 1.6만 건까지 달립니다(작은 클라우드 서버의 디스크 통로가 이런 모양). 네트워크 너머라 한 건 0.5ms, fsync는 1~2ms.' },
   };
   const TICK = 50;          // 20Hz 틱 예산
   const COMPUTE = 15;       // 틱 하나의 게임 계산 시간
@@ -27,6 +27,8 @@ K.register('disk', function (root) {
   const SPEED = 10;         // 현실 1초 = 시뮬레이션 10초
   const CREDIT_MAX = 900000;// I/O 크레딧 통 크기: 9천 IOPS로 달리면 약 3분에 바닥
   const REC_KB = 2;         // 쓰기 한 건이 메모리에서 차지하는 크기
+  const PC = 0.01;          // fsync 없이 쓰면 OS 메모리(페이지 캐시)에 복사하고 끝 (ms)
+  const DIRTY = 500000;     // OS가 받아 둘 밀린 쓰기 한도 (약 1GB). 가까워지면 쓰는 쪽을 붙잡는다
   const P = { rate: 3000, disk: 'nvme', mode: 'async', fsync: false, backup: false };
   const rnd = K.rng(11);
 
@@ -68,7 +70,7 @@ K.register('disk', function (root) {
     hint: DISKS[P.disk].desc,
   });
   const diskHint = cDisk.el.querySelector('.ctl-hint');
-  const tFsync = K.toggle(g2, { label: 'fsync 매번 (확실히 저장)', value: P.fsync, onChange: v => { P.fsync = v; }, hint: '디스크에 진짜로 새겨질 때까지 기다립니다. 쓰기 한 건이 4배 무거워집니다.' });
+  const tFsync = K.toggle(g2, { label: 'fsync 매번 (확실히 저장)', value: P.fsync, onChange: v => { P.fsync = v; }, hint: '켜면 디스크에 진짜로 새겨질 때까지 기다리고, 디스크가 할 일도 약 2배가 됩니다. 끄면 OS가 메모리에 먼저 받아 두었다가 나중에 내려보내서 빠르지만, 서버 기계가 꺼지면 그 사이 내용이 사라질 수 있습니다.' });
   const tBackup = K.toggle(g2, { label: '백업 작업 동시 실행', value: P.backup, onChange: v => { P.backup = v; }, hint: '백업이 디스크 처리 능력의 70%를 가져갑니다.' });
   const bRefill = K.button(g2, { label: '버스트 크레딧 다시 채우기', kind: 'small', onClick: () => { credits = CREDIT_MAX; } });
   const g3 = K.group(F.controls, '게임 서버');
@@ -76,7 +78,7 @@ K.register('disk', function (root) {
     label: '쓰는 방식', value: P.mode,
     options: [['sync', '게임 스레드에서 직접 (동기)'], ['async', '별도 스레드로 넘김 (비동기)']],
     onChange: v => { P.mode = v; },
-    hint: '동기: 쓰기가 끝날 때까지 게임이 기다립니다. 비동기: 쓰기를 줄에 맡기고 게임은 바로 다음 일을 합니다.',
+    hint: '동기: 쓰기가 끝날 때까지 게임이 기다립니다. fsync가 꺼져 있으면 OS 메모리에 담기는 순간, 켜져 있으면 디스크에 새겨질 때까지입니다. 비동기: 쓰기를 줄에 맡기고 게임은 바로 다음 일을 합니다.',
   });
   function syncHint() {
     diskHint.textContent = DISKS[P.disk].desc;
@@ -88,10 +90,10 @@ K.register('disk', function (root) {
   // 클라우드는 9분 동안 평소 부하(2천)로 달리다가 방금 이벤트로 8천이 몰린 순간에서 시작한다
   K.presets(F, [
     { label: '평소 (NVMe, 비동기)', apply() { set('nvme', 'async', 3000, false, false); } },
-    { label: '오래된 HDD + 동기 로그', apply() { set('hdd', 'sync', 120, false, false); } },
+    { label: '오래된 HDD + 저장마다 fsync', apply() { set('hdd', 'sync', 60, true, false); } },
     { label: '클라우드 디스크 크레딧 소진', apply() { set('cloud', 'async', 8000, false, false, 2000); } },
-    { label: '새벽 백업과 겹침', apply() { set('sata', 'sync', 800, true, true); } },
-    { label: '비동기로 해결', apply() { set('hdd', 'async', 120, false, false); } },
+    { label: '새벽 백업과 겹침', apply() { set('sata', 'sync', 200, true, true); } },
+    { label: '비동기로 해결', apply() { set('hdd', 'async', 60, true, false); } },
   ]);
   function set(disk, mode, rate, fsync, backup, lead) {
     cDisk.set(disk, false); cMode.set(mode, false); tFsync.set(fsync, false); tBackup.set(backup, false);
@@ -112,19 +114,20 @@ K.register('disk', function (root) {
 
   // ---------- 모형 ----------
   let t = 0, credits = CREDIT_MAX, Q = 0, simAcc = 0, recAcc = 0;
-  const cur = { lam: 0, dem: 0, cap: 1, capTot: 1, L: 0.02, blk: 0, spd: 1, behind: 0, pend: 0, mu: 1, used: 0, wave: false };
+  const cur = { lam: 0, dem: 0, cap: 1, capTot: 1, L: 0.02, S0: 0.02, blk: 0, spd: 1, behind: 0, pend: 0, mu: 1, used: 0, wave: false, cache: false, thr: 0 };
   const hist = [];
 
   function sub(h) {
     const D = DISKS[P.disk];
-    const c = P.fsync ? 4 : 1, S = D.svc * c;
+    // fsync를 켜면 데이터와 파일 시스템 기록을 함께 써서 디스크 일이 약 2배, 한 건은 fs 만큼 걸린다
+    const c = P.fsync ? 2 : 1, S = P.fsync ? D.fs : D.svc;
     const wave = t % 60 < 5; // 1분마다 정기 저장
     const lam = P.rate * (wave ? 1.8 : 1) * Math.max(0.4, 1 + 0.06 * K.gauss(rnd));
     // 클라우드: 크레딧이 남아 있는 만큼만 기본 속도 위로 달린다
     const capTot = D.burst ? Math.min(D.burst, D.iops + credits / h) : D.iops;
     const bk = P.backup ? 0.7 * capTot : 0;
     const mu = (capTot - bk) / c; // 게임이 1초에 넣을 수 있는 쓰기 수
-    let L, blk = 0, spd = 1, issued, pend;
+    let L, S0 = S, blk = 0, spd = 1, issued, pend, cache = false, thr = 0;
     if (P.mode === 'async') {
       const served = Math.min(Q + lam * h, mu * h);
       Q = Math.min(Q + lam * h - served, 5e7);
@@ -133,22 +136,33 @@ K.register('disk', function (root) {
       const base = S / (1 - rho);
       L = base + (Q / mu) * 1000;
       pend = Q + (issued * base) / 1000;
-    } else {
-      // 틱마다 rate/20 건을 차례로 쓰고 그 지연만큼 멈춘다. 틱이 늘면 쓰기도 덜 나가므로 균형점을 찾는다
-      let s = cur.spd || 1, Lx = S;
-      for (let i = 0; i < 14; i++) {
-        const rho = Math.min(0.95, (lam * s * c + bk) / capTot);
-        Lx = S / (1 - rho);
-        s = 0.5 * s + 0.5 * Math.min(1, TICK / (COMPUTE + (lam / 20) * Lx));
-      }
+    } else if (!P.fsync) {
+      // 동기지만 fsync 없음: OS가 메모리(페이지 캐시)에 받아 두고 나중에 디스크로 내려보낸다.
+      // 밀린 쓰기(Q)가 한도에 가까워지면 OS가 쓰는 쪽을 붙잡아, 디스크가 비워 주는 속도로만 받아 준다
+      cache = true; S0 = PC;
+      thr = K.clamp((Q - 0.9 * DIRTY) / (0.1 * DIRTY), 0, 1);
+      const Lx = PC + thr * (1000 / mu);
+      const s = Math.min(1, TICK / (COMPUTE + (lam / 20) * Lx));
       issued = lam * s;
-      Q = Math.max(0, Q - Math.max(0, mu - issued) * h); // 비동기 때 밀린 쓰기는 남는 틈에 내려간다
+      const q0 = Q;
+      Q = K.clamp(Q + (issued - mu) * h, 0, DIRTY);
+      spd = s; L = Lx; blk = (lam / 20) * Lx;
+      pend = Q;
+      issued = q0 > 0 || Q > 0 ? mu : Math.min(issued, mu); // 디스크가 실제로 내려보내는 속도
+    } else {
+      // 동기 + fsync: 게임 스레드가 한 건씩 디스크에 새겨질 때까지 기다린다.
+      // 한 스레드가 차례로 쓰므로 자기 쓰기끼리는 줄을 서지 않고, 백업처럼 같은 디스크를 쓰는 다른 일 때문에 줄이 선다
+      const rho = Math.min(0.95, bk / capTot);
+      const Lx = S / (1 - rho);
+      const s = Math.min(1, TICK / (COMPUTE + (lam / 20) * Lx));
+      issued = lam * s;
+      Q = Math.max(0, Q - Math.max(0, mu - issued) * h); // 앞서 밀린 쓰기는 남는 틈에 내려간다
       spd = s; L = Lx; blk = (lam / 20) * Lx;
       pend = Q + (issued * L) / 1000;
     }
     const used = Math.min(capTot, issued * c + bk);
     if (D.burst) credits = K.clamp(credits + (D.iops - used) * h, 0, CREDIT_MAX);
-    Object.assign(cur, { lam, dem: lam * c, bk, cap: capTot - bk, capTot, L, blk, spd, behind: Q / mu, pend, mu, used, wave });
+    Object.assign(cur, { lam, dem: lam * c, bk, cap: capTot - bk, capTot, L, S0, blk, spd, behind: Q / mu, pend, mu, used, wave, cache, thr });
     t += h;
   }
   function record() {
@@ -328,13 +342,26 @@ K.register('disk', function (root) {
   // ---------- 해설 ----------
   function explain() {
     const D = DISKS[P.disk];
-    const c = P.fsync ? 4 : 1;
     let flag = 'good', msg;
-    if (P.mode === 'sync') {
+    const slowTxt = `틱 예산 50ms를 넘겨 서버 시간이 평소의 <b>${K.pct(cur.spd)}</b> 속도로 흐릅니다. 플레이어는 <b>슬로우모션</b>, 스킬이 늦게 나가는 <b>입력 지연</b>, 잠깐씩 서는 <b>멈춤</b>을 겪습니다.`;
+    if (P.mode === 'sync' && cur.cache) {
+      const n = K.n(cur.lam / 20, 0), mb = (cur.pend * REC_KB) / 1024;
+      const mbT = mb >= 1024 ? K.n(mb / 1024, 1) + 'GB' : K.n(mb) + 'MB';
+      if (cur.spd < 0.97) {
+        flag = 'bad';
+        msg = `<b>OS가 받아 둔 밀린 쓰기가 한도(약 1GB)에 닿았습니다.</b> 디스크가 1초에 ${K.n(cur.mu)}건만 내려보내는데 ${K.n(P.rate)}건이 들어와, OS가 게임 스레드를 붙잡고 디스크가 비운 만큼만 받아 줍니다. 틱마다 쓰기 약 ${n}건 × 건당 ${K.ms(cur.L)} = <b>${K.ms(cur.blk)}</b> 동안 멈춰 있습니다. ${slowTxt}`;
+      } else if (cur.behind > 0.5) {
+        flag = 'warn';
+        msg = `게임 스레드가 직접 쓰지만 OS가 쓰기를 메모리(페이지 캐시)에 먼저 받아 주어 한 건이 <b>${K.ms(cur.L)}</b>에 끝납니다. 다만 디스크가 못 따라가 OS 메모리에 <b>${K.n(cur.pend)}건</b>(약 ${mbT}, ${dur(cur.behind)}치)이 밀려 있습니다. 밀린 양이 한도에 닿으면 OS가 게임 스레드를 붙잡습니다. 서버 기계가 갑자기 꺼지면 이만큼이 사라질 수 있습니다.`;
+      } else {
+        msg = `게임 스레드가 직접 쓰지만 OS가 쓰기를 메모리(페이지 캐시)에 먼저 받아 두고 나중에 디스크로 내려보내서, 한 건이 <b>${K.ms(cur.L)}</b>에 끝납니다. 대신 서버 기계가 갑자기 꺼지면 아직 못 내려간 몇 초치가 사라질 수 있습니다. 확실히 저장하려고 fsync를 켜면 게임 스레드가 디스크를 직접 기다리게 됩니다.`;
+      }
+    } else if (P.mode === 'sync') {
       const n = K.n(cur.lam / 20, 0);
       if (cur.spd < 0.97) {
         flag = 'bad';
-        msg = `<b>게임 스레드가 디스크를 기다리느라 틱이 늦습니다.</b> 틱마다 쓰기 약 ${n}건 × 건당 ${K.ms(cur.L)} = <b>${K.ms(cur.blk)}</b> 동안 멈춰 있습니다. 틱 예산 50ms를 넘겨 서버 시간이 평소의 <b>${K.pct(cur.spd)}</b> 속도로 흐릅니다. 플레이어는 <b>슬로우모션</b>, 스킬이 늦게 나가는 <b>입력 지연</b>, 잠깐씩 서는 <b>멈춤</b>을 겪습니다.`;
+        msg = `<b>게임 스레드가 디스크를 기다리느라 틱이 늦습니다.</b> 틱마다 쓰기 약 ${n}건 × 건당 ${K.ms(cur.L)} = <b>${K.ms(cur.blk)}</b> 동안 멈춰 있습니다. ${slowTxt}` +
+          (cur.used < cur.capTot * 0.7 ? ` 디스크는 아직 ${K.pct(cur.used / cur.capTot)}만 바쁩니다. 그래도 게임 스레드가 한 건씩 차례로 기다리는 시간이 쌓여 틱을 잡아먹습니다.` : '');
       } else if (cur.blk > 12) {
         flag = 'warn';
         msg = `틱마다 <b>${K.ms(cur.blk)}</b>를 디스크 기다리는 데 씁니다. 아직 50ms 안이지만 정기 저장이 몰리는 순간 넘칠 수 있습니다. 그러면 1분 간격으로 <b>뚝뚝 끊김</b>이 생깁니다.`;
@@ -345,11 +372,11 @@ K.register('disk', function (root) {
       const mb = (cur.pend * REC_KB) / 1024;
       if (cur.behind > 10) {
         flag = 'bad';
-        msg = `<b>게임은 멀쩡히 돌지만 저장이 ${dur(cur.behind)} 밀렸습니다.</b> 디스크가 1초에 ${K.n(cur.mu)}건만 받는데 ${K.n(P.rate)}건이 들어옵니다. 쓰기 ${K.n(cur.pend)}건(메모리 약 ${mb >= 1024 ? K.n(mb / 1024, 1) + 'GB' : K.n(mb) + 'MB'})이 줄을 섰습니다. 지금 서버가 죽으면 그만큼의 진행이 사라집니다(<b>씹힘·롤백</b>: 방금 얻은 아이템이 없어짐). 메모리가 바닥나면 서버도 죽습니다.`;
+        msg = `<b>게임은 멀쩡히 돌지만 저장이 ${dur(cur.behind)} 밀렸습니다.</b> 디스크가 1초에 ${K.n(cur.mu)}건만 받는데 ${K.n(P.rate)}건이 들어옵니다. 쓰기 ${K.n(cur.pend)}건(메모리 약 ${mb >= 1024 ? K.n(mb / 1024, 1) + 'GB' : K.n(mb) + 'MB'})이 줄을 섰습니다. 지금 서버가 죽으면 그만큼의 진행이 사라질 수 있습니다(<b>씹힘·롤백</b>: 방금 얻은 아이템이 없어짐). 메모리가 바닥나면 서버도 죽습니다.`;
       } else if (cur.behind > 0.5) {
         flag = 'warn';
         msg = `쓰기가 잠깐 몰려 저장이 <b>${dur(cur.behind)}</b> 밀렸습니다. 별도 스레드가 맡고 있어 게임 틱은 멀쩡합니다. 몰림이 지나가면 줄이 다시 줄어듭니다.`;
-      } else if (cur.L / (D.svc * c) > 2.5) {
+      } else if (cur.L / cur.S0 > 2.5) {
         flag = 'warn';
         msg = `창고 문이 거의 꽉 차서 쓰기 한 건에 <b>${K.ms(cur.L)}</b>가 걸립니다. 그래도 별도 스레드가 기다려 주므로 게임 틱은 멀쩡합니다. 정기 저장이 몰리면 저장이 몇 초 밀렸다가 다시 따라잡습니다.`;
       } else {
@@ -368,7 +395,7 @@ K.register('disk', function (root) {
       }
     }
     if (P.backup) extra.push('백업이 창고 문의 70%를 차지하고 있습니다. 매일 같은 시각에 렉이 난다면 이런 예약 작업을 먼저 의심합니다.');
-    if (P.fsync && flag !== 'good') extra.push(`fsync 때문에 쓰기 한 건이 ${c}배 무겁습니다.`);
+    if (P.fsync && flag !== 'good') extra.push(`fsync 때문에 한 건이 ${K.ms(D.svc)}에서 ${K.ms(D.fs)}로 늘고, 디스크가 할 일도 약 2배입니다.`);
     F.say(K.flag(flag) + msg + (extra.length ? ' ' + extra.join(' ') : ''));
   }
 
@@ -377,18 +404,18 @@ K.register('disk', function (root) {
     stepStrip(dt);
     drawA(); drawB(); drawC();
     const D = DISKS[P.disk];
-    const S = D.svc * (P.fsync ? 4 : 1);
-    const r = cur.L / S;
-    stL.set(K.ms(cur.L), cur.L > 50 || r > 6 ? 'bad' : cur.L > 5 || r > 2.5 ? 'warn' : 'good', '쓰기 한 건이 끝나기까지');
+    const r = cur.L / cur.S0;
+    stL.set(K.ms(cur.L), cur.L > 50 || r > 6 ? 'bad' : cur.L > 5 || r > 2.5 ? 'warn' : 'good', cur.cache ? 'OS 메모리에 담기까지' : '쓰기 한 건이 끝나기까지');
     const mb = (cur.pend * REC_KB) / 1024;
+    const mbT = mb >= 1024 ? K.n(mb / 1024, 1) + 'GB' : K.n(mb, mb < 10 ? 1 : 0) + 'MB';
     stQ.set(K.n(cur.pend), cur.behind > 10 ? 'bad' : cur.behind > 0.5 || cur.pend > Math.max(50, cur.lam * 0.2) ? 'warn' : 'good',
-      P.mode === 'async' ? `메모리 약 ${mb >= 1024 ? K.n(mb / 1024, 1) + 'GB' : K.n(mb, mb < 10 ? 1 : 0) + 'MB'}` : '게임 스레드가 직접 기다림');
+      P.mode === 'async' ? `메모리 약 ${mbT}` : cur.cache ? `OS 메모리 약 ${mbT}` : '게임 스레드가 직접 기다림');
     if (D.burst) {
       const f = credits / CREDIT_MAX;
       stC.set(K.pct(f), f < 0.01 ? 'bad' : f < 0.3 ? 'warn' : 'good', f < 0.01 ? '바닥: 기본 3천 IOPS' : '남은 체력 (최대 1.6만)');
     } else stC.set('해당 없음', null, '버스트형 볼륨에만 있음');
     stB.set(K.ms(cur.blk), COMPUTE + cur.blk > TICK ? 'bad' : cur.blk > 12 ? 'warn' : 'good', COMPUTE + cur.blk > TICK ? `게임 속도 ${K.pct(cur.spd)}` : '틱 예산 50ms 중');
-    stS.set(dur(cur.behind), cur.behind > 10 ? 'bad' : cur.behind > 0.5 ? 'warn' : 'good');
+    stS.set(dur(cur.behind), cur.behind > 10 ? 'bad' : cur.behind > 0.5 ? 'warn' : 'good', cur.cache ? '서버 기계가 꺼지면 잃는 시간' : '서버가 죽으면 잃는 시간');
     explain();
   });
 });

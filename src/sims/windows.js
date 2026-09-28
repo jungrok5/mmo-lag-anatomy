@@ -2,7 +2,7 @@
 K.register('windows', function (root) {
   const F = K.frame(root, {
     kicker: '동기화 방식 · 판정 창',
-    title: '예고가 핑보다 짧으면 실력과 상관없이 맞는다',
+    title: '예고가 “핑 + 반응 시간”보다 짧으면 실력과 상관없이 맞는다',
     lead: '보스가 공격을 예고하고, 그 안에 피해야 한다고 합시다. 예고 시간의 일부는 소식이 내게 오는 데, 일부는 사람이 반응하는 데, 일부는 내 입력이 서버에 가는 데 쓰입니다. 남는 시간이 없으면 아무리 잘해도 맞습니다. 탭 타겟 MMO가 핑에 둔감하고 패링 게임이 민감한 이유가 이 계산에 있습니다.',
     tries: [
       '장르 버튼을 차례로 눌러 보세요. 예고가 긴 레이드는 핑 300ms에서도 여유가 남고, 빠른 공격 패링은 핑 100ms만 돼도 모자랍니다.',
@@ -15,8 +15,8 @@ K.register('windows', function (root) {
   const GENRES = [
     { label: '탭 타겟 레이드', W: 2000, sched: 'arrive', judge: 'now', say: '레이드 보스는 1.5~3초 예고가 흔합니다. 핑이 꽤 높아도 반응할 시간이 충분합니다.' },
     { label: '액션 MMO 회피', W: 700, sched: 'arrive', judge: 'now', say: '0.7초 예고라도 소식이 늦게 오고 입력이 늦게 가면 여유가 금방 사라집니다.' },
-    { label: '빠른 공격 패링', W: 450, sched: 'arrive', judge: 'now', say: '0.45초 만에 들어오는 빠른 공격을 보고 패링하는 경우입니다. 사람 반응 0.25초를 빼면 0.2초만 남아, 핑이 조금만 있어도 모자랍니다. 박자를 외워 미리 누르는 패링은 반응 시간이 들지 않는 대신, 판정이 핑만큼 밀리고 흔들림만큼 창이 좁아집니다.' },
-    { label: '격투 게임 가드', W: 400, sched: 'arrive', judge: 'roll', say: '격투 게임은 롤백으로 내 입력을 누른 프레임 그대로 반영합니다. 대신 상대 공격은 핑의 절반만큼 늦게 보이고 앞부분이 잘려 나타나서, 보고 막을 시간이 그만큼 줄어듭니다. 0.25초보다 빠른 공격은 핑이 0이어도 보고 막을 수 없어 미리 읽고 막아야 합니다.' },
+    { label: '빠른 공격 패링', W: 450, sched: 'arrive', judge: 'now', say: '0.45초 만에 들어오는 빠른 공격을 보고 패링하는 경우입니다. 사람 반응 0.25초를 빼면 0.2초만 남아, 핑이 조금만 있어도 모자랍니다. 박자를 외워 미리 누르는 패링은 반응 시간이 들지 않습니다. 대신 판정 시점이 네트워크가 먹는 시간만큼 밀려 그만큼 일찍 눌러야 하고, 흔들림만큼 창이 좁아집니다.' },
+    { label: '격투 게임 가드', W: 400, sched: 'arrive', judge: 'roll', say: '격투 게임은 롤백으로 내 입력을 누른 프레임 그대로 반영합니다(이 실험은 입력 지연 0프레임으로 가정). 대신 상대 공격은 핑의 절반만큼 늦게 보이고 앞부분이 잘려 나타나서, 보고 막을 시간이 그만큼 줄어듭니다. 0.25초보다 빠른 공격은 핑이 0이어도 보고 막을 수 없어 미리 읽고 막아야 합니다.' },
     { label: '리듬 게임', W: 1500, sched: 'sched', judge: 'client', say: '리듬 게임은 박자를 미리 알고(예약), 판정도 내 기기에서 합니다. 노트가 1초 넘게 미리 보여 반응할 시간이 넉넉하고, 핑이 1초여도 판정에는 영향이 없습니다. 판정 창(±0.05초 안팎)은 박자를 맞추는 정확도라서 반응 시간과 상관이 없습니다.' },
   ];
   const P = { W: 700, rtt: 150, interp: 100, react: 250, tick: 20, sched: 'arrive', judge: 'now', speed: 0.5 };
@@ -37,7 +37,8 @@ K.register('windows', function (root) {
   const g3 = K.group(F.controls, '사람');
   K.slider(g3, { label: '사람 반응 시간', min: 150, max: 400, step: 10, value: P.react, unit: 'ms', onInput: v => { P.react = v; } });
   const g4 = K.group(F.controls, '설계');
-  const cSched = K.choice(g4, { label: '예고 전달', value: P.sched, options: [['arrive', '도착하면 재생'], ['sched', '서버 시각으로 미리 예약']], onChange: v => { P.sched = v; preset.clear(); } });
+  const cSched = K.choice(g4, { label: '예고 전달', value: P.sched, options: [['arrive', '도착하면 재생'], ['sched', '서버 시각으로 미리 예약']], onChange: v => { P.sched = v; preset.clear(); },
+    hint: '미리 예약: 서버가 예고를 0.4초 먼저 보내고, 모두가 서버 시각에 맞춰 같은 순간에 재생합니다.' });
   const cJudge = K.choice(g4, { label: '판정 기준', value: P.judge, options: [['now', '서버 현재 기준'], ['lagcomp', '지연 보상'], ['client', '클라이언트 판정'], ['roll', '롤백']], onChange: v => { P.judge = v; preset.clear(); },
     hint: '지연 보상은 최대 250ms까지 되감습니다. 클라이언트 판정은 내 화면에서 피했으면 성공입니다. 롤백은 내 입력을 누른 프레임에 반영하지만, 상대 동작을 늦게 본 시간은 돌려받지 못합니다.' });
   K.choice(g4, { label: '관찰 속도', value: P.speed, options: [[1, '1배'], [0.5, '0.5배'], [0.25, '0.25배']], onChange: v => { P.speed = +v; } });
@@ -244,7 +245,7 @@ K.register('windows', function (root) {
     stMargin.set(K.ms(p.margin), p.margin < 0 ? 'bad' : p.margin < 100 ? 'warn' : 'good');
     stRes.set(p.margin < 0 ? '못 피함' : '피할 수 있음', p.margin < 0 ? 'bad' : 'good');
     const mp = maxPing(P.judge);
-    stMax.set(Number.isFinite(mp) ? (mp < 0 ? '0에서도 불가' : K.ms(mp)) : '제한 없음', mp < 60 ? 'bad' : mp < 150 ? 'warn' : 'good');
+    stMax.set(Number.isFinite(mp) ? (mp < 0 ? '0에서도 불가' : K.ms(mp)) : '1초 넘게', mp < 60 ? 'bad' : mp < 150 ? 'warn' : 'good');
     let msg = genreSay ? genreSay + ' ' : '';
     if (p.margin < 0) {
       msg = `${K.flag('bad')}${msg}예고 ${K.ms(P.W)} 중 네트워크가 ${K.ms(Math.max(0, net))}, 사람 반응이 ${K.ms(P.react)}를 씁니다. <b>${K.ms(-p.margin)} 모자라서 실력과 상관없이 맞습니다</b>. 플레이어는 “분명 피했는데 맞았다”(씹힘)고 느낍니다.`;
@@ -252,7 +253,7 @@ K.register('windows', function (root) {
     } else if (p.margin < 100) {
       msg = `${K.flag('warn')}${msg}아슬아슬합니다. 여유가 ${K.ms(p.margin)}뿐이라 핑이 조금만 흔들려도 억울한 피격이 생깁니다.`;
     } else {
-      msg = `${K.flag('good')}${msg}여유가 ${K.ms(p.margin)} 남습니다. 이 게임은 핑 ${Number.isFinite(mp) ? K.ms(mp) : '몇 초'}까지 버팁니다.`;
+      msg = `${K.flag('good')}${msg}여유가 ${K.ms(p.margin)} 남습니다. 이 게임은 핑 ${Number.isFinite(mp) ? K.ms(mp) : '1초 넘게'}까지 버팁니다.`;
     }
     if (P.judge === 'client') msg += ' 클라이언트 판정은 내 화면만 보면 공정하지만, 조작된 클라이언트도 그대로 믿는다는 대가가 있습니다.';
     if (P.judge === 'lagcomp') msg += ' 지연 보상은 내가 본 시점으로 판정해 주지만, 다른 사람 화면에서는 “맞은 것 같은데 안 맞음”으로 보일 수 있습니다.';

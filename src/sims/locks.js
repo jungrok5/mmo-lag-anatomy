@@ -58,7 +58,7 @@ K.register('locks', function (root) {
   g3.append(bx);
   K.button(bx, { label: '데드락 일으키기', kind: 'primary', onClick: () => armDeadlock() });
   K.button(bx, { label: '복구', onClick: () => reset() });
-  g3.append(K.el('small', { class: 'ctl-hint', text: '감시 타이머(watchdog): 스레드가 5초 동안 풀려나지 못하면 서버를 강제로 다시 켭니다.' }));
+  g3.append(K.el('small', { class: 'ctl-hint', text: '감시 타이머(watchdog): 스레드가 5초 동안 풀려나지 못하면 서버를 강제로 다시 켭니다. 실제 서버는 보통 수십 초를 기다리지만 여기서는 짧게 줄였습니다.' }));
 
   K.presets(F, [
     { label: '락 거의 없음', apply: () => { cMode.set('big'); sT.set(8); sF.set(2); } },
@@ -338,7 +338,7 @@ K.register('locks', function (root) {
     if (dl && dl.phase === 'stuck') {
       const stuck = th.filter(t => t.st === 'wait').length;
       const left = Math.max(0, (WATCHDOG - (real - dl.t0)) / 1000);
-      return `${K.flag('bad')} <b>데드락(교착 상태)</b>: 스레드 1은 ${lockName(dl.A)} 락을 쥔 채 ${lockName(dl.B)} 락을, 스레드 2는 ${lockName(dl.B)} 락을 쥔 채 ${lockName(dl.A)} 락을 기다립니다. 둘 다 상대가 먼저 놓기를 기다리니 영원히 풀리지 않습니다. 두 사람이 동시에 서로에게 거래를 걸 때처럼 락을 잡는 순서가 엇갈리면 생깁니다. 지금 스레드 ${T}개 중 <b>${stuck}개</b>가 갇혔습니다. 플레이어는 처음엔 경매장·거래만 멈추다가 결국 서버 전체가 <b>멈춤</b>을 겪습니다. 감시 타이머가 <b>${K.n(left, 1)}초</b> 뒤 서버를 강제로 다시 켭니다.`;
+      return `${K.flag('bad')} <b>데드락(교착 상태)</b>: 스레드 1은 ${lockName(dl.A)} 락을 쥔 채 ${lockName(dl.B)} 락을, 스레드 2는 ${lockName(dl.B)} 락을 쥔 채 ${lockName(dl.A)} 락을 기다립니다. 둘 다 상대가 먼저 놓기를 기다리니 영원히 풀리지 않습니다. 두 사람이 동시에 서로에게 거래를 걸 때처럼 락을 잡는 순서가 엇갈리면 생깁니다. 지금 스레드 ${T}개 중 <b>${stuck}개</b>가 갇혔습니다. 플레이어는 처음엔 경매장·거래만 멈추다가, 일꾼 스레드가 모두 갇히면 서버 전체가 <b>멈춤</b>을 겪습니다. 감시 타이머가 <b>${K.n(left, 1)}초</b> 뒤 서버를 강제로 다시 켭니다.`;
     }
     if (dl && dl.phase === 'arm') {
       return `${K.flag('warn')} 스레드 1과 2가 두 락을 서로 <b>반대 순서</b>로 잡으려 합니다. 각자 첫 번째 락을 쥐는 순간 서로의 두 번째 락을 기다리게 됩니다.`;
@@ -361,6 +361,11 @@ K.register('locks', function (root) {
     else sim(dt * SLOW);
     const m = measure();
     if (dl && dl.phase === 'restart') m.thr = 0;
+    if (dl && dl.phase === 'stuck') {
+      // 갇힌 뒤에는 6초 평균이 늦게 따라오므로 최근 1초(시뮬레이션 10ms)만 본다
+      m.thr = (done.filter(x => x > now - 10).length / 10) * 1000;
+      m.ratio = th.filter(t => t.st === 'wait').length / th.length;
+    }
     drawLanes();
     drawCurve(m);
     const T = th.length;

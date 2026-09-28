@@ -7,11 +7,11 @@ K.register('oneslow', function (root) {
     lead: '같은 서버에 A와 B가 있습니다. A만 회선이 나쁩니다. 세 화면(서버, A의 화면, B의 화면)을 나란히 놓고, 서버가 입력을 처리하는 방식을 바꿔 보세요. 대부분의 방식에서 렉은 A에게 머물고 B는 “A가 이상하게 움직이는 것”만 봅니다. 하지만 어떤 방식에서는 A 한 사람 때문에 모두가 멈춥니다.',
     layout: 'stack',
     tries: [
-      '<b>틱마다 모아서</b> 방식에서 B의 화면을 보세요. A(파랑)는 멈칫했다가 한 번에 여러 걸음을 가지만, 몬스터와 B 자신은 멀쩡합니다. 아래 표에서 “B의 화면 → A의 모습”만 빨갛습니다.',
-      '<b>도착 즉시</b>로 바꾸면 A의 움직임이 몰려 온 순서대로 바로 실행되어, B의 화면에서 빨리 감기처럼 보입니다.',
+      '<b>틱마다 모아서</b> 방식에서 B의 화면을 보세요. A(파랑)는 멈칫했다가 한 번에 여러 걸음을 가지만, 몬스터와 B 자신은 멀쩡합니다. 아래 표에서 “B의 화면 → A의 모습”만 빨갛습니다. 지터와 손실을 0으로 내리면 핑이 높아도 A는 매끄럽게 보입니다. 남의 눈에 렉으로 보이게 하는 것은 핑보다 흔들림과 손실입니다.',
+      '<b>도착 즉시</b>로 바꾸면 서버가 A의 입력을 도착한 시각대로 알립니다. 이동은 조금 덜 튀지만 빨라졌다 느려졌다 하고, 스킬처럼 한 번에 끝나는 행동은 몰려 온 만큼 한순간에 실행됩니다.',
       '<b>플레이어별 입력 버퍼</b>로 바꾸면 B의 화면에서 A가 훨씬 매끄러워집니다. 대신 A의 행동이 서버에서 확정되는 시점(스킬 결과, 위치 보정)이 버퍼만큼 늦어집니다.',
-      '<b>락스텝</b>으로 바꾸면 A 한 사람의 늦은 입력 때문에 B와 몬스터까지 모두 멈춥니다.',
-      '<b>엄격한 이동 검증</b>을 켜면 A 본인의 화면에서 A가 고무줄처럼 끌려갑니다. 몰려 도착한 정상 입력을 서버가 과속으로 판단하기 때문입니다.',
+      '<b>락스텝</b>으로 바꾸면 A 한 사람의 늦은 입력 때문에 B와 몬스터까지 모두 멈춥니다. 지터와 손실을 0으로 내리면 멈추지는 않지만, B의 입력도 A의 핑만큼 늦게 반영됩니다.',
+      '<b>틱마다 모아서</b> 방식에서 <b>엄격한 이동 검증</b>을 켜면 A 본인의 화면에서 A가 고무줄처럼 끌려갑니다. 한 틱에 몰려 도착한 정상 입력을 서버가 과속으로 보고 거절하기 때문입니다. 같은 검증도 <b>플레이어별 입력 버퍼</b>에서는 걸리지 않습니다.',
     ],
   });
   K.addStyle('oneslow', `
@@ -89,14 +89,14 @@ K.register('oneslow', function (root) {
   }
   function apply(id, cmds, allowMs) {
     const sp = S.p[id];
-    const allow = (SPEED * allowMs * 1.3) / 1000;
-    let moved = 0;
+    // 엄격한 검증: 이번에 적용할 이동이 허용 거리(경과 시간 + 한 틱 여유, 30% 관용)를 넘으면
+    // 과속으로 보고 통째로 거절한다. 위치는 마지막으로 인정한 자리에 남고, 클라이언트는 그 자리로 끌려간다(고무줄).
+    // 한 틱 여유가 있어 정상 회선의 작은 박자 어긋남(한 틱에 2개)은 통과하고, 3개 이상 몰리면 걸린다.
+    const allow = (SPEED * (allowMs + TICK) * 1.3) / 1000;
+    const total = cmds.reduce((a, c) => a + Math.hypot(c.dx, c.dy), 0);
+    const reject = P.validate && total > allow;
     for (const c of cmds) {
-      let dx = c.dx, dy = c.dy;
-      const d = Math.hypot(dx, dy);
-      if (P.validate && d > 0 && moved + d > allow) { const k = Math.max(0, allow - moved) / d; dx *= k; dy *= k; }
-      moved += Math.hypot(dx, dy);
-      sp.x = K.clamp(sp.x + dx, 1, WW - 1); sp.y = K.clamp(sp.y + dy, 1, WH - 1);
+      if (!reject) { sp.x = K.clamp(sp.x + c.dx, 1, WW - 1); sp.y = K.clamp(sp.y + c.dy, 1, WH - 1); }
       sp.lastSeq = c.seq;
     }
   }
@@ -119,17 +119,16 @@ K.register('oneslow', function (root) {
     if (P.mode === 'lock') {
       const k = S.turn;
       const a = S.p.A.ls.get(k), b = S.p.B.ls.get(k);
-      if (t >= S.nextTick) {
-        if (a && b) {
-          apply('A', [a], TICK); apply('B', [b], TICK);
-          S.p.A.ls.delete(k); S.p.B.ls.delete(k);
-          moveMonster(); S.wt += TICK; S.turn++; S.ticks.push(t);
-          snapshot();
-          S.nextTick = Math.max(S.nextTick + TICK, t - TICK * 2);
-        } else {
-          const last = S.stall[S.stall.length - 1];
-          if (last && last[1] >= t - 2) last[1] = t; else S.stall.push([t, t]);
-        }
+      if (t >= S.nextTick && a && b) {
+        apply('A', [a], TICK); apply('B', [b], TICK);
+        S.p.A.ls.delete(k); S.p.B.ls.delete(k);
+        moveMonster(); S.wt += TICK; S.turn++; S.ticks.push(t);
+        snapshot();
+        S.nextTick = Math.max(S.nextTick + TICK, t - TICK * 2);
+        // 멈춤은 턴 사이 간격이 한 틱보다 길어진 부분만 센다.
+        // 핑이 높아도 입력이 일정하게 오면 턴은 제 박자로 돌고, 모두가 같은 만큼 늦게 볼 뿐이다.
+        if (S.lastTurn != null && t - S.lastTurn > TICK + 17) S.stall.push([S.lastTurn + TICK, t]);
+        S.lastTurn = t;
       }
       return;
     }
@@ -206,7 +205,12 @@ K.register('oneslow', function (root) {
       }
     }
     // 표시: 다른 개체는 보간(조금 과거), 나는 예측
-    if (c.newest >= 0) {
+    if (c.newest >= 0 && lock) {
+      // 락스텝 화면에는 흔들림을 가려 줄 보간 버퍼가 없다. 받은 턴까지만 그리고, 다음 턴이 안 오면 그대로 멈춘다.
+      // 멈춘 뒤 밀린 턴이 한꺼번에 오면 빨리 돌려 따라잡는다(몰아치기).
+      if (c.pc == null || c.newest - c.pc > TICK * 6) c.pc = c.newest - TICK;
+      c.pc = Math.min(c.newest, c.pc + dt * K.clamp(1 + (c.newest - c.pc - TICK) / 150, 1, 2.5));
+    } else if (c.newest >= 0) {
       const target = c.newest - P.interp;
       if (c.pc == null) c.pc = target;
       let diff = target - c.pc;
@@ -248,6 +252,13 @@ K.register('oneslow', function (root) {
     }
   }
   /* ---------------- 판정 ---------------- */
+  // 락스텝에서 최근 3초 중 턴이 제 박자보다 늦어진 시간의 비율 (지금 기다리는 중인 시간 포함)
+  function lockStallFrac() {
+    if (P.mode !== 'lock') return 0;
+    const past = S.stall.reduce((a, s) => a + Math.max(0, Math.min(s[1], t) - Math.max(s[0], t - 3000)), 0);
+    const now = S.lastTurn != null && t - S.lastTurn > TICK + 17 ? t - Math.max(S.lastTurn + TICK, t - 3000) : 0;
+    return (past + now) / 3000;
+  }
   function judge(viewer, target) {
     const c = CL[viewer];
     const rec = c.rec[target];
@@ -260,13 +271,13 @@ K.register('oneslow', function (root) {
       else if (d > norm * 1.8) fast++;
       if (d < norm * 0.08) freeze++;
     }
-    const lockStall = P.mode === 'lock' && S.stall.reduce((a, s) => a + Math.max(0, Math.min(s[1], t) - Math.max(s[0], t - 3000)), 0) / 3000;
+    const lockStall = lockStallFrac();
     if (lockStall > 0.12) return { sym: 'freeze', label: '멈춤', lvl: 'bad' };
     if (target === viewer && c.rubber.length >= 1 && P.mode !== 'lock') return { sym: 'rubber', label: '고무줄', lvl: 'bad' };
     if (tele >= 2) return { sym: 'teleport', label: '순간이동', lvl: 'bad' };
     if (fast / n > 0.06 && freeze / n > 0.08) return { sym: 'burst', label: '몰아치기', lvl: 'bad' };
     if (freeze / n > 0.14) return { sym: 'stutter', label: '뚝뚝 끊김', lvl: 'warn' };
-    if (fast / n > 0.06) return { sym: 'burst', label: '빨라졌다 느려짐', lvl: 'warn' };
+    if (fast / n > 0.06) return { sym: 'burst', label: '몰아치기(약하게)', lvl: 'warn' };
     return { sym: 'normal', label: '정상', lvl: 'good' };
   }
 
@@ -290,7 +301,7 @@ K.register('oneslow', function (root) {
   const cMode = K.choice(g2, { value: P.mode, options: [['tick', '틱마다 모아서'], ['event', '도착 즉시'], ['buffer', '플레이어별 입력 버퍼'], ['lock', '락스텝 (모두 기다림)']], onChange: v => { P.mode = v; pr.clear(); reset(); warm(); },
     hint: '틱마다 모아서: 50ms마다 받은 입력을 한꺼번에 적용. 도착 즉시: 받자마자 적용하고 바로 알림. 입력 버퍼: 사람마다 한 틱에 입력 하나씩 꺼내 적용. 락스텝: 모두의 입력이 모여야 다음 턴.' });
   const g3 = K.group(F.controls, '그 밖에');
-  const tVal = K.toggle(g3, { label: '엄격한 이동 검증 (한 틱 이동 거리 제한)', value: P.validate, onChange: v => { P.validate = v; pr.clear(); } });
+  const tVal = K.toggle(g3, { label: '엄격한 이동 검증 (틱마다 이동 거리 검사)', value: P.validate, onChange: v => { P.validate = v; pr.clear(); } });
   K.slider(g3, { label: '다른 사람 보간 버퍼', min: 0, max: 300, step: 10, value: P.interp, unit: 'ms', onInput: v => { P.interp = v; } });
   const pr = K.presets(F, [
     { label: '모두 정상', apply: () => set({ ping: 40, jitter: 5, loss: 0, mode: 'tick', validate: false }) },
@@ -298,7 +309,7 @@ K.register('oneslow', function (root) {
     { label: '도착 즉시 처리 서버', apply: () => set({ ping: 220, jitter: 80, loss: 3, mode: 'event', validate: false }) },
     { label: '입력 버퍼 서버', apply: () => set({ ping: 220, jitter: 80, loss: 3, mode: 'buffer', validate: false }) },
     { label: '락스텝 게임', apply: () => set({ ping: 220, jitter: 80, loss: 3, mode: 'lock', validate: false }) },
-    { label: '엄격한 이동 검증', apply: () => set({ ping: 220, jitter: 80, loss: 3, mode: 'tick', validate: true }) },
+    { label: '엄격한 이동 검증', apply: () => set({ ping: 220, jitter: 100, loss: 3, mode: 'tick', validate: true }) },
   ], '상황');
   function set(o) {
     Object.assign(P, o);
@@ -325,10 +336,7 @@ K.register('oneslow', function (root) {
         K.dot(ctx, p.x * sx, p.y * sy, r, col[id], C.paper);
         K.text(ctx, NAMES[id], p.x * sx, p.y * sy - r - 7, { align: 'center', size: 10.5, weight: 600, color: C.ink });
       });
-      if (P.mode === 'lock') {
-        const st = S.stall[S.stall.length - 1];
-        if (st && st[1] >= t - 30) K.text(ctx, 'A의 입력 기다리는 중', w - 8, 12, { align: 'right', size: 11, weight: 700, color: C.badInk });
-      }
+      if (P.mode === 'lock' && S.lastTurn != null && t - S.lastTurn > TICK * 1.5) K.text(ctx, 'A의 입력 기다리는 중', w - 8, 12, { align: 'right', size: 11, weight: 700, color: C.badInk });
       return;
     }
     const c = CL[who];
@@ -360,7 +368,7 @@ K.register('oneslow', function (root) {
     const rows = [['A', 'A(느린 사람)의 화면'], ['B', 'B(정상)의 화면']];
     const cols = ['A', 'B', 'M'];
     const head = `<tr><th></th>${cols.map(c => `<th>${c === 'M' ? '몬스터의 모습' : NAMES[c] + '의 모습'}</th>`).join('')}</tr>`;
-    const body = rows.map(([v, name]) => `<tr><th>${name}</th>${cols.map(tg => { const j = judge(v, tg); return `<td class="v"><span class="chip ${j.lvl}">${K.glyph(j.sym)}${tg === v && j.sym === 'normal' ? '정상 (예측으로 즉시)' : j.label}</span></td>`; }).join('')}</tr>`).join('');
+    const body = rows.map(([v, name]) => `<tr><th>${name}</th>${cols.map(tg => { const j = judge(v, tg); return `<td class="v"><span class="chip ${j.lvl}">${K.glyph(j.sym)}${tg === v && j.sym === 'normal' ? (P.mode === 'lock' ? '정상 (턴 대기만큼 늦게)' : '정상 (예측으로 즉시)') : j.label}</span></td>`; }).join('')}</tr>`).join('');
     mat.innerHTML = `<table>${head}${body}</table>`;
   }
   function narrate() {
@@ -368,16 +376,19 @@ K.register('oneslow', function (root) {
     const spread = bB.lvl !== 'good' || bM.lvl !== 'good';
     const tickRate = S.ticks.filter(x => x > t - 1000).length;
     stTick.set(String(tickRate), tickRate < 15 ? 'bad' : tickRate < 19 ? 'warn' : 'good');
-    const selfDelay = P.mode === 'lock' ? P.ping + TICK * 2 : P.mode === 'buffer' ? 17 : 17;
-    stSelf.set(P.mode === 'lock' ? `${K.n(selfDelay)}ms+` : '즉시', P.mode === 'lock' ? 'bad' : 'good', P.mode === 'buffer' ? `서버 확정은 버퍼만큼 더 늦음` : P.mode === 'lock' ? '예측 없이 턴을 기다림' : '예측으로 먼저 움직임');
+    const lock = P.mode === 'lock';
+    const stalled = lockStallFrac() > 0.12;
+    stSelf.set(lock ? `${K.n(P.ping + TICK * 2)}ms+` : '즉시', lock ? 'bad' : 'good', P.mode === 'buffer' ? '이동은 예측으로 즉시, 서버 확정은 버퍼만큼 더 늦음' : lock ? '예측 없이 턴을 기다림. B도 A만큼 늦게 반영' : `이동은 예측으로 즉시, 스킬 결과는 약 ${K.n(P.ping + (P.mode === 'event' ? 0 : TICK / 2))}ms 뒤`);
     stUnder.set(P.mode === 'buffer' ? String(S.p.A.under) : '—', P.mode === 'buffer' && S.p.A.under > 10 ? 'warn' : null, P.mode === 'buffer' ? 'A의 버퍼가 비어 제자리' : '입력 버퍼 방식에서만');
+    const steady = `A는 핑이 ${K.n(P.ping)}ms라도 흔들림과 손실이 적어 입력이 고르게 도착합니다. 그래서 B의 화면에서 A는 <b>${bA.label}</b>입니다. 조금 과거의 위치에 보일 뿐입니다. 남의 눈에 이상하게 보이게 만드는 것은 핑보다 흔들림과 손실입니다.`;
     let msg;
     if (P.ping <= 60 && P.jitter <= 10 && P.loss === 0) msg = `${K.flag('good')}A와 B 모두 회선이 좋습니다. 세 화면이 거의 같게 움직입니다.`;
-    else if (P.mode === 'lock') msg = `${K.flag('bad')}<b>락스텝</b>: 다음 턴을 계산하려면 A의 입력이 꼭 있어야 합니다. A의 입력이 늦을 때마다 서버, A, B, 몬스터가 <b>모두 멈춥니다</b>. 느린 한 사람의 렉이 전원에게 번지는 대표적인 구조입니다.`;
-    else if (P.mode === 'event') msg = `${K.flag(bA.lvl === 'bad' ? 'bad' : 'warn')}<b>도착 즉시 처리</b>: A의 입력이 몰려 오면 서버가 받는 대로 바로 적용하고 바로 알립니다. B의 화면에서 A는 <b>${bA.label}</b>. B 자신과 몬스터는 ${spread ? '영향을 받습니다' : '멀쩡합니다'}. A 한 사람의 렉은 “A가 이상하게 움직이는 것”으로만 남에게 보입니다.`;
-    else if (P.mode === 'buffer') msg = `${K.flag(bA.lvl === 'good' ? 'good' : 'warn')}<b>플레이어별 입력 버퍼</b>: 서버가 A의 입력을 한 틱에 하나씩 꺼내 쓰니 몰려 온 입력이 고르게 펴집니다. B의 화면에서 A는 <b>${bA.label}</b>. 버퍼가 비는 순간(지금까지 ${S.p.A.under}틱)만 A가 잠깐 제자리에 섭니다. 대신 A의 행동이 서버에서 확정되는 시점은 버퍼만큼 늦어집니다.`;
-    else msg = `${K.flag(bA.lvl === 'good' ? 'good' : 'bad')}<b>틱마다 모아서</b>: A의 입력이 들쭉날쭉 도착해 어떤 틱엔 0개, 어떤 틱엔 3개가 한꺼번에 적용됩니다. B의 화면에서 A는 <b>${bA.label}</b>. 그래도 B 자신과 몬스터는 ${spread ? '영향을 받습니다' : '멀쩡합니다'}. 서버 권위 구조에서 렉은 대부분 느린 사람에게 머뭅니다.`;
-    if (P.validate && aA.sym === 'rubber') msg += ` <b>엄격한 이동 검증</b> 때문에 A 본인의 화면에서 A가 <b>고무줄</b>처럼 끌려갑니다. 몰려 도착한 정상 입력을 서버가 과속으로 잘랐기 때문입니다.`;
+    else if (lock && stalled) msg = `${K.flag('bad')}<b>락스텝</b>: 다음 턴을 계산하려면 A의 입력이 꼭 있어야 합니다. A의 입력이 늦을 때마다 서버, A, B, 몬스터가 <b>모두 멈춥니다</b>. 느린 한 사람의 렉이 전원에게 번지는 대표적인 구조입니다.`;
+    else if (lock) msg = `${K.flag('warn')}<b>락스텝</b>: A의 입력이 늦지만 일정하게 와서 턴은 제 박자로 돕니다. 대신 서버는 A의 입력이 올 때까지 B의 입력도 붙잡아 둡니다. 그래서 B도 A의 핑만큼 늦게 반영되는 <b>입력 지연</b>을 겪습니다. 지터나 손실을 올리면 전원이 <b>멈춥니다</b>.`;
+    else if (P.mode === 'event') msg = bA.lvl === 'good' ? `${K.flag('good')}<b>도착 즉시 처리</b>: ${steady}` : `${K.flag(bA.lvl === 'bad' ? 'bad' : 'warn')}<b>도착 즉시 처리</b>: A의 입력이 몰려 오면 서버가 받는 대로 바로 적용하고 바로 알립니다. B의 화면에서 A는 <b>${bA.label}</b>. 도착 시각대로 알리므로 이동은 틱 방식보다 덜 튀지만, 스킬처럼 한 번에 끝나는 행동은 몰려 온 만큼 한순간에 실행됩니다. B 자신과 몬스터는 ${spread ? '영향을 받습니다' : '멀쩡합니다'}.`;
+    else if (P.mode === 'buffer') msg = `${K.flag(bA.lvl === 'good' ? 'good' : 'warn')}<b>플레이어별 입력 버퍼</b>: 서버가 A의 입력을 한 틱에 하나씩 꺼내 쓰니 몰려 온 입력이 고르게 펴집니다. B의 화면에서 A는 <b>${bA.label}</b>. 버퍼가 비는 순간(지금까지 ${S.p.A.under}틱)만 A가 잠깐 제자리에 섭니다. 대신 A의 행동이 서버에서 확정되는 시점은 버퍼만큼 늦어집니다.${P.validate ? ' 한 틱에 한 걸음씩만 적용하므로 <b>엄격한 이동 검증</b>에도 걸리지 않습니다.' : ''}`;
+    else msg = bA.lvl === 'good' && !P.validate ? `${K.flag('good')}<b>틱마다 모아서</b>: ${steady}` : `${K.flag(bA.lvl === 'good' ? 'good' : 'bad')}<b>틱마다 모아서</b>: A의 입력이 들쭉날쭉 도착해 어떤 틱엔 0개, 어떤 틱엔 2~3개가 한꺼번에 적용됩니다. B의 화면에서 A는 <b>${bA.label}</b>. 그래도 B 자신과 몬스터는 ${spread ? '영향을 받습니다' : '멀쩡합니다'}. 서버 권위 구조에서 렉은 대부분 느린 사람에게 머뭅니다.`;
+    if (P.validate && aA.sym === 'rubber') msg += ` <b>엄격한 이동 검증</b> 때문에 A 본인의 화면에서 A가 <b>고무줄</b>처럼 끌려갑니다. 한 틱에 몰려 도착한 정상 입력을 서버가 과속으로 보고 거절했기 때문입니다.`;
     F.say(msg);
   }
 

@@ -4,11 +4,11 @@ K.register('queue', function (root) {
   const F = K.frame(root, {
     kicker: '기본 원리 · 대기열',
     title: '창구가 바쁠수록 줄은 “갑자기” 길어진다',
-    lead: '패킷·쿼리·디스크 요청·CPU 작업은 모두 창구 앞에 줄을 섭니다. 손님(요청)이 오는 속도를 올려 보세요. 창구가 70%쯤 바쁠 때까지는 멀쩡하다가, 90%를 넘는 순간 대기 시간이 수직으로 솟습니다. 렉의 대부분은 어딘가에서 이 곡선의 오른쪽 끝에 올라탄 것입니다.',
+    lead: '패킷·쿼리·디스크 요청·CPU 작업은 모두 창구 앞에 줄을 섭니다. 손님(요청)이 오는 속도를 올려 보세요. 창구가 하나면 70%쯤 바쁠 때까지는 대기가 처리 시간의 2배 남짓이지만, 90%면 9배, 95%면 19배로 급격히 솟습니다. 렉의 대부분은 어딘가에서 이 곡선의 오른쪽 끝에 올라탄 것입니다.',
     tries: [
       '<b>도착 속도</b>를 천천히 올리며 오른쪽 곡선 위의 점이 어디서 급하게 꺾이는지 보세요.',
       '<b>이용률 95%</b> 근처에서 도착 속도를 아주 조금만 더 올려 보세요. 대기가 몇 배로 늘어납니다.',
-      '<b>창구 수</b>를 1 → 4로 늘리고 처리 시간도 4배로 늘려 보세요. 같은 이용률이어도 창구가 많으면 덜 막힙니다.',
+      '<b>창구 수</b>를 1 → 4로 늘리고 처리 시간도 4배로 늘려 보세요. 같은 이용률이어도 창구가 많으면 줄이 덜 막힙니다. 대신 한 건을 처리하는 시간은 4배입니다.',
       '<b>도착 방식</b>을 “몰려옴”으로 바꾸면, 평균 이용률이 낮아도 순간적으로 줄이 생깁니다. 월드 보스 등장, 점검 직후 접속이 이런 모양입니다.',
     ],
   });
@@ -17,7 +17,7 @@ K.register('queue', function (root) {
   const rnd = K.rng(7);
 
   const qcv = K.canvas(F.stage, { height: 150, caption: '창구 앞 풍경', right: '<span class="legend"><span><i class="dot" style="background:var(--s1)"></i>대기 중</span><span><i class="dot" style="background:var(--s2)"></i>처리 중</span></span>' });
-  const ccv = K.canvas(F.stage, { height: w => K.clamp(w * 0.42, 190, 260), caption: '이용률에 따른 평균 대기 시간', right: '곡선: 이론값 · 점: 지금 측정값' });
+  const ccv = K.canvas(F.stage, { height: w => K.clamp(w * 0.42, 190, 260), caption: '이용률에 따른 평균 대기 시간', right: '곡선: 무작위 도착 이론값 · 점: 지금 측정값' });
 
   const g1 = K.group(F.controls, '손님(요청)');
   const sLambda = K.slider(g1, { label: '도착 속도', min: 0.5, max: 40, step: 0.5, value: P.lambda, unit: '건/초', onInput: v => { P.lambda = v; reset(); } });
@@ -206,7 +206,7 @@ K.register('queue', function (root) {
     stT.set(u >= 1 ? '무한대' : K.ms(th));
     let msg;
     if (u >= 1) msg = `${K.flag('bad')}<b>들어오는 양이 처리 능력보다 많습니다.</b> 줄은 절대 줄지 않고 계속 길어집니다. 게임에서는 이 상태가 몇 초만 이어져도 요청이 타임아웃되거나(접속 끊김·무한 로딩), 뒤늦게 한꺼번에 처리됩니다(몰아치기).`;
-    else if (u >= 0.9) msg = `${K.flag('bad')}이용률 <b>${Math.round(u * 100)}%</b>. 평균은 버티는 것 같아도 대기가 처리 시간의 <b>${K.n(th / P.service, 1)}배</b>입니다. 요청이 조금만 몰려도 줄이 폭발합니다. 서버 CPU·DB·회선이 “아직 10% 남았는데 왜 렉이지?” 싶은 순간이 바로 여기입니다.`;
+    else if (u >= 0.9) msg = `${K.flag('bad')}이용률 <b>${Math.round(u * 100)}%</b>. 평균은 버티는 것 같아도 대기가 처리 시간의 <b>${K.n(th / P.service, 1)}배</b>입니다${P.mode === 'random' ? '' : '(무작위 도착일 때 이론값)'}. 요청이 조금만 몰려도 줄이 폭발합니다. 서버 CPU·DB·회선이 “아직 10% 남았는데 왜 렉이지?” 싶은 순간이 바로 여기입니다.`;
     else if (u >= 0.7) msg = `${K.flag('warn')}이용률 <b>${Math.round(u * 100)}%</b>. 곡선이 꺾이기 시작하는 구간입니다. 평소엔 괜찮지만 이벤트처럼 요청이 몰리면 바로 대기가 길어집니다.`;
     else msg = `${K.flag('good')}이용률 <b>${Math.round(u * 100)}%</b>. 창구에 여유가 있어 대부분 바로 처리됩니다. 줄이 생겨도 금방 사라집니다.`;
     F.say(msg);
