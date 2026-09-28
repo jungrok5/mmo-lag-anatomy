@@ -56,7 +56,7 @@
    ■ 기타
      K.on(name, fn) / K.emit(name, detail)   장 사이 신호 (예: 'lab:preset')
      K.glyph(symptomId)          증상 그림 SVG 문자열 (stutter, teleport, rubber, burst, slowmo, delay, freeze, dropped, disconnect, noconnect, invisible)
-     K.fxIcon('lat'|'jit'|'loss'|'stall')   네 가지 원재료 아이콘
+     K.fxIcon('lat'|'jit'|'loss'|'stall')   네 가지 원요인 아이콘
      K.addStyle(id, css)         시뮬레이션 전용 CSS 를 한 번만 주입 (공용 style.css 는 수정 금지)
      K.reducedMotion             사용자가 움직임 줄이기를 켰는지
 
@@ -528,7 +528,7 @@
   };
   K.glyph = (id, cls = '') => `<svg class="glyph ${cls}" viewBox="0 0 30 12" fill="currentColor" aria-hidden="true">${GLYPH[id] || GLYPH.normal}</svg>`;
 
-  /* 네 가지 원재료: 지연 · 흔들림 · 손실 · 정체 (14×14) */
+  /* 네 가지 원요인: 지연 · 지터 · 손실 · 정체 (14×14) */
   const FX = {
     lat: '<circle cx="7" cy="7" r="5.6" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M7 3.8V7l2.3 1.6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>',
     jit: '<path d="M1 8.5l2.4-4 2.2 6 2.4-8 2.3 7 2.7-3.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>',

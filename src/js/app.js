@@ -14,9 +14,9 @@
   const SIMNAME = {
     lab: '렉 실험실', queue: '대기열 실험', journey: '지연 분해', frames: '프레임 실험', cpu: 'CPU 스케줄러 실험', bloat: '버퍼블로트 실험',
     distance: '거리·경로 실험', timeouts: '타임아웃 사다리', nic: 'NIC 실험', rush: '접속 폭주 실험', hol: 'TCP vs UDP 실험', nagle: 'Nagle 실험',
-    sndbuf: '느린 손님 실험', tick: '틱 예산 실험', locks: '락 실험', gc: 'GC 실험', leak: '메모리 누수 실험', ladder: '숫자 감각',
+    sndbuf: '느린 클라이언트 실험', tick: '틱 예산 실험', locks: '락 실험', gc: 'GC 실험', leak: '메모리 누수 실험', ladder: '숫자 감각',
     disk: '디스크 실험', dbpool: 'DB 실험', arch: '서버 구성 실험',
-    syncmodels: '동기화 방식 비교', windows: '판정 창 실험', chain: '연속 행동 실험', oneslow: '한 명만 느릴 때 실험', npcmissing: '한쪽 클라 진단', retrans: 'TCP 재전송 실험',
+    syncmodels: '동기화 방식 비교', windows: '판정 구간 실험', chain: '연속 행동 실험', oneslow: '한 명만 느릴 때 실험', npcmissing: '한쪽 클라 진단', retrans: 'TCP 재전송 실험',
   };
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const ARROW = '<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7h8m-3-3 3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -38,12 +38,12 @@
   setTheme(savedTheme);
   $$('[data-theme-set]').forEach(b => b.addEventListener('click', () => setTheme(b.dataset.themeSet)));
 
-  /* ---------------- 히어로: 네 가지 재료 ---------------- */
+  /* ---------------- 히어로: 네 가지 요인 ---------------- */
   const thesis = $('#thesis');
-  thesis.innerHTML = `<div class="thesis-head"><b>렉은 대부분 네 가지 피해 중 하나에서 시작합니다.</b> 원인이 어느 층에 있든 게임이 받는 피해는 크게 이 넷으로 묶이고, 그 피해를 가리는 방식에 따라 렉의 모양이 정해집니다.</div>` +
+  thesis.innerHTML = `<div class="thesis-head"><b>렉은 대부분 네 가지 요인 중 하나에서 시작합니다.</b> 원인이 어느 층에 있든 게임에 미치는 영향은 크게 이 넷으로 묶이고, 게임이 이를 가리는 방식에 따라 렉의 모양이 정해집니다.</div>` +
     D.fx.map(f => `<div><span class="fx-name">${K.fxIcon(f.id).replace('<svg', '<svg width="16" height="16"')}${f.name}</span><p>${f.how}. ${f.desc.split('. ')[0].replace(/\.$/, '')}.</p></div>`).join('');
 
-  /* ---------------- 기본 개념: 재료 → 대처 → 증상 ---------------- */
+  /* ---------------- 기본 개념: 요인 → 대처 → 증상 ---------------- */
   const fxMap = $('#fx-map');
   fxMap.className = 'causes';
   fxMap.innerHTML = D.fx.map(f => `
@@ -103,7 +103,7 @@
   });
   function causeHTML(c) {
     const meta = [
-      `<span><span class="k">재료</span>${c.fx.map(fxTag).join(' ')}</span>`,
+      `<span><span class="k">요인</span>${c.fx.map(fxTag).join(' ')}</span>`,
       `<span><span class="k">누가</span>${c.who.map(w => WHO[w]).join(', ')}</span>`,
       `<span><span class="k">언제</span>${c.when.map(w => WHEN[w]).join(', ')}</span>`,
       c.sim ? `<span><span class="k">실험</span><a href="#sim-${c.sim}">${SIMNAME[c.sim] || c.sim}</a></span>` : '',
@@ -224,7 +224,7 @@
         return;
       }
       K.dot(ctx, X(p.x), y, 7, C.s2, C.paper);
-      if (p.wait) K.text(ctx, '소식 없음…', X(p.x) + 12, y - 14, { size: 11, color: C.muted });
+      if (p.wait) K.text(ctx, '패킷 없음…', X(p.x) + 12, y - 14, { size: 11, color: C.muted });
       if (p.pause) { ctx.fillStyle = C.ink2; ctx.fillRect(X(p.x) - 4, y - 24, 3, 9); ctx.fillRect(X(p.x) + 1, y - 24, 3, 9); }
       if (p.click) { ctx.strokeStyle = C.accent; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(X(p.x), y, 12 + (u * 40) % 8, 0, Math.PI * 2); ctx.stroke(); K.text(ctx, '눌렀는데…', X(p.x) + 20, y - 14, { size: 11, color: C.muted }); }
       if (p.snap) K.text(ctx, '휙', X(p.x) - 2, y - 16, { size: 11, weight: 700, color: C.badInk, align: 'center' });

@@ -4,7 +4,7 @@ K.register('queue', function (root) {
   const F = K.frame(root, {
     kicker: '기본 원리 · 대기열',
     title: '창구가 바쁠수록 줄은 “갑자기” 길어진다',
-    lead: '패킷·쿼리·디스크 요청·CPU 작업은 모두 창구 앞에 줄을 섭니다. 손님(요청)이 오는 속도를 올려 보세요. 창구가 하나면 70%쯤 바쁠 때까지는 대기가 처리 시간의 2배 남짓이지만, 90%면 9배, 95%면 19배로 급격히 솟습니다. 렉의 대부분은 어딘가에서 이 곡선의 오른쪽 끝에 올라탄 것입니다.',
+    lead: '패킷·쿼리·디스크 요청·CPU 작업은 모두 창구 앞에 줄을 섭니다. 요청이 오는 속도를 올려 보세요. 창구가 하나면 70%쯤 바쁠 때까지는 대기가 처리 시간의 2배 남짓이지만, 90%면 9배, 95%면 19배로 급격히 솟습니다. 렉의 대부분은 어딘가에서 이 곡선의 오른쪽 끝에 올라탄 것입니다.',
     tries: [
       '<b>도착 속도</b>를 천천히 올리며 오른쪽 곡선 위의 점이 어디서 급하게 꺾이는지 보세요.',
       '<b>이용률 95%</b> 근처에서 도착 속도를 아주 조금만 더 올려 보세요. 대기가 몇 배로 늘어납니다.',
@@ -19,7 +19,7 @@ K.register('queue', function (root) {
   const qcv = K.canvas(F.stage, { height: 150, caption: '창구 앞 풍경', right: '<span class="legend"><span><i class="dot" style="background:var(--s1)"></i>대기 중</span><span><i class="dot" style="background:var(--s2)"></i>처리 중</span></span>' });
   const ccv = K.canvas(F.stage, { height: w => K.clamp(w * 0.42, 190, 260), caption: '이용률에 따른 평균 대기 시간', right: '곡선: 무작위 도착 이론값 · 점: 지금 측정값' });
 
-  const g1 = K.group(F.controls, '손님(요청)');
+  const g1 = K.group(F.controls, '요청');
   const sLambda = K.slider(g1, { label: '도착 속도', min: 0.5, max: 40, step: 0.5, value: P.lambda, unit: '건/초', onInput: v => { P.lambda = v; reset(); } });
   K.choice(g1, {
     label: '도착 방식', value: P.mode,
@@ -84,7 +84,7 @@ K.register('queue', function (root) {
       t = nextEvt;
       if (kind === 'arr') { queue.push(t); nextArr = t + interArrival(); }
       else busy[idx] = null;
-      // 빈 창구에 손님 배정
+      // 빈 워커에 요청 배정
       for (let i = 0; i < busy.length && queue.length; i++) {
         if (!busy[i]) {
           const a = queue.shift();

@@ -1,23 +1,23 @@
-/* 송신 버퍼와 느린 손님. 서버 스레드 하나가 틱마다 8명에게 보낸다.
-   회선이 느린 손님의 송신 버퍼가 가득 찼을 때 서버 코드가 어떻게 하느냐(블로킹·최신만·킥·무제한)에 따라
-   그 손님만 불편하거나, 서버 전체가 렉에 빠지거나, 서버가 메모리 부족으로 죽는다. */
+/* 송신 버퍼와 느린 클라이언트. 서버 스레드 하나가 틱마다 8명에게 보낸다.
+   회선이 느린 클라이언트의 송신 버퍼가 가득 찼을 때 서버 코드가 어떻게 하느냐(블로킹·최신만·킥·무제한)에 따라
+   그 클라이언트만 불편하거나, 서버 전체가 렉에 빠지거나, 서버가 메모리 부족으로 죽는다. */
 K.register('sndbuf', function (root) {
   const F = K.frame(root, {
     kicker: '소켓과 프로토콜 · 송신 버퍼',
-    title: '느린 손님 한 명이 모두를 느리게 만드는 법',
-    lead: '서버는 틱마다 손님 8명에게 업데이트를 보냅니다. 보낸 데이터는 먼저 손님마다 있는 <b>송신 버퍼</b>(운영체제가 잡아 둔 “보낼 짐 칸”)에 담겼다가 회선 속도만큼 빠져나갑니다. 회선이 느린 손님은 이 칸이 금방 가득 찹니다. 그때 서버 코드가 어떻게 하느냐에 따라 그 손님만 불편하거나, 서버 전체가 렉에 빠집니다.',
+    title: '느린 클라이언트 하나가 모두를 느리게 만드는 법',
+    lead: '서버는 틱마다 클라이언트 8개에게 업데이트를 보냅니다. 보낸 데이터는 먼저 클라이언트마다 있는 <b>송신 버퍼</b>(운영체제가 잡아 둔 “보낼 짐 칸”)에 담겼다가 회선 속도만큼 빠져나갑니다. 회선이 느린 클라이언트는 이 칸이 금방 가득 찹니다. 그때 서버 코드가 어떻게 하느냐에 따라 그 클라이언트만 불편하거나, 서버 전체가 렉에 빠집니다.',
     tries: [
-      '처음 화면(느린 손님 1명 + 블로킹)에서 <b>서버 스레드</b> 줄의 빨간 구간을 보세요. 한 손님에게 보내느라 서버가 멈춰 서 있고, 정상 손님 7명의 지연도 함께 올라갑니다.',
-      '<b>가득 찼을 때</b>를 “최신만 남기기”로 바꿔 보세요. 느린 손님만 뚝뚝 끊기고, 서버 틱과 나머지 손님은 멀쩡해집니다.',
-      '블로킹 상태에서 <b>송신 버퍼</b>를 1MB로 키워 보세요. 막히는 시점이 30초쯤 늦춰질 뿐 결국 똑같이 막히고, 느린 손님의 지연은 수십 초가 됩니다.',
+      '처음 화면(느린 클라이언트 1개 + 블로킹)에서 <b>서버 스레드</b> 줄의 빨간 구간을 보세요. 한 클라이언트에게 보내느라 서버가 멈춰 서 있고, 정상 클라이언트 7개의 지연도 함께 올라갑니다.',
+      '<b>가득 찼을 때</b>를 “최신만 남기기”로 바꿔 보세요. 느린 클라이언트만 뚝뚝 끊기고, 서버 틱과 나머지 클라이언트는 멀쩡해집니다.',
+      '블로킹 상태에서 <b>송신 버퍼</b>를 1MB로 키워 보세요. 막히는 시점이 30초쯤 늦춰질 뿐 결국 똑같이 막히고, 느린 클라이언트의 지연은 수십 초가 됩니다.',
       '<b>무제한 쌓기</b>를 불러와 아래 서버 메모리 그래프를 보세요. 한도를 넘는 순간 서버가 죽고 모두의 접속이 끊깁니다.',
-      '<b>보낼 양</b>을 느린 손님 회선 속도보다 낮춰 보세요. 어떤 정책이든 문제가 사라집니다. 원인은 “보낼 양 > 회선 속도”입니다.',
+      '<b>보낼 양</b>을 느린 클라이언트 회선 속도보다 낮춰 보세요. 어떤 정책이든 문제가 사라집니다. 원인은 “보낼 양 > 회선 속도”입니다.',
     ],
     layout: 'side',
   });
 
   const N = 8, TICK = 50, WORK = 8, H = 2, NORM = 1000;
-  const SLOT = [2, 5, 7];                       // 느린 손님 자리: 3번, 6번, 8번
+  const SLOT = [2, 5, 7];                       // 느린 클라이언트 자리: 3번, 6번, 8번
   const SCALE = 250, MEM0 = 1229, MEMMAX = 2048; // 8명은 2,000명의 표본. 메모리는 MB
   const WIN = 20000, TWIN = 3000;
   const P = { rate: 60, slowN: 1, slowDown: 30, buf: 64, pol: 'block' };
@@ -31,21 +31,21 @@ K.register('sndbuf', function (root) {
   /* ---------- 무대 ---------- */
   const room = K.canvas(F.stage, {
     height: 58 + 22 + N * 25 + 6,
-    caption: '서버 스레드와 손님 8명',
+    caption: '서버 스레드와 클라이언트 8개',
     right: '<span class="legend"><span><i class="box" style="background:var(--good)"></i>일함</span><span><i class="box" style="background:var(--bad)"></i>send() 대기</span><span><i class="box" style="background:var(--line)"></i>쉼</span></span>',
   });
   const chart = K.canvas(F.stage, {
     height: w => K.clamp(Math.round(w * 0.36), 190, 240),
-    caption: '손님 화면 지연 (최근 20초)',
-    right: '<span class="legend"><span><i style="background:var(--s1)"></i>정상 손님 평균</span><span><i style="background:var(--s2)"></i>느린 손님 평균</span></span>',
+    caption: '클라이언트 화면 지연 (최근 20초)',
+    right: '<span class="legend"><span><i style="background:var(--s1)"></i>정상 클라이언트 평균</span><span><i style="background:var(--s2)"></i>느린 클라이언트 평균</span></span>',
   });
   const memBox = K.el('div');
   F.stage.append(memBox);
-  const memCv = K.canvas(memBox, { height: 130, caption: '서버 메모리 (최근 20초)', right: '손님 2,000명 기준' });
+  const memCv = K.canvas(memBox, { height: 130, caption: '서버 메모리 (최근 20초)', right: '동시 접속 2,000명 기준' });
 
   /* ---------- 조작부 ---------- */
   const g1 = K.group(F.controls, '서버');
-  const sRate = K.slider(g1, { label: '보낼 양 (군중 규모)', min: 10, max: 200, step: 10, value: P.rate, unit: 'KB/s', hint: '손님 한 명에게 1초 동안 보내는 양. 주변 캐릭터가 많을수록 커집니다.', onInput: v => { P.rate = v; } });
+  const sRate = K.slider(g1, { label: '보낼 양 (군중 규모)', min: 10, max: 200, step: 10, value: P.rate, unit: 'KB/s', hint: '클라이언트 하나에 1초 동안 보내는 양. 주변 캐릭터가 많을수록 커집니다.', onInput: v => { P.rate = v; } });
   const cBuf = K.choice(g1, { label: '송신 버퍼 크기 (SO_SNDBUF)', value: P.buf, options: [[16, '16KB'], [64, '64KB'], [256, '256KB'], [1024, '1MB']], onChange: v => { P.buf = +v; } });
   const cPol = K.choice(g1, {
     label: '가득 찼을 때', value: P.pol, hint: POL[P.pol],
@@ -54,12 +54,12 @@ K.register('sndbuf', function (root) {
   });
   const polHintEl = cPol.el.querySelector('.ctl-hint');
   function polHint() { polHintEl.textContent = POL[P.pol]; }
-  const g2 = K.group(F.controls, '손님 회선');
-  const sSlowN = K.slider(g2, { label: '느린 손님 수', min: 0, max: 3, step: 1, value: P.slowN, unit: '명', onInput: v => { P.slowN = v; } });
-  const sSlowD = K.slider(g2, { label: '느린 손님 회선 속도', min: 5, max: 200, step: 5, value: P.slowDown, unit: 'KB/s', hint: '정상 손님은 1000 KB/s. 약한 LTE나 붐비는 와이파이는 수십 KB/s까지 떨어집니다.', onInput: v => { P.slowDown = v; } });
+  const g2 = K.group(F.controls, '클라이언트 회선');
+  const sSlowN = K.slider(g2, { label: '느린 클라이언트 수', min: 0, max: 3, step: 1, value: P.slowN, unit: '명', onInput: v => { P.slowN = v; } });
+  const sSlowD = K.slider(g2, { label: '느린 클라이언트 회선 속도', min: 5, max: 200, step: 5, value: P.slowDown, unit: 'KB/s', hint: '정상 클라이언트는 1000 KB/s. 약한 LTE나 붐비는 와이파이는 수십 KB/s까지 떨어집니다.', onInput: v => { P.slowDown = v; } });
 
-  const stN = K.stat(F.stats, { label: '정상 손님 지연', sub: '화면이 몇 초 전 모습인지' });
-  const stS = K.stat(F.stats, { label: '느린 손님 지연', sub: ' ' });
+  const stN = K.stat(F.stats, { label: '정상 클라이언트 지연', sub: '화면이 몇 초 전 모습인지' });
+  const stS = K.stat(F.stats, { label: '느린 클라이언트 지연', sub: ' ' });
   const stHz = K.stat(F.stats, { label: '서버 틱레이트', unit: 'Hz', sub: '목표 20Hz' });
   const stBlk = K.stat(F.stats, { label: '스레드 막힘', unit: '%', sub: '최근 5초 중 send() 대기' });
   const stMem = K.stat(F.stats, { label: '서버 메모리', unit: 'GB', sub: '한도 2 GB' });
@@ -198,7 +198,7 @@ K.register('sndbuf', function (root) {
     K.text(ctx, narrow ? '서버 스레드' : '서버 스레드 (하나뿐)', 10, 14, { size: 12, weight: 700, color: C.ink });
     let st, sc;
     if (sv.st === 'down') { st = '서버 다운 · 재시작까지 ' + K.n(Math.max(0, (sv.downUntil - t) / 1000), 0) + '초'; sc = C.badInk; }
-    else if (sv.st === 'blocked') { st = 'send() 대기 중 → 손님 ' + (sv.idx + 1); sc = C.badInk; }
+    else if (sv.st === 'blocked') { st = 'send() 대기 중 → 클라이언트 ' + (sv.idx + 1); sc = C.badInk; }
     else if (hz() < 18.5) { st = '틱이 밀리는 중'; sc = C.warnInk; }
     else { st = '틱마다 ' + WORK + 'ms 일하고 쉼'; sc = C.goodInk; }
     K.text(ctx, st, w - 10, 14, { size: 11.5, weight: 600, color: sc, align: 'right' });
@@ -215,13 +215,13 @@ K.register('sndbuf', function (root) {
     K.text(ctx, '3초 전', bx0, by + bh + 9, { size: 10, color: C.muted });
     K.text(ctx, '지금', bx1, by + bh + 9, { size: 10, color: C.muted, align: 'right' });
 
-    // 손님 표
+    // 클라이언트 표
     const top = 72, RH = 25;
     const nameW = narrow ? 70 : 118, stW = narrow ? 62 : 104, latW = narrow ? 48 : 70;
     const mx0 = 10 + nameW, space = w - 10 - stW - latW - mx0 - 8;
     const twoM = !narrow, kW = twoM ? space * 0.56 : space, aX = mx0 + kW + 8, aW = space - kW - 8;
     const hy = top - 6;
-    K.text(ctx, '손님', 10, hy, { size: 10.5, color: C.muted });
+    K.text(ctx, '클라이언트', 10, hy, { size: 10.5, color: C.muted });
     K.text(ctx, narrow ? '송신 버퍼' : '송신 버퍼 (' + (P.buf >= 1024 ? '1MB' : P.buf + 'KB') + ')', mx0, hy, { size: 10.5, color: C.muted });
     if (twoM) K.text(ctx, '앱 대기열', aX, hy, { size: 10.5, color: C.muted });
     K.text(ctx, '지연', w - 10 - stW - 8, hy, { size: 10.5, color: C.muted, align: 'right' });
@@ -229,7 +229,7 @@ K.register('sndbuf', function (root) {
     for (const c of cl) {
       const y = top + c.i * RH + RH / 2, slow = isSlow(c);
       if (slow) { ctx.fillStyle = K.alpha(C.s2, 0.1); ctx.fillRect(4, y - RH / 2 + 1, w - 8, RH - 2); }
-      const nm = (narrow ? '손님' : '손님 ') + (c.i + 1);
+      const nm = (narrow ? '클라이언트' : '클라이언트 ') + (c.i + 1);
       K.text(ctx, nm, 10, y, { size: 12, weight: slow ? 700 : 400, color: C.ink });
       if (slow) {
         const lab = narrow ? '느림' : '느린 회선', bx = 10 + ctx.measureText(nm).width + 5;
@@ -260,12 +260,12 @@ K.register('sndbuf', function (root) {
   K.hover(room, (x, y) => {
     if (y >= 22 && y <= 44) {
       const blk = blockedFrac(3000);
-      return `<b>서버 스레드</b><br>틱 ${K.n(hz(), 1)}Hz · 최근 3초 중 send() 대기 ${K.pct(blk)}<br>스레드가 하나라서 여기서 멈추면 모든 손님의 틱이 멈춥니다.`;
+      return `<b>서버 스레드</b><br>틱 ${K.n(hz(), 1)}Hz · 최근 3초 중 send() 대기 ${K.pct(blk)}<br>스레드가 하나라서 여기서 멈추면 모든 클라이언트의 틱이 멈춥니다.`;
     }
     const i = Math.floor((y - 72) / 25), c = cl[i];
     if (!c) return null;
     const q = c.af >= 1024 ? K.n(c.af / 1024, 1) + 'MB' : K.n(c.af, 0) + 'KB';
-    return `<b>손님 ${i + 1}</b> · 회선 ${isSlow(c) ? P.slowDown : NORM} KB/s<br>송신 버퍼 ${K.n(c.kf, 0)} / ${P.buf}KB` + (P.pol === 'block' ? '' : `<br>앱 대기열 ${q}`) + `<br>화면 지연 ${c.st === 'ok' ? K.ms(c.ema) : '접속 끊김'}`;
+    return `<b>클라이언트 ${i + 1}</b> · 회선 ${isSlow(c) ? P.slowDown : NORM} KB/s<br>송신 버퍼 ${K.n(c.kf, 0)} / ${P.buf}KB` + (P.pol === 'block' ? '' : `<br>앱 대기열 ${q}`) + `<br>화면 지연 ${c.st === 'ok' ? K.ms(c.ema) : '접속 끊김'}`;
   });
 
   /* ---------- 차트 ---------- */
@@ -339,7 +339,7 @@ K.register('sndbuf', function (root) {
   K.hover(chart, x => {
     const p = nearest(chart, x);
     if (!p) return null;
-    return `${K.n((p.t - t) / 1000, 1)}초<br>정상 손님 <b>${p.n == null ? '접속 끊김' : K.ms(p.n)}</b><br>느린 손님 <b>${p.s == null ? (P.slowN ? '접속 끊김' : '없음') : K.ms(p.s)}</b><br>서버 틱 ${K.n(p.hz, 1)}Hz`;
+    return `${K.n((p.t - t) / 1000, 1)}초<br>정상 클라이언트 <b>${p.n == null ? '접속 끊김' : K.ms(p.n)}</b><br>느린 클라이언트 <b>${p.s == null ? (P.slowN ? '접속 끊김' : '없음') : K.ms(p.s)}</b><br>서버 틱 ${K.n(p.hz, 1)}Hz`;
   });
   K.hover(memCv, x => {
     const p = nearest(memCv, x);
@@ -352,16 +352,16 @@ K.register('sndbuf', function (root) {
     sRate.set(P.rate, false); sSlowN.set(P.slowN, false); sSlowD.set(P.slowDown, false);
     cBuf.set(P.buf, false); cPol.set(P.pol, false); polHint();
     memBox.hidden = P.pol !== 'unlimited';
-    // 처음 7초는 모두 정상 → 느린 손님 등장 → 13초 더
+    // 처음 7초는 모두 정상 → 느린 클라이언트 등장 → 13초 더
     reset();
     const n = P.slowN;
     P.slowN = 0; step(7000); P.slowN = n;
-    if (n) marks.push({ t, lab: '느린 손님 등장' });
+    if (n) marks.push({ t, lab: '느린 클라이언트 등장' });
     step(13000);
   }
   const pr = K.presets(F, [
     { label: '모두 정상', apply() { load({ slowN: 0 }); } },
-    { label: '느린 손님 1명 + 블로킹', apply() { load({}); } },
+    { label: '느린 클라이언트 1개 + 블로킹', apply() { load({}); } },
     { label: '최신만 보내기', apply() { load({ pol: 'latest', buf: 16 }); } },
     { label: '킥 정책', apply() { load({ pol: 'kick' }); } },
     { label: '무제한 쌓기', apply() { load({ pol: 'unlimited', slowN: 3, slowDown: 20, rate: 120 }); } },
@@ -377,7 +377,7 @@ K.register('sndbuf', function (root) {
     const nL = avg(normC), live = slowC.filter(c => c.st === 'ok'), sL = avg(live);
     const f = hz(), blk = blockedFrac(5000), mem = sv.st === 'down' ? null : memMB();
     stN.set(nL == null ? '—' : K.ms(nL), nL == null ? 'bad' : nL < 100 ? 'good' : nL < 200 ? 'warn' : 'bad');
-    if (!slowC.length) stS.set('—', null, '느린 손님 없음');
+    if (!slowC.length) stS.set('—', null, '느린 클라이언트 없음');
     else if (!live.length) stS.set('끊김', 'bad', '접속이 끊긴 상태');
     else stS.set(K.ms(sL), sL < 150 ? 'good' : sL < 500 ? 'warn' : 'bad', '회선 ' + P.slowDown + ' KB/s');
     stHz.set(sv.st === 'down' ? '0' : K.n(f, 1), sv.st === 'down' || f < 15 ? 'bad' : f < 19 ? 'warn' : 'good');
@@ -389,30 +389,30 @@ K.register('sndbuf', function (root) {
     const kb = P.rate / 20;
     let msg;
     if (sv.st === 'down') {
-      msg = `${K.flag('bad')}<b>서버 메모리가 한도(2 GB)를 넘어 서버 프로세스가 죽었습니다.</b> 쌓인 것은 느린 손님 몇 명의 데이터였지만, 접속이 끊긴 건 모든 손님입니다(<b>접속 끊김</b>). 재시작까지 ${K.n(Math.max(0, (sv.downUntil - t) / 1000), 0)}초. 로그에는 “메모리 부족”만 남아서 원인을 찾기도 어렵습니다.`;
+      msg = `${K.flag('bad')}<b>서버 메모리가 한도(2 GB)를 넘어 서버 프로세스가 죽었습니다.</b> 쌓인 것은 느린 클라이언트 몇 개의 데이터였지만, 접속이 끊긴 건 모든 클라이언트입니다(<b>접속 끊김</b>). 재시작까지 ${K.n(Math.max(0, (sv.downUntil - t) / 1000), 0)}초. 로그에는 “메모리 부족”만 남아서 원인을 찾기도 어렵습니다.`;
     } else if (!over) {
       msg = slowC.length
-        ? `${K.flag('good')}느린 손님(${names}번)의 회선(${P.slowDown} KB/s)도 보낼 양(${P.rate} KB/s)보다 빨라서 송신 버퍼가 차지 않습니다. 문제는 보낼 양이 회선보다 많을 때 생깁니다. <b>보낼 양</b>을 올려 보세요.`
-        : `${K.flag('good')}모든 손님의 회선이 보낼 양(${P.rate} KB/s)보다 빠릅니다. 송신 버퍼는 틱마다 ${K.n(kb, 0)}KB쯤 찼다가 바로 비워지고, 서버 스레드는 틱마다 ${WORK}ms 일하고 나머지는 쉽니다.`;
+        ? `${K.flag('good')}느린 클라이언트(${names}번)의 회선(${P.slowDown} KB/s)도 보낼 양(${P.rate} KB/s)보다 빨라서 송신 버퍼가 차지 않습니다. 문제는 보낼 양이 회선보다 많을 때 생깁니다. <b>보낼 양</b>을 올려 보세요.`
+        : `${K.flag('good')}모든 클라이언트의 회선이 보낼 양(${P.rate} KB/s)보다 빠릅니다. 송신 버퍼는 틱마다 ${K.n(kb, 0)}KB쯤 찼다가 바로 비워지고, 서버 스레드는 틱마다 ${WORK}ms 일하고 나머지는 쉽니다.`;
     } else if (P.pol === 'block') {
       msg = blk > 0.01
-        ? `${K.flag('bad')}<b>손님 ${names}의 송신 버퍼(${P.buf}KB)가 가득 찼습니다.</b> 블로킹 소켓에서 send()는 자리가 날 때까지 돌아오지 않습니다. 하나뿐인 서버 스레드가 거기서 멈춰 서니 틱이 ${K.n(f, 1)}Hz로 떨어지고, 나머지 손님도 업데이트를 늦게 받습니다. 모두가 <b>뚝뚝 끊김</b>과 <b>슬로우모션</b>을 겪습니다. <b>블로킹 소켓 + 단일 스레드 = 한 명의 나쁜 회선이 서버 전체 렉.</b>`
-        : `${K.flag('warn')}손님 ${names}의 송신 버퍼가 차오르는 중입니다. 회선이 ${P.slowDown} KB/s인데 초당 ${P.rate} KB를 보내니 곧 가득 찹니다. 가득 차는 순간부터 서버 스레드가 send()에서 멈춥니다.`;
+        ? `${K.flag('bad')}<b>클라이언트 ${names}의 송신 버퍼(${P.buf}KB)가 가득 찼습니다.</b> 블로킹 소켓에서 send()는 자리가 날 때까지 돌아오지 않습니다. 하나뿐인 서버 스레드가 거기서 멈춰 서니 틱이 ${K.n(f, 1)}Hz로 떨어지고, 나머지 클라이언트도 업데이트를 늦게 받습니다. 모두가 <b>뚝뚝 끊김</b>과 <b>슬로우모션</b>을 겪습니다. <b>블로킹 소켓 + 단일 스레드 = 한 명의 나쁜 회선이 서버 전체 렉.</b>`
+        : `${K.flag('warn')}클라이언트 ${names}의 송신 버퍼가 차오르는 중입니다. 회선이 ${P.slowDown} KB/s인데 초당 ${P.rate} KB를 보내니 곧 가득 찹니다. 가득 차는 순간부터 서버 스레드가 send()에서 멈춥니다.`;
     } else if (P.pol === 'latest') {
       const c = slowC[0];
       const dr = c ? c.dropR : 0;
-      msg = `${K.flag('warn')}<b>느린 손님에게는 가장 새 업데이트 하나만 남기고 나머지는 버립니다.</b> 서버 스레드는 기다리지 않으니 틱은 ${K.n(f, 1)}Hz 그대로이고 다른 손님은 멀쩡합니다. 느린 손님은 업데이트를 ${K.pct(dr)} 건너뛰어 <b>뚝뚝 끊김</b>과 작은 <b>순간이동</b>을 겪습니다. 이미 송신 버퍼에 담긴 ${P.buf}KB는 순서대로 빠져야 해서 그 손님의 화면은 ${sL == null ? '—' : K.ms(sL)} 늦습니다. 버퍼를 작게 잡을수록 이 지연이 줄어듭니다.`;
+      msg = `${K.flag('warn')}<b>느린 클라이언트에게는 가장 새 업데이트 하나만 남기고 나머지는 버립니다.</b> 서버 스레드는 기다리지 않으니 틱은 ${K.n(f, 1)}Hz 그대로이고 다른 클라이언트는 멀쩡합니다. 느린 클라이언트는 업데이트를 ${K.pct(dr)} 건너뛰어 <b>뚝뚝 끊김</b>과 작은 <b>순간이동</b>을 겪습니다. 이미 송신 버퍼에 담긴 ${P.buf}KB는 순서대로 빠져야 해서 그 클라이언트의 화면은 ${sL == null ? '—' : K.ms(sL)} 늦습니다. 버퍼를 작게 잡을수록 이 지연이 줄어듭니다.`;
     } else if (P.pol === 'kick') {
       const kicked = slowC.filter(c => c.st === 'kicked'), lag = slowC.filter(c => c.st === 'ok' && c.aq.length);
-      if (kicked.length) msg = `${K.flag('bad')}<b>손님 ${kicked.map(c => c.i + 1).join('·')}이(가) 5초 넘게 밀려서 연결을 끊었습니다.</b> 그 손님은 <b>접속 끊김</b>을 겪지만, 서버와 다른 손님은 멀쩡합니다(틱 ${K.n(f, 1)}Hz). 회선이 그대로면 재접속해도 다시 밀리고 다시 끊깁니다. 대신 서버 메모리는 늘 일정하게 유지됩니다.`;
+      if (kicked.length) msg = `${K.flag('bad')}<b>클라이언트 ${kicked.map(c => c.i + 1).join('·')}이(가) 5초 넘게 밀려서 연결을 끊었습니다.</b> 그 클라이언트는 <b>접속 끊김</b>을 겪지만, 서버와 다른 클라이언트는 멀쩡합니다(틱 ${K.n(f, 1)}Hz). 회선이 그대로면 재접속해도 다시 밀리고 다시 끊깁니다. 대신 서버 메모리는 늘 일정하게 유지됩니다.`;
       else if (lag.length) {
         const c = lag[0];
-        msg = `${K.flag('warn')}손님 ${c.i + 1}에게 못 보낸 데이터가 서버 메모리에 쌓이는 중입니다(${K.n(c.af, 0)}KB). ${K.n(Math.max(0, 5 - (t - c.since) / 1000), 0)}초 안에 따라잡지 못하면 연결을 끊습니다. 그동안 그 손님의 화면은 점점 늦어집니다(${K.ms(c.ema)}). 다른 손님과 서버 틱은 멀쩡합니다.`;
-      } else msg = `${K.flag('warn')}손님 ${names}의 송신 버퍼가 차오르는 중입니다. 가득 찬 뒤 5초 넘게 밀리면 서버가 연결을 끊습니다.`;
+        msg = `${K.flag('warn')}클라이언트 ${c.i + 1}에게 못 보낸 데이터가 서버 메모리에 쌓이는 중입니다(${K.n(c.af, 0)}KB). ${K.n(Math.max(0, 5 - (t - c.since) / 1000), 0)}초 안에 따라잡지 못하면 연결을 끊습니다. 그동안 그 클라이언트의 화면은 점점 늦어집니다(${K.ms(c.ema)}). 다른 클라이언트와 서버 틱은 멀쩡합니다.`;
+      } else msg = `${K.flag('warn')}클라이언트 ${names}의 송신 버퍼가 차오르는 중입니다. 가득 찬 뒤 5초 넘게 밀리면 서버가 연결을 끊습니다.`;
     } else {
       const grow = (SCALE * slowC.filter(c => c.st === 'ok').length * Math.max(0, P.rate - P.slowDown)) / 1024;
       const eta = grow > 0 && mem != null ? (MEMMAX - mem) / grow : Infinity;
-      msg = `${K.flag(eta < 8 ? 'bad' : 'warn')}<b>느린 손님에게 못 보낸 데이터를 버리지도 끊지도 않고 서버 메모리에 계속 쌓습니다.</b> 화면의 8명은 표본이고 실제로는 같은 비율로 2,000명이 접속해 있다고 치면, 메모리가 초당 ${K.n(grow, 0)}MB씩 늘어납니다. 한도까지 약 ${Number.isFinite(eta) ? K.n(eta, 0) + '초' : '—'}. 느린 손님의 화면은 ${sL == null ? '—' : K.ms(sL)} 뒤처져 있고 계속 늘어납니다. 다른 손님은 아직 멀쩡하지만, 한도를 넘는 순간 모두의 접속이 끊깁니다.`;
+      msg = `${K.flag(eta < 8 ? 'bad' : 'warn')}<b>느린 클라이언트에게 못 보낸 데이터를 버리지도 끊지도 않고 서버 메모리에 계속 쌓습니다.</b> 화면의 8명은 표본이고 실제로는 같은 비율로 2,000명이 접속해 있다고 치면, 메모리가 초당 ${K.n(grow, 0)}MB씩 늘어납니다. 한도까지 약 ${Number.isFinite(eta) ? K.n(eta, 0) + '초' : '—'}. 느린 클라이언트의 화면은 ${sL == null ? '—' : K.ms(sL)} 뒤처져 있고 계속 늘어납니다. 다른 클라이언트는 아직 멀쩡하지만, 한도를 넘는 순간 모두의 접속이 끊깁니다.`;
     }
     F.say(msg);
   });

@@ -52,11 +52,11 @@ K.register('syncmodels', function (root) {
 
   const g1 = K.group(F.controls, '회선');
   K.slider(g1, { label: '핑(왕복)', min: 0, max: 400, step: 10, value: P.rtt, unit: 'ms', onInput: v => { P.rtt = v; } });
-  K.slider(g1, { label: '지터(흔들림)', min: 0, max: 150, step: 5, value: P.jitter, unit: 'ms', onInput: v => { P.jitter = v; } });
+  K.slider(g1, { label: '지터(도착 간격의 흔들림)', min: 0, max: 150, step: 5, value: P.jitter, unit: 'ms', onInput: v => { P.jitter = v; } });
   K.slider(g1, { label: '패킷 손실', min: 0, max: 20, step: 1, value: P.loss, unit: '%', onInput: v => { P.loss = v; } });
   const g2 = K.group(F.controls, '서버·방식');
   K.choice(g2, { label: '서버 틱 (락스텝 턴)', value: P.tick, options: [[10, '10/초'], [20, '20/초'], [30, '30/초'], [60, '60/초']], onChange: v => { P.tick = +v; } });
-  K.slider(g2, { label: '락스텝 입력 지연', min: 30, max: 400, step: 10, value: P.lockDelay, unit: 'ms', onInput: v => { P.lockDelay = v; }, hint: '입력을 이만큼 뒤의 턴에 실행하도록 예약합니다. 입력이 상대에게 닿는 시간(서로 직접 주고받는 이 모델에서는 핑의 절반) + 흔들림보다 짧으면 멈춥니다.' });
+  K.slider(g2, { label: '락스텝 입력 지연', min: 30, max: 400, step: 10, value: P.lockDelay, unit: 'ms', onInput: v => { P.lockDelay = v; }, hint: '입력을 이만큼 뒤의 턴에 실행하도록 예약합니다. 입력이 상대에게 닿는 시간(서로 직접 주고받는 이 모델에서는 핑의 절반) + 지터보다 짧으면 멈춥니다.' });
   const g3 = K.group(F.controls, '누르기');
   K.button(g3, { label: '지금 누르기', kind: 'primary', onClick: () => press() });
   const rejBtn = K.button(g3, { label: '다음 행동은 서버가 거절', kind: 'small', onClick: () => { rejectNext = !rejectNext; rejBtn.setAttribute('aria-pressed', rejectNext ? 'true' : 'false'); } });
@@ -279,7 +279,7 @@ K.register('syncmodels', function (root) {
     let msg;
     if (P.rtt >= 120) msg = `${K.flag(rrMs > 250 ? 'bad' : 'warn')}핑 ${P.rtt}ms에서 <b>요청-응답</b>은 누르고 약 <b>${K.n(rrMs)}ms</b> 뒤에야 반응합니다(입력 지연). <b>예측·클라이언트 권위·롤백</b>은 핑과 상관없이 한 프레임(17ms) 만에 반응하지만, 각각 보정(고무줄), 화면 불일치·해킹, 되감기(순간이동)라는 대가가 있습니다.`;
     else msg = `${K.flag('good')}핑 ${P.rtt}ms에서는 요청-응답도 ${K.n(rrMs)}ms로 크게 굼뜨지 않습니다. 핑을 150ms 이상으로 올리면 방식 사이의 차이가 뚜렷해집니다.`;
-    if (lockStalls >= 2) msg += ` <b>락스텝</b>은 입력 지연(${P.lockDelay}ms)이 입력이 상대에게 닿는 시간(핑의 절반)+흔들림(${Math.round(P.rtt / 2 + P.jitter)}ms)보다 짧아 최근 8초 동안 ${lockStalls}번 <b>모두가 멈췄습니다</b>.`;
+    if (lockStalls >= 2) msg += ` <b>락스텝</b>은 입력 지연(${P.lockDelay}ms)이 입력이 상대에게 닿는 시간(핑의 절반)+지터(${Math.round(P.rtt / 2 + P.jitter)}ms)보다 짧아 최근 8초 동안 ${lockStalls}번 <b>모두가 멈췄습니다</b>.`;
     else msg += ` <b>락스텝</b>은 핑과 무관하게 입력 지연(${P.lockDelay}ms, 턴 단위로 올리면 최대 ${lockTurns() * tickT()}ms)만큼 일정하게 늦습니다.`;
     F.say(msg);
   }
