@@ -310,7 +310,7 @@
         s.forEach(x => { score += c.sym.indexOf(x) === 0 ? 3 : 2; });
         if (s.length) why.push(s.map(x => SYM[x].name).join(', '));
         return { c, score, why };
-      }).filter(x => x.score > 0).sort((a, b) => b.score - a.score || D.layers.findIndex(l => l.id === a.c.layer) - D.layers.findIndex(l => l.id === b.c.layer));
+      }).filter(x => x.score > 0).sort((a, b) => b.score - a.score || LAYER[a.c.layer].n - LAYER[b.c.layer].n);
       const max = (st.who ? 3 : 0) + st.when.size * 2 + st.sym.size * 3;
       hint.innerHTML = st.who ? HINT[st.who] : '선택할수록 후보가 좁혀집니다. “누가”가 가장 강한 단서입니다.';
       if (!scored.length || !max) { out.innerHTML = '<p class="note">조건을 하나 이상 골라 주세요.</p>'; return; }

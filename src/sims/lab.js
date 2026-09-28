@@ -25,7 +25,7 @@ K.register('lab', function (root) {
   // 증상별 재현 조건. set 은 기본값 위에 덮어쓴다.
   const PRESETS = [
     { id: 'normal', label: '정상', set: {},
-      say: '<b>정상</b>: 핑 60ms, 약간의 흔들림. 다른 플레이어는 보간 버퍼 100ms만큼 더 과거 모습으로 그려지는 대신 매끄럽게 움직이고, 내 캐릭터는 예측 덕분에 즉시 반응합니다.' },
+      say: '<b>정상</b>: 회선 핑 60ms, 약간의 흔들림. 게임이 재는 핑(명령→확인)에는 틱·프레임 대기가 더해져 조금 더 크게 나옵니다. 다른 플레이어는 보간 버퍼 100ms만큼 더 과거 모습으로 그려지는 대신 매끄럽게 움직이고, 내 캐릭터는 예측 덕분에 즉시 반응합니다.' },
     { id: 'stutter', label: '뚝뚝 끊김', set: { jitter: 110, tick: 15, mode: 'snap' },
       say: '<b>뚝뚝 끊김</b>: 서버 소식이 들쭉날쭉(지터 110ms) 오는데 받자마자 그리니, 늦게 온 만큼 멈췄다가 몰려 온 만큼 튑니다. 오른쪽 “내 화면”의 상대(주황) 궤적 점 간격을 보세요.' },
     { id: 'teleport', label: '순간이동', set: { outEvery: 3.5, outMs: 900, loss: 3 },
@@ -37,7 +37,7 @@ K.register('lab', function (root) {
     { id: 'slowmo', label: '슬로우모션', set: { load: 230 },
       say: '<b>슬로우모션</b>: 서버가 한 틱을 50ms 안에 못 끝내고 115ms씩 걸립니다. 이 서버는 틱마다 정해진 50ms만큼만 세계를 진행하므로, 세계 시간이 약 0.43배속으로 흐르고 다른 플레이어·몬스터가 모두 느리게 움직입니다. 흐른 시간만큼 한 번에 진행하는 서버였다면 속도는 그대로이고 뚝뚝 끊김·순간이동으로 보였을 것입니다.' },
     { id: 'delay', label: '입력 지연', set: { predict: false, rtt: 350 },
-      say: '<b>입력 지연</b>: 클라이언트 예측을 끄고 핑을 350ms로 올렸습니다. 화면을 눌러도 명령이 서버에 갔다가 결과가 돌아올 때까지 내 캐릭터가 꿈쩍하지 않습니다.' },
+      say: '<b>입력 지연</b>: 클라이언트 예측을 끄고 회선 핑을 350ms로 올렸습니다. 화면을 눌러도 명령이 서버에 갔다가 결과가 돌아올 때까지 내 캐릭터가 꿈쩍하지 않습니다.' },
     { id: 'freeze', label: '멈춤', set: { stallEvery: 4, stallMs: 1600 },
       say: '<b>멈춤</b>: 서버가 4초마다 1.6초씩 멈춥니다(GC, 동기 DB 호출 등). 세상 전체가 얼고, 예측 덕분에 나 혼자만 움직이는 이상한 장면도 보입니다. 풀리면 서버가 밀린 틱을 몰아서 계산하고, 보간하던 내 화면은 그 차이를 한 번에 건너뜁니다(순간이동). 표시 방식을 “순서대로 재생”으로 바꾸면 빨리 감기(몰아치기)로 보입니다.' },
     { id: 'disconnect', label: '접속 끊김', set: { timeout: 4000 }, action: () => outageNow(6500),
@@ -429,7 +429,7 @@ K.register('lab', function (root) {
       tries: [
         '위의 증상 버튼을 하나씩 눌러 보고, 아래 <b>사건 기록</b>과 <b>패킷 타임라인</b>에서 무슨 일이 있었는지 확인하세요.',
         '<b>지터</b>를 100ms로 올린 뒤 <b>다른 플레이어 표시</b>를 “받은 즉시” ↔ “보간”으로 바꿔 보세요. 보간 버퍼가 흔들림을 흡수하는 대신 상대가 과거에 머뭅니다.',
-        '<b>손실</b> 10%에서 <b>프로토콜</b>을 UDP ↔ TCP로 바꿔 보세요. UDP는 가끔 튀고, TCP는 멈췄다 몰아칩니다.',
+        '<b>손실</b> 10%에서 <b>프로토콜</b>을 UDP ↔ TCP로 바꿔 보세요. UDP는 보간과 입력 중복 전송이 빈자리를 메워 대부분 가려지고, TCP는 잃은 패킷을 기다리느라 멈췄다 몰아칩니다.',
         '<b>엄격한 이동 검증</b>을 켜고 지터를 80ms로 올려 보세요. 명령이 몰려 도착한 틱마다 서버가 이동을 잘라 고무줄이 생깁니다.',
         '<b>끊김 길이</b>를 타임아웃보다 길게 하고 <b>지금 회선 끊기</b>를 눌러 보세요. 접속이 끊깁니다. 타임아웃보다 조금 짧게 하면, TCP에서는 회선이 돌아온 뒤에도 재전송 대기 때문에 한참 더 멈춰 있다가 끊기기도 합니다.',
       ],
@@ -457,7 +457,7 @@ K.register('lab', function (root) {
     const lg = '<span class="legend"><span><i style="background:var(--ink-2)"></i>서버→나 (세계 소식)</span><span><i style="background:var(--muted);height:2px"></i>나→서버 (내 입력)</span><span><i class="box" style="background:var(--warn)"></i>순서 대기(TCP)</span><span><i class="box" style="background:var(--bad);opacity:.35"></i>회선 끊김·멈춤</span></span>';
     cvT = K.canvas(F.stage, { height: w => (w < 520 ? 150 : 170), caption: '패킷 타임라인 (최근 3초, 오른쪽 끝이 지금)', right: '', label: '패킷이 보내지고 도착하는 시각' });
     F.stage.append(K.el('div', { html: lg }));
-    cvV = K.canvas(F.stage, { height: 120, caption: '내 화면 속 상대의 이동 속도', right: '1 = 정상 속도 · 0 = 멈춤 · ▲ 순간이동(한 프레임에 3m 넘게)' });
+    cvV = K.canvas(F.stage, { height: 120, caption: '내 화면 속 상대의 이동 속도', right: '1 = 정상 · 0 = 멈춤 · ▲ 순간이동' });
     K.hover(cvV, x => {
       const box = spBox();
       const tt = t - 5000 + ((x - box.x) / box.w) * 5000;
@@ -748,7 +748,7 @@ K.register('lab', function (root) {
     const underRatio = C.underFrames.length ? C.underFrames.reduce((a, b) => a + b[1], 0) / C.underFrames.length : 0;
 
     if (compact) {
-      miniEl.innerHTML = `<span>핑 <b>${pingTxt}${ping != null && !C.disc ? ' ms' : ''}</b></span><span>손실 <b>${K.pct(ls.rate)}</b></span><span>서버 틱 <b>${tickRate}/초</b></span><span>화면 FPS <b>${fps}</b></span><span>상태 <b>${C.disc ? '연결 끊김' : wait > 400 ? '응답 대기 ' + K.n(wait / 1000, 1) + '초' : '연결됨'}</b></span>`;
+      miniEl.innerHTML = `<span>핑(명령→확인) <b>${pingTxt}${ping != null && !C.disc ? ' ms' : ''}</b></span><span>손실 <b>${K.pct(ls.rate)}</b></span><span>서버 틱 <b>${tickRate}/초</b></span><span>화면 FPS <b>${fps}</b></span><span>상태 <b>${C.disc ? '연결 끊김' : wait > 400 ? '응답 대기 ' + K.n(wait / 1000, 1) + '초' : '연결됨'}</b></span>`;
       const sS = cvS.cap && cvS.cap.querySelector('.srv-state'); if (sS) sS.textContent = `틱 ${tickRate}/초`;
       const cS = cvC.cap && cvC.cap.querySelector('.cli-state'); if (cS) cS.textContent = C.disc ? '연결 끊김' : `핑 ${pingTxt}${ping != null ? 'ms' : ''}`;
       return;
@@ -774,8 +774,8 @@ K.register('lab', function (root) {
       msg = `${K.flag(wait > P.timeout * 0.6 ? 'bad' : 'warn')}<b>멈춤</b>: ${why} 서버 소식이 ${K.n(wait / 1000, 1)}초째 없습니다. 상대는 마지막 위치에 서 있고, 예측을 켠 내 캐릭터만 혼자 움직입니다. ${K.ms(P.timeout)}가 지나면 접속이 끊깁니다.`;
     } else if (E('burst')) {
       msg = `${K.flag('bad')}<b>${afterStall ? '멈춤 뒤 몰아치기' : '몰아치기'}</b>: ${E('burst').text}. 멈춰 있던 동안의 움직임이 한 번에 들어와 ${P.mode === 'queue' ? '빨리 감기처럼 파파팍 재생됩니다' : P.mode === 'interp' ? '보간 버퍼를 넘어서면 한 번에 건너뜁니다(순간이동)' : '한 번에 점프합니다'}.`;
-    } else if (E('rubber')) {
-      msg = `${K.flag('bad')}<b>고무줄</b>: ${E('rubber').text}. ${P.validate && E('clip') ? '명령이 몰려 도착해 서버의 이동 검증이 잘라 냈기 때문입니다.' : P.loss > 0 && P.lossDir !== 'down' && !P.redundancy ? '서버가 받지 못한 이동 명령만큼 위치가 모자랍니다. “입력 중복 전송”을 켜면 대부분 사라집니다.' : '서버와 내 예측이 어긋났습니다.'}`;
+    } else if (E('rubber') || (P.predict && P.validate && E('clip'))) {
+      msg = `${K.flag('bad')}<b>고무줄</b>: ${E('rubber') ? E('rubber').text + '. ' : ''}${P.validate && E('clip') ? (E('rubber') ? '명령이 몰려 도착해 서버의 이동 검증이 잘라 냈기 때문입니다.' : E('clip').text + '. 잘린 만큼 내 캐릭터가 뒤로 당겨집니다.') :P.loss > 0 && P.lossDir !== 'down' && !P.redundancy ? '서버가 받지 못한 이동 명령만큼 위치가 모자랍니다. “입력 중복 전송”을 켜면 대부분 사라집니다.' : '서버와 내 예측이 어긋났습니다.'}`;
     } else if (E('teleport')) {
       msg = `${K.flag('bad')}<b>${afterStall ? '멈춤 뒤 순간이동' : '순간이동'}</b>: ${E('teleport').text}. ${afterStall ? '서버가 멈췄다 풀리면서 밀린 틱을 몰아서 계산해, 그 사이 이동한 거리를 한 프레임에 건너뛰었습니다.' : '소식이 한동안 끊겼거나(손실·회선 끊김·서버 멈춤) 늦게 와서, 그 사이 이동한 거리를 한 프레임에 건너뛰었습니다.'}${P.mode === 'extrap' ? ' 외삽은 모서리에서 방향이 바뀐 걸 모르고 직진하다 되돌아오기도 합니다.' : ''}`;
     } else if (P.load > 100) {
@@ -784,6 +784,8 @@ K.register('lab', function (root) {
       msg = `${K.flag('warn')}<b>뚝뚝 끊김 (화면)</b>: 네트워크는 멀쩡하지만 화면을 초당 ${fps}번만 그립니다. 궤적 점 간격이 넓고 일정합니다.`;
     } else if (underRatio > 0.25 && (P.mode === 'interp' || P.mode === 'queue')) {
       msg = `${K.flag('warn')}<b>뚝뚝 끊김</b>: 보간 버퍼(${P.interp}ms)가 자주 바닥납니다(프레임의 ${Math.round(underRatio * 100)}%). 다음 소식이 제때 안 와서 상대가 잠깐씩 멈춥니다. 버퍼를 늘리면 매끄러워지지만 그만큼 더 과거를 보게 됩니다.`;
+    } else if (P.mode === 'extrap' && P.jitter > 30) {
+      msg = `${K.flag('warn')}<b>뚝뚝 끊김</b>: 외삽은 마지막 속도로 앞질러 그리므로, 소식이 들쭉날쭉(지터 ${P.jitter}ms) 오면 앞서 나갔다가 다음 소식에 당겨지기를 반복해 상대가 떨리듯 움직입니다.`;
     } else if (P.mode === 'snap' && (P.jitter > 30 || P.tick < 15)) {
       msg = `${K.flag('warn')}<b>뚝뚝 끊김</b>: 받은 소식을 바로 그리니 틱 간격(${K.ms(1000 / P.tick)})과 지터(${P.jitter}ms)가 그대로 화면에 드러납니다. 궤적 점이 뭉쳤다 벌어졌다 합니다.`;
     } else if (!P.predict && ping != null) {

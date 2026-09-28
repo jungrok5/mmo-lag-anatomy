@@ -95,6 +95,7 @@
       sym: ['teleport', 'dropped'], fx: ['loss'], who: ['server'], when: ['event', 'peak'],
       num: '한도는 인스턴스 크기마다 다르고, 초당 패킷 수 한도는 공개하지 않는 경우가 많습니다. 작은 인스턴스의 “최대 10Gbps”는 잠깐만 쓸 수 있는 순간 속도이고, 평소 기본 속도는 훨씬 낮습니다.',
       fix: '한도 초과 카운터 확인(AWS는 pps_allowance_exceeded, conntrack_allowance_exceeded 등), 더 큰 인스턴스, 패킷 합치기.',
+      more: 'conntrack_allowance_exceeded는 연결 기억 표가 가득 차 새 연결을 버린 경우입니다. 표는 여유가 있는데 조용하던 연결만 잊혀 끊긴다면 “클라우드 방화벽의 연결 기억 만료” 항목을 보세요.',
       sim: 'nic' },
     { id: 'nic-saturate', t: 'NIC 대역폭 포화', en: 'NIC bandwidth saturation',
       s: '1Gbps·10Gbps 카드의 한계까지 쓰면 보내는 줄이 길어지고 결국 버려집니다.',

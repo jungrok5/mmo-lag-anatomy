@@ -229,7 +229,7 @@ K.register('syncmodels', function (root) {
     // 체감 기준선
     ctx.fillStyle = K.alpha(C.bad, 0.06);
     ctx.fillRect(box.x, sc.y(yMax), box.w, sc.y(100) - sc.y(yMax));
-    K.text(ctx, '100ms 안팎부터 “굼뜨다”고 느끼기 시작', box.x + 6, sc.y(100) - 9, { size: 10.5, color: C.badInk, weight: 600 });
+    K.text(ctx, '빨간 영역: 100ms 안팎부터 “굼뜨다”고 느낌', box.x + 6, box.y + 26, { size: 10.5, color: C.badInk, weight: 600 });
     const rr = [], pr = [], lk = [];
     for (let r = 0; r <= 400; r += 10) { rr.push([r, Math.min(rrReact(r), yMax)]); pr.push([r, FRAME]); lk.push([r, lockReact(r)]); }
     K.line(ctx, sc, lk, C.s3, 2);
