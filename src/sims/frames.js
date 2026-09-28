@@ -51,7 +51,7 @@ K.register('frames', function (root) {
 
   const g3 = K.group(F.controls, '그 밖의 원인');
   const tLoad = K.toggle(g3, { label: '새 지역 진입 시 동기 로딩', value: P.load, onChange: v => { P.load = v; nextLoad = now + 1200; }, hint: '약 6초마다 텍스처 읽기·셰이더 컴파일이 게임 스레드를 150~450ms 붙잡습니다.' });
-  const tVs = K.toggle(g3, { label: 'V-Sync (60Hz 화면에 맞춤)', value: P.vsync, onChange: v => { P.vsync = v; }, hint: '그림을 16.7ms 눈금에 맞춰 내보냅니다. 17ms 걸린 그림은 다음 눈금인 33.3ms까지 기다립니다.' });
+  const tVs = K.toggle(g3, { label: 'V-Sync (60Hz 화면에 맞춤)', value: P.vsync, onChange: v => { P.vsync = v; }, hint: '그림을 16.7ms 눈금에 맞춰 내보냅니다. 17ms 걸린 그림은 다음 눈금인 33.3ms까지 기다립니다(이중 버퍼 기준. 삼중 버퍼면 대부분 60에 가끔 33ms가 섞입니다).' });
 
   const g4 = K.group(F.controls, '게임 시간 진행');
   const cMode = K.choice(g4, {

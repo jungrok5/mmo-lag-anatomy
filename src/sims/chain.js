@@ -7,7 +7,7 @@ K.register('chain', function (root) {
     tries: [
       '<b>핑</b>을 0 → 300ms로 올려 보세요. 맨 위 줄(확인 후 다음 입력)만 10초 동안 쓰는 스킬 수가 눈에 띄게 줄어듭니다.',
       '<b>선입력 창</b>을 0으로 줄여 보세요. 가운데 줄도 맨 위 줄과 똑같아집니다. 선입력 창이 핑보다 짧아도 효과가 줄어듭니다.',
-      '아래 <b>순차 왕복 수</b>를 5로 두고 핑을 150ms로 맞춰 보세요. 상점에서 한 번 사는 데 1초 가까이 걸립니다. 한 번에 묶으면 0.2초로 줄어듭니다.',
+      '아래 <b>순차 왕복 수</b>를 5로 두고 핑을 150ms로 맞춰 보세요. 상점에서 한 번 사는 데 1초 가까이 걸립니다. 한 번에 묶으면 0.3초 안쪽으로 줄어듭니다.',
     ],
   });
   const P = { rtt: 150, gcd: 1000, queue: 400, human: 60, tick: 20, trips: 5, proc: 20 };
@@ -129,7 +129,7 @@ K.register('chain', function (root) {
     const u = uiTimes();
     stUi.set(K.ms(u.seq), u.seq > 600 ? 'bad' : u.seq > 250 ? 'warn' : 'good', `묶으면 ${K.ms(u.batch)}`);
     let msg = `${K.flag(loss > 0.12 ? 'bad' : loss > 0.05 ? 'warn' : 'good')}핑 ${P.rtt}ms, 쿨다운 ${K.ms(P.gcd)}에서 “확인 후 다음 입력” 방식은 스킬 사이마다 ${K.ms(iv.confirmFirst - P.gcd)}씩 비어 10초에 ${a}번만 씁니다. 같은 사람이 선연출 게임에서는 ${c}번을 씁니다(${Math.round(loss * 100)}% 차이). 플레이어는 이것을 <b>입력 지연</b>과 “손이 굼뜨다”로 느낍니다.`;
-    if (P.queue > 0 && P.queue < P.rtt / 2 + tickWait()) msg += ` 선입력 창(${P.queue}ms)이 핑의 절반+틱 대기보다 짧아 일부만 가려집니다.`;
+    if (P.queue > 0 && P.queue < P.rtt + tickWait()) msg += ` 선입력 창(${P.queue}ms)이 핑+틱 대기(${K.ms(P.rtt + tickWait())})보다 짧아 왕복이 일부만 가려집니다.`;
     msg += ` 상점 구매는 왕복 ${P.trips}번이 이어져 ${K.ms(u.seq)} 걸립니다. 요청을 한 번에 묶으면 ${K.ms(u.batch)}, 목록을 미리 받아 두면 누르는 즉시 반응합니다.`;
     F.say(msg);
   }

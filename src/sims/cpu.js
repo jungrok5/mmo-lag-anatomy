@@ -332,7 +332,7 @@ K.register('cpu', function (root) {
     const s = ST;
     stGot.set(K.n(s.got * 100), s.got >= 0.95 ? 'good' : s.got >= 0.8 ? 'warn' : 'bad');
     stMiss.set(K.n(s.miss * 100, 1), s.miss < 0.02 ? 'good' : s.miss < 0.1 ? 'warn' : 'bad');
-    stNet.set(K.ms(s.netWait), s.netWait < 0.5 ? 'good' : s.netWait < 2 ? 'warn' : 'bad');
+    stNet.set(K.ms(s.netWait), s.netWait < 5 ? 'good' : s.netWait < 20 ? 'warn' : 'bad');
     stUtil.set(K.n(s.util * 100), s.util < 0.7 ? 'good' : s.util < 0.9 ? 'warn' : 'bad');
     stSpd.set(K.n(sp * 100), sp >= 0.95 ? 'good' : sp >= 0.7 ? 'warn' : 'bad');
     F.say(explain(sp));

@@ -847,7 +847,7 @@ input[type="range"]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 4px 
         </div>
         <div class="prose">
           <p>빛은 광케이블 안에서 1초에 약 20만 km를 갑니다. 1,000km 떨어진 서버라면 왕복에 최소 10ms가 걸리고, 이 숫자는 어떤 기술로도 줄일 수 없습니다. 실제 패킷은 직선으로 가지 않고 통신사끼리 연결된 지점(<b>피어링</b>)을 따라 돌아가므로 보통 이론값의 1.5~2배가 걸립니다.</p>
-          <p>문제는 이 경로가 <b>시간과 상황에 따라 바뀐다</b>는 점입니다. 저녁 9~11시에는 모두가 영상을 보느라 통신사 사이 연결 구간이 붐비고, 경로 정보(<b>BGP</b>)가 바뀌면 몇 초 동안 패킷이 길을 잃고, 해저 케이블이 끊기면 몇 주 동안 먼 길로 돌아갑니다. “특정 통신사 사용자만”, “저녁에만”, “해외에서만” 렉이 있다면 이 층을 먼저 의심합니다.</p>
+          <p>문제는 이 경로가 <b>시간과 상황에 따라 바뀐다</b>는 점입니다. 저녁 9~11시에는 모두가 영상을 보느라 통신사 사이 연결 구간이 붐비고, 경로 정보(<b>BGP</b>)가 바뀌면 몇 초~몇십 초 동안 패킷이 길을 잃고, 해저 케이블이 끊기면 몇 주 동안 먼 길로 돌아갑니다. “특정 통신사 사용자만”, “저녁에만”, “해외에서만” 렉이 있다면 이 층을 먼저 의심합니다.</p>
         </div>
         <div class="analogy"><span class="tag">비유</span><p>통신사망은 <b>고속도로망</b>입니다. 서울에서 부산 가는 길이 막히지 않아도 거리만큼은 시간이 걸리고, 퇴근 시간 톨게이트(피어링 구간)는 막히며, 사고가 나면 내비게이션이 멀리 돌아가는 길을 안내합니다.</p></div>
         <div data-sim="distance" id="sim-distance"></div>
@@ -1687,7 +1687,7 @@ window.DATA = {
     { id: 'stutter', name: '뚝뚝 끊김', alias: '버벅임, 끊김, 프레임 드랍 느낌',
       what: '움직임이 매끄럽지 않고 짧게 멈췄다 움직이기를 반복합니다.',
       looks: '다른 캐릭터나 내 화면 전체가 “멈칫, 멈칫”. 궤적 점이 뭉쳤다 벌어졌다 합니다.',
-      tell: '핑 수치가 멀쩡하면 내 PC 프레임(클라이언트·OS) 문제, 핑이 흔들리면 와이파이·회선의 지터입니다.',
+      tell: '핑 수치가 멀쩡하면 내 PC 프레임(클라이언트·OS) 문제, 핑이 흔들리면 와이파이·회선의 지터일 가능성이 큽니다. 다만 게임 안 핑 표시는 대개 게임 루프에서 재기 때문에, 프레임이 튀면 핑 숫자도 함께 튈 수 있습니다.',
       preset: 'stutter' },
     { id: 'teleport', name: '순간이동', alias: '워프, 텔레포트, 뚝 끊기고 튐',
       what: '캐릭터가 이동 과정 없이 멀리 떨어진 위치로 한 번에 옮겨집니다.',
@@ -2877,6 +2877,27 @@ window.DATA = {
       c: ['방장 PC가 서버 역할(P2P, 리슨 서버)', '방장 회선이 느리거나 PC가 버벅이면 모두에게 전파, 방장은 핑 0', '방장만 유리, 방장이 나가면 모두 멈춤·끊김'],
       sym: ['stutter', 'freeze', 'disconnect'], fx: ['lat', 'stall'], who: ['zone'], when: ['random'],
       fix: '전용 서버, 호스트 이전(마이그레이션) 지원.' },
+    { id: 'sy-optimistic-reject', t: '선연출 뒤 서버 거절', en: 'Client-side feedback rejected by server',
+      s: '내 화면에서 먼저 보여 준 타격·스킬을 서버가 나중에 인정하지 않으면, 분명히 본 결과가 없던 일이 됩니다.',
+      c: ['타격 이펙트·스킬 모션을 서버 확인 전에 먼저 재생(선연출)', '서버가 사거리·대상 위치·쿨다운·자원을 다시 따져 보고 거절', '피가 튀었는데 데미지 없음, 스킬 모션만 나가고 효과 없음, 쿨다운만 돎'],
+      sym: ['dropped', 'rubber'], fx: ['lat'], who: ['me'], when: ['action'],
+      num: '거절 소식은 누른 뒤 핑 + 틱 대기만큼 늦게 옵니다. 핑 150ms면 약 0.2초 동안 “맞힌 줄” 압니다.',
+      fix: '데미지 숫자·사망·보상처럼 확정이 필요한 부분만 서버 결과로 표시, 흔한 거절 사유는 클라이언트에서 먼저 검사, 거절되면 쿨다운·자원을 되돌리고 이유를 보여 주기.',
+      more: '선연출은 핑을 가리는 가장 좋은 방법입니다. 다만 클라이언트와 서버가 판단에 쓰는 정보(상대 위치, 남은 자원)가 다를수록 거절이 잦아집니다. 스킬별 거절 비율을 지표로 모아 두면 판정이 어긋나는 곳을 찾기 쉽습니다.',
+      sim: 'syncmodels' },
+    { id: 'sy-path-mismatch', t: '목적지만 맞추다 경로가 어긋남', en: 'Command sync with divergent pathing',
+      s: '“여기로 가라”만 주고받고 길은 양쪽이 각자 계산하면, 계산이 조금만 달라도 캐릭터나 몬스터가 다른 길로 가다가 제자리로 끌려옵니다.',
+      c: ['클릭 이동·몬스터 추적에서 목적지만 보내고 경로는 클라이언트가 따로 계산', '지형 데이터 차이, 다른 캐릭터와의 충돌, 계산 순서 차이로 서버와 다른 길을 감', '몬스터가 벽을 뚫고 가다 휙 옮겨짐, 클릭한 캐릭터가 미끄러지듯 방향을 틂'],
+      sym: ['teleport', 'rubber'], fx: ['lat'], who: ['me', 'zone'], when: ['moving'],
+      fix: '서버가 경로의 중간 지점(웨이포인트)까지 함께 보내기, 주기적으로 위치를 맞추되 어긋남은 부드럽게 수렴, 양쪽이 같은 지형 데이터 사용.',
+      more: '클릭 이동·탭 타겟 게임이 핑에 둔감한 이유가 이 방식입니다. 대신 양쪽 결과가 같다는 보장이 없어서, 가끔 위치를 맞춰 주는 장치가 꼭 필요합니다.' },
+    { id: 'sy-low-send-rate', t: '느린 소식 주기', en: 'Low snapshot / update rate',
+      s: '서버가 위치 소식을 1초에 몇 번만 보내면 보간 버퍼를 그만큼 길게 잡아야 해서, 다른 캐릭터를 더 먼 과거로 보게 됩니다.',
+      c: ['전송량을 아끼려고 위치 소식을 1초에 5~10번만 보냄', '매끄럽게 그리려면 버퍼를 소식 간격의 2배(200~400ms)로 잡아야 하고, 짧게 잡으면 소식 하나만 놓쳐도 멈춤', '상대의 방향 전환이 늦게 보이고 판정과 어긋남. 버퍼가 짧으면 뚝뚝 끊기고 손실 때 순간이동'],
+      sym: ['stutter', 'teleport', 'dropped'], fx: ['lat', 'loss'], who: ['server'], when: ['always'],
+      num: '1초에 10번이면 소식 간격 100ms, 버퍼 200ms. 핑 150ms의 한쪽 지연 75ms를 더하면 상대를 약 0.3초 과거로 봅니다.',
+      fix: '가깝거나 전투 중인 대상은 자주, 먼 대상은 드물게 보내기. 바뀐 부분만 보내(델타 압축) 한 번의 크기를 줄이고 주기를 올리기. 버퍼 길이를 소식 간격에 맞춰 자동 조절.',
+      sim: 'lab' },
   ]);
 })();
 
@@ -3034,18 +3055,21 @@ DATA.glossary = [
   ['패킷 손실', 'Packet loss', '보낸 패킷이 도착하지 못하고 사라지는 것. 1%만 돼도 체감됩니다.', 'basics'],
   ['대역폭', 'Bandwidth', '회선이 1초에 보낼 수 있는 최대 양(Mbps). 도로의 차선 수에 해당하며, 속도(지연)와는 다른 개념입니다.', 'l-home'],
   ['틱', 'Tick', '서버가 게임 세계를 한 번 계산하는 단위. 20틱 서버는 1초에 20번, 50ms마다 계산합니다.', 'l-server-proc'],
-  ['틱레이트', 'Tick rate', '1초에 틱을 몇 번 도는지. 높을수록 반응이 빠르지만 서버 비용과 전송량이 늘어납니다.', 'l-server-proc'],
+  ['틱레이트', 'Tick rate', '1초에 틱을 몇 번 도는지. 높을수록 반응이 빠르지만 서버 비용과 전송량이 늘어납니다. 소식을 보내는 횟수는 전송량을 아끼려고 틱레이트보다 낮게 잡기도 합니다.', 'l-server-proc'],
   ['틱 예산', 'Tick budget', '한 틱을 끝내야 하는 시간 한도. 넘기면 서버 박자가 느려집니다.', 'l-server-proc'],
   ['FPS', 'Frames per second', '1초에 화면을 몇 번 그리는지. 60FPS면 한 프레임에 16.7ms.', 'l-client-game'],
   ['프레임 타임', 'Frame time', '한 프레임을 그리는 데 걸린 시간. 평균 FPS보다 가끔 튀는 프레임이 체감에 더 중요합니다.', 'l-client-game'],
-  ['스냅샷', 'Snapshot', '서버가 틱마다 보내는 “지금 세계 상태” 요약. 위치, 체력, 상태 등이 담깁니다.', 'lab'],
+  ['스냅샷', 'Snapshot', '서버가 틱마다 보내는 “지금 세계 상태” 요약. 위치, 체력, 상태 등이 담깁니다. 대개 받는 쪽이 이미 가진 상태와 달라진 부분만 추려 보냅니다(델타 압축).', 'lab'],
   ['보간', 'Interpolation', '받은 두 스냅샷 사이를 이어 그려 매끄럽게 보이게 하는 기술. 대신 조금 과거를 보여 줍니다.', 'lab'],
-  ['보간 버퍼', 'Interpolation buffer', '보간을 위해 일부러 늦게 그리는 시간. 지터를 흡수하는 쿠션입니다.', 'lab'],
-  ['외삽', 'Extrapolation, Dead reckoning', '새 소식이 없을 때 마지막 속도로 앞으로 어디 있을지 추측해 그리는 기술. 틀리면 순간이동처럼 보입니다.', 'lab'],
+  ['보간 버퍼', 'Interpolation buffer', '보간을 위해 일부러 늦게 그리는 시간. 지터와 손실 한두 개를 흡수하는 쿠션입니다. 보통 소식 간격의 2배(20틱이면 100ms)이고, 회선이 흔들리면 스스로 늘리는 게임도 있습니다.', 'lab'],
+  ['외삽', 'Extrapolation, Dead reckoning', '새 소식이 없을 때 마지막 속도로 앞으로 어디 있을지 추측해 그리는 기술. 틀리면 순간이동처럼 보여서 보통 0.2~0.25초까지만 추측하고 멈춥니다.', 'lab'],
   ['클라이언트 예측', 'Client-side prediction', '서버 확인을 기다리지 않고 내 캐릭터를 먼저 움직여 보여 주는 기술.', 'lab'],
-  ['서버 보정', 'Reconciliation', '서버 결과가 오면 예측과 비교해 내 캐릭터 위치를 바로잡는 것. 차이가 크면 고무줄처럼 보입니다.', 'lab'],
-  ['지연 보상', 'Lag compensation', '서버가 공격 판정을 할 때 공격자가 보던 과거 시점으로 되감아 맞았는지 확인하는 기술.', 'l-client-game'],
-  ['권위 서버', 'Authoritative server', '최종 판정은 서버만 한다는 설계. 치팅을 막지만 모든 결과가 서버 왕복을 거칩니다.', 'l-server-proc'],
+  ['서버 보정', 'Reconciliation', '서버 결과가 오면 예측과 비교해 내 캐릭터 위치를 바로잡는 것. 서버가 확인한 위치에서 아직 확인 안 된 내 입력을 다시 적용해 계산합니다. 차이가 크면 고무줄처럼 보입니다.', 'lab'],
+  ['지연 보상', 'Lag compensation', '서버가 공격 판정을 할 때 공격자가 보던 과거 시점으로 되감아 맞았는지 확인하는 기술. 맞는 쪽이 억울하지 않게 되감는 폭에 상한(보통 0.2~0.25초)을 둡니다.', 'sync'],
+  ['권위 서버', 'Authoritative server', '최종 판정은 서버만 한다는 설계. 치팅을 막지만 모든 결과가 서버 왕복을 거칩니다. 그래서 예측·선연출로 기다림을 가립니다.', 'sync'],
+  ['락스텝', 'Deterministic lockstep', '모두가 입력만 주고받고 같은 턴에 똑같이 계산하는 방식. 입력에 일정한 지연을 붙이고, 누구 하나의 입력이 늦으면 모두가 기다립니다.', 'sync'],
+  ['롤백 넷코드', 'Rollback netcode (GGPO)', '상대 입력을 예측해 먼저 진행하고, 실제 입력이 다르면 과거 프레임으로 되감아 다시 계산하는 방식. 격투 게임에서 많이 씁니다. DB의 롤백과는 다른 말입니다.', 'sync'],
+  ['선입력', 'Input buffer, spell queue', '쿨다운이나 동작이 끝나기 조금 전에 누른 다음 입력을 받아 두었다가 끝나는 순간 실행하는 것. 연계 사이에 왕복 시간이 끼지 않게 합니다.', 'sync'],
   ['TCP', 'Transmission Control Protocol', '순서대로, 빠짐없이 전달하는 프로토콜. 잃어버린 패킷을 다시 받을 때까지 뒤 패킷을 붙잡습니다.', 'l-socket'],
   ['UDP', 'User Datagram Protocol', '아무 보장 없이 보내는 대로 전달하는 프로토콜. 기다림이 없는 대신 손실·순서는 게임이 직접 처리합니다.', 'l-socket'],
   ['신뢰성 UDP', 'Reliable UDP (KCP, ENet…)', 'UDP 위에 필요한 만큼만 재전송·순서 보장을 직접 얹은 방식.', 'l-socket'],
@@ -3113,6 +3137,9 @@ DATA.glossary = [
   ['이용률', 'Utilization', '창구가 바쁜 비율. 80~90%를 넘으면 대기가 급격히 늘어납니다.', 'basics'],
   ['p99', '99th percentile', '100번 중 99번은 이보다 빠르고 1번꼴로 이보다 느린 값. 평균보다 체감 렉을 더 잘 보여 줍니다.', 'l-db'],
   ['V-Sync', 'Vertical sync', '화면 갱신 주기에 맞춰 프레임을 내보내는 기능. 찢어짐은 없애지만 입력 지연이 생깁니다.', 'l-client-game'],
+  ['가변 주사율', 'VRR, G-Sync, FreeSync', '모니터가 그림이 준비되는 때에 맞춰 화면을 바꾸는 기능. V-Sync의 60↔30 울컥거림과 입력 지연을 줄여 줍니다.', 'l-client-game'],
+  ['안티치트', 'Anti-cheat', '게임 해킹을 막는 보안 모듈. 주기적인 검사나 서버와의 확인 신호가 실패하면 끊김·튕김을 만들기도 합니다.', 'l-client-game'],
+  ['오버레이', 'Overlay', '메신저·녹화·FPS 표시 프로그램이 게임 화면 위에 그림을 덧그리는 기능. 게임의 그리기 과정에 끼어들어 끊김을 만들 수 있습니다.', 'l-client-os'],
   ['셰이더 컴파일', 'Shader compilation', '그래픽 효과 프로그램을 GPU용으로 변환하는 작업. 처음 볼 때 끊김을 만듭니다.', 'l-client-game'],
   ['넷그래프', 'Net graph', '게임 화면에 핑·손실·FPS·틱을 실시간 그래프로 띄우는 개발·디버그 표시. 렉 제보 영상에 같이 찍히면 원인 찾기가 훨씬 쉬워집니다.', 'report'],
   ['핸드오버', 'Handover', '이동 중인 폰이 연결된 기지국을 바꾸는 것.', 'l-home'],
@@ -4034,7 +4061,7 @@ K.register('chain', function (root) {
     tries: [
       '<b>핑</b>을 0 → 300ms로 올려 보세요. 맨 위 줄(확인 후 다음 입력)만 10초 동안 쓰는 스킬 수가 눈에 띄게 줄어듭니다.',
       '<b>선입력 창</b>을 0으로 줄여 보세요. 가운데 줄도 맨 위 줄과 똑같아집니다. 선입력 창이 핑보다 짧아도 효과가 줄어듭니다.',
-      '아래 <b>순차 왕복 수</b>를 5로 두고 핑을 150ms로 맞춰 보세요. 상점에서 한 번 사는 데 1초 가까이 걸립니다. 한 번에 묶으면 0.2초로 줄어듭니다.',
+      '아래 <b>순차 왕복 수</b>를 5로 두고 핑을 150ms로 맞춰 보세요. 상점에서 한 번 사는 데 1초 가까이 걸립니다. 한 번에 묶으면 0.3초 안쪽으로 줄어듭니다.',
     ],
   });
   const P = { rtt: 150, gcd: 1000, queue: 400, human: 60, tick: 20, trips: 5, proc: 20 };
@@ -4156,7 +4183,7 @@ K.register('chain', function (root) {
     const u = uiTimes();
     stUi.set(K.ms(u.seq), u.seq > 600 ? 'bad' : u.seq > 250 ? 'warn' : 'good', `묶으면 ${K.ms(u.batch)}`);
     let msg = `${K.flag(loss > 0.12 ? 'bad' : loss > 0.05 ? 'warn' : 'good')}핑 ${P.rtt}ms, 쿨다운 ${K.ms(P.gcd)}에서 “확인 후 다음 입력” 방식은 스킬 사이마다 ${K.ms(iv.confirmFirst - P.gcd)}씩 비어 10초에 ${a}번만 씁니다. 같은 사람이 선연출 게임에서는 ${c}번을 씁니다(${Math.round(loss * 100)}% 차이). 플레이어는 이것을 <b>입력 지연</b>과 “손이 굼뜨다”로 느낍니다.`;
-    if (P.queue > 0 && P.queue < P.rtt / 2 + tickWait()) msg += ` 선입력 창(${P.queue}ms)이 핑의 절반+틱 대기보다 짧아 일부만 가려집니다.`;
+    if (P.queue > 0 && P.queue < P.rtt + tickWait()) msg += ` 선입력 창(${P.queue}ms)이 핑+틱 대기(${K.ms(P.rtt + tickWait())})보다 짧아 왕복이 일부만 가려집니다.`;
     msg += ` 상점 구매는 왕복 ${P.trips}번이 이어져 ${K.ms(u.seq)} 걸립니다. 요청을 한 번에 묶으면 ${K.ms(u.batch)}, 목록을 미리 받아 두면 누르는 즉시 반응합니다.`;
     F.say(msg);
   }
@@ -4508,7 +4535,7 @@ K.register('cpu', function (root) {
     const s = ST;
     stGot.set(K.n(s.got * 100), s.got >= 0.95 ? 'good' : s.got >= 0.8 ? 'warn' : 'bad');
     stMiss.set(K.n(s.miss * 100, 1), s.miss < 0.02 ? 'good' : s.miss < 0.1 ? 'warn' : 'bad');
-    stNet.set(K.ms(s.netWait), s.netWait < 0.5 ? 'good' : s.netWait < 2 ? 'warn' : 'bad');
+    stNet.set(K.ms(s.netWait), s.netWait < 5 ? 'good' : s.netWait < 20 ? 'warn' : 'bad');
     stUtil.set(K.n(s.util * 100), s.util < 0.7 ? 'good' : s.util < 0.9 ? 'warn' : 'bad');
     stSpd.set(K.n(sp * 100), sp >= 0.95 ? 'good' : sp >= 0.7 ? 'warn' : 'bad');
     F.say(explain(sp));
@@ -5662,7 +5689,7 @@ K.register('frames', function (root) {
 
   const g3 = K.group(F.controls, '그 밖의 원인');
   const tLoad = K.toggle(g3, { label: '새 지역 진입 시 동기 로딩', value: P.load, onChange: v => { P.load = v; nextLoad = now + 1200; }, hint: '약 6초마다 텍스처 읽기·셰이더 컴파일이 게임 스레드를 150~450ms 붙잡습니다.' });
-  const tVs = K.toggle(g3, { label: 'V-Sync (60Hz 화면에 맞춤)', value: P.vsync, onChange: v => { P.vsync = v; }, hint: '그림을 16.7ms 눈금에 맞춰 내보냅니다. 17ms 걸린 그림은 다음 눈금인 33.3ms까지 기다립니다.' });
+  const tVs = K.toggle(g3, { label: 'V-Sync (60Hz 화면에 맞춤)', value: P.vsync, onChange: v => { P.vsync = v; }, hint: '그림을 16.7ms 눈금에 맞춰 내보냅니다. 17ms 걸린 그림은 다음 눈금인 33.3ms까지 기다립니다(이중 버퍼 기준. 삼중 버퍼면 대부분 60에 가끔 33ms가 섞입니다).' });
 
   const g4 = K.group(F.controls, '게임 시간 진행');
   const cMode = K.choice(g4, {
@@ -12140,7 +12167,7 @@ K.register('windows', function (root) {
     title: '예고가 핑보다 짧으면 실력과 상관없이 맞는다',
     lead: '보스가 공격을 예고하고, 그 안에 피해야 한다고 합시다. 예고 시간의 일부는 소식이 내게 오는 데, 일부는 사람이 반응하는 데, 일부는 내 입력이 서버에 가는 데 쓰입니다. 남는 시간이 없으면 아무리 잘해도 맞습니다. 탭 타겟 MMO가 핑에 둔감하고 패링 게임이 민감한 이유가 이 계산에 있습니다.',
     tries: [
-      '장르 버튼을 차례로 눌러 보세요. 예고가 긴 레이드는 핑 300ms에서도 여유가 남고, 패링 창은 핑 60ms만 돼도 모자랍니다.',
+      '장르 버튼을 차례로 눌러 보세요. 예고가 긴 레이드는 핑 300ms에서도 여유가 남고, 빠른 공격 패링은 핑 100ms만 돼도 모자랍니다.',
       '<b>액션 MMO 회피</b>에서 <b>예고 전달</b>을 “서버 시각으로 미리 예약”으로 바꿔 보세요. 소식이 늦게 오는 구간이 사라집니다. 보스 패턴을 미리 알려 주는 설계입니다.',
       '<b>판정 기준</b>을 “지연 보상”으로 바꾸면 서버가 내가 본 시점으로 되감아 판정합니다. 억울한 피격이 줄어드는 대신, 다른 사람 화면에서는 “맞은 것 같은데 피했다”로 보일 수 있습니다.',
       '아래 곡선에서 판정 방식마다 몇 ms 핑부터 피할 수 없게 되는지 확인하세요.',
@@ -12150,16 +12177,16 @@ K.register('windows', function (root) {
   const GENRES = [
     { label: '탭 타겟 레이드', W: 2000, sched: 'arrive', judge: 'now', say: '레이드 보스는 1.5~3초 예고가 흔합니다. 핑이 꽤 높아도 반응할 시간이 충분합니다.' },
     { label: '액션 MMO 회피', W: 700, sched: 'arrive', judge: 'now', say: '0.7초 예고라도 소식이 늦게 오고 입력이 늦게 가면 여유가 금방 사라집니다.' },
-    { label: '소울라이크 패링', W: 250, sched: 'arrive', judge: 'lagcomp', say: '패링 창 0.25초는 사람 반응만으로도 빠듯합니다. 핑이 조금만 있어도 창이 모자랍니다.' },
-    { label: '격투 게임 가드', W: 180, sched: 'arrive', judge: 'client', say: '격투 게임은 롤백으로 내 입력을 즉시 반영하고, 상대 동작이 늦게 보이는 만큼을 되감아 맞춥니다.' },
-    { label: '리듬 게임', W: 120, sched: 'sched', judge: 'client', say: '리듬 게임은 박자를 미리 알고(예약), 판정도 내 기기에서 합니다. 그래서 핑이 1초여도 판정에는 영향이 없습니다.' },
+    { label: '빠른 공격 패링', W: 450, sched: 'arrive', judge: 'now', say: '0.45초 만에 들어오는 빠른 공격을 보고 패링하는 경우입니다. 사람 반응 0.25초를 빼면 0.2초만 남아, 핑이 조금만 있어도 모자랍니다. 박자를 외워 미리 누르는 패링은 반응 시간이 들지 않는 대신, 판정이 핑만큼 밀리고 흔들림만큼 창이 좁아집니다.' },
+    { label: '격투 게임 가드', W: 400, sched: 'arrive', judge: 'roll', say: '격투 게임은 롤백으로 내 입력을 누른 프레임 그대로 반영합니다. 대신 상대 공격은 핑의 절반만큼 늦게 보이고 앞부분이 잘려 나타나서, 보고 막을 시간이 그만큼 줄어듭니다. 0.25초보다 빠른 공격은 핑이 0이어도 보고 막을 수 없어 미리 읽고 막아야 합니다.' },
+    { label: '리듬 게임', W: 1500, sched: 'sched', judge: 'client', say: '리듬 게임은 박자를 미리 알고(예약), 판정도 내 기기에서 합니다. 노트가 1초 넘게 미리 보여 반응할 시간이 넉넉하고, 핑이 1초여도 판정에는 영향이 없습니다. 판정 창(±0.05초 안팎)은 박자를 맞추는 정확도라서 반응 시간과 상관이 없습니다.' },
   ];
   const P = { W: 700, rtt: 150, interp: 100, react: 250, tick: 20, sched: 'arrive', judge: 'now', speed: 0.5 };
   const CAP = 250; // 지연 보상 되감기 상한
 
   const cvScene = K.canvas(F.stage, { height: w => K.clamp(w * 0.34, 150, 210), caption: '같은 공격, 두 개의 화면', right: '<span class="legend"><span><i class="dot" style="background:var(--s1)"></i>나</span><span><i class="dot" style="background:var(--s2)"></i>예고 범위</span></span>' });
   const cvBar = K.canvas(F.stage, { height: w => (w < 520 ? 176 : 132), caption: '예고 시간은 어디에 쓰이나', right: '' });
-  const cvCurve = K.canvas(F.stage, { height: w => K.clamp(w * 0.32, 180, 230), caption: '핑에 따른 여유 시간', right: '<span class="legend"><span><i style="background:var(--s1)"></i>서버 현재 기준</span><span><i style="background:var(--s2)"></i>지연 보상</span><span><i style="background:var(--s3)"></i>클라이언트 판정</span></span>' });
+  const cvCurve = K.canvas(F.stage, { height: w => K.clamp(w * 0.32, 180, 230), caption: '핑에 따른 여유 시간', right: '<span class="legend"><span><i style="background:var(--s1)"></i>서버 현재 기준</span><span><i style="background:var(--s2)"></i>지연 보상</span><span><i style="background:var(--s3)"></i>클라이언트 판정</span><span><i style="background:var(--s4)"></i>롤백</span></span>' });
 
   const preset = K.presets(F, GENRES.map(g => ({ label: g.label, apply() { sW.set(g.W, false); cSched.set(g.sched, false); cJudge.set(g.judge, false); Object.assign(P, { W: g.W, sched: g.sched, judge: g.judge }); genreSay = g.say; restart(); } })), '장르');
   let genreSay = '';
@@ -12173,8 +12200,8 @@ K.register('windows', function (root) {
   K.slider(g3, { label: '사람 반응 시간', min: 150, max: 400, step: 10, value: P.react, unit: 'ms', onInput: v => { P.react = v; } });
   const g4 = K.group(F.controls, '설계');
   const cSched = K.choice(g4, { label: '예고 전달', value: P.sched, options: [['arrive', '도착하면 재생'], ['sched', '서버 시각으로 미리 예약']], onChange: v => { P.sched = v; preset.clear(); } });
-  const cJudge = K.choice(g4, { label: '판정 기준', value: P.judge, options: [['now', '서버 현재 기준'], ['lagcomp', '지연 보상'], ['client', '클라이언트 판정']], onChange: v => { P.judge = v; preset.clear(); },
-    hint: '지연 보상은 최대 250ms까지 되감습니다. 클라이언트 판정은 내 화면에서 피했으면 성공입니다.' });
+  const cJudge = K.choice(g4, { label: '판정 기준', value: P.judge, options: [['now', '서버 현재 기준'], ['lagcomp', '지연 보상'], ['client', '클라이언트 판정'], ['roll', '롤백']], onChange: v => { P.judge = v; preset.clear(); },
+    hint: '지연 보상은 최대 250ms까지 되감습니다. 클라이언트 판정은 내 화면에서 피했으면 성공입니다. 롤백은 내 입력을 누른 프레임에 반영하지만, 상대 동작을 늦게 본 시간은 돌려받지 못합니다.' });
   K.choice(g4, { label: '관찰 속도', value: P.speed, options: [[1, '1배'], [0.5, '0.5배'], [0.25, '0.25배']], onChange: v => { P.speed = +v; } });
 
   const stLost = K.stat(F.stats, { label: '네트워크가 먹는 시간' });
