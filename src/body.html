@@ -274,7 +274,7 @@
           <ol>
             <li><b>순서 대기(머리막힘)</b>: TCP는 잃어버린 하나를 다시 받을 때까지 뒤에 도착한 소식을 게임에 넘기지 않습니다. 하나를 잃으면 그 뒤 전부가 함께 멈췄다가 한꺼번에 풀립니다(<b>멈춤</b> 뒤 <b>몰아치기</b>).</li>
             <li><b>재전송 대기 시간</b>: 보내는 쪽은 “왕복 시간 + 최소 200ms”(리눅스 기준, RTO)를 기다린 뒤에야 다시 보냅니다. 다시 보낸 것도 잃으면 기다림이 두 배씩 늘어납니다(0.3초 → 0.6초 → 1.2초 …).</li>
-            <li><b>얇은 흐름</b>: 빠른 재전송은 “뒤따르는 패킷 3개가 도착했다”는 신호(중복 ACK 3개)로 작동합니다. 게임 소식은 50~200ms에 하나씩이라 신호가 모이기 전에 RTO가 먼저 오는 경우가 많습니다. 대용량 다운로드는 잘 버티는데 게임만 유독 멈추는 이유입니다.</li>
+            <li><b>얇은 흐름</b>: 빠른 재전송은 “뒤따르는 패킷 3개가 도착했다”는 신호(중복 ACK 3개)로 작동합니다. 게임 소식은 50~200ms에 하나씩이라 신호가 모이기 전에 RTO가 먼저 오는 경우가 많습니다. 대용량 다운로드는 잘 버티는데 게임만 유독 멈추는 이유입니다. 최신 리눅스의 RACK은 뒤따르는 패킷 하나만 도착해도 판단해 이 차이를 크게 줄이지만, 소식 간격이 200ms 안팎으로 길면 RACK도 RTO보다 빠르지 않습니다.</li>
             <li><b>전송량 축소</b>: TCP는 손실을 혼잡 신호로 보고 한 번에 보낼 양(혼잡 창)을 줄입니다. RTO까지 가면 거의 처음부터 다시 늘려야 해서, 사람 많은 곳의 큰 업데이트가 줄줄이 밀립니다.</li>
           </ol>
         </div>
@@ -285,11 +285,11 @@
             <thead><tr><th>종류</th><th>언제 일어나나</th><th>복구까지 걸리는 시간</th><th>게임에서 보이는 모습</th></tr></thead>
             <tbody>
               <tr><td><b>빠른 재전송</b><br><span class="note">Fast retransmit</span></td><td>뒤따르는 패킷이 먼저 도착해 받는 쪽이 “구멍 있음”(중복 ACK·SACK)을 알릴 때</td><td>왕복 시간 + 뒤따르는 패킷 3개가 도착하는 시간</td><td>짧은 멈칫. 소식이 촘촘할수록 빠름</td></tr>
-              <tr><td><b>RACK·TLP</b><br><span class="note">시간 기준 판단, 꼬리 탐침</span></td><td>나중에 보낸 패킷이 도착했는데 앞의 것이 일정 시간 안 올 때, 또는 한동안 ACK가 없을 때 끝 패킷을 한 번 더 보냄</td><td>왕복 시간의 1~2배</td><td>얇은 흐름에서도 비교적 짧은 멈칫. 최신 리눅스 기본</td></tr>
+              <tr><td><b>RACK·TLP</b><br><span class="note">시간 기준 판단, 꼬리 탐침</span></td><td>나중에 보낸 패킷이 도착했는데 앞의 것이 일정 시간 안 올 때, 또는 한동안 ACK가 없을 때 끝 패킷을 한 번 더 보냄</td><td>뒤 패킷의 확인이 오는 즉시(RACK). 뒤 패킷이 없으면 왕복 시간의 약 2배(TLP), 날아가는 패킷이 하나뿐이면 지연 ACK를 감안해 200ms를 더 기다림</td><td>얇은 흐름에서도 비교적 짧은 멈칫. 최신 리눅스 기본</td></tr>
               <tr><td><b>RTO 재전송</b><br><span class="note">Retransmission timeout</span></td><td>아무 신호 없이 기다림이 끝났을 때</td><td>왕복 시간 + 최소 200ms, 실패할 때마다 두 배</td><td>수백 ms~수 초 <b>멈춤</b> 뒤 <b>몰아치기</b>, 길어지면 <b>접속 끊김</b></td></tr>
-              <tr><td><b>SYN 재전송</b></td><td>접속 요청 자체가 사라졌을 때 (대기 줄 넘침, 방화벽 차단)</td><td>1초, 2초, 4초, 8초 …</td><td>접속 버튼 뒤 정확히 1초, 3초씩 늦는 <b>무한 로딩</b></td></tr>
-              <tr><td><b>가짜 재전송</b><br><span class="note">Spurious retransmission</span></td><td>잃지 않았는데 늦게 오거나 순서가 바뀌어 잃은 줄 알고 다시 보냄</td><td>복구할 게 없음. 대신 전송량만 줄어듦</td><td>회선 낭비, 대용량 전송 속도 저하. 지표상 재전송률만 높음</td></tr>
-              <tr><td><b>제로 윈도 탐침</b><br><span class="note">재전송과 헷갈리는 것</span></td><td>받는 쪽 버퍼가 꽉 차 “잠깐 보내지 마” 상태일 때 확인용으로 보내는 패킷</td><td>받는 쪽이 읽기 시작할 때까지</td><td>멈춤. 회선이 아니라 받는 쪽 프로그램이 느린 것</td></tr>
+              <tr><td><b>SYN 재전송</b></td><td>접속 요청 자체가 사라졌을 때 (대기 줄 넘침, 방화벽 차단)</td><td>1초, 2초, 4초, 8초 … (리눅스 6.5 이상은 처음 다섯 번을 1초 간격으로)</td><td>접속 버튼 뒤 정확히 1초, 3초씩 늦는 <b>무한 로딩</b></td></tr>
+              <tr><td><b>가짜 재전송</b><br><span class="note">Spurious retransmission</span></td><td>잃지 않았는데 늦게 오거나 순서가 바뀌어 잃은 줄 알고 다시 보냄</td><td>복구할 게 없음. 대신 전송량만 줄어듦(리눅스는 DSACK·타임스탬프로 알아채면 되돌리기도 함)</td><td>회선 낭비, 대용량 전송 속도 저하. 지표상 재전송률만 높음</td></tr>
+              <tr><td><b>제로 윈도 탐침</b><br><span class="note">재전송과 헷갈리는 것</span></td><td>받는 쪽 버퍼가 꽉 차 “잠깐 보내지 마” 상태일 때 확인용으로 보내는 패킷</td><td>받는 쪽이 읽기 시작할 때까지</td><td>멈춤. 회선은 멀쩡하고 받는 쪽 프로그램이 제때 읽지 못한 것</td></tr>
             </tbody>
           </table>
         </div>
@@ -345,8 +345,9 @@
           <div class="prose">
             <p><b>2. 빨리 복구하게</b></p>
             <ul>
-              <li>SACK·타임스탬프가 중간 장비에서 지워지지 않게 확인</li>
-              <li>RACK-TLP 사용(최신 리눅스 기본), 얇은 흐름용 <code>tcp_thin_linear_timeouts</code></li>
+              <li>SACK·타임스탬프가 서버 설정에서 꺼져 있거나 중간 장비에서 지워지지 않게 확인(SACK이 없으면 RACK-TLP도 멈춤)</li>
+              <li>RACK-TLP 사용(최신 리눅스 기본), 얇은 흐름용 <code>tcp_thin_linear_timeouts</code>, 리눅스 6.15 이상은 <code>TCP_RTO_MAX_MS</code>로 기다림 상한 낮추기</li>
+              <li>게임 연결은 <code>TCP_NODELAY</code>를 켜 두기(Nagle이 새 소식을 붙잡으면 RACK이 쓸 뒤따르는 패킷이 사라짐)</li>
               <li>내부망 서버 간 연결은 경로별 RTO 최소값을 낮추기(<code>ip route … rto_min</code>)</li>
               <li><code>TCP_USER_TIMEOUT</code>과 게임 하트비트로 죽은 연결을 빨리 끊고 재접속</li>
             </ul>
@@ -361,18 +362,20 @@
         </div>
 
         <h3 class="sec">설정 이름 정리: 무엇을 켜고 무엇과 헷갈리나</h3>
-        <div class="prose"><p>재전송 복구에 관련된 설정은 대부분 <b>소켓 옵션이 아니라 운영체제(커널) 설정</b>입니다. 이름 때문에 자주 헷갈리는 <code>TCP_NODELAY</code>는 복구를 빠르게 하는 설정은 아닙니다. 다만 켜지 않으면(Nagle 사용) 복구 중에 새 소식이 더 늦어집니다. 아래는 리눅스 기준이며, 윈도우는 이름과 지원 범위가 다릅니다.</p></div>
+        <div class="prose"><p>재전송 복구에 관련된 설정은 대부분 <b>운영체제(커널) 설정</b>이고, 게임 연결에만 따로 켤 수 있는 소켓 옵션은 몇 개뿐입니다. 이름 때문에 자주 헷갈리는 <code>TCP_NODELAY</code>는 복구를 빠르게 하는 설정은 아닙니다. 다만 켜지 않으면(Nagle 사용) 복구 중에 새 소식이 더 늦어집니다. 아래는 리눅스 기준이며, 윈도우는 이름과 지원 범위가 다릅니다.</p></div>
         <div class="table-wrap">
           <table class="nums sync-table">
             <thead><tr><th>설정</th><th>어디서</th><th>무엇을 바꾸나</th><th>주의</th></tr></thead>
             <tbody>
-              <tr><td><code>TCP_NODELAY</code></td><td>소켓 옵션</td><td>Nagle 끄기. 작은 메시지를 모으지 않고 바로 보냄</td><td>손실이 없어도 생기는 40~200ms 대기를 없앰. <b>잃은 패킷을 알아채고 다시 보내는 속도는 그대로</b>. 다만 Nagle이 켜져 있으면 복구를 기다리는 동안 새 소식까지 묶여 복구 뒤 한 왕복을 더 기다리고, 빠른 재전송·RACK이 기대는 뒤따르는 패킷도 사라짐. 게임은 켜는 것이 보통</td></tr>
-              <tr><td><code>net.ipv4.tcp_recovery</code> (RACK)</td><td>커널 설정</td><td>시간 기준 손실 판단. 순서 뒤바뀜에 강하고 얇은 흐름도 빨리 복구</td><td>리눅스 4.18부터 기본으로 켜짐</td></tr>
-              <tr><td><code>net.ipv4.tcp_early_retrans</code> (TLP)</td><td>커널 설정</td><td>한동안 확인이 없으면 끝 패킷을 한 번 더 보내 꼬리 손실을 빨리 발견</td><td>최신 리눅스 기본값에 포함</td></tr>
-              <tr><td><code>tcp_thin_linear_timeouts</code> / <code>TCP_THIN_LINEAR_TIMEOUTS</code></td><td>커널 설정 / 소켓 옵션</td><td>패킷이 적게 오가는 연결은 RTO를 처음 몇 번 두 배로 늘리지 않음</td><td>기본은 꺼짐. 소켓 옵션으로 게임 연결에만 켤 수 있음</td></tr>
-              <tr><td><code>net.ipv4.tcp_mtu_probing</code></td><td>커널 설정</td><td>큰 패킷이 계속 사라지면 크기를 줄여 MTU 블랙홀을 통과</td><td>1 = 블랙홀이 의심될 때만 탐색</td></tr>
+              <tr><td><code>TCP_NODELAY</code></td><td>소켓 옵션</td><td>Nagle 끄기. 작은 메시지를 모으지 않고 바로 보냄</td><td>손실이 없어도 생기는 40~200ms 대기를 없앰. <b>재전송 타이머(RTO) 자체는 그대로</b>. 다만 Nagle이 켜져 있으면 복구를 기다리는 동안 새 소식까지 묶여 복구 뒤 한 왕복을 더 기다리고, 빠른 재전송·RACK이 기대는 뒤따르는 패킷도 사라져 RTO까지 가기 쉬움. 게임은 켜는 것이 보통</td></tr>
+              <tr><td><code>net.ipv4.tcp_recovery</code> (RACK)</td><td>커널 설정</td><td>시간 기준 손실 판단. 순서 뒤바뀜에 강하고 얇은 흐름도 빨리 복구</td><td>기본값 1(켜짐). 리눅스 4.4에 들어와 4.18 무렵 지금 모습이 됨. SACK이 없는 연결에서는 작동하지 않음</td></tr>
+              <tr><td><code>net.ipv4.tcp_early_retrans</code> (TLP)</td><td>커널 설정</td><td>한동안(왕복 시간의 약 2배) 확인이 없으면 끝 패킷을 한 번 더 보내 꼬리 손실을 빨리 발견</td><td>기본값 3(켜짐), 0이면 꺼짐. SACK이 있어야 작동. 날아가는 패킷이 하나뿐이면 200ms를 더 기다려 RTO와 비슷해짐</td></tr>
+              <tr><td><code>net.ipv4.tcp_sack</code>, <code>tcp_dsack</code>, <code>tcp_timestamps</code></td><td>커널 설정</td><td>구멍 알림(SACK), 중복 도착 알림(DSACK), 왕복 시간 측정(타임스탬프)</td><td>기본은 모두 켜짐. 2019년 SACK 보안 문제 때 꺼 둔 채 남은 서버가 있음. SACK이 꺼지면 RACK·TLP도 함께 멈춤</td></tr>
+              <tr><td><code>net.ipv4.tcp_thin_linear_timeouts</code> / <code>TCP_THIN_LINEAR_TIMEOUTS</code></td><td>커널 설정 / 소켓 옵션</td><td>날아가는 패킷이 4개 미만인 연결은 RTO를 처음 6번까지 두 배로 늘리지 않음</td><td>기본은 꺼짐. 소켓 옵션으로 게임 연결에만 켤 수 있음. 첫 RTO를 줄이지는 않음</td></tr>
+              <tr><td><code>TCP_RTO_MAX_MS</code> / <code>net.ipv4.tcp_rto_max_ms</code></td><td>소켓 옵션 / 커널 설정 (리눅스 6.15 이상)</td><td>두 배씩 늘어나는 RTO의 상한(기본 120초)을 낮춤. 최소 1초</td><td>연속 손실 뒤 기다림이 수십 초로 커지지 않게 함. 죽은 연결 판정도 함께 빨라짐</td></tr>
+              <tr><td><code>net.ipv4.tcp_mtu_probing</code></td><td>커널 설정</td><td>큰 패킷이 계속 사라지면 크기를 줄여 MTU 블랙홀을 통과</td><td>기본 0(꺼짐). 1 = 재전송이 3초쯤 이어져 블랙홀이 의심될 때만 줄임(그동안은 멈춤). 2 = 처음부터 작게 시작</td></tr>
               <tr><td><code>ip route … rto_min</code></td><td>경로 설정</td><td>그 경로의 RTO 최소값(기본 200ms)을 낮춤</td><td>서버끼리의 내부망에만. 인터넷 구간에 낮추면 가짜 재전송이 늘어남</td></tr>
-              <tr><td><code>TCP_USER_TIMEOUT</code></td><td>소켓 옵션</td><td>재전송이 이어질 때 연결을 포기하기까지의 시간</td><td>복구를 빠르게 하지는 않음. 죽은 연결을 빨리 끊고 재접속하게 함</td></tr>
+              <tr><td><code>TCP_USER_TIMEOUT</code></td><td>소켓 옵션</td><td>재전송이 이어질 때 연결을 포기하기까지의 시간</td><td>복구를 빠르게 하지는 않음. 죽은 연결을 빨리 끊고 재접속하게 함. 설정하지 않으면 리눅스는 재전송을 15번, 약 15분 이어간 뒤에야 끊음(<code>tcp_retries2</code>)</td></tr>
               <tr><td><code>SO_KEEPALIVE</code> + <code>TCP_KEEPIDLE</code> 등</td><td>소켓 옵션</td><td>조용한 연결이 살아 있는지 확인</td><td>재전송과 별개. NAT·LB 매핑 유지와 죽은 연결 감지용</td></tr>
               <tr><td><code>fq</code> 큐 + <code>SO_MAX_PACING_RATE</code>, BBR</td><td>큐 설정 / 소켓 옵션 / 커널 설정</td><td>패킷을 고르게 나눠 보내 순간 폭주로 인한 손실을 줄임</td><td>손실을 “예방”하는 쪽. 복구 속도와는 별개</td></tr>
             </tbody>

@@ -262,7 +262,7 @@ K.register('retrans', function (root) {
   const sAck = K.slider(g1, { label: 'ACK 지연·손실 (업로드 포화)', min: 0, max: 30, step: 1, value: P.ackLoss, unit: '%', onInput: v => { P.ackLoss = v; pr.clear(); } });
   const g2 = K.group(F.controls, '복구 설정 (보내는 쪽 OS)');
   const tRack = K.toggle(g2, { label: 'RACK-TLP (시간 기준 손실 판단 + 꼬리 탐침)', value: P.rack, onChange: v => { P.rack = v; pr.clear(); }, hint: '최신 리눅스는 기본으로 켜져 있습니다. 끄면 “중복 ACK 3개” 방식만 씁니다.' });
-  const tThin = K.toggle(g2, { label: '얇은 흐름 선형 타임아웃', value: P.thin, onChange: v => { P.thin = v; pr.clear(); }, hint: 'tcp_thin_linear_timeouts. 패킷이 적게 오가는 연결은 RTO를 두 배씩 늘리지 않습니다.' });
+  const tThin = K.toggle(g2, { label: '얇은 흐름 선형 타임아웃', value: P.thin, onChange: v => { P.thin = v; pr.clear(); }, hint: 'tcp_thin_linear_timeouts. 패킷이 적게 오가는 연결은 처음 6번까지 RTO를 두 배씩 늘리지 않습니다.' });
   const tProbe = K.toggle(g2, { label: 'MTU 탐색 (tcp_mtu_probing)', value: P.mtuProbe, onChange: v => { P.mtuProbe = v; pr.clear(); } });
   const cRto = K.choice(g2, { label: 'RTO 최소값', value: P.rtoMin, options: [[200, '200ms (기본)'], [50, '50ms (내부망용)']], onChange: v => { P.rtoMin = +v; pr.clear(); } });
 
@@ -379,7 +379,7 @@ K.register('retrans', function (root) {
     const p99 = d.length ? d[Math.min(d.length - 1, Math.floor(d.length * 0.99))] : 0;
     stRate.set(K.pct(rate, 1), rate > 0.03 ? 'bad' : rate > 0.005 ? 'warn' : 'good', `보낸 ${K.n(C.out)}개 중 ${K.n(C.retr)}개`);
     stFast.set(String(C.fast)); stRto.set(String(C.rto), C.rto > 3 ? 'bad' : C.rto ? 'warn' : 'good'); stTlp.set(String(C.tlp)); stSp.set(String(C.spurious), C.spurious ? 'warn' : 'good');
-    stP99.set(K.ms(p99), p99 > 250 ? 'bad' : p99 > 120 ? 'warn' : 'good', `평소 ${K.ms(P.rtt / 2)}`);
+    stP99.set(d.length ? K.ms(p99) : '전달 없음', !d.length || p99 > 250 ? 'bad' : p99 > 120 ? 'warn' : 'good', `평소 ${K.ms(P.rtt / 2)}`);
     const head = S.segs.get(R.expected);
     const waitMs = head && head.first < t ? t - head.first : 0;
     stWait.set(waitMs > P.rtt ? K.ms(waitMs) : '없음', waitMs > 1000 ? 'bad' : waitMs > 200 ? 'warn' : 'good', waitMs > P.rtt ? '맨 앞 하나를 기다리느라 뒤도 전부 대기' : '순서대로 바로 전달');
@@ -395,13 +395,20 @@ K.register('retrans', function (root) {
       if (top[0] === 'M') msg += `1,360바이트를 넘는 큰 업데이트만 계속 사라지고 같은 패킷을 반복해서 다시 보냅니다. ${P.mtuProbe ? 'MTU 탐색이 켜져 있어도 바로 통과하지는 못합니다. 재전송 타임아웃이 3초쯤 이어져야 블랙홀로 판단하고, 그때부터 1,024바이트로 작게 나눠 통과합니다. 그 사이는 <b>멈춤</b>이라 미리 막는 MSS 조정이 먼저입니다.' : 'TCP는 순서를 지켜야 하므로 뒤따르는 작은 소식까지 전부 줄을 서고, RTO는 두 배씩 늘어나 결국 <b>멈춤</b> 끝에 <b>접속 끊김</b>이 됩니다. 평소에는 멀쩡하다가 “큰 창을 열거나 사람 많은 곳에 가면 멈춘다”는 제보로 옵니다. MSS 조정이나 MTU 탐색이 해결책입니다.'}`;
       else if (top[0] === 'A') msg += `게임 소식 자체는 제때 도착합니다. ACK는 뒤에 오는 ACK가 앞의 것을 대신 확인해 주므로 몇 개 사라져도 대개 괜찮습니다. 문제는 업로드가 꽉 차서 ACK가 줄을 서 늦게 가는 것입니다. 보내는 쪽이 느끼는 왕복 시간이 늘어 RTO가 커지고, ACK가 한꺼번에 늦으면 잃지 않은 것을 다시 보내며(가짜 재전송) 대용량 전송은 속도가 떨어집니다. 실제 게임에서 더 크게 느껴지는 것은 같은 업로드 줄에 선 내 입력이 늦게 가는 <b>입력 지연</b>입니다(이 실험은 서버 → 내 PC 방향만 보여 줍니다).`;
       else if (P.mode === 'game' && !P.rack) {
-        const dupWait = 3 * P.gap + P.rtt / 2, rtoW = P.rtt + P.rtoMin;
+        // 보내는 쪽 기준: 잃은 패킷을 보낸 뒤 세 번째 중복 ACK가 돌아오기까지 = 소식 간격×3 + 왕복 시간
+        const dupWait = 3 * P.gap + P.rtt, rtoW = P.rtt + P.rtoMin, thr = Math.floor(P.rtoMin / 30) * 10 + 10;
+        const rackTip = P.gap < P.rtoMin ? `RACK-TLP를 켜면 다음 소식의 확인이 오는 약 ${K.ms(Math.max(P.gap, P.rtt / 4) + P.rtt)} 뒤에 복구가 시작됩니다.` : 'RACK-TLP를 켜도 소식이 이렇게 드문드문하면 크게 빨라지지 않습니다.';
         msg += dupWait > rtoW
-          ? `게임 소식이 ${P.gap}ms마다 하나라 중복 ACK 3개가 모이려면 약 ${K.ms(dupWait)}이 걸리고, 그 전에 RTO(약 ${K.ms(rtoW)})가 먼저 옵니다. 한 번 잃을 때마다 그만큼 <b>멈춤</b>, 뒤 소식은 줄을 섰다 <b>몰아치기</b>입니다. RACK-TLP를 켜면 핑의 1~2배 만에 복구가 시작됩니다.`
-          : `소식 간격(${P.gap}ms)이 짧아 중복 ACK 3개가 약 ${K.ms(dupWait)} 만에 모여 빠른 재전송으로 복구합니다. 그래도 한 번 잃을 때마다 그만큼 <b>멈춤</b> 뒤 <b>몰아치기</b>입니다. 소식 간격을 100ms 이상으로 늘리면 RTO에 기대게 됩니다.`;
+          ? `게임 소식이 ${P.gap}ms마다 하나라, 보내는 쪽에 중복 ACK 3개가 모이려면 약 ${K.ms(dupWait)}이 걸립니다. 그 전에 RTO(약 ${K.ms(rtoW)})가 먼저 옵니다. 한 번 잃을 때마다 그만큼 <b>멈춤</b>, 뒤 소식은 줄을 섰다 <b>몰아치기</b>입니다. ${rackTip}`
+          : `소식 간격(${P.gap}ms)이 짧아 중복 ACK 3개가 약 ${K.ms(dupWait)} 만에 모여 빠른 재전송으로 복구합니다. 그래도 한 번 잃을 때마다 그만큼 <b>멈춤</b> 뒤 <b>몰아치기</b>입니다. 소식 간격을 ${thr}ms 이상으로 늘리면 RTO에 기대게 됩니다.`;
       }
-      else if (P.mode === 'game') msg += `RACK-TLP가 켜져 있어 약 ${K.ms(2 * P.rtt)} 만에 탐침이 나가 복구합니다. 그래도 한 번 잃을 때마다 핑의 두세 배는 멈춥니다. 손실 자체를 줄이는 것이 먼저입니다.`;
-      else msg += `대용량 전송은 뒤따르는 패킷이 많아 빠른 재전송으로 대부분 복구되지만, 잃을 때마다 혼잡 창이 30% 줄어 속도가 떨어집니다.`;
+      else if (P.mode === 'game') {
+        const rackAt = Math.max(P.gap, P.rtt / 4) + P.rtt; // RACK: 다음 소식의 SACK이 돌아오는 시점
+        msg += P.gap < P.rtoMin
+          ? `RACK-TLP가 켜져 있어 다음 소식이 도착했다는 확인(SACK)이 오는 순간, 약 ${K.ms(rackAt)} 만에 잃은 것을 알아채고 다시 보냅니다. 그래도 잃은 소식은 평소 ${K.ms(P.rtt / 2)} 대신 약 ${K.ms(rackAt + P.rtt / 2)} 만에 도착하고, 그동안 뒤 소식도 함께 <b>멈춤</b>입니다.`
+          : `RACK-TLP가 켜져 있지만 소식 간격(${P.gap}ms)이 길어 다음 소식보다 꼬리 탐침(TLP)이 먼저 나갑니다. 날아가는 패킷이 하나뿐이면 탐침도 지연 ACK를 감안해 RTO와 비슷하게(약 ${K.ms(P.rtt + P.rtoMin)}) 기다리므로 효과가 작습니다.`;
+      }
+      else msg += `대용량 전송은 뒤따르는 패킷이 많아 빠른 재전송으로 대부분 복구되지만, 손실이 난 왕복마다 혼잡 창이 30% 줄어 속도가 떨어집니다. RTO까지 가면 혼잡 창이 1로 떨어져 처음부터 다시 늘립니다.`;
       if (P.rack && (top[0] === 'W' || top[0] === 'C' || top[0] === 'L')) msg += ' 복구 설정은 멈춤을 줄여 줄 뿐, 사라지는 패킷 자체를 줄이지는 못합니다. 손실이 생기는 자리를 고치는 것이 근본 해결입니다.';
       if (C.spurious) msg += ` 가짜 재전송도 ${C.spurious}회 있습니다.`;
     }
