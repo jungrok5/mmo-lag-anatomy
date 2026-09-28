@@ -215,7 +215,9 @@ K.register('syncmodels', function (root) {
   }
 
   const chartBox = () => ({ x: 46, y: 22, w: cvC.w - 60, h: cvC.h - 58 });
-  function lockReact(rtt) { return Math.max(P.lockDelay, 0) + FRAME; }
+  // 모델 안에서는 입력 지연이 턴 단위로 올림된다. 누른 시점이 턴 사이 어디냐에 따라 평균 반 턴이 빠진다.
+  const lockTurns = () => Math.max(1, Math.ceil(P.lockDelay / tickT()));
+  function lockReact(rtt) { return (lockTurns() - 0.5) * tickT() + FRAME; }
   function rrReact(rtt) { return rtt + tickT() / 2 + FRAME; }
   function drawChart() {
     const { ctx, w, h } = cvC;
@@ -234,7 +236,7 @@ K.register('syncmodels', function (root) {
     K.line(ctx, sc, pr, C.s2, 2);
     K.line(ctx, sc, rr, C.s1, 2);
     // 락스텝이 멈추기 시작하는 핑
-    const breakRtt = Math.max(0, (P.lockDelay - P.jitter) * 2);
+    const breakRtt = Math.max(0, (lockTurns() * tickT() - P.jitter) * 2);
     if (breakRtt < 400) {
       ctx.fillStyle = K.alpha(C.warn, 0.18);
       ctx.fillRect(sc.x(breakRtt), sc.y(lockReact(0)) - 5, sc.x(400) - sc.x(breakRtt), 10);
@@ -252,7 +254,7 @@ K.register('syncmodels', function (root) {
     const box = chartBox();
     const r = Math.round(((x - box.x) / box.w) * 400 / 10) * 10;
     if (r < 0 || r > 400) return null;
-    return `핑 <b>${r}ms</b><br>요청-응답 ${Math.round(rrReact(r))}ms<br>예측·클라 권위·롤백 ${Math.round(FRAME)}ms<br>락스텝 ${Math.round(lockReact(r))}ms${r / 2 + P.jitter > P.lockDelay ? ' (자주 멈춤)' : ''}`;
+    return `핑 <b>${r}ms</b><br>요청-응답 ${Math.round(rrReact(r))}ms<br>예측·클라 권위·롤백 ${Math.round(FRAME)}ms<br>락스텝 ${Math.round(lockReact(r))}ms${r / 2 + P.jitter > lockTurns() * tickT() ? ' (자주 멈춤)' : ''}`;
   });
 
   /* ---------------- 수치·해설 ---------------- */
@@ -278,7 +280,7 @@ K.register('syncmodels', function (root) {
     if (P.rtt >= 120) msg = `${K.flag(rrMs > 250 ? 'bad' : 'warn')}핑 ${P.rtt}ms에서 <b>요청-응답</b>은 누르고 약 <b>${K.n(rrMs)}ms</b> 뒤에야 반응합니다(입력 지연). <b>예측·클라이언트 권위·롤백</b>은 핑과 상관없이 한 프레임(17ms) 만에 반응하지만, 각각 보정(고무줄), 화면 불일치·해킹, 되감기(순간이동)라는 대가가 있습니다.`;
     else msg = `${K.flag('good')}핑 ${P.rtt}ms에서는 요청-응답도 ${K.n(rrMs)}ms로 크게 굼뜨지 않습니다. 핑을 150ms 이상으로 올리면 방식 사이의 차이가 뚜렷해집니다.`;
     if (lockStalls >= 2) msg += ` <b>락스텝</b>은 입력 지연(${P.lockDelay}ms)이 핑의 절반+흔들림(${Math.round(P.rtt / 2 + P.jitter)}ms)보다 짧아 최근 8초 동안 ${lockStalls}번 <b>모두가 멈췄습니다</b>.`;
-    else msg += ` <b>락스텝</b>은 핑과 무관하게 입력 지연(${P.lockDelay}ms)만큼 일정하게 늦습니다.`;
+    else msg += ` <b>락스텝</b>은 핑과 무관하게 입력 지연(${P.lockDelay}ms, 턴 단위로 올리면 최대 ${lockTurns() * tickT()}ms)만큼 일정하게 늦습니다.`;
     F.say(msg);
   }
 

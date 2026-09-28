@@ -152,7 +152,11 @@ K.register('npcmissing', function (root) {
     st1.set(String(o1.seen), o1.seen === P.n ? 'good' : 'bad');
     st2.set(String(o2.seen), o2.seen === P.n ? 'good' : 'bad');
     let msg;
-    if (o2.seen < P.n && o1.seen === P.n) msg = `${K.flag('bad')}클라 1은 로딩(${K.ms(P.load1)})이 끝난 뒤 등장 알림을 받아 NPC가 모두 보입니다. 클라 2는 로딩(${K.ms(P.load2)})이 길어서, 알림이 처리기 준비 전에 도착해 <b>버려졌습니다</b>. 서버는 이미 보냈다고 믿으므로 다시 보내지 않고, 그 NPC가 시야에서 나갔다 들어오기 전까지 클라 2에는 <b>안 보입니다</b>.`;
+    if ((o1.seen < P.n) !== (o2.seen < P.n)) {
+      const [gn, gl, bn, bl] = o2.seen < P.n ? [1, P.load1, 2, P.load2] : [2, P.load2, 1, P.load1];
+      const eun = n => (n === 1 ? '은' : '는');
+      msg = `${K.flag('bad')}클라 ${gn}${eun(gn)} 로딩(${K.ms(gl)})이 끝난 뒤 등장 알림을 받아 NPC가 모두 보입니다. 클라 ${bn}${eun(bn)} 로딩(${K.ms(bl)})이 길어서, 알림이 처리기 준비 전에 도착해 <b>버려졌습니다</b>. 서버는 이미 보냈다고 믿으므로 다시 보내지 않고, 그 NPC가 시야에서 나갔다 들어오기 전까지 클라 ${bn}에는 <b>안 보입니다</b>.`;
+    }
     else if (o1.seen < P.n && o2.seen < P.n) msg = `${K.flag('bad')}두 클라이언트 모두 로딩이 끝나기 전에 등장 알림이 도착해 버려졌습니다. 이 구조에서는 로딩이 느린 쪽이 먼저 문제를 겪을 뿐, 누구에게나 생길 수 있습니다.`;
     else msg = `${K.flag('good')}${P.serverWait ? '서버가 준비 완료 신호를 받은 뒤에 보내므로' : P.clientQueue ? '클라이언트가 로딩 중 받은 패킷을 보관했다가 처리하므로' : '등장 알림이 로딩이 끝난 뒤 도착해'} 두 클라이언트 모두 NPC가 보입니다.`;
     F.say(msg);

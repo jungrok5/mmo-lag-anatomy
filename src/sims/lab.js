@@ -117,7 +117,7 @@ K.register('lab', function (root) {
     this.under = false;
     if (P.mode === 'snap') return { x: last.x, y: last.y };
     if (P.mode === 'extrap') {
-      const age = Math.min(1000, t - last.at + P.rtt / 2);
+      const age = Math.min(250, t - last.at + P.rtt / 2); // 실제 게임처럼 200~250ms까지만 추측하고 멈춘다
       return { x: K.clamp(last.x + (last.vx * age) / 1000, 0, WW), y: K.clamp(last.y + (last.vy * age) / 1000, 0, WH) };
     }
     const delay = P.mode === 'interp' ? P.interp : Math.max(P.interp, 60);
