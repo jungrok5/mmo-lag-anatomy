@@ -76,7 +76,8 @@ K.register('timeouts', function (root) {
       if (tcp) {
         const p1 = lastAny + kaIdle, dead = p1 + kaInt * kaCnt;
         kaFail = { p1, dead };
-        for (let k = 0; k <= kaCnt; k++) add(p1 + k * kaInt, l => l.idx > ci && l.idx < 3);   // 서버 쪽 장비만 확인 패킷을 본다
+        // 리눅스: 쉰 지 kaIdle초에 첫 확인, kaInt초 간격으로 모두 kaCnt번 보내고, 마지막 확인 뒤 kaInt초가 더 지나면 끊는다
+        for (let k = 0; k < kaCnt; k++) add(p1 + k * kaInt, l => l.idx > ci && l.idx < 3);   // 서버 쪽 장비만 확인 패킷을 본다
         if (dead < notice) { notice = dead; noticeBy = 'ka'; }
       }
     }
@@ -125,7 +126,7 @@ K.register('timeouts', function (root) {
     P.proto = v; changed();
   } });
   const cLink = K.choice(g1, { label: '연결 방식', value: P.link, options: [['home', '유선·와이파이'], ['mobile', '모바일']], onChange: v => { P.link = v; changed(); } });
-  const tBg = K.toggle(g1, { label: '백그라운드 전환 (모바일)', value: P.bg, onChange: v => { P.bg = v; changed(); }, hint: '이 실험에서는 백그라운드로 간 지 10초 뒤 OS가 앱을 멈춘다고 둡니다. 실제로는 OS와 설정에 따라 몇 초~몇십 초입니다. 하트비트도 함께 멈춥니다.' });
+  const tBg = K.toggle(g1, { label: '백그라운드 전환 (모바일)', value: P.bg, onChange: v => { P.bg = v; changed(); }, hint: '게임 루프에서 하트비트를 보내면 앱을 내리는 즉시 멈춥니다(유니티 등 엔진은 내리면 루프를 세움). 이 실험은 하트비트를 따로 보내는 네트워크 스레드가 있어, OS가 앱을 얼리는 10초 뒤까지 버틴다고 둡니다(안드로이드 14 이상 약 10초, iOS는 몇 초~몇십 초).' });
   const tFw = K.toggle(g1, { label: '회사·PC방 방화벽 거침', value: P.fw, onChange: v => { P.fw = v; changed(); }, hint: '이 실험 값은 UDP 2분, TCP 5분입니다(TCP를 짧게 설정한 곳). 기본값은 장비마다 달라 UDP 30초~3분, TCP 30분~1시간이 흔합니다.' });
   const g2 = K.group(F.controls, '클라이언트');
   const sHb = K.slider(g2, { label: '하트비트 간격', min: 0, max: 300, step: 5, value: P.hb, fmt: v => (v ? fmtT(v) : '끔'), onInput: v => { P.hb = v; changed(); }, hint: '하트비트: 할 일이 없어도 “살아 있어요”라고 보내는 작은 패킷' });
@@ -223,7 +224,7 @@ K.register('timeouts', function (root) {
       if (lost) ctx.strokeRect(X(x) - 1, pk.y + 2.5, 2, pk.h - 5); else ctx.fillRect(X(x) - 1.5, pk.y + 2, 3, pk.h - 4);
     });
     const probes = A.kas.slice();
-    if (A.kaFail) for (let k = 0; k <= A.kaCnt; k++) probes.push(A.kaFail.p1 + k * A.kaInt);
+    if (A.kaFail) for (let k = 0; k < A.kaCnt; k++) probes.push(A.kaFail.p1 + k * A.kaInt);
     probes.forEach(x => {
       if (x > MAXT) return;
       const fail = A.kaFail && x >= A.kaFail.p1;
