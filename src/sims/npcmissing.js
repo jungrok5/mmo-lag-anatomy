@@ -103,7 +103,7 @@ K.register('npcmissing', function (root) {
   const LEAF = {
     phase: { t: '정상 동작일 가능성이 큽니다: 채널·인스턴스·페이즈 차이', c: ['pt-phase'], check: '두 캐릭터의 채널 번호, 인스턴스 ID, 해당 퀘스트 진행 단계를 비교합니다.' },
     render: { t: '서버는 보냈는데 그리지 못했습니다', c: ['pt-asset-lock', 'pt-vram', 'pt-display-option', 'pt-version'], check: '클라이언트 로그의 에셋 로딩 오류, 캐시 폴더 공유 여부, 그래픽 옵션(표시 인원 제한), 두 클라이언트의 버전을 확인합니다.' },
-    missed: { t: '등장 알림 하나가 빠졌습니다', c: ['pt-loading-drop', 'pt-aoi-race', 'pt-baseline'], check: '입장 직후 패킷 로그에서 해당 NPC의 등장 알림이 도착했는지, 도착 시각이 처리기 준비보다 빠른지 확인합니다. 위 타임라인이 이 경우입니다.' },
+    missed: { t: '등장 알림 하나가 빠졌습니다', c: ['pt-loading-drop', 'pt-spawn-burst', 'pt-aoi-race', 'pt-baseline', 'pt-id-reuse'], check: '입장 직후 패킷 로그에서 해당 NPC의 등장 알림이 도착했는지, 도착 시각이 처리기 준비보다 빠른지, 같은 번호의 개체가 직전에 사라진 적이 있는지 확인합니다. 위 타임라인이 이 경우입니다.' },
     background: { t: '뒤에 깔린 창이 일을 덜 하고 있습니다', c: ['pt-background'], check: '백그라운드 프레임 제한, 절전, 엔진의 백그라운드 실행 설정을 확인합니다. 오래 뒤에 두면 수신 버퍼가 넘쳐 알림이 사라질 수 있습니다.' },
     samepc: { t: '같은 PC·같은 IP라서 생기는 충돌입니다', c: ['pt-port-collision', 'pt-session-key', 'pt-multiclient'], check: '두 클라이언트가 같은 로컬 UDP 포트를 쓰는지, 서버가 IP나 기기 ID로 세션을 구분하는지, 멀티 클라이언트 제한 정책이 있는지 확인합니다.' },
     budget: { t: '서버가 보낼 양을 줄이고 있습니다', c: ['pt-priority', 'pt-display-option'], check: '연결별 전송 예산과 우선순위 설정, 표시 인원 상한을 확인합니다. 한쪽만 그렇다면 그 연결의 대역폭 추정치가 낮게 잡혔는지 봅니다.' },
