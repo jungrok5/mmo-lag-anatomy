@@ -8,7 +8,7 @@ K.register('retrans', function (root) {
     tries: [
       '<b>와이파이 손실 3%</b>를 누르세요. 게임 소식은 100ms마다 작은 패킷 하나라 “중복 ACK 3개”가 모이기 전에 RTO(핑 + 200ms)가 먼저 옵니다. 한 번 잃을 때마다 약 300ms 멈춘 뒤 몰아서 전달됩니다. <b>게임 소식 간격</b>을 30ms로 줄이면 빠른 재전송이 먼저 걸립니다.',
       '같은 상태에서 <b>RACK-TLP</b>를 켜 보세요. 다음 소식이 도착했다는 확인(SACK)이 오는 즉시, 약 “소식 간격 + 핑” 만에 잃은 것을 알아채고 다시 보냅니다. 뒤따르는 소식이 없을 때는 끝 패킷을 한 번 더 보내는 꼬리 탐침(TLP)이 대신합니다. <b>선형 타임아웃</b>도 켜면 연속 손실 때 기다림이 두 배씩 늘지 않습니다.',
-      '<b>MTU 블랙홀</b>을 누르세요. 2초마다 오는 큰 업데이트만 계속 사라지고, 같은 패킷을 몇 번이고 다시 보냅니다. <b>MTU 탐색</b>을 켜면 몇 초 멈춘 뒤에야 패킷을 작게 나눠 통과합니다.',
+      '<b>MTU 블랙홀</b>을 누르세요. 2초마다 오는 큰 업데이트만 계속 사라지고, 같은 패킷을 몇 번이고 다시 보냅니다. <b>MTU 탐색</b>을 켜면 몇 초 멈춘 뒤에야 패킷을 작게 나눠 통과합니다. <b>MSS 조정</b>을 켜면 처음부터 사라지지 않습니다.',
       '<b>순서 뒤바뀜 (대용량)</b>을 누르세요. RACK-TLP가 꺼진 상태라 잃지도 않은 패킷을 다시 보내는 <b>가짜 재전송</b>이 생기고 전송량(혼잡 창)이 괜히 줄어듭니다. RACK-TLP를 켜면 가짜 재전송이 줄어듭니다.',
       '<b>지연 급등</b>을 누르세요. 4초마다 0.5초씩 늦어지는 순간 RTO가 먼저 터져 가짜 재전송이 납니다. 원본도 결국 도착했으니 손실 원인 막대에는 아무것도 없습니다. 화면의 멈춤은 지연 급등 자체에서 오고, 가짜 재전송은 주로 재전송 지표를 올립니다.',
     ],
@@ -24,21 +24,21 @@ K.register('retrans', function (root) {
   const P = {
     mode: 'game', rtt: 60, gap: 100,
     wifi: 0, cong: false, cable: false, mtu: false, reorder: 0, spike: false, ackLoss: 0,
-    rack: false, thin: false, mtuProbe: false, rtoMin: 200,
+    rack: false, thin: false, mtuProbe: false, mss: false, rtoMin: 200,
   };
   const CAUSE = { W: '와이파이', C: '혼잡 대기열', L: '불량 케이블', M: 'MTU 블랙홀', A: 'ACK 손실' };
-  const PATH_MTU = 1360, MSS = 1460, SMALL = 120;
+  const PATH_MTU = 1360, MSS = 1460, MSS_CLAMP = 1300, SMALL = 120;
   const rnd = K.rng(91);
 
   /* ---------------- 상태 ---------------- */
-  let t, S, R, net, acks, lossLog, deliv, cwndLog, C;
+  let t, S, R, net, acks, lossLog, deliv, cwndLog, C, rateHist;
   function reset() {
     t = 0;
     S = { next: 0, segs: new Map(), una: 0, srtt: null, rttvar: 0, rto: 1000, backoff: 1, rtoAt: Infinity, tlpAt: Infinity, tlpOut: false,
-      cwnd: 10, ssthresh: 1e9, dup: 0, lastCum: 0, frDone: -1, nextGame: 0, nextBig: 1000, mssNow: MSS, bhStrikes: 0, retries: 0, lastArr: 0, lastAck: 0,
+      cwnd: 10, ssthresh: 1e9, dup: 0, lastCum: 0, frDone: -1, nextGame: 0, nextBig: 1000, mssNow: P.mss ? MSS_CLAMP : MSS, bhStrikes: 0, retries: 0, lastArr: 0, lastAck: 0,
       recover: 0, lossHigh: 0, lossAt: -1, rtxStamp: null, undo: null, minRtt: Infinity, reoSteps: 1, reoBumpAt: -1e9 };
     R = { expected: 0, buf: new Set(), got: new Set(), tsRecent: 0 };
-    net = []; acks = []; lossLog = []; deliv = []; cwndLog = [];
+    net = []; acks = []; lossLog = []; deliv = []; cwndLog = []; rateHist = [];
     C = { out: 0, retr: 0, fast: 0, rto: 0, tlp: 0, spurious: 0 };
   }
 
@@ -82,6 +82,10 @@ K.register('retrans', function (root) {
     if (cause) lossLog.push([t, cause]);
     else net.push({ at: tx.arr, id: s.id, tx });
     if (S.rtoAt === Infinity) S.rtoAt = t + S.rto * S.backoff;
+    // 맨 앞(가장 오래된) 패킷을 빠른 재전송하면 RTO 타이머를 지금부터 다시 건다(리눅스 tcp_xmit_retransmit_queue).
+    // 그러지 않으면 방금 다시 보낸 것의 확인이 오기 전에 RTO가 같은 패킷을 또 보낸다.
+    // 단순화: 첫 재전송일 때만 다시 건다. 같은 패킷을 거듭 잃으면(MTU 블랙홀 등) RTO가 결국 터져 MTU 탐색이 돌게 둔다.
+    if (kind === 'fast' && s.id === S.una && s.tx.length === 2) S.rtoAt = t + S.rto * S.backoff;
     if (kind === 'new') armTlp();
   }
   function armTlp() {
@@ -264,6 +268,7 @@ K.register('retrans', function (root) {
   const tRack = K.toggle(g2, { label: 'RACK-TLP (시간 기준 손실 판단 + 꼬리 탐침)', value: P.rack, onChange: v => { P.rack = v; pr.clear(); }, hint: '최신 리눅스는 기본으로 켜져 있습니다. 끄면 “중복 ACK 3개” 방식만 씁니다.' });
   const tThin = K.toggle(g2, { label: '얇은 흐름 선형 타임아웃', value: P.thin, onChange: v => { P.thin = v; pr.clear(); }, hint: 'tcp_thin_linear_timeouts. 패킷이 적게 오가는 연결은 처음 6번까지 RTO를 두 배씩 늘리지 않습니다.' });
   const tProbe = K.toggle(g2, { label: 'MTU 탐색 (tcp_mtu_probing)', value: P.mtuProbe, onChange: v => { P.mtuProbe = v; pr.clear(); } });
+  const tMss = K.toggle(g2, { label: 'MSS 조정 (1,300바이트로 제한)', value: P.mss, onChange: v => { P.mss = v; S.mssNow = v ? Math.min(S.mssNow, MSS_CLAMP) : MSS; pr.clear(); }, hint: '방화벽·공유기의 MSS clamp나 서버의 TCP_MAXSEG로 처음부터 경로를 통과할 크기로 보냅니다. 새로 만드는 패킷부터 적용됩니다.' });
   const cRto = K.choice(g2, { label: 'RTO 최소값', value: P.rtoMin, options: [[200, '200ms (기본)'], [50, '50ms (내부망용)']], onChange: v => { P.rtoMin = +v; pr.clear(); } });
 
   const stRate = K.stat(F.stats, { label: '재전송률' });
@@ -283,13 +288,13 @@ K.register('retrans', function (root) {
     { label: '순서 뒤바뀜 (대용량)', apply: () => set({ mode: 'bulk', reorder: 12 }) },
     { label: '지연 급등', apply: () => set({ spike: true }) },
     { label: '업로드 포화 (ACK 지연·손실)', apply: () => set({ ackLoss: 15 }) },
-    { label: '대책 모두 켜기', apply: () => set({ wifi: 3, cong: true, mtu: true, rack: true, thin: true, mtuProbe: true }) },
+    { label: '대책 모두 켜기', apply: () => set({ wifi: 3, cong: true, mtu: true, rack: true, thin: true, mtuProbe: true, mss: true }) },
   ], '상황');
   function set(o) {
-    Object.assign(P, { mode: 'game', wifi: 0, cong: false, cable: false, mtu: false, reorder: 0, spike: false, ackLoss: 0, rack: false, thin: false, mtuProbe: false, rtoMin: 200 }, o);
+    Object.assign(P, { mode: 'game', wifi: 0, cong: false, cable: false, mtu: false, reorder: 0, spike: false, ackLoss: 0, rack: false, thin: false, mtuProbe: false, mss: false, rtoMin: 200 }, o);
     cMode.set(P.mode, false); sWifi.set(P.wifi, false); tCong.set(P.cong, false); tCable.set(P.cable, false); tMtu.set(P.mtu, false);
     sReo.set(P.reorder, false); tSpike.set(P.spike, false); sAck.set(P.ackLoss, false); tRack.set(P.rack, false); tThin.set(P.thin, false);
-    tProbe.set(P.mtuProbe, false); cRto.set(P.rtoMin, false);
+    tProbe.set(P.mtuProbe, false); tMss.set(P.mss, false); cRto.set(P.rtoMin, false);
     cwWrap.hidden = P.mode !== 'bulk';
     reset(); warm();
   }
@@ -374,14 +379,22 @@ K.register('retrans', function (root) {
     return cnt;
   }
   function narrate(cnt) {
-    const rate = C.out ? C.retr / C.out : 0;
-    const d = deliv.map(x => x[1]).sort((a, b) => a - b);
-    const p99 = d.length ? d[Math.min(d.length - 1, Math.floor(d.length * 0.99))] : 0;
-    stRate.set(K.pct(rate, 1), rate > 0.03 ? 'bad' : rate > 0.005 ? 'warn' : 'good', `보낸 ${K.n(C.out)}개 중 ${K.n(C.retr)}개`);
-    stFast.set(String(C.fast)); stRto.set(String(C.rto), C.rto > 3 ? 'bad' : C.rto ? 'warn' : 'good'); stTlp.set(String(C.tlp)); stSp.set(String(C.spurious), C.spurious ? 'warn' : 'good');
-    stP99.set(d.length ? K.ms(p99) : '전달 없음', !d.length || p99 > 250 ? 'bad' : p99 > 120 ? 'warn' : 'good', `평소 ${K.ms(P.rtt / 2)}`);
+    // 재전송률은 최근 10초 기준(누적으로 보면 지나간 사건이 계속 숫자를 끌어올린다)
+    rateHist.push({ t, out: C.out, retr: C.retr });
+    while (rateHist.length > 1 && rateHist[1].t <= t - 10000) rateHist.shift();
+    const base = rateHist[0].t <= t - 10000 || rateHist.length === 1 ? rateHist[0] : { out: 0, retr: 0 };
+    const wOut = C.out - base.out, wRetr = C.retr - base.retr;
+    const rate = wOut ? wRetr / wOut : 0;
     const head = S.segs.get(R.expected);
     const waitMs = head && head.first < t ? t - head.first : 0;
+    const d = deliv.map(x => x[1]).sort((a, b) => a - b);
+    const p99d = d.length ? d[Math.min(d.length - 1, Math.floor(d.length * 0.99))] : 0;
+    // 맨 앞이 아직 안 왔으면 그 대기 시간도 지연이다(도착한 것만 세면 멈춘 동안 “좋음”으로 보인다)
+    const stuck = waitMs > P.rtt ? waitMs : 0, p99 = Math.max(p99d, stuck);
+    // 오래 멈춘 동안은 RTO가 길어져 다시 보낼 기회 자체가 적으므로 재전송률이 낮게 나온다
+    stRate.set(K.pct(rate, 1), rate > 0.03 ? 'bad' : rate > 0.005 || stuck > 1000 ? 'warn' : 'good', stuck > 1000 ? '멈춘 동안은 다시 보낼 기회도 적어 낮게 나옴' : `최근 10초 보낸 ${K.n(wOut)}개 중 ${K.n(wRetr)}개`);
+    stFast.set(String(C.fast)); stRto.set(String(C.rto), C.rto > 3 ? 'bad' : C.rto ? 'warn' : 'good'); stTlp.set(String(C.tlp)); stSp.set(String(C.spurious), C.spurious ? 'warn' : 'good');
+    stP99.set(d.length || stuck ? K.ms(p99) : '전달 없음', !d.length || p99 > 250 ? 'bad' : p99 > 120 ? 'warn' : 'good', stuck > p99d ? '아직 못 받은 맨 앞 소식 포함' : `평소 ${K.ms(P.rtt / 2)}`);
     stWait.set(waitMs > P.rtt ? K.ms(waitMs) : '없음', waitMs > 1000 ? 'bad' : waitMs > 200 ? 'warn' : 'good', waitMs > P.rtt ? '맨 앞 하나를 기다리느라 뒤도 전부 대기' : '순서대로 바로 전달');
     stRtoV.set(K.ms(S.rto * S.backoff), S.backoff > 1 ? 'warn' : null, S.backoff > 1 ? `두 배씩 늘어난 상태 (×${S.backoff})` : '왕복 시간 + max(최소값, 흔들림×4)');
     const top = Object.entries(cnt).sort((a, b) => b[1] - a[1])[0];

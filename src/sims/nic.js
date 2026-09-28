@@ -1,5 +1,5 @@
 /* 서버 NIC: 패킷이 링 버퍼(우편함 칸)에 쌓이고, 큐마다 코어 하나가 꺼내 간다.
-   칸이 다 차면 새로 온 패킷은 조용히 버려진다(rx_missed). 1ms 단위, 패킷 수로 계산(개별 패킷 아님). */
+   칸이 다 차면 새로 온 패킷은 조용히 버려진다(ethtool -S의 rx_missed_errors 등, 이름은 드라이버마다 다름). 1ms 단위, 패킷 수로 계산(개별 패킷 아님). */
 K.register('nic', function (root) {
   const F = K.frame(root, {
     kicker: '레이어 6 · 서버 NIC',
@@ -55,7 +55,7 @@ K.register('nic', function (root) {
 
   const stCpu = K.stat(F.stats, { label: '최대 코어 사용률', unit: '%', sub: '최근 1초' });
   const stRing = K.stat(F.stats, { label: '링 최고 채움', unit: '%', sub: '최근 1초' });
-  const stDrop = K.stat(F.stats, { label: '초당 버림', unit: '개', sub: '링 넘침(rx_missed)' });
+  const stDrop = K.stat(F.stats, { label: '초당 버림', unit: '개', sub: '링 넘침(rx_missed_errors)' });
   const stLat = K.stat(F.stats, { label: '추가 지연', sub: '평균 · NIC 안에서' });
   const stCloud = K.stat(F.stats, { label: '한도 초과 버림', unit: '개/초', sub: 'NIC에 닿기 전' });
 
