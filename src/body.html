@@ -348,7 +348,7 @@
             <p><b>2. 빨리 복구하게</b></p>
             <ul>
               <li>SACK·타임스탬프가 서버 설정에서 꺼져 있거나 중간 장비에서 지워지지 않게 확인(SACK이 없으면 RACK-TLP도 멈춤)</li>
-              <li>RACK-TLP 사용(최신 리눅스·안드로이드 기본). 내 입력처럼 클라이언트가 보내는 쪽은 클라이언트 OS가 복구하므로 서버 설정으로는 바뀌지 않음(윈도우는 11·서버 2022부터 RACK까지 기본)</li>
+              <li>RACK-TLP 사용(최신 리눅스·안드로이드 기본). 내 입력처럼 클라이언트가 보내는 쪽은 클라이언트 OS가 복구하므로 서버 설정으로는 바뀌지 않음(윈도우는 TLP가 10(1607)·서버 2016부터, RACK은 11·서버 2022부터 기본)</li>
               <li>얇은 흐름용 <code>tcp_thin_linear_timeouts</code>, 리눅스 6.15 이상은 <code>TCP_RTO_MAX_MS</code>로 기다림 상한 낮추기</li>
               <li>게임 연결은 <code>TCP_NODELAY</code>를 켜 두기(Nagle이 새 소식을 붙잡으면 RACK이 쓸 뒤따르는 패킷이 사라짐)</li>
               <li>내부망 서버 간 연결은 경로별 RTO 최소값을 낮추기(<code>ip route … rto_min</code>)</li>
