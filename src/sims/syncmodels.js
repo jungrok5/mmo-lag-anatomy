@@ -52,7 +52,7 @@ K.register('syncmodels', function (root) {
 
   const g1 = K.group(F.controls, '회선');
   K.slider(g1, { label: '핑(왕복)', min: 0, max: 400, step: 10, value: P.rtt, unit: 'ms', onInput: v => { P.rtt = v; } });
-  K.slider(g1, { label: '지터(도착 간격의 흔들림)', min: 0, max: 150, step: 5, value: P.jitter, unit: 'ms', onInput: v => { P.jitter = v; } });
+  K.slider(g1, { label: '지터', min: 0, max: 150, step: 5, value: P.jitter, unit: 'ms', onInput: v => { P.jitter = v; } });
   K.slider(g1, { label: '패킷 손실', min: 0, max: 20, step: 1, value: P.loss, unit: '%', onInput: v => { P.loss = v; } });
   const g2 = K.group(F.controls, '서버·방식');
   K.choice(g2, { label: '서버 틱 (락스텝 턴)', value: P.tick, options: [[10, '10/초'], [20, '20/초'], [30, '30/초'], [60, '60/초']], onChange: v => { P.tick = +v; } });

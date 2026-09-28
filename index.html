@@ -2321,7 +2321,7 @@ window.DATA = {
       fix: '게임 트래픽 우선 처리(QoS), 대용량 전송 회선 분리.' },
     { id: 'dc-failover', t: '네트워크 장비 장애 전환(페일오버)', en: 'Network device failover',
       s: '라우터·방화벽 한 대가 고장 나 예비 장비로 전환(페일오버)되는 몇 초 동안 모두가 멈춥니다.',
-      c: ['장비 고장 또는 점검으로 예비 장비로 전환', '전환에 수 초, 세션 정보가 동기화되지 않으면 연결 초기화', '서버 전원 동시에 멈춤, 대량 접속 끊김'],
+      c: ['장비 고장 또는 점검으로 예비 장비로 전환', '전환에 수 초, 세션 정보가 동기화되지 않으면 연결 초기화', '서버의 모든 유저가 동시에 멈춤, 대량 접속 끊김'],
       sym: ['freeze', 'disconnect'], fx: ['loss'], who: ['server'], when: ['random'],
       num: '장비가 고장을 바로 감지하면 1~3초. 빠른 고장 감지(BFD) 없이 BGP 기본 타이머에만 맡기면 인접 장비가 감지하기까지 90~180초 동안 경로가 끊길 수 있습니다.',
       fix: '연결 상태를 공유하는 이중화, BFD로 고장을 1초 안에 감지, 짧은 끊김을 견디는 타임아웃.' },
@@ -2718,7 +2718,7 @@ window.DATA = {
       sim: 'gc' },
     { id: 'mem-swap', t: '스왑', en: 'Swapping',
       s: '메모리가 모자라 OS가 일부를 디스크로 내보내면, 그 메모리를 쓸 때마다 1,000배 넘게 느린 디스크를 기다립니다.',
-      c: ['사용 메모리가 실제 램을 넘음', 'OS가 일부를 디스크로 내보내고 필요할 때 다시 읽음', '틱이 수백 ms로 폭증해 서버 전원 슬로우모션·멈춤'],
+      c: ['사용 메모리가 실제 램을 넘음', 'OS가 일부를 디스크로 내보내고 필요할 때 다시 읽음', '틱이 수백 ms로 폭증해 서버의 모든 유저가 슬로우모션·멈춤'],
       sym: ['slowmo', 'freeze'], fx: ['stall'], who: ['server'], when: ['uptime', 'peak'],
       num: 'RAM 읽기 약 100ns, SSD에서 되읽기 약 100µs(1,000배), 네트워크 너머 클라우드 디스크는 약 1ms(1만 배), HDD는 10ms(10만 배).',
       fix: '게임 서버는 스왑을 쓰지 않도록 설정하고 메모리 경보로 대응.',
@@ -2948,7 +2948,7 @@ window.DATA = {
       sim: 'arch' },
     { id: 'in-deploy', t: '배포·재시작', en: 'Deploy / rolling restart',
       s: '업데이트를 위해 서버를 재시작할 때 연결을 옮기지 않으면 그 서버에 있던 사람들의 접속이 끊기고, 종료 직전 저장과 재접속이 한꺼번에 몰립니다.',
-      c: ['핫픽스 배포로 서버를 순서대로 재시작', '연결을 다른 서버로 옮기지 않고 종료, 그 서버 전원의 저장이 DB에 몰림', '공지 없는 접속 끊김, 재접속 폭주'],
+      c: ['핫픽스 배포로 서버를 순서대로 재시작', '연결을 다른 서버로 옮기지 않고 종료, 그 서버에 있던 모든 유저의 저장이 DB에 몰림', '공지 없는 접속 끊김, 재접속 폭주'],
       sym: ['disconnect', 'noconnect', 'delay'], fx: ['stall'], who: ['server', 'zone'], when: ['random', 'login'],
       num: '서버 한 대에 5,000명이면 종료 직전 몇 초 안에 저장 5,000건이 DB로 몰립니다.',
       fix: '새 접속만 막고 기존 사람이 빠질 때까지 기다리기(드레인), 캐릭터를 다른 서버로 옮기기, 종료 전 저장 나눠 하기, 배포 시각 공지.',
@@ -3579,7 +3579,7 @@ K.register('arch', function (root) {
     tries: [
       '<b>DB 느려짐 (동기 호출)</b>을 눌러 보세요. DB 하나가 느려졌을 뿐인데 모든 필드와 던전의 틱이 늦어져 슬로우모션·뚝뚝 끊김에 빠집니다.',
       '같은 고장에서 <b>비동기</b>로 바꾸고 <b>서킷 브레이커</b>를 켜 보세요. 영향이 “저장이 늦음”으로 줄어듭니다.',
-      '<b>캐시 장애 → DB 쇄도</b>를 눌러 보세요. 캐시가 막아 주던 조회가 한꺼번에 DB로 쏟아져 멀쩡하던 DB까지 느려집니다.',
+      '<b>캐시 장애 → DB 과부하</b>를 눌러 보세요. 캐시가 막아 주던 조회가 한꺼번에 DB로 쏟아져 멀쩡하던 DB까지 느려집니다.',
       '<b>로그인 서버 장애</b>와 <b>게이트웨이 한 대 장애</b>를 비교해 보세요. 이미 게임 중인 사람이 겪는 일이 전혀 다릅니다.',
       '<b>로그 수집</b>을 멈추고 기다리는 방식을 동기/비동기로 바꿔 보세요. 로그처럼 사소해 보이는 곳도 동기로 기다리면 게임이 멈춥니다.',
     ],
@@ -3775,7 +3775,7 @@ K.register('arch', function (root) {
     const raise = (n, lv, from, why) => { if (lv > eff[n]) { eff[n] = lv; cause[n] = { from, why }; ch = true; } };
     for (let it = 0; it < 8 && ch; it++) {
       ch = false;
-      if (eff.cache === 2) raise('db', 1, 'cache', '캐시가 받던 조회가 한꺼번에 주 DB로 쏟아집니다(캐시 쇄도)');
+      if (eff.cache === 2) raise('db', 1, 'cache', '캐시가 받던 조회가 한꺼번에 주 DB로 쏟아집니다(캐시 스탬피드)');
       if (eff.replica === 2) raise('db', 1, 'replica', '복제 DB가 받던 읽기가 주 DB로 넘어옵니다');
       if (eff.db === 2) raise('replica', 1, 'db', '주 DB가 멈춰 복제가 멈춥니다. 복제 DB는 옛날 데이터를 보여 줍니다');
       if (eff.db) raise('auction', eff.db, 'db', '거래는 주 DB에 기록해야 끝납니다');
@@ -3812,7 +3812,7 @@ K.register('arch', function (root) {
       items.push({
         lv: g.lv, who: all ? '전원 (모든 필드·던전)' : g.ids.map(id => BY[id].l[0]).join(', ') + '에 있는 사람', s: all ? '전원' : '일부 필드', r: all ? 5 : 3,
         sym: g.lv === 2 ? ['멈춤', '접속 끊김'] : ['슬로우모션', '뚝뚝 끊김', '입력 지연'],
-        why: g.lv === 2 ? `게임 서버가 ${SRC[g.from]} 응답을 끝없이 기다리며 굳었습니다. 오래 가면 하트비트(연결 유지 신호)가 끊기거나 워치독(감시 타이머)이 서버를 재시작해 모두의 접속이 끊깁니다.`
+        why: g.lv === 2 ? `게임 서버가 ${SRC[g.from]} 응답을 끝없이 기다리며 멈췄습니다. 오래 가면 하트비트(연결 유지 신호)가 끊기거나 워치독(감시 타이머)이 서버를 재시작해 모두의 접속이 끊깁니다.`
           : `게임 서버가 ${SRC[g.from]} 응답을 기다리는 동안 틱이 멈춥니다. 세계가 느리게 흐르거나 뚝뚝 끊기고, 입력이 늦게 반영됩니다.`,
       });
     }
@@ -3934,7 +3934,7 @@ K.register('arch', function (root) {
     { label: '모두 정상', apply() { apply({}, 'sync', false, 'db'); } },
     { label: 'DB 느려짐 (동기 호출)', apply() { apply({ db: 1 }, 'sync', false, 'db'); } },
     { label: 'DB 느려짐 (비동기 + 서킷 브레이커)', apply() { apply({ db: 1 }, 'async', true, 'db'); } },
-    { label: '캐시 장애 → DB 쇄도', apply() { apply({ cache: 2 }, 'sync', false, 'cache'); } },
+    { label: '캐시 장애 → DB 과부하', apply() { apply({ cache: 2 }, 'sync', false, 'cache'); } },
     { label: '게이트웨이 한 대 장애', apply() { apply({ gw: 2 }, 'sync', false, 'gw'); } },
     { label: '로그인 서버 장애', apply() { apply({ login: 2 }, 'sync', false, 'login'); } },
     { label: '복제 지연', apply() { apply({ replica: 1 }, 'sync', false, 'replica'); } },
@@ -4024,8 +4024,8 @@ K.register('arch', function (root) {
       if (id === 'cache' && eff[id] === 2) return;
       saved.push(P.mode === 'async'
         ? `<b>비동기</b>: 게임 서버가 ${nm(id)} 응답을 기다리지 않아 틱이 멈추지 않습니다.`
-        : `<b>서킷 브레이커</b>: ${nm(id)}${id === 'log' ? '을' : '를'} 1초까지만 기다리고 실패가 이어지면 아예 부르지 않아, 게임 서버가 오래 굳지 않습니다. 기다리는 그 1초 동안은 틱이 멈추므로 비동기가 더 안전합니다.`);
-      if (!savedSay.length) savedSay.push(P.mode === 'async' ? '설계 덕분에 게임 서버까지는 번지지 않았습니다.' : '서킷 브레이커 덕분에 게임 서버가 오래 굳지는 않지만, 기다리는 1초 동안은 틱이 멈춥니다.');
+        : `<b>서킷 브레이커</b>: ${nm(id)}${id === 'log' ? '을' : '를'} 1초까지만 기다리고 실패가 이어지면 아예 부르지 않아, 게임 서버가 오래 멈추지 않습니다. 기다리는 그 1초 동안은 틱이 멈추므로 비동기가 더 안전합니다.`);
+      if (!savedSay.length) savedSay.push(P.mode === 'async' ? '설계 덕분에 게임 서버까지는 번지지 않았습니다.' : '서킷 브레이커 덕분에 게임 서버가 오래 멈추지는 않지만, 기다리는 1초 동안은 틱이 멈춥니다.');
     });
     if (eff.auth && P.brk) {
       saved.push('<b>서킷 브레이커</b>: 로그인 서버가 외부 인증을 오래 기다리지 않아 스레드가 묶이지 않습니다.');
@@ -4480,7 +4480,7 @@ K.register('chain', function (root) {
     lead: '스킬 하나, 버튼 하나는 핑 150ms를 크게 못 느낍니다. 하지만 행동이 이어질 때마다 서버 확인을 기다리면 그 150ms가 계속 쌓입니다. 같은 핑에서 스킬 연계와 상점 구매가 설계에 따라 얼마나 달라지는지 비교합니다.',
     tries: [
       '<b>핑</b>을 0 → 300ms로 올려 보세요. 맨 위 줄(확인 후 다음 입력)만 10초 동안 쓰는 스킬 수가 눈에 띄게 줄어듭니다.',
-      '<b>선입력 구간</b>을 0으로 줄여 보세요. 가운데 줄도 맨 위 줄과 똑같아집니다. 선입력 구간이 핑보다 짧아도 효과가 줄어듭니다.',
+      '<b>선입력 허용 시간</b>을 0으로 줄여 보세요. 가운데 줄도 맨 위 줄과 똑같아집니다. 선입력 허용 시간이 핑보다 짧아도 효과가 줄어듭니다.',
       '아래 <b>순차 왕복 수</b>를 5로 두고 핑을 150ms로 맞춰 보세요. 상점에서 한 번 사는 데 1초 가까이 걸립니다. 한 번에 묶으면 0.3초 안쪽으로 줄어듭니다.',
     ],
   });
@@ -4493,14 +4493,14 @@ K.register('chain', function (root) {
   K.choice(g1, { label: '서버 틱', value: P.tick, options: [[10, '10/초'], [20, '20/초'], [30, '30/초'], [60, '60/초']], onChange: v => { P.tick = +v; } });
   const g2 = K.group(F.controls, '스킬 연계');
   K.slider(g2, { label: '글로벌 쿨다운', min: 500, max: 2000, step: 50, value: P.gcd, fmt: v => K.ms(v), onInput: v => { P.gcd = v; } });
-  K.slider(g2, { label: '선입력 구간', min: 0, max: 600, step: 25, value: P.queue, unit: 'ms', onInput: v => { P.queue = v; }, hint: '쿨다운이 끝나기 이만큼 전부터 다음 스킬 입력을 받아 둡니다.' });
+  K.slider(g2, { label: '선입력 허용 시간', min: 0, max: 600, step: 25, value: P.queue, unit: 'ms', onInput: v => { P.queue = v; }, hint: '쿨다운이 끝나기 이만큼 전부터 다음 스킬 입력을 받아 둡니다.' });
   K.slider(g2, { label: '사람이 다시 누르기까지', min: 0, max: 200, step: 10, value: P.human, unit: 'ms', onInput: v => { P.human = v; }, hint: '쿨다운이 끝난 걸 보고 누르는 데 걸리는 시간' });
   const g3 = K.group(F.controls, '상점 UI');
   K.slider(g3, { label: '순차 왕복 수', min: 1, max: 10, step: 1, value: P.trips, unit: '번', onInput: v => { P.trips = v; }, hint: '예: 상점 열기 → 목록 → 가격 확인 → 구매 → 인벤토리 갱신' });
   K.slider(g3, { label: '요청당 서버 처리', min: 5, max: 100, step: 5, value: P.proc, unit: 'ms', onInput: v => { P.proc = v; } });
 
   const stA = K.stat(F.stats, { label: '확인 후 입력', unit: '회' });
-  const stB = K.stat(F.stats, { label: '선입력 구간', unit: '회' });
+  const stB = K.stat(F.stats, { label: '선입력 허용 시간', unit: '회' });
   const stC = K.stat(F.stats, { label: '선연출', unit: '회' });
   const stUi = K.stat(F.stats, { label: '상점 구매 (순차)' });
 
@@ -4534,7 +4534,7 @@ K.register('chain', function (root) {
     const X = v => L + (v / WIN) * (R - L);
     const rows = [
       ['확인 후 다음 입력', iv.confirmFirst],
-      ['선입력 구간 (스킬 큐)', iv.queued],
+      ['선입력 허용 시간 (스킬 큐)', iv.queued],
       ['선연출 (내 화면 쿨다운)', iv.optimistic],
     ];
     const rowH = narrow ? 50 : 46;
@@ -4603,7 +4603,7 @@ K.register('chain', function (root) {
     const u = uiTimes();
     stUi.set(K.ms(u.seq), u.seq > 600 ? 'bad' : u.seq > 250 ? 'warn' : 'good', `묶으면 ${K.ms(u.batch)}`);
     let msg = `${K.flag(loss > 0.12 ? 'bad' : loss > 0.05 ? 'warn' : 'good')}핑 ${P.rtt}ms, 쿨다운 ${K.ms(P.gcd)}에서 “확인 후 다음 입력” 방식은 스킬 사이마다 ${K.ms(iv.confirmFirst - P.gcd)}씩 비어 10초에 ${a}번만 씁니다. 같은 사람이 선연출 게임에서는 ${c}번을 씁니다(${Math.round(loss * 100)}% 차이). 플레이어는 이것을 <b>입력 지연</b>과 “손이 굼뜨다”로 느낍니다.`;
-    if (P.queue > 0 && P.queue < P.rtt + tickWait()) msg += ` 선입력 구간(${P.queue}ms)이 핑+틱 대기(${K.ms(P.rtt + tickWait())})보다 짧아 왕복이 일부만 가려집니다.`;
+    if (P.queue > 0 && P.queue < P.rtt + tickWait()) msg += ` 선입력 허용 시간(${P.queue}ms)이 핑+틱 대기(${K.ms(P.rtt + tickWait())})보다 짧아 왕복이 일부만 가려집니다.`;
     msg += ` 상점 구매는 왕복 ${P.trips}번이 이어져 ${K.ms(u.seq)} 걸립니다. 요청을 한 번에 묶으면 ${K.ms(u.batch)}, 목록을 미리 받아 두면 누르는 즉시 반응합니다.`;
     F.say(msg);
   }
@@ -4622,12 +4622,12 @@ K.register('chain', function (root) {
 "use strict";
 /* ==== sims/cpu.js ==== */
 /* 클라이언트 OS 스케줄러: 게임 스레드도 다른 프로그램과 똑같이 코어 앞에 줄을 선다.
-   0.25ms 단위 라운드로빈(시간 조각 5ms, 공용 대기 줄) 모형. 화면은 실제의 1/20 속도로 흐른다. */
+   0.25ms 단위 라운드로빈(시간 조각 5ms, 공용 대기열) 모형. 화면은 실제의 1/20 속도로 흐른다. */
 K.register('cpu', function (root) {
   const F = K.frame(root, {
     kicker: '레이어 2 · 클라이언트 OS',
     title: '내 컴퓨터가 다른 일로 바쁘면 게임도 CPU를 기다린다',
-    lead: '운영체제는 코어 몇 개를 여러 프로그램에 몇 ms씩(이 실험에서는 5ms) 번갈아 나눠 줍니다. 백신이나 방송 프로그램이 코어를 쓰고 있으면 게임의 계산도 차례를 기다려야 합니다. 16.7ms 안에 프레임을 못 끝내면 화면은 이전 프레임을 한 번 더 보여 줍니다. 회선과 서버는 멀쩡한데 내 화면만 뚝뚝 끊기는 경우입니다. 실제 윈도우는 앞에 띄운 창(포그라운드)에 CPU를 조금 더 주므로, 이 실험은 기다림이 큰 쪽으로 보여 줍니다.',
+    lead: '운영체제는 코어 몇 개를 여러 프로그램에 몇 ms씩(이 실험에서는 5ms) 번갈아 나눠 줍니다. 백신이나 방송 프로그램이 코어를 쓰고 있으면 게임의 계산도 CPU를 배정받을 때까지 기다려야 합니다. 16.7ms 안에 프레임을 못 끝내면 화면은 이전 프레임을 한 번 더 보여 줍니다. 회선과 서버는 멀쩡한데 내 화면만 뚝뚝 끊기는 경우입니다. 실제 윈도우는 앞에 띄운 창(포그라운드)의 우선순위를 조금 높이므로, 이 실험은 기다림이 큰 쪽으로 보여 줍니다.',
     tries: [
       '<b>방송 + 브라우저</b>를 누르고 “메인 상태” 줄을 보세요. 빨간 “대기” 구간은 게임 메인 스레드가 코어를 못 받고 기다린 시간입니다. 그 뒤에 ■(놓친 화면)가 찍힙니다.',
       '같은 상태에서 <b>게임 우선순위 높게</b>를 켜거나 코어를 <b>8개</b>로 늘려 보세요. 대기가 사라집니다.',
@@ -4968,7 +4968,7 @@ K.register('cpu', function (root) {
 <script>
 "use strict";
 /* ==== sims/dbpool.js ==== */
-/* DB 커넥션 풀: 요청 하나하나가 창구(커넥션)를 기다리고, CPU 코어를 나눠 쓰고, 인기 행 잠금 앞에 줄을 선다.
+/* DB 커넥션 풀: 요청 하나하나가 커넥션을 기다리고, CPU 코어를 나눠 쓰고, 핫 로우 잠금 앞에서 대기 선다.
    실제 속도(1초 = 1초)로 돌고, 응답 시간은 1초 단위로 모아 중간값·99% 값을 그린다. */
 K.register('dbpool', function (root) {
   const F = K.frame(root, {
@@ -5013,13 +5013,13 @@ K.register('dbpool', function (root) {
   const cTo = K.choice(g1, {
     label: '요청 타임아웃', value: P.timeout, options: [[1000, '1초'], [5000, '5초'], [30000, '30초']],
     onChange: v => { P.timeout = +v; cvL.setCaption(null, legendL()); },
-    hint: '이 시간이 지나도록 답이 없으면 게임 서버가 포기하고 실패로 처리합니다.',
+    hint: '이 시간이 지나도록 응답이 없으면 게임 서버가 포기하고 실패로 처리합니다.',
   });
   const g2 = K.group(F.controls, 'DB 서버');
   const sPool = K.slider(g2, { label: '커넥션 풀 크기', min: 1, max: 200, value: P.pool, unit: '개', onInput: v => { P.pool = v; ensurePool(); }, hint: '게임 서버가 DB에 미리 열어 둔 연결 수입니다.' });
   const cQ = K.choice(g2, {
     label: '쿼리 방식', value: P.query, options: [['idx', '인덱스 있음 (2ms)'], ['scan', '인덱스 없음 (풀 스캔 150ms)']],
-    onChange: v => { P.query = v; }, hint: '인덱스 = 책 뒤의 색인. 없으면 표 전체를 처음부터 훑습니다(풀 스캔).',
+    onChange: v => { P.query = v; }, hint: '인덱스 = 원하는 행을 바로 찾도록 미리 정렬해 둔 자료. 없으면 테이블 전체를 처음부터 읽습니다(풀 스캔).',
   });
   const sCores = K.slider(g2, { label: 'DB CPU 코어', min: 2, max: 64, step: 2, value: P.cores, unit: '개', onInput: v => { P.cores = v; }, hint: '동시에 도는 쿼리가 코어보다 많으면 모두가 그만큼 느려집니다.' });
   const g3 = K.group(F.controls, '핫 로우 (여러 요청이 고치는 행)');
@@ -5097,7 +5097,7 @@ K.register('dbpool', function (root) {
   }
   function arrive() {
     const hot = rnd() * 100 < P.hot ? 1 : 0;
-    if (!qLen) { // 줄이 없으면 빈 창구가 있을 수 있다
+    if (!qLen) { // 줄이 없으면 빈 커넥션이 있을 수 있다
       for (let i = 0; i < P.pool; i++) if (conns[i].st === IDLE) { start(i, now, hot); return; }
     }
     if (qLen < QCAP) { const k = (qHead + qLen) & (QCAP - 1); qT[k] = now; qH[k] = hot; qLen++; } else fail();
@@ -5274,7 +5274,7 @@ K.register('dbpool', function (root) {
   function explain(last, lw) {
     const base = BASE[P.query];
     const hotRate = (P.rate * P.hot) / 100;
-    const lockCap = 1000 / (base + P.lockMs);        // 인기 행이 1초에 처리할 수 있는 최대 건수
+    const lockCap = 1000 / (base + P.lockMs);        // 핫 로우가 1초에 처리할 수 있는 최대 건수
     const lockUtil = hotRate / lockCap;
     const cpuUtil = (P.rate * base) / 1000 / P.cores;
     const failing = last.fail > 0, q = qLen + lw;
@@ -5283,11 +5283,11 @@ K.register('dbpool', function (root) {
       let why;
       if (cpuUtil >= 0.9) {
         why = `<b>DB CPU가 모자랍니다.</b> 쿼리 한 건이 CPU를 ${base}ms씩 쓰는데 1초에 ${K.n(P.rate)}건이면 코어 ${P.cores}개가 감당할 양의 <b>${K.n(cpuUtil, 1)}배</b>입니다.` +
-          (P.query === 'scan' ? ' 인덱스(책의 색인)가 없어 표 전체를 처음부터 훑고 있습니다(풀 스캔).' : '') +
-          ' 동시에 도는 쿼리가 코어보다 많아 모두가 같이 느려지고, 느려진 쿼리가 커넥션을 오래 붙잡아 대기열이 끝없이 늘어납니다.';
+          (P.query === 'scan' ? ' 인덱스가 없어 테이블 전체를 처음부터 읽고 있습니다(풀 스캔).' : '') +
+          ' 동시에 도는 쿼리가 코어보다 많아 모두가 같이 느려지고, 느려진 쿼리가 커넥션을 오래 점유해 대기열이 끝없이 늘어납니다.';
       } else if (lockUtil >= 0.9 && P.hot > 0) {
         why = `<b>핫 로우 하나에 요청이 몰렸습니다.</b> 같은 행을 고치는 요청이 1초에 ${K.n(hotRate)}건인데, 잠금은 한 번에 하나만 쥘 수 있어 1초에 약 ${K.n(lockCap)}건만 지나갑니다.` +
-          (lw ? ` 잠금을 기다리는 요청도 커넥션을 붙잡고 있어서, 커넥션 ${P.pool}개 중 <b>${lw}개</b>가 잠금 대기에 묶였고 평범한 요청까지 기다립니다.` : '') + ' DB CPU는 한가합니다.' +
+          (lw ? ` 잠금을 기다리는 요청도 커넥션을 점유하고 있어서, 커넥션 ${P.pool}개 중 <b>${lw}개</b>가 잠금 대기에 묶였고 평범한 요청까지 기다립니다.` : '') + ' DB CPU는 한가합니다.' +
           (P.rate >= 2000 ? ' 요청이 몰리면 평소 여유 있던 핫 로우 잠금이 가장 먼저 무너집니다. 로그인할 때마다 고치는 공용 행(동시 접속자 수, 출석 기록 등)이 흔한 예입니다.' : '');
       } else {
         why = `<b>커넥션 풀이 모자랍니다.</b> 커넥션 ${P.pool}개가 모두 사용 중이라 요청이 대기열에서 기다립니다. DB CPU는 ${K.pct(Math.min(cpuUtil, 1))}만 쓰고 있어 아직 여유가 있습니다.` + (lw ? ` 그중 ${lw}개는 핫 로우 잠금을 기다리느라 아무 일도 못 합니다.` : '');
@@ -5301,7 +5301,7 @@ K.register('dbpool', function (root) {
       if (cpuUtil > 0.75) hints.push(`DB CPU가 ${K.pct(Math.min(cpuUtil, 1))} 바쁩니다`);
       return K.flag('warn') + `평균은 ${last.mean == null ? '—' : K.ms(last.mean)}로 괜찮아 보여도 <b>100건 중 1건은 ${last.p99 == null ? '—' : K.ms(last.p99)} 넘게</b> 걸립니다. ` + (hints.length ? hints.join('. ') + '. ' : '') + '이벤트나 점검 직후처럼 요청이 몰리면 바로 대기열이 길어집니다.';
     }
-    return K.flag('good') + `커넥션 ${P.pool}개 중 평균 ${K.n(last.util * P.pool, 1)}개만 바쁩니다. 쿼리가 ${P.query === 'idx' ? '인덱스(책의 색인)를 타서' : '풀 스캔인데도 요청이 적어'} 금방 끝나고, 핫 로우 잠금에도 여유가 있습니다. 요청 대부분이 <b>${last.p50 == null ? '—' : K.ms(last.p50)}</b> 안에 돌아옵니다.`;
+    return K.flag('good') + `커넥션 ${P.pool}개 중 평균 ${K.n(last.util * P.pool, 1)}개만 바쁩니다. 쿼리가 ${P.query === 'idx' ? '인덱스를 타서' : '풀 스캔인데도 요청이 적어'} 금방 끝나고, 핫 로우 잠금에도 여유가 있습니다. 요청 대부분이 <b>${last.p50 == null ? '—' : K.ms(last.p50)}</b> 안에 돌아옵니다.`;
   }
 
   K.loop(root, dt => {
@@ -5334,7 +5334,7 @@ K.register('disk', function (root) {
     title: '디스크가 밀리면 게임 스레드도 같이 멈춘다',
     lead: '로그 한 줄, 캐릭터 저장 한 번이 모두 디스크 쓰기입니다. IOPS는 디스크가 1초에 처리할 수 있는 읽기·쓰기 횟수이고, 클라우드 디스크의 버스트 크레딧은 잠깐 기본 성능보다 빠르게 처리할 수 있는 한도입니다. 보통은 OS가 쓰기를 메모리(페이지 캐시)에 먼저 받아 두지만, 디스크에 확실히 기록하라고(fsync) 하면 기록이 끝날 때까지 기다립니다. 게임 스레드가 그걸 직접 기다리면, 디스크가 밀리는 순간 게임도 같이 멈춥니다.',
     tries: [
-      '<b>오래된 HDD + 저장마다 fsync</b>를 눌러 보세요. 1초에 60건뿐인데도 한 건마다 20ms씩 디스크를 기다리느라 틱이 50ms를 넘깁니다. 틱마다 정해진 시간만큼 세계를 움직이는 서버라서 서버 시간이 느리게 흐릅니다(슬로우모션). 여기서 <b>fsync</b>를 끄면 OS가 쓰기를 메모리에 먼저 받아 주어 바로 정상이 됩니다. 대신 서버 전원이 꺼지면 아직 디스크에 기록되지 않은 내용이 사라질 수 있습니다.',
+      '<b>오래된 HDD + 저장마다 fsync</b>를 눌러 보세요. 1초에 60건뿐인데도 한 건마다 20ms씩 디스크를 기다리느라 틱이 50ms를 넘깁니다. 틱마다 정해진 시간만큼 게임 시간을 진행하는 서버라서 서버 시간이 느리게 흐릅니다(슬로우모션). 여기서 <b>fsync</b>를 끄면 OS가 쓰기를 메모리에 먼저 받아 주어 바로 정상이 됩니다. 대신 서버 전원이 꺼지면 아직 디스크에 기록되지 않은 내용이 사라질 수 있습니다.',
       '이어서 <b>비동기로 해결</b>을 눌러 보세요. 같은 HDD, 같은 fsync인데 틱은 바로 정상이 되고, 대신 저장이 조금 밀립니다.',
       '<b>클라우드 디스크 크레딧 소진</b>을 누르고 20초쯤 지켜보세요. 크레딧이 바닥나는 순간 처리 능력이 1.6만에서 3천으로 뚝 떨어집니다. 실제로는 수십 분~몇 시간에 걸쳐 일어나는 일을 몇 분으로 줄였습니다.',
       '<b>새벽 백업과 겹침</b>에서 <b>백업 작업 동시 실행</b>을 껐다 켜 보세요. 매일 같은 시각에 렉이 난다면 이런 예약 작업이 겹친 경우가 많습니다.',
@@ -6104,7 +6104,7 @@ K.register('frames', function (root) {
     lead: '게임은 1초에 60번, 16.7ms마다 “계산하고 그리기”를 되풀이합니다. 한 프레임이라도 늦으면 그동안 화면은 멈춰 있고, 다음 프레임에서 캐릭터가 한꺼번에 이동합니다. 이 렉은 내 컴퓨터 안에서 생깁니다. 회선과 서버는 멀쩡하고, 다른 플레이어 화면 속의 나는 대개 평소처럼 움직입니다.',
     tries: [
       '<b>GC 스파이크</b>를 누르고 아래 달리는 캐릭터를 지켜보세요. 몇 초마다 멈췄다가 앞으로 툭 튀어 나갑니다(순간이동). 위 차트에는 빨간 막대가 솟습니다.',
-      '그 상태에서 <b>점진적 GC</b>를 켜 보세요. 큰 멈춤 한 번을 3ms(유니티 기본값)짜리 작은 단위 여러 번으로 나눠 처리합니다. 가비지 생성을 500KB로 올리면 수거 속도가 못 따라가 다시 큰 멈춤이 나옵니다.',
+      '그 상태에서 <b>점진적 GC</b>를 켜 보세요. 큰 멈춤 한 번을 3ms(유니티 기본값)짜리 작은 단위 여러 번으로 나눠 처리합니다. 가비지 생성을 500KB로 올리면 수집 속도가 못 따라가 다시 큰 멈춤이 나옵니다.',
       '<b>V-Sync 경계 (17ms)</b>를 누르세요. 일이 16.7ms를 1ms 넘겼을 뿐인데 한 프레임에 33.3ms가 걸립니다. FPS가 60과 30 사이를 오가며 움직임이 들쭉날쭉해집니다.',
       '<b>새 지역 로딩</b>을 켠 채 <b>밀린 시간 처리</b>를 하나씩 바꿔 보세요. 한 번에 점프하면 순간이동, 고정 스텝으로 따라잡으면 긴 프레임이 줄줄이(뚝뚝 끊김), 상한을 두면 넘친 시간이 버려져 슬로우모션이 됩니다.',
     ],
@@ -6140,7 +6140,7 @@ K.register('frames', function (root) {
   const g2 = K.group(F.controls, '가비지 컬렉션(메모리 정리)');
   const tGC = K.toggle(g2, { label: 'C#/유니티 식 가비지 컬렉션', value: P.gc, onChange: v => { P.gc = v; heap = HEAP0 + 30; incLeft = 0; sync(); } });
   const sGarb = K.slider(g2, { label: '프레임당 가비지 생성', min: 0, max: 500, step: 10, value: P.garbage, unit: 'KB', onInput: v => { P.garbage = v; } });
-  const tInc = K.toggle(g2, { label: '점진적 GC(incremental)', value: P.inc, onChange: v => { P.inc = v; incLeft = 0; }, hint: '한 번에 몰아 수거하지 않고 프레임마다 3ms씩(유니티 기본값) 나눠 수거합니다.' });
+  const tInc = K.toggle(g2, { label: '점진적 GC(incremental)', value: P.inc, onChange: v => { P.inc = v; incLeft = 0; }, hint: '한 번에 몰아 수집하지 않고 프레임마다 3ms씩(유니티 기본값) 나눠 수집합니다.' });
   const heapRow = K.el('div', { class: 'ctl' });
   const heapOut = K.el('output');
   heapRow.append(K.el('div', { class: 'lab' }, K.el('span', { text: '쌓인 가비지(힙)' }), heapOut));
@@ -6483,7 +6483,7 @@ K.register('frames', function (root) {
     const eL = recent('load');
     if (eL) return `${K.flag('bad')}<b>새 지역 로딩</b>: 텍스처를 읽고 셰이더를 컴파일하느라 게임 스레드가 <b>${K.ms(eL.ms)}</b> 동안 다른 일을 못 했습니다. 그동안 화면은 <b>멈춤</b>. ${jumpText(eL)} 로딩을 다른 스레드로 넘기거나 미리 해 두면 사라집니다.` + CLIENT;
     const eG = recent('gc');
-    if (eG) return `${K.flag('bad')}<b>가비지 컬렉션</b>: ${eG.fallback ? '점진적 GC가 가비지 생성 속도를 못 따라가 결국 ' : ''}힙이 ${HEAPMAX}MB까지 차자 힙 전체를 훑어 가비지를 수거하느라 게임 전체를 <b>${K.ms(eG.ms)}</b> 멈췄습니다. 그동안 <b>멈춤</b>. ${jumpText(eG)} 가비지를 덜 만들거나(오브젝트 재사용) 점진적 GC를 켜면 줄어듭니다.` + CLIENT;
+    if (eG) return `${K.flag('bad')}<b>가비지 컬렉션</b>: ${eG.fallback ? '점진적 GC가 가비지 생성 속도를 못 따라가 결국 ' : ''}힙이 ${HEAPMAX}MB까지 차자 힙 전체를 훑어 가비지를 수집하느라 게임 전체를 <b>${K.ms(eG.ms)}</b> 멈췄습니다. 그동안 <b>멈춤</b>. ${jumpText(eG)} 가비지를 덜 만들거나(오브젝트 재사용) 점진적 GC를 켜면 줄어듭니다.` + CLIENT;
     if (P.mode === 'cap' && S.slow > 0.03) {
       return `${K.flag(S.slow > 0.2 ? 'bad' : 'warn')}한 프레임이 평균 ${K.ms(S.avg)}나 걸려 따라잡기 5번 상한에 걸립니다. 못 돌린 시간은 버려져 게임 세계가 실제의 <b>${K.pct(1 - S.slow)}</b> 속도로 흐릅니다(<b>슬로우모션</b>). 온라인 게임에서는 서버가 아는 위치와 벌어지면 <b>고무줄</b>처럼 당겨지기도 합니다.` + CLIENT;
     }
@@ -6492,9 +6492,9 @@ K.register('frames', function (root) {
       return `${K.flag(S.fps < 25 ? 'bad' : 'warn')}한 프레임 작업이 평균 <b>${K.ms(S.work)}</b>입니다. 캐릭터 ${K.n(P.chars)}명을 그리고 패킷 ${K.n(P.chars * 0.5)}개를 처리${P.mode !== 'var' && S.steps > 1.3 ? `하고, 밀린 시간을 메우려 게임 계산을 한 프레임에 평균 ${K.n(S.steps, 1)}번 되풀이` : ''}하느라 1초에 <b>${K.n(S.fps)}프레임</b>밖에 못 그립니다. 화면은 <b>뚝뚝 끊김</b>, 누른 키는 ${K.ms(S.lat)} 뒤에야 보입니다(<b>입력 지연</b>).` + CLIENT;
     }
     if (P.load) return `${K.flag('warn')}지금은 한 프레임 작업이 ${K.ms(S.work)}라 매끄럽습니다. 하지만 몇 초마다 새 지역에 들어서며 게임 스레드가 에셋을 직접 읽습니다. 곧 화면이 <b>멈춤</b> 뒤 <b>순간이동</b>합니다.`;
-    if (P.gc && P.inc && incLeft > 0) return `${K.flag('good')}점진적 GC가 프레임마다 ${SLICE}ms씩 가비지를 나눠 수거하는 중입니다. 큰 멈춤 없이 매끄럽게 달립니다.`;
-    if (P.gc && P.inc && P.garbage > 0) return `${K.flag('good')}가비지가 <b>${K.n(heap)}MB</b> 쌓였습니다. ${INC_START}MB가 되면 점진적 GC가 프레임마다 ${SLICE}ms씩 나눠 수거하기 시작합니다. 가비지를 너무 빨리 만들면 다 수거하지 못하고 ${HEAPMAX}MB에서 결국 한 번에 멈춥니다.`;
-    if (P.gc && P.garbage > 0) return `${K.flag('warn')}가비지가 <b>${K.n(heap)}MB</b> 쌓였습니다. ${HEAPMAX}MB가 되면 한꺼번에 수거하느라 게임이 잠깐 멈춥니다. 지금은 한 프레임 작업이 ${K.ms(S.work)}라 매끄럽습니다.`;
+    if (P.gc && P.inc && incLeft > 0) return `${K.flag('good')}점진적 GC가 프레임마다 ${SLICE}ms씩 가비지를 나눠 수집하는 중입니다. 큰 멈춤 없이 매끄럽게 달립니다.`;
+    if (P.gc && P.inc && P.garbage > 0) return `${K.flag('good')}가비지가 <b>${K.n(heap)}MB</b> 쌓였습니다. ${INC_START}MB가 되면 점진적 GC가 프레임마다 ${SLICE}ms씩 나눠 수집하기 시작합니다. 가비지를 너무 빨리 만들면 다 수집하지 못하고 ${HEAPMAX}MB에서 결국 한 번에 멈춥니다.`;
+    if (P.gc && P.garbage > 0) return `${K.flag('warn')}가비지가 <b>${K.n(heap)}MB</b> 쌓였습니다. ${HEAPMAX}MB가 되면 한꺼번에 수집하느라 게임이 잠깐 멈춥니다. 지금은 한 프레임 작업이 ${K.ms(S.work)}라 매끄럽습니다.`;
     return `${K.flag('good')}한 프레임 작업이 평균 <b>${K.ms(S.work)}</b>로 16.7ms 안에 넉넉히 끝납니다. 캐릭터가 매끄럽게 달리고, 누른 키는 ${K.ms(S.lat)} 뒤에 화면에 나타납니다.`;
   }
 
@@ -6524,7 +6524,7 @@ K.register('gc', function (root) {
     tries: [
       '<b>큰 힙 + 전체 멈춤</b>을 눌러 보세요. 32GB 힙에 살아 있는 데이터가 8GB면 GC 한 번에 2초 넘게 서버 전체가 멈춥니다.',
       '같은 상태에서 <b>GC 방식</b>을 “세대별”로 바꿔 보세요. 짧은 GC가 자주 일어나고, 틱 막대는 예산 안에 머뭅니다.',
-      '<b>이벤트 중 할당 폭주</b>를 눌러 보세요. GC가 더 자주 필요해지고, 가끔 오는 전체 GC가 1초 넘게 멈춥니다.',
+      '<b>이벤트 중 할당 폭주</b>를 눌러 보세요. GC가 더 자주 필요해지고, 가끔 오는 Full GC가 1초 넘게 멈춥니다.',
       '<b>동시 GC</b>를 켜고 <b>초당 할당량</b>을 1,500MB까지 올려 보세요. GC가 할당을 따라잡지 못하면 결국 전체 멈춤으로 넘어갑니다.',
     ],
   });
@@ -6658,7 +6658,7 @@ K.register('gc', function (root) {
     if (P.mode === 'gen') {
       const Iy = young() / A, py = youngPause() + 1;
       const If = (Hm * 0.9 - young() - Lm) / (A * 0.02);
-      return { interval: Iy, sub: `전체 GC는 ${fmtDur(If)}마다`, maxP: fp + py, perMin: (py * 60) / Iy + (fp * 60) / If, fullI: If, youngP: py };
+      return { interval: Iy, sub: `Full GC는 ${fmtDur(If)}마다`, maxP: fp + py, perMin: (py * 60) / Iy + (fp * 60) / If, fullI: If, youngP: py };
     }
     const D = markDur() / 1000;
     const head = Hm * 0.98 - Hm * 0.75;
@@ -6711,7 +6711,7 @@ K.register('gc', function (root) {
     const trig = P.mode === 'conc' ? 0.75 : 0.9;
     const trigV = P.mode === 'gen' ? H * 0.9 - young() / GB : H * trig;
     K.hline(ctx, sc, trigV, { color: C.muted, dash: [4, 3] });
-    const tl = P.mode === 'conc' ? '동시 GC 시작 75%' : P.mode === 'gen' ? '전체 GC 시작선' : 'GC 시작 90%';
+    const tl = P.mode === 'conc' ? '동시 GC 시작 75%' : P.mode === 'gen' ? 'Full GC 시작선' : 'GC 시작 90%';
     K.text(ctx, tl, box.x + 6, sc.y(trigV) + 9, { size: 10.5, color: C.muted });
     // 사용량 선
     ctx.save();
@@ -6791,7 +6791,7 @@ K.register('gc', function (root) {
     ctx.fillRect(box.x + box.w - lw, yb - 16, lw, 14);
     K.text(ctx, lab, box.x + box.w - 5, yb - 9, { align: 'right', size: 10.5, weight: 600, color: C.badInk });
   }
-  const evName = { full: '전체 GC', fallback: '전체 멈춤으로 전환', minor: 'Young GC', mark: '동시 GC 시작', markEnd: '동시 GC 끝' };
+  const evName = { full: 'Full GC', fallback: '전체 멈춤으로 전환', minor: 'Young GC', mark: '동시 GC 시작', markEnd: '동시 GC 끝' };
   K.hover(hcv, x => {
     const box = heapBox();
     const rel = ((x - box.x) / box.w) * WIN - WIN;
@@ -6835,10 +6835,10 @@ K.register('gc', function (root) {
       const absorb = busy
         ? `금방 버려지는 객체가 대부분이라 빨리 끝나지만, 지금은 틱 자체가 바빠(평소 약 ${K.ms(baseWork())}) GC가 겹친 틱은 예산 50ms를 살짝 넘습니다. 그때마다 짧게 <b>뚝뚝 끊김</b>이 생깁니다.`
         : '금방 버려지는 객체가 대부분이라 빨리 끝나고, 틱 예산 안에 흡수됩니다.';
-      return `${K.flag(st)} <b>세대별</b> GC는 새로 만든 객체만 모아 두는 작은 영역(Young 영역 ${K.n(young() / GB, 1)}GB)을 <b>${fmtDur(a.interval)}마다 ${K.ms(a.youngP)}</b>씩 짧게 수거합니다. ${absorb} 다만 GC에서 살아남은 2%가 Old 영역에 쌓이면 <b>${fmtDur(a.fullI)}마다</b> 전체 GC가 필요하고, 그때는 <b>${K.ms(a.maxP)}</b> 동안 <b>멈춤</b>, 이어서 <b>몰아치기</b>가 옵니다. ${who} ${st === 'good' ? '' : fix}`;
+      return `${K.flag(st)} <b>세대별</b> GC는 새로 만든 객체만 모아 두는 작은 영역(Young 영역 ${K.n(young() / GB, 1)}GB)을 <b>${fmtDur(a.interval)}마다 ${K.ms(a.youngP)}</b>씩 짧게 수집합니다. ${absorb} 다만 GC에서 살아남은 2%가 Old 영역에 쌓이면 <b>${fmtDur(a.fullI)}마다</b> Full GC가 필요하고, 그때는 <b>${K.ms(a.maxP)}</b> 동안 <b>멈춤</b>, 이어서 <b>몰아치기</b>가 옵니다. ${who} ${st === 'good' ? '' : fix}`;
     }
     if (a.fallback) {
-      return `${K.flag('bad')} <b>동시 수행</b> GC는 게임이 도는 동안 별도 스레드에서 메모리를 회수하지만, 초당 ${K.n(P.A)}MB를 새로 쓰면 GC(${K.n(markDur() / 1000, 1)}초)가 끝나기 전에 힙이 가득 찹니다. 결국 전체 멈춤으로 넘어가 <b>${K.ms(fp)}</b> 동안 서버가 멈춥니다(<b>멈춤</b> 뒤 <b>몰아치기</b>). 실제 GC마다 동작은 달라서, G1은 전체 GC로 넘어가고 ZGC는 메모리를 요청한 스레드를 GC가 끝날 때까지 멈춥니다. 어느 쪽이든 게임 스레드가 멈춥니다. ${who} ${fix}`;
+      return `${K.flag('bad')} <b>동시 수행</b> GC는 게임이 도는 동안 별도 스레드에서 메모리를 회수하지만, 초당 ${K.n(P.A)}MB를 새로 쓰면 GC(${K.n(markDur() / 1000, 1)}초)가 끝나기 전에 힙이 가득 찹니다. 결국 전체 멈춤으로 넘어가 <b>${K.ms(fp)}</b> 동안 서버가 멈춥니다(<b>멈춤</b> 뒤 <b>몰아치기</b>). 실제 GC마다 동작은 달라서, G1은 Full GC로 넘어가고 ZGC는 메모리를 요청한 스레드를 GC가 끝날 때까지 멈춥니다. 어느 쪽이든 게임 스레드가 멈춥니다. ${who} ${fix}`;
     }
     const work = baseWork();
     const slow = work * 1.25;
@@ -6894,7 +6894,7 @@ K.register('hol', function (root) {
 
   const cv = K.canvas(F.stage, {
     height: 2 * LANE + 36,
-    caption: '패킷 경로: 서버 → 내 PC → 게임',
+    caption: '패킷의 이동 경로: 서버 → 내 PC → 게임',
     right: '<span class="legend"><span><i style="background:var(--s1)"></i>TCP</span><span><i style="background:var(--s2)"></i>UDP</span><span><i class="box" style="background:var(--warn)"></i>순서 대기</span><span>× 손실 · 점선 재전송</span></span>',
   });
 
@@ -7319,7 +7319,7 @@ K.register('hol', function (root) {
       let why;
       if (!tx.lost && tx.k > 0 && t < tx.s + tx.d) why = '재전송 패킷이 오고 있습니다.';
       else if (hole.bo > 0) why = `재전송마저 사라져서 다음 재전송까지 <b>${K.ms(RTO() * Math.pow(2, hole.bo))}</b>를 기다립니다(타이머가 매번 두 배로 늘어나는 백오프).`;
-      else if (!hole.fr) why = `이 실험의 서버는 교과서 규칙대로 뒤따라 온 패킷 3개가 보내는 중복 ACK(수신 확인)로 빠진 것을 알아채거나, ${K.ms(RTO())} 타이머가 끝나야 다시 보냅니다.`;
+      else if (!hole.fr) why = `이 실험의 서버는 교과서 규칙대로 뒤따라 온 패킷 3개가 보내는 중복 ACK(수신 확인)로 빠진 것을 감지하거나, ${K.ms(RTO())} 타이머가 끝나야 다시 보냅니다.`;
       else why = '빠른 재전송 패킷이 사라졌습니다. 이제 타이머가 끝날 때까지 기다려야 합니다.';
       const behind = hole.rtoed
         ? `뒤의 패킷 ${waiting}개도 앞 시퀀스 번호가 비어 있어 게임에 전달되지 못합니다(실제 TCP는 타이머 재전송 뒤 새 패킷을 서버에 남겨 두지만, 이 실험은 수신 버퍼에 쌓이게 그렸습니다).`
@@ -7337,7 +7337,7 @@ K.register('hol', function (root) {
       const why = [];
       if (P.loss > 0) why.push(`손실률 ${K.pct(P.loss)}면 ${perSec >= 1 ? `1초에 ${K.n(perSec, 1)}개꼴로` : `${K.n(1 / perSec, 1)}초에 한 번꼴로`} 패킷이 사라집니다.`);
       if (P.auto) why.push(`4초마다 “${EV[lastEvent]}” 사건이 다시 일어납니다.`);
-      msg = `${K.flag(P.loss >= 0.05 ? 'bad' : 'warn')}지금은 잠잠합니다. ${why.join(' ')} 패킷이 사라질 때마다 TCP는 핑 한 번 이상 <b>멈춤</b> 뒤 <b>몰아치기</b>를 하고, UDP는 하나를 건너뜁니다. 그래서 액션·FPS 게임은 UDP 위에 “꼭 필요한 것만 다시 보내는” 자체 규칙을 얹어 씁니다.`;
+      msg = `${K.flag(P.loss >= 0.05 ? 'bad' : 'warn')}지금은 잠잠합니다. ${why.join(' ')} 패킷이 사라질 때마다 TCP는 핑 한 번 이상 <b>멈춤</b> 뒤 <b>몰아치기</b>를 하고, UDP는 하나를 건너뜁니다. 그래서 액션·FPS 게임은 UDP 위에 “꼭 필요한 것만 다시 보내는” 자체 규칙을 구현해 씁니다.`;
     }
     F.say(msg);
   });
@@ -7421,7 +7421,7 @@ K.register('journey', function (root) {
     const km = SRV[P.srv][1], stretch = SRV[P.srv][2];
     const net = km / 200 * stretch;
     const dc = 0.3;
-    const ddosIn = P.ddos ? 15 : 0;       // 세정 센터는 보통 들어오는 쪽만 거친다. 서버의 응답은 곧바로 나간다
+    const ddosIn = P.ddos ? 15 : 0;       // 스크러빙 센터는 보통 들어오는 쪽만 거친다. 서버의 응답은 곧바로 나간다
     const iv = 1000 / P.tick;
     const cost = Math.max(0.3, P.load / 100 * iv);
     const over = cost > iv;
@@ -7778,7 +7778,7 @@ K.register('lab', function (root) {
     { id: 'rubber', label: '고무줄', set: { loss: 25, lossDir: 'up', redundancy: false, smooth: false },
       say: '<b>고무줄</b>: 내 이동 명령의 25%가 서버에 못 가고, 잃은 명령을 다시 보내지도 않습니다. 내 화면은 예측으로 이미 움직였지만 서버는 받은 명령만큼만 옮겼으므로, 빠진 명령이 확인될 때마다 내 캐릭터(파랑)가 그만큼 뒤로 끌려갑니다.' },
     { id: 'slowmo', label: '슬로우모션', set: { load: 230 },
-      say: '<b>슬로우모션</b>: 서버가 한 틱을 50ms 안에 못 끝내고 115ms씩 걸립니다. 이 서버는 틱마다 정해진 50ms만큼만 세계를 진행하므로, 세계 시간이 약 0.43배속으로 흐르고 다른 플레이어·몬스터가 모두 느리게 움직입니다. 흐른 시간만큼 한 번에 진행하는 서버였다면 속도는 그대로이고 뚝뚝 끊김·순간이동으로 보였을 것입니다.' },
+      say: '<b>슬로우모션</b>: 서버가 한 틱을 50ms 안에 못 끝내고 115ms씩 걸립니다. 이 서버는 틱마다 정해진 50ms만큼만 게임 시간을 진행하므로, 게임 시간이 약 0.43배속으로 흐르고 다른 플레이어·몬스터가 모두 느리게 움직입니다. 흐른 시간만큼 한 번에 진행하는 서버였다면 속도는 그대로이고 뚝뚝 끊김·순간이동으로 보였을 것입니다.' },
     { id: 'delay', label: '입력 지연', set: { predict: false, rtt: 350 },
       say: '<b>입력 지연</b>: 클라이언트 예측을 끄고 회선 핑을 350ms로 올렸습니다. 화면을 눌러도 명령이 서버에 갔다가 결과가 돌아올 때까지 내 캐릭터가 꿈쩍하지 않습니다.' },
     { id: 'freeze', label: '멈춤', set: { stallEvery: 4, stallMs: 1600 },
@@ -8167,11 +8167,11 @@ K.register('lab', function (root) {
     F = K.frame(root, {
       kicker: '렉 실험실',
       title: '서버의 실제 상태와 내 화면은 언제나 조금 다르다',
-      lead: '왼쪽은 서버가 계산한 실제 세계, 오른쪽은 내 PC가 받은 패킷으로 그려낸 화면입니다. 파랑이 나, 주황이 다른 플레이어입니다. 오른쪽 화면을 누르면 그곳으로 이동합니다. 아래 조건을 바꿔 가며 두 화면이 어떻게 어긋나는지 보세요. 흐린 점은 최근 1.4초 동안 그려진 위치로, 점 사이 간격이 곧 화면 속 속도입니다.',
+      lead: '왼쪽은 서버가 계산한 실제 게임 상태, 오른쪽은 내 PC가 받은 패킷으로 그려낸 화면입니다. 파랑이 나, 주황이 다른 플레이어입니다. 오른쪽 화면을 누르면 그곳으로 이동합니다. 아래 조건을 바꿔 가며 두 화면이 어떻게 어긋나는지 보세요. 흐린 점은 최근 1.4초 동안 그려진 위치로, 점 사이 간격이 곧 화면 속 속도입니다.',
       layout: 'stack',
       tries: [
         '위의 증상 버튼을 하나씩 눌러 보고, 아래 <b>이벤트 로그</b>와 <b>패킷 타임라인</b>에서 무슨 일이 있었는지 확인하세요.',
-        '<b>지터</b>를 100ms로 올린 뒤 <b>다른 플레이어 표시</b>를 “받은 즉시” ↔ “보간”으로 바꿔 보세요. 보간 버퍼가 지터를 흡수하는 대신 상대가 과거에 머뭅니다.',
+        '<b>지터</b>를 100ms로 올린 뒤 <b>다른 플레이어 표시</b>를 “받은 즉시” ↔ “보간”으로 바꿔 보세요. 보간 버퍼가 지터를 흡수하는 대신 상대가 과거 위치로 보입니다.',
         '<b>손실</b> 10%에서 <b>프로토콜</b>을 UDP ↔ TCP로 바꿔 보세요. UDP는 보간과 입력 중복 전송이 빈자리를 메워 대부분 가려지고, TCP는 잃은 패킷을 기다리느라 멈췄다 몰아칩니다.',
         '<b>엄격한 이동 검증</b>을 켜고 지터를 80ms로 올려 보세요. 명령이 몰려 도착한 틱마다 서버가 이동을 잘라 고무줄이 생깁니다.',
         '<b>끊김 길이</b>를 타임아웃보다 길게 하고 <b>지금 회선 끊기</b>를 눌러 보세요. 접속이 끊깁니다. 타임아웃보다 조금 짧게 하면, TCP에서는 회선이 돌아온 뒤에도 재전송 대기 때문에 한참 더 멈춰 있다가 끊기기도 합니다.',
@@ -8237,7 +8237,7 @@ K.register('lab', function (root) {
     ctl.proto = K.choice(g2, { label: '프로토콜', value: P.proto, options: [['udp', 'UDP (잃으면 그만)'], ['tcp', 'TCP (재전송·순서 보장)']], onChange: v => set('proto', v) });
     ctl.timeout = K.slider(g2, { label: '접속 끊김 판정(타임아웃)', min: 1000, max: 15000, step: 500, value: P.timeout, fmt: v => K.ms(v), onInput: v => set('timeout', v) });
     const g3 = K.group(F.controls, '서버');
-    ctl.tick = K.slider(g3, { label: '틱레이트', min: 2, max: 60, step: 1, value: P.tick, unit: '/초', onInput: v => set('tick', v), hint: '서버가 1초에 세계를 몇 번 계산하고 패킷을 보내는지' });
+    ctl.tick = K.slider(g3, { label: '틱레이트', min: 2, max: 60, step: 1, value: P.tick, unit: '/초', onInput: v => set('tick', v), hint: '서버가 1초에 게임 상태를 몇 번 계산하고 패킷을 보내는지' });
     ctl.load = K.slider(g3, { label: '서버 부하 (틱 예산 대비)', min: 10, max: 300, step: 5, value: P.load, unit: '%', onInput: v => set('load', v), hint: '100%를 넘으면 한 틱을 제시간에 못 끝냅니다.' });
     ctl.stallEvery = K.slider(g3, { label: '주기적 서버 멈춤', min: 0, max: 10, step: 0.5, value: P.stallEvery, fmt: v => (v ? v + '초마다' : '끔'), onInput: v => { set('stallEvery', v); S.nextStallAt = v > 0 ? t + 800 : Infinity; } });
     ctl.stallMs = K.slider(g3, { label: '멈춤 길이', min: 100, max: 4000, step: 50, value: P.stallMs, fmt: v => K.ms(v), onInput: v => set('stallMs', v) });
@@ -8318,7 +8318,7 @@ K.register('lab', function (root) {
       body(S.rem.x, S.rem.y, Cc.s2, '상대');
       body(S.me.x, S.me.y, Cc.s1, '나');
       if (t < S.stallUntil) banner(co, '서버 멈춤', 'bad');
-      else if (P.load > 100) banner(co, `과부하 · 세계 ${K.n(100 / P.load, 2)}배속`, 'warn');
+      else if (P.load > 100) banner(co, `과부하 · 게임 시간 ${K.n(100 / P.load, 2)}배속`, 'warn');
     } else {
       // 목표 지점
       const tx = X(C.target.x), ty = Y(C.target.y);
@@ -8509,7 +8509,7 @@ K.register('lab', function (root) {
     const E = kind => recentEvent(kind, 1600);
     const afterStall = P.catchup === 'catchup' && stalls.length > 0 && t - stalls[stalls.length - 1].to < 2500;
     if (C.disc) {
-      msg = `${K.flag('bad')}<b>접속 끊김</b>: ${C.disc.outage ? '회선이 끊겨 타임아웃(' + K.ms(P.timeout) + ') 동안 서버와 내 PC가 서로 패킷을 하나도 받지 못했습니다. 먼저 알아챈 쪽이 연결을 정리합니다.' : C.disc.reason === 'server' ? '서버가 내 입력을 타임아웃(' + K.ms(P.timeout) + ') 동안 한 번도 받지 못해 나를 내보냈습니다. 내 PC가 오래 멈췄거나(로딩) 업로드 경로가 막힌 경우입니다.' : '서버 패킷이 타임아웃(' + K.ms(P.timeout) + ') 동안 하나도 오지 않아 게임이 연결을 포기했습니다.'} 왼쪽 서버 화면을 보면 내 캐릭터가 그대로 서 있습니다. 서버도 곧 알아채지만, 그 전에 다시 접속하면 “이미 접속 중” 오류가 날 수 있습니다.`;
+      msg = `${K.flag('bad')}<b>접속 끊김</b>: ${C.disc.outage ? '회선이 끊겨 타임아웃(' + K.ms(P.timeout) + ') 동안 서버와 내 PC가 서로 패킷을 하나도 받지 못했습니다. 먼저 감지한 쪽이 연결을 정리합니다.' : C.disc.reason === 'server' ? '서버가 내 입력을 타임아웃(' + K.ms(P.timeout) + ') 동안 한 번도 받지 못해 나를 내보냈습니다. 내 PC가 오래 멈췄거나(로딩) 업로드 경로가 막힌 경우입니다.' : '서버 패킷이 타임아웃(' + K.ms(P.timeout) + ') 동안 하나도 오지 않아 게임이 연결을 포기했습니다.'} 왼쪽 서버 화면을 보면 내 캐릭터가 그대로 서 있습니다. 서버도 곧 감지하지만, 그 전에 다시 접속하면 “이미 접속 중” 오류가 날 수 있습니다.`;
     } else if (t < C.hitchUntil) {
       msg = `${K.flag('warn')}<b>멈춤 (내 PC 쪽)</b>: 게임이 로딩·GC 같은 일로 화면을 못 그리고 있습니다. 패킷은 계속 도착해 수신 버퍼에 쌓이고, 풀리는 순간 한꺼번에 처리되며 상대가 튑니다. 회선 핑(게임 밖에서 잰 핑)은 멀쩡한데 화면이 멈춘다면 이 경우를 의심하세요. 게임 안 핑 표시는 게임 루프에서 재는 경우가 많아 이때 함께 튈 수 있습니다.`;
     } else if (wait > 400) {
@@ -8522,7 +8522,7 @@ K.register('lab', function (root) {
     } else if (E('teleport')) {
       msg = `${K.flag('bad')}<b>${afterStall ? '멈춤 뒤 순간이동' : '순간이동'}</b>: ${E('teleport').text}. ${afterStall ? '서버가 멈췄다 풀리면서 밀린 틱을 몰아서 계산해, 그 사이 이동한 거리를 한 프레임에 건너뛰었습니다.' : '패킷이 한동안 끊겼거나(손실·회선 끊김·서버 멈춤) 늦게 와서, 그 사이 이동한 거리를 한 프레임에 건너뛰었습니다.'}${P.mode === 'extrap' ? ' 외삽은 모서리에서 방향이 바뀐 걸 모르고 직진하다 되돌아오기도 합니다.' : ''}`;
     } else if (P.load > 100) {
-      msg = `${K.flag('warn')}<b>슬로우모션</b>: 서버가 틱 하나에 예산의 ${P.load}%를 씁니다. 1초에 ${tickRate}번만 계산하고, 이 실험의 서버는 틱마다 정해진 ${K.ms(1000 / P.tick)}만큼만 세계를 진행하므로 세계가 ${K.n(Math.min(1, 100 / P.load), 2)}배속으로 흐릅니다. 다른 플레이어와 몬스터가 모두 같이 느려집니다(흐른 시간만큼 한 번에 진행하는 서버라면 속도는 그대로이고 뚝뚝 끊김·순간이동으로 보입니다). 회선은 멀쩡하니 게임 밖에서 잰 핑은 그대로이고, 게임 안 핑은 서버 처리 대기가 섞여 있으면 조금 오를 수 있습니다.`;
+      msg = `${K.flag('warn')}<b>슬로우모션</b>: 서버가 틱 하나에 예산의 ${P.load}%를 씁니다. 1초에 ${tickRate}번만 계산하고, 이 실험의 서버는 틱마다 정해진 ${K.ms(1000 / P.tick)}만큼만 게임 시간을 진행하므로 게임 시간이 ${K.n(Math.min(1, 100 / P.load), 2)}배속으로 흐릅니다. 다른 플레이어와 몬스터가 모두 같이 느려집니다(흐른 시간만큼 한 번에 진행하는 서버라면 속도는 그대로이고 뚝뚝 끊김·순간이동으로 보입니다). 회선은 멀쩡하니 게임 밖에서 잰 핑은 그대로이고, 게임 안 핑은 서버 처리 대기가 섞여 있으면 조금 오를 수 있습니다.`;
     } else if (fps < 25) {
       msg = `${K.flag('warn')}<b>뚝뚝 끊김 (화면)</b>: 네트워크는 멀쩡하지만 화면을 초당 ${fps}번만 그립니다. 궤적 점 간격이 넓고 일정합니다.`;
     } else if (underRatio > 0.25 && (P.mode === 'interp' || P.mode === 'queue')) {
@@ -8604,7 +8604,7 @@ K.register('ladder', function (root) {
     ['L2 캐시 읽기', 4, 0, 'L1보다 조금 크고 조금 느린 캐시입니다. 그래도 L1의 4배밖에 걸리지 않습니다.'],
     ['메모리(RAM) 읽기', 100, 0, 'RAM에서 한 번 읽는 동안 CPU는 L1 캐시를 <b>100번</b> 읽을 수 있어요. 그래서 자주 쓰는 데이터는 캐시에 올라가도록 모아 둡니다. 스왑된 메모리를 읽으면 여기서 다시 <b>1,000배</b>가 걸립니다.'],
     ['다른 CPU 쪽 메모리(NUMA)', 150, 0, 'CPU가 두 개인 서버에서 옆 CPU에 붙은 메모리를 읽으면 1.5배쯤 더 걸립니다. 스레드가 CPU를 옮겨 다니면 이런 손해가 쌓입니다.'],
-    ['스레드 전환(컨텍스트 스위치)', 3e3, 0, '운영체제가 한 스레드를 멈추고 다른 스레드로 전환하는 시간입니다. 락을 기다리느라 스레드가 잠들고 깨기를 반복하면 이 비용이 계속 붙습니다.'],
+    ['컨텍스트 스위칭(스레드 전환)', 3e3, 0, '운영체제가 한 스레드를 멈추고 다른 스레드로 전환하는 시간입니다. 락을 기다리느라 스레드가 잠들고 깨기를 반복하면 이 비용이 계속 붙습니다.'],
     ['NVMe SSD 읽기', 6e4, 1, '서버용 NVMe SSD에서 작은 블록 하나를 읽는 시간입니다. RAM보다 <b>600배</b> 느립니다. 한 건 속도는 SATA SSD와 크게 다르지 않고, 대신 동시에 훨씬 많은 요청을 처리합니다.'],
     ['SATA SSD 읽기', 1e5, 1, '보통 SSD 한 번 읽기는 RAM의 <b>1,000배</b>입니다.'],
     ['스왑된 메모리 되읽기(SSD)', 1e5, 1, 'RAM이 모자라 디스크로 밀려난 메모리를 다시 읽는 시간입니다. RAM이었다면 100ns였을 일이 <b>1,000배</b> 느려집니다. 메모리 누수가 쌓인 서버가 갑자기 느려지는 이유입니다.'],
@@ -8618,7 +8618,7 @@ K.register('ladder', function (root) {
     ['서울↔미국 서부 왕복', 1.4e8, 2, '태평양을 건너 왕복하는 시간으로, 서버 틱 한 번보다 깁니다. 해외 서버에서 스킬 반응이 조금 늦는(<b>입력 지연</b>) 이유입니다.'],
     ['TCP 재전송 최소 대기', 2e8, 2, '잃은 패킷을 재전송 타이머(RTO)로 다시 보낼 때, 리눅스 TCP는 최소 “핑 + 200ms”를 기다렸다 다시 보냅니다. 게임처럼 드문드문 보내는 연결에서 흔합니다. 그동안 뒤따르는 데이터도 모두 멈춰 기다립니다(<b>멈춤</b> 뒤 <b>몰아치기</b>).'],
     ['사람 반응 속도', 2.5e8, 3, '사람이 화면을 보고 반응하는 데 걸리는 시간입니다. 컴퓨터에게는 아주 긴 시간이지만, 입력 지연은 이보다 훨씬 짧은 100ms 안팎부터 “굼뜨다”고 느낍니다.'],
-    ['큰 힙 GC 전체 멈춤', 1e9, 0, '큰 힙을 한 번에 수거하는 전체 멈춤 GC입니다. 그동안 틱 20개가 밀리고, 이 서버의 모든 플레이어가 동시에 <b>멈춤</b>을 겪습니다.'],
+    ['큰 힙 GC 전체 멈춤', 1e9, 0, '큰 힙을 한 번에 수집하는 전체 멈춤 GC입니다. 그동안 틱 20개가 밀리고, 이 서버의 모든 플레이어가 동시에 <b>멈춤</b>을 겪습니다.'],
   ].map(([n, v, g, why]) => ({ n, v, g, why }));
 
   K.addStyle('ladder', `
@@ -9036,7 +9036,7 @@ K.register('leak', function (root) {
         : '아직 틱 예산 50ms 안이라 티가 덜 나지만, 밀려난 양이 늘수록 틱이 빠르게 늘어납니다.';
       return `${K.flag(st)} 메모리 ${K.n(S.mem[i], 1)}GB가 RAM ${P.ram}GB를 넘어 <b>${out < 1 ? K.n(Math.max(10, out * 1024)) + 'MB' : K.n(out, 1) + 'GB'}</b>가 디스크(스왑)로 밀려났습니다. RAM은 한 번 읽는 데 약 100ns, SSD는 약 100µs로 <b>1,000배</b> 느립니다. 누수된 메모리는 대개 다시 안 쓰지만, 쓰는 데이터와 같은 메모리 페이지에 섞여 있거나 GC가 힙 전체를 훑으면 밀려난 메모리를 자주 건드립니다. 그때마다 디스크를 기다려 틱이 <b>${K.ms(tk)}</b>로 늘었습니다. ${feel} 접속자가 많은 저녁 9시 무렵 가장 심합니다.${risk && risk.what === '강제 종료' ? ` 이대로면 약 ${fmtH(risk.dh)} 뒤 서버가 강제로 꺼집니다(전원 <b>접속 끊김</b>).` : ''}`;
     }
-    if (P.leak === 0) return `${K.flag('good')} 누수가 없으면 메모리는 접속자 수를 따라 매일 같은 모양으로 오르내립니다. 저녁 피크에도 기본 ${P.base}GB + 접속자 ${K.n(S.ppl[i])}명분 ${K.n(pplGB, 1)}GB로 RAM ${P.ram}GB 안이라 틱은 예산 안입니다.`;
+    if (P.leak === 0) return `${K.flag('good')} 누수가 없으면 메모리는 접속자 수를 따라 매일 같은 패턴으로 오르내립니다. 저녁 피크에도 기본 ${P.base}GB + 접속자 ${K.n(S.ppl[i])}명분 ${K.n(pplGB, 1)}GB로 RAM ${P.ram}GB 안이라 틱은 예산 안입니다.`;
     const lastEv = events.filter(e => e.h <= h).pop();
     const since = lastEv && lastEv.kind === 'oom' ? '다시 켠 지' : '점검 후';
     const recent = lastEv && lastEv.kind === 'oom' && h - lastEv.h < 8 ? `<b>${fmtH(h - lastEv.h)} 전 서버가 강제로 꺼졌다가</b> 다시 켜졌습니다. 메모리가 비워져 지금은 멀쩡해 보이지만 누수는 그대로입니다. ` : '';
@@ -9351,7 +9351,7 @@ K.register('locks', function (root) {
       const cx = w / 2, cy = h / 2;
       ctx.fillStyle = C.bad; K.rr(ctx, cx - 7, cy - 44, 14, 14, 2); ctx.fill();
       K.text(ctx, '서버 재시작', cx, cy - 12, { align: 'center', size: narrow ? 17 : 20, weight: 700, color: C.ink });
-      K.text(ctx, '이 서버 전원 접속 끊김', cx, cy + 14, { align: 'center', size: narrow ? 13 : 14, weight: 600, color: C.badInk });
+      K.text(ctx, '이 서버의 모든 유저 접속 끊김', cx, cy + 14, { align: 'center', size: narrow ? 13 : 14, weight: 600, color: C.badInk });
       K.text(ctx, '다시 켜는 중…', cx, cy + 36, { align: 'center', size: 11.5, color: C.muted });
     }
   }
@@ -9526,7 +9526,7 @@ K.register('nagle', function (root) {
   const stAvg = K.stat(F.stats, { label: '평균 응답', sub: '최근 메시지 20개' });
   const stMax = K.stat(F.stats, { label: '최대 응답', sub: '최근 20개' });
   const stPps = K.stat(F.stats, { label: '초당 패킷 수', unit: '개', sub: '양방향 합계' });
-  const stWaste = K.stat(F.stats, { label: '낭비된 대기', unit: '%', sub: '응답 시간 중 기다린 몫' });
+  const stWaste = K.stat(F.stats, { label: '낭비된 대기', unit: '%', sub: '응답 시간 중 대기 비율' });
 
   /* ---------- 모형 ---------- */
   let t, ev, pkts, holds, msgs, sendBuf, sndNxt, sndUna, hold, srv, nextWrite, msgNo, byteEnd;
@@ -9874,7 +9874,7 @@ K.register('nic', function (root) {
 
   const fmtP = v => (v >= 10000 ? K.n(v / 10000, v % 10000 && v < 1e5 ? 1 : 0) + '만' : K.n(v));
   const fmtLat = v => (v >= 1000 ? K.n(v / 1000, v >= 10000 ? 0 : 1) + ' ms' : K.n(v) + ' µs');
-  const gain = () => 0.3 * (1 - Math.exp(-P.coal / 50));   // 병합: 초인종을 덜 눌러 처리 능력이 최대 +30%
+  const gain = () => 0.3 * (1 - Math.exp(-P.coal / 50));   // 병합: 인터럽트를 덜 걸어 처리 능력이 최대 +30%
   const capMs = () => CORE * (1 + gain());
 
   const mcv = K.canvas(F.stage, {
@@ -10217,7 +10217,7 @@ K.register('npcmissing', function (root) {
   /* ---------------- 진단 질문 ---------------- */
   const Q = {
     q1: { q: '두 캐릭터가 같은 채널, 같은 인스턴스, 같은 퀘스트 단계인가요?', h: '퀘스트 진행도에 따라 NPC를 다르게 보여 주는 “페이즈”가 있는 게임이 많습니다.', yes: 'q2', no: 'phase' },
-    q2: { q: '안 보이는 NPC의 이름표, 그림자, 클릭 판정은 있나요? (몸만 없나요?)', h: '이름표가 있으면 서버는 보냈고 클라이언트가 그리지 못한 것입니다.', yes: 'render', no: 'q3' },
+    q2: { q: '안 보이는 NPC의 이름표, 그림자, 클릭 판정은 있나요? (캐릭터 모델만 없나요?)', h: '이름표가 있으면 서버는 보냈고 클라이언트가 그리지 못한 것입니다.', yes: 'render', no: 'q3' },
     q3: { q: '그 자리를 벗어났다가 돌아오거나, 채널을 옮기면 보이나요?', h: '다시 시야에 들어가면 서버가 등장 알림을 새로 보냅니다.', yes: 'missed', no: 'q4' },
     q4: { q: '안 보이는 쪽 창을 앞으로 가져와 활성화하면 나아지나요?', h: '백그라운드 창은 프레임이나 처리를 제한하는 게임·OS 설정이 많습니다.', yes: 'background', no: 'q5' },
     q5: { q: '같은 버전의 두 번째 클라이언트를 다른 PC(다른 회선)에서 켜면 정상인가요?', h: '같은 PC·같은 공인 IP일 때만 생기는 충돌이 있습니다. 다른 PC에서 패치가 다른 설치본을 쓰면 버전 차이와 헷갈리니 버전을 맞춰서 봅니다.', yes: 'samepc', no: 'q6' },
@@ -10226,7 +10226,7 @@ K.register('npcmissing', function (root) {
   const LEAF = {
     phase: { t: '정상 동작일 가능성이 큽니다: 채널·인스턴스·페이즈 차이', c: ['pt-phase'], check: '두 캐릭터의 채널 번호, 인스턴스 ID, 해당 퀘스트 진행 단계를 비교합니다.' },
     render: { t: '서버는 보냈는데 그리지 못했습니다', c: ['pt-asset-lock', 'pt-vram', 'pt-display-option', 'pt-version'], check: '클라이언트 로그의 에셋 로딩 오류, 캐시 폴더 공유 여부, 그래픽 옵션(표시 인원 제한), 두 클라이언트의 버전을 확인합니다.' },
-    missed: { t: '등장 알림 하나가 빠졌습니다', c: ['pt-loading-drop', 'pt-spawn-burst', 'pt-background', 'pt-aoi-race', 'pt-baseline', 'pt-id-reuse'], check: '입장 직후 패킷 로그에서 해당 NPC의 등장 알림이 도착했는지, 도착 시각이 패킷 처리 준비보다 빠른지, 그때 창이 백그라운드였는지, 같은 번호의 개체가 직전에 사라진 적이 있는지 확인합니다. 위 타임라인이 이 경우입니다.' },
+    missed: { t: '등장 알림 하나가 빠졌습니다', c: ['pt-loading-drop', 'pt-spawn-burst', 'pt-background', 'pt-aoi-race', 'pt-baseline', 'pt-id-reuse'], check: '입장 직후 패킷 로그에서 해당 NPC의 등장 알림이 도착했는지, 도착 시각이 패킷 처리 준비보다 빠른지, 그때 창이 백그라운드였는지, 같은 ID의 개체가 직전에 사라진 적이 있는지 확인합니다. 위 타임라인이 이 경우입니다.' },
     background: { t: '백그라운드 창이 처리를 덜 하고 있습니다', c: ['pt-background'], check: '백그라운드 프레임 제한, 절전, 엔진의 백그라운드 실행 설정을 확인합니다. 오래 백그라운드에 두면 수신 버퍼가 넘쳐 알림이 사라질 수 있습니다.' },
     samepc: { t: '같은 PC·같은 IP라서 생기는 충돌입니다', c: ['pt-port-collision', 'pt-session-key', 'pt-multiclient'], check: '두 클라이언트가 같은 로컬 UDP 포트를 쓰는지, 서버가 IP나 기기 ID로 세션을 구분하는지, 멀티 클라이언트 제한 정책이 있는지 확인합니다.' },
     budget: { t: '서버가 보낼 양을 줄이고 있습니다', c: ['pt-priority', 'pt-display-option'], check: '연결별 전송 예산과 우선순위 설정, 표시 인원 상한을 확인합니다. 한쪽만 그렇다면 그 연결의 대역폭 추정치가 낮게 잡혔는지 봅니다.' },
@@ -10298,7 +10298,7 @@ K.register('oneslow', function (root) {
   const F = K.frame(root, {
     kicker: '누구에게 번지나 · 한 명만 느릴 때',
     title: '느린 한 사람은 남의 화면에서 어떻게 보이고, 남에게 번질까',
-    lead: '같은 서버에 A와 B가 있습니다. A만 회선이 나쁩니다. 세 화면(서버, A의 화면, B의 화면)을 나란히 놓고, 서버가 입력을 처리하는 방식을 바꿔 보세요. 대부분의 방식에서 렉은 A에게 머물고 B는 “A가 이상하게 움직이는 것”만 봅니다. 하지만 어떤 방식에서는 A 한 사람 때문에 모두가 멈춥니다.',
+    lead: '같은 서버에 A와 B가 있습니다. A만 회선이 나쁩니다. 세 화면(서버, A의 화면, B의 화면)을 나란히 놓고, 서버가 입력을 처리하는 방식을 바꿔 보세요. 대부분의 방식에서 렉은 A에게만 나타나고 B는 “A가 이상하게 움직이는 것”만 봅니다. 하지만 어떤 방식에서는 A 한 사람 때문에 모두가 멈춥니다.',
     layout: 'stack',
     tries: [
       '<b>틱마다 모아서</b> 방식에서 B의 화면을 보세요. A(파랑)는 멈칫했다가 한 번에 여러 걸음을 가지만, 몬스터와 B 자신은 멀쩡합니다. 아래 표에서 “B의 화면 → A의 모습”만 빨갛습니다. 지터와 손실을 0으로 내리면 핑이 높아도 A는 매끄럽게 보입니다. 남의 눈에 렉으로 보이게 하는 것은 핑보다 지터와 손실입니다.',
@@ -10681,7 +10681,7 @@ K.register('oneslow', function (root) {
     else if (lock) msg = `${K.flag('warn')}<b>락스텝</b>: A의 입력이 늦지만 일정하게 와서 턴은 정해진 주기대로 돕니다. 대신 서버는 A의 입력이 올 때까지 B의 입력도 대기시킵니다. 그래서 B도 A의 핑만큼 늦게 반영되는 <b>입력 지연</b>을 겪습니다. 지터나 손실을 올리면 전원이 <b>멈춥니다</b>.`;
     else if (P.mode === 'event') msg = bA.lvl === 'good' ? `${K.flag('good')}<b>도착 즉시 처리</b>: ${steady}` : `${K.flag(bA.lvl === 'bad' ? 'bad' : 'warn')}<b>도착 즉시 처리</b>: A의 입력이 몰려 오면 서버가 받는 대로 바로 적용하고 바로 알립니다. B의 화면에서 A는 <b>${bA.label}</b>. 도착 시각대로 알리므로 이동은 틱 방식보다 덜 튀지만, 스킬처럼 한 번에 끝나는 행동은 몰려 온 만큼 한순간에 실행됩니다. B 자신과 몬스터는 ${spread ? '영향을 받습니다' : '멀쩡합니다'}.`;
     else if (P.mode === 'buffer') msg = `${K.flag(bA.lvl === 'good' ? 'good' : 'warn')}<b>플레이어별 입력 버퍼</b>: 서버가 A의 입력을 한 틱에 하나씩 꺼내 쓰니 몰려 온 입력이 고르게 펴집니다. B의 화면에서 A는 <b>${bA.label}</b>. 버퍼가 비는 순간(지금까지 ${S.p.A.under}틱)만 A가 잠깐 제자리에 섭니다. 대신 A의 행동이 서버에서 확정되는 시점은 버퍼만큼 늦어집니다.${P.validate ? ' 한 틱에 한 걸음씩만 적용하므로 <b>엄격한 이동 검증</b>에도 걸리지 않습니다.' : ''}`;
-    else msg = bA.lvl === 'good' && !P.validate ? `${K.flag('good')}<b>틱마다 모아서</b>: ${steady}` : `${K.flag(bA.lvl === 'good' ? 'good' : 'bad')}<b>틱마다 모아서</b>: A의 입력이 들쭉날쭉 도착해 어떤 틱엔 0개, 어떤 틱엔 2~3개가 한꺼번에 적용됩니다. B의 화면에서 A는 <b>${bA.label}</b>. 그래도 B 자신과 몬스터는 ${spread ? '영향을 받습니다' : '멀쩡합니다'}. 서버 권위 구조에서 렉은 대부분 느린 사람에게 머뭅니다.`;
+    else msg = bA.lvl === 'good' && !P.validate ? `${K.flag('good')}<b>틱마다 모아서</b>: ${steady}` : `${K.flag(bA.lvl === 'good' ? 'good' : 'bad')}<b>틱마다 모아서</b>: A의 입력이 들쭉날쭉 도착해 어떤 틱엔 0개, 어떤 틱엔 2~3개가 한꺼번에 적용됩니다. B의 화면에서 A는 <b>${bA.label}</b>. 그래도 B 자신과 몬스터는 ${spread ? '영향을 받습니다' : '멀쩡합니다'}. 서버 권위 구조에서 렉은 대부분 느린 사람에게만 나타납니다.`;
     if (P.validate && aA.sym === 'rubber') msg += ` <b>엄격한 이동 검증</b> 때문에 A 본인의 화면에서 A가 <b>고무줄</b>처럼 끌려갑니다. 한 틱에 몰려 도착한 정상 입력을 서버가 과속으로 보고 거절했기 때문입니다.`;
     F.say(msg);
   }
@@ -10714,7 +10714,7 @@ K.register('queue', function (root) {
       '<b>도착 속도</b>를 천천히 올리며 오른쪽 곡선 위의 점이 어디서 급하게 꺾이는지 보세요.',
       '<b>이용률 95%</b> 근처에서 도착 속도를 아주 조금만 더 올려 보세요. 대기가 몇 배로 늘어납니다.',
       '<b>워커 수</b>를 1 → 4로 늘리고 처리 시간도 4배로 늘려 보세요. 같은 이용률이어도 워커가 많으면 대기열이 덜 막힙니다. 대신 한 건을 처리하는 시간은 4배입니다.',
-      '<b>도착 방식</b>을 “몰려옴”으로 바꾸면, 평균 이용률이 낮아도 순간적으로 대기열이 생깁니다. 월드 보스 등장, 점검 직후 접속이 이런 모양입니다.',
+      '<b>도착 방식</b>을 “몰려옴”으로 바꾸면, 평균 이용률이 낮아도 순간적으로 대기열이 생깁니다. 월드 보스 등장, 점검 직후 접속이 이런 패턴입니다.',
     ],
   });
 
@@ -10744,7 +10744,7 @@ K.register('queue', function (root) {
   // 상태
   let t = 0, nextArr = 0, burstLeft = 0;
   let queue = [];           // 도착 시각 배열
-  let busy = [];            // 창구별 {start, end} 또는 null
+  let busy = [];            // 워커별 {start, end} 또는 null
   let waits = [];           // 최근 대기 시간 (ms)
   let hist = [];            // [t, 줄 길이]
 
@@ -10931,7 +10931,7 @@ K.register('retrans', function (root) {
     lead: '서버가 TCP로 게임 패킷을 보냅니다. 오른쪽에서 경로상의 손실 원인을 하나씩 켜 보세요. 타임라인에서 어느 패킷이 어디서 사라졌는지(×와 원인 글자), 어떤 방식으로 다시 보냈는지(빠른 재전송, TLP, RTO), 잃지 않았는데 다시 보낸 불필요한 재전송은 없는지 볼 수 있습니다. 아래 막대는 최근 10초 동안의 손실을 원인별로 모은 것입니다. 복구 설정은 비교를 위해 옛 방식(RACK-TLP 꺼짐)에서 시작합니다. 최신 리눅스는 RACK-TLP가 기본으로 켜져 있습니다.',
     tries: [
       '<b>와이파이 손실 3%</b>를 누르세요. 게임 패킷은 100ms마다 작은 패킷 하나라 “중복 ACK 3개”가 모이기 전에 RTO(핑 + 200ms)가 먼저 옵니다. 한 번 잃을 때마다 약 300ms 멈춘 뒤 몰아서 전달됩니다. <b>게임 패킷 간격</b>을 30ms로 줄이면 빠른 재전송이 먼저 걸립니다.',
-      '같은 상태에서 <b>RACK-TLP</b>를 켜 보세요. 다음 패킷이 도착했다는 SACK(선택적 수신 확인)이 오는 즉시, 약 “패킷 간격 + 핑” 만에 잃은 것을 알아채고 다시 보냅니다. 뒤따르는 패킷이 없을 때는 끝 패킷을 한 번 더 보내는 TLP가 대신합니다. <b>선형 타임아웃</b>도 켜면 연속 손실 때 기다림이 두 배씩 늘지 않습니다.',
+      '같은 상태에서 <b>RACK-TLP</b>를 켜 보세요. 다음 패킷이 도착했다는 SACK(선택적 수신 확인)이 오는 즉시, 약 “패킷 간격 + 핑” 만에 손실을 감지하고 다시 보냅니다. 뒤따르는 패킷이 없을 때는 끝 패킷을 한 번 더 보내는 TLP가 대신합니다. <b>선형 타임아웃</b>도 켜면 연속 손실 때 기다림이 두 배씩 늘지 않습니다.',
       '<b>MTU 블랙홀</b>을 누르세요. 2초마다 오는 큰 업데이트만 계속 사라지고, 같은 패킷을 몇 번이고 다시 보냅니다. <b>MTU 탐색</b>을 켜면 몇 초 멈춘 뒤에야 패킷을 작게 나눠 통과합니다. <b>MSS 조정</b>을 켜면 처음부터 사라지지 않습니다.',
       '<b>순서 뒤바뀜 (대용량)</b>을 누르세요. RACK-TLP가 꺼진 상태라 잃지도 않은 패킷을 다시 보내는 <b>불필요한 재전송</b>이 생기고 전송량(혼잡 윈도우)이 괜히 줄어듭니다. RACK-TLP를 켜면 불필요한 재전송이 줄어듭니다.',
       '<b>지연 급등</b>을 누르세요. 4초마다 0.5초씩 늦어지는 순간 RTO가 먼저 만료되어 불필요한 재전송이 납니다. 원본도 결국 도착했으니 손실 원인 막대에는 아무것도 없습니다. 화면의 멈춤은 지연 급등 자체에서 오고, 불필요한 재전송은 주로 재전송 지표를 올립니다.',
@@ -11366,7 +11366,7 @@ K.register('retrans', function (root) {
       else if (P.mode === 'game') {
         const rackAt = Math.max(P.gap, P.rtt / 4) + P.rtt; // RACK: 다음 패킷의 SACK이 돌아오는 시점
         msg += P.gap < P.rtoMin
-          ? `RACK-TLP가 켜져 있어 다음 패킷이 도착했다는 SACK이 오는 순간, 약 ${K.ms(rackAt)} 만에 잃은 것을 알아채고 다시 보냅니다. 그래도 잃은 패킷은 평소(${K.ms(P.rtt / 2)})보다 늦은 약 ${K.ms(rackAt + P.rtt / 2)} 만에 도착하고, 그동안 뒤 패킷도 함께 <b>멈춤</b>입니다.`
+          ? `RACK-TLP가 켜져 있어 다음 패킷이 도착했다는 SACK이 오는 순간, 약 ${K.ms(rackAt)} 만에 손실을 감지하고 다시 보냅니다. 그래도 잃은 패킷은 평소(${K.ms(P.rtt / 2)})보다 늦은 약 ${K.ms(rackAt + P.rtt / 2)} 만에 도착하고, 그동안 뒤 패킷도 함께 <b>멈춤</b>입니다.`
           : `RACK-TLP가 켜져 있지만 패킷 간격(${P.gap}ms)이 길어 다음 패킷보다 TLP가 먼저 나갑니다. 아직 ACK를 받지 못한 패킷이 하나뿐이면 TLP도 지연 ACK를 감안해 RTO와 비슷하게(약 ${K.ms(P.rtt + P.rtoMin)}) 기다리므로 효과가 작습니다.`;
       }
       else msg += `대용량 전송은 뒤따르는 패킷이 많아 빠른 재전송으로 대부분 복구되지만, 손실이 난 왕복마다 혼잡 윈도우가 30% 줄어 속도가 떨어집니다. RTO까지 가면 혼잡 윈도우가 1로 떨어져 처음부터 다시 늘립니다.`;
@@ -12106,7 +12106,7 @@ K.register('sndbuf', function (root) {
     } else {
       const grow = (SCALE * slowC.filter(c => c.st === 'ok').length * Math.max(0, P.rate - P.slowDown)) / 1024;
       const eta = grow > 0 && mem != null ? (MEMMAX - mem) / grow : Infinity;
-      msg = `${K.flag(eta < 8 ? 'bad' : 'warn')}<b>느린 클라이언트에게 못 보낸 데이터를 버리지도 끊지도 않고 서버 메모리에 계속 쌓습니다.</b> 화면의 클라이언트 8개는 표본이고 실제로는 같은 비율로 2,000명이 접속해 있다고 치면, 메모리가 초당 ${K.n(grow, 0)}MB씩 늘어납니다. 한도까지 약 ${Number.isFinite(eta) ? K.n(eta, 0) + '초' : '—'}. 느린 클라이언트의 화면은 ${sL == null ? '—' : K.ms(sL)} 뒤처져 있고 계속 늘어납니다. 다른 클라이언트는 아직 멀쩡하지만, 한도를 넘는 순간 모두의 접속이 끊깁니다.`;
+      msg = `${K.flag(eta < 8 ? 'bad' : 'warn')}<b>느린 클라이언트에게 못 보낸 데이터를 버리지도 끊지도 않고 서버 메모리에 계속 쌓습니다.</b> 화면의 클라이언트 8개는 샘플이고 실제로는 같은 비율로 2,000명이 접속해 있다고 치면, 메모리가 초당 ${K.n(grow, 0)}MB씩 늘어납니다. 한도까지 약 ${Number.isFinite(eta) ? K.n(eta, 0) + '초' : '—'}. 느린 클라이언트의 화면은 ${sL == null ? '—' : K.ms(sL)} 뒤처져 있고 계속 늘어납니다. 다른 클라이언트는 아직 멀쩡하지만, 한도를 넘는 순간 모두의 접속이 끊깁니다.`;
     }
     F.say(msg);
   });
@@ -12170,7 +12170,7 @@ K.register('syncmodels', function (root) {
 
   const g1 = K.group(F.controls, '회선');
   K.slider(g1, { label: '핑(왕복)', min: 0, max: 400, step: 10, value: P.rtt, unit: 'ms', onInput: v => { P.rtt = v; } });
-  K.slider(g1, { label: '지터(도착 간격의 흔들림)', min: 0, max: 150, step: 5, value: P.jitter, unit: 'ms', onInput: v => { P.jitter = v; } });
+  K.slider(g1, { label: '지터', min: 0, max: 150, step: 5, value: P.jitter, unit: 'ms', onInput: v => { P.jitter = v; } });
   K.slider(g1, { label: '패킷 손실', min: 0, max: 20, step: 1, value: P.loss, unit: '%', onInput: v => { P.loss = v; } });
   const g2 = K.group(F.controls, '서버·방식');
   K.choice(g2, { label: '서버 틱 (락스텝 턴)', value: P.tick, options: [[10, '10/초'], [20, '20/초'], [30, '30/초'], [60, '60/초']], onChange: v => { P.tick = +v; } });
@@ -12426,9 +12426,9 @@ K.register('tick', function (root) {
   const F = K.frame(root, {
     kicker: '레이어 9 · 서버 게임 프로세스',
     title: '한 틱 안에 할 일이 넘치면 서버의 틱이 밀린다',
-    lead: '게임 서버는 “틱”이라는 일정한 주기마다 게임 세계를 한 번씩 갱신합니다. 20Hz 서버라면 1초에 20번, 틱 간격 50ms 안에 모든 플레이어의 입력, 시야, 몬스터, 보낼 데이터를 끝내야 합니다. 사람을 늘려 보세요. 할 일이 틱 간격을 넘치는 순간 그 서버의 세계 전체가 느려집니다. 이 실험의 서버는 틱마다 세계를 정해진 시간만큼 움직이는 방식입니다. 흐른 시간만큼 한 번에 움직이는 서버라면 느려지지는 않지만 뚝뚝 끊기고 순간이동합니다.',
+    lead: '게임 서버는 “틱”이라는 일정한 주기마다 게임 세계를 한 번씩 갱신합니다. 20Hz 서버라면 1초에 20번, 틱 간격 50ms 안에 모든 플레이어의 입력, 시야, 몬스터, 보낼 데이터를 끝내야 합니다. 사람을 늘려 보세요. 할 일이 틱 간격을 넘치는 순간 그 서버의 게임 세계 전체가 느려집니다. 이 실험의 서버는 틱마다 게임 시간을 정해진 만큼 진행하는 방식입니다. 흐른 시간만큼 한 번에 움직이는 서버라면 느려지지는 않지만 뚝뚝 끊기고 순간이동합니다.',
     tries: [
-      '<b>같은 지역 플레이어 수</b>를 60 → 800으로 천천히 올려 보세요. 막대가 <b>틱 예산</b> 선을 넘는 순간 아래 세계 시계가 느려지고 점들이 굼떠집니다.',
+      '<b>같은 지역 플레이어 수</b>를 60 → 800으로 천천히 올려 보세요. 막대가 <b>틱 예산</b> 선을 넘는 순간 아래 게임 시간이 느려지고 점들이 굼떠집니다.',
       '<b>월드 보스 (800명, 전원 비교)</b>를 누른 뒤 <b>시야 계산</b>을 “격자로 나눠 근처만”으로 바꿔 보세요. 가장 큰 비중인 시야 계산이 절반 아래로 줄고 틱 전체가 예산 안으로 들어옵니다. 모두 보스 곁에 몰려 있어 격자로도 0이 되지는 않습니다.',
       '<b>공성전</b>은 격자와 4스레드를 다 써도 넘칩니다. <b>사람들 분포</b>를 “흩어짐”으로 바꾸면 무엇이 달라지는지 비교해 보세요.',
       '<b>게임 스레드에서 DB 직접 호출</b>을 켜 보세요. 가끔 솟는 막대만큼 세계가 멈칫하고(뚝뚝 끊김, DB가 더 오래 막히면 멈춤), 그 뒤 틱 간격이 촘촘해지는 구간이 몰아치기를 만듭니다.',
@@ -12457,7 +12457,7 @@ K.register('tick', function (root) {
 
   const legend = '<span class="legend">' + SEG.map(s => `<span><i class="box" style="background:var(--${s.c})"></i>${s.name}</span>`).join('') + '</span>';
   const bcv = K.canvas(F.stage, { height: w => K.clamp(w * 0.42, 210, 290), caption: '최근 틱마다 걸린 시간과 그 안의 일', right: legend });
-  const ccv = K.canvas(F.stage, { height: w => (w < 480 ? 150 : 140), caption: '세계 시계', right: '점 = 이 서버의 플레이어' });
+  const ccv = K.canvas(F.stage, { height: w => (w < 480 ? 150 : 140), caption: '게임 시간', right: '점 = 이 서버의 플레이어' });
 
   /* ---------- 조작부 ---------- */
   const g1 = K.group(F.controls, '사람과 몬스터');
@@ -12499,7 +12499,7 @@ K.register('tick', function (root) {
 
   const stCost = K.stat(F.stats, { label: '틱 처리 시간', sub: '평균 / 최대' });
   const stRate = K.stat(F.stats, { label: '실제 틱레이트', unit: '회/초' });
-  const stSpeed = K.stat(F.stats, { label: '세계 속도' });
+  const stSpeed = K.stat(F.stats, { label: '게임 속도' });
   const stUpd = K.stat(F.stats, { label: '위치 업데이트', unit: '건/초' });
   const stBw = K.stat(F.stats, { label: '필요 대역폭', unit: 'Mbps', sub: '서버 회선 1Gbps 가정' });
 
@@ -12682,7 +12682,7 @@ K.register('tick', function (root) {
     const pad = 14, narrow = w < 480;
     const st = sp > 0.93 && sp < 1.08 ? 'good' : sp > 0.7 && sp < 1.6 ? 'warn' : 'bad';
     // 1줄: 숫자
-    K.text(ctx, '세계 속도', pad, 16, { size: 11.5, color: C.muted });
+    K.text(ctx, '게임 속도', pad, 16, { size: 11.5, color: C.muted });
     K.text(ctx, '×' + K.n(sp, 2), pad + 62, 16, { size: 16, weight: 700, mono: true, color: C.ink });
     K.text(ctx, narrow ? `틱 ${K.n(rate, 1)}/${P.hz}회·초` : `실제 틱 ${K.n(rate, 1)}회/초 · 목표 ${P.hz}회/초`, w - pad, 16, { align: 'right', size: 11.5, color: C.ink2 });
     // 2줄: 게이지 ×0 ~ ×2
@@ -12737,15 +12737,15 @@ K.register('tick', function (root) {
     const domTip = [
       '사람 수만큼 입력을 처리해야 합니다.',
       P.aoi === 'brute'
-        ? `${K.n(P.N)}명이 서로를 모두 비교하면 매 틱 약 <b>${kn(P.N * P.N)} 번</b> 비교합니다. 격자로 나누면 가까운 칸만 봅니다.`
-        : P.dist === 'crowd' ? '격자로 나눠도 모두 같은 칸 근처에 몰려 있으면 비교할 이웃이 크게 줄지 않습니다.' : '격자 덕분에 가까운 이웃만 비교합니다.',
+        ? `${K.n(P.N)}명이 서로를 모두 비교하면 매 틱 약 <b>${kn(P.N * P.N)} 번</b> 비교합니다. 격자로 나누면 가까운 셀(격자 한 칸)만 봅니다.`
+        : P.dist === 'crowd' ? '격자로 나눠도 모두 같은 셀 근처에 몰려 있으면 비교할 이웃이 크게 줄지 않습니다.' : '격자 덕분에 가까운 이웃만 비교합니다.',
       P.path ? `몬스터 ${K.n(P.M)}마리가 동시에 길을 다시 찾고 있습니다.` : `몬스터 ${K.n(P.M)}마리의 AI를 매 틱 돌립니다.`,
       `한 사람에게 최대 ${VIS_CAP}명의 움직임을 담아 보내야 해서, 사람이 늘면 제곱에 가깝게 늘어납니다.`,
       '게임 스레드가 DB·디스크를 기다리는 동안 아무 일도 못 합니다.',
     ][dom];
     let msg;
     if (avg > B * 1.03) {
-      msg = `${K.flag('bad')} 틱 한 번에 평균 <b>${K.ms(avg)}</b>가 걸려 예산 ${K.n(B, 0)}ms를 넘습니다. 가장 큰 비중은 <b>${SEG[dom].name} ${K.ms(avgParts[dom])}</b>. ${domTip} 이 서버는 틱마다 세계를 ${K.n(B, B % 1 ? 1 : 0)}ms씩만 움직이므로, 틱이 늦어지면 세계 시간이 실제보다 느리게 흐릅니다(세계 속도 <b>×${K.n(sp, 2)}</b>, 초당 ${K.n(rate, 1)}틱). 플레이어는 몬스터와 다른 캐릭터가 <b>슬로우모션</b>처럼 움직이고, 스킬을 눌러도 조금 늦게 반응하는 <b>입력 지연</b>을 느낍니다. ${scope('느려집니다')}`;
+      msg = `${K.flag('bad')} 틱 한 번에 평균 <b>${K.ms(avg)}</b>가 걸려 예산 ${K.n(B, 0)}ms를 넘습니다. 가장 큰 비중은 <b>${SEG[dom].name} ${K.ms(avgParts[dom])}</b>. ${domTip} 이 서버는 틱마다 게임 시간을 ${K.n(B, B % 1 ? 1 : 0)}ms씩만 진행하므로, 틱이 늦어지면 게임 시간이 실제보다 느리게 흐릅니다(게임 속도 <b>×${K.n(sp, 2)}</b>, 초당 ${K.n(rate, 1)}틱). 플레이어는 몬스터와 다른 캐릭터가 <b>슬로우모션</b>처럼 움직이고, 스킬을 눌러도 조금 늦게 반응하는 <b>입력 지연</b>을 느낍니다. ${scope('느려집니다')}`;
     } else if (blockMax > B * 0.8) {
       const tickMax = mx;
       const stop = tickMax >= 500
@@ -12755,7 +12755,7 @@ K.register('tick', function (root) {
     } else if (avg > B * 0.7 || mx > B) {
       msg = `${K.flag('warn')} 예산 ${K.n(B, 0)}ms 중 평균 <b>${K.pct(avg / B)}</b>를 쓰고 있습니다. 가장 큰 비중은 <b>${SEG[dom].name}</b>. ${domTip} 지금은 버티지만 여유가 적어서, 사람이 조금만 더 몰리면 틱이 넘치고 <b>슬로우모션</b>이 시작됩니다.`;
     } else {
-      msg = `${K.flag('good')} 틱은 서버가 게임 세계를 한 번 갱신하는 단위입니다. ${hz}Hz면 1초에 ${hz}번, 틱 간격 <b>${K.n(B, B % 1 ? 1 : 0)}ms</b> 안에 할 일을 끝내야 합니다(틱 예산). 지금은 평균 <b>${K.ms(avg)}</b>만 쓰고 나머지 시간은 쉽니다. 세계는 제 속도로 흐르고 점들도 고르게 움직입니다.`;
+      msg = `${K.flag('good')} 틱은 서버가 게임 세계를 한 번 갱신하는 단위입니다. ${hz}Hz면 1초에 ${hz}번, 틱 간격 <b>${K.n(B, B % 1 ? 1 : 0)}ms</b> 안에 할 일을 끝내야 합니다(틱 예산). 지금은 평균 <b>${K.ms(avg)}</b>만 쓰고 나머지 시간은 쉽니다. 게임 시간은 제 속도로 흐르고 점들도 고르게 움직입니다.`;
     }
     if (bw > 1000) msg += ` 게다가 매 틱 보내야 할 위치 정보가 <b>${K.n(bw / 1000, 1)}Gbps</b>로, 이 실험이 가정한 서버 회선 1Gbps를 넘깁니다. 전송이 밀려 패킷이 늦게 가거나 버려집니다(입력 지연·순간이동).`;
     return msg;
@@ -12789,13 +12789,13 @@ K.register('tick', function (root) {
 <script>
 "use strict";
 /* ==== sims/timeouts.js ==== */
-/* 타임아웃 사다리: 가만히 있는 연결은 길 위의 장비들이 하나씩 잊는다.
+/* 장비별 유휴 타임아웃: 가만히 있는 연결은 길 위의 장비들이 하나씩 잊는다.
    가장 짧은 유휴 타임아웃이 범인이고, 서버가 모르면 유령 접속이 남는다. 레이어 5(네트워크 장비) 장에서 쓴다. */
 K.register('timeouts', function (root) {
   const F = K.frame(root, {
     kicker: '레이어 5 · 네트워크 장비',
     title: '가만히 있으면 접속이 끊기는 이유: 장비별 유휴 타임아웃',
-    lead: '퀘스트 글을 읽거나 마을에 세워 두는 동안, 조용한 곳(로비·채팅 서버·한적한 사냥터)에서는 연결에 패킷이 거의 지나가지 않습니다. 경로상의 공유기·방화벽·로드밸런서는 한동안 패킷이 없는 연결을 끝난 것으로 보고 연결 테이블(장비가 관리하는 연결 목록)에서 지웁니다. 각 장비의 타이머가 차오르는 모습을 빨리 감기로 보세요.',
+    lead: '퀘스트 글을 읽거나 마을에 세워 두는 동안, 조용한 곳(로비·채팅 서버·한적한 사냥터)에서는 연결에 패킷이 거의 지나가지 않습니다. 경로상의 공유기·방화벽·로드밸런서는 한동안 패킷이 없는 연결을 끝난 것으로 보고 세션 테이블(장비가 관리하는 연결 목록)에서 지웁니다. 각 장비의 타이머가 차오르는 모습을 빨리 감기로 보세요.',
     tries: [
       '<b>서버 무응답 판정</b>을 “끔”으로 내려 보세요. 공유기가 60초에 알리지 않고 연결을 지우지만 서버는 모릅니다. 유령 접속입니다.',
       '<b>하트비트 간격</b>을 25초로 올려 보세요. 하트비트가 지나갈 때마다 모든 타이머가 0으로 돌아가 아무도 끊지 않습니다.',
@@ -12924,7 +12924,7 @@ K.register('timeouts', function (root) {
   const g3 = K.group(F.controls, '타임아웃 설정');
   const sLb = K.slider(g3, { label: '로드밸런서 유휴 타임아웃', min: 30, max: 3600, step: 10, value: P.lb, fmt: fmtT, onInput: v => { P.lb = v; changed(); }, hint: '알리지 않고 지우는 방식 기준입니다. 기본값 예: AWS NLB는 TCP 350초·UDP 120초(UDP는 바꿀 수 없음), Azure Load Balancer는 TCP 4분. AWS ALB(60초)는 시간이 되면 서버 쪽 연결도 닫아 서버가 곧 압니다.' });
   const sSrv = K.slider(g3, { label: '서버 무응답 판정', min: 0, max: 120, step: 5, value: P.srv, fmt: v => (v ? fmtT(v) : '끔'), onInput: v => { P.srv = v; changed(); }, hint: '게임 서버가 하트비트·입력을 이만큼 못 받으면 접속을 정리합니다.' });
-  const tKa = K.toggle(g3, { label: '짧은 keepalive 설정 (60초)', value: P.ka, onChange: v => { P.ka = v; changed(); }, hint: 'TCP 전용. 기본값은 2시간 동안 조용해야 첫 확인 패킷을 보냅니다.' });
+  const tKa = K.toggle(g3, { label: '짧은 keepalive 설정 (60초)', value: P.ka, onChange: v => { P.ka = v; changed(); }, hint: 'TCP 전용. 기본값은 2시간 동안 유휴 상태여야 첫 확인 패킷을 보냅니다.' });
 
   function dim(el, off) { el.style.opacity = off ? 0.45 : ''; el.querySelectorAll('input').forEach(i => { i.disabled = off; }); }
   const ctlSet = () => { cProto.set(P.proto, false); cLink.set(P.link, false); tBg.set(P.bg, false); tFw.set(P.fw, false); sHb.set(P.hb, false); sLb.set(P.lb, false); sSrv.set(P.srv, false); tKa.set(P.ka, false); };
@@ -13027,7 +13027,7 @@ K.register('timeouts', function (root) {
       const r = G.rows[i];
       label(r, l.name, Number.isFinite(l.T) ? fmtT(l.T) : '끔');
       ctx.fillStyle = C.sunk; ctx.fillRect(G.px0, r.y, G.pw, r.h);
-      if (!Number.isFinite(l.T)) { K.text(ctx, '판정 안 함: 서버는 조용한 플레이어를 내보내지 않음', G.px0 + 6, r.y + r.h / 2, { size: 10.5, color: C.muted }); return; }
+      if (!Number.isFinite(l.T)) { K.text(ctx, '판정 안 함: 서버는 입력 없는 플레이어를 내보내지 않음', G.px0 + 6, r.y + r.h / 2, { size: 10.5, color: C.muted }); return; }
       const endT = Math.min(l.ka ? l.end : l.E, MAXT);
       const Y = f => r.y + r.h - Math.min(1, f) * r.h;
       ctx.beginPath(); ctx.moveTo(X(0), Y(0));
@@ -13047,10 +13047,10 @@ K.register('timeouts', function (root) {
           const d = Math.min(A.kaFail.dead, MAXT);
           ctx.fillStyle = K.alpha(C.warn, 0.3); ctx.fillRect(x, r.y, X(d) - x, r.h);
           if (A.kaFail.dead <= MAXT) { ctx.fillStyle = K.alpha(C.bad, 0.22); ctx.fillRect(X(d), r.y, G.px1 - X(d), r.h); }
-          marker(ctx, G, A.kaFail.dead <= MAXT ? X(d) : x, r.y, r.h, A.kaFail.dead <= MAXT ? '확인 실패: 서버가 알아챔' : '확인 패킷 무응답', A.kaFail.dead <= MAXT ? C.ink : C.warn, 600);
+          marker(ctx, G, A.kaFail.dead <= MAXT ? X(d) : x, r.y, r.h, A.kaFail.dead <= MAXT ? '확인 실패: 서버가 감지함' : '확인 패킷 무응답', A.kaFail.dead <= MAXT ? C.ink : C.warn, 600);
         } else {
           ctx.fillStyle = K.alpha(C.bad, l === A.culprit ? 0.3 : 0.14); ctx.fillRect(x, r.y, G.px1 - x, r.h);
-          const txt = l === A.culprit ? (l.key === 'srv' ? '서버가 내보냄' : '여기서 끊김') : l.key === 'srv' ? '서버가 알아챔' : '뒤늦게 만료';
+          const txt = l === A.culprit ? (l.key === 'srv' ? '서버가 내보냄' : '여기서 끊김') : l.key === 'srv' ? '서버가 감지함' : '뒤늦게 만료';
           marker(ctx, G, x, r.y, r.h, txt, l === A.culprit ? C.bad : C.ink2, l === A.culprit || l.key === 'srv' ? 700 : 400);
         }
       } else if (l.T > MAXT) {
@@ -13087,9 +13087,9 @@ K.register('timeouts', function (root) {
     if (i < 0) return `<b>${fmtT(s)}</b>`;
     const l = A.L[i];
     if (!Number.isFinite(l.T)) return `<b>${l.name}</b><br>꺼져 있음`;
-    if (s >= l.E) return `<b>${l.name}</b> · ${fmtT(s)}<br>${l.ka ? '확인 패킷에 답이 없음' : '이미 이 연결을 지움'}`;
+    if (s >= l.E) return `<b>${l.name}</b> · ${fmtT(s)}<br>${l.ka ? '확인 패킷에 응답 없음' : '이미 이 연결을 지움'}`;
     const last = l.rs.filter(r => r <= s).pop() || 0;
-    return `<b>${l.name}</b> · ${fmtT(s)}<br>조용한 시간 ${fmtT(s - last)} / 한도 ${fmtT(l.T)}`;
+    return `<b>${l.name}</b> · ${fmtT(s)}<br>유휴 시간 ${fmtT(s - last)} / 한도 ${fmtT(l.T)}`;
   });
 
   /* ---------- 수치·해설 ---------- */
@@ -13099,7 +13099,7 @@ K.register('timeouts', function (root) {
     dim(tKa.el, P.proto !== 'tcp');
     if (rowsN !== A.L.length) { rowsN = A.L.length; tcv.fit && tcv.fit(); }
     const c = A.culprit;
-    stCut.set(c ? fmtT(A.Tc) : '끊기지 않음', c ? 'bad' : 'good', c ? '조용해진 뒤' : '10분 넘게 지켜봄');
+    stCut.set(c ? fmtT(A.Tc) : '끊기지 않음', c ? 'bad' : 'good', c ? '유휴 시작 뒤' : '10분 넘게 지켜봄');
     stWho.set(c ? c.name.replace(' 무응답 판정', '').replace(/\s*\(.*\)$/, '') : '없음', c ? 'bad' : 'good', c ? (c.key === 'srv' ? '서버가 직접 정리' : '알리지 않고 지움') : '타이머가 제때 초기화');
     if (!c) stSrv.set('—', null, '끊긴 적이 없음');
     else if (c.key === 'srv') stSrv.set(fmtT(A.notice), 'good', '서버가 직접 끊음');
@@ -13119,7 +13119,7 @@ K.register('timeouts', function (root) {
     });
     if (lostHb != null) ev.push([lostHb, '다음 하트비트가 나갔지만 서버에 닿지 못함', 'warn']);
     if (A.kaFail) ev.push([A.kaFail.p1, '서버의 keepalive 확인 패킷에 응답이 없음. 몇 번 더 재시도', 'warn']);
-    if (A.culprit && A.culprit.key !== 'srv') ev.push([A.notice, Number.isFinite(A.notice) ? '서버가 끊김을 알아채고 캐릭터를 정리' : '서버는 끝까지 모름. 캐릭터가 남아 있음', Number.isFinite(A.notice) ? '' : 'bad']);
+    if (A.culprit && A.culprit.key !== 'srv') ev.push([A.notice, Number.isFinite(A.notice) ? '서버가 끊김을 감지하고 캐릭터를 정리' : '서버는 끝까지 모름. 캐릭터가 남아 있음', Number.isFinite(A.notice) ? '' : 'bad']);
     if (!A.culprit) ev.push([MAXT, '10분 동안 아무도 끊지 않음', '']);
     return ev.sort((a, b) => a[0] - b[0]);
   }
@@ -13148,16 +13148,16 @@ K.register('timeouts', function (root) {
         (byKa ? ' 다만 keepalive는 운영체제가 보내므로 게임이 멈춰도 계속 나갑니다. 게임이 살아 있는지는 하트비트로 따로 확인해야 합니다.' : '');
     }
     let why;
-    if (bgStop) why = `휴대폰이 백그라운드로 가고 10초 뒤 OS가 앱을 멈춰 하트비트가 끊겼습니다. 그 뒤로 조용한 시간이 ${eul(fmtT(c.T))} 넘자`;
+    if (bgStop) why = `휴대폰이 백그라운드로 가고 10초 뒤 OS가 앱을 멈춰 하트비트가 끊겼습니다. 그 뒤로 유휴 시간이 ${eul(fmtT(c.T))} 넘자`;
     else if (!P.hb) why = `하트비트가 없어 이 연결에는 ${fmtT(c.T)} 동안 아무 패킷도 지나가지 않았고, 그러자`;
     else why = `하트비트 간격(${fmtT(P.hb)})이 ${c.key === 'srv' ? '서버의 무응답 판정' : c.name + '의 타임아웃'}(${fmtT(c.T)})보다 길어서`;
     if (c.key === 'srv') {
       return `${K.flag('bad')}${why} <b>${fmtT(A.Tc)}</b>에 <b>게임 서버</b>가 플레이어를 응답 없음으로 보고 내보냈습니다. 가만히 있던 플레이어가 다시 움직이면 접속 끊김 화면이 뜹니다. 서버가 직접 끊었으니 유령 접속은 남지 않습니다. ` +
         (bgStop ? '백그라운드에서는 하트비트를 보낼 수 없으니, 복귀하면 자동으로 빠르게 재접속하는 흐름을 만들어 두어야 합니다.' : `<b>해결:</b> 하트비트를 가장 짧은 타임아웃의 절반 이하, 예를 들어 ${fmtT(rec)}마다 보내세요.`);
     }
-    let s = `${K.flag('bad')}${why} <b>${fmtT(A.Tc)}</b>에 <b>${c.name}</b>${ga(c.name).slice(c.name.length)} 이 연결을 연결 테이블에서 지웠습니다. 플레이어는 가만히 있다가 다시 움직이는 순간 반응이 없다가 <b>접속 끊김</b>을 겪습니다. `;
+    let s = `${K.flag('bad')}${why} <b>${fmtT(A.Tc)}</b>에 <b>${c.name}</b>${ga(c.name).slice(c.name.length)} 이 연결을 세션 테이블에서 지웠습니다. 플레이어는 가만히 있다가 다시 움직이는 순간 반응이 없다가 <b>접속 끊김</b>을 겪습니다. `;
     if (A.ghost) s += `그런데 서버는 ${Number.isFinite(A.notice) ? `${fmtT(A.notice - A.Tc)} 동안(${A.noticeBy === 'ka' ? 'TCP keepalive 확인이 실패할 때까지' : '무응답 판정까지'})` : '끝까지'} 이 사실을 모릅니다. 서버에는 캐릭터가 그대로 남아(유령 접속) 재접속하면 “이미 접속 중” 오류가 나고, 필드에 가만히 선 캐릭터가 공격받기도 합니다. `;
-    else s += `서버는 ${fmtT(A.notice)}에 ${A.noticeBy === 'ka' ? 'TCP keepalive 확인으로' : '무응답 판정으로'} 알아채고 캐릭터를 정리합니다. `;
+    else s += `서버는 ${fmtT(A.notice)}에 ${A.noticeBy === 'ka' ? 'TCP keepalive 확인으로' : '무응답 판정으로'} 감지하고 캐릭터를 정리합니다. `;
     s += bgStop ? '백그라운드에서는 하트비트를 보낼 수 없으니, 복귀하면 자동 재접속하고 서버는 짧은 무응답 판정으로 캐릭터를 정리해야 합니다.'
       : `<b>해결:</b> 하트비트를 가장 짧은 타임아웃(${m.name} ${fmtT(m.T)})의 절반 이하, 예를 들어 ${fmtT(rec)}마다 보내고, 서버도 무응답 판정을 켜 두세요.`;
     return s;
@@ -13437,7 +13437,7 @@ K.register('windows', function (root) {
     } else {
       msg = `${K.flag('good')}${msg}여유가 ${K.ms(p.margin)} 남습니다. 이 게임은 핑 ${Number.isFinite(mp) ? K.ms(mp) : '1초 넘게'}까지 버팁니다.`;
     }
-    if (P.judge === 'client') msg += ' 클라이언트 판정은 내 화면만 보면 공정하지만, 조작된 클라이언트도 그대로 믿는다는 대가가 있습니다.';
+    if (P.judge === 'client') msg += ' 클라이언트 판정은 내 화면만 보면 공정하지만, 조작된 클라이언트의 판정도 그대로 인정한다는 대가가 있습니다.';
     if (P.judge === 'lagcomp') msg += ' 지연 보상은 내가 본 시점으로 판정해 주지만, 다른 사람 화면에서는 “맞은 것 같은데 안 맞음”으로 보일 수 있습니다.';
     if (P.judge === 'roll') msg += ` 롤백은 내 입력을 누른 프레임 그대로 인정하지만, 상대 동작을 늦게 본 ${K.ms(p.seeDown)}는 돌려받지 못합니다. 그만큼 동작 앞부분이 잘려 보입니다.`;
     F.say(msg);
@@ -13472,7 +13472,7 @@ K.register('windows', function (root) {
   const WHEN = { always: '항상', peak: '저녁 피크 시간', event: '사람이 몰릴 때', login: '접속·점검 직후', idle: '가만히 있다가', random: '가끔 무작위로', periodic: '일정한 주기로', uptime: '오래 켜 둘수록', moving: '이동 중·지역 전환 때', action: '특정 행동을 할 때' };
   const SIMNAME = {
     lab: '렉 실험실', queue: '대기열 실험', journey: '지연 분해', frames: '프레임 실험', cpu: 'CPU 스케줄러 실험', bloat: '버퍼블로트 실험',
-    distance: '거리·경로 실험', timeouts: '타임아웃 사다리', nic: 'NIC 실험', rush: '접속 폭주 실험', hol: 'TCP vs UDP 실험', nagle: 'Nagle 실험',
+    distance: '거리·경로 실험', timeouts: '장비별 유휴 타임아웃 실험', nic: 'NIC 실험', rush: '접속 폭주 실험', hol: 'TCP vs UDP 실험', nagle: 'Nagle 실험',
     sndbuf: '느린 클라이언트 실험', tick: '틱 예산 실험', locks: '락 실험', gc: 'GC 실험', leak: '메모리 누수 실험', ladder: '숫자 감각',
     disk: '디스크 실험', dbpool: 'DB 실험', arch: '서버 구성 실험',
     syncmodels: '동기화 방식 비교', windows: '판정 구간 실험', chain: '연속 행동 실험', oneslow: '한 명만 느릴 때 실험', npcmissing: '한쪽 클라 진단', retrans: 'TCP 재전송 실험',

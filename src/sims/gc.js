@@ -319,7 +319,7 @@ K.register('gc', function (root) {
       const absorb = busy
         ? `금방 버려지는 객체가 대부분이라 빨리 끝나지만, 지금은 틱 자체가 바빠(평소 약 ${K.ms(baseWork())}) GC가 겹친 틱은 예산 50ms를 살짝 넘습니다. 그때마다 짧게 <b>뚝뚝 끊김</b>이 생깁니다.`
         : '금방 버려지는 객체가 대부분이라 빨리 끝나고, 틱 예산 안에 흡수됩니다.';
-      return `${K.flag(st)} <b>세대별</b> GC는 새로 만든 객체만 모아 두는 작은 영역(Young 영역 ${K.n(young() / GB, 1)}GB)을 <b>${fmtDur(a.interval)}마다 ${K.ms(a.youngP)}</b>씩 짧게 수거합니다. ${absorb} 다만 GC에서 살아남은 2%가 Old 영역에 쌓이면 <b>${fmtDur(a.fullI)}마다</b> Full GC가 필요하고, 그때는 <b>${K.ms(a.maxP)}</b> 동안 <b>멈춤</b>, 이어서 <b>몰아치기</b>가 옵니다. ${who} ${st === 'good' ? '' : fix}`;
+      return `${K.flag(st)} <b>세대별</b> GC는 새로 만든 객체만 모아 두는 작은 영역(Young 영역 ${K.n(young() / GB, 1)}GB)을 <b>${fmtDur(a.interval)}마다 ${K.ms(a.youngP)}</b>씩 짧게 수집합니다. ${absorb} 다만 GC에서 살아남은 2%가 Old 영역에 쌓이면 <b>${fmtDur(a.fullI)}마다</b> Full GC가 필요하고, 그때는 <b>${K.ms(a.maxP)}</b> 동안 <b>멈춤</b>, 이어서 <b>몰아치기</b>가 옵니다. ${who} ${st === 'good' ? '' : fix}`;
     }
     if (a.fallback) {
       return `${K.flag('bad')} <b>동시 수행</b> GC는 게임이 도는 동안 별도 스레드에서 메모리를 회수하지만, 초당 ${K.n(P.A)}MB를 새로 쓰면 GC(${K.n(markDur() / 1000, 1)}초)가 끝나기 전에 힙이 가득 찹니다. 결국 전체 멈춤으로 넘어가 <b>${K.ms(fp)}</b> 동안 서버가 멈춥니다(<b>멈춤</b> 뒤 <b>몰아치기</b>). 실제 GC마다 동작은 달라서, G1은 Full GC로 넘어가고 ZGC는 메모리를 요청한 스레드를 GC가 끝날 때까지 멈춥니다. 어느 쪽이든 게임 스레드가 멈춥니다. ${who} ${fix}`;

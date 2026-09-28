@@ -275,7 +275,7 @@ K.register('locks', function (root) {
       const cx = w / 2, cy = h / 2;
       ctx.fillStyle = C.bad; K.rr(ctx, cx - 7, cy - 44, 14, 14, 2); ctx.fill();
       K.text(ctx, '서버 재시작', cx, cy - 12, { align: 'center', size: narrow ? 17 : 20, weight: 700, color: C.ink });
-      K.text(ctx, '이 서버 전원 접속 끊김', cx, cy + 14, { align: 'center', size: narrow ? 13 : 14, weight: 600, color: C.badInk });
+      K.text(ctx, '이 서버의 모든 유저 접속 끊김', cx, cy + 14, { align: 'center', size: narrow ? 13 : 14, weight: 600, color: C.badInk });
       K.text(ctx, '다시 켜는 중…', cx, cy + 36, { align: 'center', size: 11.5, color: C.muted });
     }
   }

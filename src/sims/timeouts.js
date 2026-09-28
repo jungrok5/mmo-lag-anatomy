@@ -1,10 +1,10 @@
-/* 타임아웃 사다리: 가만히 있는 연결은 길 위의 장비들이 하나씩 잊는다.
+/* 장비별 유휴 타임아웃: 가만히 있는 연결은 길 위의 장비들이 하나씩 잊는다.
    가장 짧은 유휴 타임아웃이 범인이고, 서버가 모르면 유령 접속이 남는다. 레이어 5(네트워크 장비) 장에서 쓴다. */
 K.register('timeouts', function (root) {
   const F = K.frame(root, {
     kicker: '레이어 5 · 네트워크 장비',
     title: '가만히 있으면 접속이 끊기는 이유: 장비별 유휴 타임아웃',
-    lead: '퀘스트 글을 읽거나 마을에 세워 두는 동안, 조용한 곳(로비·채팅 서버·한적한 사냥터)에서는 연결에 패킷이 거의 지나가지 않습니다. 경로상의 공유기·방화벽·로드밸런서는 한동안 패킷이 없는 연결을 끝난 것으로 보고 연결 테이블(장비가 관리하는 연결 목록)에서 지웁니다. 각 장비의 타이머가 차오르는 모습을 빨리 감기로 보세요.',
+    lead: '퀘스트 글을 읽거나 마을에 세워 두는 동안, 조용한 곳(로비·채팅 서버·한적한 사냥터)에서는 연결에 패킷이 거의 지나가지 않습니다. 경로상의 공유기·방화벽·로드밸런서는 한동안 패킷이 없는 연결을 끝난 것으로 보고 세션 테이블(장비가 관리하는 연결 목록)에서 지웁니다. 각 장비의 타이머가 차오르는 모습을 빨리 감기로 보세요.',
     tries: [
       '<b>서버 무응답 판정</b>을 “끔”으로 내려 보세요. 공유기가 60초에 알리지 않고 연결을 지우지만 서버는 모릅니다. 유령 접속입니다.',
       '<b>하트비트 간격</b>을 25초로 올려 보세요. 하트비트가 지나갈 때마다 모든 타이머가 0으로 돌아가 아무도 끊지 않습니다.',
@@ -133,7 +133,7 @@ K.register('timeouts', function (root) {
   const g3 = K.group(F.controls, '타임아웃 설정');
   const sLb = K.slider(g3, { label: '로드밸런서 유휴 타임아웃', min: 30, max: 3600, step: 10, value: P.lb, fmt: fmtT, onInput: v => { P.lb = v; changed(); }, hint: '알리지 않고 지우는 방식 기준입니다. 기본값 예: AWS NLB는 TCP 350초·UDP 120초(UDP는 바꿀 수 없음), Azure Load Balancer는 TCP 4분. AWS ALB(60초)는 시간이 되면 서버 쪽 연결도 닫아 서버가 곧 압니다.' });
   const sSrv = K.slider(g3, { label: '서버 무응답 판정', min: 0, max: 120, step: 5, value: P.srv, fmt: v => (v ? fmtT(v) : '끔'), onInput: v => { P.srv = v; changed(); }, hint: '게임 서버가 하트비트·입력을 이만큼 못 받으면 접속을 정리합니다.' });
-  const tKa = K.toggle(g3, { label: '짧은 keepalive 설정 (60초)', value: P.ka, onChange: v => { P.ka = v; changed(); }, hint: 'TCP 전용. 기본값은 2시간 동안 조용해야 첫 확인 패킷을 보냅니다.' });
+  const tKa = K.toggle(g3, { label: '짧은 keepalive 설정 (60초)', value: P.ka, onChange: v => { P.ka = v; changed(); }, hint: 'TCP 전용. 기본값은 2시간 동안 유휴 상태여야 첫 확인 패킷을 보냅니다.' });
 
   function dim(el, off) { el.style.opacity = off ? 0.45 : ''; el.querySelectorAll('input').forEach(i => { i.disabled = off; }); }
   const ctlSet = () => { cProto.set(P.proto, false); cLink.set(P.link, false); tBg.set(P.bg, false); tFw.set(P.fw, false); sHb.set(P.hb, false); sLb.set(P.lb, false); sSrv.set(P.srv, false); tKa.set(P.ka, false); };
@@ -236,7 +236,7 @@ K.register('timeouts', function (root) {
       const r = G.rows[i];
       label(r, l.name, Number.isFinite(l.T) ? fmtT(l.T) : '끔');
       ctx.fillStyle = C.sunk; ctx.fillRect(G.px0, r.y, G.pw, r.h);
-      if (!Number.isFinite(l.T)) { K.text(ctx, '판정 안 함: 서버는 조용한 플레이어를 내보내지 않음', G.px0 + 6, r.y + r.h / 2, { size: 10.5, color: C.muted }); return; }
+      if (!Number.isFinite(l.T)) { K.text(ctx, '판정 안 함: 서버는 입력 없는 플레이어를 내보내지 않음', G.px0 + 6, r.y + r.h / 2, { size: 10.5, color: C.muted }); return; }
       const endT = Math.min(l.ka ? l.end : l.E, MAXT);
       const Y = f => r.y + r.h - Math.min(1, f) * r.h;
       ctx.beginPath(); ctx.moveTo(X(0), Y(0));
@@ -256,10 +256,10 @@ K.register('timeouts', function (root) {
           const d = Math.min(A.kaFail.dead, MAXT);
           ctx.fillStyle = K.alpha(C.warn, 0.3); ctx.fillRect(x, r.y, X(d) - x, r.h);
           if (A.kaFail.dead <= MAXT) { ctx.fillStyle = K.alpha(C.bad, 0.22); ctx.fillRect(X(d), r.y, G.px1 - X(d), r.h); }
-          marker(ctx, G, A.kaFail.dead <= MAXT ? X(d) : x, r.y, r.h, A.kaFail.dead <= MAXT ? '확인 실패: 서버가 알아챔' : '확인 패킷 무응답', A.kaFail.dead <= MAXT ? C.ink : C.warn, 600);
+          marker(ctx, G, A.kaFail.dead <= MAXT ? X(d) : x, r.y, r.h, A.kaFail.dead <= MAXT ? '확인 실패: 서버가 감지함' : '확인 패킷 무응답', A.kaFail.dead <= MAXT ? C.ink : C.warn, 600);
         } else {
           ctx.fillStyle = K.alpha(C.bad, l === A.culprit ? 0.3 : 0.14); ctx.fillRect(x, r.y, G.px1 - x, r.h);
-          const txt = l === A.culprit ? (l.key === 'srv' ? '서버가 내보냄' : '여기서 끊김') : l.key === 'srv' ? '서버가 알아챔' : '뒤늦게 만료';
+          const txt = l === A.culprit ? (l.key === 'srv' ? '서버가 내보냄' : '여기서 끊김') : l.key === 'srv' ? '서버가 감지함' : '뒤늦게 만료';
           marker(ctx, G, x, r.y, r.h, txt, l === A.culprit ? C.bad : C.ink2, l === A.culprit || l.key === 'srv' ? 700 : 400);
         }
       } else if (l.T > MAXT) {
@@ -296,9 +296,9 @@ K.register('timeouts', function (root) {
     if (i < 0) return `<b>${fmtT(s)}</b>`;
     const l = A.L[i];
     if (!Number.isFinite(l.T)) return `<b>${l.name}</b><br>꺼져 있음`;
-    if (s >= l.E) return `<b>${l.name}</b> · ${fmtT(s)}<br>${l.ka ? '확인 패킷에 답이 없음' : '이미 이 연결을 지움'}`;
+    if (s >= l.E) return `<b>${l.name}</b> · ${fmtT(s)}<br>${l.ka ? '확인 패킷에 응답 없음' : '이미 이 연결을 지움'}`;
     const last = l.rs.filter(r => r <= s).pop() || 0;
-    return `<b>${l.name}</b> · ${fmtT(s)}<br>조용한 시간 ${fmtT(s - last)} / 한도 ${fmtT(l.T)}`;
+    return `<b>${l.name}</b> · ${fmtT(s)}<br>유휴 시간 ${fmtT(s - last)} / 한도 ${fmtT(l.T)}`;
   });
 
   /* ---------- 수치·해설 ---------- */
@@ -308,7 +308,7 @@ K.register('timeouts', function (root) {
     dim(tKa.el, P.proto !== 'tcp');
     if (rowsN !== A.L.length) { rowsN = A.L.length; tcv.fit && tcv.fit(); }
     const c = A.culprit;
-    stCut.set(c ? fmtT(A.Tc) : '끊기지 않음', c ? 'bad' : 'good', c ? '조용해진 뒤' : '10분 넘게 지켜봄');
+    stCut.set(c ? fmtT(A.Tc) : '끊기지 않음', c ? 'bad' : 'good', c ? '유휴 시작 뒤' : '10분 넘게 지켜봄');
     stWho.set(c ? c.name.replace(' 무응답 판정', '').replace(/\s*\(.*\)$/, '') : '없음', c ? 'bad' : 'good', c ? (c.key === 'srv' ? '서버가 직접 정리' : '알리지 않고 지움') : '타이머가 제때 초기화');
     if (!c) stSrv.set('—', null, '끊긴 적이 없음');
     else if (c.key === 'srv') stSrv.set(fmtT(A.notice), 'good', '서버가 직접 끊음');
@@ -328,7 +328,7 @@ K.register('timeouts', function (root) {
     });
     if (lostHb != null) ev.push([lostHb, '다음 하트비트가 나갔지만 서버에 닿지 못함', 'warn']);
     if (A.kaFail) ev.push([A.kaFail.p1, '서버의 keepalive 확인 패킷에 응답이 없음. 몇 번 더 재시도', 'warn']);
-    if (A.culprit && A.culprit.key !== 'srv') ev.push([A.notice, Number.isFinite(A.notice) ? '서버가 끊김을 알아채고 캐릭터를 정리' : '서버는 끝까지 모름. 캐릭터가 남아 있음', Number.isFinite(A.notice) ? '' : 'bad']);
+    if (A.culprit && A.culprit.key !== 'srv') ev.push([A.notice, Number.isFinite(A.notice) ? '서버가 끊김을 감지하고 캐릭터를 정리' : '서버는 끝까지 모름. 캐릭터가 남아 있음', Number.isFinite(A.notice) ? '' : 'bad']);
     if (!A.culprit) ev.push([MAXT, '10분 동안 아무도 끊지 않음', '']);
     return ev.sort((a, b) => a[0] - b[0]);
   }
@@ -357,16 +357,16 @@ K.register('timeouts', function (root) {
         (byKa ? ' 다만 keepalive는 운영체제가 보내므로 게임이 멈춰도 계속 나갑니다. 게임이 살아 있는지는 하트비트로 따로 확인해야 합니다.' : '');
     }
     let why;
-    if (bgStop) why = `휴대폰이 백그라운드로 가고 10초 뒤 OS가 앱을 멈춰 하트비트가 끊겼습니다. 그 뒤로 조용한 시간이 ${eul(fmtT(c.T))} 넘자`;
+    if (bgStop) why = `휴대폰이 백그라운드로 가고 10초 뒤 OS가 앱을 멈춰 하트비트가 끊겼습니다. 그 뒤로 유휴 시간이 ${eul(fmtT(c.T))} 넘자`;
     else if (!P.hb) why = `하트비트가 없어 이 연결에는 ${fmtT(c.T)} 동안 아무 패킷도 지나가지 않았고, 그러자`;
     else why = `하트비트 간격(${fmtT(P.hb)})이 ${c.key === 'srv' ? '서버의 무응답 판정' : c.name + '의 타임아웃'}(${fmtT(c.T)})보다 길어서`;
     if (c.key === 'srv') {
       return `${K.flag('bad')}${why} <b>${fmtT(A.Tc)}</b>에 <b>게임 서버</b>가 플레이어를 응답 없음으로 보고 내보냈습니다. 가만히 있던 플레이어가 다시 움직이면 접속 끊김 화면이 뜹니다. 서버가 직접 끊었으니 유령 접속은 남지 않습니다. ` +
         (bgStop ? '백그라운드에서는 하트비트를 보낼 수 없으니, 복귀하면 자동으로 빠르게 재접속하는 흐름을 만들어 두어야 합니다.' : `<b>해결:</b> 하트비트를 가장 짧은 타임아웃의 절반 이하, 예를 들어 ${fmtT(rec)}마다 보내세요.`);
     }
-    let s = `${K.flag('bad')}${why} <b>${fmtT(A.Tc)}</b>에 <b>${c.name}</b>${ga(c.name).slice(c.name.length)} 이 연결을 연결 테이블에서 지웠습니다. 플레이어는 가만히 있다가 다시 움직이는 순간 반응이 없다가 <b>접속 끊김</b>을 겪습니다. `;
+    let s = `${K.flag('bad')}${why} <b>${fmtT(A.Tc)}</b>에 <b>${c.name}</b>${ga(c.name).slice(c.name.length)} 이 연결을 세션 테이블에서 지웠습니다. 플레이어는 가만히 있다가 다시 움직이는 순간 반응이 없다가 <b>접속 끊김</b>을 겪습니다. `;
     if (A.ghost) s += `그런데 서버는 ${Number.isFinite(A.notice) ? `${fmtT(A.notice - A.Tc)} 동안(${A.noticeBy === 'ka' ? 'TCP keepalive 확인이 실패할 때까지' : '무응답 판정까지'})` : '끝까지'} 이 사실을 모릅니다. 서버에는 캐릭터가 그대로 남아(유령 접속) 재접속하면 “이미 접속 중” 오류가 나고, 필드에 가만히 선 캐릭터가 공격받기도 합니다. `;
-    else s += `서버는 ${fmtT(A.notice)}에 ${A.noticeBy === 'ka' ? 'TCP keepalive 확인으로' : '무응답 판정으로'} 알아채고 캐릭터를 정리합니다. `;
+    else s += `서버는 ${fmtT(A.notice)}에 ${A.noticeBy === 'ka' ? 'TCP keepalive 확인으로' : '무응답 판정으로'} 감지하고 캐릭터를 정리합니다. `;
     s += bgStop ? '백그라운드에서는 하트비트를 보낼 수 없으니, 복귀하면 자동 재접속하고 서버는 짧은 무응답 판정으로 캐릭터를 정리해야 합니다.'
       : `<b>해결:</b> 하트비트를 가장 짧은 타임아웃(${m.name} ${fmtT(m.T)})의 절반 이하, 예를 들어 ${fmtT(rec)}마다 보내고, 서버도 무응답 판정을 켜 두세요.`;
     return s;

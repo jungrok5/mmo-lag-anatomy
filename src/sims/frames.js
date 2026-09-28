@@ -7,7 +7,7 @@ K.register('frames', function (root) {
     lead: '게임은 1초에 60번, 16.7ms마다 “계산하고 그리기”를 되풀이합니다. 한 프레임이라도 늦으면 그동안 화면은 멈춰 있고, 다음 프레임에서 캐릭터가 한꺼번에 이동합니다. 이 렉은 내 컴퓨터 안에서 생깁니다. 회선과 서버는 멀쩡하고, 다른 플레이어 화면 속의 나는 대개 평소처럼 움직입니다.',
     tries: [
       '<b>GC 스파이크</b>를 누르고 아래 달리는 캐릭터를 지켜보세요. 몇 초마다 멈췄다가 앞으로 툭 튀어 나갑니다(순간이동). 위 차트에는 빨간 막대가 솟습니다.',
-      '그 상태에서 <b>점진적 GC</b>를 켜 보세요. 큰 멈춤 한 번을 3ms(유니티 기본값)짜리 작은 단위 여러 번으로 나눠 처리합니다. 가비지 생성을 500KB로 올리면 수거 속도가 못 따라가 다시 큰 멈춤이 나옵니다.',
+      '그 상태에서 <b>점진적 GC</b>를 켜 보세요. 큰 멈춤 한 번을 3ms(유니티 기본값)짜리 작은 단위 여러 번으로 나눠 처리합니다. 가비지 생성을 500KB로 올리면 수집 속도가 못 따라가 다시 큰 멈춤이 나옵니다.',
       '<b>V-Sync 경계 (17ms)</b>를 누르세요. 일이 16.7ms를 1ms 넘겼을 뿐인데 한 프레임에 33.3ms가 걸립니다. FPS가 60과 30 사이를 오가며 움직임이 들쭉날쭉해집니다.',
       '<b>새 지역 로딩</b>을 켠 채 <b>밀린 시간 처리</b>를 하나씩 바꿔 보세요. 한 번에 점프하면 순간이동, 고정 스텝으로 따라잡으면 긴 프레임이 줄줄이(뚝뚝 끊김), 상한을 두면 넘친 시간이 버려져 슬로우모션이 됩니다.',
     ],
@@ -43,7 +43,7 @@ K.register('frames', function (root) {
   const g2 = K.group(F.controls, '가비지 컬렉션(메모리 정리)');
   const tGC = K.toggle(g2, { label: 'C#/유니티 식 가비지 컬렉션', value: P.gc, onChange: v => { P.gc = v; heap = HEAP0 + 30; incLeft = 0; sync(); } });
   const sGarb = K.slider(g2, { label: '프레임당 가비지 생성', min: 0, max: 500, step: 10, value: P.garbage, unit: 'KB', onInput: v => { P.garbage = v; } });
-  const tInc = K.toggle(g2, { label: '점진적 GC(incremental)', value: P.inc, onChange: v => { P.inc = v; incLeft = 0; }, hint: '한 번에 몰아 수거하지 않고 프레임마다 3ms씩(유니티 기본값) 나눠 수거합니다.' });
+  const tInc = K.toggle(g2, { label: '점진적 GC(incremental)', value: P.inc, onChange: v => { P.inc = v; incLeft = 0; }, hint: '한 번에 몰아 수집하지 않고 프레임마다 3ms씩(유니티 기본값) 나눠 수집합니다.' });
   const heapRow = K.el('div', { class: 'ctl' });
   const heapOut = K.el('output');
   heapRow.append(K.el('div', { class: 'lab' }, K.el('span', { text: '쌓인 가비지(힙)' }), heapOut));
@@ -386,7 +386,7 @@ K.register('frames', function (root) {
     const eL = recent('load');
     if (eL) return `${K.flag('bad')}<b>새 지역 로딩</b>: 텍스처를 읽고 셰이더를 컴파일하느라 게임 스레드가 <b>${K.ms(eL.ms)}</b> 동안 다른 일을 못 했습니다. 그동안 화면은 <b>멈춤</b>. ${jumpText(eL)} 로딩을 다른 스레드로 넘기거나 미리 해 두면 사라집니다.` + CLIENT;
     const eG = recent('gc');
-    if (eG) return `${K.flag('bad')}<b>가비지 컬렉션</b>: ${eG.fallback ? '점진적 GC가 가비지 생성 속도를 못 따라가 결국 ' : ''}힙이 ${HEAPMAX}MB까지 차자 힙 전체를 훑어 가비지를 수거하느라 게임 전체를 <b>${K.ms(eG.ms)}</b> 멈췄습니다. 그동안 <b>멈춤</b>. ${jumpText(eG)} 가비지를 덜 만들거나(오브젝트 재사용) 점진적 GC를 켜면 줄어듭니다.` + CLIENT;
+    if (eG) return `${K.flag('bad')}<b>가비지 컬렉션</b>: ${eG.fallback ? '점진적 GC가 가비지 생성 속도를 못 따라가 결국 ' : ''}힙이 ${HEAPMAX}MB까지 차자 힙 전체를 훑어 가비지를 수집하느라 게임 전체를 <b>${K.ms(eG.ms)}</b> 멈췄습니다. 그동안 <b>멈춤</b>. ${jumpText(eG)} 가비지를 덜 만들거나(오브젝트 재사용) 점진적 GC를 켜면 줄어듭니다.` + CLIENT;
     if (P.mode === 'cap' && S.slow > 0.03) {
       return `${K.flag(S.slow > 0.2 ? 'bad' : 'warn')}한 프레임이 평균 ${K.ms(S.avg)}나 걸려 따라잡기 5번 상한에 걸립니다. 못 돌린 시간은 버려져 게임 세계가 실제의 <b>${K.pct(1 - S.slow)}</b> 속도로 흐릅니다(<b>슬로우모션</b>). 온라인 게임에서는 서버가 아는 위치와 벌어지면 <b>고무줄</b>처럼 당겨지기도 합니다.` + CLIENT;
     }
@@ -395,9 +395,9 @@ K.register('frames', function (root) {
       return `${K.flag(S.fps < 25 ? 'bad' : 'warn')}한 프레임 작업이 평균 <b>${K.ms(S.work)}</b>입니다. 캐릭터 ${K.n(P.chars)}명을 그리고 패킷 ${K.n(P.chars * 0.5)}개를 처리${P.mode !== 'var' && S.steps > 1.3 ? `하고, 밀린 시간을 메우려 게임 계산을 한 프레임에 평균 ${K.n(S.steps, 1)}번 되풀이` : ''}하느라 1초에 <b>${K.n(S.fps)}프레임</b>밖에 못 그립니다. 화면은 <b>뚝뚝 끊김</b>, 누른 키는 ${K.ms(S.lat)} 뒤에야 보입니다(<b>입력 지연</b>).` + CLIENT;
     }
     if (P.load) return `${K.flag('warn')}지금은 한 프레임 작업이 ${K.ms(S.work)}라 매끄럽습니다. 하지만 몇 초마다 새 지역에 들어서며 게임 스레드가 에셋을 직접 읽습니다. 곧 화면이 <b>멈춤</b> 뒤 <b>순간이동</b>합니다.`;
-    if (P.gc && P.inc && incLeft > 0) return `${K.flag('good')}점진적 GC가 프레임마다 ${SLICE}ms씩 가비지를 나눠 수거하는 중입니다. 큰 멈춤 없이 매끄럽게 달립니다.`;
-    if (P.gc && P.inc && P.garbage > 0) return `${K.flag('good')}가비지가 <b>${K.n(heap)}MB</b> 쌓였습니다. ${INC_START}MB가 되면 점진적 GC가 프레임마다 ${SLICE}ms씩 나눠 수거하기 시작합니다. 가비지를 너무 빨리 만들면 다 수거하지 못하고 ${HEAPMAX}MB에서 결국 한 번에 멈춥니다.`;
-    if (P.gc && P.garbage > 0) return `${K.flag('warn')}가비지가 <b>${K.n(heap)}MB</b> 쌓였습니다. ${HEAPMAX}MB가 되면 한꺼번에 수거하느라 게임이 잠깐 멈춥니다. 지금은 한 프레임 작업이 ${K.ms(S.work)}라 매끄럽습니다.`;
+    if (P.gc && P.inc && incLeft > 0) return `${K.flag('good')}점진적 GC가 프레임마다 ${SLICE}ms씩 가비지를 나눠 수집하는 중입니다. 큰 멈춤 없이 매끄럽게 달립니다.`;
+    if (P.gc && P.inc && P.garbage > 0) return `${K.flag('good')}가비지가 <b>${K.n(heap)}MB</b> 쌓였습니다. ${INC_START}MB가 되면 점진적 GC가 프레임마다 ${SLICE}ms씩 나눠 수집하기 시작합니다. 가비지를 너무 빨리 만들면 다 수집하지 못하고 ${HEAPMAX}MB에서 결국 한 번에 멈춥니다.`;
+    if (P.gc && P.garbage > 0) return `${K.flag('warn')}가비지가 <b>${K.n(heap)}MB</b> 쌓였습니다. ${HEAPMAX}MB가 되면 한꺼번에 수집하느라 게임이 잠깐 멈춥니다. 지금은 한 프레임 작업이 ${K.ms(S.work)}라 매끄럽습니다.`;
     return `${K.flag('good')}한 프레임 작업이 평균 <b>${K.ms(S.work)}</b>로 16.7ms 안에 넉넉히 끝납니다. 캐릭터가 매끄럽게 달리고, 누른 키는 ${K.ms(S.lat)} 뒤에 화면에 나타납니다.`;
   }
 

@@ -72,7 +72,7 @@ K.register('journey', function (root) {
     const km = SRV[P.srv][1], stretch = SRV[P.srv][2];
     const net = km / 200 * stretch;
     const dc = 0.3;
-    const ddosIn = P.ddos ? 15 : 0;       // 세정 센터는 보통 들어오는 쪽만 거친다. 서버의 응답은 곧바로 나간다
+    const ddosIn = P.ddos ? 15 : 0;       // 스크러빙 센터는 보통 들어오는 쪽만 거친다. 서버의 응답은 곧바로 나간다
     const iv = 1000 / P.tick;
     const cost = Math.max(0.3, P.load / 100 * iv);
     const over = cost > iv;

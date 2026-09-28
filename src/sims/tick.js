@@ -5,9 +5,9 @@ K.register('tick', function (root) {
   const F = K.frame(root, {
     kicker: '레이어 9 · 서버 게임 프로세스',
     title: '한 틱 안에 할 일이 넘치면 서버의 틱이 밀린다',
-    lead: '게임 서버는 “틱”이라는 일정한 주기마다 게임 세계를 한 번씩 갱신합니다. 20Hz 서버라면 1초에 20번, 틱 간격 50ms 안에 모든 플레이어의 입력, 시야, 몬스터, 보낼 데이터를 끝내야 합니다. 사람을 늘려 보세요. 할 일이 틱 간격을 넘치는 순간 그 서버의 세계 전체가 느려집니다. 이 실험의 서버는 틱마다 세계를 정해진 시간만큼 움직이는 방식입니다. 흐른 시간만큼 한 번에 움직이는 서버라면 느려지지는 않지만 뚝뚝 끊기고 순간이동합니다.',
+    lead: '게임 서버는 “틱”이라는 일정한 주기마다 게임 세계를 한 번씩 갱신합니다. 20Hz 서버라면 1초에 20번, 틱 간격 50ms 안에 모든 플레이어의 입력, 시야, 몬스터, 보낼 데이터를 끝내야 합니다. 사람을 늘려 보세요. 할 일이 틱 간격을 넘치는 순간 그 서버의 게임 세계 전체가 느려집니다. 이 실험의 서버는 틱마다 게임 시간을 정해진 만큼 진행하는 방식입니다. 흐른 시간만큼 한 번에 움직이는 서버라면 느려지지는 않지만 뚝뚝 끊기고 순간이동합니다.',
     tries: [
-      '<b>같은 지역 플레이어 수</b>를 60 → 800으로 천천히 올려 보세요. 막대가 <b>틱 예산</b> 선을 넘는 순간 아래 세계 시계가 느려지고 점들이 굼떠집니다.',
+      '<b>같은 지역 플레이어 수</b>를 60 → 800으로 천천히 올려 보세요. 막대가 <b>틱 예산</b> 선을 넘는 순간 아래 게임 시간이 느려지고 점들이 굼떠집니다.',
       '<b>월드 보스 (800명, 전원 비교)</b>를 누른 뒤 <b>시야 계산</b>을 “격자로 나눠 근처만”으로 바꿔 보세요. 가장 큰 비중인 시야 계산이 절반 아래로 줄고 틱 전체가 예산 안으로 들어옵니다. 모두 보스 곁에 몰려 있어 격자로도 0이 되지는 않습니다.',
       '<b>공성전</b>은 격자와 4스레드를 다 써도 넘칩니다. <b>사람들 분포</b>를 “흩어짐”으로 바꾸면 무엇이 달라지는지 비교해 보세요.',
       '<b>게임 스레드에서 DB 직접 호출</b>을 켜 보세요. 가끔 솟는 막대만큼 세계가 멈칫하고(뚝뚝 끊김, DB가 더 오래 막히면 멈춤), 그 뒤 틱 간격이 촘촘해지는 구간이 몰아치기를 만듭니다.',
@@ -36,7 +36,7 @@ K.register('tick', function (root) {
 
   const legend = '<span class="legend">' + SEG.map(s => `<span><i class="box" style="background:var(--${s.c})"></i>${s.name}</span>`).join('') + '</span>';
   const bcv = K.canvas(F.stage, { height: w => K.clamp(w * 0.42, 210, 290), caption: '최근 틱마다 걸린 시간과 그 안의 일', right: legend });
-  const ccv = K.canvas(F.stage, { height: w => (w < 480 ? 150 : 140), caption: '세계 시계', right: '점 = 이 서버의 플레이어' });
+  const ccv = K.canvas(F.stage, { height: w => (w < 480 ? 150 : 140), caption: '게임 시간', right: '점 = 이 서버의 플레이어' });
 
   /* ---------- 조작부 ---------- */
   const g1 = K.group(F.controls, '사람과 몬스터');
@@ -78,7 +78,7 @@ K.register('tick', function (root) {
 
   const stCost = K.stat(F.stats, { label: '틱 처리 시간', sub: '평균 / 최대' });
   const stRate = K.stat(F.stats, { label: '실제 틱레이트', unit: '회/초' });
-  const stSpeed = K.stat(F.stats, { label: '세계 속도' });
+  const stSpeed = K.stat(F.stats, { label: '게임 속도' });
   const stUpd = K.stat(F.stats, { label: '위치 업데이트', unit: '건/초' });
   const stBw = K.stat(F.stats, { label: '필요 대역폭', unit: 'Mbps', sub: '서버 회선 1Gbps 가정' });
 
@@ -261,7 +261,7 @@ K.register('tick', function (root) {
     const pad = 14, narrow = w < 480;
     const st = sp > 0.93 && sp < 1.08 ? 'good' : sp > 0.7 && sp < 1.6 ? 'warn' : 'bad';
     // 1줄: 숫자
-    K.text(ctx, '세계 속도', pad, 16, { size: 11.5, color: C.muted });
+    K.text(ctx, '게임 속도', pad, 16, { size: 11.5, color: C.muted });
     K.text(ctx, '×' + K.n(sp, 2), pad + 62, 16, { size: 16, weight: 700, mono: true, color: C.ink });
     K.text(ctx, narrow ? `틱 ${K.n(rate, 1)}/${P.hz}회·초` : `실제 틱 ${K.n(rate, 1)}회/초 · 목표 ${P.hz}회/초`, w - pad, 16, { align: 'right', size: 11.5, color: C.ink2 });
     // 2줄: 게이지 ×0 ~ ×2
@@ -316,15 +316,15 @@ K.register('tick', function (root) {
     const domTip = [
       '사람 수만큼 입력을 처리해야 합니다.',
       P.aoi === 'brute'
-        ? `${K.n(P.N)}명이 서로를 모두 비교하면 매 틱 약 <b>${kn(P.N * P.N)} 번</b> 비교합니다. 격자로 나누면 가까운 칸만 봅니다.`
-        : P.dist === 'crowd' ? '격자로 나눠도 모두 같은 칸 근처에 몰려 있으면 비교할 이웃이 크게 줄지 않습니다.' : '격자 덕분에 가까운 이웃만 비교합니다.',
+        ? `${K.n(P.N)}명이 서로를 모두 비교하면 매 틱 약 <b>${kn(P.N * P.N)} 번</b> 비교합니다. 격자로 나누면 가까운 셀(격자 한 칸)만 봅니다.`
+        : P.dist === 'crowd' ? '격자로 나눠도 모두 같은 셀 근처에 몰려 있으면 비교할 이웃이 크게 줄지 않습니다.' : '격자 덕분에 가까운 이웃만 비교합니다.',
       P.path ? `몬스터 ${K.n(P.M)}마리가 동시에 길을 다시 찾고 있습니다.` : `몬스터 ${K.n(P.M)}마리의 AI를 매 틱 돌립니다.`,
       `한 사람에게 최대 ${VIS_CAP}명의 움직임을 담아 보내야 해서, 사람이 늘면 제곱에 가깝게 늘어납니다.`,
       '게임 스레드가 DB·디스크를 기다리는 동안 아무 일도 못 합니다.',
     ][dom];
     let msg;
     if (avg > B * 1.03) {
-      msg = `${K.flag('bad')} 틱 한 번에 평균 <b>${K.ms(avg)}</b>가 걸려 예산 ${K.n(B, 0)}ms를 넘습니다. 가장 큰 비중은 <b>${SEG[dom].name} ${K.ms(avgParts[dom])}</b>. ${domTip} 이 서버는 틱마다 세계를 ${K.n(B, B % 1 ? 1 : 0)}ms씩만 움직이므로, 틱이 늦어지면 세계 시간이 실제보다 느리게 흐릅니다(세계 속도 <b>×${K.n(sp, 2)}</b>, 초당 ${K.n(rate, 1)}틱). 플레이어는 몬스터와 다른 캐릭터가 <b>슬로우모션</b>처럼 움직이고, 스킬을 눌러도 조금 늦게 반응하는 <b>입력 지연</b>을 느낍니다. ${scope('느려집니다')}`;
+      msg = `${K.flag('bad')} 틱 한 번에 평균 <b>${K.ms(avg)}</b>가 걸려 예산 ${K.n(B, 0)}ms를 넘습니다. 가장 큰 비중은 <b>${SEG[dom].name} ${K.ms(avgParts[dom])}</b>. ${domTip} 이 서버는 틱마다 게임 시간을 ${K.n(B, B % 1 ? 1 : 0)}ms씩만 진행하므로, 틱이 늦어지면 게임 시간이 실제보다 느리게 흐릅니다(게임 속도 <b>×${K.n(sp, 2)}</b>, 초당 ${K.n(rate, 1)}틱). 플레이어는 몬스터와 다른 캐릭터가 <b>슬로우모션</b>처럼 움직이고, 스킬을 눌러도 조금 늦게 반응하는 <b>입력 지연</b>을 느낍니다. ${scope('느려집니다')}`;
     } else if (blockMax > B * 0.8) {
       const tickMax = mx;
       const stop = tickMax >= 500
@@ -334,7 +334,7 @@ K.register('tick', function (root) {
     } else if (avg > B * 0.7 || mx > B) {
       msg = `${K.flag('warn')} 예산 ${K.n(B, 0)}ms 중 평균 <b>${K.pct(avg / B)}</b>를 쓰고 있습니다. 가장 큰 비중은 <b>${SEG[dom].name}</b>. ${domTip} 지금은 버티지만 여유가 적어서, 사람이 조금만 더 몰리면 틱이 넘치고 <b>슬로우모션</b>이 시작됩니다.`;
     } else {
-      msg = `${K.flag('good')} 틱은 서버가 게임 세계를 한 번 갱신하는 단위입니다. ${hz}Hz면 1초에 ${hz}번, 틱 간격 <b>${K.n(B, B % 1 ? 1 : 0)}ms</b> 안에 할 일을 끝내야 합니다(틱 예산). 지금은 평균 <b>${K.ms(avg)}</b>만 쓰고 나머지 시간은 쉽니다. 세계는 제 속도로 흐르고 점들도 고르게 움직입니다.`;
+      msg = `${K.flag('good')} 틱은 서버가 게임 세계를 한 번 갱신하는 단위입니다. ${hz}Hz면 1초에 ${hz}번, 틱 간격 <b>${K.n(B, B % 1 ? 1 : 0)}ms</b> 안에 할 일을 끝내야 합니다(틱 예산). 지금은 평균 <b>${K.ms(avg)}</b>만 쓰고 나머지 시간은 쉽니다. 게임 시간은 제 속도로 흐르고 점들도 고르게 움직입니다.`;
     }
     if (bw > 1000) msg += ` 게다가 매 틱 보내야 할 위치 정보가 <b>${K.n(bw / 1000, 1)}Gbps</b>로, 이 실험이 가정한 서버 회선 1Gbps를 넘깁니다. 전송이 밀려 패킷이 늦게 가거나 버려집니다(입력 지연·순간이동).`;
     return msg;

@@ -1,4 +1,4 @@
-/* DB 커넥션 풀: 요청 하나하나가 창구(커넥션)를 기다리고, CPU 코어를 나눠 쓰고, 인기 행 잠금 앞에 줄을 선다.
+/* DB 커넥션 풀: 요청 하나하나가 커넥션을 기다리고, CPU 코어를 나눠 쓰고, 핫 로우 잠금 앞에서 대기 선다.
    실제 속도(1초 = 1초)로 돌고, 응답 시간은 1초 단위로 모아 중간값·99% 값을 그린다. */
 K.register('dbpool', function (root) {
   const F = K.frame(root, {
@@ -43,7 +43,7 @@ K.register('dbpool', function (root) {
   const cTo = K.choice(g1, {
     label: '요청 타임아웃', value: P.timeout, options: [[1000, '1초'], [5000, '5초'], [30000, '30초']],
     onChange: v => { P.timeout = +v; cvL.setCaption(null, legendL()); },
-    hint: '이 시간이 지나도록 답이 없으면 게임 서버가 포기하고 실패로 처리합니다.',
+    hint: '이 시간이 지나도록 응답이 없으면 게임 서버가 포기하고 실패로 처리합니다.',
   });
   const g2 = K.group(F.controls, 'DB 서버');
   const sPool = K.slider(g2, { label: '커넥션 풀 크기', min: 1, max: 200, value: P.pool, unit: '개', onInput: v => { P.pool = v; ensurePool(); }, hint: '게임 서버가 DB에 미리 열어 둔 연결 수입니다.' });
@@ -127,7 +127,7 @@ K.register('dbpool', function (root) {
   }
   function arrive() {
     const hot = rnd() * 100 < P.hot ? 1 : 0;
-    if (!qLen) { // 줄이 없으면 빈 창구가 있을 수 있다
+    if (!qLen) { // 줄이 없으면 빈 커넥션이 있을 수 있다
       for (let i = 0; i < P.pool; i++) if (conns[i].st === IDLE) { start(i, now, hot); return; }
     }
     if (qLen < QCAP) { const k = (qHead + qLen) & (QCAP - 1); qT[k] = now; qH[k] = hot; qLen++; } else fail();
@@ -304,7 +304,7 @@ K.register('dbpool', function (root) {
   function explain(last, lw) {
     const base = BASE[P.query];
     const hotRate = (P.rate * P.hot) / 100;
-    const lockCap = 1000 / (base + P.lockMs);        // 인기 행이 1초에 처리할 수 있는 최대 건수
+    const lockCap = 1000 / (base + P.lockMs);        // 핫 로우가 1초에 처리할 수 있는 최대 건수
     const lockUtil = hotRate / lockCap;
     const cpuUtil = (P.rate * base) / 1000 / P.cores;
     const failing = last.fail > 0, q = qLen + lw;

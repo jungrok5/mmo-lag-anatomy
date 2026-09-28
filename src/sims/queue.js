@@ -39,7 +39,7 @@ K.register('queue', function (root) {
   // 상태
   let t = 0, nextArr = 0, burstLeft = 0;
   let queue = [];           // 도착 시각 배열
-  let busy = [];            // 창구별 {start, end} 또는 null
+  let busy = [];            // 워커별 {start, end} 또는 null
   let waits = [];           // 최근 대기 시간 (ms)
   let hist = [];            // [t, 줄 길이]
 

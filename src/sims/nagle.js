@@ -65,7 +65,7 @@ K.register('nagle', function (root) {
   const stAvg = K.stat(F.stats, { label: '평균 응답', sub: '최근 메시지 20개' });
   const stMax = K.stat(F.stats, { label: '최대 응답', sub: '최근 20개' });
   const stPps = K.stat(F.stats, { label: '초당 패킷 수', unit: '개', sub: '양방향 합계' });
-  const stWaste = K.stat(F.stats, { label: '낭비된 대기', unit: '%', sub: '응답 시간 중 기다린 몫' });
+  const stWaste = K.stat(F.stats, { label: '낭비된 대기', unit: '%', sub: '응답 시간 중 대기 비율' });
 
   /* ---------- 모형 ---------- */
   let t, ev, pkts, holds, msgs, sendBuf, sndNxt, sndUna, hold, srv, nextWrite, msgNo, byteEnd;

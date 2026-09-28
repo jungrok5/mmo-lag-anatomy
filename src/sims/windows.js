@@ -255,7 +255,7 @@ K.register('windows', function (root) {
     } else {
       msg = `${K.flag('good')}${msg}여유가 ${K.ms(p.margin)} 남습니다. 이 게임은 핑 ${Number.isFinite(mp) ? K.ms(mp) : '1초 넘게'}까지 버팁니다.`;
     }
-    if (P.judge === 'client') msg += ' 클라이언트 판정은 내 화면만 보면 공정하지만, 조작된 클라이언트도 그대로 믿는다는 대가가 있습니다.';
+    if (P.judge === 'client') msg += ' 클라이언트 판정은 내 화면만 보면 공정하지만, 조작된 클라이언트의 판정도 그대로 인정한다는 대가가 있습니다.';
     if (P.judge === 'lagcomp') msg += ' 지연 보상은 내가 본 시점으로 판정해 주지만, 다른 사람 화면에서는 “맞은 것 같은데 안 맞음”으로 보일 수 있습니다.';
     if (P.judge === 'roll') msg += ` 롤백은 내 입력을 누른 프레임 그대로 인정하지만, 상대 동작을 늦게 본 ${K.ms(p.seeDown)}는 돌려받지 못합니다. 그만큼 동작 앞부분이 잘려 보입니다.`;
     F.say(msg);

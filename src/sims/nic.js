@@ -23,7 +23,7 @@ K.register('nic', function (root) {
 
   const fmtP = v => (v >= 10000 ? K.n(v / 10000, v % 10000 && v < 1e5 ? 1 : 0) + '만' : K.n(v));
   const fmtLat = v => (v >= 1000 ? K.n(v / 1000, v >= 10000 ? 0 : 1) + ' ms' : K.n(v) + ' µs');
-  const gain = () => 0.3 * (1 - Math.exp(-P.coal / 50));   // 병합: 초인종을 덜 눌러 처리 능력이 최대 +30%
+  const gain = () => 0.3 * (1 - Math.exp(-P.coal / 50));   // 병합: 인터럽트를 덜 걸어 처리 능력이 최대 +30%
   const capMs = () => CORE * (1 + gain());
 
   const mcv = K.canvas(F.stage, {
