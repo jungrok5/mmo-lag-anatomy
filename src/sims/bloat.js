@@ -53,7 +53,7 @@ K.register('bloat', function (root) {
   const sigName = v => v < 25 ? '좋음' : v < 55 ? '보통' : v < 85 ? '약함' : '매우 약함';
   const pFail = v => 0.02 + 0.58 * v / 100;
   const sSig = K.slider(g3, { label: '와이파이 신호', min: 0, max: 100, step: 5, value: P.sig, fmt: v => `${sigName(v)} · 실패 ${Math.round(pFail(v) * 100)}%`, onInput: v => { P.sig = v; }, hint: '한 번 보낼 때 실패할 확률. 실패하면 잠깐 쉬었다 다시 보내고, 8번 모두 실패하면 패킷을 잃습니다.' });
-  const tIntf = K.toggle(g3, { label: '전자레인지·이웃 공유기 간섭', value: P.intf, onChange: v => { P.intf = v; }, hint: '2.5초마다 0.3초씩 전파가 거의 막힙니다.' });
+  const tIntf = K.toggle(g3, { label: '전자레인지·이웃 공유기 간섭', value: P.intf, onChange: v => { P.intf = v; }, hint: '2.5초마다 0.3초씩 전파가 거의 막힌다고 단순화했습니다. 실제 전자레인지는 돌아가는 내내 2.4GHz 와이파이를 방해하고, 5GHz는 영향을 거의 받지 않습니다.' });
 
   const ctlSet = () => { sCap.set(P.cap, false); sBuf.set(P.bufV, false); tSqm.set(P.sqm, false); sUp.set(P.up, false); sSig.set(P.sig, false); tIntf.set(P.intf, false); };
   const bv = k => Math.round(Math.log2(k / 16) / 8 * 100);

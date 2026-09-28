@@ -2851,6 +2851,7 @@ window.DATA = {
       s: '상대 입력을 예측해 먼저 보여 주다가 틀리면 되감아 다시 계산합니다. 핑이 클수록 되감는 폭이 커집니다.',
       c: ['상대가 입력을 바꿈(예측과 다름)', '실제 입력이 핑의 절반만큼 늦게 도착해 그만큼 되감아 재계산', '상대 동작이 몇 프레임 건너뛰거나 갑자기 바뀜'],
       sym: ['teleport'], fx: ['lat', 'jit'], who: ['me'], when: ['action', 'random'],
+      num: '핑 100ms(한쪽 50ms)면 60fps에서 약 3프레임을 되감습니다. 입력 지연을 2프레임 두면 1프레임으로 줄어듭니다.',
       fix: '입력 지연을 1~3프레임 섞어 되감기 폭 줄이기, 되감기 상한.',
       sim: 'syncmodels' },
     { id: 'sy-no-timestamp', t: '도착 순서대로 재생', en: 'Events played on arrival (no timestamps)',
@@ -2863,7 +2864,7 @@ window.DATA = {
       s: '요청을 다음 틱까지 모았다가 처리하고, 결과도 그다음 틱에 보내면 틱 간격이 두 번 더해집니다.',
       c: ['받은 요청은 다음 틱에서 처리', '처리 결과도 다음 전송 틱에 모아서 보냄', '핑은 낮은데 반응이 틱 간격만큼 일정하게 늦음. 10틱 서버면 최대 0.2초'],
       sym: ['delay'], fx: ['lat'], who: ['server'], when: ['always'],
-      num: '10틱 서버는 한 틱이 100ms라 최악 200ms, 평균 100ms가 더해집니다.',
+      num: '10틱 서버는 한 틱이 100ms라 틱 대기만으로 평균 150ms, 최악 200ms가 더해집니다. 한 번만 기다리면 평균 50ms입니다.',
       fix: '처리한 틱에 바로 응답 보내기, 틱레이트 올리기, 중요한 응답은 즉시 전송.' },
     { id: 'sy-strict-check', t: '너무 엄격한 서버 검증', en: 'Over-strict server validation',
       s: '이동 속도·쿨타임·사거리를 서버가 너무 빡빡하게 검사하면, 지터로 몰려 온 정상 입력까지 거절합니다.',
@@ -2874,7 +2875,7 @@ window.DATA = {
     { id: 'sy-host', t: '호스트(방장) 구조', en: 'Listen server / host advantage',
       s: '한 플레이어의 PC가 서버 역할을 하면, 그 사람의 회선과 PC 성능이 모두의 체감을 정합니다.',
       c: ['방장 PC가 서버 역할(P2P, 리슨 서버)', '방장 회선이 느리거나 PC가 버벅이면 모두에게 전파, 방장은 핑 0', '방장만 유리, 방장이 나가면 모두 멈춤·끊김'],
-      sym: ['stutter', 'freeze', 'disconnect'], fx: ['lat', 'stall'], who: ['server'], when: ['random'],
+      sym: ['stutter', 'freeze', 'disconnect'], fx: ['lat', 'stall'], who: ['zone'], when: ['random'],
       fix: '전용 서버, 호스트 이전(마이그레이션) 지원.' },
   ]);
 })();
@@ -3683,7 +3684,7 @@ K.register('bloat', function (root) {
   const sigName = v => v < 25 ? '좋음' : v < 55 ? '보통' : v < 85 ? '약함' : '매우 약함';
   const pFail = v => 0.02 + 0.58 * v / 100;
   const sSig = K.slider(g3, { label: '와이파이 신호', min: 0, max: 100, step: 5, value: P.sig, fmt: v => `${sigName(v)} · 실패 ${Math.round(pFail(v) * 100)}%`, onInput: v => { P.sig = v; }, hint: '한 번 보낼 때 실패할 확률. 실패하면 잠깐 쉬었다 다시 보내고, 8번 모두 실패하면 패킷을 잃습니다.' });
-  const tIntf = K.toggle(g3, { label: '전자레인지·이웃 공유기 간섭', value: P.intf, onChange: v => { P.intf = v; }, hint: '2.5초마다 0.3초씩 전파가 거의 막힙니다.' });
+  const tIntf = K.toggle(g3, { label: '전자레인지·이웃 공유기 간섭', value: P.intf, onChange: v => { P.intf = v; }, hint: '2.5초마다 0.3초씩 전파가 거의 막힌다고 단순화했습니다. 실제 전자레인지는 돌아가는 내내 2.4GHz 와이파이를 방해하고, 5GHz는 영향을 거의 받지 않습니다.' });
 
   const ctlSet = () => { sCap.set(P.cap, false); sBuf.set(P.bufV, false); tSqm.set(P.sqm, false); sUp.set(P.up, false); sSig.set(P.sig, false); tIntf.set(P.intf, false); };
   const bv = k => Math.round(Math.log2(k / 16) / 8 * 100);
