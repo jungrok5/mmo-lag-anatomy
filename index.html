@@ -11283,6 +11283,11 @@ K.register('retrans', function (root) {
       });
     }
     ctx.restore();
+    // 복구 중에 보내지 못하고 서버에 쌓인 소식(작은 소식은 합쳐져 있어 원래 개수로 센다)
+    if (P.mode === 'game' && S.q.length) {
+      const n = S.q.reduce((a, q) => a + (q[2] ? 1 : Math.round(q[0] / SMALL)), 0);
+      K.text(ctx, w < 520 ? `서버에 ${n}개 대기` : `복구를 기다리며 서버에 쌓인 소식 ${n}개`, R - 4, yS + 14, { align: 'right', size: 10.5, weight: 700, color: Cc.warnInk });
+    }
   }
   function drawDelay() {
     const { ctx, w, h } = cvD;
