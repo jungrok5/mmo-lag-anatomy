@@ -54,11 +54,12 @@ K.register('ladder', function (root) {
     .ld-row:hover { background: var(--paper); }
     .ld-row:focus-visible { box-shadow: 0 0 0 2px var(--accent); }
     .ld-row.on { background: var(--accent-soft); }
-    .ld-name { display: flex; align-items: baseline; gap: 8px; font-size: 13.5px; color: var(--ink); min-width: 0; line-height: 1.35; }
-    .ld-name .dot { flex: none; width: 9px; height: 9px; border-radius: 50%; transform: translateY(-1px); }
+    .ld-name { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 8px; font-size: 13.5px; color: var(--ink); min-width: 0; line-height: 1.35; }
+    .ld-name .dot { flex: none; margin-right: -2px; width: 9px; height: 9px; border-radius: 50%; transform: translateY(-1px); }
     .ld-name small { color: var(--muted); font-size: 11px; white-space: nowrap; }
     .ld-bar { position: relative; height: 22px; min-width: 0; }
-    .ld-grid { position: absolute; inset: 0; background-image:
+    .ld-grid { position: absolute; inset: 0; background-repeat: no-repeat; background-size: 100% 100%, var(--span) 100%, var(--span) 100%;
+      background-image:
         linear-gradient(90deg, transparent calc(var(--tk) - 1px), var(--bad) calc(var(--tk) - 1px), var(--bad) calc(var(--tk) + 1px), transparent calc(var(--tk) + 1px)),
         repeating-linear-gradient(90deg, var(--line) 0 1px, transparent 1px 30%),
         repeating-linear-gradient(90deg, var(--grid) 0 1px, transparent 1px 10%); }
@@ -105,12 +106,16 @@ K.register('ladder', function (root) {
     if (n >= 1e4) return K.n(n / 1e4, 1) + '만 번';
     return K.n(n) + '번';
   }
-  const pos = ns => (Math.log10(Math.max(1, ns)) / 10) * 100;   // 1ns ~ 10초, 한 칸(10%) = 10배
+  // 1ns ~ 10초를 막대 칸의 82%에 담고(한 눈금 = 10배), 나머지는 값 글자 자리로 둔다
+  const SPAN = 82;
+  const pos = ns => (Math.log10(Math.max(1, ns)) / 10) * SPAN;
   const TKP = pos(TICK);
 
   /* ---------- DOM ---------- */
   let mode = 'real', pinned = 2, shown = 2;
-  const box = K.el('div', { class: 'ld', style: { '--tk': TKP + '%' } });
+  const box = K.el('div', { class: 'ld' });
+  box.style.setProperty('--tk', TKP + '%');
+  box.style.setProperty('--span', SPAN + '%');
   const top = K.el('div', { class: 'ld-top' });
   K.choice(top, {
     label: '눈금', value: mode, options: [['real', '실제 시간 (로그 눈금)'], ['human', '1나노초를 1초로 늘리면']],
@@ -129,7 +134,7 @@ K.register('ladder', function (root) {
       cnt);
     const n = Math.floor(TICK / r.v);
     if (i === 14) cnt.textContent = '1번 (기준)';
-    else if (n < 1) { cnt.classList.add('long'); cnt.innerHTML = K.flag('bad') + ' 틱보다 김'; }
+    else if (n < 1) { cnt.classList.add('long'); cnt.innerHTML = K.flag('bad').replace('나쁨', '') + '틱보다 김'; }
     else cnt.textContent = fmtCount(n);
     el.addEventListener('mouseenter', () => show(i));
     el.addEventListener('focus', () => show(i));
@@ -152,9 +157,7 @@ K.register('ladder', function (root) {
       const p = pos(r.v);
       const { val } = rowEls[i];
       val.textContent = mode === 'real' ? fmtReal(r.v) : fmtHuman(r.v);
-      // 막대 끝 바로 뒤에 값을 둔다. 오른쪽 끝에 가까우면 막대 안쪽 왼편으로.
-      if (p > 72) { val.style.left = ''; val.style.right = `calc(${100 - p}% + 6px)`; }
-      else { val.style.right = ''; val.style.left = `calc(max(${p}%, 4px) + 6px)`; }
+      val.style.left = `calc(max(${p}%, 4px) + 4px)`;   // 막대 끝 바로 뒤
     });
     show(shown);
   }

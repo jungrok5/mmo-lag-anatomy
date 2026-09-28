@@ -245,10 +245,13 @@ K.register('arch', function (root) {
           : `게임 서버가 ${SRC[g.from]} 응답을 기다리는 동안 틱이 멈춥니다. 세상 전체가 느리게 흐르고 입력이 늦게 반영됩니다.`,
       });
     }
-    const sev = it => (it.sym.length ? Math.min(...it.sym.map(s => SEV.indexOf(s))) : 99);
-    items.sort((a, b) => b.r - a.r || sev(a) - sev(b));
+    items.sort((a, b) => b.r - a.r || sevOf(a) - sevOf(b));
     return items;
   }
+  const sevOf = it => (it.sym.length ? Math.min(...it.sym.map(s => SEV.indexOf(s))) : 99);
+  // 심각한 증상(끊김·멈춤·접속 불가·롤백)이거나 넓은 범위가 움직임 증상을 겪으면 나쁨
+  const statusOf = it => (!it.sym.length ? 'good' : sevOf(it) < 4 || (it.r >= 4 && sevOf(it) < 10) ? 'bad' : 'warn');
+  const worst = list => (list.includes('bad') ? 'bad' : list.includes('warn') ? 'warn' : 'good');
 
   // ---------- SVG 그리기 ----------
   const NS = 'http://www.w3.org/2000/svg';
@@ -334,7 +337,7 @@ K.register('arch', function (root) {
   g1.append(K.el('div', { class: 'ctl' }, K.el('label', { for: selEl.id }, K.el('span', { text: '고장 낼 곳' })), selEl,
     K.el('small', { class: 'ctl-hint', text: '그림의 상자를 눌러도 됩니다. 누를 때마다 정상 → 느려짐 → 멈춤 순서로 바뀝니다.' })));
   const cState = K.choice(g1, { label: '상태', value: 0, options: [[0, '정상'], [1, '느려짐'], [2, '멈춤 (장애)']], onChange: v => setState(sel, +v) });
-  selEl.addEventListener('change', () => select(selEl.value));
+  selEl.addEventListener('change', () => select(selEl.value, true));
   K.button(g1, { label: '모두 정상으로', kind: 'small', onClick: () => { NODES.forEach(n => { own[n.id] = 0; }); presets.clear(); refresh(); } });
   const g2 = K.group(F.controls, '게임 서버 설계');
   const cMode = K.choice(g2, {
@@ -345,9 +348,14 @@ K.register('arch', function (root) {
   });
   const tBrk = K.toggle(g2, { label: '타임아웃·차단기 (서킷 브레이커)', value: P.brk, onChange: v => { P.brk = v; refresh(); }, hint: '상대가 느리면 1초만 기다리고 포기합니다. 계속 실패하면 한동안 아예 부르지 않고 바로 실패 처리합니다.' });
 
-  function select(id) {
+  function select(id, reveal) {
     sel = id; selEl.value = id; cState.set(own[id], false);
     NODES.forEach(n => n.g.classList.toggle('sel', n.id === id));
+    // 좁은 화면에서는 그림이 가로로 밀리므로 고른 서버가 보이게 옮긴다
+    if (reveal && scroll.scrollWidth > scroll.clientWidth + 4) {
+      const left = (BY[id].x / 1040) * scroll.scrollWidth - scroll.clientWidth / 2;
+      scroll.scrollTo({ left: Math.max(0, left), behavior: K.reducedMotion ? 'auto' : 'smooth' });
+    }
   }
   function setState(id, v) { own[id] = v; if (id === sel) cState.set(v, false); presets.clear(); refresh(); }
 
@@ -363,7 +371,7 @@ K.register('arch', function (root) {
   function apply(st, mode, brk, focus) {
     NODES.forEach(n => { own[n.id] = st[n.id] || 0; });
     P.mode = mode; P.brk = brk; cMode.set(mode, false); tBrk.set(brk, false);
-    select(focus); refresh();
+    select(focus, true); refresh();
   }
 
   const stScope = K.stat(F.stats, { label: '영향받는 플레이어 범위' });
@@ -420,9 +428,8 @@ K.register('arch', function (root) {
     listEl.innerHTML = '';
     if (!items.length) listEl.append(K.el('li', { class: 'arch-empty', text: '고장 난 곳이 없습니다. 모두 평소처럼 플레이합니다.' }));
     items.forEach(it => {
-      const bad = it.lv === 2 || it.sym.some(s => SEV.indexOf(s) < 4);
       listEl.append(K.el('li', { class: 'arch-item' },
-        K.el('div', { class: 'who', html: `${K.flag(!it.sym.length ? 'good' : bad ? 'bad' : 'warn')}<b>${it.who}</b>` }),
+        K.el('div', { class: 'who', html: `${K.flag(statusOf(it))}<b>${it.who}</b>` }),
         it.sym.length ? K.el('div', { class: 'chips', html: it.sym.map(chip).join('') }) : null,
         K.el('p', { class: 'why', text: it.why })));
     });
@@ -440,22 +447,26 @@ K.register('arch', function (root) {
       chainEl.append(K.el('li', { class: g.lv === 2 ? 'bad' : 'warn', html: `<b>${nm(g.from)} ${word(eff[g.from])}</b> → <b>${gName(g.ids)} ${word(g.lv)}</b><br>${g.why}.` }));
     });
     // 설계가 막아 낸 연쇄
-    const saved = [];
+    const saved = [], savedSay = [];
     ['db', 'log', 'cache'].forEach(id => {
       if (!eff[id] || block) return;
       if (id === 'cache' && eff[id] === 2) return;
       saved.push(P.mode === 'async'
         ? `<b>비동기</b>: 게임 서버가 ${nm(id)} 응답을 기다리지 않아 틱이 멈추지 않습니다.`
         : `<b>차단기</b>: ${nm(id)}${id === 'log' ? '을' : '를'} 1초만 기다리고 포기해 게임 서버가 굳지 않습니다.`);
+      if (!savedSay.length) savedSay.push('설계 덕분에 게임 서버까지는 번지지 않았습니다.');
     });
-    if (eff.auth && P.brk) saved.push('<b>차단기</b>: 로그인 서버가 외부 인증을 오래 기다리지 않아 일꾼이 묶이지 않습니다.');
+    if (eff.auth && P.brk) {
+      saved.push('<b>차단기</b>: 로그인 서버가 외부 인증을 오래 기다리지 않아 일꾼이 묶이지 않습니다.');
+      savedSay.push('차단기 덕분에 로그인 서버는 버티고 “잠시 후 다시 시도” 안내를 빨리 보여 줍니다.');
+    }
     saved.forEach(t => chainEl.append(K.el('li', { class: 'good', html: t })));
     if (!chainEl.children.length) chainEl.append(K.el('li', { class: 'arch-empty', text: NODES.some(n => own[n.id]) ? '번진 곳 없음: 탈이 그 서버 안에서 멈췄습니다.' : '번진 곳 없음.' }));
 
     // 수치 타일
     const hit = items.filter(it => it.sym.length);
     const top = hit[0];
-    stScope.set(top ? top.s : '없음', !top ? 'good' : top.r >= 5 ? 'bad' : 'warn', top ? (hit.length > 1 ? `그 밖에 ${hit.length - 1}무리` : top.who) : '플레이어는 모름');
+    stScope.set(top ? top.s : '없음', top ? statusOf(top) : 'good', top ? (hit.length > 1 ? `그 밖에 ${hit.length - 1}무리` : top.who) : '플레이어는 모름');
     const allSym = [...new Set(hit.flatMap(it => it.sym))].sort((a, b) => SEV.indexOf(a) - SEV.indexOf(b));
     stSym.set(allSym[0] || '없음', !allSym.length ? 'good' : SEV.indexOf(allSym[0]) < 4 ? 'bad' : 'warn', allSym.length > 1 ? '그 밖에 ' + allSym.slice(1, 3).join(', ') + (allSym.length > 3 ? ' 등' : '') : ' ');
     const cas = Object.keys(cause);
@@ -466,12 +477,12 @@ K.register('arch', function (root) {
     let msg;
     if (!faults.length) msg = K.flag('good') + '모든 서버가 정상입니다. 그림의 상자를 누르거나 “고장 낼 곳”을 골라 보세요. 누를 때마다 정상 → 느려짐 → 멈춤 → 정상 순서로 바뀝니다.';
     else {
-      const flag = !top ? 'good' : top.r >= 5 || SEV.indexOf(allSym[0]) < 4 ? 'bad' : 'warn';
+      const flag = worst(items.map(statusOf));
       msg = K.flag(flag) + faults.map(n => `<b>${n.name} ${word(own[n.id])}</b>`).join(', ') + '. ';
       groups.forEach(g => { msg += `→ <b>${gName(g.ids)} ${word(g.lv)}</b>: ${g.why}. `; });
       msg += top ? `누가 겪나: <b>${top.who}</b>. 무엇을: ${top.sym.join(', ')}.` : '플레이어는 거의 알아채지 못합니다.';
       if (block && GAMES.some(g => cause[g])) msg += ' 기다리는 방식을 비동기로 바꾸거나 차단기를 켜면 번지는 범위가 줄어듭니다.';
-      else if (saved.length) msg += ' 설계 덕분에 게임 서버까지 번지지 않았습니다.';
+      else if (savedSay.length) msg += ' ' + savedSay.join(' ');
     }
     F.say(msg);
   }

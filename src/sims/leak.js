@@ -25,6 +25,8 @@ K.register('leak', function (root) {
   });
   const tcv = K.canvas(F.stage, { height: w => K.clamp(w * 0.22, 150, 180), caption: '틱 처리 시간', right: '20Hz · 예산 50ms' });
 
+  K.addStyle('leak', '.sim[data-sim="leak"] .cv-cap { flex-wrap: wrap; row-gap: 4px; }');
+
   /* ---------- 조작부 ---------- */
   const g0 = K.group(F.controls, '재생 (1초 = 2시간)');
   const row = K.el('div', { style: 'display:flex;gap:8px;flex-wrap:wrap' });

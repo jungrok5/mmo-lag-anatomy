@@ -5,7 +5,8 @@
   const D = window.DATA;
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
-  const LAYER = Object.fromEntries(D.layers.map((l, i) => [l.id, Object.assign({ n: i + 1 }, l)]));
+  const ALL_LAYERS = D.layers.concat(D.extraLayers || []);
+  const LAYER = Object.fromEntries(ALL_LAYERS.map((l, i) => [l.id, Object.assign({ n: i + 1 }, l)]));
   const SYM = Object.fromEntries(D.symptoms.map(s => [s.id, s]));
   const FX = Object.fromEntries(D.fx.map(f => [f.id, f]));
   const WHO = { me: '나만', home: '같은 집', region: '특정 지역·통신사', zone: '특정 장소·채널', server: '서버 전체', feature: '특정 기능만' };
@@ -15,6 +16,7 @@
     distance: '거리·경로 실험', timeouts: '타임아웃 사다리', nic: 'NIC 실험', rush: '접속 폭주 실험', hol: 'TCP vs UDP 실험', nagle: 'Nagle 실험',
     sndbuf: '느린 손님 실험', tick: '틱 예산 실험', locks: '락 실험', gc: 'GC 실험', leak: '메모리 누수 실험', ladder: '숫자 감각',
     disk: '디스크 실험', dbpool: 'DB 실험', arch: '서버 구성 실험',
+    syncmodels: '동기화 방식 비교', windows: '판정 창 실험', chain: '연속 행동 실험',
   };
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const ARROW = '<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7h8m-3-3 3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -124,6 +126,8 @@
     </article>`;
   }
   $$('[data-causes]').forEach(box => { box.innerHTML = (byLayer[box.dataset.causes] || []).map(causeHTML).join(''); });
+  const syncH3 = $('#sync h3.sec:last-of-type');
+  if (syncH3) syncH3.innerHTML = `동기화 설계에서 렉을 만드는 원인 <span class="mono">${(byLayer.sync || []).length}가지</span>`;
 
   /* ---------------- 증상 사전 ---------------- */
   const symCauses = {};
@@ -132,7 +136,7 @@
     const list = symCauses[s.id] || [];
     const groups = {};
     list.forEach(c => { (groups[c.layer] = groups[c.layer] || []).push(c); });
-    const links = D.layers.filter(l => groups[l.id]).map(l =>
+    const links = ALL_LAYERS.filter(l => groups[l.id]).map(l =>
       `<span><span class="note">${l.short}</span> ${groups[l.id].map(c => `<a href="#c-${c.id}">${c.t}</a>`).join(', ')}</span>`).join('');
     return `<article class="sym-card" id="s-${s.id}">
       <header>${K.glyph(s.id)}<div><h4>${s.name}</h4><div class="alias">${s.alias}</div></div></header>

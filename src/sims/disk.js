@@ -148,11 +148,12 @@ K.register('disk', function (root) {
     }
     const used = Math.min(capTot, issued * c + bk);
     if (D.burst) credits = K.clamp(credits + (D.iops - used) * h, 0, CREDIT_MAX);
-    Object.assign(cur, { lam, dem: lam * c, cap: capTot - bk, capTot, L, blk, spd, behind: Q / mu, pend, mu, used, wave });
+    Object.assign(cur, { lam, dem: lam * c, bk, cap: capTot - bk, capTot, L, blk, spd, behind: Q / mu, pend, mu, used, wave });
     t += h;
   }
   function record() {
-    hist.push({ t, dem: cur.dem, cap: cur.cap, cr: DISKS[P.disk].burst ? credits / CREDIT_MAX : null, L: cur.L, blk: cur.blk, spd: cur.spd, behind: cur.behind });
+    // 차트에는 디스크 전체 기준으로 싣는다: 수요 = 게임 쓰기 + 백업 몫, 능력 = 디스크 전체
+    hist.push({ t, dem: cur.dem + cur.bk, game: cur.dem, bk: cur.bk, cap: cur.capTot, cr: DISKS[P.disk].burst ? credits / CREDIT_MAX : null, L: cur.L, blk: cur.blk, spd: cur.spd, behind: cur.behind });
     while (hist.length && hist[0].t < t - WIN) hist.shift();
   }
   function step(dtMs) {
@@ -237,14 +238,15 @@ K.register('disk', function (root) {
     K.area(ctx, sc, demPts, C.s1, 0.1);
     K.line(ctx, sc, capPts, C.s2);
     K.line(ctx, sc, demPts, C.s1);
-    if (cur.cap > ymax) K.text(ctx, `처리 능력 ${kfmt(cur.cap)}: 차트 위로 벗어남`, top.x + top.w - 4, top.y + 9, { align: 'right', size: 10.5, color: C.ink2, weight: 600 });
+    if (cur.capTot > ymax) K.text(ctx, `처리 능력 ${kfmt(cur.capTot)}: 차트 위로 벗어남`, top.x + top.w - 4, top.y + 9, { align: 'right', size: 10.5, color: C.ink2, weight: 600 });
+    else if (P.backup) K.text(ctx, '수요에 백업이 쓰는 몫(능력의 70%) 포함', top.x + top.w - 4, top.y + 9, { align: 'right', size: 10.5, color: C.ink2, weight: 600 });
     else if (hist.some(p => p.dem > p.cap)) K.text(ctx, '붉은 구간: 수요가 처리 능력을 넘음', top.x + top.w - 4, top.y + 9, { align: 'right', size: 10.5, color: C.badInk, weight: 600 });
 
     const xT = narrow ? [x0, x0 + 300, x1] : [x0, x0 + 120, x0 + 240, x0 + 360, x0 + 480, x1];
     const sc2 = K.plot(ctx, bot, { x0, x1, y0: 0, y1: 1, yTicks: [0, 0.5, 1], yFmt: v => Math.round(v * 100) + '%', xTicks: xT, xFmt: agoFmt(x1), yTitle: '버스트 크레딧 (남은 체력)' });
     const crSegs = segs(hist, p => p.cr != null).map(s => s.map(p => [p.t, p.cr]));
     for (const s of crSegs) { K.area(ctx, sc2, s, C.s3, 0.18); K.line(ctx, sc2, s, C.s3); }
-    if (!crSegs.length) note(ctx, '이 디스크는 크레딧 없이 늘 같은 속도로 일합니다', bot.x + bot.w / 2, bot.y + bot.h / 2, 'center');
+    if (!crSegs.length) note(ctx, narrow ? '크레딧 없음: 늘 같은 속도' : '이 디스크는 크레딧 없이 늘 같은 속도로 일합니다', bot.x + bot.w / 2, bot.y + bot.h / 2, 'center');
   }
 
   function drawB() {
@@ -315,7 +317,7 @@ K.register('disk', function (root) {
   K.hover(cvA, x => {
     const p = nearest(x, boxA);
     if (!p) return null;
-    return `${ago(p)}<br>쓰기 수요 <b>${K.n(p.dem)}</b> IOPS<br>처리 능력 <b>${K.n(p.cap)}</b> IOPS` + (p.cr != null ? `<br>버스트 크레딧 <b>${K.pct(p.cr)}</b>` : '');
+    return `${ago(p)}<br>쓰기 수요 <b>${K.n(p.dem)}</b> IOPS` + (p.bk ? `<br>(게임 ${K.n(p.game)} + 백업 ${K.n(p.bk)})` : '') + `<br>처리 능력 <b>${K.n(p.cap)}</b> IOPS` + (p.cr != null ? `<br>버스트 크레딧 <b>${K.pct(p.cr)}</b>` : '');
   });
   K.hover(cvB, x => {
     const p = nearest(x, boxB);

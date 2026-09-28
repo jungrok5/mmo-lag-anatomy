@@ -88,7 +88,7 @@ K.register('rush', function (root) {
 
   const acv = K.canvas(F.stage, {
     height: w => K.clamp(w * 0.36, 200, 250),
-    caption: '초당 접속 시도와 성공',
+    caption: '초당 접속 시도와 성공 <span style="font-weight:400;color:var(--muted)">(눈금 한 칸 = 10배)</span>',
     right: '<span class="legend"><span><i style="background:var(--s1)"></i>시도</span><span><i style="background:var(--s2)"></i>성공</span></span>',
   });
   const bcv = K.canvas(F.stage, {
@@ -119,7 +119,7 @@ K.register('rush', function (root) {
   const stDone = K.stat(F.stats, { label: '전원 접속까지' });
   const stFail = K.stat(F.stats, { label: '누적 실패', unit: '회', sub: '“연결할 수 없습니다”' });
   const stAtt = K.stat(F.stats, { label: '지금 초당 시도', unit: '번' });
-  const stEff = K.stat(F.stats, { label: '서버 효율', unit: '%', sub: '처리 능력 대비 실제 입장' });
+  const stEff = K.stat(F.stats, { label: '서버 효율', sub: '처리 능력 대비 실제 입장' });
 
   let R = simulate(), t = 60, playing = true;
   function recalc() { R = simulate(); }
@@ -176,14 +176,23 @@ K.register('rush', function (root) {
     for (let s = 0; s <= end; s += 5) {   // 0.5초 평균으로 그린다
       let sa = 0, so = 0, c = 0;
       for (let i = s; i < Math.min(s + 5, end + 1); i++) { sa += R.att[i]; so += R.ok[i]; c++; }
-      a.push([(s + c / 2) * DT, L(sa / c)]); o.push([(s + c / 2) * DT, L(so / c)]);
+      a.push([(s + c / 2) * DT, sa / c]); o.push([(s + c / 2) * DT, so / c]);
     }
-    K.line(ctx, sc, a, C.s1);
-    K.line(ctx, sc, o, C.s2);
-    if (a.length) { K.dot(ctx, sc.x(a[a.length - 1][0]), sc.y(a[a.length - 1][1]), 3.5, C.s1); K.dot(ctx, sc.x(o[o.length - 1][0]), sc.y(o[o.length - 1][1]), 3.5, C.s2); }
+    // 0(=시도 없음)인 구간은 선을 끊는다
+    const draw = (pts, col) => {
+      let seg = [];
+      pts.forEach((p, i) => {
+        if (p[1] >= 10) seg.push([p[0], L(p[1])]);
+        if ((p[1] < 10 || i === pts.length - 1) && seg.length) { K.line(ctx, sc, seg.length > 1 ? seg : [seg[0], [seg[0][0] + 0.25, seg[0][1]]], col); seg = []; }
+      });
+    };
+    draw(a, C.s1); draw(o, C.s2);
+    [[a, C.s1], [o, C.s2]].forEach(([pts, col]) => {
+      const p = pts[pts.length - 1];
+      if (p && p[1] >= 10) K.dot(ctx, sc.x(p[0]), sc.y(L(p[1])), 3.5, col);
+    });
     playhead(ctx, sc, box, `${Math.floor(Math.min(t, TEND))}초`);
     K.text(ctx, '번/초', box.x - 6, box.y - 12, { size: 10.5, color: C.muted, align: 'right' });
-    K.text(ctx, '세로 눈금: 10배씩', box.x + 4, box.y + 8, { size: 10.5, color: C.muted });
   }
 
   function drawB() {
@@ -225,7 +234,7 @@ K.register('rush', function (root) {
 
   /* ---------- 해설 ---------- */
   function explain(s) {
-    const N = P.n, rem = N - R.logged[s], att = avg(R.att, s, 10), okps = avg(R.ok, s, 10), good = avg(R.ok, s, 50) / P.rate;
+    const N = P.n, rem = N - R.logged[s], att = avg(R.att, s, 50), okps = avg(R.ok, s, 50), good = okps / P.rate;
     const minT = N / P.rate;
     if (rem < 0.5) {
       const d = R.doneT;
@@ -258,7 +267,7 @@ K.register('rush', function (root) {
     const att = avg(R.att, s, 10);
     stAtt.set(fmtB(Math.round(att)), att <= P.rate * 1.2 ? 'good' : att < P.rate * 10 ? 'warn' : 'bad');
     if (rem < 0.5) stEff.set('—', null, '모두 접속함');
-    else { const g = Math.min(1, avg(R.ok, s, 50) / P.rate); stEff.set(K.n(g * 100), g > 0.9 ? 'good' : g > 0.6 ? 'warn' : 'bad', '처리 능력 대비 실제 입장'); }
+    else { const g = Math.min(1, avg(R.ok, s, 50) / P.rate); stEff.set(K.n(g * 100) + '<i>%</i>', g > 0.9 ? 'good' : g > 0.6 ? 'warn' : 'bad', '처리 능력 대비 실제 입장'); }
     if (P.queue) {
       const me = Math.round(N * 0.6), ahead = Math.max(0, me - R.logged[s]);
       mName.textContent = '순번 대기열'; mOut.textContent = `${K.n(R.B[s])}명 대기`;

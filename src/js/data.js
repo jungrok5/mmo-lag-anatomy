@@ -33,6 +33,11 @@ window.DATA = {
       what: '게이트웨이, 서버 간 호출 사슬, 연쇄 장애, 배포·확장' },
   ],
 
+  /* 물리적 층은 아니지만 원인을 모아 두는 묶음 (증상 색인·진단 도우미에 함께 쓰인다) */
+  extraLayers: [
+    { id: 'sync', name: '동기화 설계', short: '동기화 설계', side: '설계', anchor: 'sync' },
+  ],
+
   /* 네 가지 재료 */
   fx: [
     { id: 'lat', name: '지연', en: 'Latency', how: '소식이 늦게 온다',

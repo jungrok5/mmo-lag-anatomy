@@ -222,7 +222,7 @@ K.register('locks', function (root) {
     const narrow = w < 480;
     const lx = narrow ? 24 : 58, rx = w - 10, top = 30, bot = h - 22;
     const T = th.length;
-    const rowH = Math.min(26, (bot - top) / T);
+    const rowH = Math.min(30, (bot - top) / T);
     const bh = Math.max(3, rowH - (rowH > 9 ? 4 : 2));
     const win = narrow ? 36 : WIN;
     const t0 = now - win;
@@ -369,7 +369,7 @@ K.register('locks', function (root) {
     stThr.set(down ? '0' : K.n(m.thr), down || gain < T * 0.4 ? 'bad' : gain < T * 0.75 ? 'warn' : 'good');
     stWait.set(down ? '—' : K.ms(m.wait), down ? 'bad' : m.wait > JOB * 2 ? 'bad' : m.wait > JOB * 0.3 ? 'warn' : 'good', down ? '서버 꺼짐' : '락 한 번 잡는 데');
     stRatio.set(down ? '—' : K.n(m.ratio * 100) + '<i>%</i>', down || m.ratio > 0.3 ? 'bad' : m.ratio >= 0.1 ? 'warn' : 'good', down ? '서버 꺼짐' : `평균 ${K.n(m.ratio * T, 1)}개가 줄 서 있음`);
-    stGain.set('×' + K.n(gain, 1), gain < T * 0.4 ? 'bad' : gain < T * 0.75 ? 'warn' : 'good', `스레드 ${T}개 · 이상적이면 ×${T}`);
+    stGain.set('×' + K.n(gain, 1), gain < T * 0.4 ? 'bad' : gain < T * 0.75 ? 'warn' : 'good', `이상적이면 ×${T}`);
     F.say(explain(m));
   });
 });

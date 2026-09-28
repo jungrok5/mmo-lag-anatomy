@@ -25,6 +25,8 @@ K.register('gc', function (root) {
     right: '<span class="legend"><span><i class="box" style="background:var(--s1)"></i>예산 안</span><span><i class="box" style="background:var(--bad)"></i>예산 초과</span></span>',
   });
 
+  K.addStyle('gc', '.sim[data-sim="gc"] .cv-cap { flex-wrap: wrap; row-gap: 4px; }');
+
   /* ---------- 조작부 ---------- */
   const g1 = K.group(F.controls, '메모리 쓰는 양');
   const sA = K.slider(g1, { label: '초당 할당량', min: 10, max: 2000, step: 10, value: P.A, fmt: v => K.n(v) + ' MB/s', onInput: v => { P.A = v; reset(); }, hint: '몬스터 스폰, 스킬 이펙트, 패킷 조립처럼 잠깐 쓰고 버리는 메모리' });
@@ -337,8 +339,8 @@ K.register('gc', function (root) {
     stMiss.set(K.n(missed), missed >= 6 ? 'bad' : missed >= 1 ? 'warn' : 'good', missed ? '풀린 뒤 몰아서 처리' : '밀리지 않음');
     stSum.set(K.ms(a.perMin), a.perMin > 1000 ? 'bad' : a.perMin > 200 ? 'warn' : 'good', `1분 중 ${K.pct(a.perMin / 60000, 1)}`);
     const slowConc = P.mode === 'conc' && !a.fallback && baseWork() * 1.25 > B * 0.9;
-    const feel = a.maxP >= 300 ? ['멈춤·몰아치기', 'bad'] : a.maxP >= B || slowConc ? ['가끔 끊김', 'warn'] : ['거의 못 느낌', 'good'];
-    stFeel.set(feel[0], feel[1], a.maxP >= B ? `${fmtDur(a.fullI)}마다 한 번` : '');
+    const feel = a.maxP >= 300 ? ['멈춤', 'bad'] : a.maxP >= B || slowConc ? ['살짝 끊김', 'warn'] : ['매끄러움', 'good'];
+    stFeel.set(feel[0], feel[1], a.maxP >= 300 ? `풀리면 몰아치기 · ${fmtDur(a.fullI)}마다` : a.maxP >= B ? `${fmtDur(a.fullI)}마다 한 번` : slowConc ? '청소 중 틱이 느려짐' : '멈춤을 못 느낌');
     F.say(explain(a));
   });
 });

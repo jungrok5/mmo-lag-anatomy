@@ -394,6 +394,7 @@ K.register('frames', function (root) {
     }
     if (P.load) return `${K.flag('warn')}지금은 한 장 일이 ${K.ms(S.work)}라 매끄럽습니다. 하지만 몇 초마다 새 지역에 들어서며 게임 스레드가 에셋을 직접 읽습니다. 곧 화면이 <b>멈춤</b> 뒤 <b>순간이동</b>합니다.`;
     if (P.gc && P.inc && incLeft > 0) return `${K.flag('good')}점진적 GC가 한 장마다 2ms씩 쓰레기를 나눠 치우는 중입니다. 큰 멈춤 없이 매끄럽게 달립니다.`;
+    if (P.gc && P.inc && P.garbage > 0) return `${K.flag('good')}쓰레기가 <b>${K.n(heap)}MB</b> 쌓였습니다. ${INC_START}MB가 되면 점진적 GC가 한 장마다 2ms씩 나눠 치우기 시작합니다. 쓰레기를 너무 빨리 만들면 다 못 치우고 ${HEAPMAX}MB에서 결국 한 번에 멈춥니다.`;
     if (P.gc && P.garbage > 0) return `${K.flag('warn')}쓰레기가 <b>${K.n(heap)}MB</b> 쌓였습니다. ${HEAPMAX}MB가 되면 한꺼번에 치우느라 게임이 잠깐 멈춥니다. 지금은 한 장 일이 ${K.ms(S.work)}라 매끄럽습니다.`;
     return `${K.flag('good')}한 장 일이 평균 <b>${K.ms(S.work)}</b>로 16.7ms 안에 넉넉히 끝납니다. 캐릭터가 매끄럽게 달리고, 누른 키는 ${K.ms(S.lat)} 뒤에 화면에 나타납니다.`;
   }
