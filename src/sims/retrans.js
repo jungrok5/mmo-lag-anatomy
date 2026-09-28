@@ -7,10 +7,10 @@ K.register('retrans', function (root) {
     lead: '서버가 TCP로 게임 소식을 보냅니다. 오른쪽에서 길 위의 손실 원인을 하나씩 켜 보세요. 타임라인에서 어느 패킷이 어디서 사라졌는지(×와 원인 글자), 어떤 방식으로 다시 보냈는지(빠른 재전송, TLP, RTO), 잃지 않았는데 다시 보낸 가짜 재전송은 없는지 볼 수 있습니다. 아래 막대는 최근 10초 동안의 손실을 원인별로 모은 것입니다.',
     tries: [
       '<b>와이파이 손실 3%</b>를 누르세요. 게임 소식은 100ms마다 작은 패킷 하나라 “중복 ACK 3개”가 모이기 전에 RTO(핑 + 200ms)가 먼저 옵니다. 한 번 잃을 때마다 약 300ms 멈춘 뒤 몰아서 전달됩니다. <b>게임 소식 간격</b>을 30ms로 줄이면 빠른 재전송이 먼저 걸립니다.',
-      '같은 상태에서 <b>RACK-TLP</b>를 켜 보세요. 약 “핑의 2배” 만에 탐침(TLP)이 나가 복구가 빨라집니다. <b>선형 타임아웃</b>도 켜면 연속 손실 때 기다림이 두 배씩 늘지 않습니다.',
+      '같은 상태에서 <b>RACK-TLP</b>를 켜 보세요. 다음 소식이 도착했다는 확인(SACK)이 오는 즉시, 약 “소식 간격 + 핑” 만에 잃은 것을 알아채고 다시 보냅니다. 뒤따르는 소식이 없을 때는 끝 패킷을 한 번 더 보내는 꼬리 탐침(TLP)이 대신합니다. <b>선형 타임아웃</b>도 켜면 연속 손실 때 기다림이 두 배씩 늘지 않습니다.',
       '<b>MTU 블랙홀</b>을 누르세요. 2초마다 오는 큰 업데이트만 계속 사라지고, 같은 패킷을 몇 번이고 다시 보냅니다. <b>MTU 탐색</b>을 켜면 몇 초 멈춘 뒤에야 패킷을 작게 나눠 통과합니다.',
-      '<b>순서 뒤바뀜 (대용량)</b>을 누르고 RACK-TLP를 끄세요. 잃지도 않은 패킷을 다시 보내는 <b>가짜 재전송</b>이 생기고 전송량(혼잡 창)이 괜히 줄어듭니다.',
-      '<b>지연 급등</b>을 누르세요. 4초마다 0.5초씩 늦어지는 순간 RTO가 먼저 터져 가짜 재전송이 납니다. 원본도 결국 도착했으니 손실 원인 막대에는 아무것도 없습니다.',
+      '<b>순서 뒤바뀜 (대용량)</b>을 누르세요. RACK-TLP가 꺼진 상태라 잃지도 않은 패킷을 다시 보내는 <b>가짜 재전송</b>이 생기고 전송량(혼잡 창)이 괜히 줄어듭니다. RACK-TLP를 켜면 가짜 재전송이 줄어듭니다.',
+      '<b>지연 급등</b>을 누르세요. 4초마다 0.5초씩 늦어지는 순간 RTO가 먼저 터져 가짜 재전송이 납니다. 원본도 결국 도착했으니 손실 원인 막대에는 아무것도 없습니다. 화면의 멈춤은 지연 급등 자체에서 오고, 가짜 재전송은 주로 재전송 지표를 올립니다.',
     ],
   });
   K.addStyle('retrans', `
@@ -183,15 +183,17 @@ K.register('retrans', function (root) {
     if (t >= S.rtoAt && outstanding() > 0) {
       C.rto++;
       const thinNow = P.thin && outstanding() < 4 && S.retries < 6;
-      // 가장 오래된 것 하나를 다시 보낸다. 나머지는 이후 ACK·SACK을 보고 판단한다.
+      // 가장 오래된 것 하나를 다시 보낸다. 나머지는 확인이 돌아올 때마다 차례로(onAck).
       for (let i = S.una; i < S.next; i++) {
         const s = S.segs.get(i);
         if (s && !s.acked && !s.sacked) { transmit(s, 'rto'); break; }
       }
+      // 혼잡 창은 1로. 기준값(ssthresh)은 연속 RTO의 첫 번째에서만 70%로 낮춘다(CUBIC). 가짜로 밝혀지면 되돌릴 값을 남겨 둔다.
+      if (P.mode === 'bulk') { if (S.retries === 0) { S.undo = [S.cwnd, S.ssthresh]; S.ssthresh = Math.max(2, S.cwnd * 0.7); } S.cwnd = 1; }
+      S.lossHigh = S.next; S.lossAt = t; S.recover = S.next; S.frDone = S.una; S.dup = 0; S.tlpAt = Infinity;
       S.retries++;
       if (!thinNow) S.backoff = Math.min(64, S.backoff * 2);
       S.rtoAt = t + S.rto * S.backoff;
-      if (P.mode === 'bulk') { S.ssthresh = Math.max(2, S.cwnd / 2); S.cwnd = 1; }
     }
   }
 
@@ -202,6 +204,7 @@ K.register('retrans', function (root) {
     if (R.got.has(p.id)) dsack = p.id; // 이미 받은 것 = 상대가 괜히 다시 보냄
     else {
       R.got.add(p.id);
+      if (p.id === R.expected) R.tsRecent = p.tx.at; // 타임스탬프: 창을 앞으로 민 패킷의 보낸 시각을 ACK에 담아 돌려준다
       if (p.id >= R.expected) R.buf.add(p.id);
       while (R.buf.has(R.expected)) {
         R.buf.delete(R.expected);
@@ -215,7 +218,7 @@ K.register('retrans', function (root) {
       // 업로드가 꽉 차면 ACK도 공유기 줄에 서서 늦게 간다
       let at = t + oneWay(t) + (P.ackLoss ? rnd() * P.ackLoss * 12 : 0);
       at = Math.max(at, S.lastAck + 0.2); S.lastAck = at;
-      acks.push({ at, cum: R.expected, sack, dsack });
+      acks.push({ at, cum: R.expected, sack, dsack, ts: R.tsRecent });
     }
     else lossLog.push([t, 'A']);
     if (s) s.lastArr = t;
@@ -390,7 +393,7 @@ K.register('retrans', function (root) {
       const name = CAUSE[top[0]];
       msg = `${K.flag(rate > 0.03 || p99 > 250 ? 'bad' : 'warn')}최근 10초 손실의 주범은 <b>${name}</b>(${top[1]}개)입니다. `;
       if (top[0] === 'M') msg += `1,360바이트를 넘는 큰 업데이트만 계속 사라지고 같은 패킷을 반복해서 다시 보냅니다. ${P.mtuProbe ? 'MTU 탐색이 켜져 있어도 바로 통과하지는 못합니다. 재전송 타임아웃이 3초쯤 이어져야 블랙홀로 판단하고, 그때부터 1,024바이트로 작게 나눠 통과합니다. 그 사이는 <b>멈춤</b>이라 미리 막는 MSS 조정이 먼저입니다.' : 'TCP는 순서를 지켜야 하므로 뒤따르는 작은 소식까지 전부 줄을 서고, RTO는 두 배씩 늘어나 결국 <b>멈춤</b> 끝에 <b>접속 끊김</b>이 됩니다. 평소에는 멀쩡하다가 “큰 창을 열거나 사람 많은 곳에 가면 멈춘다”는 제보로 옵니다. MSS 조정이나 MTU 탐색이 해결책입니다.'}`;
-      else if (top[0] === 'A') msg += `게임 소식 자체는 제때 도착합니다. ACK는 뒤에 오는 ACK가 앞의 것을 대신 확인해 주므로 몇 개 사라져도 대개 괜찮습니다. 문제는 업로드가 꽉 차서 ACK가 줄을 서 늦게 가는 것입니다. 보내는 쪽이 느끼는 왕복 시간이 늘어 RTO가 커지고, ACK가 한꺼번에 늦으면 잃지 않은 것을 다시 보내며(가짜 재전송) 대용량 전송은 속도가 떨어집니다.`;
+      else if (top[0] === 'A') msg += `게임 소식 자체는 제때 도착합니다. ACK는 뒤에 오는 ACK가 앞의 것을 대신 확인해 주므로 몇 개 사라져도 대개 괜찮습니다. 문제는 업로드가 꽉 차서 ACK가 줄을 서 늦게 가는 것입니다. 보내는 쪽이 느끼는 왕복 시간이 늘어 RTO가 커지고, ACK가 한꺼번에 늦으면 잃지 않은 것을 다시 보내며(가짜 재전송) 대용량 전송은 속도가 떨어집니다. 실제 게임에서 더 크게 느껴지는 것은 같은 업로드 줄에 선 내 입력이 늦게 가는 <b>입력 지연</b>입니다(이 실험은 서버 → 내 PC 방향만 보여 줍니다).`;
       else if (P.mode === 'game' && !P.rack) {
         const dupWait = 3 * P.gap + P.rtt / 2, rtoW = P.rtt + P.rtoMin;
         msg += dupWait > rtoW
