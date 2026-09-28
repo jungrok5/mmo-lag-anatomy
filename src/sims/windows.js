@@ -157,11 +157,13 @@ K.register('windows', function (root) {
     segs.forEach(([name, v, col]) => {
       if (v <= 0.5) return;
       const x0 = X(acc), x1 = X(acc + v);
-      ctx.fillStyle = col;
+      // 돌려받은 구간과 겹치는 칸은 흐리게, 글자는 생략 (그 위에 “여유” 표시가 올라간다)
+      const back = p.comp > 0 && acc + v > total - p.comp + 0.5;
+      ctx.fillStyle = back && acc >= total - p.comp - 0.5 ? K.alpha(col, 0.3) : col;
       K.rr(ctx, x0 + 1, y, Math.max(1, x1 - x0 - 2), bh, 3); ctx.fill();
       ctx.font = K.font(10.5, 600);
       const lab = `${name} ${Math.round(v)}`;
-      if (ctx.measureText(lab).width + 10 < x1 - x0) K.text(ctx, lab, (x0 + x1) / 2, y + bh / 2, { align: 'center', size: 10.5, weight: 600, color: '#fff' });
+      if (back) { /* 글자 생략 */ } else if (ctx.measureText(lab).width + 10 < x1 - x0) K.text(ctx, lab, (x0 + x1) / 2, y + bh / 2, { align: 'center', size: 10.5, weight: 600, color: '#fff' });
       else if (ctx.measureText(String(Math.round(v))).width + 8 < x1 - x0) K.text(ctx, String(Math.round(v)), (x0 + x1) / 2, y + bh / 2, { align: 'center', size: 10.5, weight: 600, color: '#fff' });
       acc += v;
     });

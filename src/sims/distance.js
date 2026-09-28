@@ -47,7 +47,7 @@ K.register('distance', function (root) {
     const scale = a[3] === b[3] ? 0.35 : km > 5000 ? 1.2 : 1.0;
     const at = h => {
       const f = cong(h), jm = 40 * f * scale;
-      return { f, min: base, avg: base + jm / 3 + ac[2] / 3, p95: base + jm + ac[2], loss: 0.03 * f * f * scale + (P.cut ? 0.01 : 0) + ac[3] };
+      return { f, min: base, avg: base + jm / 3 + ac[2] / 3, p95: base + jm + ac[2], loss: 0.015 * f * f * scale + (P.cut ? 0.01 : 0) + ac[3] };
     };
     return { a, b, same, km, light, route, base, scale, at, now: at(P.hour), intl: a[3] !== b[3] };
   }

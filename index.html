@@ -1705,7 +1705,7 @@ window.DATA = {
       tell: '어딘가에서 소식이 붙잡혀 있다가 한 번에 풀렸습니다. TCP 재전송 대기, 서버 따라잡기, 클라 처리 밀림이 대표적입니다.',
       preset: 'burst' },
     { id: 'slowmo', name: '슬로우모션', alias: '세계가 느려짐, 전체적으로 굼뜸',
-      what: '모든 것이 느리게 움직입니다. 스킬 시전, 몬스터 이동, 쿨타임까지 늘어진 것처럼 보입니다.',
+      what: '모든 것이 느리게 움직입니다. 스킬 시전과 몬스터 이동이 늘어진 것처럼 보입니다. 서버 설계에 따라서는 속도는 그대로인 채 뚝뚝 끊김·순간이동으로 나타나기도 합니다.',
       looks: '같은 지역의 모두가 함께 느려집니다. 대개 사람이 많이 모인 곳에서 생깁니다.',
       tell: '서버가 틱을 제시간에 못 끝내고 있습니다. 인원 폭증, 시야 계산, 브로드캐스트, 메모리 부족을 봅니다.',
       preset: 'slowmo' },
@@ -1751,7 +1751,7 @@ window.DATA = {
     ['“좋은 핑”의 기준', 60, '대부분의 MMO에서 차이를 거의 못 느끼는 수준'],
     ['보간 버퍼 (대표값)', 100, '보통 소식 간격의 2배. 다른 플레이어를 이만큼 과거 모습으로 그려 흔들림과 손실 한 번을 숨김'],
     ['서울 ↔ 미국 서부 왕복', 140, '이 중 약 90ms는 광케이블 속 빛의 속도 한계라 줄일 수 없음'],
-    ['TCP 재전송 최소 대기 (리눅스)', 200, '패킷 하나를 잃으면 적어도 이만큼 멈출 수 있음'],
+    ['TCP 재전송 최소 대기 (리눅스, 핑에 더해짐)', 200, '패킷 하나를 잃으면 적어도 “핑 + 이만큼” 멈출 수 있음'],
     ['사람의 반응 속도', 250, '보고 누르기까지 걸리는 시간. 입력 지연은 이보다 훨씬 짧은 100ms 안팎부터 “굼뜨다”고 느낌'],
     ['큰 서버의 GC 전체 멈춤', 1000, '서버의 모든 사람이 동시에 멈추는 시간'],
     ['흔한 접속 끊김 판정 (타임아웃)', 5000, '이 시간 동안 소식이 없으면 연결을 포기'],
@@ -2512,6 +2512,13 @@ window.DATA = {
       fix: '멈춤이 짧은 GC(ZGC, Shenandoah, 목표 시간을 줄인 G1), 할당 줄이기, 힙 크기 조정.',
       more: 'Java의 G1은 한 번 멈춤 목표가 기본 200ms라, 20틱 서버에서는 틱 4개에 해당합니다. C#(.NET) 서버는 보통 서버 GC와 백그라운드 GC를 켜지만, 젊은 세대 청소와 압축을 동반한 전체 청소는 여전히 모든 스레드를 세웁니다. 어느 방식이든 할당이 청소보다 빠르면 결국 전체 멈춤으로 넘어갑니다.',
       sim: 'gc' },
+    { id: 'mem-script-gc', t: '스크립트 엔진의 GC 멈춤', en: 'Scripting VM GC (Lua, etc.)',
+      s: 'C++ 서버라도 퀘스트·AI·스킬을 Lua 같은 스크립트로 돌리면, 스크립트 엔진이 자기 메모리를 청소하는 동안 그 존이 멈춥니다.',
+      c: ['존마다 스크립트 엔진이 퀘스트·AI·이벤트를 실행하며 임시 객체를 대량 생성', '스크립트 엔진의 GC가 한 번에 많이 치우면 그 존의 틱이 멈춤', '특정 존·특정 이벤트 중에만 주기적으로 멈칫'],
+      sym: ['stutter', 'freeze'], fx: ['stall'], who: ['zone'], when: ['event', 'periodic'],
+      num: '스크립트 힙이 수백 MB로 커지면 한 번에 수십~수백 ms가 걸리기도 합니다.',
+      fix: '점진적·세대별 GC 설정, 틱마다 조금씩 GC 진행, 스크립트의 임시 객체 줄이기.',
+      sim: 'gc' },
     { id: 'mem-alloc', t: '할당 폭주', en: 'Allocation storms',
       s: '이벤트 중 임시 객체를 대량으로 만들면 GC가 평소보다 훨씬 자주 돕니다.',
       c: ['아이템 드롭·전투 로그·이벤트 보상으로 임시 객체 폭증', 'GC가 몇 배 자주 돌고, 미처 버려지지 않은 객체가 늙은 세대로 넘어가 전체 청소도 앞당겨짐', '이벤트 때만 주기적으로 멈칫'],
@@ -2773,12 +2780,6 @@ window.DATA = {
       sym: ['noconnect', 'dropped'], fx: ['stall'], who: ['server', 'feature'], when: ['login', 'action'],
       fix: '타임아웃과 친절한 안내, 인증 결과 캐시, 결제 재시도·보상 절차.',
       sim: 'arch' },
-    { id: 'in-cpu-throttle', t: '컨테이너 CPU 한도에 걸림', en: 'Container CPU throttling (cgroup quota)',
-      s: '서버를 컨테이너로 돌릴 때 정해 둔 CPU 한도를 잠깐이라도 다 쓰면, 남은 시간 동안 강제로 멈춰 틱이 튑니다.',
-      c: ['쿠버네티스 등에서 게임 서버에 CPU 한도(예: 2코어)를 걸어 둠', '0.1초 단위로 한도를 다 쓰면 다음 구간까지 실행이 멈춤', '평균 CPU는 낮아 보이는데 수십 ms씩 자꾸 끊김'],
-      sym: ['stutter', 'freeze'], fx: ['stall'], who: ['server', 'zone'], when: ['event', 'random'],
-      num: '기본 구간은 100ms. 2코어 한도에서 스레드 4개가 50ms 만에 한도를 다 쓰면 남은 50ms는 멈춥니다. 20틱 서버라면 한 틱이 통째로 밀립니다.',
-      fix: '틱을 도는 게임 서버는 CPU 한도 대신 전용 코어 배정, 스로틀링(한도 걸림) 지표 감시, 스레드 수를 한도에 맞추기.' },
   ]);
 })();
 
@@ -3128,6 +3129,9 @@ DATA.glossary = [
   ['복제 지연', 'Replication lag', '복제본 DB가 주 DB를 따라가지 못하고 뒤처진 시간.', 'l-db'],
   ['롤백', 'Rollback', '저장이 취소되어 이전 상태로 돌아가는 것. 플레이어는 “아이템이 사라졌다”고 느낍니다.', 'l-db'],
   ['캐시', 'Cache (Redis 등)', '자주 쓰는 데이터를 빠른 곳에 복사해 둔 것. DB 부하를 줄입니다.', 'l-infra'],
+  ['체크포인트', 'Checkpoint', 'DB가 메모리에 모아 둔 변경분을 주기적으로 디스크에 몰아 쓰는 일. 그 순간 저장·조회가 잠깐 느려질 수 있습니다.', 'l-db'],
+  ['장애 전환', 'Failover', '주 서버나 DB가 죽었을 때 예비 쪽으로 넘어가는 일. 넘어가는 동안 잠깐 저장이 안 되고, 복제가 늦었다면 마지막 데이터가 사라질 수 있습니다.', 'l-db'],
+  ['MVCC', 'Multi-version concurrency control', 'DB가 읽는 사람과 고치는 사람이 서로 막지 않도록 옛 버전을 잠시 보관하는 방식. 오래 열린 트랜잭션이 있으면 옛 버전이 쌓여 느려집니다.', 'l-db'],
   ['캐시 쇄도', 'Cache stampede', '캐시가 한꺼번에 비어 요청이 원본(DB)으로 몰리는 현상.', 'l-db'],
   ['게이트웨이', 'Gateway', '클라이언트 연결을 받아 뒤쪽 게임 서버로 전달하는 중간 서버.', 'l-infra'],
   ['서킷 브레이커', 'Circuit breaker', '실패가 계속되는 서비스 호출을 잠시 끊어 연쇄 장애를 막는 장치.', 'l-infra'],
@@ -5352,7 +5356,7 @@ K.register('distance', function (root) {
     const scale = a[3] === b[3] ? 0.35 : km > 5000 ? 1.2 : 1.0;
     const at = h => {
       const f = cong(h), jm = 40 * f * scale;
-      return { f, min: base, avg: base + jm / 3 + ac[2] / 3, p95: base + jm + ac[2], loss: 0.03 * f * f * scale + (P.cut ? 0.01 : 0) + ac[3] };
+      return { f, min: base, avg: base + jm / 3 + ac[2] / 3, p95: base + jm + ac[2], loss: 0.015 * f * f * scale + (P.cut ? 0.01 : 0) + ac[3] };
     };
     return { a, b, same, km, light, route, base, scale, at, now: at(P.hour), intl: a[3] !== b[3] };
   }
@@ -7293,7 +7297,7 @@ K.register('lab', function (root) {
   // 증상별 재현 조건. set 은 기본값 위에 덮어쓴다.
   const PRESETS = [
     { id: 'normal', label: '정상', set: {},
-      say: '<b>정상</b>: 핑 60ms, 약간의 흔들림. 다른 플레이어는 100ms 늦게 그려지는 대신(보간) 매끄럽게 움직이고, 내 캐릭터는 예측 덕분에 즉시 반응합니다.' },
+      say: '<b>정상</b>: 핑 60ms, 약간의 흔들림. 다른 플레이어는 보간 버퍼 100ms만큼 더 과거 모습으로 그려지는 대신 매끄럽게 움직이고, 내 캐릭터는 예측 덕분에 즉시 반응합니다.' },
     { id: 'stutter', label: '뚝뚝 끊김', set: { jitter: 110, tick: 15, mode: 'snap' },
       say: '<b>뚝뚝 끊김</b>: 서버 소식이 들쭉날쭉(지터 110ms) 오는데 받자마자 그리니, 늦게 온 만큼 멈췄다가 몰려 온 만큼 튑니다. 오른쪽 “내 화면”의 상대(주황) 궤적 점 간격을 보세요.' },
     { id: 'teleport', label: '순간이동', set: { outEvery: 3.5, outMs: 900, loss: 3 },
@@ -7683,7 +7687,7 @@ K.register('lab', function (root) {
         '<b>지터</b>를 100ms로 올린 뒤 <b>다른 플레이어 표시</b>를 “받은 즉시” ↔ “보간”으로 바꿔 보세요. 보간 버퍼가 흔들림을 흡수하는 대신 상대가 과거에 머뭅니다.',
         '<b>손실</b> 10%에서 <b>프로토콜</b>을 UDP ↔ TCP로 바꿔 보세요. UDP는 가끔 튀고, TCP는 멈췄다 몰아칩니다.',
         '<b>엄격한 이동 검증</b>을 켜고 지터를 80ms로 올려 보세요. 명령이 몰려 도착한 틱마다 서버가 이동을 잘라 고무줄이 생깁니다.',
-        '<b>지금 회선 끊기</b>를 타임아웃보다 길게 설정하고 눌러 보세요. TCP에서는 회선이 돌아온 뒤에도 재전송 대기 때문에 한참 더 멈춰 있습니다.',
+        '<b>끊김 길이</b>를 타임아웃보다 길게 하고 <b>지금 회선 끊기</b>를 눌러 보세요. 접속이 끊깁니다. 타임아웃보다 조금 짧게 하면, TCP에서는 회선이 돌아온 뒤에도 재전송 대기 때문에 한참 더 멈춰 있다가 끊기기도 합니다.',
       ],
     });
     F.presets.hidden = false;
@@ -8033,7 +8037,8 @@ K.register('lab', function (root) {
     } else if (P.mode === 'snap' && (P.jitter > 30 || P.tick < 15)) {
       msg = `${K.flag('warn')}<b>뚝뚝 끊김</b>: 받은 소식을 바로 그리니 틱 간격(${K.ms(1000 / P.tick)})과 지터(${P.jitter}ms)가 그대로 화면에 드러납니다. 궤적 점이 뭉쳤다 벌어졌다 합니다.`;
     } else if (!P.predict && ping != null) {
-      msg = `${K.flag(ping > 150 ? 'bad' : 'warn')}<b>입력 지연</b>: 예측이 꺼져 있어 내 캐릭터가 서버 확인을 기다립니다. 누르고 약 ${K.ms(ping)} 뒤에야 움직이기 시작합니다. 대부분의 게임은 이동에 예측을 쓰고, 스킬 판정처럼 서버 확인이 꼭 필요한 곳에서만 이 지연이 보입니다.`;
+      const ownBuf = P.mode === 'interp' ? P.interp : P.mode === 'queue' ? Math.max(P.interp, 60) : 0;
+      msg = `${K.flag(ping > 150 ? 'bad' : 'warn')}<b>입력 지연</b>: 예측이 꺼져 있어 내 캐릭터가 서버 확인을 기다립니다. 누르고 약 ${K.ms(ping + ownBuf)} 뒤에야 움직이기 시작합니다${ownBuf ? `(왕복 ${K.ms(ping)} + 내 캐릭터도 다른 사람처럼 보간 버퍼 ${K.ms(ownBuf)}만큼 늦게 그림)` : ''}. 대부분의 게임은 이동에 예측을 쓰고, 스킬 판정처럼 서버 확인이 꼭 필요한 곳에서만 이 지연이 보입니다.`;
     } else if (fps < 25) {
       msg = `${K.flag('warn')}<b>뚝뚝 끊김 (화면)</b>: 네트워크는 멀쩡하지만 화면을 초당 ${fps}번만 그립니다. 궤적 점 간격이 넓고 일정합니다.`;
     } else {
@@ -8112,7 +8117,7 @@ K.register('ladder', function (root) {
     ['서울↔도쿄 왕복', 3e7, 2, '빛이 광섬유를 타고 서울과 도쿄를 오가는 시간입니다. 서버가 아무리 빨라도 이 거리만큼은 줄일 수 없습니다.'],
     ['서버 틱 한 번(20Hz)', 5e7, 3, '20Hz 서버가 세계를 한 걸음 움직이는 박자입니다. 이 안에 모든 일을 끝내야 합니다. 이 표의 기준선입니다.'],
     ['서울↔미국 서부 왕복', 1.4e8, 2, '태평양을 건너 왕복하는 시간으로, 서버 틱 한 번보다 깁니다. 해외 서버에서 스킬 반응이 한 박자 늦는(<b>입력 지연</b>) 이유입니다.'],
-    ['TCP 재전송 최소 대기', 2e8, 2, '패킷 하나가 사라지면 리눅스 TCP는 최소 200ms를 기다렸다 다시 보냅니다. 그동안 뒤따르는 데이터도 모두 멈춰 기다립니다(<b>멈춤</b> 뒤 <b>몰아치기</b>).'],
+    ['TCP 재전송 최소 대기', 2e8, 2, '패킷 하나가 사라지면 리눅스 TCP는 최소 “핑 + 200ms”를 기다렸다 다시 보냅니다. 그동안 뒤따르는 데이터도 모두 멈춰 기다립니다(<b>멈춤</b> 뒤 <b>몰아치기</b>).'],
     ['사람 반응 속도', 2.5e8, 3, '사람이 화면을 보고 반응하는 데 걸리는 시간입니다. 컴퓨터에겐 영겁이지만, 입력 지연이 100ms만 넘어도 사람은 “느리다”고 느낍니다.'],
     ['큰 힙 GC 전체 멈춤', 1e9, 0, '큰 힙을 한 번에 청소하는 전체 멈춤 GC입니다. 그동안 틱 20개가 밀리고, 이 서버의 모든 플레이어가 동시에 <b>멈춤</b>을 겪습니다.'],
   ].map(([n, v, g, why]) => ({ n, v, g, why }));
@@ -9345,7 +9350,7 @@ K.register('nic', function (root) {
     title: '서버 네트워크 카드가 패킷을 흘리는 순간',
     lead: '네트워크 카드(NIC)는 서버의 우편함입니다. 링 버퍼는 우편함의 칸 수, 인터럽트는 집배원이 초인종을 누르는 일, RSS는 여러 사람이 우편물을 나눠 받는 일입니다. 받는 사람(CPU 코어)이 꺼내는 속도보다 빨리 쌓이면 칸이 다 차고, 그 뒤에 온 패킷은 아무 기록 없이 버려집니다.',
     tries: [
-      '<b>월드 보스 (150만 pps, RSS 1개)</b>를 누르세요. 코어 하나가 100%에 붙고 우편함이 넘쳐 초당 수십만 개가 버려집니다.',
+      '<b>월드 보스 (150만 pps, RSS 1개)</b>를 누르세요(게이트웨이 규모의 극단적인 예). 코어 하나가 100%에 붙고 우편함이 넘쳐 초당 수십만 개가 버려집니다.',
       '이어서 <b>RSS 큐 수</b>를 8로 올려 보세요. 같은 양을 코어 8개가 나눠 받아 버림이 0이 됩니다.',
       '<b>클라우드 PPS 한도 초과</b>: 서버 쪽 그림은 멀쩡한데 “한도 초과 버림”만 쌓입니다. 서버 안을 아무리 봐도 원인이 안 보이는 경우입니다.',
       '<b>몰림 정도</b>를 올리면 평균은 여유가 있어도 몰리는 순간에 칸이 모자랍니다. <b>링 버퍼 크기</b>를 키우면 버림은 줄지만 줄이 길어져 지연이 늘어납니다.',
@@ -9383,7 +9388,7 @@ K.register('nic', function (root) {
 
   /* ---------- 조작부 ---------- */
   const g1 = K.group(F.controls, '들어오는 패킷');
-  const sPps = K.slider(g1, { label: '초당 들어오는 패킷(PPS)', min: 0, max: PPS.length - 1, step: 1, value: PPS.indexOf(P.pps), fmt: i => fmtP(PPS[i]) + '/초', onInput: i => { P.pps = PPS[i]; }, hint: '유저 1명이 초당 20~30개를 보냅니다. 150만 pps ≈ 한곳에 모인 5만~7만 명.' });
+  const sPps = K.slider(g1, { label: '초당 들어오는 패킷(PPS)', min: 0, max: PPS.length - 1, step: 1, value: PPS.indexOf(P.pps), fmt: i => fmtP(PPS[i]) + '/초', onInput: i => { P.pps = PPS[i]; }, hint: '유저 1명이 초당 20~30개를 보냅니다. 150만 pps ≈ 5만~7만 명분이라 게임 서버 한 대보다는 게이트웨이·프록시 한 대가 받는 규모입니다.' });
   const sBurst = K.slider(g1, { label: '몰림 정도', min: 0, max: 100, step: 5, value: P.burst, unit: '%', onInput: v => { P.burst = v; }, hint: '평균은 같아도 짧은 순간에 몰려 들어옵니다(보스 등장, 광역 스킬).' });
   const tCloud = K.toggle(g1, { label: '클라우드 인스턴스 PPS 한도 (100만 pps)', value: P.cloud, onChange: v => { P.cloud = v; }, hint: '한도를 넘은 패킷은 NIC에 닿기 전에 조용히 버려집니다.' });
   const g2 = K.group(F.controls, '네트워크 카드 설정');
@@ -10504,7 +10509,7 @@ K.register('rush', function (root) {
   const cBl = K.choice(g2, { label: 'listen backlog (접속 대기 줄)', value: P.backlog, options: [[128, '128'], [4096, '4,096'], [65535, '65,535']], onChange: v => { P.backlog = +v; recalc(); }, hint: '128은 오래된 리눅스 기본값, 4,096은 요즘 기본값입니다.' });
   const cFd = K.choice(g2, { label: '동시 접속 한도 (파일 디스크립터)', value: P.fd, options: [[1024, '1,024'], [65535, '65,535'], [1000000, '100만']], onChange: v => { P.fd = +v; recalc(); }, hint: '접속 하나에 번호 하나. 1,024는 설정을 안 바꾼 기본값입니다.' });
   const g3 = K.group(F.controls, '게임 클라이언트');
-  const cRe = K.choice(g3, { label: '재시도 방식', value: P.retry, options: [['now', '즉시 재시도'], ['fixed', '5초마다'], ['backoff', '지수 백오프 + 무작위']], onChange: v => { P.retry = v; recalc(); }, hint: '백오프: 실패할 때마다 2초, 4초, 8초… 최대 60초에 무작위를 섞어 기다립니다.' });
+  const cRe = K.choice(g3, { label: '재시도 방식', value: P.retry, options: [['now', '즉시 재시도'], ['fixed', '5초마다'], ['backoff', '지수 백오프 + 무작위']], onChange: v => { P.retry = v; recalc(); }, hint: '백오프: 실패할 때마다 2초, 4초, 8초… 최대 60초에 무작위를 섞어 기다립니다. 이 실험은 거절 처리에 드는 서버 부담을 크게 잡았습니다. 실제 효율 저하는 반쯤 처리한 로그인이 클라이언트 타임아웃으로 버려지는 헛일에서 주로 옵니다.' });
   const tQ = K.toggle(g3, { label: '접속 대기열(순번표) 시스템', value: P.queue, onChange: v => { P.queue = v; recalc(); }, hint: '누르면 바로 순번표를 받고, 서버가 처리할 수 있는 만큼만 차례로 들여보냅니다.' });
 
   const stIn = K.stat(F.stats, { label: '접속 완료 인원', unit: '명' });
@@ -11818,7 +11823,7 @@ K.register('timeouts', function (root) {
     const udp = P.proto === 'udp', L = [];
     if (P.link === 'home') L.push({ key: 'nat', idx: 0, name: '가정 공유기(NAT)', T: udp ? 60 : 3600 });
     else L.push({ key: 'cgnat', idx: 0, name: '통신사 공유기(CGNAT)', T: udp ? 30 : 600 });
-    if (P.fw) L.push({ key: 'fw', idx: 1, name: '회사·PC방 방화벽', T: 300 });
+    if (P.fw) L.push({ key: 'fw', idx: 1, name: '회사·PC방 방화벽', T: P.proto === 'udp' ? 120 : 300 });
     L.push({ key: 'lb', idx: 2, name: '로드밸런서', T: P.lb });
     L.push({ key: 'srv', idx: 3, name: '게임 서버 무응답 판정', T: P.srv > 0 ? P.srv : Infinity });
     if (!udp) L.push({ key: 'ka', idx: 4, name: 'TCP keepalive (서버)', T: P.ka ? 60 : 7200, ka: true });
@@ -11903,11 +11908,11 @@ K.register('timeouts', function (root) {
   const cProto = K.choice(g1, { label: '프로토콜', value: P.proto, options: [['udp', 'UDP'], ['tcp', 'TCP']], onChange: v => { P.proto = v; changed(); } });
   const cLink = K.choice(g1, { label: '연결 방식', value: P.link, options: [['home', '유선·와이파이'], ['mobile', '모바일']], onChange: v => { P.link = v; changed(); } });
   const tBg = K.toggle(g1, { label: '백그라운드 전환 (모바일)', value: P.bg, onChange: v => { P.bg = v; changed(); }, hint: '앱이 백그라운드로 가면 10초 뒤 OS가 앱을 멈춥니다. 하트비트도 멈춥니다.' });
-  const tFw = K.toggle(g1, { label: '회사·PC방 방화벽 거침', value: P.fw, onChange: v => { P.fw = v; changed(); } });
+  const tFw = K.toggle(g1, { label: '회사·PC방 방화벽 거침', value: P.fw, onChange: v => { P.fw = v; changed(); }, hint: '짧게 설정된 곳 기준: UDP 120초, TCP 5분. TCP는 1시간인 장비도 흔합니다.' });
   const g2 = K.group(F.controls, '클라이언트');
   const sHb = K.slider(g2, { label: '하트비트 간격', min: 0, max: 300, step: 5, value: P.hb, fmt: v => (v ? fmtT(v) : '끔'), onInput: v => { P.hb = v; changed(); }, hint: '하트비트: 할 일이 없어도 “살아 있어요”라고 보내는 작은 패킷' });
   const g3 = K.group(F.controls, '타임아웃 설정');
-  const sLb = K.slider(g3, { label: '로드밸런서 유휴 타임아웃', min: 30, max: 3600, step: 10, value: P.lb, fmt: fmtT, onInput: v => { P.lb = v; changed(); } });
+  const sLb = K.slider(g3, { label: '로드밸런서 유휴 타임아웃', min: 30, max: 3600, step: 10, value: P.lb, fmt: fmtT, onInput: v => { P.lb = v; changed(); }, hint: '예: AWS NLB는 TCP 350초·UDP 120초, ALB는 60초가 기본입니다.' });
   const sSrv = K.slider(g3, { label: '서버 무응답 판정', min: 0, max: 120, step: 5, value: P.srv, fmt: v => (v ? fmtT(v) : '끔'), onInput: v => { P.srv = v; changed(); }, hint: '게임 서버가 하트비트·입력을 이만큼 못 받으면 접속을 정리합니다.' });
   const tKa = K.toggle(g3, { label: '짧은 keepalive 설정 (60초)', value: P.ka, onChange: v => { P.ka = v; changed(); }, hint: 'TCP 전용. 기본값은 2시간 동안 조용해야 첫 확인 패킷을 보냅니다.' });
 
@@ -12212,14 +12217,16 @@ K.register('windows', function (root) {
   /* ---------------- 계산 ---------------- */
   function parts(rtt, judge = P.judge, sched = P.sched) {
     const down = rtt / 2, up = rtt / 2;
+    const roll = judge === 'roll'; // 롤백: 보간 버퍼·서버 틱 없이 프레임 단위로 입력을 주고받는다
     const seeDown = sched === 'sched' ? Math.max(0, down - 400) : down;
-    const seeInterp = sched === 'sched' ? 0 : P.interp;
-    const tickWait = 1000 / P.tick / 2;
+    const seeInterp = sched === 'sched' || roll ? 0 : P.interp;
+    const tickWait = roll ? 0 : 1000 / P.tick / 2;
     const see = seeDown + seeInterp;
     const travel = up + tickWait;
     let comp = 0;
     if (judge === 'lagcomp') comp = Math.min(CAP, see + travel);
     if (judge === 'client') comp = see + travel;
+    if (roll) comp = travel; // 내 입력은 누른 프레임으로 되감아 인정. 상대 동작을 늦게 본 시간은 못 돌려받음
     const used = see + P.react + travel - comp;
     return { seeDown, seeInterp, react: P.react, up, tickWait, comp, used, margin: P.W - used };
   }
@@ -12241,11 +12248,11 @@ K.register('windows', function (root) {
     const tPress = tSee + p.react;                           // 내가 누른 시각(서버 시계로)
     const tArrive = tPress + p.up + p.tickWait;              // 서버가 회피를 처리하는 시각
     const hitAtServer = P.W;
-    const dodgedServer = P.judge === 'now' ? tArrive < hitAtServer : P.judge === 'lagcomp' ? p.used < P.W : P.react < P.W;
+    const dodgedServer = P.judge === 'now' ? tArrive < hitAtServer : P.judge === 'client' ? P.react < P.W : p.used < P.W;
     const period = Math.max(P.W, tArrive) + 1300;
     const u = ph % period;
     const panels = [
-      { x: 0, title: '서버의 진실', start: 0, move: P.judge === 'client' ? tPress + p.up : tArrive, local: false },
+      { x: 0, title: '서버의 진실', start: 0, move: P.judge === 'client' ? tPress + p.up : P.judge === 'roll' ? tPress : tArrive, local: false },
       { x: pw + gap, title: '내 화면', start: tSee, move: tPress, local: true },
     ];
     panels.forEach(pn => {
@@ -12281,7 +12288,7 @@ K.register('windows', function (root) {
       if (u >= hitLocal) {
         if (pn.local) {
           // 내 화면에서는 이미 피한 것처럼 보이지만, 서버 판정은 내려오는 시간만큼 늦게 도착한다
-          const verdictAt = P.judge === 'client' ? hitLocal : Math.max(hitLocal, P.W + P.rtt / 2);
+          const verdictAt = P.judge === 'client' || P.judge === 'roll' ? hitLocal : Math.max(hitLocal, P.W + P.rtt / 2);
           if (u >= verdictAt) {
             const hit = !dodgedServer;
             K.text(ctx, hit ? (mv > 0.5 ? '피했는데 맞음' : '피격') : '회피 성공', pw / 2, h - 14, { align: 'center', size: 12.5, weight: 700, color: hit ? C.badInk : C.goodInk });
@@ -12317,11 +12324,13 @@ K.register('windows', function (root) {
     segs.forEach(([name, v, col]) => {
       if (v <= 0.5) return;
       const x0 = X(acc), x1 = X(acc + v);
-      ctx.fillStyle = col;
+      // 돌려받은 구간과 겹치는 칸은 흐리게, 글자는 생략 (그 위에 “여유” 표시가 올라간다)
+      const back = p.comp > 0 && acc + v > total - p.comp + 0.5;
+      ctx.fillStyle = back && acc >= total - p.comp - 0.5 ? K.alpha(col, 0.3) : col;
       K.rr(ctx, x0 + 1, y, Math.max(1, x1 - x0 - 2), bh, 3); ctx.fill();
       ctx.font = K.font(10.5, 600);
       const lab = `${name} ${Math.round(v)}`;
-      if (ctx.measureText(lab).width + 10 < x1 - x0) K.text(ctx, lab, (x0 + x1) / 2, y + bh / 2, { align: 'center', size: 10.5, weight: 600, color: '#fff' });
+      if (back) { /* 글자 생략 */ } else if (ctx.measureText(lab).width + 10 < x1 - x0) K.text(ctx, lab, (x0 + x1) / 2, y + bh / 2, { align: 'center', size: 10.5, weight: 600, color: '#fff' });
       else if (ctx.measureText(String(Math.round(v))).width + 8 < x1 - x0) K.text(ctx, String(Math.round(v)), (x0 + x1) / 2, y + bh / 2, { align: 'center', size: 10.5, weight: 600, color: '#fff' });
       acc += v;
     });
@@ -12330,7 +12339,7 @@ K.register('windows', function (root) {
       const x0 = X(total - p.comp), x1 = X(total);
       ctx.strokeStyle = C.ink2; ctx.lineWidth = 1.5;
       ctx.beginPath(); ctx.moveTo(x0, y - 6); ctx.lineTo(x0, y - 12); ctx.lineTo(x1, y - 12); ctx.lineTo(x1, y - 6); ctx.stroke();
-      K.text(ctx, `${P.judge === 'client' ? '내 화면 기준 판정' : '되감기'}로 돌려받음 ${Math.round(p.comp)}ms`, (x0 + x1) / 2, y - 21, { align: 'center', size: 10.5, weight: 600, color: C.ink });
+      K.text(ctx, `${P.judge === 'client' ? '내 화면 기준 판정' : P.judge === 'roll' ? '누른 프레임 기준 판정' : '되감기'}로 돌려받음 ${Math.round(p.comp)}ms`, (x0 + x1) / 2, y - 21, { align: 'center', size: 10.5, weight: 600, color: C.ink });
     }
     // 적중 시각
     const xw = X(P.W);
@@ -12375,7 +12384,7 @@ K.register('windows', function (root) {
     ctx.fillStyle = K.alpha(C.bad, 0.06);
     ctx.fillRect(box.x, sc.y(0), box.w, sc.y(lo) - sc.y(0));
     K.hline(ctx, sc, 0, { color: C.badInk });
-    [['now', C.s1], ['lagcomp', C.s2], ['client', C.s3]].forEach(([j, col]) => {
+    [['now', C.s1], ['lagcomp', C.s2], ['client', C.s3], ['roll', C.s4]].forEach(([j, col]) => {
       const pts = [];
       for (let r = 0; r <= 400; r += 10) pts.push([r, K.clamp(parts(r, j).margin, lo, hi)]);
       K.line(ctx, sc, pts, col, j === P.judge ? 2.5 : 2);
@@ -12383,7 +12392,7 @@ K.register('windows', function (root) {
     const x = sc.x(P.rtt);
     ctx.strokeStyle = C.ink2; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(x, box.y); ctx.lineTo(x, box.y + box.h); ctx.stroke(); ctx.setLineDash([]);
     const m = parts(P.rtt).margin;
-    K.dot(ctx, x, sc.y(K.clamp(m, lo, hi)), 5, P.judge === 'now' ? C.s1 : P.judge === 'lagcomp' ? C.s2 : C.s3);
+    K.dot(ctx, x, sc.y(K.clamp(m, lo, hi)), 5, P.judge === 'now' ? C.s1 : P.judge === 'lagcomp' ? C.s2 : P.judge === 'roll' ? C.s4 : C.s3);
     K.text(ctx, `지금 ${P.rtt}ms`, Math.min(x + 6, box.x + box.w - 60), box.y + 8, { size: 11, weight: 600, color: C.ink });
   }
   K.hover(cvCurve, x => {
@@ -12391,7 +12400,7 @@ K.register('windows', function (root) {
     const r = Math.round(((x - box.x) / box.w) * 40) * 10;
     if (r < 0 || r > 400) return null;
     const f = j => { const m = parts(r, j).margin; return `${Math.round(m)}ms${m < 0 ? ' (못 피함)' : ''}`; };
-    return `핑 <b>${r}ms</b><br>서버 현재 기준 ${f('now')}<br>지연 보상 ${f('lagcomp')}<br>클라이언트 판정 ${f('client')}`;
+    return `핑 <b>${r}ms</b><br>서버 현재 기준 ${f('now')}<br>지연 보상 ${f('lagcomp')}<br>클라이언트 판정 ${f('client')}<br>롤백 ${f('roll')}`;
   });
 
   /* ---------------- 수치·해설 ---------------- */
@@ -12414,6 +12423,7 @@ K.register('windows', function (root) {
     }
     if (P.judge === 'client') msg += ' 클라이언트 판정은 내 화면만 보면 공정하지만, 조작된 클라이언트도 그대로 믿는다는 대가가 있습니다.';
     if (P.judge === 'lagcomp') msg += ' 지연 보상은 내가 본 시점으로 판정해 주지만, 다른 사람 화면에서는 “맞은 것 같은데 안 맞음”으로 보일 수 있습니다.';
+    if (P.judge === 'roll') msg += ` 롤백은 내 입력을 누른 프레임 그대로 인정하지만, 상대 동작을 늦게 본 ${K.ms(p.seeDown)}는 돌려받지 못합니다. 그만큼 동작 앞부분이 잘려 보입니다.`;
     F.say(msg);
   }
 
@@ -12443,7 +12453,7 @@ K.register('windows', function (root) {
   const SYM = Object.fromEntries(D.symptoms.map(s => [s.id, s]));
   const FX = Object.fromEntries(D.fx.map(f => [f.id, f]));
   const WHO = { me: '나만', home: '같은 집', region: '특정 지역·통신사', zone: '특정 장소·채널', server: '서버 전체', feature: '특정 기능만', onechar: '특정 캐릭터만 이상해 보임', oneclient: '같은 PC의 한쪽 클라만' };
-  const WHEN = { always: '항상', peak: '저녁 피크 시간', event: '사람이 몰릴 때', login: '접속·점검 직후', idle: '가만히 있다가', random: '가끔 무작위로', periodic: '일정한 주기로', uptime: '오래 켜 둘수록', moving: '이동·지역 전환 때', action: '특정 행동을 할 때' };
+  const WHEN = { always: '항상', peak: '저녁 피크 시간', event: '사람이 몰릴 때', login: '접속·점검 직후', idle: '가만히 있다가', random: '가끔 무작위로', periodic: '일정한 주기로', uptime: '오래 켜 둘수록', moving: '이동 중·지역 전환 때', action: '특정 행동을 할 때' };
   const SIMNAME = {
     lab: '렉 실험실', queue: '대기열 실험', journey: '지연 분해', frames: '프레임 실험', cpu: 'CPU 스케줄러 실험', bloat: '버퍼블로트 실험',
     distance: '거리·경로 실험', timeouts: '타임아웃 사다리', nic: 'NIC 실험', rush: '접속 폭주 실험', hol: 'TCP vs UDP 실험', nagle: 'Nagle 실험',

@@ -10,7 +10,7 @@
   const SYM = Object.fromEntries(D.symptoms.map(s => [s.id, s]));
   const FX = Object.fromEntries(D.fx.map(f => [f.id, f]));
   const WHO = { me: '나만', home: '같은 집', region: '특정 지역·통신사', zone: '특정 장소·채널', server: '서버 전체', feature: '특정 기능만', onechar: '특정 캐릭터만 이상해 보임', oneclient: '같은 PC의 한쪽 클라만' };
-  const WHEN = { always: '항상', peak: '저녁 피크 시간', event: '사람이 몰릴 때', login: '접속·점검 직후', idle: '가만히 있다가', random: '가끔 무작위로', periodic: '일정한 주기로', uptime: '오래 켜 둘수록', moving: '이동·지역 전환 때', action: '특정 행동을 할 때' };
+  const WHEN = { always: '항상', peak: '저녁 피크 시간', event: '사람이 몰릴 때', login: '접속·점검 직후', idle: '가만히 있다가', random: '가끔 무작위로', periodic: '일정한 주기로', uptime: '오래 켜 둘수록', moving: '이동 중·지역 전환 때', action: '특정 행동을 할 때' };
   const SIMNAME = {
     lab: '렉 실험실', queue: '대기열 실험', journey: '지연 분해', frames: '프레임 실험', cpu: 'CPU 스케줄러 실험', bloat: '버퍼블로트 실험',
     distance: '거리·경로 실험', timeouts: '타임아웃 사다리', nic: 'NIC 실험', rush: '접속 폭주 실험', hol: 'TCP vs UDP 실험', nagle: 'Nagle 실험',

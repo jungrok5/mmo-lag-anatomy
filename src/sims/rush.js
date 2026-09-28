@@ -112,7 +112,7 @@ K.register('rush', function (root) {
   const cBl = K.choice(g2, { label: 'listen backlog (접속 대기 줄)', value: P.backlog, options: [[128, '128'], [4096, '4,096'], [65535, '65,535']], onChange: v => { P.backlog = +v; recalc(); }, hint: '128은 오래된 리눅스 기본값, 4,096은 요즘 기본값입니다.' });
   const cFd = K.choice(g2, { label: '동시 접속 한도 (파일 디스크립터)', value: P.fd, options: [[1024, '1,024'], [65535, '65,535'], [1000000, '100만']], onChange: v => { P.fd = +v; recalc(); }, hint: '접속 하나에 번호 하나. 1,024는 설정을 안 바꾼 기본값입니다.' });
   const g3 = K.group(F.controls, '게임 클라이언트');
-  const cRe = K.choice(g3, { label: '재시도 방식', value: P.retry, options: [['now', '즉시 재시도'], ['fixed', '5초마다'], ['backoff', '지수 백오프 + 무작위']], onChange: v => { P.retry = v; recalc(); }, hint: '백오프: 실패할 때마다 2초, 4초, 8초… 최대 60초에 무작위를 섞어 기다립니다.' });
+  const cRe = K.choice(g3, { label: '재시도 방식', value: P.retry, options: [['now', '즉시 재시도'], ['fixed', '5초마다'], ['backoff', '지수 백오프 + 무작위']], onChange: v => { P.retry = v; recalc(); }, hint: '백오프: 실패할 때마다 2초, 4초, 8초… 최대 60초에 무작위를 섞어 기다립니다. 이 실험은 거절 처리에 드는 서버 부담을 크게 잡았습니다. 실제 효율 저하는 반쯤 처리한 로그인이 클라이언트 타임아웃으로 버려지는 헛일에서 주로 옵니다.' });
   const tQ = K.toggle(g3, { label: '접속 대기열(순번표) 시스템', value: P.queue, onChange: v => { P.queue = v; recalc(); }, hint: '누르면 바로 순번표를 받고, 서버가 처리할 수 있는 만큼만 차례로 들여보냅니다.' });
 
   const stIn = K.stat(F.stats, { label: '접속 완료 인원', unit: '명' });

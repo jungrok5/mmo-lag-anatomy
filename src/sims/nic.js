@@ -6,7 +6,7 @@ K.register('nic', function (root) {
     title: '서버 네트워크 카드가 패킷을 흘리는 순간',
     lead: '네트워크 카드(NIC)는 서버의 우편함입니다. 링 버퍼는 우편함의 칸 수, 인터럽트는 집배원이 초인종을 누르는 일, RSS는 여러 사람이 우편물을 나눠 받는 일입니다. 받는 사람(CPU 코어)이 꺼내는 속도보다 빨리 쌓이면 칸이 다 차고, 그 뒤에 온 패킷은 아무 기록 없이 버려집니다.',
     tries: [
-      '<b>월드 보스 (150만 pps, RSS 1개)</b>를 누르세요. 코어 하나가 100%에 붙고 우편함이 넘쳐 초당 수십만 개가 버려집니다.',
+      '<b>월드 보스 (150만 pps, RSS 1개)</b>를 누르세요(게이트웨이 규모의 극단적인 예). 코어 하나가 100%에 붙고 우편함이 넘쳐 초당 수십만 개가 버려집니다.',
       '이어서 <b>RSS 큐 수</b>를 8로 올려 보세요. 같은 양을 코어 8개가 나눠 받아 버림이 0이 됩니다.',
       '<b>클라우드 PPS 한도 초과</b>: 서버 쪽 그림은 멀쩡한데 “한도 초과 버림”만 쌓입니다. 서버 안을 아무리 봐도 원인이 안 보이는 경우입니다.',
       '<b>몰림 정도</b>를 올리면 평균은 여유가 있어도 몰리는 순간에 칸이 모자랍니다. <b>링 버퍼 크기</b>를 키우면 버림은 줄지만 줄이 길어져 지연이 늘어납니다.',
@@ -44,7 +44,7 @@ K.register('nic', function (root) {
 
   /* ---------- 조작부 ---------- */
   const g1 = K.group(F.controls, '들어오는 패킷');
-  const sPps = K.slider(g1, { label: '초당 들어오는 패킷(PPS)', min: 0, max: PPS.length - 1, step: 1, value: PPS.indexOf(P.pps), fmt: i => fmtP(PPS[i]) + '/초', onInput: i => { P.pps = PPS[i]; }, hint: '유저 1명이 초당 20~30개를 보냅니다. 150만 pps ≈ 한곳에 모인 5만~7만 명.' });
+  const sPps = K.slider(g1, { label: '초당 들어오는 패킷(PPS)', min: 0, max: PPS.length - 1, step: 1, value: PPS.indexOf(P.pps), fmt: i => fmtP(PPS[i]) + '/초', onInput: i => { P.pps = PPS[i]; }, hint: '유저 1명이 초당 20~30개를 보냅니다. 150만 pps ≈ 5만~7만 명분이라 게임 서버 한 대보다는 게이트웨이·프록시 한 대가 받는 규모입니다.' });
   const sBurst = K.slider(g1, { label: '몰림 정도', min: 0, max: 100, step: 5, value: P.burst, unit: '%', onInput: v => { P.burst = v; }, hint: '평균은 같아도 짧은 순간에 몰려 들어옵니다(보스 등장, 광역 스킬).' });
   const tCloud = K.toggle(g1, { label: '클라우드 인스턴스 PPS 한도 (100만 pps)', value: P.cloud, onChange: v => { P.cloud = v; }, hint: '한도를 넘은 패킷은 NIC에 닿기 전에 조용히 버려집니다.' });
   const g2 = K.group(F.controls, '네트워크 카드 설정');

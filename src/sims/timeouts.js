@@ -37,7 +37,7 @@ K.register('timeouts', function (root) {
     const udp = P.proto === 'udp', L = [];
     if (P.link === 'home') L.push({ key: 'nat', idx: 0, name: '가정 공유기(NAT)', T: udp ? 60 : 3600 });
     else L.push({ key: 'cgnat', idx: 0, name: '통신사 공유기(CGNAT)', T: udp ? 30 : 600 });
-    if (P.fw) L.push({ key: 'fw', idx: 1, name: '회사·PC방 방화벽', T: 300 });
+    if (P.fw) L.push({ key: 'fw', idx: 1, name: '회사·PC방 방화벽', T: P.proto === 'udp' ? 120 : 300 });
     L.push({ key: 'lb', idx: 2, name: '로드밸런서', T: P.lb });
     L.push({ key: 'srv', idx: 3, name: '게임 서버 무응답 판정', T: P.srv > 0 ? P.srv : Infinity });
     if (!udp) L.push({ key: 'ka', idx: 4, name: 'TCP keepalive (서버)', T: P.ka ? 60 : 7200, ka: true });
@@ -122,11 +122,11 @@ K.register('timeouts', function (root) {
   const cProto = K.choice(g1, { label: '프로토콜', value: P.proto, options: [['udp', 'UDP'], ['tcp', 'TCP']], onChange: v => { P.proto = v; changed(); } });
   const cLink = K.choice(g1, { label: '연결 방식', value: P.link, options: [['home', '유선·와이파이'], ['mobile', '모바일']], onChange: v => { P.link = v; changed(); } });
   const tBg = K.toggle(g1, { label: '백그라운드 전환 (모바일)', value: P.bg, onChange: v => { P.bg = v; changed(); }, hint: '앱이 백그라운드로 가면 10초 뒤 OS가 앱을 멈춥니다. 하트비트도 멈춥니다.' });
-  const tFw = K.toggle(g1, { label: '회사·PC방 방화벽 거침', value: P.fw, onChange: v => { P.fw = v; changed(); } });
+  const tFw = K.toggle(g1, { label: '회사·PC방 방화벽 거침', value: P.fw, onChange: v => { P.fw = v; changed(); }, hint: '짧게 설정된 곳 기준: UDP 120초, TCP 5분. TCP는 1시간인 장비도 흔합니다.' });
   const g2 = K.group(F.controls, '클라이언트');
   const sHb = K.slider(g2, { label: '하트비트 간격', min: 0, max: 300, step: 5, value: P.hb, fmt: v => (v ? fmtT(v) : '끔'), onInput: v => { P.hb = v; changed(); }, hint: '하트비트: 할 일이 없어도 “살아 있어요”라고 보내는 작은 패킷' });
   const g3 = K.group(F.controls, '타임아웃 설정');
-  const sLb = K.slider(g3, { label: '로드밸런서 유휴 타임아웃', min: 30, max: 3600, step: 10, value: P.lb, fmt: fmtT, onInput: v => { P.lb = v; changed(); } });
+  const sLb = K.slider(g3, { label: '로드밸런서 유휴 타임아웃', min: 30, max: 3600, step: 10, value: P.lb, fmt: fmtT, onInput: v => { P.lb = v; changed(); }, hint: '예: AWS NLB는 TCP 350초·UDP 120초, ALB는 60초가 기본입니다.' });
   const sSrv = K.slider(g3, { label: '서버 무응답 판정', min: 0, max: 120, step: 5, value: P.srv, fmt: v => (v ? fmtT(v) : '끔'), onInput: v => { P.srv = v; changed(); }, hint: '게임 서버가 하트비트·입력을 이만큼 못 받으면 접속을 정리합니다.' });
   const tKa = K.toggle(g3, { label: '짧은 keepalive 설정 (60초)', value: P.ka, onChange: v => { P.ka = v; changed(); }, hint: 'TCP 전용. 기본값은 2시간 동안 조용해야 첫 확인 패킷을 보냅니다.' });
 
