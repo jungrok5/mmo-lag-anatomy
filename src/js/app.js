@@ -9,14 +9,14 @@
   const LAYER = Object.fromEntries(ALL_LAYERS.map((l, i) => [l.id, Object.assign({ n: i + 1 }, l)]));
   const SYM = Object.fromEntries(D.symptoms.map(s => [s.id, s]));
   const FX = Object.fromEntries(D.fx.map(f => [f.id, f]));
-  const WHO = { me: '나만', home: '같은 집', region: '특정 지역·통신사', zone: '특정 장소·채널', server: '서버 전체', feature: '특정 기능만' };
+  const WHO = { me: '나만', home: '같은 집', region: '특정 지역·통신사', zone: '특정 장소·채널', server: '서버 전체', feature: '특정 기능만', onechar: '특정 캐릭터만 이상해 보임', oneclient: '같은 PC의 한쪽 클라만' };
   const WHEN = { always: '항상', peak: '저녁 피크 시간', event: '사람이 몰릴 때', login: '접속·점검 직후', idle: '가만히 있다가', random: '가끔 무작위로', periodic: '일정한 주기로', uptime: '오래 켜 둘수록', moving: '이동·지역 전환 때', action: '특정 행동을 할 때' };
   const SIMNAME = {
     lab: '렉 실험실', queue: '대기열 실험', journey: '지연 분해', frames: '프레임 실험', cpu: 'CPU 스케줄러 실험', bloat: '버퍼블로트 실험',
     distance: '거리·경로 실험', timeouts: '타임아웃 사다리', nic: 'NIC 실험', rush: '접속 폭주 실험', hol: 'TCP vs UDP 실험', nagle: 'Nagle 실험',
     sndbuf: '느린 손님 실험', tick: '틱 예산 실험', locks: '락 실험', gc: 'GC 실험', leak: '메모리 누수 실험', ladder: '숫자 감각',
     disk: '디스크 실험', dbpool: 'DB 실험', arch: '서버 구성 실험',
-    syncmodels: '동기화 방식 비교', windows: '판정 창 실험', chain: '연속 행동 실험',
+    syncmodels: '동기화 방식 비교', windows: '판정 창 실험', chain: '연속 행동 실험', oneslow: '한 명만 느릴 때 실험', npcmissing: '한쪽 클라 진단',
   };
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const ARROW = '<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7h8m-3-3 3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -128,6 +128,8 @@
   $$('[data-causes]').forEach(box => { box.innerHTML = (byLayer[box.dataset.causes] || []).map(causeHTML).join(''); });
   const syncH3 = $('#sync h3.sec:last-of-type');
   if (syncH3) syncH3.innerHTML = `동기화 설계에서 렉을 만드는 원인 <span class="mono">${(byLayer.sync || []).length}가지</span>`;
+  const partH3 = $('#partial h3.sec:last-of-type');
+  if (partH3) partH3.innerHTML = `일부에게만 생기는 문제 <span class="mono">${(byLayer.partial || []).length}가지</span>`;
 
   /* ---------------- 증상 사전 ---------------- */
   const symCauses = {};
@@ -173,6 +175,7 @@
     dropped: u => ({ x: u, skill: u > 0.35 && u < 0.6 }),
     disconnect: u => (u < 0.5 ? { x: u } : { x: 0.5, cut: true }),
     noconnect: u => ({ spin: true, x: 0.5, u }),
+    invisible: u => ({ x: u, ghost: true }),
   };
   const animCanvases = $$('canvas[data-anim]');
   function drawAnims(now) {
@@ -201,6 +204,7 @@
         const uu = u - i * 0.022;
         if (uu < 0) continue;
         const p = f(uu);
+        if (p.ghost) continue;
         ctx.fillStyle = K.alpha(C.s2, 0.12 + 0.5 * (1 - i / 12));
         ctx.beginPath(); ctx.arc(X(p.x), y, 3, 0, Math.PI * 2); ctx.fill();
       }
@@ -209,6 +213,12 @@
         ctx.fillStyle = K.alpha(C.ink2, 0.35);
         ctx.beginPath(); ctx.arc(X(p.x), y, 7, 0, Math.PI * 2); ctx.fill();
         K.text(ctx, '서버와의 연결이 끊어졌습니다', X(p.x) + 14, y - 12, { size: 11, weight: 600, color: C.badInk });
+        return;
+      }
+      if (p.ghost) {
+        ctx.save(); ctx.strokeStyle = C.ink2; ctx.lineWidth = 1.4; ctx.setLineDash([3, 3]);
+        ctx.beginPath(); ctx.arc(X(p.x), y, 7, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
+        K.text(ctx, '서버엔 있는데 내 화면엔 없음', X(Math.min(p.x, 0.45)) + 12, y - 14, { size: 11, color: C.muted });
         return;
       }
       K.dot(ctx, X(p.x), y, 7, C.s2, C.paper);
@@ -281,6 +291,8 @@
       zone: '특정 장소·채널에 모인 사람들만 겪는다면 <b>서버 게임 프로세스</b>(틱 예산, 시야 계산, 브로드캐스트)가 1순위입니다. 그 장소의 인원수와 시각을 함께 전달하세요.',
       server: '서버 전체가 동시에 겪는다면 <b>서버 쪽 공통 자원</b>(메모리·GC, DB, 네트워크 장비, 서버 OS)입니다. 정확한 시각이 가장 중요한 단서입니다.',
       feature: '특정 기능만 느리거나 실패한다면 그 기능을 맡은 <b>부가 서버나 DB</b>입니다. 전투는 멀쩡한지 함께 알려 주세요.',
+      onechar: '다른 사람들은 멀쩡한데 <b>특정 캐릭터 하나만</b> 버벅이거나 순간이동해 보인다면, 대개 그 사람의 회선이 나쁜 것입니다. 서버 권위 구조에서는 정상 동작이며, 그 사람 한 명 때문에 모두가 멈춘다면 락스텝·블로킹 전송처럼 “기다리는 구조”를 의심합니다.',
+      oneclient: '같은 PC의 두 클라이언트 중 <b>한쪽만</b> 이상하다면 회선 문제는 거의 아닙니다. 채널·페이즈 차이, 로딩 중 버려진 알림, 백그라운드 창 제한, 같은 PC라서 생기는 포트·세션 충돌, 캐시 파일 충돌 순서로 확인하세요. 아래 “같은 PC의 두 클라이언트” 진단 질문이 도와줍니다.',
     };
 
     function update() {

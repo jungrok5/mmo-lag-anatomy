@@ -7,7 +7,7 @@ K.register('journey', function (root) {
     lead: '스킬 버튼을 누른 순간부터 결과가 화면에 뜨기까지, 신호는 내 PC와 집 공유기, 통신사, 인터넷, 서버와 DB를 차례로 지나갑니다. 구간마다 몇 ms씩 쌓인 합이 플레이어가 느끼는 지연입니다. 조건을 바꾸며 어느 구간이 가장 크게 자라는지 보세요.',
     tries: [
       '<b>서버 위치</b>를 “미국 서부”로 바꿔 보세요. 인터넷 구간이 막대의 절반 이상을 차지합니다.',
-      '<b>같은 집 다른 트래픽</b>을 60%로 올려 보세요. 공유기 대기열 하나가 부산까지 가는 거리보다 훨씬 큰 지연을 만듭니다.',
+      '<b>같은 집 다른 트래픽</b>을 60%에서 100%로 올려 보세요. 60%에서는 줄이 금방 빠지지만, 영상 업로드처럼 회선을 꽉 채우면 공유기 대기열 하나가 부산까지 가는 거리보다 수십 배 큰 지연을 만듭니다.',
       '<b>FPS</b>를 30으로 낮추고 <b>모니터</b>를 TV로 바꿔 보세요. 네트워크가 멀쩡해도 내 PC 쪽에서만 100ms 넘게 쌓입니다.',
       '<b>보는 관점</b>을 “다른 플레이어”로 바꾸면 보간 대기가 가장 큰 몫이 됩니다. 남의 캐릭터는 늘 조금 과거 모습입니다.',
       '<b>월드 보스</b> 프리셋에서 서버 부하를 100% 아래로 내려 보세요. 서버 두 칸이 한꺼번에 줄어듭니다.',
@@ -26,8 +26,8 @@ K.register('journey', function (root) {
     wired: { name: '유선 랜', ms: 0.5, jit: 0.2, info: '랜선은 기다림이 거의 없습니다.', fix: '' },
     wifi: { name: '와이파이', ms: 3, jit: 4, info: '공기 중으로 보내려면 차례를 기다리고, 가끔 다시 보냅니다.', fix: '랜선으로 바꾸면 이 구간이 거의 0이 됩니다.' },
     wifiBad: { name: '와이파이(약함)', ms: 18, jit: 35, info: '신호가 약하면 전송 실패와 재전송이 잦습니다. 평균도 늘고 도착 간격도 들쭉날쭉해집니다(지터).', fix: '공유기 가까이 가거나 랜선으로 바꾸면 이 구간이 거의 사라집니다.' },
-    lte: { name: 'LTE 무선', ms: 25, jit: 20, mobile: true, info: '기지국이 전송 순서를 배정해 줄 때까지 기다립니다. 이동 중에는 기지국이 바뀌며 더 흔들립니다.', fix: '가능하면 와이파이나 유선으로 바꾸세요.' },
-    nr: { name: '5G 무선', ms: 10, jit: 8, mobile: true, info: '기지국이 전송 순서를 배정해 줄 때까지 기다립니다. LTE보다 짧지만 유선보다는 깁니다.', fix: '가능하면 유선으로 바꾸세요.' },
+    lte: { name: 'LTE 무선', ms: 14, jit: 15, mobile: true, info: '기지국이 전송 순서를 배정해 줄 때까지 기다립니다. 이동 중에는 기지국이 바뀌며 더 흔들립니다.', fix: '가능하면 와이파이나 유선으로 바꾸세요.' },
+    nr: { name: '5G 무선', ms: 8, jit: 8, mobile: true, info: '기지국이 전송 순서를 배정해 줄 때까지 기다립니다. LTE보다 짧지만 유선보다는 깁니다.', fix: '가능하면 유선으로 바꾸세요.' },
   };
   const MON = { gaming: ['게이밍 모니터', 3], normal: ['일반 모니터', 10], tv: ['TV', 40] };
   const TH = [50, 100, 150, 250];
@@ -60,11 +60,13 @@ K.register('journey', function (root) {
     const fr = 1000 / P.fps;
     const L = LINK[P.link];
     const mobile = !!L.mobile;
-    const acc = mobile ? (P.link === 'lte' ? 15 : 8) : (P.line === 'ftth' ? 2 : 8);
+    const acc = mobile ? (P.link === 'lte' ? 6 : 5) : (P.line === 'ftth' ? 2 : 8);
     const accName = mobile ? '통신사 코어망' : '통신사 가입자망';
     const accInfo = mobile ? '기지국에서 통신사 코어망을 거쳐 인터넷으로 나가는 구간입니다.' : `집에서 통신사 국사까지 가는 구간입니다. ${P.line === 'ftth' ? '광랜은 빠릅니다.' : '케이블 인터넷은 여러 집이 선을 나눠 써서 광랜보다 깁니다.'}`;
     const accFix = mobile ? '모바일 회선의 기본 지연이라 플레이어가 줄이기 어렵습니다.' : (P.line === 'ftth' ? '' : '광랜으로 바꾸면 조금 줄어듭니다.');
-    const bloatUp = mobile ? 0 : P.traffic / 100 * 250;
+    // 대기열은 이용률에 비례하지 않는다: 회선이 거의 꽉 찰 때 급격히 길어지고, 100%(대용량 업로드)면 버퍼가 가득 찬다
+    const u = P.traffic / 100;
+    const bloatUp = mobile ? 0 : u >= 1 ? 250 : Math.min(250, 8 * u / (1 - u));
     const km = SRV[P.srv][1];
     const net = km / 200 * 1.5;
     const dc = 0.3 + (P.ddos ? 15 : 0);
@@ -84,7 +86,7 @@ K.register('journey', function (root) {
       bloatFix: '공유기의 SQM(스마트 대기열 관리)을 켜거나 큰 업로드를 잠시 멈추면 바로 줄어듭니다.',
       inet: `서버까지 약 ${K.n(km)}km. 광케이블 속 빛도 1,000km에 5ms가 걸리고, 실제 길은 직선보다 1.5배쯤 깁니다.`,
       inetFix: km > 1000 ? '빛보다 빠를 수는 없습니다. 가까운 지역 서버에 접속하는 것이 유일한 해법입니다.' : '',
-      dc: '방화벽·로드밸런서를 지나 서버에 닿습니다.' + (P.ddos ? ' DDoS 방어 업체의 세척 센터를 거쳐 돌아가느라 15ms가 더 듭니다.' : ''),
+      dc: '방화벽·로드밸런서를 지나 서버에 닿습니다.' + (P.ddos ? ' DDoS 방어 업체의 세정 센터를 거쳐 돌아가느라 15ms가 더 듭니다.' : ''),
       dcFix: P.ddos ? 'DDoS 방어 경유지를 서버 가까운 곳에 두면 대부분 사라집니다.' : '',
       srvFix: over ? '서버 부하를 나누거나(채널·인스턴스 분산) 틱당 계산을 줄여야 합니다.' : '',
     };
@@ -160,11 +162,11 @@ K.register('journey', function (root) {
   const gH = K.group(F.controls, '집·회선');
   const cLink = K.choice(gH, { label: '연결 방식', value: P.link, options: [['wired', '유선'], ['wifi', '와이파이 좋음'], ['wifiBad', '와이파이 나쁨'], ['lte', 'LTE'], ['nr', '5G']], onChange: v => { P.link = v; changed(); } });
   const cLine = K.choice(gH, { label: '집 인터넷', value: P.line, options: [['ftth', '광랜'], ['cable', '케이블']], onChange: v => { P.line = v; changed(); } });
-  const sTraffic = K.slider(gH, { label: '같은 집 다른 트래픽', min: 0, max: 100, step: 5, value: P.traffic, unit: '%', onInput: v => { P.traffic = v; changed(); }, hint: '가족의 영상 업로드·클라우드 백업이 회선을 얼마나 채우는지' });
+  const sTraffic = K.slider(gH, { label: '같은 집 다른 트래픽', min: 0, max: 100, step: 5, value: P.traffic, unit: '%', onInput: v => { P.traffic = v; changed(); }, hint: '가족의 영상 업로드·클라우드 백업이 회선을 얼마나 채우는지. 줄은 회선이 거의 꽉 찰 때 급격히 길어집니다. 100%는 영상 업로드처럼 회선을 끝까지 채우는 전송입니다.' });
 
   const gI = K.group(F.controls, '인터넷');
   const cSrv = K.choice(gI, { label: '서버 위치 (서울에서)', value: P.srv, options: Object.keys(SRV).map(k => [k, SRV[k][0]]), onChange: v => { P.srv = v; changed(); } });
-  const tDdos = K.toggle(gI, { label: 'DDoS 방어 경유', value: P.ddos, onChange: v => { P.ddos = v; changed(); }, hint: '공격 트래픽을 걸러 주는 세척 센터를 한 번 거쳐 갑니다.' });
+  const tDdos = K.toggle(gI, { label: 'DDoS 방어 경유', value: P.ddos, onChange: v => { P.ddos = v; changed(); }, hint: '공격 트래픽을 걸러 주는 세정 센터를 한 번 거쳐 갑니다.' });
 
   const gS = K.group(F.controls, '서버');
   const cTick = K.choice(gS, { label: '틱레이트', value: P.tick, options: [[10, '10Hz'], [20, '20Hz'], [30, '30Hz'], [60, '60Hz']], onChange: v => { P.tick = +v; changed(); } });
@@ -188,7 +190,7 @@ K.register('journey', function (root) {
   const preset = o => () => { Object.assign(P, DEF, o); ctlSet(); changed(); };
   K.presets(F, [
     { label: '유선 + 국내 서버', apply: preset({}) },
-    { label: '와이파이 + 가족이 영상 업로드', apply: preset({ link: 'wifi', traffic: 70, mon: 'normal' }) },
+    { label: '와이파이 + 가족이 영상 업로드', apply: preset({ link: 'wifi', traffic: 100, mon: 'normal' }) },
     { label: '이동 중 LTE', apply: preset({ link: 'lte', mon: 'normal' }) },
     { label: '미국 서버 접속', apply: preset({ srv: 'usw', mon: 'normal' }) },
     { label: '월드 보스 (서버 과부하)', apply: preset({ load: 180, mon: 'normal' }) },

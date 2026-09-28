@@ -4,7 +4,7 @@ K.register('frames', function (root) {
   const F = K.frame(root, {
     kicker: '레이어 1 · 클라이언트 게임',
     title: '프레임이 늦으면 화면이 멈췄다 튄다',
-    lead: '게임은 1초에 60번, 16.7ms마다 “계산하고 그리기”를 되풀이합니다. 한 장이라도 늦으면 그동안 화면은 멈춰 있고, 다음 장에서 캐릭터가 한꺼번에 이동합니다. 이 렉은 내 컴퓨터 안에서 생기므로 핑은 멀쩡하고, 다른 플레이어 화면 속의 나는 부드럽게 움직입니다.',
+    lead: '게임은 1초에 60번, 16.7ms마다 “계산하고 그리기”를 되풀이합니다. 한 장이라도 늦으면 그동안 화면은 멈춰 있고, 다음 장에서 캐릭터가 한꺼번에 이동합니다. 이 렉은 내 컴퓨터 안에서 생기므로 핑은 멀쩡하고, 다른 플레이어 화면 속의 나는 대개 평소처럼 움직입니다.',
     tries: [
       '<b>GC 스파이크</b>를 누르고 아래 달리는 캐릭터를 지켜보세요. 몇 초마다 멈췄다가 앞으로 툭 튀어 나갑니다(순간이동). 위 차트에는 빨간 막대가 솟습니다.',
       '그 상태에서 <b>점진적 GC</b>를 켜 보세요. 큰 멈춤 한 번을 2ms짜리 작은 조각 여러 개로 나눠 치웁니다.',
@@ -37,7 +37,7 @@ K.register('frames', function (root) {
   /* ---------- 조작부 ---------- */
   const g1 = K.group(F.controls, '한 프레임에 할 일');
   const sBase = K.slider(g1, { label: '기본 비용', min: 2, max: 30, step: 0.5, value: P.base, unit: 'ms', onInput: v => { P.base = v; }, hint: '지형·UI·효과를 그리고 게임 규칙을 계산하는 기본 일' });
-  const sChars = K.slider(g1, { label: '화면 속 캐릭터 수', min: 0, max: 500, step: 10, value: P.chars, unit: '명', onInput: v => { P.chars = v; }, hint: '1명마다 그리기 0.04ms + 그 캐릭터 패킷 처리(프레임당 0.5개 × 0.01ms)' });
+  const sChars = K.slider(g1, { label: '화면 속 캐릭터 수', min: 0, max: 500, step: 10, value: P.chars, unit: '명', onInput: v => { P.chars = v; }, hint: '1명마다 그리기·애니메이션 0.04ms + 그 캐릭터 패킷 처리(프레임당 0.5개 × 0.01ms)' });
 
   const g2 = K.group(F.controls, '가비지 컬렉션(쓰레기 치우기)');
   const tGC = K.toggle(g2, { label: 'C#/유니티 식 가비지 컬렉션', value: P.gc, onChange: v => { P.gc = v; heap = HEAP0 + 30; incLeft = 0; sync(); } });
@@ -359,7 +359,7 @@ K.register('frames', function (root) {
   }
 
   /* ---------- 해설 ---------- */
-  const CLIENT = ' 모두 내 컴퓨터 안의 일이라 <b>핑은 멀쩡하고</b>, 다른 플레이어 화면 속 나는 부드럽게 움직입니다.';
+  const CLIENT = ' 모두 내 컴퓨터 안의 일이라 <b>핑은 멀쩡하고</b>, 다른 플레이어 화면 속 나는 대개 평소처럼 움직입니다.';
   function recent(kind) {
     // 지금 그리는 중인 장이 이미 길어지고 있으면 그 원인을 먼저 말한다
     if (now - cur.start > 30 && cur.cause === kind && cur.end - cur.start > BAD) return { ms: cur.end - cur.start, kind, fallback: cur.fallback };

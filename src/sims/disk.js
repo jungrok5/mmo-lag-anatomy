@@ -8,7 +8,7 @@ K.register('disk', function (root) {
     tries: [
       '<b>오래된 HDD + 동기 로그</b>를 눌러 보세요. 1초에 쓰기 120건뿐인데도 틱이 50ms를 넘겨 서버 시간이 느리게 흐릅니다(슬로우모션).',
       '이어서 <b>비동기로 해결</b>을 눌러 보세요. 같은 HDD인데 틱은 바로 정상이 되고, 대신 저장이 조금 밀립니다.',
-      '<b>클라우드 디스크 크레딧 소진</b>을 누르고 20초쯤 지켜보세요. 크레딧이 바닥나는 순간 처리 능력이 1.6만에서 3천으로 뚝 떨어집니다.',
+      '<b>클라우드 디스크 크레딧 소진</b>을 누르고 20초쯤 지켜보세요. 크레딧이 바닥나는 순간 처리 능력이 1.6만에서 3천으로 뚝 떨어집니다. 실제로는 수십 분~몇 시간에 걸쳐 일어나는 일을 몇 분으로 줄였습니다.',
       '<b>새벽 백업과 겹침</b>에서 <b>백업 작업 동시 실행</b>을 껐다 켜 보세요. 매일 같은 시각에 렉이 난다면 이런 예약 작업이 겹친 경우가 많습니다.',
       '1분마다 짧게 솟는 봉우리는 <b>정기 저장</b>입니다. 동기 방식일 때 이 순간마다 게임이 뚝뚝 끊기는지 아래 띠에서 보세요.',
     ],
@@ -63,7 +63,7 @@ K.register('disk', function (root) {
   const g2 = K.group(F.controls, '디스크');
   const cDisk = K.choice(g2, {
     label: '디스크 종류', value: P.disk,
-    options: [['hdd', 'HDD'], ['sata', 'SATA SSD'], ['nvme', 'NVMe SSD'], ['cloud', '클라우드 기본 볼륨']],
+    options: [['hdd', 'HDD'], ['sata', 'SATA SSD'], ['nvme', 'NVMe SSD'], ['cloud', '클라우드 버스트형']],
     onChange: v => { if (v === 'cloud' && P.disk !== 'cloud') credits = CREDIT_MAX; P.disk = v; syncHint(); },
     hint: DISKS[P.disk].desc,
   });
@@ -386,7 +386,7 @@ K.register('disk', function (root) {
     if (D.burst) {
       const f = credits / CREDIT_MAX;
       stC.set(K.pct(f), f < 0.01 ? 'bad' : f < 0.3 ? 'warn' : 'good', f < 0.01 ? '바닥: 기본 3천 IOPS' : '남은 체력 (최대 1.6만)');
-    } else stC.set('해당 없음', null, '클라우드 볼륨에만 있음');
+    } else stC.set('해당 없음', null, '버스트형 볼륨에만 있음');
     stB.set(K.ms(cur.blk), COMPUTE + cur.blk > TICK ? 'bad' : cur.blk > 12 ? 'warn' : 'good', COMPUTE + cur.blk > TICK ? `게임 속도 ${K.pct(cur.spd)}` : '틱 예산 50ms 중');
     stS.set(dur(cur.behind), cur.behind > 10 ? 'bad' : cur.behind > 0.5 ? 'warn' : 'good');
     explain();

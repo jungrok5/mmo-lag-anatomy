@@ -36,7 +36,7 @@ K.register('hol', function (root) {
   const cIv = K.choice(g2, { label: '전송 간격', value: P.iv, options: [[50, '50ms (20Hz)'], [33, '33ms (30Hz)'], [100, '100ms (10Hz)']], onChange: v => { P.iv = +v; } });
   const cRto = K.choice(g2, {
     label: 'RTO 최소값 (재전송 타이머)', value: P.rtoMin,
-    options: [[200, '200ms 리눅스 기본'], [1000, '1초 표준 초기값']], onChange: v => { P.rtoMin = +v; rtoHint(); }, hint: ' ',
+    options: [[200, '200ms 리눅스 기본'], [1000, '1초 표준 권장값']], onChange: v => { P.rtoMin = +v; rtoHint(); }, hint: ' ',
   });
   const rtoHintEl = cRto.el.querySelector('.ctl-hint');
   function rtoHint() { rtoHintEl.innerHTML = `지금 재전송 타이머 ≈ <b>${K.ms(RTO())}</b>. 재전송도 사라지면 두 배씩 늘어납니다.`; }

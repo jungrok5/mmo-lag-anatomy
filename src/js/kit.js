@@ -55,7 +55,7 @@
 
    ■ 기타
      K.on(name, fn) / K.emit(name, detail)   장 사이 신호 (예: 'lab:preset')
-     K.glyph(symptomId)          증상 그림 SVG 문자열 (stutter, teleport, rubber, burst, slowmo, delay, freeze, dropped, disconnect, noconnect)
+     K.glyph(symptomId)          증상 그림 SVG 문자열 (stutter, teleport, rubber, burst, slowmo, delay, freeze, dropped, disconnect, noconnect, invisible)
      K.fxIcon('lat'|'jit'|'loss'|'stall')   네 가지 원재료 아이콘
      K.addStyle(id, css)         시뮬레이션 전용 CSS 를 한 번만 주입 (공용 style.css 는 수정 금지)
      K.reducedMotion             사용자가 움직임 줄이기를 켰는지
@@ -524,6 +524,7 @@
     dropped: dots([3, 8]) + '<circle cx="16" cy="6" r="3.3" fill="none" stroke="currentColor" stroke-width="1.1"/><path d="M13.7 3.7l4.6 4.6M18.3 3.7l-4.6 4.6" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>' + '<path d="M28 6h-6m0 0 2-2m-2 2 2 2" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>',
     disconnect: '<path d="M1.5 6h9.5M19 6h9.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M13 3l1.6 6M15.8 3l1.6 6" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>',
     noconnect: '<path d="M15 1.8a4.2 4.2 0 1 1-4.2 4.2" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>' + dots([3, 27], 1.2),
+    invisible: dots([3, 8]) + '<circle cx="17" cy="6" r="3.6" fill="none" stroke="currentColor" stroke-width="1.1" stroke-dasharray="1.7 1.5"/>' + dots([26]),
   };
   K.glyph = (id, cls = '') => `<svg class="glyph ${cls}" viewBox="0 0 30 12" fill="currentColor" aria-hidden="true">${GLYPH[id] || GLYPH.normal}</svg>`;
 
