@@ -40,7 +40,7 @@ K.register('windows', function (root) {
   const cSched = K.choice(g4, { label: '예고 전달', value: P.sched, options: [['arrive', '도착하면 재생'], ['sched', '서버 시각으로 미리 예약']], onChange: v => { P.sched = v; preset.clear(); },
     hint: '미리 예약: 서버가 예고를 0.4초 먼저 보내고, 모두가 서버 시각에 맞춰 같은 순간에 재생합니다.' });
   const cJudge = K.choice(g4, { label: '판정 기준', value: P.judge, options: [['now', '서버 현재 기준'], ['lagcomp', '지연 보상'], ['client', '클라이언트 판정'], ['roll', '롤백']], onChange: v => { P.judge = v; preset.clear(); },
-    hint: '지연 보상은 최대 250ms까지 되감습니다. 클라이언트 판정은 내 화면에서 피했으면 성공입니다. 롤백은 내 입력을 누른 프레임에 반영하지만, 상대 동작을 늦게 본 시간은 돌려받지 못합니다.' });
+    hint: '이 실험의 지연 보상은 최대 250ms까지 되감습니다(게임마다 0.2~1초). 클라이언트 판정은 내 화면에서 피했으면 성공입니다. 롤백은 내 입력을 누른 프레임에 반영하지만, 상대 동작을 늦게 본 시간은 돌려받지 못합니다.' });
   K.choice(g4, { label: '관찰 속도', value: P.speed, options: [[1, '1배'], [0.5, '0.5배'], [0.25, '0.25배']], onChange: v => { P.speed = +v; } });
 
   const stLost = K.stat(F.stats, { label: '네트워크가 먹는 시간' });
@@ -248,7 +248,7 @@ K.register('windows', function (root) {
     stMax.set(Number.isFinite(mp) ? (mp < 0 ? '0에서도 불가' : K.ms(mp)) : '1초 넘게', mp < 60 ? 'bad' : mp < 150 ? 'warn' : 'good');
     let msg = genreSay ? genreSay + ' ' : '';
     if (p.margin < 0) {
-      msg = `${K.flag('bad')}${msg}예고 ${K.ms(P.W)} 중 네트워크가 ${K.ms(Math.max(0, net))}, 사람 반응이 ${K.ms(P.react)}를 씁니다. <b>${K.ms(-p.margin)} 모자라서 실력과 상관없이 맞습니다</b>. 플레이어는 “분명 피했는데 맞았다”(씹힘)고 느낍니다.`;
+      msg = `${K.flag('bad')}${msg}예고 ${K.ms(P.W)} 중 네트워크가 ${K.ms(Math.max(0, net))}, 사람 반응이 ${K.ms(P.react)}를 씁니다. <b>${K.ms(-p.margin)} 모자라서 실력과 상관없이 맞습니다</b>. 플레이어는 “분명 피했는데 맞았다”(씹힘·롤백)고 느낍니다.`;
       if (P.judge === 'now') msg += ' 지연 보상이나 예고 예약으로 네트워크 몫을 줄일 수 있습니다.';
     } else if (p.margin < 100) {
       msg = `${K.flag('warn')}${msg}아슬아슬합니다. 여유가 ${K.ms(p.margin)}뿐이라 핑이 조금만 흔들려도 억울한 피격이 생깁니다.`;

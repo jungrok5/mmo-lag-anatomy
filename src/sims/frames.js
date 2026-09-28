@@ -381,7 +381,7 @@ K.register('frames', function (root) {
   function explain() {
     if (!S) return '';
     if (P.mode === 'fixed' && now < spiralUntil) {
-      return `${K.flag('bad')}<b>따라잡기 폭주.</b> 늦어진 시간을 메우려고 게임 계산(한 번에 ${K.ms(calcCost())})을 한 장에 최대 <b>${S.maxSteps}번</b> 되풀이합니다. 되풀이하는 동안 또 시간이 밀려 긴 프레임이 줄줄이 이어집니다. 플레이어는 <b>뚝뚝 끊김</b>과 <b>순간이동</b>을 연달아 봅니다. “따라잡기 상한”으로 바꾸면 끊김 대신 <b>슬로우모션</b>이 됩니다.` + CLIENT;
+      return `${K.flag('bad')}<b>따라잡기 폭주.</b> 늦어진 시간을 메우려고 게임 계산(한 번에 ${K.ms(calcCost())})을 한 장에 최대 <b>${S.maxSteps}번</b> 되풀이합니다. 되풀이하는 동안 또 시간이 밀려 긴 프레임이 줄줄이 이어집니다. 플레이어는 <b>뚝뚝 끊김</b>과 <b>순간이동</b>을 연달아 봅니다. “따라잡기 상한”으로 바꾸면 뚝뚝 끊김이 <b>슬로우모션</b>으로 바뀝니다.` + CLIENT;
     }
     const eL = recent('load');
     if (eL) return `${K.flag('bad')}<b>새 지역 로딩</b>: 텍스처를 읽고 셰이더를 컴파일하느라 게임 스레드가 <b>${K.ms(eL.ms)}</b> 동안 다른 일을 못 했습니다. 그동안 화면은 <b>멈춤</b>. ${jumpText(eL)} 로딩을 다른 스레드로 넘기거나 미리 해 두면 사라집니다.` + CLIENT;

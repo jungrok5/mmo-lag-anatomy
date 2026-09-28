@@ -40,7 +40,7 @@
 
   /* ---------------- 히어로: 네 가지 재료 ---------------- */
   const thesis = $('#thesis');
-  thesis.innerHTML = `<div class="thesis-head"><b>모든 렉은 네 가지 중 하나에서 시작합니다.</b> 원인이 어느 층에 있든 게임이 받는 피해는 이것뿐이고, 그 피해를 가리는 방식에 따라 렉의 모양이 정해집니다.</div>` +
+  thesis.innerHTML = `<div class="thesis-head"><b>렉은 대부분 네 가지 피해 중 하나에서 시작합니다.</b> 원인이 어느 층에 있든 게임이 받는 피해는 크게 이 넷으로 묶이고, 그 피해를 가리는 방식에 따라 렉의 모양이 정해집니다.</div>` +
     D.fx.map(f => `<div><span class="fx-name">${K.fxIcon(f.id).replace('<svg', '<svg width="16" height="16"')}${f.name}</span><p>${f.how}. ${f.desc.split('. ')[0].replace(/\.$/, '')}.</p></div>`).join('');
 
   /* ---------------- 기본 개념: 재료 → 대처 → 증상 ---------------- */
@@ -173,9 +173,9 @@
     burst: u => (u < 0.25 ? { x: u * 1.0 } : u < 0.55 ? { x: 0.25, wait: true } : u < 0.65 ? { x: 0.25 + (u - 0.55) * 4.5 } : { x: 0.7 + (u - 0.65) * 0.85 }),
     slowmo: u => ({ x: u * 0.42 }),
     delay: u => (u < 0.3 ? { x: 0.05, click: true } : { x: 0.05 + (u - 0.3) * 1.3 }),
-    freeze: u => (u < 0.35 ? { x: u } : u < 0.7 ? { x: 0.35, pause: true } : { x: 0.35 + (u - 0.7) }),
+    freeze: u => (u < 0.35 ? { x: u } : u < 0.7 ? { x: 0.35, pause: true } : u < 0.8 ? { x: 0.35 + (u - 0.7) * 4.5 } : { x: u }),
     dropped: u => ({ x: u, skill: u > 0.35 && u < 0.6 }),
-    disconnect: u => (u < 0.5 ? { x: u } : { x: 0.5, cut: true }),
+    disconnect: u => (u < 0.4 ? { x: u } : u < 0.6 ? { x: 0.4, wait: true } : { x: 0.4, cut: true }),
     noconnect: u => ({ spin: true, x: 0.5, u }),
     invisible: u => ({ x: u, ghost: true }),
   };
@@ -287,7 +287,7 @@
     root.append(form, hint, K.el('div', { class: 'cv-cap' }, K.el('b', { text: '가능성 높은 원인' }), K.el('span', { text: '누가·언제·모양이 대표 특징과 맞을수록 높음' })), out);
 
     const HINT = {
-      me: '나만 겪는다면 먼저 <b>내 쪽 세 층</b>(게임, PC·폰, 집 네트워크)을 봅니다. 유선으로 바꾸거나, 다른 게임·영상 통화도 느린지 확인해 보세요. 핑은 멀쩡한데 끊기면 내 PC의 프레임 문제입니다.',
+      me: '나만 겪는다면 먼저 <b>내 쪽 세 층</b>(게임, PC·폰, 집 네트워크)을 봅니다. 유선으로 바꾸거나, 다른 게임·영상 통화도 느린지 확인해 보세요. 회선 핑(게임 밖에서 잰 핑)은 멀쩡한데 끊기면 내 PC의 프레임 문제일 가능성이 큽니다.',
       home: '같은 집 사람들이 함께 겪는다면 <b>공유기와 집 회선</b>이 1순위입니다. 누가 큰 파일을 올리거나 받고 있지 않은지, 공유기를 재부팅하면 나아지는지 보세요.',
       region: '특정 지역·통신사만 겪는다면 <b>인터넷 회선 층</b>(경로, 피어링, 해외 구간)입니다. 게임 서버는 멀쩡할 가능성이 높습니다. 통신사별 핑 통계를 서버팀에 요청하세요.',
       zone: '특정 장소·채널에 모인 사람들만 겪는다면 <b>서버 게임 프로세스</b>(틱 예산, 시야 계산, 브로드캐스트)가 1순위입니다. 그 장소의 인원수와 시각을 함께 전달하세요.',
@@ -303,6 +303,8 @@
         // 목록의 첫 항목은 그 원인의 대표 특징이라 가중치를 더 준다
         const wi = st.who ? c.who.indexOf(st.who) : -1;
         if (wi >= 0) { score += wi === 0 ? 3 : 2; why.push(WHO[st.who]); }
+        // “누가”가 가장 강한 단서라서, 고른 “누가”와 맞지 않는 원인은 2점을 뺀다(언제·모양만 맞는 서버 원인이 “같은 집” 결과 위로 올라오지 않게)
+        else if (st.who) score -= 2;
         const w = c.when.filter(x => st.when.has(x));
         w.forEach(x => { score += c.when.indexOf(x) === 0 ? 2 : 1.5; });
         if (w.length) why.push(w.map(x => WHEN[x]).join(', '));

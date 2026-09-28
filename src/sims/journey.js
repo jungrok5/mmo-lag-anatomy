@@ -366,7 +366,7 @@ K.register('journey', function (root) {
         : g === 'warn' ? '분명히 피했는데 맞았다는 판정이 가끔 생깁니다.' : '피했는데 맞는 일이 잦고, 상대가 순간이동하듯 보이기도 합니다.');
     }
     const fix = a.fix || (b && b.fix) || '';
-    const mid = cur.over ? ' 서버가 틱 안에 계산을 끝내지 못해 모든 플레이어의 반응이 함께 늦어집니다(슬로우모션).' : '';
+    const mid = cur.over ? ' 서버가 틱 안에 계산을 끝내지 못해 모든 플레이어의 반응이 함께 늦어집니다(입력 지연. 틱마다 정해진 시간만큼 움직이는 서버라면 슬로우모션까지).' : '';
     F.say(`${K.flag(g)}총 <b>${K.n(cur.total, 0)}ms</b> 중 가장 큰 몫은 <b>${a.name}</b>(${a.rt}${K.ms(a.ms)}, ${pa}%)이고, 그다음은 <b>${b.name}</b>(${b.rt}${K.ms(b.ms)})입니다. ${a.info}${mid} ${feel}${fix ? ' <b>도움이 되는 것:</b> ' + fix : ''}`);
   }
 

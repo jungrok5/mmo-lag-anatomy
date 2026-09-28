@@ -436,14 +436,14 @@ K.register('retrans', function (root) {
         const thr = Math.floor(Math.max(P.rtoMin / 3, (P.rtt + P.rtoMin) / 4) / 10) * 10 + 10;
         const rackTip = P.gap < P.rtoMin ? `RACK-TLP를 켜면 다음 소식의 확인이 오는 약 ${K.ms(Math.max(P.gap, P.rtt / 4) + P.rtt)} 뒤에 복구가 시작됩니다.` : 'RACK-TLP를 켜도 소식이 이렇게 드문드문하면 크게 빨라지지 않습니다.';
         msg += dupWait > rtoW
-          ? `게임 소식이 ${P.gap}ms마다 하나라, 보내는 쪽에 중복 ACK 3개가 모이려면 약 ${K.ms(dupWait)}이 걸립니다. 그 전에 RTO(약 ${K.ms(rtoW)})가 먼저 옵니다. 한 번 잃을 때마다 그만큼 <b>멈춤</b>, 뒤 소식은 줄을 섰다 <b>몰아치기</b>입니다. ${rackTip}`
+          ? `게임 소식이 ${P.gap}ms마다 하나라, 보내는 쪽에 중복 ACK 3개가 모이려면 약 ${K.ms(dupWait)}가 걸립니다. 그 전에 RTO(약 ${K.ms(rtoW)})가 먼저 옵니다. 한 번 잃을 때마다 그만큼 <b>멈춤</b>, 뒤 소식은 줄을 섰다 <b>몰아치기</b>입니다. ${rackTip}`
           : `소식 간격(${P.gap}ms)이 짧아 중복 ACK 3개가 약 ${K.ms(dupWait)} 만에 모여 빠른 재전송으로 복구합니다. 그래도 한 번 잃을 때마다 그만큼 <b>멈춤</b> 뒤 <b>몰아치기</b>입니다. 소식 간격을 ${thr}ms 이상으로 늘리면 RTO에 기대게 됩니다.`;
       }
       else if (P.mode === 'game') {
         const rackAt = Math.max(P.gap, P.rtt / 4) + P.rtt; // RACK: 다음 소식의 SACK이 돌아오는 시점
         msg += P.gap < P.rtoMin
-          ? `RACK-TLP가 켜져 있어 다음 소식이 도착했다는 확인(SACK)이 오는 순간, 약 ${K.ms(rackAt)} 만에 잃은 것을 알아채고 다시 보냅니다. 그래도 잃은 소식은 평소 ${K.ms(P.rtt / 2)} 대신 약 ${K.ms(rackAt + P.rtt / 2)} 만에 도착하고, 그동안 뒤 소식도 함께 <b>멈춤</b>입니다.`
-          : `RACK-TLP가 켜져 있지만 소식 간격(${P.gap}ms)이 길어 다음 소식보다 꼬리 탐침(TLP)이 먼저 나갑니다. 날아가는 패킷이 하나뿐이면 탐침도 지연 ACK를 감안해 RTO와 비슷하게(약 ${K.ms(P.rtt + P.rtoMin)}) 기다리므로 효과가 작습니다.`;
+          ? `RACK-TLP가 켜져 있어 다음 소식이 도착했다는 확인(SACK)이 오는 순간, 약 ${K.ms(rackAt)} 만에 잃은 것을 알아채고 다시 보냅니다. 그래도 잃은 소식은 평소(${K.ms(P.rtt / 2)})보다 늦은 약 ${K.ms(rackAt + P.rtt / 2)} 만에 도착하고, 그동안 뒤 소식도 함께 <b>멈춤</b>입니다.`
+          : `RACK-TLP가 켜져 있지만 소식 간격(${P.gap}ms)이 길어 다음 소식보다 꼬리 탐침(TLP)이 먼저 나갑니다. 아직 확인받지 못한 패킷이 하나뿐이면 탐침도 지연 ACK를 감안해 RTO와 비슷하게(약 ${K.ms(P.rtt + P.rtoMin)}) 기다리므로 효과가 작습니다.`;
       }
       else msg += `대용량 전송은 뒤따르는 패킷이 많아 빠른 재전송으로 대부분 복구되지만, 손실이 난 왕복마다 혼잡 창이 30% 줄어 속도가 떨어집니다. RTO까지 가면 혼잡 창이 1로 떨어져 처음부터 다시 늘립니다.`;
       if (P.rack && (top[0] === 'W' || top[0] === 'C' || top[0] === 'L')) msg += ' 복구 설정은 멈춤을 줄여 줄 뿐, 사라지는 패킷 자체를 줄이지는 못합니다. 손실이 생기는 자리를 고치는 것이 근본 해결입니다.';

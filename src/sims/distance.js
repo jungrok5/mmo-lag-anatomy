@@ -212,6 +212,7 @@ K.register('distance', function (root) {
     // 이름표: 선택된 도시 먼저, 겹치지 않는 자리에만
     const order = [P.me, P.srv].concat(keys.filter(kk => kk !== P.me && kk !== P.srv));
     const narrow = w < 560;
+    const labels = [];   // 이미 놓은 이름표(선택된 도시는 배경까지 여유를 두고). 이름표끼리는 절대 겹치지 않게
     order.forEach((kk, i) => {
       if (i === 1 && P.me === P.srv) return;
       const sel = i < 2;
@@ -222,15 +223,14 @@ K.register('distance', function (root) {
       ctx.font = K.font(sel ? 12 : 10.5, sel ? 700 : 400);
       const tw = ctx.measureText(name).width, th = sel ? 14 : 12;
       const cand = [[x + 9, y - th / 2], [x - 9 - tw, y - th / 2], [x - tw / 2, y - 10 - th], [x - tw / 2, y + 9]];
-      let spot = null;
-      for (const c of cand) {
-        if (c[0] < 2 || c[0] + tw > w - 2 || c[1] < 2 || c[1] + th > h - 28) continue;
-        if (placed.some(r => c[0] < r[0] + r[2] && c[0] + tw > r[0] && c[1] < r[1] + r[3] && c[1] + th > r[1])) continue;
-        spot = c; break;
-      }
-      if (!spot && sel) spot = cand.find(c => c[0] >= 2 && c[0] + tw <= w - 2) || cand[0];
+      const inb = c => c[0] >= 2 && c[0] + tw <= w - 2 && c[1] >= 2 && c[1] + th <= h - 28;
+      const hit = (c, rs) => rs.some(r => c[0] < r[0] + r[2] && c[0] + tw > r[0] && c[1] < r[1] + r[3] && c[1] + th > r[1]);
+      // 1순위: 점·경로·이름표를 모두 피하는 자리. 선택된 도시는 없으면 경로를 덮더라도 다른 이름표만은 피한다
+      let spot = cand.find(c => inb(c) && !hit(c, placed) && !hit(c, labels));
+      if (!spot && sel) spot = cand.find(c => inb(c) && !hit(c, labels)) || cand.find(c => c[0] >= 2 && c[0] + tw <= w - 2) || cand[0];
       if (!spot) return;
       placed.push([spot[0], spot[1], tw, th]);
+      labels.push(sel ? [spot[0] - 6, spot[1] - 3, tw + 12, th + 6] : [spot[0], spot[1], tw, th]);
       if (sel) { ctx.fillStyle = K.alpha(C.paper, 0.85); K.rr(ctx, spot[0] - 3, spot[1] - 1, tw + 6, th + 2, 4); ctx.fill(); }
       K.text(ctx, name, spot[0], spot[1] + th / 2, { size: sel ? 12 : 10.5, weight: sel ? 700 : 400, color: sel ? C.ink : C.muted });
     });
