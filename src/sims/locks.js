@@ -3,13 +3,13 @@
 K.register('locks', function (root) {
   const F = K.frame(root, {
     kicker: '레이어 9 · 서버 게임 프로세스',
-    title: '모두가 같은 열쇠 하나를 기다린다',
-    lead: '서버에서는 여러 일꾼(스레드)이 동시에 일합니다. 경매장 목록처럼 모두가 함께 쓰는 자료는 한 번에 한 스레드만 고치도록 “락(자물쇠)”을 겁니다. 락 안에서 하는 일이 길수록 스레드들은 열쇠를 기다리며 줄을 섭니다. 스레드를 늘려도 빨라지지 않는 이유가 여기 있습니다.',
+    title: '모든 스레드가 같은 락 하나를 기다린다',
+    lead: '서버에서는 여러 스레드(동시에 일하는 실행 단위)가 함께 일합니다. 경매장 목록처럼 모두가 함께 쓰는 공유 데이터는 한 번에 한 스레드만 고치도록 락(잠금)을 겁니다. 락 안에서 하는 일이 길수록 스레드들은 락을 기다리며 대기합니다. 스레드를 늘려도 빨라지지 않는 이유가 여기 있습니다.',
     tries: [
       '<b>락 안에서 하는 일</b>을 20% → 40%로 올려 보세요. 줄무늬(기다림)가 레인을 채우고, 스레드 수는 그대로인데 초당 처리 작업이 절반 가까이 줄어듭니다.',
       '<b>스레드만 늘리기 (16개, 큰 락)</b>를 눌러 보세요. 스레드가 두 배인데 처리량은 그대로이고, 기다리는 스레드만 늘어납니다.',
-      '<b>락 방식</b>을 “잘게 나눈 락 8개”로 바꿔 보세요. 서로 다른 자물쇠를 쓰는 스레드끼리는 기다리지 않아 줄이 거의 사라집니다.',
-      '<b>데드락 일으키기</b>를 눌러 보세요. 두 스레드가 서로의 열쇠를 기다리며 영원히 멈추고, 다른 스레드도 하나둘 줄에 갇힙니다.',
+      '<b>락 방식</b>을 “잘게 나눈 락 8개”로 바꿔 보세요. 서로 다른 락을 쓰는 스레드끼리는 기다리지 않아 대기가 거의 사라집니다.',
+      '<b>데드락 일으키기</b>를 눌러 보세요. 두 스레드가 서로가 잡은 락을 기다리며 영원히 멈추고, 다른 스레드도 하나둘 대기 상태에 갇힙니다.',
     ],
   });
 
@@ -42,23 +42,23 @@ K.register('locks', function (root) {
   });
 
   /* ---------- 조작부 ---------- */
-  const g1 = K.group(F.controls, '일꾼(스레드)과 일');
+  const g1 = K.group(F.controls, '스레드와 작업');
   const sT = K.slider(g1, { label: '스레드 수', min: 1, max: 16, step: 1, value: P.T, unit: '개', onInput: v => { P.T = v; reset(); }, hint: 'CPU 코어는 16개라고 가정합니다' });
   const sF = K.slider(g1, {
     label: '락 안에서 하는 일', min: 0, max: 80, step: 2, value: P.f * 100, fmt: v => v + '%', onInput: v => { P.f = v / 100; reset(); },
-    hint: '작업 하나(약 2ms) 중 공유 자료를 고치느라 락을 쥐고 있어야 하는 비율',
+    hint: '작업 하나(약 2ms) 중 공유 데이터를 고치느라 락을 잡고 있어야 하는 비율',
   });
   const g2 = K.group(F.controls, '락 방식');
   const cMode = K.choice(g2, {
-    label: '공유 자료(경매장 목록)를 지키는 법', value: P.mode, options: [['big', '큰 락 하나'], ['fine', '잘게 나눈 락 8개']],
-    onChange: v => { P.mode = v; reset(); }, hint: '잘게 나눈 락: 아이템 종류별로 자물쇠를 따로 둡니다. 작업마다 8개 중 하나를 씁니다.',
+    label: '공유 데이터(경매장 목록) 보호 방식', value: P.mode, options: [['big', '큰 락 하나'], ['fine', '잘게 나눈 락 8개']],
+    onChange: v => { P.mode = v; reset(); }, hint: '잘게 나눈 락: 아이템 종류별로 락을 따로 둡니다. 작업마다 8개 중 하나를 씁니다.',
   });
   const g3 = K.group(F.controls, '사고 내 보기');
   const bx = K.el('div', { class: 'lk-btns' });
   g3.append(bx);
   K.button(bx, { label: '데드락 일으키기', kind: 'primary', onClick: () => armDeadlock() });
   K.button(bx, { label: '복구', onClick: () => reset() });
-  g3.append(K.el('small', { class: 'ctl-hint', text: '감시 타이머(watchdog): 스레드가 5초 동안 풀려나지 못하면 서버를 강제로 다시 켭니다. 실제 서버는 보통 수십 초를 기다리지만 여기서는 짧게 줄였습니다.' }));
+  g3.append(K.el('small', { class: 'ctl-hint', text: '워치독(감시 타이머): 스레드가 5초 동안 풀려나지 못하면 서버를 강제로 다시 켭니다. 실제 서버는 보통 수십 초를 기다리지만 여기서는 짧게 줄였습니다.' }));
 
   K.presets(F, [
     { label: '락 거의 없음', apply: () => { cMode.set('big'); sT.set(8); sF.set(2); } },
@@ -120,14 +120,14 @@ K.register('locks', function (root) {
   function scriptGot(t, at) {
     const s = t.script;
     s.step = 1;
-    t.note = lockName(s.seq[0]) + ' 쥠';
+    t.note = lockName(s.seq[0]) + ' 보유';
     setSt(t, 'hold', at, Infinity);
     const other = th[1 - t.id];
     if (other.script.step === 1) { t.until = at + 0.4; other.until = at + 0.4; }
   }
   function scriptHoldDone(t, at) {
     const s = t.script;
-    t.note = `${lockName(s.seq[0])} 쥐고 ${lockName(s.seq[1])} 기다림`;
+    t.note = `${lockName(s.seq[0])} 잡고 ${lockName(s.seq[1])} 기다림`;
     s.step = 2;
     acquire(t, s.seq[1], at);
   }
@@ -233,8 +233,8 @@ K.register('locks', function (root) {
     const queued = locks.reduce((a, l) => a + l.q.length, 0);
     let head;
     if (P.f < 0.001) head = '락을 쓰지 않음';
-    else if (P.mode === 'big') head = locks[0].owner >= 0 ? `경매장 락: 스레드 ${locks[0].owner + 1} 사용 중 · 줄 ${locks[0].q.length}개` : '경매장 락: 비어 있음';
-    else head = `락 8개 중 ${Math.min(8, busy)}개 사용 중 · 줄 ${queued}개`;
+    else if (P.mode === 'big') head = locks[0].owner >= 0 ? `경매장 락: 스레드 ${locks[0].owner + 1} 사용 중 · 대기 ${locks[0].q.length}개` : '경매장 락: 비어 있음';
+    else head = `락 8개 중 ${Math.min(8, busy)}개 사용 중 · 대기 ${queued}개`;
     K.text(ctx, narrow ? head.replace('경매장 락: ', '') : head, lx, 14, { size: 11.5, color: C.ink2, weight: 600 });
     th.forEach((t, i) => {
       const y = top + i * rowH + (rowH - bh) / 2;
@@ -263,7 +263,7 @@ K.register('locks', function (root) {
     // 감시 타이머
     if (dl && dl.phase === 'stuck') {
       const left = Math.max(0, (WATCHDOG - (real - dl.t0)) / 1000);
-      const lab = `감시 타이머 ${K.n(left, 1)}초`;
+      const lab = `워치독 ${K.n(left, 1)}초`;
       ctx.font = K.font(11.5, 700);
       const tw = ctx.measureText(lab).width + 14;
       ctx.fillStyle = C.bad; K.rr(ctx, rx - tw, 4, tw, 20, 5); ctx.fill();
@@ -333,25 +333,25 @@ K.register('locks', function (root) {
     const T = th.length, fp = Math.round(P.f * 100);
     const gain = m.thr / 500;
     if (dl && dl.phase === 'restart') {
-      return `${K.flag('bad')} 감시 타이머가 멈춘 서버를 강제로 다시 켭니다. 이 서버에 있던 <b>모든 플레이어</b>가 한꺼번에 <b>접속 끊김</b>을 겪고, 다시 들어오려는 사람이 몰려 한동안 <b>접속 불가·무한 로딩</b>이 이어집니다. 락에 기다림 제한 시간이 없으면 데드락은 스스로 풀리지 않아서, 재시작 말고는 방법이 없습니다.`;
+      return `${K.flag('bad')} 워치독이 멈춘 서버를 강제로 다시 켭니다. 이 서버에 있던 <b>모든 플레이어</b>가 한꺼번에 <b>접속 끊김</b>을 겪고, 다시 들어오려는 사람이 몰려 한동안 <b>접속 불가·무한 로딩</b>이 이어집니다. 락에 기다림 제한 시간이 없으면 데드락은 스스로 풀리지 않아서, 재시작 말고는 방법이 없습니다.`;
     }
     if (dl && dl.phase === 'stuck') {
       const stuck = th.filter(t => t.st === 'wait').length;
       const left = Math.max(0, (WATCHDOG - (real - dl.t0)) / 1000);
-      return `${K.flag('bad')} <b>데드락(교착 상태)</b>: 스레드 1은 ${lockName(dl.A)} 락을 쥔 채 ${lockName(dl.B)} 락을, 스레드 2는 ${lockName(dl.B)} 락을 쥔 채 ${lockName(dl.A)} 락을 기다립니다. 둘 다 상대가 먼저 놓기를 기다리니 영원히 풀리지 않습니다. 두 사람이 동시에 서로에게 거래를 걸 때처럼 락을 잡는 순서가 엇갈리면 생깁니다. 지금 스레드 ${T}개 중 <b>${stuck}개</b>가 갇혔습니다. 플레이어는 처음엔 경매장·거래만 멈추다가, 일꾼 스레드가 모두 갇히면 서버 전체가 <b>멈춤</b>을 겪습니다. 감시 타이머가 <b>${K.n(left, 1)}초</b> 뒤 서버를 강제로 다시 켭니다.`;
+      return `${K.flag('bad')} <b>데드락(교착 상태)</b>: 스레드 1은 ${lockName(dl.A)} 락을 잡은 채 ${lockName(dl.B)} 락을, 스레드 2는 ${lockName(dl.B)} 락을 잡은 채 ${lockName(dl.A)} 락을 기다립니다. 둘 다 상대가 먼저 놓기를 기다리니 영원히 풀리지 않습니다. 두 사람이 동시에 서로에게 거래를 걸 때처럼 락을 잡는 순서가 엇갈리면 생깁니다. 지금 스레드 ${T}개 중 <b>${stuck}개</b>가 갇혔습니다. 플레이어는 처음엔 경매장·거래만 멈추다가, 워커 스레드가 모두 갇히면 서버 전체가 <b>멈춤</b>을 겪습니다. 워치독이 <b>${K.n(left, 1)}초</b> 뒤 서버를 강제로 다시 켭니다.`;
     }
     if (dl && dl.phase === 'arm') {
-      return `${K.flag('warn')} 스레드 1과 2가 두 락을 서로 <b>반대 순서</b>로 잡으려 합니다. 각자 첫 번째 락을 쥐는 순간 서로의 두 번째 락을 기다리게 됩니다.`;
+      return `${K.flag('warn')} 스레드 1과 2가 두 락을 서로 <b>반대 순서</b>로 잡으려 합니다. 각자 첫 번째 락을 잡는 순간 서로의 두 번째 락을 기다리게 됩니다.`;
     }
     if (P.f < 0.001 || m.ratio < 0.1) {
-      const why = P.mode === 'fine' && P.f > 0.001 ? `락을 8개로 나눠 서로 다른 칸을 고치는 스레드끼리는 기다리지 않습니다. 락 안의 일이 ${fp}%여도` : `락 안에서 하는 일이 ${fp}%뿐이라`;
+      const why = P.mode === 'fine' && P.f > 0.001 ? `락을 8개로 나눠 서로 다른 락을 쓰는 스레드끼리는 기다리지 않습니다. 락 안의 일이 ${fp}%여도` : `락 안에서 하는 일이 ${fp}%뿐이라`;
       return `${K.flag('good')} ${why} 스레드들이 거의 기다리지 않습니다. 스레드 ${T}개가 각자 일해서 1개일 때보다 <b>×${K.n(gain, 1)}</b> 많이 처리합니다. 경매장·거래창 요청이 몰려도 금방 처리됩니다.`;
     }
     const waiting = K.n(m.ratio * T, 1);
-    const cap = P.mode === 'big' ? `락 안의 일(${fp}%)은 한 번에 한 스레드만 할 수 있어서, 스레드를 아무리 늘려도 처리량은 최대 <b>×${K.n(1 / P.f, 1)}</b>(1 ÷ ${K.n(P.f, 2)})에서 멈춥니다.` : `락을 8개로 나눠 서로 다른 칸을 쓰는 스레드끼리는 기다리지 않지만, 같은 칸을 고른 스레드끼리는 여전히 줄을 섭니다.`;
-    const sym = `이 처리량(초당 ${K.n(m.thr)}건)보다 요청이 많이 몰리면 줄이 끝없이 길어집니다. 플레이어는 경매장 검색·거래창이 늦게 열리는 <b>입력 지연</b>을 겪고, 심하면 그 기능만 <b>멈춤</b>처럼 느낍니다. 사냥·이동처럼 이 락을 안 쓰는 일은 멀쩡합니다.`;
+    const cap = P.mode === 'big' ? `락 안의 일(${fp}%)은 한 번에 한 스레드만 할 수 있어서, 스레드를 아무리 늘려도 처리량은 최대 <b>×${K.n(1 / P.f, 1)}</b>(1 ÷ ${K.n(P.f, 2)})에서 멈춥니다.` : `락을 8개로 나눠 서로 다른 락을 쓰는 스레드끼리는 기다리지 않지만, 같은 락을 고른 스레드끼리는 여전히 대기합니다.`;
+    const sym = `이 처리량(초당 ${K.n(m.thr)}건)보다 요청이 많이 몰리면 대기열이 끝없이 길어집니다. 플레이어는 경매장 검색·거래창이 늦게 열리는 <b>입력 지연</b>을 겪고, 심하면 그 기능만 <b>멈춤</b>처럼 느낍니다. 사냥·이동처럼 이 락을 안 쓰는 일은 멀쩡합니다.`;
     if (m.ratio < 0.3) return `${K.flag('warn')} 스레드 ${T}개 중 평균 <b>${waiting}개</b>가 락 앞에서 기다립니다. ${cap} ${sym}`;
-    return `${K.flag('bad')} 스레드 ${T}개 중 평균 <b>${waiting}개</b>가 락 앞에서 줄을 서 있습니다. 스레드를 늘려도 기다리는 줄만 길어집니다. ${cap} ${sym}`;
+    return `${K.flag('bad')} 스레드 ${T}개 중 평균 <b>${waiting}개</b>가 락을 기다리고 있습니다. 스레드를 늘려도 대기하는 스레드만 늘어납니다. ${cap} ${sym}`;
   }
 
   K.loop(root, dt => {
@@ -373,7 +373,7 @@ K.register('locks', function (root) {
     const down = dl && dl.phase === 'restart';
     stThr.set(down ? '0' : K.n(m.thr), down || gain < T * 0.4 ? 'bad' : gain < T * 0.75 ? 'warn' : 'good');
     stWait.set(down ? '—' : K.ms(m.wait), down ? 'bad' : m.wait > JOB * 2 ? 'bad' : m.wait > JOB * 0.3 ? 'warn' : 'good', down ? '서버 꺼짐' : '락 한 번 잡는 데');
-    stRatio.set(down ? '—' : K.n(m.ratio * 100) + '<i>%</i>', down || m.ratio > 0.3 ? 'bad' : m.ratio >= 0.1 ? 'warn' : 'good', down ? '서버 꺼짐' : `평균 ${K.n(m.ratio * T, 1)}개가 줄 서 있음`);
+    stRatio.set(down ? '—' : K.n(m.ratio * 100) + '<i>%</i>', down || m.ratio > 0.3 ? 'bad' : m.ratio >= 0.1 ? 'warn' : 'good', down ? '서버 꺼짐' : `평균 ${K.n(m.ratio * T, 1)}개가 대기 중`);
     stGain.set('×' + K.n(gain, 1), gain < T * 0.4 ? 'bad' : gain < T * 0.75 ? 'warn' : 'good', `이상적이면 ×${T}`);
     F.say(explain(m));
   });

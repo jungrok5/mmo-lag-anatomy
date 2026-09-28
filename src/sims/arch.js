@@ -3,11 +3,11 @@
 K.register('arch', function (root) {
   const F = K.frame(root, {
     kicker: '레이어 13 · 서버 구성과 운영',
-    title: '서버 하나가 아프면 누가 무엇을 겪나',
-    lead: 'MMO는 대개 역할이 다른 여러 서버가 서로 부르며 돌아갑니다. 상자를 누르면 그 서버가 느려지거나 멈춥니다. 탈이 어디까지 번지는지, 플레이어는 누가 무엇을 겪는지 아래 목록에서 확인하세요. 같은 고장도 “기다리는 방식”에 따라 영향 범위가 크게 달라집니다.',
+    title: '서버 하나에 장애가 나면 누가 무엇을 겪나',
+    lead: 'MMO는 대개 역할이 다른 여러 서버가 서로 부르며 돌아갑니다. 상자를 누르면 그 서버가 느려지거나 멈춥니다. 장애가 어디까지 번지는지, 플레이어는 누가 무엇을 겪는지 아래 목록에서 확인하세요. 같은 고장도 “기다리는 방식”에 따라 영향 범위가 크게 달라집니다.',
     tries: [
       '<b>DB 느려짐 (동기 호출)</b>을 눌러 보세요. DB 하나가 느려졌을 뿐인데 모든 필드와 던전의 틱이 늦어져 슬로우모션·뚝뚝 끊김에 빠집니다.',
-      '같은 고장에서 <b>비동기</b>로 바꾸고 <b>차단기</b>를 켜 보세요. 영향이 “저장이 늦음”으로 줄어듭니다.',
+      '같은 고장에서 <b>비동기</b>로 바꾸고 <b>서킷 브레이커</b>를 켜 보세요. 영향이 “저장이 늦음”으로 줄어듭니다.',
       '<b>캐시 장애 → DB 쇄도</b>를 눌러 보세요. 캐시가 막아 주던 조회가 한꺼번에 DB로 쏟아져 멀쩡하던 DB까지 느려집니다.',
       '<b>로그인 서버 장애</b>와 <b>게이트웨이 한 대 장애</b>를 비교해 보세요. 이미 게임 중인 사람이 겪는 일이 전혀 다릅니다.',
       '<b>로그 수집</b>을 멈추고 기다리는 방식을 동기/비동기로 바꿔 보세요. 로그처럼 사소해 보이는 곳도 동기로 기다리면 게임이 멈춥니다.',
@@ -141,7 +141,7 @@ K.register('arch', function (root) {
     ],
     auth: [
       { who: '로그인·결제하는 사람', s: '로그인·결제', r: 2, sym: ['접속 불가·무한 로딩', '특정 기능만 안 됨'], why: '외부 플랫폼 응답이 늦어 로그인과 결제가 오래 걸립니다.' },
-      c => ({ who: '결제하는 사람 · 새로 로그인하는 사람', s: '결제·새 로그인', r: 2, sym: ['특정 기능만 안 됨', '접속 불가·무한 로딩'], why: c.brk ? '차단기가 외부 호출을 바로 끊어 “잠시 후 다시 시도” 안내가 빨리 뜹니다. 게임 중인 사람은 결제만 안 됩니다.' : '결제가 실패하고 플랫폼 로그인이 막힙니다. 게임 중인 사람은 결제만 안 됩니다.' }),
+      c => ({ who: '결제하는 사람 · 새로 로그인하는 사람', s: '결제·새 로그인', r: 2, sym: ['특정 기능만 안 됨', '접속 불가·무한 로딩'], why: c.brk ? '서킷 브레이커가 외부 호출을 바로 끊어 “잠시 후 다시 시도” 안내가 빨리 뜹니다. 게임 중인 사람은 결제만 안 됩니다.' : '결제가 실패하고 플랫폼 로그인이 막힙니다. 게임 중인 사람은 결제만 안 됩니다.' }),
     ],
     login: [
       { who: '새로 로그인하는 사람', s: '새 로그인', r: 2, sym: ['접속 불가·무한 로딩'], why: '로그인 버튼 뒤 대기가 길어집니다. 로그인 서버가 느린 것만으로는 이미 게임 중인 사람에게 영향이 없습니다.' },
@@ -175,10 +175,10 @@ K.register('arch', function (root) {
     ],
     db: [
       c => (c.sync && !c.brk ? null : c.sync
-        ? { who: '전원 (누군가 저장할 때마다)', s: '전원', r: 5, sym: ['멈춤', '뚝뚝 끊김', '특정 기능만 안 됨'], why: '게임 서버가 DB를 1초까지만 기다리고 포기합니다. 차단기가 열리기 전까지는 누군가 저장할 때마다 틱이 최대 1초씩 멈추고, 그 뒤로는 바로 “저장 실패”로 처리해 게임은 계속됩니다. 1초 안에 겨우 답하는 느린 DB라면 실패로 세지 않아 차단기가 열리지 않고 멈칫이 계속됩니다.' }
-        : { who: '전원 (저장할 때)', s: '전원', r: 5, sym: ['특정 기능만 안 됨'], why: '게임은 멀쩡히 돌지만 얻은 아이템·우편이 늦게 들어옵니다(저장 지연).' + (c.brk ? ' 너무 오래 걸리는 저장은 실패로 끊어 줄이 쌓이지 않게 합니다.' : '') }),
+        ? { who: '전원 (누군가 저장할 때마다)', s: '전원', r: 5, sym: ['멈춤', '뚝뚝 끊김', '특정 기능만 안 됨'], why: '게임 서버가 DB를 1초까지만 기다리고 포기합니다. 서킷 브레이커가 열리기 전까지는 누군가 저장할 때마다 틱이 최대 1초씩 멈추고, 그 뒤로는 바로 “저장 실패”로 처리해 게임은 계속됩니다. 1초 안에 겨우 답하는 느린 DB라면 실패로 세지 않아 서킷 브레이커가 열리지 않고 짧은 멈춤이 계속됩니다.' }
+        : { who: '전원 (저장할 때)', s: '전원', r: 5, sym: ['특정 기능만 안 됨'], why: '게임은 멀쩡히 돌지만 얻은 아이템·우편이 늦게 들어옵니다(저장 지연).' + (c.brk ? ' 너무 오래 걸리는 저장은 실패로 끊어 대기열이 쌓이지 않게 합니다.' : '') }),
       c => (c.sync && !c.brk ? null : c.brk
-        ? { who: '전원', s: '전원', r: 5, sym: ['씹힘·롤백', '특정 기능만 안 됨'], why: '차단기가 DB 호출을 바로 끊어 게임은 계속됩니다. 대신 저장이 모두 실패해 거래·강화·우편이 막히고, 그동안의 진행은 되돌려질 수 있습니다.' }
+        ? { who: '전원', s: '전원', r: 5, sym: ['씹힘·롤백', '특정 기능만 안 됨'], why: '서킷 브레이커가 DB 호출을 바로 끊어 게임은 계속됩니다. 대신 저장이 모두 실패해 거래·강화·우편이 막히고, 그동안의 진행은 되돌려질 수 있습니다.' }
         : { who: '전원', s: '전원', r: 5, sym: ['씹힘·롤백'], why: '게임은 돌지만 저장할 것이 메모리에 계속 쌓입니다. 이대로 서버가 재시작되면 그동안의 진행이 사라집니다(롤백).' }),
     ],
     replica: [
@@ -187,7 +187,7 @@ K.register('arch', function (root) {
     ],
     log: [
       c => (c.sync && !c.brk ? null : NOBODY('로그가 늦게 쌓일 뿐 게임에는 영향이 없습니다.')),
-      c => (c.sync && !c.brk ? null : NOBODY(c.sync ? '차단기가 로그 쓰기를 포기시켜 게임은 계속됩니다. 그 사이 로그는 사라져 아이템 복사 같은 사고를 추적하기 어려워집니다.' : '로그가 메모리에 쌓이다 넘치면 버려집니다. 게임은 계속되지만 그 사이 기록은 사라집니다.')),
+      c => (c.sync && !c.brk ? null : NOBODY(c.sync ? '서킷 브레이커가 로그 쓰기를 포기시켜 게임은 계속됩니다. 그 사이 로그는 사라져 아이템 복사 같은 사고를 추적하기 어려워집니다.' : '로그가 메모리에 쌓이다 넘치면 버려집니다. 게임은 계속되지만 그 사이 기록은 사라집니다.')),
     ],
   };
 
@@ -209,7 +209,7 @@ K.register('arch', function (root) {
       if (eff.db === 2) raise('replica', 1, 'db', '주 DB가 멈춰 복제가 멈춥니다. 복제 DB는 옛날 데이터를 보여 줍니다');
       if (eff.db) raise('auction', eff.db, 'db', '거래는 주 DB에 기록해야 끝납니다');
       if (eff.db) raise('login', eff.db, 'db', '계정 정보를 주 DB에서 읽어야 로그인이 끝납니다');
-      if (eff.auth && !P.brk) raise('login', eff.auth, 'auth', '로그인 서버의 일꾼(스레드)이 모두 외부 인증 응답을 기다리며 묶입니다');
+      if (eff.auth && !P.brk) raise('login', eff.auth, 'auth', '로그인 서버의 워커 스레드가 모두 외부 인증 응답을 기다리며 묶입니다');
       if (eff.gw === 2) raise('login', 1, 'gw', '접속이 끊긴 플레이어가 한꺼번에 다시 로그인합니다(재접속 폭주)');
       if (block) for (const g of GAMES) {
         if (eff.db) raise(g, eff.db, 'db', eff.db === 2 ? 'DB 응답을 끝없이 기다리며 게임 스레드가 멈춥니다(동기 호출)' : '저장할 때마다 DB 응답을 기다리느라 틱이 늦어집니다(동기 호출)');
@@ -241,7 +241,7 @@ K.register('arch', function (root) {
       items.push({
         lv: g.lv, who: all ? '전원 (모든 필드·던전)' : g.ids.map(id => BY[id].l[0]).join(', ') + '에 있는 사람', s: all ? '전원' : '일부 필드', r: all ? 5 : 3,
         sym: g.lv === 2 ? ['멈춤', '접속 끊김'] : ['슬로우모션', '뚝뚝 끊김', '입력 지연'],
-        why: g.lv === 2 ? `게임 서버가 ${SRC[g.from]} 응답을 끝없이 기다리며 굳었습니다. 오래 가면 연결 유지 신호가 끊기거나 감시 타이머가 서버를 다시 켜서 모두의 접속이 끊깁니다.`
+        why: g.lv === 2 ? `게임 서버가 ${SRC[g.from]} 응답을 끝없이 기다리며 굳었습니다. 오래 가면 하트비트(연결 유지 신호)가 끊기거나 워치독(감시 타이머)이 서버를 재시작해 모두의 접속이 끊깁니다.`
           : `게임 서버가 ${SRC[g.from]} 응답을 기다리는 동안 틱이 멈춥니다. 세계가 느리게 흐르거나 뚝뚝 끊기고, 입력이 늦게 반영됩니다.`,
       });
     }
@@ -282,7 +282,7 @@ K.register('arch', function (root) {
   S('text', { class: 'grp-t', x: 626, y: 132 }, svg).textContent = '게임 서버';
   S('rect', { class: 'grp', x: 616, y: 326, width: 148, height: 172, rx: 10 }, svg);
   S('text', { class: 'grp-t', x: 626, y: 340 }, svg).textContent = '기능 서버';
-  [['바깥', 52], ['입구', 248], ['접속 관리', 480], ['게임·기능 서버', 690], ['데이터', 918]].forEach(([t, x]) => {
+  [['클라이언트', 52], ['네트워크 장비', 248], ['접속 관리', 480], ['게임·기능 서버', 690], ['데이터', 918]].forEach(([t, x]) => {
     S('text', { class: 'col-t', x, y: 534, 'text-anchor': 'middle' }, svg).textContent = t;
   });
   const gEdges = S('g', {}, svg), gLabels = S('g', {}, svg), gFlow = S('g', {}, svg), gNodes = S('g', {}, svg);
@@ -344,9 +344,9 @@ K.register('arch', function (root) {
     label: '게임 서버가 DB·로그를 기다리는 방식', value: P.mode,
     options: [['sync', '동기 (응답 올 때까지 멈춤)'], ['async', '비동기 (기다리지 않음)']],
     onChange: v => { P.mode = v; refresh(); },
-    hint: '동기: 답이 올 때까지 게임 스레드가 서서 기다립니다. 비동기: 부탁만 해 두고 바로 다음 틱을 돌립니다.',
+    hint: '동기: 응답이 올 때까지 게임 스레드가 멈춰 기다립니다. 비동기: 요청만 보내 두고 바로 다음 틱을 돌립니다.',
   });
-  const tBrk = K.toggle(g2, { label: '타임아웃·차단기 (서킷 브레이커)', value: P.brk, onChange: v => { P.brk = v; refresh(); }, hint: '상대가 느리면 1초만 기다리고 포기합니다. 계속 실패하면 한동안 아예 부르지 않고 바로 실패 처리합니다.' });
+  const tBrk = K.toggle(g2, { label: '타임아웃·서킷 브레이커', value: P.brk, onChange: v => { P.brk = v; refresh(); }, hint: '상대가 느리면 1초만 기다리고 포기합니다. 계속 실패하면 한동안 아예 부르지 않고 바로 실패 처리합니다.' });
 
   function select(id, reveal) {
     sel = id; selEl.value = id; cState.set(own[id], false);
@@ -362,7 +362,7 @@ K.register('arch', function (root) {
   const presets = K.presets(F, [
     { label: '모두 정상', apply() { apply({}, 'sync', false, 'db'); } },
     { label: 'DB 느려짐 (동기 호출)', apply() { apply({ db: 1 }, 'sync', false, 'db'); } },
-    { label: 'DB 느려짐 (비동기 + 차단기)', apply() { apply({ db: 1 }, 'async', true, 'db'); } },
+    { label: 'DB 느려짐 (비동기 + 서킷 브레이커)', apply() { apply({ db: 1 }, 'async', true, 'db'); } },
     { label: '캐시 장애 → DB 쇄도', apply() { apply({ cache: 2 }, 'sync', false, 'cache'); } },
     { label: '게이트웨이 한 대 장애', apply() { apply({ gw: 2 }, 'sync', false, 'gw'); } },
     { label: '로그인 서버 장애', apply() { apply({ login: 2 }, 'sync', false, 'login'); } },
@@ -453,20 +453,20 @@ K.register('arch', function (root) {
       if (id === 'cache' && eff[id] === 2) return;
       saved.push(P.mode === 'async'
         ? `<b>비동기</b>: 게임 서버가 ${nm(id)} 응답을 기다리지 않아 틱이 멈추지 않습니다.`
-        : `<b>차단기</b>: ${nm(id)}${id === 'log' ? '을' : '를'} 1초까지만 기다리고 실패가 이어지면 아예 부르지 않아, 게임 서버가 오래 굳지 않습니다. 기다리는 그 1초 동안은 틱이 멈추므로 비동기가 더 안전합니다.`);
-      if (!savedSay.length) savedSay.push(P.mode === 'async' ? '설계 덕분에 게임 서버까지는 번지지 않았습니다.' : '차단기 덕분에 게임 서버가 오래 굳지는 않지만, 기다리는 1초 동안은 틱이 멈춥니다.');
+        : `<b>서킷 브레이커</b>: ${nm(id)}${id === 'log' ? '을' : '를'} 1초까지만 기다리고 실패가 이어지면 아예 부르지 않아, 게임 서버가 오래 굳지 않습니다. 기다리는 그 1초 동안은 틱이 멈추므로 비동기가 더 안전합니다.`);
+      if (!savedSay.length) savedSay.push(P.mode === 'async' ? '설계 덕분에 게임 서버까지는 번지지 않았습니다.' : '서킷 브레이커 덕분에 게임 서버가 오래 굳지는 않지만, 기다리는 1초 동안은 틱이 멈춥니다.');
     });
     if (eff.auth && P.brk) {
-      saved.push('<b>차단기</b>: 로그인 서버가 외부 인증을 오래 기다리지 않아 일꾼이 묶이지 않습니다.');
-      savedSay.push('차단기 덕분에 로그인 서버는 버티고 “잠시 후 다시 시도” 안내를 빨리 보여 줍니다.');
+      saved.push('<b>서킷 브레이커</b>: 로그인 서버가 외부 인증을 오래 기다리지 않아 스레드가 묶이지 않습니다.');
+      savedSay.push('서킷 브레이커 덕분에 로그인 서버는 버티고 “잠시 후 다시 시도” 안내를 빨리 보여 줍니다.');
     }
     saved.forEach(t => chainEl.append(K.el('li', { class: 'good', html: t })));
-    if (!chainEl.children.length) chainEl.append(K.el('li', { class: 'arch-empty', text: NODES.some(n => own[n.id]) ? '번진 곳 없음: 탈이 그 서버 안에서 멈췄습니다.' : '번진 곳 없음.' }));
+    if (!chainEl.children.length) chainEl.append(K.el('li', { class: 'arch-empty', text: NODES.some(n => own[n.id]) ? '번진 곳 없음: 장애가 그 서버 안에서 멈췄습니다.' : '번진 곳 없음.' }));
 
     // 수치 타일
     const hit = items.filter(it => it.sym.length);
     const top = hit[0];
-    stScope.set(top ? top.s : '없음', top ? statusOf(top) : 'good', top ? (hit.length > 1 ? `그 밖에 ${hit.length - 1}무리` : top.who) : '플레이어는 모름');
+    stScope.set(top ? top.s : '없음', top ? statusOf(top) : 'good', top ? (hit.length > 1 ? `그 밖에 ${hit.length - 1}개 그룹` : top.who) : '플레이어는 모름');
     const allSym = [...new Set(hit.flatMap(it => it.sym))].sort((a, b) => SEV.indexOf(a) - SEV.indexOf(b));
     stSym.set(allSym[0] || '없음', !allSym.length ? 'good' : SEV.indexOf(allSym[0]) < 4 ? 'bad' : 'warn', allSym.length > 1 ? '그 밖에 ' + allSym.slice(1, 3).join(', ') + (allSym.length > 3 ? ' 등' : '') : ' ');
     const cas = Object.keys(cause);
@@ -481,7 +481,7 @@ K.register('arch', function (root) {
       msg = K.flag(flag) + faults.map(n => `<b>${n.name} ${word(own[n.id])}</b>`).join(', ') + '. ';
       groups.forEach(g => { msg += `→ <b>${gName(g.ids)} ${word(g.lv)}</b>: ${g.why}. `; });
       msg += top ? `누가 겪나: <b>${top.who}</b>. 무엇을: ${top.sym.join(', ')}.` : '플레이어는 거의 알아채지 못합니다.';
-      if (block && GAMES.some(g => cause[g])) msg += ' 기다리는 방식을 비동기로 바꾸거나 차단기를 켜면 번지는 범위가 줄어듭니다.';
+      if (block && GAMES.some(g => cause[g])) msg += ' 기다리는 방식을 비동기로 바꾸거나 서킷 브레이커를 켜면 번지는 범위가 줄어듭니다.';
       else if (savedSay.length) msg += ' ' + savedSay.join(' ');
     }
     F.say(msg);

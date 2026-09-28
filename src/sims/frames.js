@@ -4,11 +4,11 @@ K.register('frames', function (root) {
   const F = K.frame(root, {
     kicker: '레이어 1 · 클라이언트 게임',
     title: '프레임이 늦으면 화면이 멈췄다 튄다',
-    lead: '게임은 1초에 60번, 16.7ms마다 “계산하고 그리기”를 되풀이합니다. 한 장이라도 늦으면 그동안 화면은 멈춰 있고, 다음 장에서 캐릭터가 한꺼번에 이동합니다. 이 렉은 내 컴퓨터 안에서 생깁니다. 회선과 서버는 멀쩡하고, 다른 플레이어 화면 속의 나는 대개 평소처럼 움직입니다.',
+    lead: '게임은 1초에 60번, 16.7ms마다 “계산하고 그리기”를 되풀이합니다. 한 프레임이라도 늦으면 그동안 화면은 멈춰 있고, 다음 프레임에서 캐릭터가 한꺼번에 이동합니다. 이 렉은 내 컴퓨터 안에서 생깁니다. 회선과 서버는 멀쩡하고, 다른 플레이어 화면 속의 나는 대개 평소처럼 움직입니다.',
     tries: [
       '<b>GC 스파이크</b>를 누르고 아래 달리는 캐릭터를 지켜보세요. 몇 초마다 멈췄다가 앞으로 툭 튀어 나갑니다(순간이동). 위 차트에는 빨간 막대가 솟습니다.',
-      '그 상태에서 <b>점진적 GC</b>를 켜 보세요. 큰 멈춤 한 번을 3ms(유니티 기본값)짜리 작은 조각 여러 개로 나눠 치웁니다. 쓰레기 생성을 500KB로 올리면 치우는 속도가 못 따라가 다시 큰 멈춤이 나옵니다.',
-      '<b>V-Sync 경계 (17ms)</b>를 누르세요. 일이 16.7ms를 1ms 넘겼을 뿐인데 한 장에 33.3ms가 걸립니다. FPS가 60과 30 사이를 오가며 울컥거립니다.',
+      '그 상태에서 <b>점진적 GC</b>를 켜 보세요. 큰 멈춤 한 번을 3ms(유니티 기본값)짜리 작은 단위 여러 번으로 나눠 처리합니다. 가비지 생성을 500KB로 올리면 수거 속도가 못 따라가 다시 큰 멈춤이 나옵니다.',
+      '<b>V-Sync 경계 (17ms)</b>를 누르세요. 일이 16.7ms를 1ms 넘겼을 뿐인데 한 프레임에 33.3ms가 걸립니다. FPS가 60과 30 사이를 오가며 움직임이 들쭉날쭉해집니다.',
       '<b>새 지역 로딩</b>을 켠 채 <b>밀린 시간 처리</b>를 하나씩 바꿔 보세요. 한 번에 점프하면 순간이동, 고정 스텝으로 따라잡으면 긴 프레임이 줄줄이(뚝뚝 끊김), 상한을 두면 넘친 시간이 버려져 슬로우모션이 됩니다.',
     ],
     layout: 'side',
@@ -27,7 +27,7 @@ K.register('frames', function (root) {
   const fcv = K.canvas(F.stage, {
     height: w => K.clamp(w * 0.36, 190, 260),
     caption: '프레임 시간',
-    right: '<span class="legend"><span><i class="box" style="background:var(--s1)"></i>그림 한 장</span><span><i class="box" style="background:var(--bad)"></i>50ms 넘음</span></span>',
+    right: '<span class="legend"><span><i class="box" style="background:var(--s1)"></i>프레임 1개</span><span><i class="box" style="background:var(--bad)"></i>50ms 넘음</span></span>',
   });
   const scv = K.canvas(F.stage, {
     height: w => (w < 520 ? 110 : 140),
@@ -40,19 +40,19 @@ K.register('frames', function (root) {
   const sBase = K.slider(g1, { label: '기본 비용', min: 2, max: 30, step: 0.5, value: P.base, unit: 'ms', onInput: v => { P.base = v; }, hint: '지형·UI·효과를 그리고 게임 규칙을 계산하는 기본 일' });
   const sChars = K.slider(g1, { label: '화면 속 캐릭터 수', min: 0, max: 500, step: 10, value: P.chars, unit: '명', onInput: v => { P.chars = v; }, hint: '1명마다 그리기·애니메이션 0.04ms + 그 캐릭터 패킷 처리(프레임당 0.5개 × 0.01ms)' });
 
-  const g2 = K.group(F.controls, '가비지 컬렉션(쓰레기 치우기)');
+  const g2 = K.group(F.controls, '가비지 컬렉션(메모리 정리)');
   const tGC = K.toggle(g2, { label: 'C#/유니티 식 가비지 컬렉션', value: P.gc, onChange: v => { P.gc = v; heap = HEAP0 + 30; incLeft = 0; sync(); } });
-  const sGarb = K.slider(g2, { label: '프레임당 쓰레기 생성', min: 0, max: 500, step: 10, value: P.garbage, unit: 'KB', onInput: v => { P.garbage = v; } });
-  const tInc = K.toggle(g2, { label: '점진적 GC(incremental)', value: P.inc, onChange: v => { P.inc = v; incLeft = 0; }, hint: '한 번에 몰아 치우지 않고 프레임마다 3ms씩(유니티 기본값) 나눠 치웁니다.' });
+  const sGarb = K.slider(g2, { label: '프레임당 가비지 생성', min: 0, max: 500, step: 10, value: P.garbage, unit: 'KB', onInput: v => { P.garbage = v; } });
+  const tInc = K.toggle(g2, { label: '점진적 GC(incremental)', value: P.inc, onChange: v => { P.inc = v; incLeft = 0; }, hint: '한 번에 몰아 수거하지 않고 프레임마다 3ms씩(유니티 기본값) 나눠 수거합니다.' });
   const heapRow = K.el('div', { class: 'ctl' });
   const heapOut = K.el('output');
-  heapRow.append(K.el('div', { class: 'lab' }, K.el('span', { text: '쌓인 쓰레기(힙)' }), heapOut));
+  heapRow.append(K.el('div', { class: 'lab' }, K.el('span', { text: '쌓인 가비지(힙)' }), heapOut));
   g2.append(heapRow);
   const heapM = K.meter(heapRow);
 
   const g3 = K.group(F.controls, '그 밖의 원인');
-  const tLoad = K.toggle(g3, { label: '새 지역 진입 시 동기 로딩', value: P.load, onChange: v => { P.load = v; nextLoad = now + 1200; }, hint: '약 6초마다 텍스처 읽기·셰이더 컴파일이 게임 스레드를 150~450ms 붙잡습니다.' });
-  const tVs = K.toggle(g3, { label: 'V-Sync (60Hz 화면에 맞춤)', value: P.vsync, onChange: v => { P.vsync = v; }, hint: '그림을 16.7ms 눈금에 맞춰 내보냅니다. 17ms 걸린 그림은 다음 눈금인 33.3ms까지 기다립니다(이중 버퍼 기준. 삼중 버퍼면 대부분 60에 가끔 33ms가 섞입니다).' });
+  const tLoad = K.toggle(g3, { label: '새 지역 진입 시 동기 로딩', value: P.load, onChange: v => { P.load = v; nextLoad = now + 1200; }, hint: '약 6초마다 텍스처 읽기·셰이더 컴파일이 게임 스레드를 150~450ms 동안 막습니다.' });
+  const tVs = K.toggle(g3, { label: 'V-Sync (60Hz 화면에 맞춤)', value: P.vsync, onChange: v => { P.vsync = v; }, hint: '프레임을 16.7ms 간격(화면 갱신 주기)에 맞춰 내보냅니다. 17ms 걸린 프레임은 다음 갱신 시점인 33.3ms까지 기다립니다(이중 버퍼 기준. 삼중 버퍼면 대부분 60에 가끔 33ms가 섞입니다).' });
 
   const g4 = K.group(F.controls, '게임 시간 진행');
   const cMode = K.choice(g4, {
@@ -301,7 +301,7 @@ K.register('frames', function (root) {
     if (!f) return null;
     const dt = f.end - f.start;
     let s = `<b>${K.ms(dt)}</b> · ${K.n(1000 / dt)} FPS 속도<br>그리기 ${K.ms(f.render)}<br>게임 계산 ${K.ms(f.calc)}${f.steps !== 1 ? ` (${f.steps}번)` : ''}`;
-    if (f.gc) s += `<br>GC ${K.ms(f.gc)}${f.gcKind === 'inc' ? ' (조각)' : ''}`;
+    if (f.gc) s += `<br>GC ${K.ms(f.gc)}${f.gcKind === 'inc' ? ' (점진적)' : ''}`;
     if (f.load) s += `<br>동기 로딩 ${K.ms(f.load)}`;
     if (f.wait > 0.5) s += `<br>V-Sync 기다림 ${K.ms(f.wait)}`;
     return s;
@@ -375,30 +375,30 @@ K.register('frames', function (root) {
   function jumpText(e) {
     const d = lastJump && !lastJump.rubber && now - lastJump.t < 3000 ? lastJump.d : Math.min(e.ms, P.mode === 'cap' ? 5 * VB : e.ms) * SPEED;
     if (P.mode === 'var') return `풀리는 순간 캐릭터가 <b>${K.n(d, 1)}m 순간이동</b>합니다.`;
-    if (P.mode === 'fixed') return `풀리면 밀린 계산을 몰아서 돌려 <b>${K.n(d, 1)}m 순간이동</b>하고, 몰아 돌린 계산 때문에 다음 장도 늦어집니다.`;
+    if (P.mode === 'fixed') return `풀리면 밀린 계산을 몰아서 돌려 <b>${K.n(d, 1)}m 순간이동</b>하고, 몰아 돌린 계산 때문에 다음 프레임도 늦어집니다.`;
     return `따라잡기를 5번에서 멈추니 이동은 ${K.n(d, 1)}m에 그치지만, 나머지 시간은 버려져 게임 시계가 그만큼 뒤처집니다(<b>슬로우모션</b>).`;
   }
   function explain() {
     if (!S) return '';
     if (P.mode === 'fixed' && now < spiralUntil) {
-      return `${K.flag('bad')}<b>따라잡기 폭주.</b> 늦어진 시간을 메우려고 게임 계산(한 번에 ${K.ms(calcCost())})을 한 장에 최대 <b>${S.maxSteps}번</b> 되풀이합니다. 되풀이하는 동안 또 시간이 밀려 긴 프레임이 줄줄이 이어집니다. 플레이어는 <b>뚝뚝 끊김</b>과 <b>순간이동</b>을 연달아 봅니다. “따라잡기 상한”으로 바꾸면 뚝뚝 끊김이 <b>슬로우모션</b>으로 바뀝니다.` + CLIENT;
+      return `${K.flag('bad')}<b>따라잡기 폭주.</b> 늦어진 시간을 메우려고 게임 계산(한 번에 ${K.ms(calcCost())})을 한 프레임에 최대 <b>${S.maxSteps}번</b> 되풀이합니다. 되풀이하는 동안 또 시간이 밀려 긴 프레임이 줄줄이 이어집니다. 플레이어는 <b>뚝뚝 끊김</b>과 <b>순간이동</b>을 연달아 봅니다. “따라잡기 상한”으로 바꾸면 뚝뚝 끊김이 <b>슬로우모션</b>으로 바뀝니다.` + CLIENT;
     }
     const eL = recent('load');
     if (eL) return `${K.flag('bad')}<b>새 지역 로딩</b>: 텍스처를 읽고 셰이더를 컴파일하느라 게임 스레드가 <b>${K.ms(eL.ms)}</b> 동안 다른 일을 못 했습니다. 그동안 화면은 <b>멈춤</b>. ${jumpText(eL)} 로딩을 다른 스레드로 넘기거나 미리 해 두면 사라집니다.` + CLIENT;
     const eG = recent('gc');
-    if (eG) return `${K.flag('bad')}<b>가비지 컬렉션</b>: ${eG.fallback ? '점진적 GC가 쓰레기 만드는 속도를 못 따라가 결국 ' : ''}힙이 ${HEAPMAX}MB까지 차자 힙 전체를 훑어 쓰레기를 치우느라 게임 전체를 <b>${K.ms(eG.ms)}</b> 세웠습니다. 그동안 <b>멈춤</b>. ${jumpText(eG)} 쓰레기를 덜 만들거나(오브젝트 재사용) 점진적 GC를 켜면 줄어듭니다.` + CLIENT;
+    if (eG) return `${K.flag('bad')}<b>가비지 컬렉션</b>: ${eG.fallback ? '점진적 GC가 가비지 생성 속도를 못 따라가 결국 ' : ''}힙이 ${HEAPMAX}MB까지 차자 힙 전체를 훑어 가비지를 수거하느라 게임 전체를 <b>${K.ms(eG.ms)}</b> 멈췄습니다. 그동안 <b>멈춤</b>. ${jumpText(eG)} 가비지를 덜 만들거나(오브젝트 재사용) 점진적 GC를 켜면 줄어듭니다.` + CLIENT;
     if (P.mode === 'cap' && S.slow > 0.03) {
-      return `${K.flag(S.slow > 0.2 ? 'bad' : 'warn')}한 장이 평균 ${K.ms(S.avg)}나 걸려 따라잡기 5번 상한에 걸립니다. 못 돌린 시간은 버려져 게임 세계가 실제의 <b>${K.pct(1 - S.slow)}</b> 속도로 흐릅니다(<b>슬로우모션</b>). 온라인 게임에서는 서버가 아는 위치와 벌어지면 <b>고무줄</b>처럼 당겨지기도 합니다.` + CLIENT;
+      return `${K.flag(S.slow > 0.2 ? 'bad' : 'warn')}한 프레임이 평균 ${K.ms(S.avg)}나 걸려 따라잡기 5번 상한에 걸립니다. 못 돌린 시간은 버려져 게임 세계가 실제의 <b>${K.pct(1 - S.slow)}</b> 속도로 흐릅니다(<b>슬로우모션</b>). 온라인 게임에서는 서버가 아는 위치와 벌어지면 <b>고무줄</b>처럼 당겨지기도 합니다.` + CLIENT;
     }
-    if (S.mixed) return `${K.flag('warn')}한 장 일이 평균 <b>${K.ms(S.work)}</b>로 16.7ms 언저리입니다. V-Sync는 16.7ms 눈금에 맞춰 내보내므로 어떤 장은 16.7ms, 어떤 장은 33.3ms가 걸립니다. FPS가 60과 30 사이를 오가 움직임이 울컥거립니다(<b>뚝뚝 끊김</b>). GC·로딩을 뺀 가장 무거운 장이 ${K.ms(S.wmax)}이니, 일을 ${K.ms(Math.max(0.5, S.wmax - VB + 0.3))}쯤 줄여 모든 장이 16.7ms 안에 끝나면 60에 고정됩니다.`;
+    if (S.mixed) return `${K.flag('warn')}한 프레임 작업이 평균 <b>${K.ms(S.work)}</b>로 16.7ms 언저리입니다. V-Sync는 16.7ms 간격에 맞춰 내보내므로 어떤 프레임은 16.7ms, 어떤 프레임은 33.3ms가 걸립니다. FPS가 60과 30 사이를 오가 움직임이 들쭉날쭉합니다(<b>뚝뚝 끊김</b>). GC·로딩을 뺀 가장 무거운 프레임이 ${K.ms(S.wmax)}이니, 작업을 ${K.ms(Math.max(0.5, S.wmax - VB + 0.3))}쯤 줄여 모든 프레임이 16.7ms 안에 끝나면 60에 고정됩니다.`;
     if (S.fps < 45) {
-      return `${K.flag(S.fps < 25 ? 'bad' : 'warn')}한 장 일이 평균 <b>${K.ms(S.work)}</b>입니다. 캐릭터 ${K.n(P.chars)}명을 그리고 패킷 ${K.n(P.chars * 0.5)}개를 처리${P.mode !== 'var' && S.steps > 1.3 ? `하고, 밀린 시간을 메우려 게임 계산을 한 장에 평균 ${K.n(S.steps, 1)}번 되풀이` : ''}하느라 1초에 <b>${K.n(S.fps)}장</b>밖에 못 그립니다. 화면은 <b>뚝뚝 끊김</b>, 누른 키는 ${K.ms(S.lat)} 뒤에야 보입니다(<b>입력 지연</b>).` + CLIENT;
+      return `${K.flag(S.fps < 25 ? 'bad' : 'warn')}한 프레임 작업이 평균 <b>${K.ms(S.work)}</b>입니다. 캐릭터 ${K.n(P.chars)}명을 그리고 패킷 ${K.n(P.chars * 0.5)}개를 처리${P.mode !== 'var' && S.steps > 1.3 ? `하고, 밀린 시간을 메우려 게임 계산을 한 프레임에 평균 ${K.n(S.steps, 1)}번 되풀이` : ''}하느라 1초에 <b>${K.n(S.fps)}프레임</b>밖에 못 그립니다. 화면은 <b>뚝뚝 끊김</b>, 누른 키는 ${K.ms(S.lat)} 뒤에야 보입니다(<b>입력 지연</b>).` + CLIENT;
     }
-    if (P.load) return `${K.flag('warn')}지금은 한 장 일이 ${K.ms(S.work)}라 매끄럽습니다. 하지만 몇 초마다 새 지역에 들어서며 게임 스레드가 에셋을 직접 읽습니다. 곧 화면이 <b>멈춤</b> 뒤 <b>순간이동</b>합니다.`;
-    if (P.gc && P.inc && incLeft > 0) return `${K.flag('good')}점진적 GC가 한 장마다 ${SLICE}ms씩 쓰레기를 나눠 치우는 중입니다. 큰 멈춤 없이 매끄럽게 달립니다.`;
-    if (P.gc && P.inc && P.garbage > 0) return `${K.flag('good')}쓰레기가 <b>${K.n(heap)}MB</b> 쌓였습니다. ${INC_START}MB가 되면 점진적 GC가 한 장마다 ${SLICE}ms씩 나눠 치우기 시작합니다. 쓰레기를 너무 빨리 만들면 다 못 치우고 ${HEAPMAX}MB에서 결국 한 번에 멈춥니다.`;
-    if (P.gc && P.garbage > 0) return `${K.flag('warn')}쓰레기가 <b>${K.n(heap)}MB</b> 쌓였습니다. ${HEAPMAX}MB가 되면 한꺼번에 치우느라 게임이 잠깐 멈춥니다. 지금은 한 장 일이 ${K.ms(S.work)}라 매끄럽습니다.`;
-    return `${K.flag('good')}한 장 일이 평균 <b>${K.ms(S.work)}</b>로 16.7ms 안에 넉넉히 끝납니다. 캐릭터가 매끄럽게 달리고, 누른 키는 ${K.ms(S.lat)} 뒤에 화면에 나타납니다.`;
+    if (P.load) return `${K.flag('warn')}지금은 한 프레임 작업이 ${K.ms(S.work)}라 매끄럽습니다. 하지만 몇 초마다 새 지역에 들어서며 게임 스레드가 에셋을 직접 읽습니다. 곧 화면이 <b>멈춤</b> 뒤 <b>순간이동</b>합니다.`;
+    if (P.gc && P.inc && incLeft > 0) return `${K.flag('good')}점진적 GC가 프레임마다 ${SLICE}ms씩 가비지를 나눠 수거하는 중입니다. 큰 멈춤 없이 매끄럽게 달립니다.`;
+    if (P.gc && P.inc && P.garbage > 0) return `${K.flag('good')}가비지가 <b>${K.n(heap)}MB</b> 쌓였습니다. ${INC_START}MB가 되면 점진적 GC가 프레임마다 ${SLICE}ms씩 나눠 수거하기 시작합니다. 가비지를 너무 빨리 만들면 다 수거하지 못하고 ${HEAPMAX}MB에서 결국 한 번에 멈춥니다.`;
+    if (P.gc && P.garbage > 0) return `${K.flag('warn')}가비지가 <b>${K.n(heap)}MB</b> 쌓였습니다. ${HEAPMAX}MB가 되면 한꺼번에 수거하느라 게임이 잠깐 멈춥니다. 지금은 한 프레임 작업이 ${K.ms(S.work)}라 매끄럽습니다.`;
+    return `${K.flag('good')}한 프레임 작업이 평균 <b>${K.ms(S.work)}</b>로 16.7ms 안에 넉넉히 끝납니다. 캐릭터가 매끄럽게 달리고, 누른 키는 ${K.ms(S.lat)} 뒤에 화면에 나타납니다.`;
   }
 
   K.loop(root, dt => {

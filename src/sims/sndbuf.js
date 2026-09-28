@@ -5,7 +5,7 @@ K.register('sndbuf', function (root) {
   const F = K.frame(root, {
     kicker: '소켓과 프로토콜 · 송신 버퍼',
     title: '느린 클라이언트 하나가 모두를 느리게 만드는 법',
-    lead: '서버는 틱마다 클라이언트 8개에게 업데이트를 보냅니다. 보낸 데이터는 먼저 클라이언트마다 있는 <b>송신 버퍼</b>(운영체제가 잡아 둔 “보낼 짐 칸”)에 담겼다가 회선 속도만큼 빠져나갑니다. 회선이 느린 클라이언트는 이 칸이 금방 가득 찹니다. 그때 서버 코드가 어떻게 하느냐에 따라 그 클라이언트만 불편하거나, 서버 전체가 렉에 빠집니다.',
+    lead: '서버는 틱마다 클라이언트 8개에게 업데이트를 보냅니다. 보낸 데이터는 먼저 클라이언트마다 있는 <b>송신 버퍼</b>(운영체제가 연결마다 잡아 둔 전송 대기 메모리)에 담겼다가 회선 속도만큼 빠져나갑니다. 회선이 느린 클라이언트는 이 버퍼가 금방 가득 찹니다. 그때 서버 코드가 어떻게 하느냐에 따라 그 클라이언트만 불편하거나, 서버 전체가 렉에 빠집니다.',
     tries: [
       '처음 화면(느린 클라이언트 1개 + 블로킹)에서 <b>서버 스레드</b> 줄의 빨간 구간을 보세요. 한 클라이언트에게 보내느라 서버가 멈춰 서 있고, 정상 클라이언트 7개의 지연도 함께 올라갑니다.',
       '<b>가득 찼을 때</b>를 “최신만 남기기”로 바꿔 보세요. 느린 클라이언트만 뚝뚝 끊기고, 서버 틱과 나머지 클라이언트는 멀쩡해집니다.',
@@ -22,7 +22,7 @@ K.register('sndbuf', function (root) {
   const WIN = 20000, TWIN = 3000;
   const P = { rate: 60, slowN: 1, slowDown: 30, buf: 64, pol: 'block' };
   const POL = {
-    block: '자리가 날 때까지 send()가 돌아오지 않습니다. 서버 스레드가 그 자리에서 멈춥니다.',
+    block: '버퍼에 빈 공간이 생길 때까지 send()가 반환되지 않습니다. 서버 스레드가 그 자리에서 멈춥니다.',
     latest: '버퍼가 차 있으면 가장 새 업데이트 하나만 남기고 나머지는 버립니다.',
     kick: '못 보낸 데이터를 서버 메모리에 쌓아 두다가, 5초 넘게 밀리면 연결을 끊습니다.',
     unlimited: '못 보낸 데이터를 서버 메모리에 끝없이 쌓습니다.',
@@ -45,7 +45,7 @@ K.register('sndbuf', function (root) {
 
   /* ---------- 조작부 ---------- */
   const g1 = K.group(F.controls, '서버');
-  const sRate = K.slider(g1, { label: '보낼 양 (군중 규모)', min: 10, max: 200, step: 10, value: P.rate, unit: 'KB/s', hint: '클라이언트 하나에 1초 동안 보내는 양. 주변 캐릭터가 많을수록 커집니다.', onInput: v => { P.rate = v; } });
+  const sRate = K.slider(g1, { label: '보낼 양 (주변 캐릭터 수)', min: 10, max: 200, step: 10, value: P.rate, unit: 'KB/s', hint: '클라이언트 하나에 1초 동안 보내는 양. 주변 캐릭터가 많을수록 커집니다.', onInput: v => { P.rate = v; } });
   const cBuf = K.choice(g1, { label: '송신 버퍼 크기 (SO_SNDBUF)', value: P.buf, options: [[16, '16KB'], [64, '64KB'], [256, '256KB'], [1024, '1MB']], onChange: v => { P.buf = +v; } });
   const cPol = K.choice(g1, {
     label: '가득 찼을 때', value: P.pol, hint: POL[P.pol],
@@ -55,7 +55,7 @@ K.register('sndbuf', function (root) {
   const polHintEl = cPol.el.querySelector('.ctl-hint');
   function polHint() { polHintEl.textContent = POL[P.pol]; }
   const g2 = K.group(F.controls, '클라이언트 회선');
-  const sSlowN = K.slider(g2, { label: '느린 클라이언트 수', min: 0, max: 3, step: 1, value: P.slowN, unit: '명', onInput: v => { P.slowN = v; } });
+  const sSlowN = K.slider(g2, { label: '느린 클라이언트 수', min: 0, max: 3, step: 1, value: P.slowN, unit: '개', onInput: v => { P.slowN = v; } });
   const sSlowD = K.slider(g2, { label: '느린 클라이언트 회선 속도', min: 5, max: 200, step: 5, value: P.slowDown, unit: 'KB/s', hint: '정상 클라이언트는 1000 KB/s. 약한 LTE나 붐비는 와이파이는 수십 KB/s까지 떨어집니다.', onInput: v => { P.slowDown = v; } });
 
   const stN = K.stat(F.stats, { label: '정상 클라이언트 지연', sub: '화면이 몇 초 전 모습인지' });
@@ -396,7 +396,7 @@ K.register('sndbuf', function (root) {
         : `${K.flag('good')}모든 클라이언트의 회선이 보낼 양(${P.rate} KB/s)보다 빠릅니다. 송신 버퍼는 틱마다 ${K.n(kb, 0)}KB쯤 찼다가 바로 비워지고, 서버 스레드는 틱마다 ${WORK}ms 일하고 나머지는 쉽니다.`;
     } else if (P.pol === 'block') {
       msg = blk > 0.01
-        ? `${K.flag('bad')}<b>클라이언트 ${names}의 송신 버퍼(${P.buf}KB)가 가득 찼습니다.</b> 블로킹 소켓에서 send()는 자리가 날 때까지 돌아오지 않습니다. 하나뿐인 서버 스레드가 거기서 멈춰 서니 틱이 ${K.n(f, 1)}Hz로 떨어지고, 나머지 클라이언트도 업데이트를 늦게 받습니다. 모두가 <b>뚝뚝 끊김</b>과 <b>슬로우모션</b>을 겪습니다. <b>블로킹 소켓 + 단일 스레드 = 한 명의 나쁜 회선이 서버 전체 렉.</b>`
+        ? `${K.flag('bad')}<b>클라이언트 ${names}의 송신 버퍼(${P.buf}KB)가 가득 찼습니다.</b> 블로킹 소켓에서 send()는 버퍼에 빈 공간이 생길 때까지 반환되지 않습니다. 하나뿐인 서버 스레드가 거기서 멈춰 서니 틱이 ${K.n(f, 1)}Hz로 떨어지고, 나머지 클라이언트도 업데이트를 늦게 받습니다. 모두가 <b>뚝뚝 끊김</b>과 <b>슬로우모션</b>을 겪습니다. <b>블로킹 소켓 + 단일 스레드 = 한 명의 나쁜 회선이 서버 전체 렉.</b>`
         : `${K.flag('warn')}클라이언트 ${names}의 송신 버퍼가 차오르는 중입니다. 회선이 ${P.slowDown} KB/s인데 초당 ${P.rate} KB를 보내니 곧 가득 찹니다. 가득 차는 순간부터 서버 스레드가 send()에서 멈춥니다.`;
     } else if (P.pol === 'latest') {
       const c = slowC[0];
@@ -404,7 +404,7 @@ K.register('sndbuf', function (root) {
       msg = `${K.flag('warn')}<b>느린 클라이언트에게는 가장 새 업데이트 하나만 남기고 나머지는 버립니다.</b> 서버 스레드는 기다리지 않으니 틱은 ${K.n(f, 1)}Hz 그대로이고 다른 클라이언트는 멀쩡합니다. 느린 클라이언트는 업데이트를 ${K.pct(dr)} 건너뛰어 <b>뚝뚝 끊김</b>과 작은 <b>순간이동</b>을 겪습니다. 이미 송신 버퍼에 담긴 ${P.buf}KB는 순서대로 빠져야 해서 그 클라이언트의 화면은 ${sL == null ? '—' : K.ms(sL)} 늦습니다. 버퍼를 작게 잡을수록 이 지연이 줄어듭니다.`;
     } else if (P.pol === 'kick') {
       const kicked = slowC.filter(c => c.st === 'kicked'), lag = slowC.filter(c => c.st === 'ok' && c.aq.length);
-      if (kicked.length) msg = `${K.flag('bad')}<b>클라이언트 ${kicked.map(c => c.i + 1).join('·')}이(가) 5초 넘게 밀려서 연결을 끊었습니다.</b> 그 클라이언트는 <b>접속 끊김</b>을 겪지만, 서버와 다른 클라이언트는 멀쩡합니다(틱 ${K.n(f, 1)}Hz). 회선이 그대로면 재접속해도 다시 밀리고 다시 끊깁니다. 대신 서버 메모리는 늘 일정하게 유지됩니다.`;
+      if (kicked.length) msg = `${K.flag('bad')}<b>클라이언트 ${kicked.map(c => c.i + 1).join('·')}이 5초 넘게 밀려서 연결을 끊었습니다.</b> 그 클라이언트는 <b>접속 끊김</b>을 겪지만, 서버와 다른 클라이언트는 멀쩡합니다(틱 ${K.n(f, 1)}Hz). 회선이 그대로면 재접속해도 다시 밀리고 다시 끊깁니다. 대신 서버 메모리는 늘 일정하게 유지됩니다.`;
       else if (lag.length) {
         const c = lag[0];
         msg = `${K.flag('warn')}클라이언트 ${c.i + 1}에게 못 보낸 데이터가 서버 메모리에 쌓이는 중입니다(${K.n(c.af, 0)}KB). ${K.n(Math.max(0, 5 - (t - c.since) / 1000), 0)}초 안에 따라잡지 못하면 연결을 끊습니다. 그동안 그 클라이언트의 화면은 점점 늦어집니다(${K.ms(c.ema)}). 다른 클라이언트와 서버 틱은 멀쩡합니다.`;
@@ -412,7 +412,7 @@ K.register('sndbuf', function (root) {
     } else {
       const grow = (SCALE * slowC.filter(c => c.st === 'ok').length * Math.max(0, P.rate - P.slowDown)) / 1024;
       const eta = grow > 0 && mem != null ? (MEMMAX - mem) / grow : Infinity;
-      msg = `${K.flag(eta < 8 ? 'bad' : 'warn')}<b>느린 클라이언트에게 못 보낸 데이터를 버리지도 끊지도 않고 서버 메모리에 계속 쌓습니다.</b> 화면의 8명은 표본이고 실제로는 같은 비율로 2,000명이 접속해 있다고 치면, 메모리가 초당 ${K.n(grow, 0)}MB씩 늘어납니다. 한도까지 약 ${Number.isFinite(eta) ? K.n(eta, 0) + '초' : '—'}. 느린 클라이언트의 화면은 ${sL == null ? '—' : K.ms(sL)} 뒤처져 있고 계속 늘어납니다. 다른 클라이언트는 아직 멀쩡하지만, 한도를 넘는 순간 모두의 접속이 끊깁니다.`;
+      msg = `${K.flag(eta < 8 ? 'bad' : 'warn')}<b>느린 클라이언트에게 못 보낸 데이터를 버리지도 끊지도 않고 서버 메모리에 계속 쌓습니다.</b> 화면의 클라이언트 8개는 표본이고 실제로는 같은 비율로 2,000명이 접속해 있다고 치면, 메모리가 초당 ${K.n(grow, 0)}MB씩 늘어납니다. 한도까지 약 ${Number.isFinite(eta) ? K.n(eta, 0) + '초' : '—'}. 느린 클라이언트의 화면은 ${sL == null ? '—' : K.ms(sL)} 뒤처져 있고 계속 늘어납니다. 다른 클라이언트는 아직 멀쩡하지만, 한도를 넘는 순간 모두의 접속이 끊깁니다.`;
     }
     F.say(msg);
   });

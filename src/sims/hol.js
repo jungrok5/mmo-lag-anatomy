@@ -3,10 +3,10 @@
 K.register('hol', function (root) {
   const F = K.frame(root, {
     kicker: '소켓과 프로토콜 · TCP vs UDP',
-    title: 'TCP는 잃어버린 한 개를 기다리느라 뒤의 모두를 붙잡는다',
-    lead: '서버가 캐릭터 위치를 50ms마다 보냅니다. 위는 TCP, 아래는 UDP이고, 두 길에서 똑같은 패킷이 똑같이 사라집니다. TCP는 받은 데이터를 <b>보낸 순서대로만</b> 게임에 넘겨줍니다. 하나가 빠지면 그 패킷이 다시 올 때까지 뒤에 도착한 패킷도 모두 기다립니다. UDP는 <b>도착하는 대로</b> 넘겨주고, 빠진 것은 건너뜁니다. 다시 보내는 규칙은 교과서 방식(뒤따르는 패킷 3개의 “중복 확인”, 또는 타이머)으로 단순화했습니다. 최신 리눅스 기본인 RACK은 뒤따르는 패킷 하나로도 판단해 첫 재전송이 조금 더 빠릅니다. 또 실제 TCP는 타이머 재전송 뒤에는 한 번에 하나만 보내고 새 패킷은 서버에 붙잡아 두는데, 이 실험은 새 패킷을 계속 보내 수신 버퍼에 쌓이게 그렸습니다. 어느 쪽이든 게임에 전달되지 못하는 것은 같습니다(06 TCP 재전송 해부의 실험에서 비교).',
+    title: 'TCP는 잃어버린 패킷 하나 때문에 뒤의 패킷까지 모두 막힌다',
+    lead: '서버가 캐릭터 위치를 50ms마다 보냅니다. 위는 TCP, 아래는 UDP이고, 두 연결에서 똑같은 패킷이 똑같이 사라집니다. TCP는 받은 데이터를 <b>보낸 순서대로만</b> 게임에 넘겨줍니다. 하나가 빠지면 그 패킷이 다시 올 때까지 뒤에 도착한 패킷도 모두 기다립니다. UDP는 <b>도착하는 대로</b> 넘겨주고, 빠진 것은 건너뜁니다. 다시 보내는 규칙은 교과서 방식(뒤따르는 패킷 3개가 보내는 중복 ACK, 또는 타이머)으로 단순화했습니다. 최신 리눅스 기본인 RACK은 뒤따르는 패킷 하나로도 판단해 첫 재전송이 조금 더 빠릅니다. 또 실제 TCP는 타이머 재전송 뒤에는 한 번에 하나만 보내고 새 패킷은 서버에 남겨 두는데, 이 실험은 새 패킷을 계속 보내 수신 버퍼에 쌓이게 그렸습니다. 어느 쪽이든 게임에 전달되지 못하는 것은 같습니다(06 TCP 재전송 해부의 실험에서 비교).',
     tries: [
-      '<b>다음 패킷 하나 잃어버리기</b>를 누르세요. TCP의 “게임에 전달” 줄이 끊겼다가 한 점에 몰리는 곳(몰아치기)을 찾아보세요. UDP는 한 칸만 비고 끝납니다.',
+      '<b>다음 패킷 하나 잃어버리기</b>를 누르세요. TCP의 “게임에 전달” 줄이 끊겼다가 한 점에 몰리는 곳(몰아치기)을 찾아보세요. UDP는 하나만 빠지고 끝납니다.',
       '<b>핑(RTT)</b>을 250ms로 올리고 다시 잃어버려 보세요. 재전송이 한 번 왕복해야 하니 멈춤도 그만큼 길어집니다.',
       '<b>와이파이 순간 끊김</b>을 누르세요. 끊긴 0.5초 동안은 둘 다 멈추지만, TCP는 그 사이 보낸 재전송까지 사라져서 훨씬 늦게 풀립니다.',
       '<b>연속 손실 (백오프)</b>를 누른 뒤 <b>RTO 최소값</b>을 1초로 바꿔 보세요. 원본과 재전송 두 번이 연달아 사라지면 다시 보내기까지 기다리는 시간이 매번 두 배로 늘어, 멈춤이 3초를 넘깁니다(백오프).',
@@ -23,7 +23,7 @@ K.register('hol', function (root) {
 
   const cv = K.canvas(F.stage, {
     height: 2 * LANE + 36,
-    caption: '패킷의 여행: 서버 → 내 PC → 게임',
+    caption: '패킷 경로: 서버 → 내 PC → 게임',
     right: '<span class="legend"><span><i style="background:var(--s1)"></i>TCP</span><span><i style="background:var(--s2)"></i>UDP</span><span><i class="box" style="background:var(--warn)"></i>순서 대기</span><span>× 손실 · 점선 재전송</span></span>',
   });
 
@@ -328,7 +328,7 @@ K.register('hol', function (root) {
     let tag = null, tc = C.badInk;
     if (since > freezeThr()) tag = '멈춤 ' + K.ms(since);
     else if (tcp && t - clump.t < 500) { tag = '몰아치기 ×' + clump.n; tc = C.warnInk; }
-    else if (!tcp && t - udpJump.t < 450) { tag = udpJump.n + '칸 건너뜀'; tc = C.warnInk; }
+    else if (!tcp && t - udpJump.t < 450) { tag = udpJump.n + '개 건너뜀'; tc = C.warnInk; }
     if (tag) {
       // 유령(서버 위치)은 늘 앞쪽에 있으니 글자는 점 왼쪽에, 자리가 없으면 둘 다 지난 오른쪽에
       ctx.font = K.font(11, 700);
@@ -383,7 +383,7 @@ K.register('hol', function (root) {
       if (p.lost) s += ` · 처음 보낸 것이 사라짐<br>재전송 ${p.tx.length - 1}번` + (p.tx.some(x => x.k === 2) ? ' (타이머)' : p.tx.length > 1 ? ' (빠른 재전송)' : '');
       if (p.tA != null) s += `<br>내 PC 도착 +${K.ms(p.tA - p.s)}`;
       if (p.tD != null) s += `<br>순서 대기 ${K.ms(p.tD - p.tA)}<br>게임 전달 +${K.ms(p.tD - p.s)}`;
-      else if (p.tA != null) s += '<br>앞 번호를 기다리는 중';
+      else if (p.tA != null) s += '<br>앞 패킷을 기다리는 중';
       return s;
     }
     if (p.lost) return `<b>#${p.n}</b> 사라짐<br>UDP는 다시 보내지 않습니다. 게임은 이 업데이트를 건너뜁니다.`;
@@ -446,18 +446,18 @@ K.register('hol', function (root) {
     } else if (hole && hole.lost && hole.tA == null && t > hole.s + hole.d / 2) {
       const tx = hole.tx[hole.tx.length - 1];
       let why;
-      if (!tx.lost && tx.k > 0 && t < tx.s + tx.d) why = '재전송본이 오고 있습니다.';
+      if (!tx.lost && tx.k > 0 && t < tx.s + tx.d) why = '재전송 패킷이 오고 있습니다.';
       else if (hole.bo > 0) why = `재전송마저 사라져서 다음 재전송까지 <b>${K.ms(RTO() * Math.pow(2, hole.bo))}</b>를 기다립니다(타이머가 매번 두 배로 늘어나는 백오프).`;
-      else if (!hole.fr) why = `이 실험의 서버는 교과서 규칙대로 뒤따라 온 패킷 3개가 보내는 “중복 확인(ACK)”으로 빠진 것을 알아채거나, ${K.ms(RTO())} 타이머가 끝나야 다시 보냅니다.`;
-      else why = '빠른 재전송본이 사라졌습니다. 이제 타이머가 끝날 때까지 기다려야 합니다.';
+      else if (!hole.fr) why = `이 실험의 서버는 교과서 규칙대로 뒤따라 온 패킷 3개가 보내는 중복 ACK(수신 확인)로 빠진 것을 알아채거나, ${K.ms(RTO())} 타이머가 끝나야 다시 보냅니다.`;
+      else why = '빠른 재전송 패킷이 사라졌습니다. 이제 타이머가 끝날 때까지 기다려야 합니다.';
       const behind = hole.rtoed
-        ? `뒤의 패킷 ${waiting}개도 번호가 비어 있어 게임에 전달되지 못합니다(실제 TCP는 타이머 재전송 뒤 새 패킷을 서버에 붙잡아 두지만, 이 실험은 수신 버퍼에 쌓이게 그렸습니다).`
-        : waiting ? `뒤에 온 ${waiting}개는 이미 내 PC에 와 있지만, 번호가 비어 있어 수신 버퍼에서 기다립니다.` : '뒤따라 오는 패킷도 도착하는 대로 수신 버퍼에 붙잡히게 됩니다.';
+        ? `뒤의 패킷 ${waiting}개도 앞 시퀀스 번호가 비어 있어 게임에 전달되지 못합니다(실제 TCP는 타이머 재전송 뒤 새 패킷을 서버에 남겨 두지만, 이 실험은 수신 버퍼에 쌓이게 그렸습니다).`
+        : waiting ? `뒤에 온 ${waiting}개는 이미 내 PC에 와 있지만, 앞 시퀀스 번호가 비어 있어 수신 버퍼에서 기다립니다.` : '뒤따라 오는 패킷도 도착하는 대로 수신 버퍼에서 대기하게 됩니다.';
       msg = `${K.flag('bad')}<b>TCP: #${hole.n}번 패킷이 사라졌습니다.</b> ${behind} ${why} 그동안 게임은 새 위치를 하나도 못 받아 캐릭터가 <b>멈춤</b>입니다. 같은 순간 UDP는 #${hole.n}번만 빼고 계속 전달하고 있습니다.`;
     } else if (lb) {
       // 여러 개를 잃으면 구멍이 차례로 메워지며 여러 번 풀린다. 마지막 묶음 직전 간격이 아니라 이번 사건의 가장 긴 공백을 말한다.
       const gapMax = batches.reduce((a, b) => (b.t >= lb.t - 1600 && b.t <= lb.t ? Math.max(a, b.gap) : a), 0);
-      msg = `${K.flag('warn')}<b>빠졌던 #${lb.n}번이 다시 도착하자, 기다리던 것까지 ${lb.c}개가 한 번에 게임에 전달됐습니다.</b> 게임은 ${K.ms(gapMax)} 동안 새 패킷이 없다가 밀린 업데이트를 한꺼번에 처리합니다. 플레이어는 캐릭터가 멈췄다가 파파팍 앞으로 튀는 <b>몰아치기</b>를 봅니다. UDP 쪽은 그 한 칸만 비어서 거의 티가 나지 않거나 작은 <b>순간이동</b>으로 끝납니다.`;
+      msg = `${K.flag('warn')}<b>빠졌던 #${lb.n}번이 다시 도착하자, 기다리던 것까지 ${lb.c}개가 한 번에 게임에 전달됐습니다.</b> 게임은 ${K.ms(gapMax)} 동안 새 패킷이 없다가 밀린 업데이트를 한꺼번에 처리합니다. 플레이어는 캐릭터가 멈췄다가 한꺼번에 앞으로 튀는 <b>몰아치기</b>를 봅니다. UDP 쪽은 그 하나만 빠져서 거의 티가 나지 않거나 작은 <b>순간이동</b>으로 끝납니다.`;
     } else if (P.loss === 0 && !P.auto && !blackout) {
       msg = `${K.flag('good')}손실이 없으면 TCP와 UDP는 똑같습니다. 둘 다 ${P.iv}ms마다 고르게 전달합니다. 차이는 패킷이 하나라도 사라지는 순간에 생깁니다. <b>다음 패킷 하나 잃어버리기</b>를 눌러 보세요.`;
     } else {
@@ -466,7 +466,7 @@ K.register('hol', function (root) {
       const why = [];
       if (P.loss > 0) why.push(`손실률 ${K.pct(P.loss)}면 ${perSec >= 1 ? `1초에 ${K.n(perSec, 1)}개꼴로` : `${K.n(1 / perSec, 1)}초에 한 번꼴로`} 패킷이 사라집니다.`);
       if (P.auto) why.push(`4초마다 “${EV[lastEvent]}” 사건이 다시 일어납니다.`);
-      msg = `${K.flag(P.loss >= 0.05 ? 'bad' : 'warn')}지금은 잠잠합니다. ${why.join(' ')} 패킷이 사라질 때마다 TCP는 핑 한 번 이상 <b>멈춤</b> 뒤 <b>몰아치기</b>를 하고, UDP는 한 칸을 건너뜁니다. 그래서 액션·FPS 게임은 UDP 위에 “꼭 필요한 것만 다시 보내는” 자체 규칙을 얹어 씁니다.`;
+      msg = `${K.flag(P.loss >= 0.05 ? 'bad' : 'warn')}지금은 잠잠합니다. ${why.join(' ')} 패킷이 사라질 때마다 TCP는 핑 한 번 이상 <b>멈춤</b> 뒤 <b>몰아치기</b>를 하고, UDP는 하나를 건너뜁니다. 그래서 액션·FPS 게임은 UDP 위에 “꼭 필요한 것만 다시 보내는” 자체 규칙을 얹어 씁니다.`;
     }
     F.say(msg);
   });

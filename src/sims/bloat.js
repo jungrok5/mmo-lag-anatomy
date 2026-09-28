@@ -4,12 +4,12 @@ K.register('bloat', function (root) {
   const F = K.frame(root, {
     kicker: '레이어 3 · 집 네트워크',
     title: '동생이 영상을 올리면 내 핑이 튀는 이유 (버퍼블로트)',
-    lead: '집 공유기는 인터넷으로 올려 보낼 패킷을 한 줄로 세워 둡니다. 누군가 큰 영상을 올리기 시작하면 이 줄이 꽉 차고, 작은 게임 패킷도 그 맨 뒤에 서야 합니다. 줄이 길어진 만큼 핑이 오릅니다. 와이파이 재전송까지 겹치면 핑은 들쭉날쭉해집니다.',
+    lead: '집 공유기는 인터넷으로 올려 보낼 패킷을 대기열 하나에 순서대로 쌓아 둡니다. 누군가 큰 영상을 올리기 시작하면 이 대기열이 꽉 차고, 작은 게임 패킷도 그 맨 뒤에서 기다려야 합니다. 대기열이 길어진 만큼 핑이 오릅니다. 와이파이 재전송까지 겹치면 핑은 들쭉날쭉해집니다.',
     tries: [
       '<b>다른 기기 업로드</b>를 “없음”으로 내렸다가 다시 “최대”로 올려 보세요. 몇 초에 걸쳐 대기열이 차오르고 핑이 따라 오릅니다.',
       '<b>SQM</b>을 켜 보세요. 업로드는 그대로인데 게임 핑은 기본 핑 근처로 돌아옵니다.',
-      '<b>버퍼 크기</b>를 가장 작게 줄여 보세요. 줄이 짧아져 핑은 내려가지만, 넘치는 패킷은 버려집니다.',
-      '업로드를 없음으로 두고 <b>와이파이 신호</b>를 “매우 약함”으로 옮겨 보세요. 차트의 뾰족한 가시는 재전송, × 표시는 끝내 사라진 패킷입니다.',
+      '<b>버퍼 크기</b>를 가장 작게 줄여 보세요. 대기열이 짧아져 핑은 내려가지만, 넘치는 패킷은 버려집니다.',
+      '업로드를 없음으로 두고 <b>와이파이 신호</b>를 “매우 약함”으로 옮겨 보세요. 차트의 스파이크(뾰족하게 튄 부분)는 재전송, × 표시는 끝내 사라진 패킷입니다.',
     ],
     layout: 'side',
   });
@@ -24,7 +24,7 @@ K.register('bloat', function (root) {
   const rnd = K.rng(11);
 
   const qcv = K.canvas(F.stage, {
-    height: 156, caption: '공유기 올림 대기열',
+    height: 156, caption: '공유기 업로드 대기열',
     right: '<span class="legend"><span><i class="box" style="background:var(--muted)"></i>다른 트래픽</span><span><i class="box" style="background:var(--s1)"></i>게임 패킷</span></span>',
   });
   const ccv = K.canvas(F.stage, {
@@ -34,14 +34,14 @@ K.register('bloat', function (root) {
 
   /* ---------- 조작부 ---------- */
   const g1 = K.group(F.controls, '회선·공유기');
-  const sCap = K.slider(g1, { label: '올림 속도', min: 1, max: 100, step: 1, value: P.cap, unit: 'Mbps', onInput: v => { P.cap = v; sBuf.set(P.bufV, false); } });
+  const sCap = K.slider(g1, { label: '업로드 속도', min: 1, max: 100, step: 1, value: P.cap, unit: 'Mbps', onInput: v => { P.cap = v; sBuf.set(P.bufV, false); } });
   const sBuf = K.slider(g1, {
     label: '공유기 버퍼 크기', min: 0, max: 100, step: 1, value: P.bufV,
     fmt: v => `${K.n(kb(v))} KB · ${K.ms(kb(v) * 8 / P.cap)}`,
     onInput: v => { P.bufV = v; trimToBuffer(); },
-    hint: '버퍼가 꽉 찼을 때 줄을 다 비우는 데 걸리는 시간(ms)도 함께 표시합니다.',
+    hint: '버퍼가 꽉 찼을 때 대기열을 다 비우는 데 걸리는 시간(ms)도 함께 표시합니다.',
   });
-  const tSqm = K.toggle(g1, { label: 'SQM (스마트 대기열 관리: fq_codel/CAKE)', value: P.sqm, onChange: v => { P.sqm = v; switchMode(); }, hint: '흐름마다 줄을 따로 세우고, 큰 흐름의 줄은 5ms 안팎으로 짧게 유지합니다. 실제 공유기에서는 속도를 회선의 90~95%로 맞춰야 줄이 공유기 안에 생겨 효과가 납니다.' });
+  const tSqm = K.toggle(g1, { label: 'SQM (스마트 대기열 관리: fq_codel/CAKE)', value: P.sqm, onChange: v => { P.sqm = v; switchMode(); }, hint: '흐름마다 대기열을 따로 두고, 큰 흐름의 대기열은 5ms 안팎으로 짧게 유지합니다. 실제 공유기에서는 속도를 회선의 90~95%로 맞춰야 대기열이 공유기 안에 생겨 효과가 납니다.' });
   const g2 = K.group(F.controls, '다른 트래픽');
   const sUp = K.slider(g2, {
     label: '다른 기기 업로드', min: 0, max: 100, step: 5, value: P.up,
@@ -264,8 +264,8 @@ K.register('bloat', function (root) {
       ctx.fillStyle = K.alpha(C.muted, 0.75);
       const bpx = MTU / B * pw;
       qb.forEach(p => { const x = X(pos + p.b); if (bpx >= 3) { K.rr(ctx, x, by, bpx - 1, bh, 2); ctx.fill(); } else ctx.fillRect(x, by, bpx + 0.3, bh); pos += p.b; });
-      K.text(ctx, '다른 트래픽 줄 (5ms 안팎으로 유지)', px0 + 8, by + bh / 2, { size: 10.5, color: C.muted });
-      K.text(ctx, '게임 전용 줄', px0 + 8, gy + gh / 2, { size: 10.5, color: C.muted });
+      K.text(ctx, '다른 트래픽 대기열 (5ms 안팎)', px0 + 8, by + bh / 2, { size: 10.5, color: C.muted });
+      K.text(ctx, '게임 전용 대기열', px0 + 8, gy + gh / 2, { size: 10.5, color: C.muted });
       let gp = 0;
       qg.forEach(p => { pill(ctx, X(gp) - 12, gy, 12, gh); gp += p.b; });
     } else {
@@ -364,17 +364,17 @@ K.register('bloat', function (root) {
     const parts = [];
     const bloated = !P.sqm && M.qms > 20;
     if (P.up >= 100 && bloated) {
-      parts.push(`다른 기기의 대용량 업로드가 공유기 대기열을 <b>${K.n(M.fill * 100, 0)}%</b> 채웠습니다. 게임 패킷은 앞에 선 영상 패킷 ${K.n(qBytes / 1000)}KB가 다 나갈 때까지 <b>${K.ms(M.qms)}</b>를 기다립니다. 핑이 ${K.ms(M.last)}까지 올라 누른 스킬이 늦게 나가는 입력 지연이 생깁니다. 막힌 쪽은 올림 줄이라, 서버가 보내는 다른 캐릭터 패킷은 대부분 제때 옵니다. “남의 움직임은 멀쩡한데 내 스킬만 늦다”가 이 경우의 단서입니다.`);
-      if (M.loss > 0.001) parts.push(`줄이 꽉 차면 게임 패킷까지 버려져(손실 ${K.n(M.loss * 100, 1)}%) 고무줄 현상도 납니다.`);
-      parts.push('<b>SQM</b>을 켜면 게임 패킷이 따로 줄을 서서 바로 나갑니다.');
+      parts.push(`다른 기기의 대용량 업로드가 공유기 대기열을 <b>${K.n(M.fill * 100, 0)}%</b> 채웠습니다. 게임 패킷은 앞에 쌓인 영상 패킷 ${K.n(qBytes / 1000)}KB가 다 나갈 때까지 <b>${K.ms(M.qms)}</b>를 기다립니다. 핑이 ${K.ms(M.last)}까지 올라 누른 스킬이 늦게 나가는 입력 지연이 생깁니다. 막힌 쪽은 업로드 대기열이라, 서버가 보내는 다른 캐릭터 패킷은 대부분 제때 옵니다. “남의 움직임은 멀쩡한데 내 스킬만 늦다”가 이 경우의 단서입니다.`);
+      if (M.loss > 0.001) parts.push(`대기열이 꽉 차면 게임 패킷까지 버려져(손실 ${K.n(M.loss * 100, 1)}%) 고무줄 현상도 납니다.`);
+      parts.push('<b>SQM</b>을 켜면 게임 패킷이 별도 대기열로 바로 나갑니다.');
     } else if (P.up >= 100 && P.sqm) {
-      parts.push(`SQM이 켜져 있어 업로드는 계속되지만 그 줄은 5ms 안팎으로 짧게 유지되고, 게임 패킷은 전용 줄로 바로 나갑니다. 핑 <b>${K.ms(M.last)}</b>, 버퍼 크기와 상관없이 기본 핑 근처입니다.`);
+      parts.push(`SQM이 켜져 있어 업로드는 계속되지만 그 대기열은 5ms 안팎으로 짧게 유지되고, 게임 패킷은 전용 대기열로 바로 나갑니다. 핑 <b>${K.ms(M.last)}</b>, 버퍼 크기와 상관없이 기본 핑 근처입니다.`);
     } else if (P.up >= 100) {
-      parts.push(`버퍼가 작아 줄이 금방 넘칩니다. 대기는 <b>${K.ms(M.qms)}</b>로 짧지만, 넘친 패킷은 버려지고 업로드는 속도를 30%쯤 줄였다 다시 올리기를 반복합니다. 다만 버퍼 크기 하나로는 회선 속도와 상황마다 알맞게 맞추기 어렵고, 더 줄이면 업로드가 회선 속도를 다 쓰지 못합니다. 그래서 답은 작은 버퍼보다 SQM입니다.`);
+      parts.push(`버퍼가 작아 대기열이 금방 넘칩니다. 대기는 <b>${K.ms(M.qms)}</b>로 짧지만, 넘친 패킷은 버려지고 업로드는 속도를 30%쯤 줄였다 다시 올리기를 반복합니다. 다만 버퍼 크기 하나로는 회선 속도와 상황마다 알맞게 맞추기 어렵고, 더 줄이면 업로드가 회선 속도를 다 쓰지 못합니다. 그래서 답은 작은 버퍼보다 SQM입니다.`);
     } else if (P.up > 0) {
-      parts.push(`업로드가 회선의 ${P.up}%만 씁니다. 몰려 들어온 패킷이 짧게 줄을 섰다가 금방 빠져서 대기는 평균 ${K.ms(Math.max(0, (M.ok.reduce((a, h) => a + h.lat, 0) / Math.max(1, M.ok.length)) - BASE - M.wifiMs))} 정도입니다. 회선이 거의 꽉 찰수록 지터가 커집니다.`);
+      parts.push(`업로드가 회선의 ${P.up}%만 씁니다. 몰려 들어온 패킷이 대기열에 잠깐 쌓였다가 금방 빠져서 대기는 평균 ${K.ms(Math.max(0, (M.ok.reduce((a, h) => a + h.lat, 0) / Math.max(1, M.ok.length)) - BASE - M.wifiMs))} 정도입니다. 회선이 거의 꽉 찰수록 지터가 커집니다.`);
     } else {
-      parts.push('올릴 다른 트래픽이 없어 게임 패킷이 줄을 서지 않고 바로 나갑니다.');
+      parts.push('올릴 다른 트래픽이 없어 게임 패킷이 대기하지 않고 바로 나갑니다.');
     }
     if (P.intf) parts.push(`2.5초마다 간섭이 0.3초씩 전파를 막아 그 순간의 패킷이 재전송을 거듭하다 사라집니다(손실 ${K.n(M.loss * 100, 1)}%). 화면에서는 주기적인 멈춤 뒤에 순간이동·고무줄로 보입니다.`);
     else if (P.sig >= 55) parts.push(`와이파이 신호가 약해 패킷마다 평균 ${K.n(M.retry, 1)}번 다시 보냅니다. 도착 시간이 들쭉날쭉해져(지터 ${K.ms(M.jit)}) 캐릭터가 뚝뚝 끊기${M.loss > 0 ? `고, 8번 모두 실패한 패킷은 사라져(손실 ${K.n(M.loss * 100, 1)}%) 순간이동·고무줄이 생깁니다` : '는 모습으로 보입니다'}. 공유기 가까이 가거나 랜선을 쓰면 사라집니다.`);

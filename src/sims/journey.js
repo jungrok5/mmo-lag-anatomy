@@ -7,10 +7,10 @@ K.register('journey', function (root) {
     lead: '스킬 버튼을 누른 순간부터 결과가 화면에 뜨기까지, 신호는 내 PC와 집 공유기, 통신사, 인터넷, 서버와 DB를 차례로 지나갑니다. 구간마다 몇 ms씩 쌓인 합이 플레이어가 느끼는 지연입니다. 조건을 바꾸며 어느 구간이 가장 크게 자라는지 보세요.',
     tries: [
       '<b>서버 위치</b>를 “미국 서부”로 바꿔 보세요. 인터넷 구간이 막대의 절반 이상을 차지합니다.',
-      '<b>같은 집 다른 트래픽</b>을 60%에서 100%로 올려 보세요. 60%에서는 줄이 금방 빠지지만, 영상 업로드처럼 회선을 꽉 채우면 공유기 대기열 하나가 부산까지 가는 거리보다 수십 배 큰 지연을 만듭니다.',
+      '<b>같은 집 다른 트래픽</b>을 60%에서 100%로 올려 보세요. 60%에서는 대기열이 금방 빠지지만, 영상 업로드처럼 회선을 꽉 채우면 공유기 대기열 하나가 부산까지 가는 거리보다 수십 배 큰 지연을 만듭니다.',
       '<b>FPS</b>를 30으로 낮추고 <b>모니터</b>를 TV로 바꿔 보세요. 네트워크가 멀쩡해도 내 PC 쪽에서만 100ms 넘게 쌓입니다.',
-      '<b>보는 관점</b>을 “다른 플레이어”로 바꾸면 보간 대기가 가장 큰 몫이 됩니다. 남의 캐릭터는 늘 조금 과거 모습입니다.',
-      '<b>월드 보스</b> 프리셋에서 서버 부하를 100% 아래로 내려 보세요. 서버 두 칸이 한꺼번에 줄어듭니다.',
+      '<b>보는 관점</b>을 “다른 플레이어”로 바꾸면 보간 대기가 가장 큰 비중을 차지합니다. 남의 캐릭터는 늘 조금 과거 모습입니다.',
+      '<b>월드 보스</b> 프리셋에서 서버 부하를 100% 아래로 내려 보세요. 서버 쪽 두 구간이 한꺼번에 줄어듭니다.',
     ],
     layout: 'side',
   });
@@ -27,7 +27,7 @@ K.register('journey', function (root) {
     wired: { name: '유선 랜', ms: 0.5, jit: 0.2, info: '랜선은 기다림이 거의 없습니다.', fix: '' },
     wifi: { name: '와이파이', ms: 3, jit: 4, info: '무선 채널이 빌 때까지 기다렸다 보내고, 가끔 다시 보냅니다.', fix: '랜선으로 바꾸면 이 구간이 거의 0이 됩니다.' },
     wifiBad: { name: '와이파이(약함)', ms: 18, jit: 35, info: '신호가 약하면 전송 실패와 재전송이 잦습니다. 평균도 늘고 도착 간격도 들쭉날쭉해집니다(지터).', fix: '공유기 가까이 가거나 랜선으로 바꾸면 이 구간이 거의 사라집니다.' },
-    lte: { name: 'LTE 무선', ms: 14, jit: 15, mobile: true, info: '기지국이 전송 순서를 배정해 줄 때까지 기다립니다. 이동 중에는 기지국이 바뀌며 더 흔들립니다.', fix: '가능하면 와이파이나 유선으로 바꾸세요.' },
+    lte: { name: 'LTE 무선', ms: 14, jit: 15, mobile: true, info: '기지국이 전송 순서를 배정해 줄 때까지 기다립니다. 이동 중에는 기지국이 바뀌며 지터가 더 커집니다.', fix: '가능하면 와이파이나 유선으로 바꾸세요.' },
     nr: { name: '5G 무선', ms: 8, jit: 8, mobile: true, info: '기지국이 전송 순서를 배정해 줄 때까지 기다립니다. LTE보다 짧지만 유선보다는 깁니다.', fix: '가능하면 유선으로 바꾸세요.' },
   };
   const MON = { gaming: ['게이밍 모니터', 3], normal: ['일반 모니터', 10], tv: ['TV', 40] };
@@ -85,14 +85,14 @@ K.register('journey', function (root) {
       os: '운영체제와 랜 드라이버가 패킷을 주고받습니다. 평소엔 0.2ms지만 백그라운드 다운로드·백신 검사가 돌면 늦어집니다.',
       osFix: P.bg ? '백그라운드 다운로드와 업데이트를 멈추면 됩니다.' : '',
       frame: 'FPS를 올리면 한 프레임이 짧아져 이 구간이 함께 줄어듭니다.',
-      bloat: '공유기는 인터넷으로 올려 보낼 패킷을 한 줄로 세웁니다. 가족이 영상을 올리면 줄이 길어지고 게임 패킷도 그 뒤에 섭니다(버퍼블로트). 막히는 쪽은 올림이라 서버에서 오는 패킷은 늦어지지 않습니다.',
+      bloat: '공유기는 인터넷으로 올려 보낼 패킷을 대기열 하나에 쌓습니다. 가족이 영상을 올리면 대기열이 길어지고 게임 패킷도 그 뒤에서 기다립니다(버퍼블로트). 막히는 쪽은 업로드라 서버에서 오는 패킷은 늦어지지 않습니다.',
       bloatFix: '공유기의 SQM(스마트 대기열 관리)을 켜거나 큰 업로드를 잠시 멈추면 바로 줄어듭니다.',
       inet: `서버까지 직선으로 약 ${K.n(km)}km. 광케이블 속 빛도 1,000km에 5ms가 걸리고, ` + (stretch > 2
-        ? '한국과 유럽 사이 직선 위로는 큰 케이블이 거의 없어 동남아·수에즈나 미국을 돌아갑니다. 실제 길은 직선의 2.5~3배입니다.'
-        : '실제 길은 직선보다 1.5배쯤 깁니다.'),
+        ? '한국과 유럽 사이 직선 위로는 큰 케이블이 거의 없어 동남아·수에즈나 미국을 돌아갑니다. 실제 경로는 직선의 2.5~3배입니다.'
+        : '실제 경로는 직선보다 1.5배쯤 깁니다.'),
       inetFix: km > 1000 ? '빛보다 빠를 수는 없습니다. 가까운 지역 서버에 접속하는 것이 유일한 해법입니다.' : '',
-      dc: '방화벽·로드밸런서를 지나 서버에 닿습니다.' + (P.ddos ? ' DDoS 방어 업체의 세정 센터(공격을 걸러 내는 거점)를 거쳐 돌아가느라 15ms가 더 듭니다.' : ''),
-      dcBack: '서버의 응답이 데이터센터 장비를 지나 인터넷으로 나갑니다.' + (P.ddos ? ' 세정 센터는 보통 들어오는 쪽만 거치므로 돌아오는 길은 늘지 않습니다.' : ''),
+      dc: '방화벽·로드밸런서를 지나 서버에 닿습니다.' + (P.ddos ? ' DDoS 방어 업체의 스크러빙 센터(공격 트래픽을 걸러 내는 거점)를 거쳐 돌아가느라 15ms가 더 듭니다.' : ''),
+      dcBack: '서버의 응답이 데이터센터 장비를 지나 인터넷으로 나갑니다.' + (P.ddos ? ' 스크러빙 센터는 보통 들어오는 쪽만 거치므로 돌아오는 경로는 늘지 않습니다.' : ''),
       dcFix: P.ddos ? 'DDoS 방어 경유지를 서버 가까운 곳에 두면 대부분 사라집니다.' : '',
       srvFix: over ? '서버 부하를 나누거나(채널·인스턴스 분산) 틱당 계산을 줄여야 합니다.' : '',
     };
@@ -103,27 +103,27 @@ K.register('journey', function (root) {
       add('go', 'in', 0, '입력 인식', fr / 2, fr / 2, `키를 누른 순간은 두 프레임 사이 어딘가입니다. 게임은 다음 프레임에 입력을 읽으므로 평균 반 프레임을 기다립니다.`, txt.frame);
       add('go', 'cpu', 0, '클라 게임 처리', fr, fr * 0.2, '입력을 읽고 게임 로직을 돌려 서버로 보낼 패킷을 만듭니다. 한 프레임이 걸립니다.', txt.frame);
       add('go', 'os', 0, '클라 OS 송신', os, P.bg ? 4 : 0.1, txt.os, txt.osFix);
-      add('go', 'link', 1, L.name + ' (올림)', L.ms, L.jit, L.info, L.fix);
-      if (!mobile) add('go', 'bloat', 1, '공유기 대기열 (올림)', bloatUp, bloatUp * 0.5, txt.bloat, txt.bloatFix);
+      add('go', 'link', 1, L.name + ' (업로드)', L.ms, L.jit, L.info, L.fix);
+      if (!mobile) add('go', 'bloat', 1, '공유기 대기열 (업로드)', bloatUp, bloatUp * 0.5, txt.bloat, txt.bloatFix);
       add('go', 'acc', 1, accName, acc, mobile ? 5 : 1, accInfo, accFix);
       add('go', 'inet', 2, '인터넷 구간', net, 1 + net * 0.05, txt.inet, txt.inetFix);
       add('go', 'dc', 2, '데이터센터 장비', dc + ddosIn, P.ddos ? 4 : 0.1, txt.dc, txt.dcFix);
       add('srv', 'nic', 3, '서버 NIC·커널', nic, nic * 0.5, '서버 운영체제가 패킷을 받아 게임 프로그램에 넘깁니다.' + (over ? ' 서버가 과부하라 이 단계도 밀립니다.' : ''), txt.srvFix);
     }
     add('srv', 'wait', 3, '다음 틱까지 대기', effIv / 2, effIv / 2,
-      `서버는 ${P.tick}Hz 박자(틱)로 입력을 모아 처리합니다. 도착한 입력은 다음 틱까지 평균 반 박자를 기다립니다.` + (over ? ' 서버가 밀려 박자 자체가 늘어졌습니다.' : ''),
+      `서버는 ${P.tick}Hz 틱 주기로 입력을 모아 처리합니다. 도착한 입력은 다음 틱까지 평균 틱 간격의 절반을 기다립니다.` + (over ? ' 서버가 밀려 틱 간격 자체가 늘어났습니다.' : ''),
       over ? txt.srvFix : '틱레이트를 올리면 기다림이 줄지만 서버 비용이 커집니다.');
     add('srv', 'tick', 3, '서버 틱 계산', cost, over ? cost * 0.3 : cost * 0.2, '한 틱 동안 모든 플레이어의 입력과 몬스터·스킬 판정을 계산합니다. 사람이 몰릴수록 오래 걸립니다.', txt.srvFix);
     if (P.view === 'act' && P.db) {
       add('srv', 'db', 3, 'DB 조회·저장', P.dbBusy ? 80 : 5, P.dbBusy ? 60 : 2,
-        '아이템 사용·거래처럼 기록이 필요한 행동은 DB에 다녀와야 결과가 확정됩니다.' + (P.dbBusy ? ' DB가 붐벼 줄을 섭니다.' : ''),
+        '아이템 사용·거래처럼 기록이 필요한 행동은 DB에 다녀와야 결과가 확정됩니다.' + (P.dbBusy ? ' DB가 붐벼 대기열에서 기다립니다.' : ''),
         '결과를 먼저 보여 주고 DB 저장은 뒤에서 처리(비동기)하면 체감 지연에서 빠집니다.');
     }
     if (P.view === 'see') add('srv', 'nic', 3, '서버 NIC·커널', nic, nic * 0.5, '서버 운영체제가 게임 프로그램이 만든 패킷을 네트워크로 내보냅니다.' + (over ? ' 서버가 과부하라 이 단계도 밀립니다.' : ''), txt.srvFix);
     add('back', 'dc', 2, '데이터센터 장비', dc, 0.1, txt.dcBack, '');
     add('back', 'inet', 2, '인터넷 구간', net, 1 + net * 0.05, txt.inet, txt.inetFix);
     add('back', 'acc', 1, accName, acc, mobile ? 5 : 1, accInfo, accFix);
-    add('back', 'link', 1, L.name + ' (내림)', L.ms, L.jit, L.info, L.fix);
+    add('back', 'link', 1, L.name + ' (다운로드)', L.ms, L.jit, L.info, L.fix);
     add('back', 'os', 0, '클라 OS 수신', os, P.bg ? 4 : 0.1, txt.os, txt.osFix);
     if (P.view === 'see') add('scr', 'interp', 0, '보간 대기', P.interp, 0, '다른 플레이어의 움직임을 부드럽게 이어 보이려고 일부러 버퍼만큼 늦게 재생합니다.', '버퍼를 줄이면 빨라지지만, 패킷이 조금만 늦어도 뚝뚝 끊김·순간이동이 보입니다.');
     add('scr', 'render', 0, '렌더링', fr, fr * 0.2, '결과를 반영해 다음 화면을 그립니다. 한 프레임이 걸립니다.', txt.frame);
@@ -134,7 +134,7 @@ K.register('journey', function (root) {
     // 같은 종류(올림·내림)는 합쳐서 순위를 매긴다
     const kinds = {};
     S.forEach(s => {
-      const k = kinds[s.kind] || (kinds[s.kind] = { kind: s.kind, ms: 0, n: 0, cat: s.cat, name: s.name.replace(/ \((올림|내림)\)$/, ''), info: s.info, fix: s.fix });
+      const k = kinds[s.kind] || (kinds[s.kind] = { kind: s.kind, ms: 0, n: 0, cat: s.cat, name: s.name.replace(/ \((업로드|다운로드)\)$/, ''), info: s.info, fix: s.fix });
       k.ms += s.ms; k.n++;
     });
     const ranked = Object.values(kinds).sort((a, b) => b.ms - a.ms);
@@ -152,7 +152,7 @@ K.register('journey', function (root) {
     hint: '내 행동은 클라이언트 예측을 끈 상태, 즉 서버 확인을 기다리는 경우입니다. 다른 플레이어는 서버에서 나에게 오는 한 방향만 셉니다.',
   });
   const legend = '<span class="legend">' + CAT.map(c => `<span><i class="box" style="background:var(--${c.c})"></i>${c.name}</span>`).join('') + '</span>';
-  const bar = K.canvas(F.stage, { height: 118, caption: '전체 여정', right: legend });
+  const bar = K.canvas(F.stage, { height: 118, caption: '전체 구간', right: legend });
   const listCap = K.el('div', { class: 'cv-cap' }, K.el('b', { text: '구간별 지연' }), K.el('span', { text: '막대는 모두 같은 눈금 · 눌러서 설명 보기' }));
   const list = K.el('div', { class: 'jr-list' });
   const tip = K.el('div', { class: 'tip', hidden: true });
@@ -167,11 +167,11 @@ K.register('journey', function (root) {
   const gH = K.group(F.controls, '집·회선');
   const cLink = K.choice(gH, { label: '연결 방식', value: P.link, options: [['wired', '유선'], ['wifi', '와이파이 좋음'], ['wifiBad', '와이파이 나쁨'], ['lte', 'LTE'], ['nr', '5G']], onChange: v => { P.link = v; changed(); } });
   const cLine = K.choice(gH, { label: '집 인터넷', value: P.line, options: [['ftth', '광랜'], ['cable', '케이블']], onChange: v => { P.line = v; changed(); } });
-  const sTraffic = K.slider(gH, { label: '같은 집 다른 트래픽', min: 0, max: 100, step: 5, value: P.traffic, unit: '%', onInput: v => { P.traffic = v; changed(); }, hint: '가족의 영상 업로드·클라우드 백업이 올림 회선을 얼마나 채우는지. 줄은 회선이 거의 꽉 찰 때 급격히 길어집니다. 100%는 영상 업로드처럼 회선을 끝까지 채우는 전송입니다. 올림 줄이라 “다른 플레이어” 관점에는 영향이 없습니다.' });
+  const sTraffic = K.slider(gH, { label: '같은 집 다른 트래픽', min: 0, max: 100, step: 5, value: P.traffic, unit: '%', onInput: v => { P.traffic = v; changed(); }, hint: '가족의 영상 업로드·클라우드 백업이 업로드 회선을 얼마나 채우는지. 대기열은 회선이 거의 꽉 찰 때 급격히 길어집니다. 100%는 영상 업로드처럼 회선을 끝까지 채우는 전송입니다. 업로드 쪽 대기열이라 “다른 플레이어” 관점에는 영향이 없습니다.' });
 
   const gI = K.group(F.controls, '인터넷');
   const cSrv = K.choice(gI, { label: '서버 위치 (서울에서)', value: P.srv, options: Object.keys(SRV).map(k => [k, SRV[k][0]]), onChange: v => { P.srv = v; changed(); } });
-  const tDdos = K.toggle(gI, { label: 'DDoS 방어 경유', value: P.ddos, onChange: v => { P.ddos = v; changed(); }, hint: '공격 트래픽을 걸러 주는 세정 센터를 한 번 거쳐 갑니다. 흔한 방식대로 들어오는 쪽만 거친다고 두었습니다.' });
+  const tDdos = K.toggle(gI, { label: 'DDoS 방어 경유', value: P.ddos, onChange: v => { P.ddos = v; changed(); }, hint: '공격 트래픽을 걸러 주는 스크러빙 센터를 한 번 거쳐 갑니다. 흔한 방식대로 들어오는 쪽만 거친다고 두었습니다.' });
 
   const gS = K.group(F.controls, '서버');
   const cTick = K.choice(gS, { label: '틱레이트', value: P.tick, options: [[10, '10Hz'], [20, '20Hz'], [30, '30Hz'], [60, '60Hz']], onChange: v => { P.tick = +v; changed(); } });
@@ -359,7 +359,7 @@ K.register('journey', function (root) {
     let feel;
     if (P.view === 'act') {
       feel = g === 'good' ? '플레이어는 누르자마자 스킬이 나가는 것처럼 느낍니다.'
-        : g === 'warn' ? '플레이어는 버튼을 누르고 반 박자 뒤에 반응하는 입력 지연을 느낍니다. 회피 타이밍이 조금씩 밀립니다.'
+        : g === 'warn' ? '플레이어는 버튼을 누르고 조금 늦게 반응하는 입력 지연을 느낍니다. 회피 타이밍이 조금씩 밀립니다.'
           : '입력 지연이 커서 스킬과 회피가 한참 늦게 나갑니다. 연타하면 씹힘·롤백처럼 보이고, 판정에서 계속 불리해집니다.';
     } else {
       feel = `다른 플레이어는 실제보다 약 ${K.n(cur.total, 0)}ms 전의 모습으로 보입니다. ` + (g === 'good' ? '대부분의 전투에서 티가 나지 않습니다.'
@@ -367,7 +367,7 @@ K.register('journey', function (root) {
     }
     const fix = a.fix || (b && b.fix) || '';
     const mid = cur.over ? ' 서버가 틱 안에 계산을 끝내지 못해 모든 플레이어의 반응이 함께 늦어집니다(입력 지연. 틱마다 정해진 시간만큼 움직이는 서버라면 슬로우모션까지).' : '';
-    F.say(`${K.flag(g)}총 <b>${K.n(cur.total, 0)}ms</b> 중 가장 큰 몫은 <b>${a.name}</b>(${a.rt}${K.ms(a.ms)}, ${pa}%)이고, 그다음은 <b>${b.name}</b>(${b.rt}${K.ms(b.ms)})입니다. ${a.info}${mid} ${feel}${fix ? ' <b>도움이 되는 것:</b> ' + fix : ''}`);
+    F.say(`${K.flag(g)}총 <b>${K.n(cur.total, 0)}ms</b> 중 가장 큰 비중은 <b>${a.name}</b>(${a.rt}${K.ms(a.ms)}, ${pa}%)이고, 그다음은 <b>${b.name}</b>(${b.rt}${K.ms(b.ms)})입니다. ${a.info}${mid} ${feel}${fix ? ' <b>도움이 되는 것:</b> ' + fix : ''}`);
   }
 
   function changed() {

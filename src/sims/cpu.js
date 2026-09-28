@@ -3,13 +3,13 @@
 K.register('cpu', function (root) {
   const F = K.frame(root, {
     kicker: '레이어 2 · 클라이언트 OS',
-    title: '내 컴퓨터가 다른 일로 바쁘면 게임도 줄을 선다',
-    lead: '운영체제는 코어 몇 개를 여러 프로그램에 몇 ms씩(이 실험에서는 5ms) 번갈아 나눠 줍니다. 백신이나 방송 프로그램이 코어를 쓰고 있으면 게임의 계산도 차례를 기다려야 합니다. 16.7ms 안에 그림을 못 끝내면 화면은 이전 그림을 한 번 더 보여 줍니다. 회선과 서버는 멀쩡한데 내 화면만 뚝뚝 끊기는 경우입니다. 실제 윈도우는 앞에 띄운 창을 조금 더 챙겨 주므로, 이 실험은 기다림이 큰 쪽으로 보여 줍니다.',
+    title: '내 컴퓨터가 다른 일로 바쁘면 게임도 CPU를 기다린다',
+    lead: '운영체제는 코어 몇 개를 여러 프로그램에 몇 ms씩(이 실험에서는 5ms) 번갈아 나눠 줍니다. 백신이나 방송 프로그램이 코어를 쓰고 있으면 게임의 계산도 차례를 기다려야 합니다. 16.7ms 안에 프레임을 못 끝내면 화면은 이전 프레임을 한 번 더 보여 줍니다. 회선과 서버는 멀쩡한데 내 화면만 뚝뚝 끊기는 경우입니다. 실제 윈도우는 앞에 띄운 창(포그라운드)에 CPU를 조금 더 주므로, 이 실험은 기다림이 큰 쪽으로 보여 줍니다.',
     tries: [
-      '<b>방송 + 브라우저</b>를 누르고 “메인 상태” 줄을 보세요. 빨간 “대기” 칸이 게임 메인 스레드가 코어를 못 받고 줄 선 시간입니다. 그 뒤에 ■(놓친 화면)가 찍힙니다.',
+      '<b>방송 + 브라우저</b>를 누르고 “메인 상태” 줄을 보세요. 빨간 “대기” 구간은 게임 메인 스레드가 코어를 못 받고 기다린 시간입니다. 그 뒤에 ■(놓친 화면)가 찍힙니다.',
       '같은 상태에서 <b>게임 우선순위 높게</b>를 켜거나 코어를 <b>8개</b>로 늘려 보세요. 대기가 사라집니다.',
       '<b>폰 발열</b>을 누르고 20초쯤 지켜보세요. CPU 속도가 떨어지면서 처음엔 멀쩡하던 게임이 점점 뚝뚝 끊깁니다.',
-      '<b>타이머 15.6ms</b>: CPU는 한가한데도 ■가 섞입니다. 잠들었다 깨는 시각이 15.6ms 눈금에 묶여 그림 간격이 들쭉날쭉하기 때문입니다.',
+      '<b>타이머 15.6ms</b>: CPU는 한가한데도 ■가 섞입니다. 잠들었다 깨는 시각이 15.6ms 단위로 맞춰져 프레임 간격이 들쭉날쭉하기 때문입니다.',
     ],
     layout: 'side',
   });
@@ -137,8 +137,8 @@ K.register('cpu', function (root) {
   });
 
   const g1 = K.group(F.controls, '게임');
-  const sW = K.slider(g1, { label: '게임 한 프레임 계산량', min: 4, max: 14, step: 0.5, value: P.W, unit: 'ms', onInput: v => { P.W = v; rebuild(); }, hint: '메인 스레드가 한 장마다 할 계산(CPU 속도 100% 기준). 렌더 스레드는 따로 4ms.' });
-  const tPrio = K.toggle(g1, { label: '게임 우선순위 높게', value: P.prio, onChange: v => { P.prio = v; rebuild(); }, hint: '게임 스레드가 줄을 서면 다른 프로그램을 코어에서 내립니다.' });
+  const sW = K.slider(g1, { label: '게임 한 프레임 계산량', min: 4, max: 14, step: 0.5, value: P.W, unit: 'ms', onInput: v => { P.W = v; rebuild(); }, hint: '메인 스레드가 한 프레임마다 할 계산(CPU 속도 100% 기준). 렌더 스레드는 따로 4ms.' });
+  const tPrio = K.toggle(g1, { label: '게임 우선순위 높게', value: P.prio, onChange: v => { P.prio = v; rebuild(); }, hint: '게임 스레드가 대기 중이면 다른 프로그램을 코어에서 내립니다.' });
   const g2 = K.group(F.controls, '내 컴퓨터');
   const cCores = K.choice(g2, { label: '코어 수', value: P.cores, options: [[2, '2개'], [4, '4개'], [8, '8개']], onChange: v => { P.cores = +v; cv.fit(); rebuild(); } });
   const cPow = K.choice(g2, {
@@ -148,13 +148,13 @@ K.register('cpu', function (root) {
   });
   const tTimer = K.toggle(g2, { label: '타이머 해상도 15.6ms (윈도우 기본값)', value: P.timer, onChange: v => { P.timer = v; rebuild(); }, hint: '끄면 게임이 타이머를 1ms로 바꿔 쓴 상태입니다.' });
   const g3 = K.group(F.controls, '같이 돌고 있는 프로그램');
-  const tAv = K.toggle(g3, { label: '백신 전체 검사', value: P.av, onChange: v => { P.av = v; rebuild(); }, hint: '1코어 90% + 가끔 30ms 몰아치기' });
+  const tAv = K.toggle(g3, { label: '백신 전체 검사', value: P.av, onChange: v => { P.av = v; rebuild(); }, hint: '1코어 90% + 가끔 30ms씩 집중 사용' });
   const tUpd = K.toggle(g3, { label: '윈도우 업데이트', value: P.upd, onChange: v => { P.upd = v; rebuild(); }, hint: '2코어 60%' });
   const tObs = K.toggle(g3, { label: '방송·녹화 프로그램', value: P.obs, onChange: v => { P.obs = v; rebuild(); }, hint: 'CPU로 영상을 압축하는 경우. 1코어 70% + 인코더 스레드 3개가 매 프레임 5ms. 그래픽카드로 압축하면 CPU 부담은 훨씬 적습니다.' });
   const tWeb = K.toggle(g3, { label: '브라우저 영상', value: P.web, onChange: v => { P.web = v; rebuild(); }, hint: '1코어 40%' });
 
   const stGot = K.stat(F.stats, { label: '게임이 받은 CPU', unit: '%', sub: '원할 때 바로 받은 비율' });
-  const stMiss = K.stat(F.stats, { label: '놓친 프레임', unit: '%', sub: '이전 그림을 반복한 비율' });
+  const stMiss = K.stat(F.stats, { label: '놓친 프레임', unit: '%', sub: '이전 프레임을 반복한 비율' });
   const stNet = K.stat(F.stats, { label: '네트워크 대기', sub: '패킷 도착→읽기(평균)' });
   const stUtil = K.stat(F.stats, { label: '전체 CPU 사용률', unit: '%' });
   const stSpd = K.stat(F.stats, { label: '현재 CPU 속도', unit: '%' });
@@ -260,12 +260,12 @@ K.register('cpu', function (root) {
     K.text(ctx, w < 520 ? '지금' : '지금 (20배 느리게 재생)', x1, yb, { size: 10.5, color: C.muted, align: 'right' });
     const mid = (x0 + x1) / 2;
     K.dot(ctx, mid - (w < 520 ? 44 : 78), yb, 3, C.good, C.paper);
-    K.text(ctx, w < 520 ? '새 그림' : '제때 새 그림', mid - (w < 520 ? 38 : 72), yb, { size: 10.5, color: C.ink2 });
+    K.text(ctx, w < 520 ? '제때' : '제때 새 프레임', mid - (w < 520 ? 38 : 72), yb, { size: 10.5, color: C.ink2 });
     ctx.fillStyle = C.bad; ctx.fillRect(mid + 6, yb - 3.5, 7, 7);
-    K.text(ctx, w < 520 ? '놓침' : '놓침(이전 그림 반복)', mid + 17, yb, { size: 10.5, color: C.ink2 });
+    K.text(ctx, w < 520 ? '놓침' : '놓침(이전 프레임 반복)', mid + 17, yb, { size: 10.5, color: C.ink2 });
     // 지금 코어를 기다리며 줄 선 스레드
     const yq = L.yC + P.cores * rh + AXIS + QROW / 2 - 2;
-    K.text(ctx, '대기 줄', 6, yq, { size: 11, color: C.ink2, weight: 600 });
+    K.text(ctx, '대기열', 6, yq, { size: 11, color: C.ink2, weight: 600 });
     const q = live.queue;
     if (!q.length) K.text(ctx, w < 520 ? '비어 있음' : '비어 있음: 코어를 기다리는 스레드가 없습니다', LW, yq, { size: 11, color: C.muted });
     let cx = LW;
@@ -286,11 +286,11 @@ K.register('cpu', function (root) {
     const t = L.t0 + ((x - LW) / (cv.w - LW - 8)) * L.WIN;
     if (y < L.yM) {
       const v = live.vbl.find(q => Math.abs(q[0] - t) < 4);
-      return v ? (v[1] ? '<b>제때</b>: 이 순간 새 그림이 화면에 나갔습니다.' : '<b>놓침</b>: 새 그림이 준비되지 않아 이전 그림을 한 번 더 보여 줬습니다.') : null;
+      return v ? (v[1] ? '<b>제때</b>: 이 순간 새 프레임이 화면에 나갔습니다.' : '<b>놓침</b>: 새 프레임이 준비되지 않아 이전 프레임을 한 번 더 보여 줬습니다.') : null;
     }
     if (y < L.yC) {
       const s = live.mseg.find(q => q[0] <= t && q[1] >= t);
-      if (!s) return '메인 스레드가 다음 장까지 잠자는 중';
+      if (!s) return '메인 스레드가 다음 프레임까지 잠자는 중';
       return s[2] === 'run' ? `메인 스레드 실행 중 (${K.ms(s[1] - s[0])})` : `메인 스레드가 코어를 기다리는 중 <b>${K.ms(s[1] - s[0])}</b>`;
     }
     const c = Math.floor((y - L.yC) / L.rh);
@@ -306,7 +306,7 @@ K.register('cpu', function (root) {
     const s = ST, bgOn = P.av || P.upd || P.obs || P.web, need = P.W / sp;
     const miss = K.pct(s.miss, 1), got = K.pct(s.got);
     if (P.timer && s.miss > 0.04) {
-      return `${K.flag(s.miss > 0.15 ? 'bad' : 'warn')}CPU는 한가합니다(사용률 ${K.pct(s.util)}). 그런데 게임이 “16.7ms 뒤에 깨워 줘” 하고 잠들어도 윈도우 기본 타이머는 15.6ms 눈금에만 깨웁니다. 어떤 장은 늦게 시작하고 어떤 장은 곧바로 이어 시작해 그림 간격이 들쭉날쭉합니다. 화면 갱신의 <b>${miss}</b>를 놓쳐 <b>뚝뚝 끊김</b>으로 보입니다. 게임이 타이머를 1ms로 바꾸면 사라집니다.`;
+      return `${K.flag(s.miss > 0.15 ? 'bad' : 'warn')}CPU는 한가합니다(사용률 ${K.pct(s.util)}). 그런데 게임이 16.7ms 뒤에 깨어나도록 예약하고 잠들어도 윈도우 기본 타이머는 15.6ms 단위로만 깨웁니다. 어떤 프레임은 늦게 시작하고 어떤 프레임은 곧바로 이어 시작해 프레임 간격이 들쭉날쭉합니다. 화면 갱신의 <b>${miss}</b>를 놓쳐 <b>뚝뚝 끊김</b>으로 보입니다. 게임이 타이머를 1ms로 바꾸면 사라집니다.`;
     }
     if (need > VB * 0.98 && s.miss > 0.02) {
       const why = P.power === 'heat'
@@ -315,14 +315,14 @@ K.register('cpu', function (root) {
       return `${K.flag('bad')}CPU 속도가 <b>${K.pct(sp)}</b>로 떨어져 ${K.n(P.W, 1)}ms짜리 계산에 <b>${K.ms(need)}</b>가 걸립니다. 16.7ms 안에 못 끝내 화면 갱신의 <b>${miss}</b>를 놓칩니다(<b>뚝뚝 끊김</b>).${why}`;
     }
     if (bgOn && s.got < 0.9) {
-      return `${K.flag(s.miss > 0.05 || s.got < 0.7 ? 'bad' : 'warn')}게임 스레드가 코어를 얻으려고 줄을 섭니다. 다른 프로그램도 코어를 5ms씩 번갈아 쓰니, 게임이 원할 때 바로 CPU를 받은 비율이 <b>${got}</b>뿐입니다. 메인 스레드는 한 장마다 평균 <b>${K.ms(s.mainWait)}</b> 기다리고, 화면 갱신의 <b>${miss}</b>를 놓칩니다(<b>뚝뚝 끊김</b>). 네트워크 스레드도 패킷을 평균 <b>${K.ms(s.netWait)}</b> 늦게 읽습니다. 이 정도는 보간 버퍼가 가려 주지만, 기다림이 수십 ms로 길어지면 다른 캐릭터 움직임이 뭉쳤다 풀립니다(<b>몰아치기</b>). 회선과 서버는 멀쩡합니다.`;
+      return `${K.flag(s.miss > 0.05 || s.got < 0.7 ? 'bad' : 'warn')}게임 스레드가 코어를 얻으려고 대기열에서 기다립니다. 다른 프로그램도 코어를 5ms씩 번갈아 쓰니, 게임이 원할 때 바로 CPU를 받은 비율이 <b>${got}</b>뿐입니다. 메인 스레드는 한 프레임마다 평균 <b>${K.ms(s.mainWait)}</b> 기다리고, 화면 갱신의 <b>${miss}</b>를 놓칩니다(<b>뚝뚝 끊김</b>). 네트워크 스레드도 패킷을 평균 <b>${K.ms(s.netWait)}</b> 늦게 읽습니다. 이 정도는 보간 버퍼가 가려 주지만, 기다림이 수십 ms로 길어지면 다른 캐릭터 움직임이 뭉쳤다 풀립니다(<b>몰아치기</b>). 회선과 서버는 멀쩡합니다.`;
     }
-    if (bgOn && P.prio) return `${K.flag('good')}게임 스레드가 줄에 서면 다른 프로그램을 먼저 내리므로 게임은 거의 기다리지 않습니다(바로 받은 비율 ${got}). 대신 백신·방송 같은 프로그램이 그만큼 느려집니다.`;
+    if (bgOn && P.prio) return `${K.flag('good')}게임 스레드가 대기열에 들어오면 다른 프로그램을 먼저 내리므로 게임은 거의 기다리지 않습니다(바로 받은 비율 ${got}). 대신 백신·방송 같은 프로그램이 그만큼 느려집니다.`;
     if (P.power === 'heat' && sp < 0.97) return need > VB
       ? `${K.flag('warn')}폰이 뜨거워지며 CPU 속도가 <b>${K.pct(sp)}</b>까지 내려왔습니다. 계산이 ${K.ms(need)}로 16.7ms를 막 넘어, 화면 갱신을 가끔 놓치기 시작했습니다(${miss}). 더 뜨거워지면 <b>뚝뚝 끊김</b>이 뚜렷해집니다.`
       : `${K.flag('warn')}폰이 뜨거워지며 CPU 속도가 <b>${K.pct(sp)}</b>까지 내려왔습니다. 지금은 계산이 ${K.ms(need)}라 버티지만, 16.7ms를 넘는 순간부터 <b>뚝뚝 끊김</b>이 시작됩니다.`;
     if (bgOn) return `${K.flag('good')}다른 프로그램이 돌고 있지만 코어 ${P.cores}개가 넉넉해 게임 스레드는 거의 기다리지 않습니다(바로 받은 비율 ${got}, 전체 사용률 ${K.pct(s.util)}).`;
-    return `${K.flag('good')}게임 스레드가 코어를 기다리지 않고 바로 돕니다. 계산 ${K.ms(need)} + 렌더 4ms가 제시간에 끝나 화면이 바뀔 때마다 새 그림이 나갑니다.`;
+    return `${K.flag('good')}게임 스레드가 코어를 기다리지 않고 바로 돕니다. 계산 ${K.ms(need)} + 렌더 4ms가 제시간에 끝나 화면이 바뀔 때마다 새 프레임이 나갑니다.`;
   }
 
   K.loop(root, dt => {

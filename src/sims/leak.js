@@ -4,7 +4,7 @@ K.register('leak', function (root) {
   const F = K.frame(root, {
     kicker: '레이어 10 · 메모리',
     title: '점검 직후엔 멀쩡하다가 사흘째 저녁부터 렉',
-    lead: '서버가 다 쓴 메모리를 돌려주지 않고 조금씩 쥐고 있는 버그를 메모리 누수라고 합니다. 한 시간에 수백 MB씩이라 첫날은 티가 안 납니다. 며칠 쌓인 뒤 접속자가 가장 많은 저녁이 오면 RAM을 넘고, 그때부터 서버가 디스크를 메모리처럼 쓰며 급격히 느려집니다. 재생해서 사흘을 빨리 감아 보세요.',
+    lead: '서버가 다 쓴 메모리를 해제하지 않아 사용량이 조금씩 늘어나는 버그를 메모리 누수라고 합니다. 한 시간에 수백 MB씩이라 첫날은 티가 안 납니다. 며칠 쌓인 뒤 접속자가 가장 많은 저녁이 오면 RAM을 넘고, 그때부터 서버가 디스크를 메모리처럼 쓰며 급격히 느려집니다. 재생해서 사흘을 빨리 감아 보세요.',
     tries: [
       '그대로 재생해 보세요. <b>3일차 저녁</b>에 메모리 선이 RAM 선을 넘는 순간, 아래 틱 그래프가 치솟습니다.',
       '<b>정기 점검</b>을 “24시간”으로 바꿔 보세요. 매일 다시 켜니 문제가 사라진 것처럼 보입니다. 누수는 그대로인데 말이죠.',
@@ -38,7 +38,7 @@ K.register('leak', function (root) {
   const sLeak = K.slider(g1, { label: '누수 속도', min: 0, max: 1000, step: 10, value: P.leak, fmt: v => K.n(v) + ' MB/시간', onInput: v => { P.leak = v; compute(); } });
   const sBase = K.slider(g1, { label: '서버 기본 사용량', min: 4, max: 24, step: 1, value: P.base, unit: 'GB', onInput: v => { P.base = v; compute(); }, hint: '월드 데이터, 캐시 등 켜자마자 쓰는 양. 저녁엔 접속자 1명당 2MB가 더해집니다.' });
   const cRam = K.choice(g1, { label: '물리 메모리(RAM)', value: P.ram, options: [[16, '16GB'], [32, '32GB'], [64, '64GB']], onChange: v => { P.ram = +v; compute(); } });
-  const tSwap = K.toggle(g1, { label: '스왑 사용 (디스크 8GB)', value: P.swap, onChange: v => { P.swap = v; compute(); }, hint: 'RAM이 모자라면 디스크 일부를 메모리처럼 빌려 씁니다.' });
+  const tSwap = K.toggle(g1, { label: '스왑 사용 (디스크 8GB)', value: P.swap, onChange: v => { P.swap = v; compute(); }, hint: 'RAM이 모자라면 디스크 일부를 메모리처럼 씁니다.' });
   const cMaint = K.choice(g1, { label: '정기 점검(재시작)', value: P.maint, options: [[0, '없음'], [24, '24시간마다'], [72, '72시간마다']], onChange: v => { P.maint = +v; compute(); } });
 
   const stUp = K.stat(F.stats, { label: '가동 시간' });
@@ -269,14 +269,14 @@ K.register('leak', function (root) {
     const leaked = (P.leak * upH) / 1024;
     const pplGB = (S.ppl[i] * PER) / 1024;
     if (s === 2) return `${K.flag('bad')} 메모리가 RAM ${P.ram}GB${P.swap ? `와 스왑 ${SWAP}GB를 모두` : '를'} 채우자 운영체제가 서버 프로세스를 강제로 끝냈습니다(OOM, 메모리 부족 종료). 이 서버의 <b>모든 플레이어</b>가 한꺼번에 <b>접속 끊김</b>을 겪고, 다시 켜지는 10분 동안 <b>접속 불가·무한 로딩</b>입니다. 다시 켜면 메모리가 비워져 멀쩡해 보이지만, 누수는 그대로라 같은 일이 되풀이됩니다.`;
-    if (s === 3) return `${K.flag('good')} 정기 점검으로 서버를 다시 켜는 중입니다. 새던 메모리가 모두 풀려 처음 상태로 돌아갑니다. 매일 점검하면 누수가 쌓일 틈이 없어 문제가 <b>숨어 버립니다</b>. 점검을 한 번 건너뛰거나 주기를 늘리면 그제야 드러납니다.`;
+    if (s === 3) return `${K.flag('good')} 정기 점검으로 서버를 다시 켜는 중입니다. 누수된 메모리가 모두 해제되어 처음 상태로 돌아갑니다. 매일 점검하면 누수가 쌓일 틈이 없어 문제가 <b>숨어 버립니다</b>. 점검을 한 번 건너뛰거나 주기를 늘리면 그제야 드러납니다.`;
     if (s === 1) {
       const out = S.mem[i] - P.ram, tk = S.tick[i];
       const st = tk > 50 ? 'bad' : 'warn';
       const feel = tk > 50
         ? '틱 예산 50ms를 넘어 플레이어는 <b>입력 지연</b>과 <b>슬로우모션</b>(흐른 시간만큼 움직이는 서버라면 뚝뚝 끊김)을 겪고, 심하면 <b>멈춤</b>이 옵니다.'
         : '아직 틱 예산 50ms 안이라 티가 덜 나지만, 밀려난 양이 늘수록 틱이 빠르게 늘어납니다.';
-      return `${K.flag(st)} 메모리 ${K.n(S.mem[i], 1)}GB가 RAM ${P.ram}GB를 넘어 <b>${out < 1 ? K.n(Math.max(10, out * 1024)) + 'MB' : K.n(out, 1) + 'GB'}</b>가 디스크(스왑)로 밀려났습니다. RAM은 한 번 읽는 데 약 100ns, SSD는 약 100µs로 <b>1,000배</b> 느립니다. 새는 메모리는 대개 다시 안 쓰지만, 쓰는 데이터와 같은 조각에 섞여 있거나 GC가 청소하며 힙 전체를 훑으면 밀려난 메모리를 자주 건드립니다. 그때마다 디스크를 기다려 틱이 <b>${K.ms(tk)}</b>로 늘었습니다. ${feel} 접속자가 많은 저녁 9시 무렵 가장 심합니다.${risk && risk.what === '강제 종료' ? ` 이대로면 약 ${fmtH(risk.dh)} 뒤 서버가 강제로 꺼집니다(전원 <b>접속 끊김</b>).` : ''}`;
+      return `${K.flag(st)} 메모리 ${K.n(S.mem[i], 1)}GB가 RAM ${P.ram}GB를 넘어 <b>${out < 1 ? K.n(Math.max(10, out * 1024)) + 'MB' : K.n(out, 1) + 'GB'}</b>가 디스크(스왑)로 밀려났습니다. RAM은 한 번 읽는 데 약 100ns, SSD는 약 100µs로 <b>1,000배</b> 느립니다. 누수된 메모리는 대개 다시 안 쓰지만, 쓰는 데이터와 같은 메모리 페이지에 섞여 있거나 GC가 힙 전체를 훑으면 밀려난 메모리를 자주 건드립니다. 그때마다 디스크를 기다려 틱이 <b>${K.ms(tk)}</b>로 늘었습니다. ${feel} 접속자가 많은 저녁 9시 무렵 가장 심합니다.${risk && risk.what === '강제 종료' ? ` 이대로면 약 ${fmtH(risk.dh)} 뒤 서버가 강제로 꺼집니다(전원 <b>접속 끊김</b>).` : ''}`;
     }
     if (P.leak === 0) return `${K.flag('good')} 누수가 없으면 메모리는 접속자 수를 따라 매일 같은 모양으로 오르내립니다. 저녁 피크에도 기본 ${P.base}GB + 접속자 ${K.n(S.ppl[i])}명분 ${K.n(pplGB, 1)}GB로 RAM ${P.ram}GB 안이라 틱은 예산 안입니다.`;
     const lastEv = events.filter(e => e.h <= h).pop();

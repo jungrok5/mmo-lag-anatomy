@@ -3,13 +3,13 @@
 K.register('gc', function (root) {
   const F = K.frame(root, {
     kicker: '레이어 10 · 메모리',
-    title: '청소하는 동안 세상이 멈춘다',
-    lead: '서버 프로그램은 쉬지 않고 메모리를 빌려 씁니다(할당). 다 쓴 메모리를 모아 치우는 일이 GC(가비지 컬렉션, 쓰레기 청소)입니다. 청소 방식에 따라 서버 전체가 잠깐 얼어붙기도 합니다. 아래 두 그래프를 함께 보세요. 위쪽 톱니가 뚝 떨어지는 순간, 아래쪽 틱 막대가 하늘로 솟습니다.',
+    title: 'GC가 도는 동안 서버가 멈춘다',
+    lead: '서버 프로그램은 쉬지 않고 메모리를 할당해 씁니다. 다 쓴 메모리를 모아 회수하는 일이 GC(가비지 컬렉션)입니다. GC 방식에 따라 서버 전체가 잠깐 멈추기도 합니다. 아래 두 그래프를 함께 보세요. 위쪽 톱니 모양 그래프가 뚝 떨어지는 순간, 아래쪽 틱 막대가 크게 솟습니다.',
     tries: [
-      '<b>큰 힙 + 전체 멈춤</b>을 눌러 보세요. 32GB 힙에 살아 있는 데이터가 8GB면 청소 한 번에 2초 넘게 서버 전체가 멈춥니다.',
-      '같은 상태에서 <b>GC 방식</b>을 “세대별”로 바꿔 보세요. 짧은 청소가 자주 일어나고, 틱 막대는 예산 안에 머뭅니다.',
-      '<b>이벤트 중 할당 폭주</b>를 눌러 보세요. 청소가 더 자주 필요해지고, 가끔 오는 전체 청소가 1초 넘게 멈춥니다.',
-      '<b>동시 GC</b>를 켜고 <b>초당 할당량</b>을 1,500MB까지 올려 보세요. 청소가 할당을 따라잡지 못하면 결국 전체 멈춤으로 넘어갑니다.',
+      '<b>큰 힙 + 전체 멈춤</b>을 눌러 보세요. 32GB 힙에 살아 있는 데이터가 8GB면 GC 한 번에 2초 넘게 서버 전체가 멈춥니다.',
+      '같은 상태에서 <b>GC 방식</b>을 “세대별”로 바꿔 보세요. 짧은 GC가 자주 일어나고, 틱 막대는 예산 안에 머뭅니다.',
+      '<b>이벤트 중 할당 폭주</b>를 눌러 보세요. GC가 더 자주 필요해지고, 가끔 오는 전체 GC가 1초 넘게 멈춥니다.',
+      '<b>동시 GC</b>를 켜고 <b>초당 할당량</b>을 1,500MB까지 올려 보세요. GC가 할당을 따라잡지 못하면 결국 전체 멈춤으로 넘어갑니다.',
     ],
   });
 
@@ -30,8 +30,8 @@ K.register('gc', function (root) {
   /* ---------- 조작부 ---------- */
   const g1 = K.group(F.controls, '메모리 쓰는 양');
   const sA = K.slider(g1, { label: '초당 할당량', min: 10, max: 2000, step: 10, value: P.A, fmt: v => K.n(v) + ' MB/s', onInput: v => { P.A = v; reset(); }, hint: '몬스터 스폰, 스킬 이펙트, 패킷 조립처럼 잠깐 쓰고 버리는 메모리' });
-  const sL = K.slider(g1, { label: '오래 살아남는 데이터', min: 0.5, max: 16, step: 0.5, value: P.L, fmt: v => K.n(v, 1) + ' GB', onInput: v => { P.L = v; reset(); }, hint: '접속한 캐릭터, 인벤토리, 월드 상태처럼 치울 수 없는 것' });
-  const g2 = K.group(F.controls, '청소 설정');
+  const sL = K.slider(g1, { label: '오래 살아남는 데이터', min: 0.5, max: 16, step: 0.5, value: P.L, fmt: v => K.n(v, 1) + ' GB', onInput: v => { P.L = v; reset(); }, hint: '접속한 캐릭터, 인벤토리, 월드 상태처럼 회수할 수 없는 것' });
+  const g2 = K.group(F.controls, 'GC 설정');
   const cH = K.choice(g2, { label: '힙 크기', value: P.H, options: [[2, '2GB'], [8, '8GB'], [32, '32GB']], onChange: v => { P.H = +v; fitLive(); reset(); } });
   const cM = K.choice(g2, {
     label: 'GC 방식', value: P.mode,
@@ -137,18 +137,18 @@ K.register('gc', function (root) {
     const A = P.A, Hm = P.H * GB, Lm = P.L * GB, fp = fullPause();
     if (P.mode === 'stw') {
       const I = (Hm * 0.9 - Lm) / A;
-      return { interval: I, sub: '청소 1번에 ' + K.ms(fp), maxP: fp, perMin: (fp * 60) / I, fullI: I };
+      return { interval: I, sub: 'GC 1번에 ' + K.ms(fp), maxP: fp, perMin: (fp * 60) / I, fullI: I };
     }
     if (P.mode === 'gen') {
       const Iy = young() / A, py = youngPause() + 1;
       const If = (Hm * 0.9 - young() - Lm) / (A * 0.02);
-      return { interval: Iy, sub: `전체 청소는 ${fmtDur(If)}마다`, maxP: fp + py, perMin: (py * 60) / Iy + (fp * 60) / If, fullI: If, youngP: py };
+      return { interval: Iy, sub: `전체 GC는 ${fmtDur(If)}마다`, maxP: fp + py, perMin: (py * 60) / Iy + (fp * 60) / If, fullI: If, youngP: py };
     }
     const D = markDur() / 1000;
     const head = Hm * 0.98 - Hm * 0.75;
     if (A * D >= head) {
       const I = (Hm * 0.75 - Lm) / A + head / A;
-      return { interval: I, sub: '청소가 할당을 못 따라잡음', maxP: fp, perMin: (fp * 60) / I, fullI: I, fallback: true };
+      return { interval: I, sub: 'GC가 할당을 못 따라잡음', maxP: fp, perMin: (fp * 60) / I, fullI: I, fallback: true };
     }
     const cyc = Math.max(D, (Hm * 0.75 - Lm - A * D) / A + D);
     return { interval: cyc, sub: `이 중 ${K.n(D, 1)}초는 틱이 25% 느림`, maxP: 3 + 5 * K.clamp(P.L / 16, 0, 1), perMin: (60 / cyc) * 8, fullI: Infinity, markShare: D / cyc };
@@ -189,13 +189,13 @@ K.register('gc', function (root) {
     // 오래 사는 데이터 띠
     ctx.fillStyle = K.alpha(C.ink2, 0.1);
     ctx.fillRect(box.x, sc.y(P.L), box.w, sc.y(0) - sc.y(P.L));
-    if (sc.y(0) - sc.y(P.L) > 16) K.text(ctx, `오래 사는 데이터 ${K.n(P.L, 1)}GB (치울 수 없음)`, box.x + 6, sc.y(P.L) + 10, { size: 10.5, color: C.ink2 });
+    if (sc.y(0) - sc.y(P.L) > 16) K.text(ctx, `오래 사는 데이터 ${K.n(P.L, 1)}GB (회수 불가)`, box.x + 6, sc.y(P.L) + 10, { size: 10.5, color: C.ink2 });
     // 힙 크기, 청소 시작선
     K.hline(ctx, sc, H, { color: C.ink2 });
     const trig = P.mode === 'conc' ? 0.75 : 0.9;
     const trigV = P.mode === 'gen' ? H * 0.9 - young() / GB : H * trig;
     K.hline(ctx, sc, trigV, { color: C.muted, dash: [4, 3] });
-    const tl = P.mode === 'conc' ? '동시 청소 시작 75%' : P.mode === 'gen' ? '전체 청소 시작선' : '청소 시작 90%';
+    const tl = P.mode === 'conc' ? '동시 GC 시작 75%' : P.mode === 'gen' ? '전체 GC 시작선' : 'GC 시작 90%';
     K.text(ctx, tl, box.x + 6, sc.y(trigV) + 9, { size: 10.5, color: C.muted });
     // 사용량 선
     ctx.save();
@@ -275,7 +275,7 @@ K.register('gc', function (root) {
     ctx.fillRect(box.x + box.w - lw, yb - 16, lw, 14);
     K.text(ctx, lab, box.x + box.w - 5, yb - 9, { align: 'right', size: 10.5, weight: 600, color: C.badInk });
   }
-  const evName = { full: '전체 청소', fallback: '전체 멈춤으로 전환', minor: '젊은 세대 청소', mark: '동시 청소 시작', markEnd: '동시 청소 끝' };
+  const evName = { full: '전체 GC', fallback: '전체 멈춤으로 전환', minor: 'Young GC', mark: '동시 GC 시작', markEnd: '동시 GC 끝' };
   K.hover(hcv, x => {
     const box = heapBox();
     const rel = ((x - box.x) / box.w) * WIN - WIN;
@@ -300,7 +300,7 @@ K.register('gc', function (root) {
     let s = `${K.n(-rel / 1000, 1)}초 전 · 틱 <b>${K.ms(m.dur)}</b>`;
     if (m.pause >= 1) s += `<br>이 중 GC 멈춤 <b>${K.ms(m.pause)}</b>`;
     if (m.pause >= B) s += `<br>밀린 틱 ${Math.floor(m.pause / B)}개를 뒤이어 몰아서 처리`;
-    else if (m.marking) s += '<br>동시 청소 중이라 틱이 25% 느림';
+    else if (m.marking) s += '<br>동시 GC 중이라 틱이 25% 느림';
     return s;
   });
 
@@ -311,23 +311,23 @@ K.register('gc', function (root) {
     const who = '이 서버 프로세스에 붙어 있는 <b>모든 플레이어가 같은 순간에</b> 겪습니다.';
     if (P.mode === 'stw') {
       const st = fp >= 300 ? 'bad' : fp >= B ? 'warn' : 'good';
-      return `${K.flag(st)} GC는 더 안 쓰는 메모리를 모아 치우는 쓰레기 청소입니다. <b>전체 멈춤</b> 방식은 청소하는 동안 게임 스레드까지 모두 “얼음”입니다. 힙 ${P.H}GB의 90%가 차는 <b>${fmtDur(a.interval)}마다</b> 청소를 하고, 살아 있는 데이터 ${K.n(P.L, 1)}GB를 훑는 데 <b>${K.ms(fp)}</b>가 걸립니다. 그동안 틱 ${missed}개가 밀립니다. 플레이어는 세상이 <b>멈춤</b> 뒤, 밀린 틱이 한꺼번에 처리되며 몬스터가 순간이동하듯 움직이고 스킬이 한꺼번에 터지는 <b>몰아치기</b>를 봅니다. ${who} ${fix}`;
+      return `${K.flag(st)} GC는 더 안 쓰는 메모리를 모아 회수하는 작업입니다. <b>전체 멈춤</b>(Stop-the-world) 방식은 GC가 도는 동안 게임 스레드까지 모두 멈춥니다. 힙 ${P.H}GB의 90%가 차는 <b>${fmtDur(a.interval)}마다</b> GC를 하고, 살아 있는 데이터 ${K.n(P.L, 1)}GB를 훑는 데 <b>${K.ms(fp)}</b>가 걸립니다. 그동안 틱 ${missed}개가 밀립니다. 플레이어는 게임이 <b>멈춤</b> 상태가 된 뒤, 밀린 틱이 한꺼번에 처리되며 몬스터가 순간이동하듯 움직이고 스킬이 한꺼번에 터지는 <b>몰아치기</b>를 봅니다. ${who} ${fix}`;
     }
     if (P.mode === 'gen') {
       const st = a.fullI < 300 && fp >= 300 ? 'bad' : fp >= B ? 'warn' : 'good';
       const busy = baseWork() * 1.15 + a.youngP > B;   // 바쁜 틱에 젊은 세대 청소가 겹치면 예산을 넘는다
       const absorb = busy
-        ? `금방 버려지는 객체가 대부분이라 빨리 끝나지만, 지금은 틱 자체가 바빠(평소 약 ${K.ms(baseWork())}) 청소가 겹친 틱은 예산 50ms를 살짝 넘습니다. 그때마다 짧게 <b>뚝뚝 끊김</b>이 생깁니다.`
+        ? `금방 버려지는 객체가 대부분이라 빨리 끝나지만, 지금은 틱 자체가 바빠(평소 약 ${K.ms(baseWork())}) GC가 겹친 틱은 예산 50ms를 살짝 넘습니다. 그때마다 짧게 <b>뚝뚝 끊김</b>이 생깁니다.`
         : '금방 버려지는 객체가 대부분이라 빨리 끝나고, 틱 예산 안에 흡수됩니다.';
-      return `${K.flag(st)} <b>세대별</b> GC는 새로 만든 객체만 모아 두는 작은 칸(젊은 세대 ${K.n(young() / GB, 1)}GB)을 <b>${fmtDur(a.interval)}마다 ${K.ms(a.youngP)}</b>씩 짧게 청소합니다. ${absorb} 다만 청소에서 살아남은 2%가 늙은 세대에 쌓이면 <b>${fmtDur(a.fullI)}마다</b> 전체 청소가 필요하고, 그때는 <b>${K.ms(a.maxP)}</b> 동안 <b>멈춤</b>, 이어서 <b>몰아치기</b>가 옵니다. ${who} ${st === 'good' ? '' : fix}`;
+      return `${K.flag(st)} <b>세대별</b> GC는 새로 만든 객체만 모아 두는 작은 영역(Young 영역 ${K.n(young() / GB, 1)}GB)을 <b>${fmtDur(a.interval)}마다 ${K.ms(a.youngP)}</b>씩 짧게 수거합니다. ${absorb} 다만 GC에서 살아남은 2%가 Old 영역에 쌓이면 <b>${fmtDur(a.fullI)}마다</b> 전체 GC가 필요하고, 그때는 <b>${K.ms(a.maxP)}</b> 동안 <b>멈춤</b>, 이어서 <b>몰아치기</b>가 옵니다. ${who} ${st === 'good' ? '' : fix}`;
     }
     if (a.fallback) {
-      return `${K.flag('bad')} <b>동시 수행</b> GC는 게임이 도는 동안 옆에서 청소하지만, 초당 ${K.n(P.A)}MB를 새로 쓰면 청소(${K.n(markDur() / 1000, 1)}초)가 끝나기 전에 힙이 가득 찹니다. 결국 전체 멈춤으로 넘어가 <b>${K.ms(fp)}</b> 동안 서버가 얼어붙습니다(<b>멈춤</b> 뒤 <b>몰아치기</b>). 실제 GC마다 모양은 달라서, G1은 전체 청소로 넘어가고 ZGC는 메모리를 달라는 스레드를 청소가 끝날 때까지 세웁니다. 어느 쪽이든 게임 스레드가 멈춥니다. ${who} ${fix}`;
+      return `${K.flag('bad')} <b>동시 수행</b> GC는 게임이 도는 동안 별도 스레드에서 메모리를 회수하지만, 초당 ${K.n(P.A)}MB를 새로 쓰면 GC(${K.n(markDur() / 1000, 1)}초)가 끝나기 전에 힙이 가득 찹니다. 결국 전체 멈춤으로 넘어가 <b>${K.ms(fp)}</b> 동안 서버가 멈춥니다(<b>멈춤</b> 뒤 <b>몰아치기</b>). 실제 GC마다 동작은 달라서, G1은 전체 GC로 넘어가고 ZGC는 메모리를 요청한 스레드를 GC가 끝날 때까지 멈춥니다. 어느 쪽이든 게임 스레드가 멈춥니다. ${who} ${fix}`;
     }
     const work = baseWork();
     const slow = work * 1.25;
     const st = slow > B * 0.9 ? 'warn' : 'good';
-    return `${K.flag(st)} <b>동시 수행</b> GC는 게임이 도는 동안 옆 스레드에서 청소합니다. 멈춤은 한 번에 <b>${K.ms(a.maxP)}</b> 이하라 거의 느낄 수 없습니다. 대신 청소하는 동안(시간의 ${K.pct(a.markShare)}) CPU를 나눠 써서 틱이 평소 ${K.ms(work)}에서 <b>${K.ms(slow)}</b>로 25% 느려집니다. ${slow > B * 0.9 ? '예산 50ms에 가까워서 조금만 더 바빠지면 <b>슬로우모션</b>이 됩니다.' : '예산 안이라 플레이어는 차이를 거의 못 느낍니다.'} 할당이 청소 속도를 넘으면 결국 전체 멈춤으로 넘어간다는 점은 기억하세요.`;
+    return `${K.flag(st)} <b>동시 수행</b> GC는 게임이 도는 동안 별도 스레드에서 메모리를 회수합니다. 멈춤은 한 번에 <b>${K.ms(a.maxP)}</b> 이하라 거의 느낄 수 없습니다. 대신 GC가 도는 동안(시간의 ${K.pct(a.markShare)}) CPU를 나눠 써서 틱이 평소 ${K.ms(work)}에서 <b>${K.ms(slow)}</b>로 25% 느려집니다. ${slow > B * 0.9 ? '예산 50ms에 가까워서 조금만 더 바빠지면 <b>슬로우모션</b>이 됩니다.' : '예산 안이라 플레이어는 차이를 거의 못 느낍니다.'} 할당이 GC 속도를 넘으면 결국 전체 멈춤으로 넘어간다는 점은 기억하세요.`;
   }
 
   K.loop(root, dt => {
@@ -337,14 +337,14 @@ K.register('gc', function (root) {
     const a = analytic();
     const missed = Math.floor(a.maxP / B);
     stInt.set(fmtDur(a.interval), P.mode === 'stw' && a.interval < 10 && a.maxP > B ? 'bad' : null, a.sub);
-    const cap = P.mode === 'conc' ? '<span class="legend"><span><i class="box" style="background:var(--sunk);outline:1px solid var(--line)"></i>동시 청소 중</span></span>' : '최근 60초 · 2배속';
+    const cap = P.mode === 'conc' ? '<span class="legend"><span><i class="box" style="background:var(--sunk);outline:1px solid var(--line)"></i>동시 GC 중</span></span>' : '최근 60초 · 2배속';
     if (cap !== capNow) { hcv.setCaption(null, cap); capNow = cap; }
-    stMax.set(K.ms(a.maxP), a.maxP >= 300 ? 'bad' : a.maxP >= B ? 'warn' : 'good', a.maxP >= B ? '서버 전체가 얼어붙음' : '틱 안에 흡수됨');
+    stMax.set(K.ms(a.maxP), a.maxP >= 300 ? 'bad' : a.maxP >= B ? 'warn' : 'good', a.maxP >= B ? '서버 전체가 멈춤' : '틱 안에 흡수됨');
     stMiss.set(K.n(missed), missed >= 6 ? 'bad' : missed >= 1 ? 'warn' : 'good', missed ? '풀린 뒤 몰아서 처리' : '밀리지 않음');
     stSum.set(K.ms(a.perMin), a.perMin > 1000 ? 'bad' : a.perMin > 200 ? 'warn' : 'good', `1분 중 ${K.pct(a.perMin / 60000, 1)}`);
     const slowConc = P.mode === 'conc' && !a.fallback && baseWork() * 1.25 > B * 0.9;
     const feel = a.maxP >= 300 ? ['멈춤', 'bad'] : a.maxP >= B ? ['짧은 멈춤', 'warn'] : slowConc ? ['슬로우모션 직전', 'warn'] : ['매끄러움', 'good'];
-    stFeel.set(feel[0], feel[1], a.maxP >= 300 ? `풀리면 몰아치기 · ${fmtDur(a.fullI)}마다` : a.maxP >= B ? `${fmtDur(a.fullI)}마다 한 번` : slowConc ? '청소 중 틱이 느려짐' : '멈춤을 못 느낌');
+    stFeel.set(feel[0], feel[1], a.maxP >= 300 ? `풀리면 몰아치기 · ${fmtDur(a.fullI)}마다` : a.maxP >= B ? `${fmtDur(a.fullI)}마다 한 번` : slowConc ? 'GC 중 틱이 느려짐' : '멈춤을 못 느낌');
     F.say(explain(a));
   });
 });

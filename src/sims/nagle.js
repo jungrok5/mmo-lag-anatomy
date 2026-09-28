@@ -5,12 +5,12 @@ K.register('nagle', function (root) {
   const F = K.frame(root, {
     kicker: '소켓과 프로토콜 · 소켓 옵션',
     title: '작은 패킷을 모았다 보내려다 40~200ms를 버린다',
-    lead: 'TCP에는 “작은 조각은 모았다가 한 번에 보내자”는 <b>Nagle 규칙</b>과, “받았다는 확인(ACK)은 조금 미뤘다가 답장에 얹어 보내자”는 <b>지연 ACK</b>가 기본으로 켜져 있습니다. 둘 다 패킷 수를 아끼려는 규칙입니다. 그런데 게임 메시지를 헤더와 본문으로 나눠 쓰면, 두 규칙이 서로를 기다리느라 메시지마다 수십~수백 ms를 그냥 버립니다.',
+    lead: 'TCP에는 “작은 패킷은 모았다가 한 번에 보내자”는 <b>Nagle 규칙</b>과, “ACK(수신 확인)는 조금 미뤘다가 응답에 실어 보내자”는 <b>지연 ACK</b>가 기본으로 켜져 있습니다. 둘 다 패킷 수를 아끼려는 규칙입니다. 그런데 게임 메시지를 헤더와 본문으로 나눠 쓰면, 두 규칙이 서로를 기다리느라 메시지마다 수십~수백 ms를 그냥 버립니다.',
     tries: [
       '처음 화면(리눅스 기본값 + 나눠 쓰기)에서 오른쪽 막대를 보세요. 핑은 20ms인데 응답은 80ms 넘게 걸립니다.',
       '<b>지연 ACK</b>를 200ms(윈도우)로 바꿔 보세요. 메시지마다 200ms 넘게 늦어집니다. 받는 쪽이 윈도우일 때 생기는 입력 지연입니다. 서버가 Nagle을 켠 채 보내고 윈도우 PC가 받는 반대 방향에서도 똑같이 생깁니다.',
       '<b>TCP_NODELAY</b>를 켜 보세요. 헤더와 본문이 바로 연달아 나가고 노란 기다림이 사라집니다.',
-      '<b>메시지 쓰는 방식</b>을 “한 번에 쓰기”로 바꿔도 풀립니다. 붙잡힐 작은 조각이 생기지 않기 때문입니다.',
+      '<b>메시지 쓰는 방식</b>을 “한 번에 쓰기”로 바꿔도 풀립니다. 대기할 작은 패킷이 생기지 않기 때문입니다.',
       '“작은 이동 명령 연속”에서 NODELAY를 껐다 켜며 <b>초당 패킷 수</b>와 응답 시간을 비교하세요. Nagle이 무엇을 아끼고 무엇을 버리는지 보입니다.',
     ],
     layout: 'stack',
@@ -50,13 +50,13 @@ K.register('nagle', function (root) {
   });
   const patHintEl = cPat.el.querySelector('.ctl-hint');
   function patHint() { patHintEl.textContent = PAT[P.pat].hint; }
-  const tNd = K.toggle(g1, { label: 'TCP_NODELAY (Nagle 끄기)', value: P.nodelay, hint: '켜면 작은 조각도 기다리지 않고 바로 보냅니다.', onChange: v => { P.nodelay = v; rerun(); } });
+  const tNd = K.toggle(g1, { label: 'TCP_NODELAY (Nagle 끄기)', value: P.nodelay, hint: '켜면 작은 패킷도 기다리지 않고 바로 보냅니다.', onChange: v => { P.nodelay = v; rerun(); } });
   const g2 = K.group(F.controls, '운영체제와 회선');
   const cAck = K.choice(g2, {
     label: '서버의 지연 ACK', value: P.delack,
     options: [[0, '끔'], [40, '40ms 리눅스'], [200, '200ms 윈도우']],
     onChange: v => { P.delack = +v; rerun(); },
-    hint: '답장이 없으면 ACK를 이만큼 미뤘다가 따로 보냅니다.',
+    hint: '보낼 응답이 없으면 ACK를 이만큼 미뤘다가 따로 보냅니다.',
   });
   const sRtt = K.slider(g2, { label: '핑(RTT, 왕복 시간)', min: 2, max: 200, step: 2, value: P.rtt, unit: 'ms', hint: '20ms ≈ 국내 서버', onInput: v => { P.rtt = v; rerun(); } });
   const g3 = K.group(F.controls, '보기');
@@ -86,7 +86,7 @@ K.register('nagle', function (root) {
   }
   function labelOf(parts, bytes) {
     const same = parts.every(p => p === parts[0]);
-    const name = parts.length === 1 ? parts[0] : same ? parts[0] + '×' + parts.length : parts.length <= 3 ? parts.join('+') : parts[0] + ' 외 ' + (parts.length - 1) + '조각';
+    const name = parts.length === 1 ? parts[0] : same ? parts[0] + '×' + parts.length : parts.length <= 3 ? parts.join('+') : parts[0] + ' 외 ' + (parts.length - 1) + '개';
     return name + ' ' + bytes + 'B';
   }
   // 보내는 쪽(클라이언트) TCP: Nagle 규칙
@@ -268,8 +268,8 @@ K.register('nagle', function (root) {
     for (const hd of holds) {
       const b = hd.b != null ? hd.b : t, hx = hd.side === 'c' ? G.cx - 10 : G.sx + 10;
       if (Math.abs(x - hx) < 12 && tt >= hd.a - 3 && tt <= b + 3 && b - hd.a >= 2) {
-        return hd.side === 'c' ? `<b>Nagle 대기 ${K.ms(b - hd.a)}</b><br>앞서 보낸 조각의 ACK가 오기 전이라 작은 조각을 보내지 않고 모아 둡니다.`
-          : `<b>지연 ACK 대기 ${K.ms(b - hd.a)}</b><br>답장에 얹어 보내려고 ACK를 미룹니다. 메시지가 반쪽이라 답장이 생기지 않습니다.`;
+        return hd.side === 'c' ? `<b>Nagle 대기 ${K.ms(b - hd.a)}</b><br>앞서 보낸 데이터의 ACK가 오기 전이라 작은 패킷을 보내지 않고 모아 둡니다.`
+          : `<b>지연 ACK 대기 ${K.ms(b - hd.a)}</b><br>응답에 실어 보내려고 ACK를 미룹니다. 메시지가 반쪽이라 응답이 생기지 않습니다.`;
       }
     }
     let best = null, bd = 16;
@@ -282,7 +282,7 @@ K.register('nagle', function (root) {
     }
     if (!best) return null;
     const who = best.dir > 0 ? '클라이언트 → 서버' : '서버 → 클라이언트';
-    const what = best.kind === 'ack' ? '받았다는 확인만 담은 빈 패킷' : best.kind === 'resp' ? '서버의 답장 (ACK도 함께 실림)' : '게임 메시지 데이터';
+    const what = best.kind === 'ack' ? 'ACK(수신 확인)만 담은 빈 패킷' : best.kind === 'resp' ? '서버의 응답 (ACK도 함께 실림)' : '게임 메시지 데이터';
     return `<b>${best.lab}</b><br>${who}<br>${what}<br>가는 데 ${K.ms(best.a - best.s)}`;
   });
 
@@ -370,15 +370,15 @@ K.register('nagle', function (root) {
     if (P.pat === 'small') {
       msg = P.nodelay
         ? `${K.flag('good')}<b>명령을 쓰는 즉시 보냅니다.</b> 패킷은 초당 ${pps}개로 늘지만 기다림이 없어 응답은 핑(${K.ms(P.rtt)})만큼만 걸립니다. 작은 패킷이 많아지는 비용은 보통 게임 코드에서 한 틱 동안의 메시지를 묶어 한 번에 쓰는 식으로 줄입니다.`
-        : `${K.flag(wr < 0.1 ? 'good' : 'warn')}<b>Nagle이 작은 이동 명령을 모아서 보냅니다.</b> 앞 명령의 ACK(여기서는 답장)가 돌아오기 전에 쓴 명령은 모였다가 한 패킷으로 나갑니다. 패킷 수는 초당 ${pps}개로 줄어 대역폭은 아끼지만, 명령마다 평균 ${K.ms(avgWaste)}(최대 핑 한 번)가 더해집니다. Nagle은 원격 터미널이 글자 하나마다 패킷을 보내 회선이 막히던 문제를 줄이려고 만든 규칙이라, 게임에서는 아끼는 것보다 잃는 것이 더 큽니다.`;
+        : `${K.flag(wr < 0.1 ? 'good' : 'warn')}<b>Nagle이 작은 이동 명령을 모아서 보냅니다.</b> 앞 명령의 ACK(여기서는 응답)가 돌아오기 전에 쓴 명령은 모였다가 한 패킷으로 나갑니다. 패킷 수는 초당 ${pps}개로 줄어 대역폭은 아끼지만, 명령마다 평균 ${K.ms(avgWaste)}(최대 핑 한 번)가 더해집니다. Nagle은 원격 터미널이 글자 하나마다 패킷을 보내 회선이 막히던 문제를 줄이려고 만든 규칙이라, 게임에서는 아끼는 것보다 잃는 것이 더 큽니다.`;
     } else if (P.nodelay) {
-      msg = `${K.flag('good')}<b>TCP_NODELAY를 켜서 Nagle 규칙을 껐습니다.</b> ${P.pat === 'split' ? '헤더와 본문이 곧바로 연달아 나가고, ' : ''}서버는 메시지를 다 받자마자 답장에 ACK를 얹어 보냅니다. 응답은 핑 ${K.ms(P.rtt)} + 처리 1ms 그대로입니다. Nagle은 패킷 수(대역폭)를 아끼는 대신 지연을 쓰는 규칙이라, 게임 서버와 클라이언트는 거의 항상 TCP_NODELAY를 켭니다.`;
+      msg = `${K.flag('good')}<b>TCP_NODELAY를 켜서 Nagle 규칙을 껐습니다.</b> ${P.pat === 'split' ? '헤더와 본문이 곧바로 연달아 나가고, ' : ''}서버는 메시지를 다 받자마자 응답에 ACK를 실어 보냅니다. 응답은 핑 ${K.ms(P.rtt)} + 처리 1ms 그대로입니다. Nagle은 패킷 수(대역폭)를 아끼는 대신 지연을 쓰는 규칙이라, 게임 서버와 클라이언트는 거의 항상 TCP_NODELAY를 켭니다.`;
     } else if (P.pat === 'one') {
-      msg = `${K.flag(wr < 0.1 ? 'good' : 'warn')}<b>메시지를 한 번에 쓰면 Nagle이 붙잡을 조각이 생기지 않습니다.</b> 새 메시지를 쓸 때 앞 메시지의 답장(ACK 포함)이 이미 돌아와 있기 때문입니다. 다만 핑이 길거나 메시지를 자주 보내 답장보다 다음 메시지가 먼저 나오면 다시 Nagle에 걸립니다. 그래서 게임은 보통 TCP_NODELAY도 함께 켭니다.`;
+      msg = `${K.flag(wr < 0.1 ? 'good' : 'warn')}<b>메시지를 한 번에 쓰면 Nagle에 걸릴 작은 패킷이 생기지 않습니다.</b> 새 메시지를 쓸 때 앞 메시지의 응답(ACK 포함)이 이미 돌아와 있기 때문입니다. 다만 핑이 길거나 메시지를 자주 보내 응답보다 다음 메시지가 먼저 나오면 다시 Nagle에 걸립니다. 그래서 게임은 보통 TCP_NODELAY도 함께 켭니다.`;
     } else if (P.delack === 0) {
-      msg = `${K.flag('warn')}<b>지연 ACK를 끄면 서버가 헤더를 받자마자 ACK를 보냅니다.</b> 그래도 본문은 그 ACK가 돌아올 때까지 한 번 왕복(${K.ms(P.rtt)}) 붙잡혀 있어서 메시지마다 약 +${K.ms(avgWaste)}입니다. 핑이 멀수록 손해가 커집니다. 지연 ACK는 상대 운영체제가 정하는 값이라 우리가 확실히 고칠 수 있는 쪽은 TCP_NODELAY입니다.`;
+      msg = `${K.flag('warn')}<b>지연 ACK를 끄면 서버가 헤더를 받자마자 ACK를 보냅니다.</b> 그래도 본문은 그 ACK가 돌아올 때까지 한 번 왕복(${K.ms(P.rtt)}) 동안 대기해서 메시지마다 약 +${K.ms(avgWaste)}입니다. 핑이 멀수록 손해가 커집니다. 지연 ACK는 상대 운영체제가 정하는 값이라 우리가 확실히 고칠 수 있는 쪽은 TCP_NODELAY입니다.`;
     } else {
-      msg = `${K.flag('bad')}<b>헤더(8바이트)는 바로 나갔지만 본문(40바이트)은 붙잡혀 있습니다.</b> Nagle 규칙은 “ACK를 못 받은 데이터가 있으면 작은 조각은 ACK가 올 때까지 모아 둔다”입니다. 서버는 헤더만으로는 메시지를 처리할 수 없어 답장이 없고, 그래서 ACK를 ${P.delack}ms 미룹니다(지연 ACK). 서로 기다리는 사이 메시지마다 약 <b>${K.ms(avgWaste)}</b>를 버립니다. 핑은 ${K.ms(P.rtt)}인데 응답은 ${K.ms(avg)}입니다. ${tail}`;
+      msg = `${K.flag('bad')}<b>헤더(8바이트)는 바로 나갔지만 본문(40바이트)은 대기 중입니다.</b> Nagle 규칙은 “ACK를 못 받은 데이터가 있으면 작은 패킷은 ACK가 올 때까지 모아 둔다”입니다. 서버는 헤더만으로는 메시지를 처리할 수 없어 응답이 없고, 그래서 ACK를 ${P.delack}ms 미룹니다(지연 ACK). 서로 기다리는 사이 메시지마다 약 <b>${K.ms(avgWaste)}</b>를 버립니다. 핑은 ${K.ms(P.rtt)}인데 응답은 ${K.ms(avg)}입니다. ${tail}`;
     }
     F.say(msg);
   });
