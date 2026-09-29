@@ -54,3 +54,4 @@ Object.entries(D.secRefs || {}).forEach(([id, list]) => {
 });
 const urls = new Set(); D.causes.forEach(c => (c.ref || []).forEach(r => urls.add(r.u))); Object.values(D.secRefs || {}).forEach(l => l.forEach(r => urls.add(r.u)));
 console.log(JSON.stringify({ causes: D.causes.length, per, glossary: D.glossary.length, ownPending: pending, refMissing, refSections: Object.keys(D.secRefs || {}).length, refUrls: urls.size, probs }, null, 1));
+process.exitCode = probs.length ? 1 : 0;

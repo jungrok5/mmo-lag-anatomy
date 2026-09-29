@@ -1,0 +1,39 @@
+# main에 올라오면 데이터를 검사하고 index.html을 새로 만들어 GitHub Pages에 배포한다.
+name: Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: 데이터 검사
+        run: node tools/validate.cjs
+      - name: 빌드
+        run: |
+          python3 build.py
+          git diff --quiet index.html || echo "::warning::커밋된 index.html이 src와 다릅니다. python3 build.py 뒤 커밋하세요."
+          mkdir -p _site
+          cp index.html _site/
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v5
