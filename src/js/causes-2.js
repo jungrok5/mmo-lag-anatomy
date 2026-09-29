@@ -10,7 +10,12 @@
       sym: ['noconnect', 'disconnect'], fx: ['loss'], who: ['server'], when: ['login', 'event'],
       own: ['net', 'srv', 'cli'],
       act: { game: '서버: 로그인 대기열 시스템으로 한꺼번에 몰리는 접속 조절, 짧은 연결을 반복하지 않게 연결 재사용, 하트비트가 끊긴 연결은 먼저 정리(죽은 연결이 세션 테이블을 오래 차지하지 않게). 클라이언트: 가장 짧은 유휴 타임아웃의 절반 이하 간격으로 하트비트 보내기, 끊기면 자동 재접속하되 재시도 간격을 늘려 가며 무작위로 분산(한꺼번에 다시 몰리지 않게).', infra: '세션 테이블 크기 늘리기, 짧게 끝난 연결 빨리 정리(종료된 세션의 타임아웃 단축), 유휴 세션 타임아웃을 줄일 때는 그 값을 게임팀에 알려 하트비트 간격 맞추기, 공격 차단, 세션 수 사용률 경보.' },
-      sim: 'rush' },
+      sim: 'rush',
+      ref: [
+        { t: 'Netfilter Conntrack Sysfs variables', u: 'https://docs.kernel.org/networking/nf_conntrack-sysctl.html', p: 'Linux kernel', n: '연결 추적 표의 최대 항목 수(nf_conntrack_max), 종료 중인 연결의 유지 시간(TIME_WAIT·FIN_WAIT 기본 120초), 성립된 TCP 기본 5일' },
+        { t: 'Amazon EC2 security group connection tracking', u: 'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/security-group-connection-tracking.html', p: 'AWS', n: '인스턴스당 추적할 수 있는 연결 수를 넘으면 새 연결의 패킷을 버림, 유휴 연결이 추적 표를 고갈시킬 수 있음' },
+        { t: 'Infrastructure layer attacks', u: 'https://docs.aws.amazon.com/whitepapers/latest/aws-best-practices-ddos-resiliency/infrastructure-layer-attacks.html', p: 'AWS', n: 'SYN 플러드 같은 공격은 서버·방화벽·로드밸런서의 자원을 묶어 둠' },
+      ] },
     { id: 'dc-ddos', t: 'DDoS 방어 경유·오탐', en: 'DDoS scrubbing latency, false positives',
       s: '공격을 막으려고 트래픽을 스크러빙 센터로 돌리면 경로가 길어지고, 정상 사용자를 공격으로 오인해 막기도 합니다.',
       c: ['공격 감지 후(또는 상시) 들어오는 트래픽을 스크러빙 센터로 우회', '경로가 길어지고, 일부 정상 패킷을 공격으로 판정', '전체 핑 상승, 특정 지역·통신사만 접속 불가'],
