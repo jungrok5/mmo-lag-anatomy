@@ -169,6 +169,9 @@ window.DATA = {
     ] },
   ],
   causes: [],
+  /* 원인 항목의 who(누가 겪나)·when(언제 생기나) 값과 화면에 보이는 이름 */
+  who: { me: '나만', home: '같은 집', region: '특정 지역·통신사', zone: '특정 장소·채널', server: '서버 전체', feature: '특정 기능만', onechar: '특정 캐릭터만 이상해 보임', oneclient: '같은 PC의 한쪽 클라만' },
+  when: { always: '항상', peak: '저녁 피크 시간', event: '사람이 몰릴 때', login: '접속·점검 직후', idle: '가만히 있다가', random: '가끔 무작위로', periodic: '일정한 주기로', uptime: '오래 켜 둘수록', moving: '이동 중·지역 전환 때', action: '특정 행동을 할 때' },
   glossary: [],
   /* 장별 출처. src/js/refs-*.js 가 장 id(basics, l-socket …)마다 [{ t: 제목, u: 주소, p: 발행처, n: 무엇의 근거인지 }] 를 넣는다.
      원인 항목의 출처는 각 항목의 ref 배열(같은 모양)에 둔다. */

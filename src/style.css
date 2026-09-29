@@ -300,6 +300,10 @@ a.sym:hover { border-color: var(--ink-2); }
 }
 .cause-meta { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: var(--ink-2); align-items: center; }
 .cause-meta .k { color: var(--muted); font-weight: 600; margin-right: 4px; }
+.cause-meta .cid a { color: var(--ink-2); text-decoration: none; }
+.cause-meta .cid a:hover { color: var(--accent); text-decoration: underline; }
+.cause-meta .copy { margin-left: 8px; min-height: 24px; padding: 1px 8px; border: 1px solid var(--line); border-radius: 5px; background: transparent; color: var(--muted); font: inherit; font-size: 12px; cursor: pointer; }
+.cause-meta .copy:hover { color: var(--ink); border-color: var(--ink-2); }
 .cause details { max-width: var(--prose); }
 .cause summary { cursor: pointer; font-size: 13.5px; color: var(--accent); font-weight: 600; width: fit-content; }
 .cause details[open] summary { margin-bottom: 8px; }

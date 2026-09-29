@@ -4,7 +4,8 @@ MMO 게임에서 렉이 생기는 원인을 **내 게임 화면부터 서버의 
 슬라이더와 스위치로 직접 망가뜨려 보며 이해하는 시청각 백과입니다.
 서버 프로그래머가 아닌 기획·아트·QA·PM이 읽는 것을 기준으로 썼습니다.
 
-`index.html` 하나를 브라우저로 열면 됩니다. 외부 서버가 필요 없고, 인터넷 연결은 글꼴을 받을 때만 씁니다.
+`index.html` 하나를 브라우저로 열면 됩니다. 글꼴까지 파일 안에 들어 있어 외부 서버나 인터넷 연결 없이 열립니다(출처 링크를 누를 때만 외부로 나갑니다).
+사내 웹 서버, 사내 GitHub Pages, 위키 첨부, 공유 폴더 어디에 올려도 됩니다.
 
 ## 무엇이 들어 있나
 
@@ -38,6 +39,16 @@ MMO 게임에서 렉이 생기는 원인을 **내 게임 화면부터 서버의 
 관련 증상, 네 가지 요인, 누가·언제 겪는지, 수치 감각, 해결 담당(게임개발팀·인프라팀·외부)과 팀별 할 일을 담고 있습니다.
 주 담당 기준으로 게임개발팀 132개(클라이언트 39, 서버 93), 인프라팀 59개(네트워크 23, 서버 장비·OS 30, DB 장비 6), 외부(유저 환경·통신사·클라우드) 25개이고, 88개는 두 팀 모두 할 일이 있습니다.
 
+## 원인 ID로 가리키기
+
+원인 카드마다 **ID**(예: `mem-gc`)와 **링크 복사** 버튼이 있습니다. 위키의 장애 기록이나 티켓에 이 링크를 붙이면 그 원인 카드가 펼쳐진 채로 열립니다(주소 끝 `#c-mem-gc`).
+기록과 도감을 대조하는 기준 값이라서, ID는 한번 정하면 바꾸거나 지우지 않습니다.
+
+## Claude로 묻기
+
+- **Claude Code로 이 저장소를 열 때**: [`CLAUDE.md`](CLAUDE.md)에 데이터 위치, 필드 뜻, 증상에서 원인과 담당을 좁히는 방법, 장애 기록 대조 절차가 있어 그대로 따라 답합니다.
+- **Claude 프로젝트에 자료로 올릴 때**: `npm run export`로 만든 `build/lag-anatomy.md`(원인·증상·담당·용어·출처 전체)를 올립니다. 스크립트로 대조할 때는 같은 내용의 `build/lag-anatomy.json`을 씁니다.
+
 ## 검수
 
 영역별 시니어 개발자 관점의 AI 검토자 7명이 전체를 검수했고(지적 161건), 이어서 4명이 TCP 재전송 장을 다시 검수했습니다(지적 67건). 3차로 8명이 문서 전체를 영역별로 다시 검수했고(지적 212건), 이어서 장 사이의 수치를 맞추는 편집과 비전문가 눈높이의 쉬운 말 편집을 거쳤습니다. 숫자·기본값·버전은 커널 소스, RFC, 클라우드·엔진 공식 문서로 확인했고, 27개 실험은 모든 프리셋을 헤드리스 브라우저로 돌려 해설 숫자와 모델 값이 맞는지 확인했습니다. 게임개발팀·인프라팀 담당 구분도 영역별 검토자 5명과 장애 대응 책임자 관점의 교차 검토자가 검수했습니다. 반영 결과는 [`REVIEW.md`](REVIEW.md)에 있습니다.
@@ -47,22 +58,28 @@ MMO 게임에서 렉이 생기는 원인을 **내 게임 화면부터 서버의 
 ```
 index.html            빌드 결과 (이 파일만 배포하면 됨)
 build.py              src/ 를 하나의 HTML로 합치는 스크립트
+CLAUDE.md             Claude가 이 저장소로 질문에 답하거나 내용을 고칠 때 따르는 안내
 src/
-  head.html           <title>, 글꼴
+  head.html           <title>, 설명, 글꼴 자리
+  fonts/              페이지에 넣는 글꼴(woff2)과 라이선스
   style.css           디자인 토큰(라이트·다크), 레이아웃, 조작부
   body.html           본문 뼈대와 장별 설명
   js/kit.js           시뮬레이션 공용 도구(K): 조작부, 캔버스, 차트, 색, 증상 그림
   js/data.js          레이어, 증상, 네 가지 요인, 숫자 감각, 제보 항목
   js/causes-*.js      원인 항목 (레이어별)
+  js/refs-*.js        장별 출처
   js/glossary.js      용어 사전
   js/app.js           데이터로 본문 채우기, 진단 도우미, 내비게이션
   sims/*.js           시뮬레이션 하나당 파일 하나 (작성 규칙은 sims/README.md)
 tools/validate.cjs    원인 데이터 검사(태그·담당·팀별 할 일·용어 사전 연결). probs가 []여야 함
 tools/check.cjs       헤드리스 크로미움으로 열어 오류·가로 넘침 확인, 스크린샷
 tools/shots.cjs       섹션별 스크린샷
+tools/linkcheck.py    출처 주소 점검(실패한 주소만 출력)
+tools/export.cjs      원인·증상·담당·용어·출처를 마크다운·JSON 하나씩으로 내보내기
 tools/probes/         실험·진단 도우미를 직접 눌러 보는 점검 스크립트(재전송·실험실·담당 탐색기 등)
 docs/OWNERS_GUIDE.md  해결 담당(own)·팀별 할 일(act) 작성 규칙
 docs/TERMS.md         표준 용어표(비유어 대신 쓸 통용 용어)
+docs/SOURCES_GUIDE.md 출처 작성 규칙(공신력 있는 자료만)
 docs/OBSERVABILITY_PLAN.md  관측으로 원인·담당을 판정하는 계획(미구현)
 REVIEW.md             영역별 검수 기록
 ```
@@ -75,6 +92,8 @@ REVIEW.md             영역별 검수 기록
 npm test                                      # 빌드 + 데이터 검사 + 1280px·390px 다크 점검
 python3 build.py                              # index.html 생성
 node tools/validate.cjs                       # 원인 데이터 검사
+npm run links                                 # 출처 주소 점검
+npm run export                                # build/lag-anatomy.md·.json 내보내기
 python3 build.py --only lab                   # 시뮬레이션 하나만 build/sandbox-lab.html 로
 node tools/check.cjs index.html build/p.png 1280          # 오류 확인 + 스크린샷
 node tools/check.cjs index.html build/m.png 390 --dark    # 폰 폭, 다크 모드

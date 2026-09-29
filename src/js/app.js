@@ -9,8 +9,8 @@
   const LAYER = Object.fromEntries(ALL_LAYERS.map((l, i) => [l.id, Object.assign({ n: i + 1 }, l)]));
   const SYM = Object.fromEntries(D.symptoms.map(s => [s.id, s]));
   const FX = Object.fromEntries(D.fx.map(f => [f.id, f]));
-  const WHO = { me: '나만', home: '같은 집', region: '특정 지역·통신사', zone: '특정 장소·채널', server: '서버 전체', feature: '특정 기능만', onechar: '특정 캐릭터만 이상해 보임', oneclient: '같은 PC의 한쪽 클라만' };
-  const WHEN = { always: '항상', peak: '저녁 피크 시간', event: '사람이 몰릴 때', login: '접속·점검 직후', idle: '가만히 있다가', random: '가끔 무작위로', periodic: '일정한 주기로', uptime: '오래 켜 둘수록', moving: '이동 중·지역 전환 때', action: '특정 행동을 할 때' };
+  const WHO = D.who;
+  const WHEN = D.when;
   const SIMNAME = {
     lab: '렉 실험실', queue: '대기열 실험', journey: '지연 분해', frames: '프레임 실험', cpu: 'CPU 스케줄러 실험', bloat: '버퍼블로트 실험',
     distance: '거리·경로 실험', timeouts: '장비별 유휴 타임아웃 실험', nic: 'NIC 실험', rush: '접속 폭주 실험', hol: 'TCP vs UDP 실험', nagle: 'Nagle 실험',
@@ -133,6 +133,7 @@
       `<span><span class="k">누가</span>${c.who.map(w => WHO[w]).join(', ')}</span>`,
       `<span><span class="k">언제</span>${c.when.map(w => WHEN[w]).join(', ')}</span>`,
       c.sim ? `<span><span class="k">실험</span><a href="#sim-${c.sim}">${SIMNAME[c.sim] || c.sim}</a></span>` : '',
+      `<span class="cid"><span class="k">ID</span><a class="mono" href="#c-${c.id}">${c.id}</a><button type="button" class="copy" data-copy="${c.id}" aria-label="${esc(c.t)} 링크 복사">링크 복사</button></span>`,
     ].join('');
     const acts = c.act ? TEAM_ORDER.filter(t => c.act[t]).map(t => `<dt class="act act-${t}">${ACT_LABEL[t]}</dt><dd>${c.act[t]}</dd>`).join('') : '';
     const dl = [
@@ -521,6 +522,26 @@
     if (el && el.classList.contains('cause')) { const d = $('details', el); if (d) d.open = true; }
   }
   window.addEventListener('hashchange', openHash);
+
+  // 원인 링크 복사: 위키의 장애 기록에 붙여 이 원인을 가리키는 주소
+  function copyOld(t) {
+    const ta = document.createElement('textarea');
+    ta.value = t; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0';
+    document.body.append(ta); ta.select();
+    let ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { /* 복사가 막힌 환경 */ }
+    ta.remove();
+    return ok ? Promise.resolve() : Promise.reject(new Error('copy'));
+  }
+  // 클립보드 API는 https·localhost에서만 되므로 http 사내 서버·파일로 열었을 때는 예전 방식으로 복사한다
+  const copyText = t => (navigator.clipboard && window.isSecureContext ? navigator.clipboard.writeText(t).catch(() => copyOld(t)) : copyOld(t));
+  document.addEventListener('click', e => {
+    const b = e.target.closest('button[data-copy]');
+    if (!b) return;
+    const hash = '#c-' + b.dataset.copy;
+    const show = msg => { b.textContent = msg; clearTimeout(b._t); b._t = setTimeout(() => { b.textContent = '링크 복사'; }, 1800); };
+    copyText(location.href.split('#')[0] + hash).then(() => show('복사됨'), () => { history.replaceState(null, '', hash); show('주소창에서 복사하세요'); });
+  });
 
   /* ---------------- 시뮬레이션 올리기 ---------------- */
   K.mountAll();

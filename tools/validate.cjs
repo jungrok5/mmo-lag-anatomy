@@ -5,8 +5,8 @@ for (const f of files) vm.runInContext(fs.readFileSync(f, 'utf8'), ctx, { filena
 const D = ctx.DATA, body = fs.readFileSync('src/body.html', 'utf8');
 const layers = new Set([...D.layers, ...(D.extraLayers || [])].map(l => l.id));
 const syms = new Set(D.symptoms.map(s => s.id)), fx = new Set(D.fx.map(f => f.id));
-const WHO = new Set('me home region zone server feature onechar oneclient'.split(' '));
-const WHEN = new Set('always peak event login idle random periodic uptime moving action'.split(' '));
+const WHO = new Set(Object.keys(D.who));
+const WHEN = new Set(Object.keys(D.when));
 const sims = new Set(fs.readdirSync('src/sims').filter(f => f.endsWith('.js')).map(f => f.slice(0, -3)));
 const probs = [], ids = new Set(), per = {}; let pending = 0, refMissing = 0;
 const checkRefs = (list, where) => {

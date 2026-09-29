@@ -6,7 +6,9 @@
     "build": "python3 build.py",
     "validate": "node tools/validate.cjs",
     "check": "mkdir -p build && node tools/check.cjs index.html build/p.png 1280 && node tools/check.cjs index.html build/m.png 390 --dark",
-    "test": "npm run build && npm run validate && npm run check"
+    "test": "npm run build && npm run validate && npm run check",
+    "links": "python3 tools/linkcheck.py",
+    "export": "node tools/export.cjs"
   },
   "devDependencies": {
     "playwright": "^1.56.1"
