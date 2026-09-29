@@ -34,6 +34,12 @@ TITLE_FULL = "렉 해부도감: MMO 게임 렉 원인 백과"
 FAVICON = "data:image/svg+xml;base64," + base64.b64encode((SRC / "site" / "favicon.svg").read_bytes()).decode("ascii")
 
 
+# 검색엔진 소유 확인 태그(Google Search Console 등). 네이버 서치어드바이저 등을 추가할 때 여기에 넣는다
+VERIFY = {
+    "google-site-verification": "MkGziULldBfP0Ucua6AbX0riN3P2l0pfQvmSfiAtiwI",
+}
+
+
 def seo(head):
     """완성본에만 넣는 검색엔진·AI·링크 미리보기용 정보."""
     desc = html.unescape(re.search(r'<meta name="description" content="([^"]*)">', head).group(1))
@@ -54,6 +60,7 @@ def seo(head):
     }
     e = lambda v: html.escape(v, quote=True)
     return "\n".join([
+        *[f'<meta name="{k}" content="{e(v)}">' for k, v in VERIFY.items()],
         '<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">',
         f'<link rel="canonical" href="{SITE}">',
         f'<link rel="icon" href="{FAVICON}" type="image/svg+xml">',
