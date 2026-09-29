@@ -5155,6 +5155,103 @@ Object.assign(DATA.secRefs, {
 </script>
 <script>
 "use strict";
+/* ==== js/refs-rt.js ==== */
+/* 장별 출처: TCP 재전송 해부(retrans), 누가 고치나(owners)
+   retrans: 본문, 재전송 종류 표, 원인 찾는 도구 표, 해결 방향, 설정 이름 표와 시뮬레이션 retrans 의 근거.
+   owners: 경계 규칙(클라이언트 하트비트, backlog, 클라우드 보안 그룹·네트워크 ACL)과 현상별 표의 기술 근거. */
+Object.assign(DATA.secRefs, {
+  'retrans': [
+    /* 표준: 재전송 동작 */
+    { t: 'RFC 6298: Computing TCP\'s Retransmission Timer', u: 'https://www.rfc-editor.org/rfc/rfc6298', p: 'IETF', n: 'RTO = SRTT + max(G, 4·RTTVAR), 초기 1초, 최소 1초 권고, 만료될 때마다 두 배, 상한을 두려면 60초 이상, 재전송한 패킷은 RTT 표본에서 뺌(Karn)' },
+    { t: 'RFC 5681: TCP Congestion Control', u: 'https://www.rfc-editor.org/rfc/rfc5681', p: 'IETF', n: '세 번째 중복 ACK에서 빠른 재전송, RTO 뒤에는 혼잡 윈도우 1 세그먼트(손실 윈도우)에서 다시 시작' },
+    { t: 'RFC 6675: A Conservative Loss Recovery Algorithm Based on Selective Acknowledgment (SACK) for TCP', u: 'https://www.rfc-editor.org/rfc/rfc6675', p: 'IETF', n: 'SACK 정보로 빠진 패킷을 판단하는 손실 복구(빠른 재전송의 중복 ACK·SACK 신호)' },
+    { t: 'RFC 8985: The RACK-TLP Loss Detection Algorithm for TCP', u: 'https://www.rfc-editor.org/rfc/rfc8985', p: 'IETF', n: 'RACK의 순서 뒤바뀜 여유(min_RTT/4)와 DSACK에 따른 조정, TLP 대기 2·SRTT(보낸 패킷이 하나면 지연 ACK 여유 추가), 탐침 뒤 RTO 재설정, SACK 필수' },
+    { t: 'RFC 2018: TCP Selective Acknowledgment Options', u: 'https://www.rfc-editor.org/rfc/rfc2018', p: 'IETF', n: 'SACK: 받는 쪽이 중간에 빠진 부분을 알림' },
+    { t: 'RFC 2883: An Extension to the Selective Acknowledgement (SACK) Option for TCP', u: 'https://www.rfc-editor.org/rfc/rfc2883', p: 'IETF', n: 'DSACK: 이미 받은 것을 또 받았다고 알려 불필요한 재전송을 드러냄' },
+    { t: 'RFC 5682: Forward RTO-Recovery (F-RTO): An Algorithm for Detecting Spurious Retransmission Timeouts with TCP', u: 'https://www.rfc-editor.org/rfc/rfc5682', p: 'IETF', n: 'F-RTO: 불필요한 RTO 감지' },
+    { t: 'RFC 3522: The Eifel Detection Algorithm for TCP', u: 'https://www.rfc-editor.org/rfc/rfc3522', p: 'IETF', n: '타임스탬프로 복구가 불필요했는지 사후에 가려냄(시뮬레이션의 혼잡 윈도우 되돌리기)' },
+    { t: 'RFC 7323: TCP Extensions for High Performance', u: 'https://www.rfc-editor.org/rfc/rfc7323', p: 'IETF', n: '타임스탬프·윈도우 스케일 옵션, 스케일이 없으면 윈도우는 최대 64KiB' },
+    { t: 'RFC 6937: Proportional Rate Reduction for TCP', u: 'https://www.rfc-editor.org/rfc/rfc6937', p: 'IETF', n: 'PRR: 복구 중 보내는 양을 새로 전달된 양에 맞춰 줄임(시뮬레이션의 복구 중 전송 한도)' },
+    { t: 'RFC 9438: CUBIC for Fast and Long-Distance Networks', u: 'https://www.rfc-editor.org/rfc/rfc9438', p: 'IETF', n: 'CUBIC은 손실 때 혼잡 윈도우를 0.7배로 줄임(시뮬레이션의 30% 축소)' },
+    { t: 'RFC 9293: Transmission Control Protocol (TCP)', u: 'https://www.rfc-editor.org/rfc/rfc9293', p: 'IETF', n: '제로 윈도우 프로브: 윈도우가 0이어도 탐침을 보내고, 간격은 지수적으로 늘림' },
+    { t: 'RFC 9000: QUIC: A UDP-Based Multiplexed and Secure Transport', u: 'https://www.rfc-editor.org/rfc/rfc9000', p: 'IETF', n: 'QUIC은 손실이 그 패킷에 담긴 스트림만 막아 다른 스트림은 계속 진행(흐름 분리)' },
+    /* 표준: 손실을 줄이는 쪽 */
+    { t: 'RFC 2475: An Architecture for Differentiated Services', u: 'https://www.rfc-editor.org/rfc/rfc2475', p: 'IETF', n: '셰이핑은 패킷을 늦추고, 폴리싱은 초과분을 버린다는 정의' },
+    { t: 'RFC 3168: The Addition of Explicit Congestion Notification (ECN) to IP', u: 'https://www.rfc-editor.org/rfc/rfc3168', p: 'IETF', n: 'ECN: 패킷을 버리지 않고 혼잡을 알림' },
+    { t: 'Smart Queue Management', u: 'https://www.bufferbloat.net/projects/cerowrt/wiki/Smart_Queue_Management/', p: 'Bufferbloat.net', n: '공유기 SQM: 흐름별 스케줄링·AQM·셰이핑으로 대기열 넘침과 버퍼블로트를 줄임' },
+    { t: 'RFC 1191: Path MTU discovery', u: 'https://www.rfc-editor.org/rfc/rfc1191', p: 'IETF', n: '크기 초과 알림 ICMP(유형 3 코드 4)로 경로 MTU를 찾음' },
+    /* 표준: 경로 측정 해석 */
+    { t: 'RFC 1812: Requirements for IP Version 4 Routers', u: 'https://www.rfc-editor.org/rfc/rfc1812', p: 'IETF', n: '라우터는 ICMP 오류 메시지 발생 속도를 제한할 수 있음(중간 한 구간만 손실로 보이는 mtr 결과)' },
+    { t: 'RFC 2991: Multipath Issues in Unicast and Multicast Next-Hop Selection', u: 'https://www.rfc-editor.org/rfc/rfc2991', p: 'IETF', n: '다중 경로에서는 ping·traceroute 같은 진단 결과를 믿기 어렵고, 흐름 해시로 경로를 고정하는 방식' },
+    /* 리눅스 커널: 설정·카운터 문서 */
+    { t: 'IP Sysctl', u: 'https://docs.kernel.org/networking/ip-sysctl.html', p: 'Linux kernel', n: 'tcp_recovery(기본 0x1 RACK), tcp_early_retrans(기본 3, 0이면 TLP 끔), tcp_sack·tcp_dsack·tcp_timestamps(기본 켜짐), tcp_thin_linear_timeouts(날아가는 패킷 4개 미만, 최대 6번 선형), tcp_rto_max_ms, tcp_mtu_probing·tcp_base_mss, tcp_rto_min_us, tcp_retries2(기본 15, 약 924.6초), tcp_syn_linear_timeouts, tcp_notsent_lowat' },
+    { t: 'SNMP counter', u: 'https://docs.kernel.org/networking/snmp_counter.html', p: 'Linux kernel', n: 'TcpOutSegs에는 재전송이 빠져 있음, TCPLossProbes·TCPLossProbeRecovery·TCPLostRetransmit·TCPSpuriousRTOs·TCPDSACKRecv·TCPSynRetrans의 뜻' },
+    { t: 'net/ipv4/proc.c', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/ipv4/proc.c?h=v6.12', p: 'Linux kernel', n: 'nstat에 나오는 카운터 이름(RetransSegs, TCPTimeouts, TCPLossProbes, TCPSpuriousRTOs, TCPDSACKRecv 등)' },
+    { t: 'Thin-streams and TCP', u: 'https://docs.kernel.org/networking/tcp-thin.html', p: 'Linux kernel', n: '게임 같은 thin stream은 빠른 재전송이 잘 안 돼 긴 타임아웃에 기댐, TCP_THIN_LINEAR_TIMEOUTS' },
+    /* 리눅스 커널: 소스 */
+    { t: 'include/net/tcp.h', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/net/tcp.h?h=v6.12', p: 'Linux kernel', n: 'TCP_RTO_MIN 200ms, TCP_RTO_MAX 120초, TCP_TIMEOUT_INIT 1초, 지연 ACK 40~200ms(TCP_DELACK_MIN·MAX), TCP_BASE_MSS 1,024, thin stream 기준(날아가는 패킷 4개 미만)' },
+    { t: 'net/ipv4/tcp_input.c', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/ipv4/tcp_input.c?h=v6.12', p: 'Linux kernel', n: 'RTO = SRTT + rttvar(RTO 최소값 이상), RACK은 SACK 연결에만 적용, 복구 중 혼잡 윈도우 축소에 PRR 사용' },
+    { t: 'net/ipv4/tcp_output.c', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/ipv4/tcp_output.c?h=v6.12', p: 'Linux kernel', n: 'TLP는 SACK 연결에만, 대기 2·RTT, 보낸 패킷이 하나면 RTO 최소값을 더함' },
+    { t: 'net/ipv4/tcp_timer.c', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/ipv4/tcp_timer.c?h=v6.12', p: 'Linux kernel', n: 'RTO가 tcp_retries1만큼 이어지면 블랙홀 감지로 MTU 탐색, thin stream·SYN의 선형 타임아웃' },
+    { t: 'net/ipv4/tcp_recovery.c', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/ipv4/tcp_recovery.c?h=v6.12', p: 'Linux kernel', n: 'RACK 여유 시간 = min(min_RTT/4 × 단계, SRTT), 최소 RTT보다 빨리 확인된 재전송은 기준에서 뺌' },
+    { t: 'net/ipv4/tcp_ipv4.c', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/ipv4/tcp_ipv4.c?h=v6.12', p: 'Linux kernel', n: '기본값 초기화: tcp_early_retrans 3, tcp_recovery RACK, tcp_syn_linear_timeouts 4, tcp_base_mss 1,024(tcp_mtu_probing은 따로 정하지 않아 0)' },
+    { t: 'net/ipv4/tcp_bbr.c', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/ipv4/tcp_bbr.c?h=v6.12', p: 'Linux kernel', n: 'BBR의 pacing_rate = pacing_gain × 병목 대역폭(페이싱으로 고르게 보냄)' },
+    /* 리눅스 커널: 버전 */
+    { t: 'tcp: use RACK to detect losses', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4f41b1c58a32537542f14c1150099131613a5e8a', p: 'Linux kernel', n: 'RACK과 tcp_recovery 도입(리눅스 4.4), 처음에는 기존 방식의 보조로 동작' },
+    { t: 'tcp: disable RFC6675 loss detection', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b38a51fec1c1f693f03b1aa19d0622123634d4b7', p: 'Linux kernel', n: 'RACK을 기본 손실 감지로 바꿈(2018년, 리눅스 4.18)' },
+    { t: 'tcp: remove obsolete and unused RFC3517/RFC6675 loss recovery code', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1c120191dcec510cc17d587ece48a7ae875a90c5', p: 'Linux kernel', n: 'RFC6675 손실 복구 코드 삭제(리눅스 6.17), RACK-TLP가 2018년부터 기본이었다는 설명' },
+    { t: 'tcp: make the first N SYN RTO backoffs linear', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ccce324dabfe2143519daf50ed8b1ef1d0c542f7', p: 'Linux kernel', n: 'SYN 재전송 앞 4번을 1초 간격으로(리눅스 6.5)' },
+    { t: 'tcp: add sysctl_tcp_rto_min_us', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f086edef71be7174a16c1ed67ac65a085cda28b1', p: 'Linux kernel', n: '서버 전체 RTO 최소값 tcp_rto_min_us(리눅스 6.11)' },
+    { t: 'tcp: add the ability to control max RTO', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=54a378f43425085d0684679d99735696b69165bc', p: 'Linux kernel', n: 'TCP_RTO_MAX_MS 소켓 옵션, 1~120초(리눅스 6.15)' },
+    { t: 'Android common kernels', u: 'https://source.android.com/docs/core/architecture/kernel/android-common', p: 'Android (Google)', n: '지원 중인 안드로이드 공통 커널은 5.10 이상(RACK이 기본이 된 4.18보다 새 커널)' },
+    /* 소켓 옵션·큐 설정 */
+    { t: 'tcp(7) — Linux manual page', u: 'https://man7.org/linux/man-pages/man7/tcp.7.html', p: 'Linux man-pages', n: 'TCP_NODELAY(Nagle 끔), TCP_USER_TIMEOUT(재전송 시점은 바꾸지 않고 포기 시점만 정함), TCP_KEEPIDLE, TCP_INFO' },
+    { t: 'ip-route(8) — Linux manual page', u: 'https://man7.org/linux/man-pages/man8/ip-route.8.html', p: 'iproute2', n: '경로별 rto_min 옵션' },
+    { t: 'tc-fq(8) — Linux manual page', u: 'https://man7.org/linux/man-pages/man8/tc-fq.8.html', p: 'iproute2', n: 'fq 큐의 연결별 페이싱과 SO_MAX_PACING_RATE' },
+    { t: 'iptables-extensions(8) — Linux manual page', u: 'https://man7.org/linux/man-pages/man8/iptables-extensions.8.html', p: 'netfilter', n: 'TCPMSS --clamp-mss-to-pmtu: ICMP가 막힌 구간을 SYN의 MSS 조정으로 우회' },
+    /* 원인 찾는 도구 */
+    { t: 'ss(8) — Linux manual page', u: 'https://man7.org/linux/man-pages/man8/ss.8.html', p: 'iproute2', n: 'ss -i의 rto(ms), backoff(실제 RTO = rto << backoff), rtt/rttvar, cwnd' },
+    { t: 'misc/ss.c', u: 'https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/misc/ss.c?h=v6.12.0', p: 'iproute2', n: 'ss -ti의 retrans:지금/누적, lost, reordering, bytes_sent·bytes_retrans 출력' },
+    { t: 'nstat(8) — Linux manual page', u: 'https://man7.org/linux/man-pages/man8/nstat.8.html', p: 'iproute2', n: 'nstat은 기본으로 이전 실행 이후의 증가분을 보여 줌' },
+    { t: 'Demonstrations of tcpretrans, the Linux eBPF/bcc version', u: 'https://raw.githubusercontent.com/iovisor/bcc/master/tools/tcpretrans_example.txt', p: 'IO Visor', n: '재전송마다 주소·포트·상태를 한 줄씩, -c는 흐름별 집계, -l은 TLP 시도 포함' },
+    { t: 'Interface statistics', u: 'https://docs.kernel.org/networking/statistics.html', p: 'Linux kernel', n: 'ip -s -s link로 세부 오류까지 확인, rx_missed_errors·rx_crc_errors의 뜻, ethtool -S의 드라이버별 통계' },
+    { t: 'drivers/net/ethernet/intel/igb/igb_ethtool.c', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/net/ethernet/intel/igb/igb_ethtool.c?h=v6.12', p: 'Linux kernel', n: '드라이버별 카운터 이름 예: rx_missed_errors, rx_no_buffer_count, rx_crc_errors' },
+    { t: 'Ethtool counters', u: 'https://docs.kernel.org/networking/device_drivers/ethernet/mellanox/mlx5/counters.html', p: 'Linux kernel', n: 'mlx5의 rx_out_of_buffer·rx_discards_phy' },
+    { t: 'net/core/net-procfs.c', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/core/net-procfs.c?h=v6.12', p: 'Linux kernel', n: '/proc/net/softnet_stat은 CPU마다 한 줄, 16진수, 2번째 열 dropped, 3번째 열 time_squeeze' },
+    { t: 'Monitor network performance for ENA settings on your EC2 instance', u: 'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-network-performance-ena.html', p: 'AWS', n: 'bw_in·bw_out·pps·conntrack·linklocal_allowance_exceeded의 뜻, CloudWatch로 보려면 CloudWatch 에이전트 설치' },
+    { t: 'High-Resolution Measurement of Data Center Microbursts', u: 'https://research.facebook.com/publications/high-resolution-measurement-of-data-center-microbursts/', p: 'Meta', n: '버스트 대부분이 수십 µs 안에 끝나 분 단위 평균 사용률로는 드롭 원인이 보이지 않음(IMC 2017)' },
+    { t: 'mtr(8) manual page source', u: 'https://raw.githubusercontent.com/traviscross/mtr/master/man/mtr.8.in', p: 'mtr', n: '-T(--tcp)로 TCP SYN, -P(--port)로 대상 포트 지정' },
+    { t: 'pathping', u: 'https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/pathping', p: 'Microsoft', n: '여러 번 보내 구간별 손실·지연을 계산하는 윈도우 경로 진단 명령' },
+    { t: 'Display Filter Reference: Transmission Control Protocol', u: 'https://www.wireshark.org/docs/dfref/t/tcp.html', p: 'Wireshark', n: 'tcp.analysis.retransmission·fast_retransmission·spurious_retransmission·duplicate_ack·lost_segment·zero_window 표시 필터' },
+    { t: '7.5. TCP Analysis', u: 'https://www.wireshark.org/docs/wsug_html_chunked/ChAdvTCPAnalysis.html', p: 'Wireshark', n: '재전송·빠른 재전송·불필요한 재전송·ZeroWindow 판정 조건' },
+    /* 윈도우 */
+    { t: 'Network-Related Performance Counters', u: 'https://learn.microsoft.com/en-us/windows-server/networking/technologies/network-subsystem/net-sub-performance-counters', p: 'Microsoft', n: 'TCPv4 Segments Retransmitted/sec·Segments Sent/sec, Network Interface Packets Received Discarded' },
+    { t: 'TCP/IP connectivity issues troubleshooting', u: 'https://learn.microsoft.com/en-us/troubleshoot/windows-client/networking/tcp-ip-connectivity-issues-troubleshooting', p: 'Microsoft', n: 'netsh int tcp show global로 TCP 전역 설정(Max SYN Retransmissions) 확인, 양쪽 동시 캡처로 중간 손실 확인' },
+    { t: 'Packet Monitor (Pktmon)', u: 'https://learn.microsoft.com/en-us/windows-server/networking/technologies/pktmon/pktmon', p: 'Microsoft', n: '윈도우 네트워크 스택 여러 지점에서 패킷 폐기 위치와 이유를 보여 주는 내장 도구' },
+    { t: 'TCP improvements in the Windows network stack (IETF 98 TCPM)', u: 'https://datatracker.ietf.org/meeting/98/materials/slides-98-tcpm-tcp-improvements-in-windows-01', p: 'Microsoft', n: '윈도우 10 1주년 업데이트(1607)·서버 2016에서 TLP와 RACK을 기본으로 켬(RTT 10ms 초과 연결), 한 패킷만 남았을 때 TLP는 지연 ACK 200ms를 감안' },
+    { t: 'Algorithmic improvements boost TCP performance on the Internet', u: 'https://techcommunity.microsoft.com/blog/networkingblog/algorithmic-improvements-boost-tcp-performance-on-the-internet/2347061', p: 'Microsoft', n: 'TLP는 윈도우 서버 2016부터 기본, 잃은 재전송까지 복구하는 새 RACK은 서버 2022에 탑재, PRR은 윈도우 10 1903부터 기본' },
+    { t: 'TcpMaxConnectRetransmissions', u: 'https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-2000-server/cc938209(v=technet.10)', p: 'Microsoft', n: '예전 윈도우 SYN 재전송: 3초부터 두 배씩 2번' },
+  ],
+  'owners': [
+    { t: 'RFC 4787: Network Address Translation (NAT) Behavioral Requirements for Unicast UDP', u: 'https://www.rfc-editor.org/rfc/rfc4787', p: 'IETF', n: 'NAT 매핑은 안에서 나가는 패킷으로 반드시 갱신되고(REQ-6), 밖에서 들어오는 패킷의 갱신은 선택 사항(UDP 기준). 그래서 하트비트는 클라이언트가 보냄' },
+    { t: 'RFC 5382: NAT Behavioral Requirements for TCP', u: 'https://www.rfc-editor.org/rfc/rfc5382', p: 'IETF', n: 'NAT는 유휴 TCP 세션을 지울 수 있으며, 권고 유휴 타임아웃은 2시간 4분 이상(장비마다 설정이 다를 수 있음)' },
+    { t: 'Amazon EC2 security group connection tracking', u: 'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/security-group-connection-tracking.html', p: 'AWS', n: '보안 그룹 연결 추적의 TCP 유휴 타임아웃(Nitro v6 인스턴스 유형 350초, 그 밖 5일, 60초~5일로 조정), 5분보다 짧은 keepalive 권고, NLB를 거치는 TCP는 350초' },
+    { t: 'Control subnet traffic with network access control lists', u: 'https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html', p: 'AWS', n: '네트워크 ACL은 상태를 저장하지 않아(연결 추적 없음) 응답 트래픽도 규칙으로 따로 허용해야 함' },
+    { t: 'Monitor network performance for ENA settings on your EC2 instance', u: 'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-network-performance-ena.html', p: 'AWS', n: '인스턴스의 연결 추적·초당 패킷 한도 초과 카운터(conntrack_allowance_exceeded, pps_allowance_exceeded)' },
+    { t: 'listen(2) — Linux manual page', u: 'https://man7.org/linux/man-pages/man2/listen.2.html', p: 'Linux man-pages', n: 'listen의 backlog 인자가 실제 대기열 크기이며 somaxconn보다 크면 그 값으로 잘림(5.4부터 기본 4096)' },
+    { t: 'IP Sysctl', u: 'https://docs.kernel.org/networking/ip-sysctl.html', p: 'Linux kernel', n: 'somaxconn(listen backlog 상한), tcp_max_syn_backlog, tcp_syncookies(기본 1, SYN 대기열이 넘칠 때 쓰는 대비책), tcp_keepalive_time(기본 2시간)' },
+    { t: 'SNMP counter', u: 'https://docs.kernel.org/networking/snmp_counter.html', p: 'Linux kernel', n: 'accept 대기열이 차면 SYN을 버리고 TcpExtListenOverflows·TcpExtListenDrops가 늘어남' },
+    { t: 'Netfilter Conntrack Sysfs variables', u: 'https://docs.kernel.org/networking/nf_conntrack-sysctl.html', p: 'Linux kernel', n: 'nf_conntrack_count와 nf_conntrack_max로 conntrack 사용률 계산' },
+    { t: 'Control Group v2', u: 'https://docs.kernel.org/admin-guide/cgroup-v2.html', p: 'Linux kernel', n: 'cpu.stat의 nr_throttled: 컨테이너 CPU 한도로 스로틀링된 횟수' },
+    { t: 'proc_stat(5) — Linux manual page', u: 'https://man7.org/linux/man-pages/man5/proc_stat.5.html', p: 'Linux man-pages', n: '/proc/stat의 steal: 가상화 환경에서 다른 OS가 CPU를 쓴 시간' },
+    { t: 'RFC 2992: Analysis of an Equal-Cost Multi-Path Algorithm', u: 'https://www.rfc-editor.org/rfc/rfc2992', p: 'IETF', n: 'ECMP는 흐름을 구분하는 헤더 필드의 해시로 경로를 고름(같은 흐름은 같은 경로, 흐름이 다르면 다른 경로일 수 있음)' },
+    { t: 'mtr(8) manual page source', u: 'https://raw.githubusercontent.com/traviscross/mtr/master/man/mtr.8.in', p: 'mtr', n: '게임과 같은 프로토콜·포트로 경로 측정(-T, -u, -P)' },
+  ],
+});
+
+</script>
+<script>
+"use strict";
 /* ==== js/refs-server.js ==== */
 /* 장별 출처: 서버 게임 프로세스(l-server-proc: 본문·틱 실험·락 실험), 서버 구성과 운영(l-infra: 본문·구성도 실험) */
 Object.assign(DATA.secRefs, {
