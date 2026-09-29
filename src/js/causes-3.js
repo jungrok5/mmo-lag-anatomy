@@ -54,7 +54,7 @@
       sim: 'tick',
       ref: [
         { t: 'Time Dilation – How’s That Going?', u: 'https://www.eveonline.com/news/view/time-dilation-hows-that-going', p: 'CCP Games', n: 'EVE Online의 Time Dilation은 노드 단위라 한 노드에 함께 올라간 먼 성계까지 느려짐, 큰 전투는 성계 4개만 올린 강화 노드에서 처리' },
-        { t: 'mpstat(1) - Linux manual page', u: 'https://man7.org/linux/man-pages/man1/mpstat.1.html', p: 'sysstat', n: '프로세서별 사용률과 전체 평균을 따로 보여 줌(-P ALL)' },
+        { t: 'mpstat(1) — Linux manual page', u: 'https://man7.org/linux/man-pages/man1/mpstat.1.html', p: 'sysstat', n: '프로세서별 사용률과 전체 평균을 따로 보여 줌(-P ALL)' },
       ] },
     { id: 'sp-lock', t: '락 경합', en: 'Lock contention',
       s: '여러 스레드가 같은 데이터를 쓰려고 락 하나를 기다리면, 스레드를 늘려도 한 번에 하나씩만 실행됩니다.',
@@ -140,7 +140,7 @@
       act: { game: '크래시 덤프 분석으로 원인 수정, 자주 저장.', infra: '프로세스 자동 재시작, 크래시 덤프 수집·보관 환경, 서버 다운 즉시 경보.' },
       ref: [
         { t: 'Collecting User-Mode Dumps', u: 'https://learn.microsoft.com/en-us/windows/win32/wer/collecting-user-mode-dumps', p: 'Microsoft', n: '윈도우 오류 보고(WER)로 사용자 모드 프로그램이 크래시할 때 전체·미니 덤프를 로컬에 모으도록 설정' },
-        { t: 'systemd.service(5) - Linux manual page', u: 'https://man7.org/linux/man-pages/man5/systemd.service.5.html', p: 'systemd', n: 'Restart=on-failure는 비정상 종료·신호 종료(코어 덤프 포함)·워치독 시간 초과 때 서비스를 자동 재시작, 오래 도는 서비스에 권장' },
+        { t: 'systemd.service(5) — Linux manual page', u: 'https://man7.org/linux/man-pages/man5/systemd.service.5.html', p: 'systemd', n: 'Restart=on-failure는 비정상 종료·신호 종료(코어 덤프 포함)·워치독 시간 초과 때 서비스를 자동 재시작, 오래 도는 서비스에 권장' },
       ] },
     { id: 'sp-threadpool', t: '스레드 풀 고갈', en: 'Thread pool starvation',
       s: '작업을 처리할 워커 스레드가 모두 느린 작업에 묶이면 새 요청은 무작정 기다립니다.',
@@ -161,7 +161,7 @@
       own: ['srv'],
       act: { game: '반복 상한, 워치독, 문제 입력 재현 테스트.' },
       ref: [
-        { t: 'systemd.service(5) - Linux manual page', u: 'https://man7.org/linux/man-pages/man5/systemd.service.5.html', p: 'systemd', n: 'WatchdogSec=: 서비스가 정한 시간 안에 살아 있다는 신호(WATCHDOG=1)를 보내지 않으면 실패로 보고 종료, Restart= 설정에 따라 자동 재시작' },
+        { t: 'systemd.service(5) — Linux manual page', u: 'https://man7.org/linux/man-pages/man5/systemd.service.5.html', p: 'systemd', n: 'WatchdogSec=: 서비스가 정한 시간 안에 살아 있다는 신호(WATCHDOG=1)를 보내지 않으면 실패로 보고 종료, Restart= 설정에 따라 자동 재시작' },
         { t: 'Liveness, Readiness, and Startup Probes', u: 'https://kubernetes.io/docs/concepts/workloads/pods/probes/', p: 'Kubernetes', n: '실행 중이지만 진행하지 못하는 상태를 라이브니스 검사로 잡아 재시작, 기본은 10초마다 검사해 3번 연속 실패하면 재시작' },
       ] },
     { id: 'sp-hot-entity', t: '한 대상에 몰린 전투 (월드 보스)', en: 'Hot entity / combat event fan-out',
@@ -569,7 +569,7 @@
       ref: [
         { t: 'RFC 5905: Network Time Protocol Version 4: Protocol and Algorithms Specification', u: 'https://www.rfc-editor.org/rfc/rfc5905', p: 'IETF', n: '빠른 LAN의 NTP 클라이언트는 보통 수백 µs 안으로 맞음' },
         { t: 'chrony – Frequently Asked Questions', u: 'https://chrony-project.org/faq.html', p: 'chrony', n: '보통 컴퓨터 시계의 드리프트는 100ppm 미만이지만 가상 머신은 더 클 수 있음, 일시 정지했다 재개한 가상 머신은 시각이 틀어져 스텝 보정이 필요할 수 있음' },
-        { t: 'clock_getres(2) - Linux manual page', u: 'https://man7.org/linux/man-pages/man2/clock_gettime.2.html', p: 'Linux man-pages', n: 'CLOCK_REALTIME은 수동 변경·NTP 보정으로 불연속하게 뛸 수 있고, CLOCK_MONOTONIC은 그런 점프의 영향을 받지 않음' },
+        { t: 'clock_gettime(2) — Linux manual page', u: 'https://man7.org/linux/man-pages/man2/clock_gettime.2.html', p: 'Linux man-pages', n: 'CLOCK_REALTIME은 수동 변경·NTP 보정으로 불연속하게 뛸 수 있고, CLOCK_MONOTONIC은 그런 점프의 영향을 받지 않음' },
       ] },
     { id: 'in-bots', t: '매크로·봇 과다', en: 'Bots and macros',
       s: '봇은 사람보다 훨씬 자주 요청을 보내 서버 처리량을 잠식합니다.',

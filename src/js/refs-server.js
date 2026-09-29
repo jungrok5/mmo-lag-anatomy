@@ -21,6 +21,6 @@ Object.assign(DATA.secRefs, {
     { t: 'Working with DB instance read replicas', u: 'https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html', p: 'AWS', n: '구성도 실험의 복제 지연: 읽기 복제본은 비동기로 갱신돼 옛 데이터를 읽을 수 있음' },
     { t: 'Site Reliability Engineering, Chapter 20: Load Balancing in the Datacenter', u: 'https://sre.google/sre-book/load-balancing-datacenter/', p: 'Google', n: '배포·재시작: lame duck 상태로 새 요청을 돌린 뒤 종료, 재시작 직후 예열' },
     { t: 'Amazon EC2 Auto Scaling lifecycle hooks', u: 'https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html', p: 'AWS', n: '확장·축소 때 인스턴스를 대기 상태로 두고 준비·정리 작업을 마침(기본 1시간까지)' },
-    { t: 'systemd.service(5) - Linux manual page', u: 'https://man7.org/linux/man-pages/man5/systemd.service.5.html', p: 'systemd', n: '구성도 실험의 워치독: 살아 있다는 신호가 끊긴 서비스를 종료하고 자동 재시작' },
+    { t: 'systemd.service(5) — Linux manual page', u: 'https://man7.org/linux/man-pages/man5/systemd.service.5.html', p: 'systemd', n: '구성도 실험의 워치독: 살아 있다는 신호가 끊긴 서비스를 종료하고 자동 재시작' },
   ],
 });
