@@ -574,3 +574,10 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
 .refs.bib li { padding: 6px 0; border-bottom: 1px solid var(--line); }
 .refs.bib details { font-size: 12.5px; color: var(--ink-2); }
 .refs.bib details summary { cursor: pointer; color: var(--muted); }
+
+/* 자바스크립트를 실행하지 않는 수집기·브라우저용 정적 사본(배포 때 tools/site.cjs가 넣는다).
+   스크립트가 돌면 head에서 html에 js 표시를 붙여 처음부터 숨기고, app.js가 곧 원래 화면으로 바꾼다 */
+.js .sf { display: none; }
+.sf article { padding-block: 12px; border-bottom: 1px solid var(--line); }
+.sf h3, .sf h4 { font-size: 17px; }
+.sf .en { color: var(--muted); font-weight: 400; font-size: 13px; }

@@ -2,6 +2,25 @@
   "name": "mmo-lag-anatomy",
   "private": true,
   "description": "렉 해부도감: MMO 렉 원인 시청각 백과",
+  "homepage": "https://jungrok5.github.io/mmo-lag-anatomy/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jungrok5/mmo-lag-anatomy.git"
+  },
+  "keywords": [
+    "렉",
+    "lag",
+    "MMO",
+    "netcode",
+    "game networking",
+    "latency",
+    "jitter",
+    "packet loss",
+    "TCP retransmission",
+    "game server",
+    "SRE",
+    "Korean"
+  ],
   "license": "MIT",
   "scripts": {
     "build": "python3 build.py",
@@ -9,7 +28,8 @@
     "check": "mkdir -p build && node tools/check.cjs index.html build/p.png 1280 && node tools/check.cjs index.html build/m.png 390 --dark",
     "test": "npm run build && npm run validate && npm run check",
     "links": "python3 tools/linkcheck.py",
-    "export": "node tools/export.cjs"
+    "export": "node tools/export.cjs",
+    "site": "python3 build.py && node tools/site.cjs"
   },
   "devDependencies": {
     "playwright": "^1.56.1"

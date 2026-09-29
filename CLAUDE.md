@@ -66,6 +66,7 @@ python3 build.py      # index.html 만들기 (글꼴까지 넣은 파일 하나)
 npm run validate      # 원인 데이터 검사
 npm run links         # 출처 주소 점검 (실패한 주소만 출력)
 npm run export        # build/lag-anatomy.md, build/lag-anatomy.json (Claude 프로젝트 업로드·다른 도구용)
+npm run site          # 배포본을 build/site/에 만들기(원인·증상별 페이지, 텍스트 판, llms.txt, sitemap.xml)
 ```
 
 폴더 구조와 장 목록은 `README.md`에 있다.

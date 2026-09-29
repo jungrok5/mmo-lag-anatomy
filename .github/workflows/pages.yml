@@ -1,4 +1,4 @@
-# main에 올라오면 데이터를 검사하고 index.html을 새로 만들어 GitHub Pages에 배포한다.
+# main에 올라오면 데이터를 검사하고 index.html과 검색엔진·AI용 파일을 만들어 GitHub Pages에 배포한다.
 name: Pages
 
 on:
@@ -29,11 +29,16 @@ jobs:
         run: |
           python3 build.py
           git diff --quiet index.html || echo "::warning::커밋된 index.html이 src와 다릅니다. python3 build.py 뒤 커밋하세요."
-          mkdir -p _site
-          cp index.html _site/
+      - name: 검색엔진·AI용 파일 만들기
+        # 원인·증상별 페이지, 텍스트 판, llms.txt, sitemap.xml, index.html의 정적 사본
+        run: node tools/site.cjs _site
       - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v5
         with:
           path: _site
       - id: deployment
         uses: actions/deploy-pages@v5
+      - name: 검색엔진에 갱신 알리기 (IndexNow)
+        # Bing(ChatGPT 검색의 바탕)·Naver 등이 받는다. 실패해도 배포에는 영향 없음
+        continue-on-error: true
+        run: node tools/indexnow.cjs _site
