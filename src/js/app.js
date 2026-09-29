@@ -19,6 +19,23 @@
     syncmodels: '동기화 방식 비교', windows: '판정 구간 실험', chain: '연속 행동 실험', oneslow: '한 명만 느릴 때 실험', npcmissing: '한쪽 클라 진단', retrans: 'TCP 재전송 실험',
   };
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  /* 해결 담당: own[0]이 주 담당, 나머지는 함께 대응하는 곳. act는 팀별 할 일 */
+  const OWN = Object.fromEntries((D.owners || []).map(o => [o.id, o]));
+  const TEAMS = D.teams || {};
+  const TEAM_ORDER = ['game', 'infra', 'ext'];
+  const ACT_LABEL = { game: '게임개발팀이 할 일', infra: '인프라팀이 할 일', ext: '유저 안내·외부 요청' };
+  const leadTeam = c => (c.own && OWN[c.own[0]] ? OWN[c.own[0]].team : null);
+  const teamsOf = c => [...new Set((c.own || []).map(id => OWN[id] && OWN[id].team).filter(Boolean))];
+  const ownBadge = id => {
+    const o = OWN[id]; if (!o) return '';
+    return `<span class="own own-${o.team}" title="${esc(o.name + ': ' + o.desc)}"><span class="tm">${TEAMS[o.team].name}</span>${o.short}</span>`;
+  };
+  const ownRow = c => {
+    if (!c.own || !c.own.length) return '';
+    const rest = c.own.slice(1);
+    return `<div class="own-row"><span class="k">주 담당</span>${ownBadge(c.own[0])}${rest.length ? `<span class="k">함께</span>${rest.map(ownBadge).join('')}` : ''}</div>`;
+  };
   const ARROW = '<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7h8m-3-3 3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   const symChip = (id, link = true) => {
     const s = SYM[id]; if (!s) return '';
@@ -98,6 +115,13 @@
     const l = LAYER[sec.dataset.layer];
     const n = (byLayer[l.id] || []).length;
     $('.ch-kicker', sec).innerHTML = `<span class="idx">L${String(l.n).padStart(2, '0')}</span>레이어 ${l.n} / ${D.layers.length} · ${l.side} · 원인 ${n}가지`;
+    const lead = {};
+    (byLayer[l.id] || []).forEach(c => { if (c.own && OWN[c.own[0]]) lead[c.own[0]] = (lead[c.own[0]] || 0) + 1; });
+    const top = Object.entries(lead).sort((a, b) => b[1] - a[1]);
+    if (top.length) {
+      const box = K.el('p', { class: 'own-sum', html: `<span class="k">주 담당</span>${top.map(([id, k]) => `${ownBadge(id)}<span class="mono">${k}</span>`).join('')} <a href="#owners">담당 구분 보기</a>` });
+      $('.ch-head', sec).append(box);
+    }
     const h3 = $('h3.sec:last-of-type', sec);
     if (h3) h3.innerHTML = `이 층에서 렉을 만드는 원인 <span class="mono">${n}가지</span>`;
   });
@@ -108,9 +132,10 @@
       `<span><span class="k">언제</span>${c.when.map(w => WHEN[w]).join(', ')}</span>`,
       c.sim ? `<span><span class="k">실험</span><a href="#sim-${c.sim}">${SIMNAME[c.sim] || c.sim}</a></span>` : '',
     ].join('');
+    const acts = c.act ? TEAM_ORDER.filter(t => c.act[t]).map(t => `<dt class="act act-${t}">${ACT_LABEL[t]}</dt><dd>${c.act[t]}</dd>`).join('') : '';
     const dl = [
       c.num ? `<dt>수치 감각</dt><dd>${c.num}</dd>` : '',
-      c.fix ? `<dt>서버·클라팀의 대응</dt><dd>${c.fix}</dd>` : '',
+      acts || (c.fix ? `<dt>대응</dt><dd>${c.fix}</dd>` : ''),
       c.more ? `<dt>더 알아보기</dt><dd>${c.more}</dd>` : '',
     ].join('');
     return `<article class="cause" id="c-${c.id}">
@@ -121,8 +146,9 @@
         <div class="step"><b>그러면</b>${c.c[1]}</div><div class="arr">${ARROW}</div>
         <div class="step out"><b>화면에서는</b>${c.c[2]}</div>
       </div>
+      ${ownRow(c)}
       <div class="cause-meta">${meta}</div>
-      ${dl ? `<details><summary>수치 감각과 대응</summary><div class="more"><dl>${dl}</dl></div></details>` : ''}
+      ${dl ? `<details><summary>수치 감각과 팀별 대응</summary><div class="more"><dl>${dl}</dl></div></details>` : ''}
     </article>`;
   }
   $$('[data-causes]').forEach(box => { box.innerHTML = (byLayer[box.dataset.causes] || []).map(causeHTML).join(''); });
@@ -132,6 +158,14 @@
   if (partH3) partH3.innerHTML = `일부에게만 생기는 문제 <span class="mono">${(byLayer.partial || []).length}가지</span>`;
   const rtH3 = $('#retrans h3.sec:last-of-type');
   if (rtH3) rtH3.innerHTML = `TCP 재전송의 근본 원인 <span class="mono">${(byLayer.retrans || []).length}가지</span>`;
+
+  // 원인 목록을 주 담당 팀별로 센 한 줄
+  function teamSplit(list) {
+    const k = { game: 0, infra: 0, ext: 0 };
+    list.forEach(c => { const t = leadTeam(c); if (t) k[t]++; });
+    if (!k.game && !k.infra && !k.ext) return '';
+    return `<p class="team-split"><span class="k">주 담당</span>${TEAM_ORDER.filter(t => k[t]).map(t => `<span class="own own-${t}"><span class="tm">${TEAMS[t].name}</span>${k[t]}가지</span>`).join('')}</p>`;
+  }
 
   /* ---------------- 증상 사전 ---------------- */
   const symCauses = {};
@@ -149,6 +183,7 @@
       <div class="looks"><b>화면에서는</b>${s.looks}</div>
       <p><b>단서</b> ${s.tell}</p>
       <details class="cause-links"><summary>이 증상을 만드는 원인 ${list.length}가지</summary><div class="list">${links}</div></details>
+      ${teamSplit(list)}
       <div class="actions">
         ${s.preset ? `<button type="button" class="btn small primary" data-lab="${s.preset}">실험실에서 재현하기</button>` : ''}
         <button type="button" class="btn small" data-tri="${s.id}">진단 도우미로</button>
@@ -316,11 +351,15 @@
       const max = (st.who ? 3 : 0) + st.when.size * 2 + st.sym.size * 3;
       hint.innerHTML = st.who ? HINT[st.who] : '선택할수록 후보가 좁혀집니다. “누가”가 가장 강한 단서입니다.';
       if (!scored.length || !max) { out.innerHTML = '<p class="note">조건을 하나 이상 골라 주세요.</p>'; return; }
-      out.innerHTML = scored.slice(0, 10).map(({ c, score, why }) => {
+      // 상위 10개의 주 담당을 세어 “먼저 넘길 곳”을 알려 준다
+      const route = {};
+      scored.slice(0, 10).forEach(({ c }) => { if (c.own && OWN[c.own[0]]) route[c.own[0]] = (route[c.own[0]] || 0) + 1; });
+      const routeHTML = Object.keys(route).length ? `<p class="tri-route"><span class="k">먼저 확인할 곳</span>${Object.entries(route).sort((a, b) => b[1] - a[1]).map(([id, k]) => `${ownBadge(id)}<span class="mono">${k}</span>`).join('')}<span class="note">상위 10개 원인의 주 담당</span></p>` : '';
+      out.innerHTML = routeHTML + scored.slice(0, 10).map(({ c, score, why }) => {
         const pct = Math.round((score / max) * 100);
         return `<div class="tri-item">
           <div class="score">${pct}%<div class="meter"><i style="width:${pct}%"></i></div></div>
-          <div><a href="#c-${c.id}">${c.t}</a> <span class="layer">· ${LAYER[c.layer].name}</span>
+          <div><a href="#c-${c.id}">${c.t}</a> <span class="layer">· ${LAYER[c.layer].name}</span> ${c.own && c.own.length ? ownBadge(c.own[0]) : ''}
           <div class="why">${c.s}</div>
           <div class="why"><span class="note">맞는 조건: ${why.join(' · ')}</span></div></div>
         </div>`;
@@ -332,6 +371,75 @@
       update();
     });
     update();
+  });
+
+  /* ---------------- 담당 구분 탐색기 ---------------- */
+  K.register('owners', function (root) {
+    const st = { team: 'game', mode: 'lead', cell: null };   // mode: lead = 주 담당만, all = 함께 대응 포함
+    const has = c => c.own && c.own.length;
+    const causes = D.causes.filter(has);
+
+    const stats = K.el('div', { class: 'sim-stats' });
+    const sGame = K.stat(stats, { label: '게임개발팀이 주 담당', unit: '가지' });
+    const sInfra = K.stat(stats, { label: '인프라팀이 주 담당', unit: '가지' });
+    const sExt = K.stat(stats, { label: '외부가 주 담당', unit: '가지' });
+    const sBoth = K.stat(stats, { label: '두 팀 모두 할 일이 있음', unit: '가지' });
+    const k = { game: 0, infra: 0, ext: 0 };
+    causes.forEach(c => { k[leadTeam(c)]++; });
+    const both = causes.filter(c => c.act && c.act.game && c.act.infra).length;
+    sGame.set(String(k.game), null, `전체 ${causes.length}가지 중`);
+    sInfra.set(String(k.infra), null, `전체 ${causes.length}가지 중`);
+    sExt.set(String(k.ext), null, '유저 환경·통신사·클라우드');
+    sBoth.set(String(both), null, '완화와 근본 해결을 나눠 맡는 경우');
+
+    // 층 × 담당 표. 칸의 굵은 숫자는 주 담당, +숫자는 함께 대응
+    const matWrap = K.el('div', { class: 'table-wrap own-mat-wrap' });
+    const rows = ALL_LAYERS.filter(l => causes.some(c => c.layer === l.id));
+    const maxLead = Math.max(1, ...rows.flatMap(l => D.owners.map(o => causes.filter(c => c.layer === l.id && c.own[0] === o.id).length)));
+    matWrap.innerHTML = `<table class="own-mat"><thead><tr><th scope="col">층·주제</th>${D.owners.map(o => `<th scope="col" class="own-${o.team}"><span class="tm">${TEAMS[o.team].name}</span>${o.short}</th>`).join('')}</tr></thead><tbody>${rows.map(l => {
+      return `<tr><th scope="row"><a href="#${l.anchor || 'l-' + l.id}">${l.short}</a></th>${D.owners.map(o => {
+        const lead = causes.filter(c => c.layer === l.id && c.own[0] === o.id).length;
+        const also = causes.filter(c => c.layer === l.id && c.own.indexOf(o.id) > 0).length;
+        if (!lead && !also) return '<td class="empty"></td>';
+        return `<td class="own-${o.team}" style="--a:${(0.12 + 0.6 * lead / maxLead).toFixed(2)}"><button type="button" data-l="${l.id}" data-o="${o.id}" aria-label="${esc(l.short + ' · ' + o.name + ': 주 담당 ' + lead + '가지, 함께 ' + also + '가지')}">${lead ? `<b>${lead}</b>` : ''}${also ? `<span>+${also}</span>` : ''}</button></td>`;
+      }).join('')}</tr>`;
+    }).join('')}</tbody></table>`;
+
+    const ctl = K.el('div', { class: 'own-ctl' });
+    const cTeam = K.choice(ctl, { label: '팀', value: st.team, options: TEAM_ORDER.map(t => [t, TEAMS[t].name]), onChange: v => { st.team = v; st.cell = null; draw(); } });
+    const cMode = K.choice(ctl, { label: '범위', value: st.mode, options: [['lead', '주 담당만'], ['all', '함께 대응 포함']], onChange: v => { st.mode = v; draw(); } });
+    const out = K.el('div', { class: 'own-list' });
+
+    matWrap.addEventListener('click', e => {
+      const b = e.target.closest('button[data-l]'); if (!b) return;
+      st.cell = { layer: b.dataset.l, owner: b.dataset.o };
+      st.team = OWN[st.cell.owner].team; cTeam.set && cTeam.set(st.team, false);
+      draw();
+      out.scrollIntoView({ behavior: K.reducedMotion ? 'auto' : 'smooth', block: 'nearest' });
+    });
+
+    function item(c, team) {
+      const act = c.act && c.act[team];
+      return `<li><div class="own-li-top"><a href="#c-${c.id}">${c.t}</a>${ownBadge(c.own[0])}</div>${act ? `<div class="own-act">${act}</div>` : `<div class="own-act note">이 팀의 할 일은 없고, ${TEAMS[leadTeam(c)].name}이 처리합니다.</div>`}</li>`;
+    }
+    function draw() {
+      $$('button[data-l]', matWrap).forEach(b => b.classList.toggle('on', !!st.cell && b.dataset.l === st.cell.layer && b.dataset.o === st.cell.owner));
+      if (st.cell) {
+        const o = OWN[st.cell.owner], l = LAYER[st.cell.layer];
+        const list = causes.filter(c => c.layer === l.id && (st.mode === 'all' ? c.own.includes(o.id) : c.own[0] === o.id));
+        out.innerHTML = `<p class="own-list-head"><b>${l.name}</b> · ${o.name} ${st.mode === 'all' ? '(함께 대응 포함)' : '(주 담당)'} ${list.length}가지 <button type="button" class="btn small" data-clear>팀 전체 보기</button></p>` +
+          (list.length ? `<ul>${list.map(c => item(c, o.team)).join('')}</ul>` : '<p class="note">이 범위에 해당하는 원인이 없습니다. “함께 대응 포함”을 골라 보세요.</p>');
+        $('[data-clear]', out).addEventListener('click', () => { st.cell = null; draw(); });
+        return;
+      }
+      const pick = c => (st.mode === 'all' ? teamsOf(c).includes(st.team) : leadTeam(c) === st.team);
+      const groups = rows.map(l => [l, causes.filter(c => c.layer === l.id && pick(c))]).filter(([, v]) => v.length);
+      const n = groups.reduce((a, [, v]) => a + v.length, 0);
+      out.innerHTML = `<p class="own-list-head"><b>${TEAMS[st.team].name}</b> ${st.mode === 'all' ? '할 일이 있는' : '주 담당인'} 원인 ${n}가지. 층을 눌러 펼치세요. 표의 칸을 누르면 그 층·담당만 봅니다.</p>` +
+        groups.map(([l, v], i) => `<details${i === 0 ? ' open' : ''}><summary>${l.short} <span class="mono">${v.length}</span></summary><ul>${v.map(c => item(c, st.team)).join('')}</ul></details>`).join('');
+    }
+    root.append(stats, matWrap, ctl, out);
+    draw();
   });
 
   /* ---------------- 제보 가이드 ---------------- */

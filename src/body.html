@@ -16,6 +16,7 @@
         <li><a href="#sync">동기화 방식과 체감</a></li>
         <li><a href="#partial">한 명만·한쪽만 이상할 때</a></li>
         <li><a href="#retrans">TCP 재전송 해부</a></li>
+        <li><a href="#owners">게임팀·인프라팀 담당 구분</a></li>
       </ol>
     </div>
     <div class="nav-group">
@@ -390,6 +391,76 @@
       </section>
 
       <!-- ===================== 레이어 1 ===================== -->
+      <section class="chapter" id="owners">
+        <div class="ch-head">
+          <div class="ch-kicker"><span class="idx">07</span>누가 고치나</div>
+          <h2>게임개발팀이 고칠 것, 인프라팀이 고칠 것</h2>
+          <p class="lede">같은 렉이라도 고치는 곳이 다릅니다. 클라이언트·서버 코드와 동기화 설계는 <b>게임개발팀</b>이, 회선·네트워크 장비·서버 장비·DB 장비는 <b>인프라팀</b>이 맡습니다. 유저의 PC와 집 네트워크, 통신사 구간, 클라우드 사업자 쪽 문제는 두 팀 모두 직접 고칠 수 없어 안내하거나 요청하거나 우회합니다. 모든 원인 카드에 <b>주 담당</b>과 <b>함께 대응할 곳</b>을 표시했고, 카드의 “수치 감각과 팀별 대응”을 펼치면 팀마다 할 일이 나뉘어 있습니다.</p>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>팀</th><th>담당</th><th>맡는 범위</th><th>주로 쓰는 해결 수단</th></tr></thead>
+            <tbody>
+              <tr><td rowspan="2"><b>게임개발팀</b></td><td><span class="own own-game"><span class="tm">게임개발팀</span>클라이언트</span></td><td>게임 클라이언트 코드: 프레임·GC·로딩, 보간·외삽·예측, 클라이언트의 네트워크 처리</td><td>코드 수정, 보간 버퍼·예측 조정, 로딩 방식 변경, 클라이언트 패치</td></tr>
+              <tr><td><span class="own own-game"><span class="tm">게임개발팀</span>서버</span></td><td>게임 서버 코드: 틱·스레드·락, 동기화 설계, 소켓 옵션, 쿼리·트랜잭션 설계</td><td>로직 최적화, 비동기 호출, 틱·지역 분산, 소켓 옵션(TCP_NODELAY 등), 쿼리·인덱스 설계, 서버 패치</td></tr>
+              <tr><td rowspan="3"><b>인프라팀</b></td><td><span class="own own-infra"><span class="tm">인프라팀</span>네트워크</span></td><td>회선과 IDC 네트워크 장비(스위치·라우터·방화벽·로드밸런서·DDoS 방어), 통신사·피어링</td><td>장비 설정·교체, 회선·피어링 증설, 경로 변경, 통신사 에스컬레이션, 타임아웃·세션 한도 조정</td></tr>
+              <tr><td><span class="own own-infra"><span class="tm">인프라팀</span>서버 장비·OS</span></td><td>서버 장비·클라우드 인스턴스, OS·커널 설정, NIC, 배포·모니터링 환경</td><td>증설·인스턴스 변경, 커널 설정(sysctl), NIC 링 버퍼·인터럽트 분산, 크론·백업 시간 조정</td></tr>
+              <tr><td><span class="own own-infra"><span class="tm">인프라팀</span>DB 장비</span></td><td>DB 서버·스토리지, DB 설정·복제·백업, 캐시 서버</td><td>DB 증설, 스토리지 IOPS 확보, DB 파라미터·복제 설정, 백업·체크포인트 조정</td></tr>
+              <tr><td><b>외부</b></td><td><span class="own own-ext"><span class="tm">외부</span>유저·통신사·클라우드</span></td><td>유저 PC·집 네트워크, 통신사 구간, 클라우드 사업자</td><td>유저 안내(유선 연결 등), 통신사·클라우드 사업자에 요청, 게임 쪽 우회·완화</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sec">층·주제별 담당 한눈에 보기</h3>
+        <p class="note">굵은 숫자는 그 담당이 주 담당인 원인 수, +숫자는 함께 대응하는 원인 수입니다. 칸을 누르면 아래에 그 원인과 팀의 할 일이 나옵니다.</p>
+        <div data-sim="owners" id="sim-owners"></div>
+
+        <h3 class="sec">경계가 애매할 때: 완화는 게임팀, 근본 해결은 인프라팀</h3>
+        <div class="prose">
+          <p>회선이나 장비 문제라도 게임개발팀이 할 일이 없는 것은 아닙니다. 인프라팀이 원인을 없애는 동안, 게임개발팀은 그 영향을 줄이는 설계(보간 버퍼, 입력 중복 전송, 하트비트, 재접속)로 버팁니다. 반대로 서버 코드가 원인이면 장비를 늘려도 잠시 미룰 뿐입니다. 자주 부딪히는 경우를 정리했습니다.</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>현상</th><th>게임개발팀 (완화·설계)</th><th>인프라팀 (근본 해결)</th><th>먼저 볼 지표</th></tr></thead>
+            <tbody>
+              <tr><td>특정 통신사·지역에서 손실·지터가 큼</td><td>적응형 보간 버퍼, 입력 겹쳐 보내기, 손실에 강한 UDP 전송</td><td>경로 품질 점검(양방향 mtr), 통신사 에스컬레이션, 피어링·회선 추가</td><td>통신사별 손실률·지터 분포</td></tr>
+              <tr><td>TCP 재전송 증가</td><td>TCP_NODELAY, 연결 나누기, 보내기 버퍼에 옛 위치 쌓지 않기(TCP_NOTSENT_LOWAT)</td><td>손실 지점 제거(장비·케이블·MTU), MSS 조정, 커널 복구 설정(RACK·tcp_mtu_probing)</td><td>재전송 증가분(nstat), NIC 드롭 카운터</td></tr>
+              <tr><td>서버 CPU 포화로 틱 초과</td><td>시야 계산·브로드캐스트 최적화, 틱 분산, 붐비는 지역 나누기</td><td>코어·인스턴스 증설, CPU 스틸·스로틀링 확인, 인터럽트 분산</td><td>틱 처리 시간, CPU 사용률·steal</td></tr>
+              <tr><td>DB 응답 지연</td><td>쿼리·인덱스·트랜잭션 설계, 게임 루프 밖에서 비동기 호출, 캐시</td><td>DB 장비 증설, 스토리지 IOPS, 복제·체크포인트 설정, 커넥션 한도</td><td>느린 쿼리 로그, 락 대기, IOPS</td></tr>
+              <tr><td>점검 직후 접속 불가</td><td>로그인 대기열 시스템, 재시도 지수 백오프, 접속 분산</td><td>backlog·somaxconn, 방화벽·로드밸런서 세션 한도, conntrack 한도</td><td>ListenOverflows, 세션 테이블 사용률</td></tr>
+              <tr><td>가만히 있으면 접속 끊김</td><td>하트비트를 가장 짧은 유휴 타임아웃의 절반 이하로, 끊기면 자동 재접속</td><td>로드밸런서·방화벽·NAT의 유휴 타임아웃 확인·조정</td><td>끊긴 연결의 유휴 시간 분포</td></tr>
+              <tr><td>정해진 시각마다 서버 멈춤</td><td>정각 이벤트·저장 분산, GC 튜닝</td><td>백업·크론·스냅숏 시간 조정, 디스크 버스트 확인</td><td>멈춘 시각과 작업 스케줄</td></tr>
+              <tr><td>DDoS·트래픽 폭주</td><td>서버의 요청 속도 제한, 비정상 패킷 조기 차단</td><td>DDoS 방어(스크러빙), 장비의 초당 패킷 한도, 회선 증설</td><td>초당 패킷 수, 장비 CPU</td></tr>
+              <tr><td>유저 와이파이·PC 문제</td><td>게임 안 네트워크 상태 표시(핑·손실), 지터에 강한 보간, 설정 안내</td><td>직접 고칠 수 없음</td><td>제보의 회선·기기 정보</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sec">넘길 때 챙길 정보</h3>
+        <div class="two-col">
+          <div class="prose">
+            <p><b>게임개발팀 → 인프라팀</b></p>
+            <ul>
+              <li>정확한 시각(초 단위, 시간대 표기)과 지속 시간</li>
+              <li>서버·채널 ID, 영향 범위(나만·특정 통신사·서버 전체)</li>
+              <li>영향받은 클라이언트의 IP 대역·통신사·지역</li>
+              <li>게임 쪽 지표: 틱 처리 시간, 핑·손실 분포, 재전송이 늘어난 연결 수</li>
+              <li>최근 배포·설정 변경 여부</li>
+            </ul>
+          </div>
+          <div class="prose">
+            <p><b>인프라팀 → 게임개발팀</b></p>
+            <ul>
+              <li>같은 시각의 장비·회선 지표(사용률, 드롭·에러 카운터, 세션 수)</li>
+              <li>장비·회선 변경 이력(교체, 설정 변경, 통신사 작업 공지)</li>
+              <li>원인 구간과 결론, 재발 방지 계획</li>
+              <li>게임 쪽에 필요한 조치(하트비트 간격, 재시도 방식, 연결 수 제한 등)</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
       <section class="chapter layer" id="l-client-game" data-layer="client-game">
         <div class="ch-head">
           <div class="ch-kicker"></div>

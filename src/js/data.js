@@ -40,6 +40,21 @@ window.DATA = {
     { id: 'retrans', name: 'TCP 재전송의 근본 원인', short: 'TCP 재전송', side: '원인', anchor: 'retrans' },
   ],
 
+  /* 해결 담당. 원인 항목의 own 배열은 이 id를 쓰고 첫 항목이 주 담당, act는 팀별로 할 일 */
+  teams: {
+    game: { name: '게임개발팀', desc: '클라이언트·서버 코드와 동기화 설계' },
+    infra: { name: '인프라팀', desc: '회선·네트워크 장비, 서버 장비·OS, DB 장비' },
+    ext: { name: '외부', desc: '유저 환경, 통신사, 클라우드 사업자' },
+  },
+  owners: [
+    { id: 'cli', team: 'game', name: '클라이언트 개발', short: '클라이언트', desc: '게임 클라이언트 코드: 프레임·GC·로딩, 보간·외삽·예측, 클라이언트의 네트워크 처리' },
+    { id: 'srv', team: 'game', name: '서버 개발', short: '서버', desc: '게임 서버 코드: 틱·스레드·락, 동기화 설계, 소켓 옵션, 쿼리·트랜잭션 설계' },
+    { id: 'net', team: 'infra', name: '네트워크 인프라', short: '네트워크', desc: '회선과 IDC 네트워크 장비(스위치·라우터·방화벽·로드밸런서·DDoS 방어), 통신사·피어링' },
+    { id: 'sys', team: 'infra', name: '서버 인프라', short: '서버 장비·OS', desc: '서버 장비·클라우드 인스턴스, OS·커널 설정, NIC, 배포·모니터링 환경' },
+    { id: 'dba', team: 'infra', name: 'DB 인프라', short: 'DB 장비', desc: 'DB 서버·스토리지, DB 설정·복제·백업, 캐시 서버' },
+    { id: 'ext', team: 'ext', name: '외부', short: '유저·통신사·클라우드', desc: '유저 PC·집 네트워크, 통신사, 클라우드 사업자. 직접 고칠 수 없어 안내·요청·우회로 대응' },
+  ],
+
   /* 네 가지 요인 */
   fx: [
     { id: 'lat', name: '지연', en: 'Latency', how: '패킷이 늦게 온다',

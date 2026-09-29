@@ -522,6 +522,42 @@ input[type="range"]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 4px 
 
 .sandbox { padding: 20px; max-width: 1100px; margin: 0 auto; }
 
+/* ---------- 해결 담당 ---------- */
+.own { --team: var(--muted); display: inline-flex; align-items: baseline; gap: 5px; font-size: 12.5px; line-height: 1.25; padding: 2px 8px 2px 7px; border: 1px solid var(--line); border-left: 4px solid var(--team); border-radius: 4px; background: var(--paper); color: var(--ink-2); white-space: nowrap; }
+.own .tm { font-weight: 700; color: var(--ink); font-size: 11.5px; }
+.own-game { --team: var(--s1); }
+.own-infra { --team: var(--s2); }
+.own-ext { --team: var(--muted); }
+.own-row, .own-sum, .team-split, .tri-route { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; font-size: 13px; margin: 0; }
+.own-row .k, .own-sum .k, .team-split .k, .tri-route .k { font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: .03em; }
+.own-sum .mono, .tri-route .mono { font-family: var(--font-mono); font-size: 12px; color: var(--ink-2); margin-right: 4px; }
+.own-sum { margin-top: 12px; }
+.tri-route { padding: 8px 12px; border: 1px dashed var(--line); border-radius: 8px; }
+.tri-route .note { font-size: 12px; }
+.more dt.act::before { content: ''; display: inline-block; width: 4px; height: 12px; margin-right: 7px; vertical-align: -1px; background: var(--team, var(--muted)); border-radius: 1px; }
+.more dt.act-game { --team: var(--s1); }
+.more dt.act-infra { --team: var(--s2); }
+.more dt.act-ext { --team: var(--muted); }
+.own-mat { border-collapse: separate; border-spacing: 3px; width: 100%; font-size: 13px; }
+.own-mat th { font-weight: 600; text-align: left; color: var(--ink-2); padding: 4px 6px; white-space: nowrap; }
+.own-mat thead th { font-size: 12px; vertical-align: bottom; border-bottom: 3px solid var(--team, var(--line)); }
+.own-mat thead th .tm { display: block; font-size: 10.5px; color: var(--muted); font-weight: 700; }
+.own-mat tbody th a { color: var(--ink); text-decoration: none; }
+.own-mat td { padding: 0; min-width: 44px; }
+.own-mat td button { width: 100%; min-height: 34px; border: 1px solid var(--line); border-radius: 6px; background: color-mix(in srgb, var(--team) calc(var(--a) * 100%), var(--paper)); color: var(--ink); font: 600 13px/1 var(--font-mono); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 3px; padding: 0 4px; }
+.own-mat td button span { font-weight: 500; font-size: 11px; color: var(--ink-2); }
+.own-mat td button:hover, .own-mat td button.on { outline: 2px solid var(--ink); outline-offset: -1px; }
+.own-ctl { display: flex; flex-wrap: wrap; gap: 12px 24px; margin: 16px 0 8px; }
+.own-list-head { font-size: 14px; color: var(--ink-2); margin: 8px 0; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+.own-list ul { list-style: none; margin: 6px 0 12px; padding: 0; display: grid; gap: 6px; }
+.own-list li { padding: 9px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); }
+.own-li-top { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
+.own-li-top a { font-weight: 700; }
+.own-act { font-size: 13.5px; color: var(--ink-2); margin-top: 4px; }
+.own-list details { border-top: 1px solid var(--line); padding: 6px 0; }
+.own-list summary { cursor: pointer; font-weight: 600; font-size: 14px; }
+.own-list summary .mono { font-family: var(--font-mono); color: var(--muted); font-weight: 500; margin-left: 4px; }
+
 </style>
 </head>
 <body>
@@ -543,6 +579,7 @@ input[type="range"]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 4px 
         <li><a href="#sync">동기화 방식과 체감</a></li>
         <li><a href="#partial">한 명만·한쪽만 이상할 때</a></li>
         <li><a href="#retrans">TCP 재전송 해부</a></li>
+        <li><a href="#owners">게임팀·인프라팀 담당 구분</a></li>
       </ol>
     </div>
     <div class="nav-group">
@@ -917,6 +954,76 @@ input[type="range"]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 4px 
       </section>
 
       <!-- ===================== 레이어 1 ===================== -->
+      <section class="chapter" id="owners">
+        <div class="ch-head">
+          <div class="ch-kicker"><span class="idx">07</span>누가 고치나</div>
+          <h2>게임개발팀이 고칠 것, 인프라팀이 고칠 것</h2>
+          <p class="lede">같은 렉이라도 고치는 곳이 다릅니다. 클라이언트·서버 코드와 동기화 설계는 <b>게임개발팀</b>이, 회선·네트워크 장비·서버 장비·DB 장비는 <b>인프라팀</b>이 맡습니다. 유저의 PC와 집 네트워크, 통신사 구간, 클라우드 사업자 쪽 문제는 두 팀 모두 직접 고칠 수 없어 안내하거나 요청하거나 우회합니다. 모든 원인 카드에 <b>주 담당</b>과 <b>함께 대응할 곳</b>을 표시했고, 카드의 “수치 감각과 팀별 대응”을 펼치면 팀마다 할 일이 나뉘어 있습니다.</p>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>팀</th><th>담당</th><th>맡는 범위</th><th>주로 쓰는 해결 수단</th></tr></thead>
+            <tbody>
+              <tr><td rowspan="2"><b>게임개발팀</b></td><td><span class="own own-game"><span class="tm">게임개발팀</span>클라이언트</span></td><td>게임 클라이언트 코드: 프레임·GC·로딩, 보간·외삽·예측, 클라이언트의 네트워크 처리</td><td>코드 수정, 보간 버퍼·예측 조정, 로딩 방식 변경, 클라이언트 패치</td></tr>
+              <tr><td><span class="own own-game"><span class="tm">게임개발팀</span>서버</span></td><td>게임 서버 코드: 틱·스레드·락, 동기화 설계, 소켓 옵션, 쿼리·트랜잭션 설계</td><td>로직 최적화, 비동기 호출, 틱·지역 분산, 소켓 옵션(TCP_NODELAY 등), 쿼리·인덱스 설계, 서버 패치</td></tr>
+              <tr><td rowspan="3"><b>인프라팀</b></td><td><span class="own own-infra"><span class="tm">인프라팀</span>네트워크</span></td><td>회선과 IDC 네트워크 장비(스위치·라우터·방화벽·로드밸런서·DDoS 방어), 통신사·피어링</td><td>장비 설정·교체, 회선·피어링 증설, 경로 변경, 통신사 에스컬레이션, 타임아웃·세션 한도 조정</td></tr>
+              <tr><td><span class="own own-infra"><span class="tm">인프라팀</span>서버 장비·OS</span></td><td>서버 장비·클라우드 인스턴스, OS·커널 설정, NIC, 배포·모니터링 환경</td><td>증설·인스턴스 변경, 커널 설정(sysctl), NIC 링 버퍼·인터럽트 분산, 크론·백업 시간 조정</td></tr>
+              <tr><td><span class="own own-infra"><span class="tm">인프라팀</span>DB 장비</span></td><td>DB 서버·스토리지, DB 설정·복제·백업, 캐시 서버</td><td>DB 증설, 스토리지 IOPS 확보, DB 파라미터·복제 설정, 백업·체크포인트 조정</td></tr>
+              <tr><td><b>외부</b></td><td><span class="own own-ext"><span class="tm">외부</span>유저·통신사·클라우드</span></td><td>유저 PC·집 네트워크, 통신사 구간, 클라우드 사업자</td><td>유저 안내(유선 연결 등), 통신사·클라우드 사업자에 요청, 게임 쪽 우회·완화</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sec">층·주제별 담당 한눈에 보기</h3>
+        <p class="note">굵은 숫자는 그 담당이 주 담당인 원인 수, +숫자는 함께 대응하는 원인 수입니다. 칸을 누르면 아래에 그 원인과 팀의 할 일이 나옵니다.</p>
+        <div data-sim="owners" id="sim-owners"></div>
+
+        <h3 class="sec">경계가 애매할 때: 완화는 게임팀, 근본 해결은 인프라팀</h3>
+        <div class="prose">
+          <p>회선이나 장비 문제라도 게임개발팀이 할 일이 없는 것은 아닙니다. 인프라팀이 원인을 없애는 동안, 게임개발팀은 그 영향을 줄이는 설계(보간 버퍼, 입력 중복 전송, 하트비트, 재접속)로 버팁니다. 반대로 서버 코드가 원인이면 장비를 늘려도 잠시 미룰 뿐입니다. 자주 부딪히는 경우를 정리했습니다.</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>현상</th><th>게임개발팀 (완화·설계)</th><th>인프라팀 (근본 해결)</th><th>먼저 볼 지표</th></tr></thead>
+            <tbody>
+              <tr><td>특정 통신사·지역에서 손실·지터가 큼</td><td>적응형 보간 버퍼, 입력 겹쳐 보내기, 손실에 강한 UDP 전송</td><td>경로 품질 점검(양방향 mtr), 통신사 에스컬레이션, 피어링·회선 추가</td><td>통신사별 손실률·지터 분포</td></tr>
+              <tr><td>TCP 재전송 증가</td><td>TCP_NODELAY, 연결 나누기, 보내기 버퍼에 옛 위치 쌓지 않기(TCP_NOTSENT_LOWAT)</td><td>손실 지점 제거(장비·케이블·MTU), MSS 조정, 커널 복구 설정(RACK·tcp_mtu_probing)</td><td>재전송 증가분(nstat), NIC 드롭 카운터</td></tr>
+              <tr><td>서버 CPU 포화로 틱 초과</td><td>시야 계산·브로드캐스트 최적화, 틱 분산, 붐비는 지역 나누기</td><td>코어·인스턴스 증설, CPU 스틸·스로틀링 확인, 인터럽트 분산</td><td>틱 처리 시간, CPU 사용률·steal</td></tr>
+              <tr><td>DB 응답 지연</td><td>쿼리·인덱스·트랜잭션 설계, 게임 루프 밖에서 비동기 호출, 캐시</td><td>DB 장비 증설, 스토리지 IOPS, 복제·체크포인트 설정, 커넥션 한도</td><td>느린 쿼리 로그, 락 대기, IOPS</td></tr>
+              <tr><td>점검 직후 접속 불가</td><td>로그인 대기열 시스템, 재시도 지수 백오프, 접속 분산</td><td>backlog·somaxconn, 방화벽·로드밸런서 세션 한도, conntrack 한도</td><td>ListenOverflows, 세션 테이블 사용률</td></tr>
+              <tr><td>가만히 있으면 접속 끊김</td><td>하트비트를 가장 짧은 유휴 타임아웃의 절반 이하로, 끊기면 자동 재접속</td><td>로드밸런서·방화벽·NAT의 유휴 타임아웃 확인·조정</td><td>끊긴 연결의 유휴 시간 분포</td></tr>
+              <tr><td>정해진 시각마다 서버 멈춤</td><td>정각 이벤트·저장 분산, GC 튜닝</td><td>백업·크론·스냅숏 시간 조정, 디스크 버스트 확인</td><td>멈춘 시각과 작업 스케줄</td></tr>
+              <tr><td>DDoS·트래픽 폭주</td><td>서버의 요청 속도 제한, 비정상 패킷 조기 차단</td><td>DDoS 방어(스크러빙), 장비의 초당 패킷 한도, 회선 증설</td><td>초당 패킷 수, 장비 CPU</td></tr>
+              <tr><td>유저 와이파이·PC 문제</td><td>게임 안 네트워크 상태 표시(핑·손실), 지터에 강한 보간, 설정 안내</td><td>직접 고칠 수 없음</td><td>제보의 회선·기기 정보</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sec">넘길 때 챙길 정보</h3>
+        <div class="two-col">
+          <div class="prose">
+            <p><b>게임개발팀 → 인프라팀</b></p>
+            <ul>
+              <li>정확한 시각(초 단위, 시간대 표기)과 지속 시간</li>
+              <li>서버·채널 ID, 영향 범위(나만·특정 통신사·서버 전체)</li>
+              <li>영향받은 클라이언트의 IP 대역·통신사·지역</li>
+              <li>게임 쪽 지표: 틱 처리 시간, 핑·손실 분포, 재전송이 늘어난 연결 수</li>
+              <li>최근 배포·설정 변경 여부</li>
+            </ul>
+          </div>
+          <div class="prose">
+            <p><b>인프라팀 → 게임개발팀</b></p>
+            <ul>
+              <li>같은 시각의 장비·회선 지표(사용률, 드롭·에러 카운터, 세션 수)</li>
+              <li>장비·회선 변경 이력(교체, 설정 변경, 통신사 작업 공지)</li>
+              <li>원인 구간과 결론, 재발 방지 계획</li>
+              <li>게임 쪽에 필요한 조치(하트비트 간격, 재시도 방식, 연결 수 제한 등)</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
       <section class="chapter layer" id="l-client-game" data-layer="client-game">
         <div class="ch-head">
           <div class="ch-kicker"></div>
@@ -1794,6 +1901,21 @@ window.DATA = {
     { id: 'retrans', name: 'TCP 재전송의 근본 원인', short: 'TCP 재전송', side: '원인', anchor: 'retrans' },
   ],
 
+  /* 해결 담당. 원인 항목의 own 배열은 이 id를 쓰고 첫 항목이 주 담당, act는 팀별로 할 일 */
+  teams: {
+    game: { name: '게임개발팀', desc: '클라이언트·서버 코드와 동기화 설계' },
+    infra: { name: '인프라팀', desc: '회선·네트워크 장비, 서버 장비·OS, DB 장비' },
+    ext: { name: '외부', desc: '유저 환경, 통신사, 클라우드 사업자' },
+  },
+  owners: [
+    { id: 'cli', team: 'game', name: '클라이언트 개발', short: '클라이언트', desc: '게임 클라이언트 코드: 프레임·GC·로딩, 보간·외삽·예측, 클라이언트의 네트워크 처리' },
+    { id: 'srv', team: 'game', name: '서버 개발', short: '서버', desc: '게임 서버 코드: 틱·스레드·락, 동기화 설계, 소켓 옵션, 쿼리·트랜잭션 설계' },
+    { id: 'net', team: 'infra', name: '네트워크 인프라', short: '네트워크', desc: '회선과 IDC 네트워크 장비(스위치·라우터·방화벽·로드밸런서·DDoS 방어), 통신사·피어링' },
+    { id: 'sys', team: 'infra', name: '서버 인프라', short: '서버 장비·OS', desc: '서버 장비·클라우드 인스턴스, OS·커널 설정, NIC, 배포·모니터링 환경' },
+    { id: 'dba', team: 'infra', name: 'DB 인프라', short: 'DB 장비', desc: 'DB 서버·스토리지, DB 설정·복제·백업, 캐시 서버' },
+    { id: 'ext', team: 'ext', name: '외부', short: '유저·통신사·클라우드', desc: '유저 PC·집 네트워크, 통신사, 클라우드 사업자. 직접 고칠 수 없어 안내·요청·우회로 대응' },
+  ],
+
   /* 네 가지 요인 */
   fx: [
     { id: 'lat', name: '지연', en: 'Latency', how: '패킷이 늦게 온다',
@@ -2294,7 +2416,8 @@ window.DATA = {
       c: ['플레이어가 한동안 아무 패킷도 안 보냄(대화창, 자리 비움)', '로드밸런서가 유휴 연결을 정리(흔한 기본값 60~350초)', '다시 움직이는 순간 접속 끊김'],
       sym: ['disconnect'], fx: ['loss'], who: ['me', 'server'], when: ['idle'],
       num: 'AWS ALB는 60초, NLB는 TCP 350초·UDP 120초, Azure Load Balancer는 TCP 4분이 기본값입니다. ALB와 NLB의 TCP 값은 바꿀 수 있지만 NLB의 UDP 120초는 바꿀 수 없습니다. ALB는 시간이 되면 서버 쪽 연결도 닫지만, NLB는 조용히 지워 서버가 모르는 채로 남기 쉽습니다.',
-      fix: '가장 짧은 유휴 타임아웃의 절반 이하 간격으로 하트비트 보내기(ALB 60초 뒤라면 30초 이하).',
+      own: ['net', 'srv'],
+      act: { game: '가장 짧은 유휴 타임아웃의 절반 이하 간격으로 하트비트 보내기(ALB 60초 뒤라면 30초 이하), 끊기면 자동 재접속.', infra: '경로에 있는 로드밸런서의 유휴 타임아웃 값을 확인해 게임팀에 공유하고, 필요하면 늘리기.' },
       sim: 'timeouts' },
     { id: 'dc-cloud-conntrack', t: '클라우드 보안 그룹의 연결 추적 만료', en: 'Cloud security group connection tracking timeout',
       s: '클라우드 서버에 붙은 방화벽(보안 그룹)도 연결을 추적하고, 유휴 연결의 추적 항목은 정해진 시간 뒤 만료됩니다. 로드밸런서 없이 바로 붙는 서버도 가만히 있던 플레이어의 접속이 끊길 수 있습니다.',
@@ -2835,7 +2958,8 @@ window.DATA = {
       c: ['느린 쿼리나 요청 폭주로 모든 연결이 사용 중', '새 요청은 연결이 날 때까지 대기', '로그인 무한 로딩, 저장 지연, 타임아웃'],
       sym: ['noconnect', 'delay'], fx: ['stall', 'lat'], who: ['server', 'feature'], when: ['login', 'event'],
       num: '필요한 연결 수는 “초당 요청 × 한 건이 연결을 점유하는 시간”으로 어림합니다. 1초에 2,000건, 건당 5ms면 평균 10개가 늘 바쁩니다. 몰릴 때를 생각해 그 두세 배를 둡니다. 쿼리가 150ms로 느려지면 같은 요청에 300개가 필요해집니다.',
-      fix: '느린 쿼리 제거, 풀 크기와 대기 타임아웃 조정, 기능별 풀 분리.',
+      own: ['srv', 'dba'],
+      act: { game: '느린 쿼리 제거, 풀 크기와 대기 타임아웃 조정, 기능별 풀 분리.', infra: 'DB의 최대 연결 수와 CPU·IOPS 여유 확인, 커넥션 대기·락 대기 지표를 모니터링에 추가.' },
       more: '풀을 무작정 키우면 DB CPU와 잠금 경쟁만 늘어 모두가 같이 느려집니다. 또 서버 수 × 풀 크기가 DB의 최대 연결 수를 넘으면, 증설한 서버나 재시작한 서버가 연결조차 못 맺습니다. 오토스케일링이나 점검 직후에 흔합니다.',
       sim: 'dbpool' },
     { id: 'db-replica-lag', t: '복제 지연', en: 'Replication lag',
@@ -13478,6 +13602,23 @@ K.register('windows', function (root) {
     syncmodels: '동기화 방식 비교', windows: '판정 구간 실험', chain: '연속 행동 실험', oneslow: '한 명만 느릴 때 실험', npcmissing: '한쪽 클라 진단', retrans: 'TCP 재전송 실험',
   };
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  /* 해결 담당: own[0]이 주 담당, 나머지는 함께 대응하는 곳. act는 팀별 할 일 */
+  const OWN = Object.fromEntries((D.owners || []).map(o => [o.id, o]));
+  const TEAMS = D.teams || {};
+  const TEAM_ORDER = ['game', 'infra', 'ext'];
+  const ACT_LABEL = { game: '게임개발팀이 할 일', infra: '인프라팀이 할 일', ext: '유저 안내·외부 요청' };
+  const leadTeam = c => (c.own && OWN[c.own[0]] ? OWN[c.own[0]].team : null);
+  const teamsOf = c => [...new Set((c.own || []).map(id => OWN[id] && OWN[id].team).filter(Boolean))];
+  const ownBadge = id => {
+    const o = OWN[id]; if (!o) return '';
+    return `<span class="own own-${o.team}" title="${esc(o.name + ': ' + o.desc)}"><span class="tm">${TEAMS[o.team].name}</span>${o.short}</span>`;
+  };
+  const ownRow = c => {
+    if (!c.own || !c.own.length) return '';
+    const rest = c.own.slice(1);
+    return `<div class="own-row"><span class="k">주 담당</span>${ownBadge(c.own[0])}${rest.length ? `<span class="k">함께</span>${rest.map(ownBadge).join('')}` : ''}</div>`;
+  };
   const ARROW = '<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7h8m-3-3 3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   const symChip = (id, link = true) => {
     const s = SYM[id]; if (!s) return '';
@@ -13557,6 +13698,13 @@ K.register('windows', function (root) {
     const l = LAYER[sec.dataset.layer];
     const n = (byLayer[l.id] || []).length;
     $('.ch-kicker', sec).innerHTML = `<span class="idx">L${String(l.n).padStart(2, '0')}</span>레이어 ${l.n} / ${D.layers.length} · ${l.side} · 원인 ${n}가지`;
+    const lead = {};
+    (byLayer[l.id] || []).forEach(c => { if (c.own && OWN[c.own[0]]) lead[c.own[0]] = (lead[c.own[0]] || 0) + 1; });
+    const top = Object.entries(lead).sort((a, b) => b[1] - a[1]);
+    if (top.length) {
+      const box = K.el('p', { class: 'own-sum', html: `<span class="k">주 담당</span>${top.map(([id, k]) => `${ownBadge(id)}<span class="mono">${k}</span>`).join('')} <a href="#owners">담당 구분 보기</a>` });
+      $('.ch-head', sec).append(box);
+    }
     const h3 = $('h3.sec:last-of-type', sec);
     if (h3) h3.innerHTML = `이 층에서 렉을 만드는 원인 <span class="mono">${n}가지</span>`;
   });
@@ -13567,9 +13715,10 @@ K.register('windows', function (root) {
       `<span><span class="k">언제</span>${c.when.map(w => WHEN[w]).join(', ')}</span>`,
       c.sim ? `<span><span class="k">실험</span><a href="#sim-${c.sim}">${SIMNAME[c.sim] || c.sim}</a></span>` : '',
     ].join('');
+    const acts = c.act ? TEAM_ORDER.filter(t => c.act[t]).map(t => `<dt class="act act-${t}">${ACT_LABEL[t]}</dt><dd>${c.act[t]}</dd>`).join('') : '';
     const dl = [
       c.num ? `<dt>수치 감각</dt><dd>${c.num}</dd>` : '',
-      c.fix ? `<dt>서버·클라팀의 대응</dt><dd>${c.fix}</dd>` : '',
+      acts || (c.fix ? `<dt>대응</dt><dd>${c.fix}</dd>` : ''),
       c.more ? `<dt>더 알아보기</dt><dd>${c.more}</dd>` : '',
     ].join('');
     return `<article class="cause" id="c-${c.id}">
@@ -13580,8 +13729,9 @@ K.register('windows', function (root) {
         <div class="step"><b>그러면</b>${c.c[1]}</div><div class="arr">${ARROW}</div>
         <div class="step out"><b>화면에서는</b>${c.c[2]}</div>
       </div>
+      ${ownRow(c)}
       <div class="cause-meta">${meta}</div>
-      ${dl ? `<details><summary>수치 감각과 대응</summary><div class="more"><dl>${dl}</dl></div></details>` : ''}
+      ${dl ? `<details><summary>수치 감각과 팀별 대응</summary><div class="more"><dl>${dl}</dl></div></details>` : ''}
     </article>`;
   }
   $$('[data-causes]').forEach(box => { box.innerHTML = (byLayer[box.dataset.causes] || []).map(causeHTML).join(''); });
@@ -13591,6 +13741,14 @@ K.register('windows', function (root) {
   if (partH3) partH3.innerHTML = `일부에게만 생기는 문제 <span class="mono">${(byLayer.partial || []).length}가지</span>`;
   const rtH3 = $('#retrans h3.sec:last-of-type');
   if (rtH3) rtH3.innerHTML = `TCP 재전송의 근본 원인 <span class="mono">${(byLayer.retrans || []).length}가지</span>`;
+
+  // 원인 목록을 주 담당 팀별로 센 한 줄
+  function teamSplit(list) {
+    const k = { game: 0, infra: 0, ext: 0 };
+    list.forEach(c => { const t = leadTeam(c); if (t) k[t]++; });
+    if (!k.game && !k.infra && !k.ext) return '';
+    return `<p class="team-split"><span class="k">주 담당</span>${TEAM_ORDER.filter(t => k[t]).map(t => `<span class="own own-${t}"><span class="tm">${TEAMS[t].name}</span>${k[t]}가지</span>`).join('')}</p>`;
+  }
 
   /* ---------------- 증상 사전 ---------------- */
   const symCauses = {};
@@ -13608,6 +13766,7 @@ K.register('windows', function (root) {
       <div class="looks"><b>화면에서는</b>${s.looks}</div>
       <p><b>단서</b> ${s.tell}</p>
       <details class="cause-links"><summary>이 증상을 만드는 원인 ${list.length}가지</summary><div class="list">${links}</div></details>
+      ${teamSplit(list)}
       <div class="actions">
         ${s.preset ? `<button type="button" class="btn small primary" data-lab="${s.preset}">실험실에서 재현하기</button>` : ''}
         <button type="button" class="btn small" data-tri="${s.id}">진단 도우미로</button>
@@ -13775,11 +13934,15 @@ K.register('windows', function (root) {
       const max = (st.who ? 3 : 0) + st.when.size * 2 + st.sym.size * 3;
       hint.innerHTML = st.who ? HINT[st.who] : '선택할수록 후보가 좁혀집니다. “누가”가 가장 강한 단서입니다.';
       if (!scored.length || !max) { out.innerHTML = '<p class="note">조건을 하나 이상 골라 주세요.</p>'; return; }
-      out.innerHTML = scored.slice(0, 10).map(({ c, score, why }) => {
+      // 상위 10개의 주 담당을 세어 “먼저 넘길 곳”을 알려 준다
+      const route = {};
+      scored.slice(0, 10).forEach(({ c }) => { if (c.own && OWN[c.own[0]]) route[c.own[0]] = (route[c.own[0]] || 0) + 1; });
+      const routeHTML = Object.keys(route).length ? `<p class="tri-route"><span class="k">먼저 확인할 곳</span>${Object.entries(route).sort((a, b) => b[1] - a[1]).map(([id, k]) => `${ownBadge(id)}<span class="mono">${k}</span>`).join('')}<span class="note">상위 10개 원인의 주 담당</span></p>` : '';
+      out.innerHTML = routeHTML + scored.slice(0, 10).map(({ c, score, why }) => {
         const pct = Math.round((score / max) * 100);
         return `<div class="tri-item">
           <div class="score">${pct}%<div class="meter"><i style="width:${pct}%"></i></div></div>
-          <div><a href="#c-${c.id}">${c.t}</a> <span class="layer">· ${LAYER[c.layer].name}</span>
+          <div><a href="#c-${c.id}">${c.t}</a> <span class="layer">· ${LAYER[c.layer].name}</span> ${c.own && c.own.length ? ownBadge(c.own[0]) : ''}
           <div class="why">${c.s}</div>
           <div class="why"><span class="note">맞는 조건: ${why.join(' · ')}</span></div></div>
         </div>`;
@@ -13791,6 +13954,75 @@ K.register('windows', function (root) {
       update();
     });
     update();
+  });
+
+  /* ---------------- 담당 구분 탐색기 ---------------- */
+  K.register('owners', function (root) {
+    const st = { team: 'game', mode: 'lead', cell: null };   // mode: lead = 주 담당만, all = 함께 대응 포함
+    const has = c => c.own && c.own.length;
+    const causes = D.causes.filter(has);
+
+    const stats = K.el('div', { class: 'sim-stats' });
+    const sGame = K.stat(stats, { label: '게임개발팀이 주 담당', unit: '가지' });
+    const sInfra = K.stat(stats, { label: '인프라팀이 주 담당', unit: '가지' });
+    const sExt = K.stat(stats, { label: '외부가 주 담당', unit: '가지' });
+    const sBoth = K.stat(stats, { label: '두 팀 모두 할 일이 있음', unit: '가지' });
+    const k = { game: 0, infra: 0, ext: 0 };
+    causes.forEach(c => { k[leadTeam(c)]++; });
+    const both = causes.filter(c => c.act && c.act.game && c.act.infra).length;
+    sGame.set(String(k.game), null, `전체 ${causes.length}가지 중`);
+    sInfra.set(String(k.infra), null, `전체 ${causes.length}가지 중`);
+    sExt.set(String(k.ext), null, '유저 환경·통신사·클라우드');
+    sBoth.set(String(both), null, '완화와 근본 해결을 나눠 맡는 경우');
+
+    // 층 × 담당 표. 칸의 굵은 숫자는 주 담당, +숫자는 함께 대응
+    const matWrap = K.el('div', { class: 'table-wrap own-mat-wrap' });
+    const rows = ALL_LAYERS.filter(l => causes.some(c => c.layer === l.id));
+    const maxLead = Math.max(1, ...rows.flatMap(l => D.owners.map(o => causes.filter(c => c.layer === l.id && c.own[0] === o.id).length)));
+    matWrap.innerHTML = `<table class="own-mat"><thead><tr><th scope="col">층·주제</th>${D.owners.map(o => `<th scope="col" class="own-${o.team}"><span class="tm">${TEAMS[o.team].name}</span>${o.short}</th>`).join('')}</tr></thead><tbody>${rows.map(l => {
+      return `<tr><th scope="row"><a href="#${l.anchor || 'l-' + l.id}">${l.short}</a></th>${D.owners.map(o => {
+        const lead = causes.filter(c => c.layer === l.id && c.own[0] === o.id).length;
+        const also = causes.filter(c => c.layer === l.id && c.own.indexOf(o.id) > 0).length;
+        if (!lead && !also) return '<td class="empty"></td>';
+        return `<td class="own-${o.team}" style="--a:${(0.12 + 0.6 * lead / maxLead).toFixed(2)}"><button type="button" data-l="${l.id}" data-o="${o.id}" aria-label="${esc(l.short + ' · ' + o.name + ': 주 담당 ' + lead + '가지, 함께 ' + also + '가지')}">${lead ? `<b>${lead}</b>` : ''}${also ? `<span>+${also}</span>` : ''}</button></td>`;
+      }).join('')}</tr>`;
+    }).join('')}</tbody></table>`;
+
+    const ctl = K.el('div', { class: 'own-ctl' });
+    const cTeam = K.choice(ctl, { label: '팀', value: st.team, options: TEAM_ORDER.map(t => [t, TEAMS[t].name]), onChange: v => { st.team = v; st.cell = null; draw(); } });
+    const cMode = K.choice(ctl, { label: '범위', value: st.mode, options: [['lead', '주 담당만'], ['all', '함께 대응 포함']], onChange: v => { st.mode = v; draw(); } });
+    const out = K.el('div', { class: 'own-list' });
+
+    matWrap.addEventListener('click', e => {
+      const b = e.target.closest('button[data-l]'); if (!b) return;
+      st.cell = { layer: b.dataset.l, owner: b.dataset.o };
+      st.team = OWN[st.cell.owner].team; cTeam.set && cTeam.set(st.team, false);
+      draw();
+      out.scrollIntoView({ behavior: K.reducedMotion ? 'auto' : 'smooth', block: 'nearest' });
+    });
+
+    function item(c, team) {
+      const act = c.act && c.act[team];
+      return `<li><div class="own-li-top"><a href="#c-${c.id}">${c.t}</a>${ownBadge(c.own[0])}</div>${act ? `<div class="own-act">${act}</div>` : `<div class="own-act note">이 팀의 할 일은 없고, ${TEAMS[leadTeam(c)].name}이 처리합니다.</div>`}</li>`;
+    }
+    function draw() {
+      $$('button[data-l]', matWrap).forEach(b => b.classList.toggle('on', !!st.cell && b.dataset.l === st.cell.layer && b.dataset.o === st.cell.owner));
+      if (st.cell) {
+        const o = OWN[st.cell.owner], l = LAYER[st.cell.layer];
+        const list = causes.filter(c => c.layer === l.id && (st.mode === 'all' ? c.own.includes(o.id) : c.own[0] === o.id));
+        out.innerHTML = `<p class="own-list-head"><b>${l.name}</b> · ${o.name} ${st.mode === 'all' ? '(함께 대응 포함)' : '(주 담당)'} ${list.length}가지 <button type="button" class="btn small" data-clear>팀 전체 보기</button></p>` +
+          (list.length ? `<ul>${list.map(c => item(c, o.team)).join('')}</ul>` : '<p class="note">이 범위에 해당하는 원인이 없습니다. “함께 대응 포함”을 골라 보세요.</p>');
+        $('[data-clear]', out).addEventListener('click', () => { st.cell = null; draw(); });
+        return;
+      }
+      const pick = c => (st.mode === 'all' ? teamsOf(c).includes(st.team) : leadTeam(c) === st.team);
+      const groups = rows.map(l => [l, causes.filter(c => c.layer === l.id && pick(c))]).filter(([, v]) => v.length);
+      const n = groups.reduce((a, [, v]) => a + v.length, 0);
+      out.innerHTML = `<p class="own-list-head"><b>${TEAMS[st.team].name}</b> ${st.mode === 'all' ? '할 일이 있는' : '주 담당인'} 원인 ${n}가지. 층을 눌러 펼치세요. 표의 칸을 누르면 그 층·담당만 봅니다.</p>` +
+        groups.map(([l, v], i) => `<details${i === 0 ? ' open' : ''}><summary>${l.short} <span class="mono">${v.length}</span></summary><ul>${v.map(c => item(c, st.team)).join('')}</ul></details>`).join('');
+    }
+    root.append(stats, matWrap, ctl, out);
+    draw();
   });
 
   /* ---------------- 제보 가이드 ---------------- */
