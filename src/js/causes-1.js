@@ -206,7 +206,7 @@
       more: '윈도우는 앞에 띄운 창(포그라운드)의 프로그램에 우선순위를 조금 더 주지만, 코어보다 바쁜 일이 많으면 게임도 기다립니다. 백신은 CPU를 쓰는 것보다 “실시간 감시”로 더 자주 끼어듭니다. 게임이 파일을 열 때마다 검사해서, 에셋을 읽는 순간의 멈춤이 길어집니다.',
       sim: 'cpu',
       ref: [
-        { t: 'Multitasking', u: 'https://learn.microsoft.com/en-us/windows/win32/procthread/multitasking', p: 'Microsoft', n: '윈도우는 스레드마다 시간 조각을 주고 다 쓰면 다음 스레드로 넘김, 시간 조각은 약 20ms(OS·CPU에 따라 다름)' },
+        { t: 'Multitasking', u: 'https://learn.microsoft.com/en-us/windows/win32/procthread/multitasking', p: 'Microsoft', n: '윈도우는 스레드마다 타임 슬라이스를 주고 다 쓰면 다음 스레드로 넘김, 타임 슬라이스는 약 20ms(OS·CPU에 따라 다름)' },
         { t: 'Priority Boosts', u: 'https://learn.microsoft.com/en-us/windows/win32/procthread/priority-boosts', p: 'Microsoft', n: '앞에 띄운 창(포그라운드)의 프로세스는 우선순위를 백그라운드 프로세스 이상으로 올려 줌' },
         { t: 'About regular quick and full scans with Microsoft Defender Antivirus', u: 'https://learn.microsoft.com/en-us/defender-endpoint/schedule-antivirus-scans', p: 'Microsoft', n: '실시간 보호는 파일을 열고 닫을 때마다, 폴더를 열 때마다 검사' },
       ] },

@@ -320,7 +320,7 @@ a.sym:hover { border-color: var(--ink-2); }
 .sym-card:target { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
 .sym-card header { display: flex; align-items: center; gap: 12px; }
 .sym-card header svg { width: 64px; height: 24px; flex: none; color: var(--ink); }
-.sym-card h4 { font-size: 18px; font-weight: 700; }
+.sym-card h4, .sym-card h3 { font-size: 18px; font-weight: 700; }
 .sym-card .alias { font-size: 12.5px; color: var(--muted); }
 .sym-card p { font-size: 14.5px; color: var(--ink-2); }
 .sym-card .looks { font-size: 14px; color: var(--ink); background: var(--paper); border-radius: 6px; padding: 8px 10px; }
@@ -363,7 +363,7 @@ a.sym:hover { border-color: var(--ink-2); }
 .sim-head { display: grid; gap: 6px; }
 .sim-kicker { font-size: 11px; letter-spacing: .03em; font-weight: 700; color: var(--accent); display: flex; align-items: center; gap: 8px; }
 .sim-kicker::before { content: ""; width: 8px; height: 8px; border-radius: 2px; background: var(--accent); }
-.sim-head h4 { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
+.sim-head h4, .sim-head h3 { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
 .sim-head p { color: var(--ink-2); font-size: 14.5px; max-width: 80ch; }
 .sim-body { display: grid; gap: 18px; }
 .sim-body.layout-side { grid-template-columns: minmax(0, 1fr) minmax(250px, 300px); align-items: start; }

@@ -72,8 +72,8 @@
 | 봐준다 | 허용한다 | causes |
 | 시끄러운 이웃 | 노이지 네이버 | causes |
 | 차가운 캐시 | 콜드 캐시 | causes |
-| 캐시 쇄도 | 캐시 스탬피드 | causes. 용어집 표제어도 맞출 것 |
-| 문맥 전환 | 컨텍스트 스위칭 | causes. 용어집 표제어도 맞출 것 |
+| 캐시 쇄도 | 캐시 스탬피드 | causes. 용어집 표제어도 맞춤 |
+| 문맥 전환 | 컨텍스트 스위칭 | causes. 용어집 표제어도 맞춤 |
 | 열쇠 (락) | 락 | causes |
 | 연결 이전 (QUIC) | 연결 마이그레이션 | causes |
 | 세계 (서버가 계산·전송하는 대상) | 게임 상태 (“세계를 계산” → “게임 상태를 계산”) | body·data·glossary. 증상 별칭 “세계가 느려짐”, “내 화면에 보이는 세계”는 둠 |
@@ -81,10 +81,10 @@
 | 약속한다 (TCP·UDP) | 보장한다. “이 약속의 세부 조건” → “이 동작의 세부 설정” | body |
 | 붙잡아 둔다 | TCP가 뒤 패킷을 → 게임에 넘기지 않는다 / 객체를 → 참조한다 / 스레드·커넥션을 → 점유한다 | body·data·glossary |
 | 호출 사슬 | 호출 체인 | body·data·glossary |
-| 세정 센터 | 스크러빙 센터 | glossary 표제어 바꿈. causes-2, sims/journey에 남아 있음 |
+| 세정 센터 | 스크러빙 센터 | glossary 표제어 바꿈. causes-2, sims/journey도 바꿈 |
 | 손실 허용 채널 | 비신뢰(unreliable) 채널 | body |
-| 뒤에 깔린 창 | 백그라운드 창 | body. causes-1·5, sims/npcmissing에 남아 있음 |
-| 날아가는 패킷 | 아직 ACK를 받지 못한 패킷(in-flight) | body. causes-6, sims/retrans에 남아 있음 |
+| 뒤에 깔린 창 | 백그라운드 창 | body. causes-1·5, sims/npcmissing도 바꿈 |
+| 날아가는 패킷 | 아직 ACK를 받지 못한 패킷(in-flight) | body. causes-6, sims/retrans도 바꿈 |
 | 꼬리 손실 | 마지막 패킷들의 손실(tail loss) | body |
 | 구멍 알림 (SACK), 구멍 (시퀀스) | 선택적 ACK(SACK) / 중간에 빠진 부분 | body·glossary |
 | 순간 몰림, 순간 폭주 | 마이크로버스트 / 버스트 | body |
@@ -113,7 +113,7 @@
 | 재전송 대기 (용어집 표제어) | RTO | glossary |
 | CPU 스로틀, 시간 조각·CPU 몫 (CFS) | CPU 스로틀링, 주기(CFS period)·할당량(quota) | glossary. CFS 주기는 타임 슬라이스가 아니라서 “주기” |
 | 몸 (캐릭터 표시) | 캐릭터 모델 | body·data |
-| 패킷의 여행 (장 이름) | 패킷의 이동 경로 | body·README. sims/hol.js 캡션에 남아 있음 |
+| 패킷의 여행 (장 이름) | 패킷의 이동 경로 | body·README. sims/hol.js 캡션도 바꿈 |
 | 통신사와 먼 길 (장 제목) | 통신사망과 장거리 구간 | body |
 | 지터 풀이 위치 | body.html이 #sync(동기화 방식 표)와 #partial(느린 본인 항목)에서 이미 “지터(도착 간격의 흔들림)”로 풀이함 | 이 두 장에 렌더되는 원인 카드(causes-4 sync 등)·시뮬레이션에서는 풀이 없이 “지터”만 쓰면 중복이 없음 |
 | 감시 타이머 | 워치독 | causes. 용어집 표제어(워치독)에 맞춤 |
@@ -161,7 +161,7 @@
 | 멈칫 (증상 이름이 아닌 곳) | 짧은 멈춤 | sims(arch) |
 | 연결 유지 신호, 감시 타이머 (처음 나올 때) | 하트비트(연결 유지 신호), 워치독(감시 타이머) | sims(arch·locks). 위 두 행과 같음 |
 | 창구 앞 풍경 (캡션) | 대기열과 워커 | sims(queue) |
-| 인기 행 | 핫 로우. 처음에 “핫 로우(모두가 동시에 고치려는 행)” | sims(dbpool). causes-3 카드 제목 “인기 행 잠금 경합”은 제목 링크 때문에 확인 필요 |
+| 인기 행 | 핫 로우. 처음에 “핫 로우(모두가 동시에 고치려는 행)” | sims(dbpool). causes-3 카드 제목도 “핫 로우 잠금 경합”으로 바꿈 |
 | 서랍 (DB 행·CPU 캐시) | 행 / 캐시 | sims(dbpool·ladder) |
 | 올림 / 내림 (회선 방향) | 업로드 / 다운로드 | sims(bloat·journey) |
 | 가시, 봉우리 (차트) | 스파이크 | sims(bloat·disk) |
@@ -194,7 +194,7 @@
 | 보낼 짐 칸 (송신 버퍼) | 전송 대기 메모리 | sims(sndbuf) |
 | (send()가) 자리가 날 때까지 돌아오지 않는다 | 버퍼에 빈 공간이 생길 때까지 반환되지 않는다 | sims(sndbuf) |
 | 군중 규모 | 주변 캐릭터 수 | sims(sndbuf) |
-| 타임아웃 사다리 | 장비별 유휴 타임아웃 | sims(timeouts) 제목. app.js SIMNAME “타임아웃 사다리”는 app.js 담당이 맞출 것 |
+| 타임아웃 사다리 | 장비별 유휴 타임아웃 | sims(timeouts) 제목. app.js SIMNAME도 맞춤 |
 | 네트워크가 먹는 시간, 네트워크 몫 | 네트워크가 쓰는 시간 | sims(windows) |
 | 파도처럼 몰린다 | 주기적으로 몰린다 | sims(rush) |
 | 기다리다 지쳐 끊긴 (로그인) | 클라이언트 타임아웃으로 끊긴 | sims(rush) |

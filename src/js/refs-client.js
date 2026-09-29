@@ -14,8 +14,8 @@ Object.assign(DATA.secRefs, {
     { t: 'Handling variation in time', u: 'https://docs.unity3d.com/Manual/time-handling-variations.html', p: 'Unity', n: '실험의 따라잡기 상한(실험은 한 프레임에 5번까지): 유니티는 한 프레임의 게임 시간을 최대 1/3초로 묶어 따라잡기 악순환을 막고, 넘친 시간만큼 게임 시계가 늦어짐' },
   ],
   'l-client-os': [
-    { t: 'Multitasking', u: 'https://learn.microsoft.com/en-us/windows/win32/procthread/multitasking', p: 'Microsoft', n: '스레드마다 시간 조각(약 20ms, OS·CPU에 따라 다름)을 주고 다 쓰면 다음 스레드로 넘기는 선점형 멀티태스킹' },
-    { t: 'Scheduling Priorities', u: 'https://learn.microsoft.com/en-us/windows/win32/procthread/scheduling-priorities', p: 'Microsoft', n: '실행할 수 있는 스레드 중 가장 높은 우선순위의 스레드들이 시간 조각을 차례로(라운드 로빈) 받음' },
+    { t: 'Multitasking', u: 'https://learn.microsoft.com/en-us/windows/win32/procthread/multitasking', p: 'Microsoft', n: '스레드마다 타임 슬라이스(약 20ms, OS·CPU에 따라 다름)를 주고 다 쓰면 다음 스레드로 넘기는 선점형 멀티태스킹' },
+    { t: 'Scheduling Priorities', u: 'https://learn.microsoft.com/en-us/windows/win32/procthread/scheduling-priorities', p: 'Microsoft', n: '실행할 수 있는 스레드 중 가장 높은 우선순위의 스레드들이 타임 슬라이스를 차례로(라운드 로빈) 받음' },
     { t: 'Priority Boosts', u: 'https://learn.microsoft.com/en-us/windows/win32/procthread/priority-boosts', p: 'Microsoft', n: '앞에 띄운 창(포그라운드)의 프로세스 우선순위를 백그라운드 프로세스 이상으로 올려 줌' },
     { t: 'socket(7) — Linux manual page', u: 'https://man7.org/linux/man-pages/man7/socket.7.html', p: 'Linux man-pages', n: '소켓마다 수신 버퍼(SO_RCVBUF)가 있고 기본·최대 크기는 시스템 설정으로 정해짐' },
     { t: 'Wi-Fi low-latency mode', u: 'https://source.android.com/docs/core/connect/wifi-low-latency', p: 'Android (Google)', n: '안드로이드 10 이상의 와이파이 저지연 모드에서는 프레임워크가 와이파이 절전(doze)을 명시적으로 끔(앱이 앞에 떠 있고 화면이 켜진 경우)' },

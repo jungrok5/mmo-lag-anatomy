@@ -367,7 +367,7 @@ a.sym:hover { border-color: var(--ink-2); }
 .sym-card:target { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
 .sym-card header { display: flex; align-items: center; gap: 12px; }
 .sym-card header svg { width: 64px; height: 24px; flex: none; color: var(--ink); }
-.sym-card h4 { font-size: 18px; font-weight: 700; }
+.sym-card h4, .sym-card h3 { font-size: 18px; font-weight: 700; }
 .sym-card .alias { font-size: 12.5px; color: var(--muted); }
 .sym-card p { font-size: 14.5px; color: var(--ink-2); }
 .sym-card .looks { font-size: 14px; color: var(--ink); background: var(--paper); border-radius: 6px; padding: 8px 10px; }
@@ -410,7 +410,7 @@ a.sym:hover { border-color: var(--ink-2); }
 .sim-head { display: grid; gap: 6px; }
 .sim-kicker { font-size: 11px; letter-spacing: .03em; font-weight: 700; color: var(--accent); display: flex; align-items: center; gap: 8px; }
 .sim-kicker::before { content: ""; width: 8px; height: 8px; border-radius: 2px; background: var(--accent); }
-.sim-head h4 { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
+.sim-head h4, .sim-head h3 { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
 .sim-head p { color: var(--ink-2); font-size: 14.5px; max-width: 80ch; }
 .sim-body { display: grid; gap: 18px; }
 .sim-body.layout-side { grid-template-columns: minmax(0, 1fr) minmax(250px, 300px); align-items: start; }
@@ -2341,7 +2341,7 @@ window.DATA = {
       more: '윈도우는 앞에 띄운 창(포그라운드)의 프로그램에 우선순위를 조금 더 주지만, 코어보다 바쁜 일이 많으면 게임도 기다립니다. 백신은 CPU를 쓰는 것보다 “실시간 감시”로 더 자주 끼어듭니다. 게임이 파일을 열 때마다 검사해서, 에셋을 읽는 순간의 멈춤이 길어집니다.',
       sim: 'cpu',
       ref: [
-        { t: 'Multitasking', u: 'https://learn.microsoft.com/en-us/windows/win32/procthread/multitasking', p: 'Microsoft', n: '윈도우는 스레드마다 시간 조각을 주고 다 쓰면 다음 스레드로 넘김, 시간 조각은 약 20ms(OS·CPU에 따라 다름)' },
+        { t: 'Multitasking', u: 'https://learn.microsoft.com/en-us/windows/win32/procthread/multitasking', p: 'Microsoft', n: '윈도우는 스레드마다 타임 슬라이스를 주고 다 쓰면 다음 스레드로 넘김, 타임 슬라이스는 약 20ms(OS·CPU에 따라 다름)' },
         { t: 'Priority Boosts', u: 'https://learn.microsoft.com/en-us/windows/win32/procthread/priority-boosts', p: 'Microsoft', n: '앞에 띄운 창(포그라운드)의 프로세스는 우선순위를 백그라운드 프로세스 이상으로 올려 줌' },
         { t: 'About regular quick and full scans with Microsoft Defender Antivirus', u: 'https://learn.microsoft.com/en-us/defender-endpoint/schedule-antivirus-scans', p: 'Microsoft', n: '실시간 보호는 파일을 열고 닫을 때마다, 폴더를 열 때마다 검사' },
       ] },
@@ -2537,7 +2537,7 @@ window.DATA = {
       num: '업로드 10Mbps 회선에 1MB 버퍼면 대기열이 800ms 분량까지 길어집니다.',
       own: ['ext', 'cli'],
       act: { game: '핑이 갑자기 수백 ms로 오르면 화면에 네트워크 상태 표시(같은 회선의 대용량 전송 가능성 안내).', ext: '유저에게 SQM(fq_codel, CAKE)이나 QoS가 있는 공유기 사용, SQM 속도는 회선 속도의 90~95%로 맞추기(그래야 대기열이 공유기 안에 생겨 효과가 남), 업로드 속도 제한 안내.' },
-      more: '업로드 쪽이 특히 잘 막힙니다. 케이블·모바일 회선은 업로드가 다운로드보다 훨씬 좁은 경우가 많기 때문입니다. 광랜이 넉넉한 집에서는 와이파이 구간이 병목이 되어, 공유기의 무선 대기열에서 같은 일이 생깁니다. 게임 패킷은 작아서 대역폭은 거의 안 쓰지만, 대기열에서 기다려야 한다는 점은 똑같습니다. 업로드 방향만 막히면 내 입력만 늦고 남의 움직임은 멀쩡합니다. 폰에서는 같은 폰의 사진 백업·앱 업데이트가 기지국 쪽 대기열을 채워 같은 일이 생깁니다.',
+      more: '업로드 쪽이 특히 잘 막힙니다. 케이블·모바일 회선은 업로드가 다운로드보다 훨씬 좁은 경우가 많기 때문입니다. 광랜이 넉넉한 집에서는 와이파이 구간이 병목이 되어, 공유기의 무선 대기열에서 같은 일이 생깁니다. 게임 패킷은 작아서 대역폭은 거의 안 쓰지만, 대기열에서 기다려야 한다는 점은 똑같습니다. 업로드 방향만 막히면 내 입력만 늦고 남의 움직임은 멀쩡합니다. 폰에서는 같은 폰의 사진 백업·앱 업데이트가 폰 모뎀과 기지국의 대기열을 채워 같은 일이 생깁니다.',
       sim: 'bloat',
       ref: [
         { t: 'Setting up SQM for CeroWrt 3.10', u: 'https://www.bufferbloat.net/projects/cerowrt/wiki/Setting_up_SQM_for_CeroWrt_310/', p: 'Bufferbloat.net', n: 'SQM 속도를 실측 속도의 95%(광고 속도 기준이면 85%)로 낮춰 병목을 통신사 장비에서 공유기 안으로 가져와야 효과가 남' },
@@ -4929,8 +4929,8 @@ Object.assign(DATA.secRefs, {
     { t: 'Handling variation in time', u: 'https://docs.unity3d.com/Manual/time-handling-variations.html', p: 'Unity', n: '실험의 따라잡기 상한(실험은 한 프레임에 5번까지): 유니티는 한 프레임의 게임 시간을 최대 1/3초로 묶어 따라잡기 악순환을 막고, 넘친 시간만큼 게임 시계가 늦어짐' },
   ],
   'l-client-os': [
-    { t: 'Multitasking', u: 'https://learn.microsoft.com/en-us/windows/win32/procthread/multitasking', p: 'Microsoft', n: '스레드마다 시간 조각(약 20ms, OS·CPU에 따라 다름)을 주고 다 쓰면 다음 스레드로 넘기는 선점형 멀티태스킹' },
-    { t: 'Scheduling Priorities', u: 'https://learn.microsoft.com/en-us/windows/win32/procthread/scheduling-priorities', p: 'Microsoft', n: '실행할 수 있는 스레드 중 가장 높은 우선순위의 스레드들이 시간 조각을 차례로(라운드 로빈) 받음' },
+    { t: 'Multitasking', u: 'https://learn.microsoft.com/en-us/windows/win32/procthread/multitasking', p: 'Microsoft', n: '스레드마다 타임 슬라이스(약 20ms, OS·CPU에 따라 다름)를 주고 다 쓰면 다음 스레드로 넘기는 선점형 멀티태스킹' },
+    { t: 'Scheduling Priorities', u: 'https://learn.microsoft.com/en-us/windows/win32/procthread/scheduling-priorities', p: 'Microsoft', n: '실행할 수 있는 스레드 중 가장 높은 우선순위의 스레드들이 타임 슬라이스를 차례로(라운드 로빈) 받음' },
     { t: 'Priority Boosts', u: 'https://learn.microsoft.com/en-us/windows/win32/procthread/priority-boosts', p: 'Microsoft', n: '앞에 띄운 창(포그라운드)의 프로세스 우선순위를 백그라운드 프로세스 이상으로 올려 줌' },
     { t: 'socket(7) — Linux manual page', u: 'https://man7.org/linux/man-pages/man7/socket.7.html', p: 'Linux man-pages', n: '소켓마다 수신 버퍼(SO_RCVBUF)가 있고 기본·최대 크기는 시스템 설정으로 정해짐' },
     { t: 'Wi-Fi low-latency mode', u: 'https://source.android.com/docs/core/connect/wifi-low-latency', p: 'Android (Google)', n: '안드로이드 10 이상의 와이파이 저지연 모드에서는 프레임워크가 와이파이 절전(doze)을 명시적으로 끔(앱이 앞에 떠 있고 화면이 켜진 경우)' },
