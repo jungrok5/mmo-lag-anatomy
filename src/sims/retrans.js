@@ -92,7 +92,7 @@ K.register('retrans', function (root) {
     if (kind === 'new') armTlp();
   }
   function armTlp() {
-    // TLP 대기(PTO) = 왕복 시간의 2배. 날아가는 패킷이 하나뿐이면 지연 ACK를 감안해 RTO 최소값만큼 더 기다리고,
+    // TLP 대기(PTO) = 왕복 시간의 2배. 아직 ACK를 받지 못한 패킷이 하나뿐이면 지연 ACK를 감안해 RTO 최소값만큼 더 기다리고,
     // RTO보다 늦게 잡지는 않는다(RFC 8985, 리눅스 tcp_schedule_loss_probe). 복구 중에는 걸지 않는다.
     if (!P.rack || S.tlpOut || S.srtt == null || S.una < S.recover) return;
     S.tlpAt = Math.min(t + 2 * S.srtt + (outstanding() === 1 ? P.rtoMin : 2), S.rtoAt);
@@ -125,7 +125,7 @@ K.register('retrans', function (root) {
       S.tlpOut = false;
     } else if (a.cum === S.una && outstanding() > 0) S.dup++;
     a.sack.forEach(id => { const s = S.segs.get(id); if (s && !s.sacked) { s.sacked = true; newly++; if (s.tx.length === 1 && sackSample == null) sackSample = t - s.tx[0].at; } });
-    // 복구 중에는 혼잡 윈도우가 “날아가는 패킷 + 방금 도착이 확인된 만큼”으로 묶인다(리눅스 PRR). RTO 뒤(슬로 스타트)는 그 두 배.
+    // 복구 중에는 혼잡 윈도우가 “아직 ACK를 받지 못한 패킷 + 방금 도착이 확인된 만큼”으로 묶인다(리눅스 PRR). RTO 뒤(슬로 스타트)는 그 두 배.
     // 다시 보낸 것이 이 한도를 먼저 쓰므로, thin stream은 복구가 끝날 때까지 새 패킷이 보내는 쪽에 쌓인다.
     if (wasRec) S.credit += newly * (inLoss ? 2 : 1);
     const rtt = rtxAcked || sample == null ? sackSample : sample;

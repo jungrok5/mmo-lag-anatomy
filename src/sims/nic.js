@@ -8,7 +8,7 @@ K.register('nic', function (root) {
     tries: [
       '<b>월드 보스 (150만 pps, RSS 1개)</b>를 누르세요(게이트웨이 규모의 극단적인 예). 코어 하나가 100%에 붙고 링 버퍼가 넘쳐 초당 수십만 개가 버려집니다.',
       '이어서 <b>RSS 큐 수</b>를 8로 올려 보세요. 같은 양을 코어 8개가 나눠 받아 버림이 0이 됩니다.',
-      '<b>클라우드 PPS 한도 초과</b>: 서버 쪽 그림은 멀쩡한데 “한도 초과 버림”만 쌓입니다. 서버 안을 아무리 봐도 원인이 안 보이는 경우입니다.',
+      '<b>클라우드 PPS 한도 초과</b>: 서버 쪽 그림은 멀쩡한데 “한도 초과 버림”만 쌓입니다. CPU·링 버퍼 같은 평소 지표로는 원인이 안 보이는 경우입니다.',
       '<b>몰림 정도</b>를 올리면 평균은 여유가 있어도 몰리는 순간에 슬롯이 모자랍니다. <b>링 버퍼 크기</b>를 키우면 버림은 줄지만 대기열이 길어져 지연이 늘어납니다.',
     ],
     layout: 'side',
@@ -46,10 +46,10 @@ K.register('nic', function (root) {
   const g1 = K.group(F.controls, '들어오는 패킷');
   const sPps = K.slider(g1, { label: '초당 들어오는 패킷(PPS)', min: 0, max: PPS.length - 1, step: 1, value: PPS.indexOf(P.pps), fmt: i => fmtP(PPS[i]) + '/초', onInput: i => { P.pps = PPS[i]; }, hint: '유저 1명이 초당 20~30개를 보냅니다. 150만 pps ≈ 5만~7만 명분이라 게임 서버 한 대보다는 게이트웨이·프록시 한 대가 받는 규모입니다.' });
   const sBurst = K.slider(g1, { label: '몰림 정도', min: 0, max: 100, step: 5, value: P.burst, unit: '%', onInput: v => { P.burst = v; }, hint: '평균은 같아도 짧은 순간에 몰려 들어옵니다(보스 등장, 광역 스킬).' });
-  const tCloud = K.toggle(g1, { label: '클라우드 인스턴스 PPS 한도 (100만 pps)', value: P.cloud, onChange: v => { P.cloud = v; }, hint: '한도를 넘은 패킷은 NIC에 닿기 전에 조용히 버려집니다.' });
+  const tCloud = K.toggle(g1, { label: '클라우드 인스턴스 PPS 한도 (100만 pps)', value: P.cloud, onChange: v => { P.cloud = v; }, hint: '이 실험은 한도를 100만 pps로 가정합니다(실제 한도는 인스턴스마다 다르고 공개하지 않는 경우가 많음). 넘은 패킷은 NIC에 닿기 전에 버려지고, AWS라면 ethtool -S의 pps_allowance_exceeded에만 남습니다.' });
   const g2 = K.group(F.controls, '네트워크 카드 설정');
   const cRing = K.choice(g2, { label: '링 버퍼 크기', value: P.ring, options: [[256, '256개'], [1024, '1024개'], [4096, '4096개']], onChange: v => { P.ring = +v; } });
-  const sRss = K.slider(g2, { label: 'RSS 큐 수', min: 1, max: 16, step: 1, value: P.rss, unit: '개', onInput: v => { P.rss = v; setup(); }, hint: '1개면 모든 인터럽트가 코어 하나로 갑니다.' });
+  const sRss = K.slider(g2, { label: 'RSS 큐 수', min: 1, max: 16, step: 1, value: P.rss, unit: '개', onInput: v => { P.rss = v; setup(); }, hint: '1개면 모든 인터럽트가 코어 하나로 갑니다. 이 실험은 코어 하나가 초당 약 70만 개를 꺼낸다고 가정합니다(실측 예는 35만~43만, CPU·설정에 따라 다름).' });
   const tSkew = K.toggle(g2, { label: '해시 쏠림 (한 큐로 몰림)', value: P.skew, onChange: v => { P.skew = v; setup(); }, hint: '큰 연결 몇 개(게이트웨이·프록시)가 같은 해시 값에 몰려 70%가 1번 큐로 갑니다.' });
   const sCoal = K.slider(g2, { label: '인터럽트 병합(coalescing)', min: 0, max: 200, step: 10, value: P.coal, unit: 'µs', onInput: v => { P.coal = v; }, hint: '인터럽트를 모아서 한 번에 보냅니다. 처리 능력은 늘지만 패킷이 그만큼 기다립니다.' });
 
@@ -237,7 +237,7 @@ K.register('nic', function (root) {
   const SYM = '플레이어는 사람이 많이 모인 곳에서만 여러 캐릭터가 한꺼번에 <b>순간이동</b>하고 스킬이 <b>씹힙니다</b>. 한산한 사냥터에서는 멀쩡합니다.';
   function explain(r) {
     const cap = capMs() * 1000;
-    if (r.cloud > 1000) return `${K.flag('bad')}클라우드가 이 서버에 허용한 한도는 초당 100만 패킷입니다. 넘친 <b>${fmtP(r.cloud)}개/초</b>는 네트워크 카드에 닿기도 전에 조용히 버려집니다. 서버 CPU와 링 버퍼는 멀쩡해 보여서 원인 찾기가 가장 어렵습니다. ${SYM} 더 큰 인스턴스를 쓰거나 서버를 나눠야 합니다.`;
+    if (r.cloud > 1000) return `${K.flag('bad')}클라우드가 이 서버에 허용한 한도는 초당 100만 패킷입니다. 넘친 <b>${fmtP(r.cloud)}개/초</b>는 네트워크 카드에 닿기도 전에 조용히 버려집니다. 서버 CPU와 링 버퍼는 멀쩡해 보여 평소 지표로는 원인을 찾기 어렵습니다. AWS라면 ethtool -S의 pps_allowance_exceeded 카운터로 확인합니다. ${SYM} 더 큰 인스턴스를 쓰거나 서버를 나눠야 합니다.`;
     if (r.drop > 100 && P.skew && P.rss > 1) return `${K.flag('bad')}큐는 ${P.rss}개인데 해시가 한쪽으로 쏠려 70%가 1번 큐로 몰렸습니다. 1번 코어는 꽉 찼고 나머지는 한가합니다. 1번 큐의 링 버퍼만 넘쳐 초당 <b>${fmtP(r.drop)}개</b>가 버려집니다. ${SYM} 큐를 늘려도 소용없고, 연결을 나누거나 해시 방식을 바꿔야 합니다.`;
     if (r.drop > 100 && P.rss === 1) return `${K.flag('bad')}모든 패킷이 코어 하나로만 들어갑니다(RSS 1개). 코어 하나는 초당 약 ${fmtP(cap)}개까지만 꺼내는데 ${fmtP(P.pps)}개가 들어옵니다. 링 버퍼(${K.n(P.ring)}개)가 넘쳐 초당 <b>${fmtP(r.drop)}개</b>가 게임 서버 로그에 아무 흔적 없이 버려집니다. ${SYM} RSS 큐를 늘려 여러 코어가 나눠 받게 하세요.`;
     if (r.drop > 100 && r.util < 0.9) return `${K.flag('warn')}평균으로는 코어에 여유가 있지만(최대 ${K.pct(r.util)}), 패킷이 몰려 들어오는 순간 링 버퍼 슬롯(${K.n(P.ring)}개)이 모자라 초당 <b>${fmtP(r.drop)}개</b>가 버려집니다. 링 버퍼를 키우면 줄어듭니다. 대신 대기열이 길어져 지연이 조금 늘어납니다.`;

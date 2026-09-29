@@ -125,9 +125,9 @@ K.register('timeouts', function (root) {
     if (P.lb === LB_DEF[P.proto]) { P.lb = LB_DEF[v]; sLb.set(P.lb, false); }   // 기본값이면 프로토콜에 맞는 기본값으로
     P.proto = v; changed();
   } });
-  const cLink = K.choice(g1, { label: '연결 방식', value: P.link, options: [['home', '유선·와이파이'], ['mobile', '모바일']], onChange: v => { P.link = v; changed(); } });
+  const cLink = K.choice(g1, { label: '연결 방식', value: P.link, options: [['home', '유선·와이파이'], ['mobile', '모바일']], onChange: v => { P.link = v; changed(); }, hint: '실험 값: 가정 공유기 UDP 1분·TCP 1시간, 통신사 공유기(CGNAT) UDP 30초·TCP 10분. 실제 값은 기기·통신사마다 다르고, 측정 연구에서 UDP는 30초~3분이 흔했습니다.' });
   const tBg = K.toggle(g1, { label: '백그라운드 전환 (모바일)', value: P.bg, onChange: v => { P.bg = v; changed(); }, hint: '게임 루프에서 하트비트를 보내면 앱을 내리는 즉시 멈춥니다(유니티 등 엔진은 내리면 루프를 멈춤). 이 실험은 하트비트를 따로 보내는 네트워크 스레드가 있어, OS가 앱을 일시 정지하는 10초 뒤까지 버틴다고 둡니다(안드로이드 14 이상 약 10초, iOS는 몇 초~몇십 초).' });
-  const tFw = K.toggle(g1, { label: '회사·PC방 방화벽 거침', value: P.fw, onChange: v => { P.fw = v; changed(); }, hint: '이 실험 값은 UDP 2분, TCP 5분입니다(TCP를 짧게 설정한 곳). 기본값은 장비마다 달라 UDP 30초~3분, TCP 30분~1시간이 흔합니다.' });
+  const tFw = K.toggle(g1, { label: '회사·PC방 방화벽 거침', value: P.fw, onChange: v => { P.fw = v; changed(); }, hint: '이 실험 값은 UDP 2분, TCP 5분입니다(TCP를 짧게 설정한 곳). 기본값은 장비마다 달라 UDP 30초~3분, TCP 30~90분이 흔합니다.' });
   const g2 = K.group(F.controls, '클라이언트');
   const sHb = K.slider(g2, { label: '하트비트 간격', min: 0, max: 300, step: 5, value: P.hb, fmt: v => (v ? fmtT(v) : '끔'), onInput: v => { P.hb = v; changed(); }, hint: '하트비트: 할 일이 없어도 “살아 있어요”라고 보내는 작은 패킷' });
   const g3 = K.group(F.controls, '타임아웃 설정');
