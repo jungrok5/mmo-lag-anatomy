@@ -80,7 +80,7 @@ K.register('distance', function (root) {
   const cAcc = K.choice(g2, { label: '가입자망', value: P.acc, options: [['wired', '유선'], ['wifi', '와이파이'], ['lte', 'LTE']], onChange: v => { P.acc = v; changed(); } });
   const g3 = K.group(F.controls, '시간');
   const hhmm = v => String(Math.floor(v) % 24).padStart(2, '0') + ':' + (v % 1 ? '30' : '00');
-  const sHour = K.slider(g3, { label: '내 쪽 시각', min: 0, max: 23.5, step: 0.5, value: P.hour, fmt: hhmm, onInput: v => { P.hour = v; changed(); }, hint: '저녁 9~11시는 모두가 영상을 보고 게임을 하는 시간이라 통신사 사이·국제 구간이 붐빕니다.' });
+  const sHour = K.slider(g3, { label: '내 쪽 시각', min: 0, max: 23.5, step: 0.5, value: P.hour, fmt: hhmm, onInput: v => { P.hour = v; changed(); }, hint: '저녁 9~11시 무렵은 모두가 영상을 보고 게임을 하는 시간이라 통신사 사이·국제 구간이 붐비기 쉽습니다.' });
 
   const ctlSet = () => { cMe.set(P.me, false); cSrv.set(P.srv, false); sRoute.set(P.route, false); tCut.set(P.cut, false); cAcc.set(P.acc, false); sHour.set(P.hour, false); };
   const preset = o => () => { Object.assign(P, DEF, o); ctlSet(); changed(); };

@@ -289,7 +289,7 @@
       act: { game: '자주 함께 쓰는 데이터를 연속으로 배치(데이터 지향 설계).' },
       sim: 'ladder',
       ref: [
-        { t: 'Designs, Lessons and Advice from Building Large Distributed Systems (LADIS 2009 keynote)', u: 'https://www.cs.cornell.edu/projects/ladis2009/talks/dean-keynote-ladis2009.pdf', p: 'Google', n: 'L1 캐시 0.5ns, L2 캐시 7ns, 메인 메모리 100ns(2009년 기준): 캐시를 벗어나면 수십~수백 배' },
+        { t: 'Designs, Lessons and Advice from Building Large Distributed Systems (LADIS 2009 keynote)', u: 'https://www.cs.cornell.edu/projects/ladis2009/talks/dean-keynote-ladis2009.pdf', p: 'Google', n: 'L1 캐시 0.5ns, L2 캐시 7ns, 메인 메모리 100ns(2009년 기준): RAM까지 가면 캐시보다 한두 자릿수 느림' },
       ] },
     { id: 'mem-fragment', t: '메모리 단편화', en: 'Heap fragmentation',
       s: '할당과 해제를 반복해 빈 공간이 잘게 쪼개지면, 실제로 쓰는 양보다 훨씬 많은 메모리를 점유하게 됩니다.',
@@ -370,7 +370,7 @@
       sim: 'disk',
       ref: [
         { t: 'Exos X18 Data Sheet', u: 'https://www.seagate.com/www-content/datasheets/pdfs/exos-x18-mango-DS2045-1N-2007US-en_US.pdf', p: 'Seagate', n: '7,200rpm 서버용 HDD의 4K 무작위 읽기 170 IOPS(QD16)' },
-        { t: 'PM893 | Data center SSD', u: 'https://semiconductor.samsung.com/ssd/datacenter-ssd/pm893/', p: 'Samsung', n: '서버용 SATA SSD 무작위 읽기·쓰기 최대 98,000/30,000 IOPS' },
+        { t: 'D3-S4520 SSD', u: 'https://www.solidigm.com/products/data-center/d3/s4520.html', p: 'Solidigm', n: '서버용 SATA SSD 4KB 무작위 읽기·쓰기 최대 92K/48K IOPS' },
         { t: 'Solidigm™ D7-P5520 and D7-P5620 Product Brief', u: 'https://www.solidigm.com/products/data-center/product-briefs/d7-p5520-p5620-product-brief.html', p: 'Solidigm', n: '서버용 NVMe SSD 무작위 읽기·쓰기 1,000K/200K IOPS' },
         { t: 'Amazon EBS General Purpose SSD volumes', u: 'https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html', p: 'AWS', n: 'gp3 기본 성능 3,000 IOPS와 125MiB/s, 둘은 따로 늘릴 수 있는 별개 한도' },
         { t: 'Amazon EBS-optimized instance types', u: 'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-optimized.html', p: 'AWS', n: '인스턴스 유형마다 EBS 대역폭·처리량·IOPS의 기준·최대 한도가 따로 있음' },

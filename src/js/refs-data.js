@@ -17,7 +17,7 @@ Object.assign(DATA.secRefs, {
   ],
   'l-disk': [
     { t: 'Exos X18 Data Sheet', u: 'https://www.seagate.com/www-content/datasheets/pdfs/exos-x18-mango-DS2045-1N-2007US-en_US.pdf', p: 'Seagate', n: '7,200rpm HDD의 4K 무작위 읽기 170 IOPS, 평균 회전 지연 4.16ms(본문의 HDD 150번 남짓, 디스크 실험의 HDD)' },
-    { t: 'PM893 | Data center SSD', u: 'https://semiconductor.samsung.com/ssd/datacenter-ssd/pm893/', p: 'Samsung', n: 'SATA SSD 무작위 읽기·쓰기 최대 98,000/30,000 IOPS(본문의 SSD 수만 번)' },
+    { t: 'D3-S4520 SSD', u: 'https://www.solidigm.com/products/data-center/d3/s4520.html', p: 'Solidigm', n: 'SATA SSD 4KB 무작위 읽기·쓰기 최대 92K/48K IOPS(본문의 SSD 수만 번)' },
     { t: 'Solidigm™ D7-P5520 and D7-P5620 Product Brief', u: 'https://www.solidigm.com/products/data-center/product-briefs/d7-p5520-p5620-product-brief.html', p: 'Solidigm', n: 'NVMe SSD 무작위 읽기·쓰기 1,000K/200K IOPS(본문의 수십만 번)' },
     { t: 'Amazon EBS General Purpose SSD volumes', u: 'https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html', p: 'AWS', n: 'gp3 기본 3,000 IOPS, gp2는 I/O 크레딧으로 3,000 IOPS까지 버스트하다 크레딧이 떨어지면 기준 성능으로' },
     { t: 'Amazon EBS-optimized instance types', u: 'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-optimized.html', p: 'AWS', n: '작은 인스턴스는 EBS 최대 성능을 24시간에 한 번 30분만 내고 기준 성능으로 돌아감(예: t4g.2xlarge 기준 4,000·최대 15,700 IOPS, 디스크 실험의 클라우드 버스트형 가정)' },

@@ -1159,7 +1159,7 @@ input[type="range"]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 4px 
         </div>
         <div class="prose">
           <p>빛은 광케이블 안에서 1초에 약 20만 km를 갑니다. 1,000km 떨어진 서버라면 왕복에 최소 10ms가 걸리고, 이 숫자는 어떤 기술로도 줄일 수 없습니다. 실제 패킷은 직선으로 가지 않고 통신사끼리 연결된 지점(<b>피어링</b>)을 따라 돌아가므로 보통 이론값의 1.5~2배가 걸립니다. 한국–유럽처럼 직선 위로 큰 케이블이 거의 없는 구간은 동남아·수에즈나 미국을 돌아가 2.5~3배(왕복 약 230~270ms)가 됩니다.</p>
-          <p>문제는 이 경로가 <b>시간과 상황에 따라 바뀐다</b>는 점입니다. 저녁 9~11시에는 모두가 영상을 보느라 통신사 사이 연결 구간이 붐비고, 경로 정보(<b>BGP</b>)가 바뀌면 몇 초~몇십 초(드물게 몇 분) 동안 패킷이 목적지에 닿지 못하고, 해저 케이블이 끊기면 몇 주 동안 먼 경로로 우회합니다. “특정 통신사 사용자만”, “저녁에만”, “해외에서만” 렉이 있다면 이 층을 먼저 의심합니다.</p>
+          <p>문제는 이 경로가 <b>시간과 상황에 따라 바뀐다</b>는 점입니다. 저녁 9~11시 무렵에는 모두가 영상을 보느라 통신사 사이 연결 구간이 붐비기 쉽고, 경로 정보(<b>BGP</b>)가 바뀌면 몇 초~몇십 초(드물게 몇 분) 동안 패킷이 목적지에 닿지 못하고, 해저 케이블이 끊기면 몇 주 동안 먼 경로로 우회합니다. “특정 통신사 사용자만”, “저녁에만”, “해외에서만” 렉이 있다면 이 층을 먼저 의심합니다.</p>
         </div>
         <div class="analogy"><span class="tag">비유</span><p>통신사망은 <b>고속도로망</b>입니다. 서울에서 부산 가는 길이 막히지 않아도 거리만큼은 시간이 걸리고, 퇴근 시간 톨게이트(피어링 구간)는 막히며, 사고가 나면 내비게이션이 멀리 돌아가는 길을 안내합니다.</p></div>
         <div data-sim="distance" id="sim-distance"></div>
@@ -3591,7 +3591,7 @@ window.DATA = {
       act: { game: '자주 함께 쓰는 데이터를 연속으로 배치(데이터 지향 설계).' },
       sim: 'ladder',
       ref: [
-        { t: 'Designs, Lessons and Advice from Building Large Distributed Systems (LADIS 2009 keynote)', u: 'https://www.cs.cornell.edu/projects/ladis2009/talks/dean-keynote-ladis2009.pdf', p: 'Google', n: 'L1 캐시 0.5ns, L2 캐시 7ns, 메인 메모리 100ns(2009년 기준): 캐시를 벗어나면 수십~수백 배' },
+        { t: 'Designs, Lessons and Advice from Building Large Distributed Systems (LADIS 2009 keynote)', u: 'https://www.cs.cornell.edu/projects/ladis2009/talks/dean-keynote-ladis2009.pdf', p: 'Google', n: 'L1 캐시 0.5ns, L2 캐시 7ns, 메인 메모리 100ns(2009년 기준): RAM까지 가면 캐시보다 한두 자릿수 느림' },
       ] },
     { id: 'mem-fragment', t: '메모리 단편화', en: 'Heap fragmentation',
       s: '할당과 해제를 반복해 빈 공간이 잘게 쪼개지면, 실제로 쓰는 양보다 훨씬 많은 메모리를 점유하게 됩니다.',
@@ -3672,7 +3672,7 @@ window.DATA = {
       sim: 'disk',
       ref: [
         { t: 'Exos X18 Data Sheet', u: 'https://www.seagate.com/www-content/datasheets/pdfs/exos-x18-mango-DS2045-1N-2007US-en_US.pdf', p: 'Seagate', n: '7,200rpm 서버용 HDD의 4K 무작위 읽기 170 IOPS(QD16)' },
-        { t: 'PM893 | Data center SSD', u: 'https://semiconductor.samsung.com/ssd/datacenter-ssd/pm893/', p: 'Samsung', n: '서버용 SATA SSD 무작위 읽기·쓰기 최대 98,000/30,000 IOPS' },
+        { t: 'D3-S4520 SSD', u: 'https://www.solidigm.com/products/data-center/d3/s4520.html', p: 'Solidigm', n: '서버용 SATA SSD 4KB 무작위 읽기·쓰기 최대 92K/48K IOPS' },
         { t: 'Solidigm™ D7-P5520 and D7-P5620 Product Brief', u: 'https://www.solidigm.com/products/data-center/product-briefs/d7-p5520-p5620-product-brief.html', p: 'Solidigm', n: '서버용 NVMe SSD 무작위 읽기·쓰기 1,000K/200K IOPS' },
         { t: 'Amazon EBS General Purpose SSD volumes', u: 'https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html', p: 'AWS', n: 'gp3 기본 성능 3,000 IOPS와 125MiB/s, 둘은 따로 늘릴 수 있는 별개 한도' },
         { t: 'Amazon EBS-optimized instance types', u: 'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-optimized.html', p: 'AWS', n: '인스턴스 유형마다 EBS 대역폭·처리량·IOPS의 기준·최대 한도가 따로 있음' },
@@ -4589,13 +4589,13 @@ window.DATA = {
       more: '무선 장비의 재시도는 지터를 만들고(재시도마다 수 ms), 재시도 한도를 넘은 경우만 손실이 됩니다. 그래서 무선 품질이 나빠질수록 “지터 → 가끔 멈춤 → 잦은 멈춤” 순서로 증상이 커집니다. 공유기(AP) 사이를 옮겨 가는 순간(로밍)에는 수십 ms~수 초 동안 연달아 잃기도 합니다. 모바일망은 기지국 구간에서 재전송을 많이 하므로, 손실보다 수백 ms 지연 급등으로 나타나는 경우가 많습니다.',
       sim: 'retrans',
       ref: [
-        { t: 'net/wireless/core.c', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/wireless/core.c', p: 'Linux kernel', n: '리눅스 무선 스택의 기본 재시도 한도: 짧은 프레임 7번, 긴 프레임 4번(dot11ShortRetryLimit·dot11LongRetryLimit)' },
+        { t: 'net/wireless/core.c', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/wireless/core.c?h=v6.12', p: 'Linux kernel', n: '리눅스 무선 스택의 기본 재시도 한도: 짧은 프레임 7번, 긴 프레임 4번(dot11ShortRetryLimit·dot11LongRetryLimit)' },
         { t: 'RFC 3481: TCP over Second (2.5G) and Third (3G) Generation Wireless Networks', u: 'https://www.rfc-editor.org/rfc/rfc3481', p: 'IETF', n: '모바일망은 링크 계층 재전송 덕분에 IP 손실은 적지만, 그 복구가 지연 흔들림과 지연 급등으로 나타남' },
         { t: 'Wi-Fi roaming support in Apple devices', u: 'https://support.apple.com/guide/deployment/wi-fi-roaming-support-dep98f116c0f/web', p: 'Apple', n: 'AP를 옮길 때 새 AP 인증이 끝날 때까지 데이터를 보낼 수 없고, 802.1X 환경에서는 몇 초 걸릴 수 있음' },
         { t: 'RFC 8985: The RACK-TLP Loss Detection Algorithm for TCP', u: 'https://www.rfc-editor.org/rfc/rfc8985', p: 'IETF', n: 'RACK(시간 기준 손실 판단)과 TLP(끝 패킷 재전송)의 정의' },
         { t: 'IP Sysctl', u: 'https://docs.kernel.org/networking/ip-sysctl.html', p: 'Linux kernel', n: 'tcp_recovery 기본 0x1(RACK), tcp_early_retrans 기본 3(TLP 켜짐), TCP_NOTSENT_LOWAT·tcp_notsent_lowat로 아직 보내지 않은 데이터 양 제한' },
-        { t: 'tcp(7) - Linux manual page', u: 'https://man7.org/linux/man-pages/man7/tcp.7.html', p: 'Linux man-pages', n: 'TCP_NODELAY는 Nagle 알고리즘을 꺼 작은 데이터도 바로 보냄' },
-        { t: 'include/net/tcp.h', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/net/tcp.h', p: 'Linux kernel', n: 'RTO 최소값 TCP_RTO_MIN = 200ms' },
+        { t: 'tcp(7) — Linux manual page', u: 'https://man7.org/linux/man-pages/man7/tcp.7.html', p: 'Linux man-pages', n: 'TCP_NODELAY는 Nagle 알고리즘을 꺼 작은 데이터도 바로 보냄' },
+        { t: 'include/net/tcp.h', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/net/tcp.h?h=v6.12', p: 'Linux kernel', n: 'RTO 최소값 TCP_RTO_MIN = 200ms' },
       ] },
     { id: 'rt-queue-drop', t: '병목 대기열 넘침 (혼잡 손실)', en: 'Tail drop at a congested bottleneck',
       s: '공유기, 통신사 연결 구간, 데이터센터 회선처럼 가장 좁은 곳의 대기열이 가득 차면 새로 오는 패킷을 버립니다.',
@@ -4623,8 +4623,8 @@ window.DATA = {
       sim: 'retrans',
       ref: [
         { t: 'High-Resolution Measurement of Data Center Microbursts', u: 'https://research.facebook.com/publications/high-resolution-measurement-of-data-center-microbursts/', p: 'Meta', n: '데이터센터 랙 스위치 버스트의 70% 이상이 수십 µs 안에 끝나고, 분 단위 평균 사용률과 드롭의 관계가 약함(IMC 2017)' },
-        { t: 'tc-fq(8) - Linux manual page', u: 'https://man7.org/linux/man-pages/man8/tc-fq.8.html', p: 'Linux man-pages', n: 'fq 큐는 소켓(연결)마다 페이싱하고, SO_MAX_PACING_RATE로 연결별 최대 속도를 정함' },
-        { t: 'net/ipv4/tcp_bbr.c', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/ipv4/tcp_bbr.c', p: 'Linux kernel', n: 'BBR은 추정한 병목 대역폭으로 pacing_rate를 정해 보냄' },
+        { t: 'tc-fq(8) — Linux manual page', u: 'https://man7.org/linux/man-pages/man8/tc-fq.8.html', p: 'iproute2', n: 'fq 큐는 소켓(연결)마다 페이싱하고, SO_MAX_PACING_RATE로 연결별 최대 속도를 정함' },
+        { t: 'net/ipv4/tcp_bbr.c', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/ipv4/tcp_bbr.c?h=v6.12', p: 'Linux kernel', n: 'BBR은 추정한 병목 대역폭으로 pacing_rate를 정해 보냄' },
         { t: 'IP Sysctl', u: 'https://docs.kernel.org/networking/ip-sysctl.html', p: 'Linux kernel', n: 'TCP는 흐름 속도에 맞춰 TSO 프레임 크기를 정함(최대 64KB, tcp_min_tso_segs)' },
         { t: 'Monitor network performance for ENA settings on your EC2 instance', u: 'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-network-performance-ena.html', p: 'AWS', n: 'bw_out_allowance_exceeded·pps_allowance_exceeded: 인스턴스의 대역폭·초당 패킷 한도를 넘어 대기열에 넣거나 버린 패킷 수' },
       ] },
@@ -4640,7 +4640,7 @@ window.DATA = {
         { t: 'RFC 2475: An Architecture for Differentiated Services', u: 'https://www.rfc-editor.org/rfc/rfc2475', p: 'IETF', n: '셰이핑은 패킷을 늦춰 트래픽 프로파일에 맞추고, 폴리싱은 프로파일을 넘는 패킷을 버린다는 정의' },
         { t: 'An Internet-Wide Analysis of Traffic Policing', u: 'https://research.google/pubs/an-internet-wide-analysis-of-traffic-policing/', p: 'Google', n: '폴리싱이 걸린 전송은 손실률이 평균 6배 높고, 페이싱·셰이핑으로 같은 목적을 이룰 수 있음(SIGCOMM 2016)' },
         { t: 'Monitor network performance for ENA settings on your EC2 instance', u: 'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-network-performance-ena.html', p: 'AWS', n: 'ethtool -S의 bw_out_allowance_exceeded·pps_allowance_exceeded: 인스턴스 한도를 넘어 대기열에 넣거나 버린 패킷 수' },
-        { t: 'tc-fq(8) - Linux manual page', u: 'https://man7.org/linux/man-pages/man8/tc-fq.8.html', p: 'Linux man-pages', n: '리눅스 fq 큐의 연결별 페이싱' },
+        { t: 'tc-fq(8) — Linux manual page', u: 'https://man7.org/linux/man-pages/man8/tc-fq.8.html', p: 'iproute2', n: '리눅스 fq 큐의 연결별 페이싱' },
       ] },
     { id: 'rt-physical', t: '물리 오류 (불량 선·광모듈·커넥터)', en: 'Bit errors: bad cable, optics, dirty fiber',
       s: '케이블 손상, 먼지 낀 광커넥터, 수명이 다한 광모듈은 비트 오류를 만들고, 깨진 패킷은 장비가 조용히 버립니다.',
@@ -4652,7 +4652,7 @@ window.DATA = {
       sim: 'retrans',
       ref: [
         { t: 'Interface statistics', u: 'https://docs.kernel.org/networking/statistics.html', p: 'Linux kernel', n: 'rx_crc_errors는 받는 쪽 인터페이스가 CRC 오류로 센 패킷 수, ip -s -s link와 ethtool -S로 확인' },
-        { t: 'ethtool(8) - Linux manual page', u: 'https://man7.org/linux/man-pages/man8/ethtool.8.html', p: 'Linux man-pages', n: '-S로 NIC·드라이버별 통계, -m으로 광모듈(SFP+·QSFP) EEPROM과 광 진단 정보 확인' },
+        { t: 'ethtool(8) — Linux manual page', u: 'https://man7.org/linux/man-pages/man8/ethtool.8.html', p: 'ethtool', n: '-S로 NIC·드라이버별 통계, -m으로 광모듈(SFP+·QSFP) EEPROM과 광 진단 정보 확인' },
       ] },
     { id: 'rt-duplex', t: '듀플렉스 불일치', en: 'Duplex mismatch',
       s: '한쪽은 자동 협상, 다른 쪽은 속도·듀플렉스를 고정해 두면 한쪽이 반이중으로 동작하며 부하가 걸릴 때마다 충돌로 패킷을 잃습니다.',
@@ -4667,7 +4667,7 @@ window.DATA = {
         { t: 'IEEE 802.3ae 10 Gigabit Ethernet: HSSG Objectives', u: 'https://www.ieee802.org/3/ae/objectives.pdf', p: 'IEEE', n: '10기가비트 이더넷은 전이중만 지원' },
         { t: 'IEEE P802.3ba Objectives', u: 'https://www.ieee802.org/3/ba/PAR/P802.3ba_Objectives_0709.pdf', p: 'IEEE', n: '40·100기가비트 이더넷도 전이중만 지원' },
         { t: 'Interface statistics', u: 'https://docs.kernel.org/networking/statistics.html', p: 'Linux kernel', n: 'tx_window_errors는 늦은 충돌(late collision)로 실패한 전송 수, rx_crc_errors는 CRC 오류로 받은 패킷 수' },
-        { t: 'ethtool(8) - Linux manual page', u: 'https://man7.org/linux/man-pages/man8/ethtool.8.html', p: 'Linux man-pages', n: 'ethtool -s의 speed·duplex·autoneg로 속도·듀플렉스·자동 협상 설정' },
+        { t: 'ethtool(8) — Linux manual page', u: 'https://man7.org/linux/man-pages/man8/ethtool.8.html', p: 'ethtool', n: 'ethtool -s의 speed·duplex·autoneg로 속도·듀플렉스·자동 협상 설정' },
       ] },
     { id: 'rt-host-drop', t: '수신 서버 호스트의 패킷 폐기', en: 'Receiver host drops (ring, softirq, CPU)',
       s: '패킷은 서버까지 왔는데 NIC의 링 버퍼(도착한 패킷을 잠시 담아 두는 버퍼)가 넘치거나, 커널의 수신 처리 코어가 포화되어 버려집니다.',
@@ -4679,13 +4679,13 @@ window.DATA = {
       sim: 'nic',
       ref: [
         { t: 'Interface statistics', u: 'https://docs.kernel.org/networking/statistics.html', p: 'Linux kernel', n: 'rx_missed_errors는 버퍼가 없어 호스트가 받지 못한 패킷 수(/proc/net/dev에서는 drop에 합산), ip -s -s link로 확인' },
-        { t: 'drivers/net/ethernet/intel/igb/igb_ethtool.c', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/net/ethernet/intel/igb/igb_ethtool.c', p: 'Linux kernel', n: 'ethtool -S 카운터 이름은 드라이버가 정함(예: igb의 rx_missed_errors·rx_no_buffer_count)' },
+        { t: 'drivers/net/ethernet/intel/igb/igb_ethtool.c', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/net/ethernet/intel/igb/igb_ethtool.c?h=v6.12', p: 'Linux kernel', n: 'ethtool -S 카운터 이름은 드라이버가 정함(예: igb의 rx_missed_errors·rx_no_buffer_count)' },
         { t: 'Ethtool counters', u: 'https://docs.kernel.org/networking/device_drivers/ethernet/mellanox/mlx5/counters.html', p: 'Linux kernel', n: 'mlx5 드라이버의 rx_out_of_buffer(수신 큐에 버퍼가 없음)·rx_discards_phy(포트 버퍼 부족으로 폐기)' },
-        { t: 'net/core/net-procfs.c', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/core/net-procfs.c', p: 'Linux kernel', n: '/proc/net/softnet_stat은 CPU마다 한 줄, 16진수이며 2번째 열이 dropped, 3번째 열이 time_squeeze' },
+        { t: 'net/core/net-procfs.c', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/core/net-procfs.c?h=v6.12', p: 'Linux kernel', n: '/proc/net/softnet_stat은 CPU마다 한 줄, 16진수이며 2번째 열이 dropped, 3번째 열이 time_squeeze' },
         { t: 'Documentation for /proc/sys/net/', u: 'https://docs.kernel.org/admin-guide/sysctl/net.html', p: 'Linux kernel', n: 'netdev_max_backlog: 커널이 처리하는 것보다 빨리 들어올 때 쌓아 두는 수신 대기열 한도' },
         { t: 'Scaling in the Linux Networking Stack', u: 'https://docs.kernel.org/networking/scaling.html', p: 'Linux kernel', n: 'RSS: NIC가 여러 수신 큐로 나눠 여러 CPU에서 처리' },
-        { t: 'ethtool(8) - Linux manual page', u: 'https://man7.org/linux/man-pages/man8/ethtool.8.html', p: 'Linux man-pages', n: '-G(--set-ring)로 링 버퍼 크기 변경' },
-        { t: 'proc_stat(5) - Linux manual page', u: 'https://man7.org/linux/man-pages/man5/proc_stat.5.html', p: 'Linux man-pages', n: '/proc/stat의 steal: 가상화 환경에서 다른 OS가 CPU를 쓴 시간' },
+        { t: 'ethtool(8) — Linux manual page', u: 'https://man7.org/linux/man-pages/man8/ethtool.8.html', p: 'ethtool', n: '-G(--set-ring)로 링 버퍼 크기 변경' },
+        { t: 'proc_stat(5) — Linux manual page', u: 'https://man7.org/linux/man-pages/man5/proc_stat.5.html', p: 'Linux man-pages', n: '/proc/stat의 steal: 가상화 환경에서 다른 OS가 CPU를 쓴 시간' },
       ] },
     { id: 'rt-stateful-fw', t: '방화벽·연결 추적의 폐기', en: 'Stateful firewall / conntrack drops',
       s: '방화벽이나 리눅스 연결 추적(conntrack, 지나가는 연결을 테이블에 기록하는 기능)은 테이블이 가득 차거나, 연결 상태가 맞지 않는다고 판단하면 패킷을 버립니다.',
@@ -4697,8 +4697,8 @@ window.DATA = {
       sim: 'retrans',
       ref: [
         { t: 'Netfilter Conntrack Sysfs variables', u: 'https://docs.kernel.org/networking/nf_conntrack-sysctl.html', p: 'Linux kernel', n: 'nf_conntrack_max 기본값은 해시 버킷 수(메모리÷16384, 1,024~262,144), 현재 개수는 nf_conntrack_count, nf_conntrack_tcp_be_liberal은 윈도우 밖 RST만 INVALID로 처리' },
-        { t: 'net/netfilter/nf_conntrack_core.c', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/netfilter/nf_conntrack_core.c', p: 'Linux kernel', n: '테이블이 가득 차면 “nf_conntrack: table full, dropping packet” 로그를 남기고 폐기' },
-        { t: 'iptables-extensions(8) - Linux manual page', u: 'https://man7.org/linux/man-pages/man8/iptables-extensions.8.html', p: 'Linux man-pages', n: 'raw 테이블의 CT --notrack으로 연결 추적에서 제외' },
+        { t: 'net/netfilter/nf_conntrack_core.c', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/netfilter/nf_conntrack_core.c?h=v6.12', p: 'Linux kernel', n: '테이블이 가득 차면 “nf_conntrack: table full, dropping packet” 로그를 남기고 폐기' },
+        { t: 'iptables-extensions(8) — Linux manual page', u: 'https://man7.org/linux/man-pages/man8/iptables-extensions.8.html', p: 'netfilter', n: 'raw 테이블의 CT --notrack으로 연결 추적에서 제외' },
         { t: 'Amazon EC2 security group connection tracking', u: 'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/security-group-connection-tracking.html', p: 'AWS', n: '인스턴스별 추적 연결 수 한도를 넘으면 패킷을 버리고 conntrack_allowance_exceeded로 확인, 비대칭 경로는 피하라는 권고' },
       ] },
     { id: 'rt-appliance-pps', t: '중간 장비 처리 한도 초과 (방화벽·IPS·DDoS 방어)', en: 'Inline appliance PPS / CPU overload',
@@ -4725,11 +4725,11 @@ window.DATA = {
         { t: 'RFC 2923: TCP Problems with Path MTU Discovery', u: 'https://www.rfc-editor.org/rfc/rfc2923', p: 'IETF', n: 'ICMP가 막혀 큰 패킷만 계속 사라지는 PMTU 블랙홀 문제' },
         { t: 'RFC 4821: Packetization Layer Path MTU Discovery', u: 'https://www.rfc-editor.org/rfc/rfc4821', p: 'IETF', n: 'ICMP 없이 전송 계층이 패킷 크기를 탐색하는 방법(리눅스 tcp_mtu_probing의 바탕)' },
         { t: 'IP Sysctl', u: 'https://docs.kernel.org/networking/ip-sysctl.html', p: 'Linux kernel', n: 'tcp_mtu_probing: 0 꺼짐, 1 블랙홀이 감지될 때만, 2 항상(시작 MSS는 tcp_base_mss). tcp_retries1 기본 3' },
-        { t: 'net/ipv4/tcp_timer.c', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/ipv4/tcp_timer.c', p: 'Linux kernel', n: 'RTO 재전송이 tcp_retries1만큼 이어지면 블랙홀 감지로 보고 MTU 탐색을 켜 MSS를 낮춤' },
-        { t: 'include/net/tcp.h', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/net/tcp.h', p: 'Linux kernel', n: 'TCP_BASE_MSS = 1,024바이트' },
+        { t: 'net/ipv4/tcp_timer.c', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/ipv4/tcp_timer.c?h=v6.12', p: 'Linux kernel', n: 'RTO 재전송이 tcp_retries1만큼 이어지면 블랙홀 감지로 보고 MTU 탐색을 켜 MSS를 낮춤' },
+        { t: 'include/net/tcp.h', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/net/tcp.h?h=v6.12', p: 'Linux kernel', n: 'TCP_BASE_MSS = 1,024바이트' },
         { t: 'RFC 6298: Computing TCP\'s Retransmission Timer', u: 'https://www.rfc-editor.org/rfc/rfc6298', p: 'IETF', n: '재전송 타이머가 만료될 때마다 RTO를 두 배로 늘림' },
-        { t: 'iptables-extensions(8) - Linux manual page', u: 'https://man7.org/linux/man-pages/man8/iptables-extensions.8.html', p: 'Linux man-pages', n: 'TCPMSS --clamp-mss-to-pmtu: ICMP를 막는 구간 때문에 큰 패킷이 멈추는 문제를 SYN의 MSS 조정으로 우회' },
-        { t: 'tcp(7) - Linux manual page', u: 'https://man7.org/linux/man-pages/man7/tcp.7.html', p: 'Linux man-pages', n: 'TCP_MAXSEG: 나가는 패킷의 최대 세그먼트 크기, 연결 전에 설정하면 상대에게 알리는 MSS도 바뀜' },
+        { t: 'iptables-extensions(8) — Linux manual page', u: 'https://man7.org/linux/man-pages/man8/iptables-extensions.8.html', p: 'netfilter', n: 'TCPMSS --clamp-mss-to-pmtu: ICMP를 막는 구간 때문에 큰 패킷이 멈추는 문제를 SYN의 MSS 조정으로 우회' },
+        { t: 'tcp(7) — Linux manual page', u: 'https://man7.org/linux/man-pages/man7/tcp.7.html', p: 'Linux man-pages', n: 'TCP_MAXSEG: 나가는 패킷의 최대 세그먼트 크기, 연결 전에 설정하면 상대에게 알리는 MSS도 바뀜' },
         { t: 'Network maximum transmission unit (MTU) for your EC2 instance', u: 'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/network_mtu.html', p: 'AWS', n: '인터넷 게이트웨이·VPN은 MTU 1,500, PMTUD에는 ICMP 유형 3 코드 4가 필요하고 보안 그룹·네트워크 ACL이 막으면 받지 못함' },
         { t: 'MTU considerations | Cloud VPN', u: 'https://cloud.google.com/network-connectivity/docs/vpn/concepts/mtu-considerations', p: 'Google Cloud', n: 'Cloud VPN 게이트웨이 MTU 1,460바이트, IPv4 터널의 페이로드 MTU 1,406바이트(터널을 지나면 1,400 안팎)' },
       ] },
@@ -4746,7 +4746,7 @@ window.DATA = {
         { t: 'RFC 4787: Network Address Translation (NAT) Behavioral Requirements for Unicast UDP', u: 'https://www.rfc-editor.org/rfc/rfc4787', p: 'IETF', n: 'NAT 매핑은 안에서 나가는 패킷으로 갱신되어야 하고(REQ-6), 밖에서 들어오는 패킷의 갱신은 선택 사항(UDP 기준)' },
         { t: 'Amazon EC2 security group connection tracking', u: 'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/security-group-connection-tracking.html', p: 'AWS', n: 'TCP 유휴 추적 타임아웃 기본값은 Nitro v6 인스턴스 유형 350초, 그 밖의 유형 432,000초(5일). 5분보다 짧은 간격의 keepalive 권고' },
         { t: 'IP Sysctl', u: 'https://docs.kernel.org/networking/ip-sysctl.html', p: 'Linux kernel', n: 'tcp_keepalive_time 기본 2시간' },
-        { t: 'tcp(7) - Linux manual page', u: 'https://man7.org/linux/man-pages/man7/tcp.7.html', p: 'Linux man-pages', n: 'TCP_KEEPIDLE(keepalive를 시작하기 전 유휴 시간), TCP_USER_TIMEOUT(확인받지 못한 데이터를 기다리다 연결을 닫는 시간)' },
+        { t: 'tcp(7) — Linux manual page', u: 'https://man7.org/linux/man-pages/man7/tcp.7.html', p: 'Linux man-pages', n: 'TCP_KEEPIDLE(keepalive를 시작하기 전 유휴 시간), TCP_USER_TIMEOUT(확인받지 못한 데이터를 기다리다 연결을 닫는 시간)' },
         { t: 'RFC 5482: TCP User Timeout Option', u: 'https://www.rfc-editor.org/rfc/rfc5482', p: 'IETF', n: 'TCP 사용자 타임아웃: 보낸 데이터가 확인받지 못한 채 얼마나 지나면 연결을 닫을지' },
       ] },
     { id: 'rt-path', t: '경로 변경·ECMP 불량 경로', en: 'Route change / bad ECMP member',
@@ -4759,7 +4759,7 @@ window.DATA = {
       ref: [
         { t: 'RFC 2991: Multipath Issues in Unicast and Multicast Next-Hop Selection', u: 'https://www.rfc-editor.org/rfc/rfc2991', p: 'IETF', n: '다중 경로에서는 ping·traceroute 같은 진단 도구의 결과를 믿기 어렵고, 흐름을 해시해 경로를 고정하는 방식을 설명' },
         { t: 'RFC 2992: Analysis of an Equal-Cost Multi-Path Algorithm', u: 'https://www.rfc-editor.org/rfc/rfc2992', p: 'IETF', n: 'ECMP는 흐름을 구분하는 헤더 필드의 해시로 다음 경로를 고름(같은 흐름은 같은 경로)' },
-        { t: 'tcp(7) - Linux manual page', u: 'https://man7.org/linux/man-pages/man7/tcp.7.html', p: 'Linux man-pages', n: 'TCP_INFO: 소켓별 상태(struct tcp_info) 조회' },
+        { t: 'tcp(7) — Linux manual page', u: 'https://man7.org/linux/man-pages/man7/tcp.7.html', p: 'Linux man-pages', n: 'TCP_INFO: 소켓별 상태(struct tcp_info) 조회' },
         { t: 'mtr(8) manual page source', u: 'https://raw.githubusercontent.com/traviscross/mtr/master/man/mtr.8.in', p: 'mtr', n: '-T(--tcp)는 ICMP 대신 TCP SYN으로, -P(--port)는 대상 포트 지정' },
       ] },
 
@@ -4794,7 +4794,7 @@ window.DATA = {
         { t: 'RFC 5681: TCP Congestion Control', u: 'https://www.rfc-editor.org/rfc/rfc5681', p: 'IETF', n: '세 번째 중복 ACK에서 빠른 재전송' },
         { t: 'RFC 8985: The RACK-TLP Loss Detection Algorithm for TCP', u: 'https://www.rfc-editor.org/rfc/rfc8985', p: 'IETF', n: 'RACK은 시간 기준으로 손실을 판단해 순서 뒤바뀜에 강하고, DSACK을 받으면 순서 뒤바뀜 허용 시간(reo_wnd)을 늘림' },
         { t: 'IP Sysctl', u: 'https://docs.kernel.org/networking/ip-sysctl.html', p: 'Linux kernel', n: 'tcp_reordering 시작값 3(연결마다 tcp_max_reordering까지 자동 조정), tcp_recovery의 RACK 설정' },
-        { t: 'misc/ss.c', u: 'https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/misc/ss.c', p: 'iproute2', n: 'ss -ti는 연결의 reordering 값이 기본값 3과 다를 때 reordering:값을 표시' },
+        { t: 'misc/ss.c', u: 'https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/misc/ss.c?h=v6.12.0', p: 'iproute2', n: 'ss -ti는 연결의 reordering 값이 기본값 3과 다를 때 reordering:값을 표시' },
       ] },
     { id: 'rt-ack-path', t: 'ACK가 늦거나 사라짐 (업로드 포화)', en: 'ACK path congestion on asymmetric links',
       s: '데이터는 잘 도착했는데 “받았다”는 ACK가 꽉 찬 업로드 대기열에서 늦어지거나 사라지면, 보내는 쪽이 손실로 판단해 재전송합니다.',
@@ -4807,7 +4807,7 @@ window.DATA = {
       ref: [
         { t: 'RFC 3449: TCP Performance Implications of Network Path Asymmetry', u: 'https://www.rfc-editor.org/rfc/rfc3449', p: 'IETF', n: '업로드가 좁은 비대칭 회선에서 ACK가 늦거나 사라지면 TCP 성능이 떨어짐, ACK는 누적 확인이라 일부가 사라져도 뒤 ACK가 대신함, ACK 우선 스케줄링 같은 대책' },
         { t: 'Smart Queue Management', u: 'https://www.bufferbloat.net/projects/cerowrt/wiki/Smart_Queue_Management/', p: 'Bufferbloat.net', n: '공유기에서 대기열 관리와 셰이핑으로 대기열을 짧게 유지' },
-        { t: 'tc-cake(8) - Linux manual page', u: 'https://man7.org/linux/man-pages/man8/tc-cake.8.html', p: 'Linux man-pages', n: 'CAKE는 흐름을 나눠 드문드문 보내는 흐름(sparse flow)의 지연을 최소화' },
+        { t: 'tc-cake(8) — Linux manual page', u: 'https://man7.org/linux/man-pages/man8/tc-cake.8.html', p: 'iproute2', n: 'CAKE는 흐름을 나눠 드문드문 보내는 흐름(sparse flow)의 지연을 최소화' },
       ] },
     { id: 'rt-rto-setting', t: 'RTO 설정이 환경과 맞지 않음', en: 'RTO min too low or too high',
       s: 'RTO 최소값을 너무 낮추면 조금만 늦어도 불필요한 재전송이 나고, 기본값(200ms)은 게임 입장에서 너무 길어 한 번 잃을 때마다 오래 멈춥니다.',
@@ -4819,14 +4819,14 @@ window.DATA = {
       sim: 'retrans',
       ref: [
         { t: 'RFC 6298: Computing TCP\'s Retransmission Timer', u: 'https://www.rfc-editor.org/rfc/rfc6298', p: 'IETF', n: 'RTO = SRTT + max(G, 4·RTTVAR), 최소 1초 권고, 실패할 때마다 두 배, 최대값을 두려면 60초 이상' },
-        { t: 'include/net/tcp.h', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/net/tcp.h', p: 'Linux kernel', n: '리눅스 TCP_RTO_MIN 200ms, TCP_RTO_MAX 120초' },
-        { t: 'net/ipv4/tcp_input.c', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/ipv4/tcp_input.c', p: 'Linux kernel', n: '리눅스 RTO는 SRTT + rttvar이고, rttvar는 RTO 최소값(기본 200ms) 아래로 내려가지 않음' },
+        { t: 'include/net/tcp.h', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/net/tcp.h?h=v6.12', p: 'Linux kernel', n: '리눅스 TCP_RTO_MIN 200ms, TCP_RTO_MAX 120초' },
+        { t: 'net/ipv4/tcp_input.c', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/ipv4/tcp_input.c?h=v6.12', p: 'Linux kernel', n: '리눅스 RTO는 SRTT + rttvar이고, rttvar는 RTO 최소값(기본 200ms) 아래로 내려가지 않음' },
         { t: 'tcp: add the ability to control max RTO', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=54a378f43425085d0684679d99735696b69165bc', p: 'Linux kernel', n: 'TCP_RTO_MAX_MS 소켓 옵션 추가(1~120초), 리눅스 6.15부터' },
         { t: 'tcp: add sysctl_tcp_rto_min_us', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f086edef71be7174a16c1ed67ac65a085cda28b1', p: 'Linux kernel', n: '서버 전체 기본 RTO 최소값 tcp_rto_min_us 추가, 리눅스 6.11부터' },
         { t: 'IP Sysctl', u: 'https://docs.kernel.org/networking/ip-sysctl.html', p: 'Linux kernel', n: 'tcp_rto_min_us 기본 200000(경로 옵션 rto_min이 우선), tcp_rto_max_ms 1,000~120,000(기본 120,000), tcp_thin_linear_timeouts' },
-        { t: 'ip-route(8) - Linux manual page', u: 'https://man7.org/linux/man-pages/man8/ip-route.8.html', p: 'Linux man-pages', n: '경로별 rto_min 옵션: 그 목적지와 통신할 때의 RTO 최소값' },
+        { t: 'ip-route(8) — Linux manual page', u: 'https://man7.org/linux/man-pages/man8/ip-route.8.html', p: 'iproute2', n: '경로별 rto_min 옵션: 그 목적지와 통신할 때의 RTO 최소값' },
         { t: 'Thin-streams and TCP', u: 'https://docs.kernel.org/networking/tcp-thin.html', p: 'Linux kernel', n: 'TCP_THIN_LINEAR_TIMEOUTS로 thin stream 연결만 지수 백오프를 끌 수 있음' },
-        { t: 'tcp(7) - Linux manual page', u: 'https://man7.org/linux/man-pages/man7/tcp.7.html', p: 'Linux man-pages', n: 'TCP_USER_TIMEOUT: 확인받지 못한 데이터를 기다리다 연결을 닫기까지의 시간' },
+        { t: 'tcp(7) — Linux manual page', u: 'https://man7.org/linux/man-pages/man7/tcp.7.html', p: 'Linux man-pages', n: 'TCP_USER_TIMEOUT: 확인받지 못한 데이터를 기다리다 연결을 닫기까지의 시간' },
       ] },
 
     /* ---- 복구가 유난히 느린 이유 ---- */
@@ -4843,10 +4843,10 @@ window.DATA = {
         { t: 'Thin-streams and TCP', u: 'https://docs.kernel.org/networking/tcp-thin.html', p: 'Linux kernel', n: '게임처럼 드문드문 보내는 thin stream은 빠른 재전송이 잘 작동하지 않아 긴 타임아웃에 기댐, 날아가는 패킷 4개 미만이 기준' },
         { t: 'RFC 5681: TCP Congestion Control', u: 'https://www.rfc-editor.org/rfc/rfc5681', p: 'IETF', n: '세 번째 중복 ACK에서 빠른 재전송' },
         { t: 'RFC 8985: The RACK-TLP Loss Detection Algorithm for TCP', u: 'https://www.rfc-editor.org/rfc/rfc8985', p: 'IETF', n: 'RACK은 뒤에 보낸 패킷이 전달된 것으로 손실을 판단, TLP 대기는 2·SRTT(보낸 패킷이 하나면 지연 ACK 여유를 더함)' },
-        { t: 'include/net/tcp.h', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/net/tcp.h', p: 'Linux kernel', n: 'TCP_RTO_MIN 200ms, thin stream 판정(날아가는 패킷 4개 미만)과 선형 재시도 6번' },
+        { t: 'include/net/tcp.h', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/net/tcp.h?h=v6.12', p: 'Linux kernel', n: 'TCP_RTO_MIN 200ms, thin stream 판정(날아가는 패킷 4개 미만)과 선형 재시도 6번' },
         { t: 'tcp: remove thin_dupack feature', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4a7f6009441144783e5925551c72e3f2e1b0839b', p: 'Linux kernel', n: '2017년 1월 thin_dupack 삭제(리눅스 4.11), RACK이 그 역할을 대신한다는 설명' },
         { t: 'IP Sysctl', u: 'https://docs.kernel.org/networking/ip-sysctl.html', p: 'Linux kernel', n: 'tcp_thin_linear_timeouts: thin stream이면 최대 6번까지 RTO를 두 배로 늘리지 않음(기본 꺼짐)' },
-        { t: 'tcp(7) - Linux manual page', u: 'https://man7.org/linux/man-pages/man7/tcp.7.html', p: 'Linux man-pages', n: 'TCP_NODELAY는 Nagle 알고리즘을 끔' },
+        { t: 'tcp(7) — Linux manual page', u: 'https://man7.org/linux/man-pages/man7/tcp.7.html', p: 'Linux man-pages', n: 'TCP_NODELAY는 Nagle 알고리즘을 끔' },
       ] },
     { id: 'rt-sack-stripped', t: '중간 장비의 TCP 옵션 제거', en: 'Middlebox strips TCP options',
       s: '일부 방화벽·가속 장비가 TCP 옵션을 지우거나 고치면, 여러 개를 잃었을 때 한 왕복에 하나씩만 복구하거나 윈도우(한 번에 보낼 수 있는 양)가 작아져 느려집니다.',
@@ -4860,9 +4860,9 @@ window.DATA = {
         { t: 'RFC 2018: TCP Selective Acknowledgment Options', u: 'https://www.rfc-editor.org/rfc/rfc2018', p: 'IETF', n: 'SACK 없이 누적 ACK만으로는 왕복마다 잃은 패킷 하나만 알 수 있음' },
         { t: 'RFC 7323: TCP Extensions for High Performance', u: 'https://www.rfc-editor.org/rfc/rfc7323', p: 'IETF', n: '윈도우 스케일 옵션이 없으면 윈도우는 최대 2^16 = 64KiB' },
         { t: 'RFC 8985: The RACK-TLP Loss Detection Algorithm for TCP', u: 'https://www.rfc-editor.org/rfc/rfc8985', p: 'IETF', n: 'RACK-TLP는 SACK 사용이 필수' },
-        { t: 'net/ipv4/tcp_output.c', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/ipv4/tcp_output.c', p: 'Linux kernel', n: '리눅스 TLP는 SACK을 쓰는 연결에서만 예약됨' },
+        { t: 'net/ipv4/tcp_output.c', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/ipv4/tcp_output.c?h=v6.12', p: 'Linux kernel', n: '리눅스 TLP는 SACK을 쓰는 연결에서만 예약됨' },
         { t: 'IP Sysctl', u: 'https://docs.kernel.org/networking/ip-sysctl.html', p: 'Linux kernel', n: 'tcp_sack 기본 1(켜짐)' },
-        { t: 'misc/ss.c', u: 'https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/misc/ss.c', p: 'iproute2', n: 'ss -ti는 연결이 쓰는 옵션에 따라 ts, sack, wscale:송신,수신을 표시' },
+        { t: 'misc/ss.c', u: 'https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/misc/ss.c?h=v6.12.0', p: 'iproute2', n: 'ss -ti는 연결이 쓰는 옵션에 따라 ts, sack, wscale:송신,수신을 표시' },
         { t: 'tcp: limit payload size of sacked skbs', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3b4929f65b0d8249f19a50245cd88ed1a2f78cff', p: 'Linux kernel', n: '2019년 SACK 처리 취약점(CVE-2019-11477) 수정 커밋' },
         { t: 'Linux and FreeBSD Kernel: Multiple TCP-based remote denial of service vulnerabilities (NFLX-2019-001)', u: 'https://raw.githubusercontent.com/Netflix/security-bulletins/master/advisories/third-party/2019-001.md', p: 'Netflix', n: '당시 임시 대책으로 tcp_sack=0(SACK 처리 끄기)이 안내됨' },
       ] },
@@ -4888,16 +4888,16 @@ window.DATA = {
       act: { game: '서버: listen의 backlog 인자 늘리기(somaxconn과 함께), 게임 서버가 accept를 제때 부르게 하기, 로그인 대기열 시스템. 클라이언트: 접속 재시도 간격 늘리기(무작위로 분산).', infra: '서버 장비·OS: 서버 접속 대기열 넘침은 nstat의 TcpExtListenOverflows·TcpExtListenDrops와 로그의 “Possible SYN flooding” 경고로 확인, somaxconn 늘리기(listen 인자와 함께), SYN 쿠키. 네트워크: 방화벽·DDoS 방어의 SYN 제한 완화.' },
       sim: 'rush',
       ref: [
-        { t: 'include/net/tcp.h', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/net/tcp.h', p: 'Linux kernel', n: '첫 RTO TCP_TIMEOUT_INIT = 1초(RFC 6298의 초기값)' },
+        { t: 'include/net/tcp.h', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/net/tcp.h?h=v6.12', p: 'Linux kernel', n: '첫 RTO TCP_TIMEOUT_INIT = 1초(RFC 6298의 초기값)' },
         { t: 'RFC 6298: Computing TCP\'s Retransmission Timer', u: 'https://www.rfc-editor.org/rfc/rfc6298', p: 'IETF', n: '초기 RTO 1초, 재전송 때마다 두 배' },
         { t: 'IP Sysctl', u: 'https://docs.kernel.org/networking/ip-sysctl.html', p: 'Linux kernel', n: 'tcp_syn_retries 기본 6, tcp_syn_linear_timeouts 기본 4(SYN RTO 1, 1, 1, 1, 1, 2, 4 …), 마지막 재전송 67초·포기 131초, somaxconn 기본 4096, tcp_syncookies 기본 1' },
         { t: 'tcp: make the first N SYN RTO backoffs linear', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ccce324dabfe2143519daf50ed8b1ef1d0c542f7', p: 'Linux kernel', n: 'SYN 재전송 앞부분을 일정 간격으로 바꾼 커밋, 리눅스 6.5부터(기본 4는 macOS·iOS 방식을 따름)' },
         { t: 'Android common kernels', u: 'https://source.android.com/docs/core/architecture/kernel/android-common', p: 'Android (Google)', n: '5.10~6.18 공통 커널이 함께 지원되고, 이전 플랫폼용 커널(예: android14-6.1)을 새 안드로이드 기기의 출시나 업그레이드에 쓸 수 있음' },
         { t: 'TcpMaxConnectRetransmissions', u: 'https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-2000-server/cc938209(v=technet.10)', p: 'Microsoft', n: '예전 윈도우 기본값: SYN 재전송 2번, 첫 대기 3초에서 두 배씩, 마지막 뒤 두 배를 더 기다리고 포기(3+6+12=21초)' },
         { t: 'TCP/IP connectivity issues troubleshooting', u: 'https://learn.microsoft.com/en-us/troubleshoot/windows-client/networking/tcp-ip-connectivity-issues-troubleshooting', p: 'Microsoft', n: 'SYN 재전송 횟수는 OS마다 다르며 netsh int tcp show global의 Max SYN Retransmissions로 확인' },
-        { t: 'listen(2) - Linux manual page', u: 'https://man7.org/linux/man-pages/man2/listen.2.html', p: 'Linux man-pages', n: 'listen의 backlog 인자는 somaxconn으로 잘림(리눅스 5.4부터 기본 4096, 이전 128)' },
+        { t: 'listen(2) — Linux manual page', u: 'https://man7.org/linux/man-pages/man2/listen.2.html', p: 'Linux man-pages', n: 'listen의 backlog 인자는 somaxconn으로 잘림(리눅스 5.4부터 기본 4096, 이전 128)' },
         { t: 'SNMP counter', u: 'https://docs.kernel.org/networking/snmp_counter.html', p: 'Linux kernel', n: 'accept 대기열이 차면 SYN을 버리고 TcpExtListenOverflows·TcpExtListenDrops가 함께 늘어남, TcpExtTCPSynRetrans' },
-        { t: 'net/ipv4/tcp_input.c', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/ipv4/tcp_input.c', p: 'Linux kernel', n: '“Possible SYN flooding on port …” 로그 메시지' },
+        { t: 'net/ipv4/tcp_input.c', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/ipv4/tcp_input.c?h=v6.12', p: 'Linux kernel', n: '“Possible SYN flooding on port …” 로그 메시지' },
       ] },
   ]);
 })();
@@ -4959,7 +4959,7 @@ Object.assign(DATA.secRefs, {
   ],
   'l-disk': [
     { t: 'Exos X18 Data Sheet', u: 'https://www.seagate.com/www-content/datasheets/pdfs/exos-x18-mango-DS2045-1N-2007US-en_US.pdf', p: 'Seagate', n: '7,200rpm HDD의 4K 무작위 읽기 170 IOPS, 평균 회전 지연 4.16ms(본문의 HDD 150번 남짓, 디스크 실험의 HDD)' },
-    { t: 'PM893 | Data center SSD', u: 'https://semiconductor.samsung.com/ssd/datacenter-ssd/pm893/', p: 'Samsung', n: 'SATA SSD 무작위 읽기·쓰기 최대 98,000/30,000 IOPS(본문의 SSD 수만 번)' },
+    { t: 'D3-S4520 SSD', u: 'https://www.solidigm.com/products/data-center/d3/s4520.html', p: 'Solidigm', n: 'SATA SSD 4KB 무작위 읽기·쓰기 최대 92K/48K IOPS(본문의 SSD 수만 번)' },
     { t: 'Solidigm™ D7-P5520 and D7-P5620 Product Brief', u: 'https://www.solidigm.com/products/data-center/product-briefs/d7-p5520-p5620-product-brief.html', p: 'Solidigm', n: 'NVMe SSD 무작위 읽기·쓰기 1,000K/200K IOPS(본문의 수십만 번)' },
     { t: 'Amazon EBS General Purpose SSD volumes', u: 'https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html', p: 'AWS', n: 'gp3 기본 3,000 IOPS, gp2는 I/O 크레딧으로 3,000 IOPS까지 버스트하다 크레딧이 떨어지면 기준 성능으로' },
     { t: 'Amazon EBS-optimized instance types', u: 'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-optimized.html', p: 'AWS', n: '작은 인스턴스는 EBS 최대 성능을 24시간에 한 번 30분만 내고 기준 성능으로 돌아감(예: t4g.2xlarge 기준 4,000·최대 15,700 IOPS, 디스크 실험의 클라우드 버스트형 가정)' },
@@ -5017,6 +5017,63 @@ Object.assign(DATA.secRefs, {
     { t: 'IP Sysctl', u: 'https://docs.kernel.org/networking/ip-sysctl.html', p: 'Linux kernel', n: '리눅스 tcp_rto_min_us 기본 200ms, 손실 감지는 RACK(tcp_recovery)' },
     { t: 'RFC 896: Congestion Control in IP/TCP Internetworks', u: 'https://www.rfc-editor.org/rfc/rfc896', p: 'IETF', n: 'Nagle 규칙의 원래 목적: 키 입력 1바이트마다 41바이트 패킷이 나가던 원격 터미널 문제' },
     { t: 'send(2) — Linux manual page', u: 'https://man7.org/linux/man-pages/man2/send.2.html', p: 'Linux man-pages', n: '송신 버퍼가 가득 차면 블로킹 send()는 반환되지 않음' },
+  ],
+});
+
+</script>
+<script>
+"use strict";
+/* ==== js/refs-net.js ==== */
+/* 장별 출처: 전체 지도(journey), 집 네트워크(l-home), 인터넷 회선(l-isp), 데이터센터 네트워크 장비(l-dc-net)
+   본문·표와 시뮬레이션 journey·bloat·distance·timeouts의 근거 */
+Object.assign(DATA.secRefs, {
+  'journey': [
+    { t: 'ITU-T G.114: One-way transmission time', u: 'https://www.itu.int/rec/T-REC-G.114-200305-I/en', p: 'ITU', n: '광케이블 전송 지연 5µs/km(1,000km 편도 5ms), 편도 150ms 이하면 대부분 응용에 거의 투명하지만 상호작용이 강한 작업은 100ms 아래에서도 영향' },
+    { t: 'Azure network round-trip latency statistics', u: 'https://learn.microsoft.com/en-us/azure/networking/azure-network-latency', p: 'Microsoft Azure', n: '실험의 서버 위치별 인터넷 구간 규모: 서울 기준 부산 지역 8ms, 도쿄 30ms, 싱가포르 68ms, 미국 서부 124~136ms, 유럽 234~244ms(왕복 중앙값)' },
+    { t: 'The Internet at the Speed of Light (HotNets 2014)', u: 'https://conferences.sigcomm.org/hotnets/2014/papers/hotnets-XIII-final111.pdf', p: 'ACM', n: '실험의 경로 배수 1.5: 실제 라우터 경로는 광케이블 직선 대비 중앙값 약 1.5배' },
+    { t: 'Report ITU-R M.2134: Requirements related to technical performance for IMT-Advanced radio interface(s)', u: 'https://www.itu.int/pub/R-REP-M.2134-2008', p: 'ITU', n: 'LTE-Advanced 무선 구간 한 방향 지연 요구치 10ms 미만(무부하·작은 패킷 기준, 실험의 LTE 값은 여기에 부하와 스케줄링 대기를 더한 가정)' },
+    { t: 'Report ITU-R M.2410: Minimum requirements related to technical performance for IMT-2020 radio interface(s)', u: 'https://www.itu.int/pub/R-REP-M.2410-2017', p: 'ITU', n: '5G(IMT-2020) 무선 구간 한 방향 지연 요구치 4ms(eMBB, 무부하 기준)' },
+    { t: 'An Experimental Study of Home Gateway Characteristics (IMC 2010)', u: 'https://conferences.sigcomm.org/imc/2010/papers/p260.pdf', p: 'ACM', n: '실험의 공유기 대기열: 가정용 공유기는 업로드와 다운로드가 겹치면 대기 지연이 수백 ms(최대 약 400ms)까지 늘기도 함' },
+    { t: 'Maximum transmission unit and maximum segment size', u: 'https://developers.cloudflare.com/magic-transit/reference/mtu-mss/', p: 'Cloudflare', n: '실험의 DDoS 방어 경유: 들어오는 트래픽만 방어망을 거치고 서버의 응답은 인터넷으로 바로 나감(DSR)' },
+  ],
+  'l-home': [
+    { t: 'RFC 7567: IETF Recommendations Regarding Active Queue Management', u: 'https://www.rfc-editor.org/rfc/rfc7567', p: 'IETF', n: '장비 대기열이 쌓이는 것이 인터넷 지연의 주요 원인이고, 대기열 관리(AQM)를 기본으로 쓰라는 권고' },
+    { t: 'RFC 8289: Controlled Delay Active Queue Management', u: 'https://www.rfc-editor.org/rfc/rfc8289', p: 'IETF', n: 'CoDel의 목표 대기 시간 5ms·관찰 간격 100ms(실험의 SQM 대기열 5ms 안팎)' },
+    { t: 'RFC 8290: The Flow Queue CoDel Packet Scheduler and Active Queue Management Algorithm', u: 'https://www.rfc-editor.org/rfc/rfc8290', p: 'IETF', n: 'FQ-CoDel: 주소·포트로 흐름마다 대기열을 나누고, 대기열을 만들지 않는 작은 흐름을 먼저 내보냄' },
+    { t: 'What Can I Do About Bufferbloat?', u: 'https://www.bufferbloat.net/projects/bloat/wiki/What_can_I_do_about_Bufferbloat/', p: 'Bufferbloat.net', n: 'cake·fq_codel 같은 SQM을 지원하는 공유기를 쓰고, 부하 중 지연을 재 가며 SQM 속도를 맞추기' },
+    { t: 'An Experimental Study of Home Gateway Characteristics (IMC 2010)', u: 'https://conferences.sigcomm.org/imc/2010/papers/p260.pdf', p: 'ACM', n: '가정용 공유기 34종 측정: 업로드·다운로드가 겹칠 때 대기 지연 최대 약 400ms, UDP 매핑 유지 중앙값 90초' },
+    { t: 'Ending the Anomaly: Achieving Low Latency and Airtime Fairness in WiFi (USENIX ATC 2017)', u: 'https://www.usenix.org/system/files/conference/atc17/atc17-hoiland-jorgensen.pdf', p: 'USENIX', n: '와이파이 무선 대기열에서도 부하 중 수백 ms 지연, 느린 기기가 다른 기기의 전송 시간까지 잡아먹음' },
+    { t: 'RFC 4787: Network Address Translation (NAT) Behavioral Requirements for Unicast UDP', u: 'https://www.rfc-editor.org/rfc/rfc4787', p: 'IETF', n: 'NAT의 UDP 매핑 타이머 요구치(2분 이상, 기본 5분 이상 권장)와 안쪽에서 나가는 패킷으로 갱신' },
+    { t: 'RFC 8325: Mapping Diffserv to IEEE 802.11', u: 'https://www.rfc-editor.org/rfc/rfc8325', p: 'IETF', n: '와이파이는 채널이 바쁘면 미루고 무작위 백오프 뒤에 보내는 CSMA/CA 방식' },
+    { t: 'Resolve Wi-Fi and Bluetooth issues caused by wireless interference', u: 'https://support.apple.com/en-us/102319', p: 'Apple', n: '실험의 전자레인지 간섭: 전자레인지·블루투스 등이 2.4GHz 와이파이를 방해하고, 5GHz로 옮기면 나아짐' },
+    { t: 'RFC 9438: CUBIC for Fast and Long-Distance Networks', u: 'https://www.rfc-editor.org/rfc/rfc9438', p: 'IETF', n: '실험의 업로드 속도 조절: CUBIC은 손실을 겪으면 전송 창을 0.7배(약 30% 감소)로 줄였다가 다시 늘림' },
+  ],
+  'l-isp': [
+    { t: 'ITU-T G.114: One-way transmission time', u: 'https://www.itu.int/rec/T-REC-G.114-200305-I/en', p: 'ITU', n: '광케이블 전송 지연 5µs/km: 빛은 광케이블에서 초속 약 20만 km, 1,000km 왕복 최소 10ms' },
+    { t: 'The Internet at the Speed of Light (HotNets 2014)', u: 'https://conferences.sigcomm.org/hotnets/2014/papers/hotnets-XIII-final111.pdf', p: 'ACM', n: '실제 라우터 경로는 광케이블 직선 대비 중앙값 약 1.5배, 최소 핑은 빛의 속도 대비 3.2배(광케이블 직선 대비 약 2배)' },
+    { t: 'Azure network round-trip latency statistics', u: 'https://learn.microsoft.com/en-us/azure/networking/azure-network-latency', p: 'Microsoft Azure', n: '서울 기준 실측 왕복 중앙값: 도쿄 30ms, 미국 서부 124~136ms, 유럽 234~244ms(한국–유럽은 광케이블 직선의 약 2.8배)' },
+    { t: 'AAE-1 & SMW5 cable cuts impact millions of users across multiple countries', u: 'https://blog.cloudflare.com/aae-1-smw5-cable-cuts/', p: 'Cloudflare', n: '유럽–아시아 트래픽은 대개 이집트를 지나고, 해저 케이블 수리는 며칠~몇 주' },
+    { t: 'Quantifying the Causes of Path Inflation (SIGCOMM 2003)', u: 'https://conferences.sigcomm.org/sigcomm/2003/papers/p113-spring.pdf', p: 'ACM', n: '통신사 사이 피어링 정책과 도메인 간 라우팅이 경로를 크게 늘림' },
+    { t: 'Inferring Persistent Interdomain Congestion (SIGCOMM 2018)', u: 'https://www.caida.org/catalog/papers/2018_inferring_persistent_interdomain_congestion/inferring_persistent_interdomain_congestion.pdf', p: 'ACM', n: '일부 통신사 간 연결 구간은 매일 피크 시간마다 지연과 손실이 오르는 반복 혼잡을 보임' },
+    { t: 'RFC 4271: A Border Gateway Protocol 4 (BGP-4)', u: 'https://www.rfc-editor.org/rfc/rfc4271', p: 'IETF', n: '인터넷 경로 정보를 주고받는 BGP, 홀드 타임 권장 기본값 90초' },
+    { t: 'BGP updates in 2024', u: 'https://blog.apnic.net/2025/01/07/bgp-updates-in-2024/', p: 'APNIC', n: '불안정해진 경로가 다시 안정되기까지 하루 평균 25~50초' },
+    { t: 'Delayed Internet Routing Convergence (SIGCOMM 2000)', u: 'https://conferences.sigcomm.org/sigcomm/2000/conf/paper/sigcomm2000-5-2.pdf', p: 'ACM', n: '경로 장애 뒤 수렴에 수 분까지 걸리고 그동안 손실·지연이 늘어남(2000년 당시 측정)' },
+  ],
+  'l-dc-net': [
+    { t: 'High-Resolution Measurement of Data Center Microbursts (IMC 2017)', u: 'https://conferences.sigcomm.org/imc/2017/papers/imc17-final60.pdf', p: 'ACM', n: '데이터센터 네트워크의 종단 간 지연은 1ms 미만이고, 버스트의 70% 이상이 수십 µs 안에 끝나 평균 사용률로는 안 보임' },
+    { t: 'Data Center TCP (DCTCP) (SIGCOMM 2010)', u: 'https://conferences.sigcomm.org/sigcomm/2010/papers/sigcomm/p63.pdf', p: 'ACM', n: '범용 스위치는 여러 포트가 얕은 버퍼를 나눠 쓰고, 짧은 순간 여러 흐름이 한 포트로 몰리면 버퍼가 넘쳐 손실' },
+    { t: 'Netfilter Conntrack Sysfs variables', u: 'https://docs.kernel.org/networking/nf_conntrack-sysctl.html', p: 'Linux kernel', n: '연결 추적 표의 최대 항목 수와 유지 시간 기본값(UDP 30초·스트림 120초, 성립된 TCP 5일)' },
+    { t: 'Edit attributes for your Application Load Balancer', u: 'https://docs.aws.amazon.com/elasticloadbalancing/latest/application/edit-load-balancer-attributes.html', p: 'AWS', n: 'ALB 유휴 타임아웃 기본 60초, 시간이 되면 로드밸런서가 연결을 닫음' },
+    { t: 'Network Load Balancers', u: 'https://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html', p: 'AWS', n: '실험의 로드밸런서 기본값: NLB TCP 350초, UDP 120초(변경 불가), 유휴 뒤에는 조용히 추적을 멈춤' },
+    { t: 'Configure load balancer TCP reset and idle timeout', u: 'https://learn.microsoft.com/en-us/azure/load-balancer/load-balancer-tcp-idle-timeout', p: 'Microsoft Azure', n: 'Azure Load Balancer 유휴 타임아웃 기본 4분' },
+    { t: 'Amazon EC2 security group connection tracking', u: 'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/security-group-connection-tracking.html', p: 'AWS', n: '보안 그룹 연결 추적 기본값, 로드밸런서·방화벽의 TCP 유휴 타임아웃은 흔히 60~90분이라는 설명' },
+    { t: 'Flow-Based Sessions', u: 'https://www.juniper.net/documentation/us/en/software/junos/flow-packet-processing/topics/topic-map/security-flow-based-session-for-srx-series-devices.html', p: 'Juniper Networks', n: '실험의 회사 방화벽: SRX 방화벽 기본 세션 타임아웃 TCP 1,800초(30분), UDP 60초' },
+    { t: 'An Experimental Study of Home Gateway Characteristics (IMC 2010)', u: 'https://conferences.sigcomm.org/imc/2010/papers/p260.pdf', p: 'ACM', n: '실험의 가정 공유기 값: UDP 매핑 중앙값 90초(양방향 트래픽이면 180초), TCP 중앙값 약 60분' },
+    { t: 'A Multi-perspective Analysis of Carrier-Grade NAT Deployment (IMC 2016)', u: 'https://www.icir.org/vern/papers/cgn-imc16.pdf', p: 'ACM', n: '실험의 CGNAT UDP 30초: CGN UDP 매핑 중앙값 유선망 35초·모바일망 65초, 측정된 NAT의 74%가 1분 이하' },
+    { t: 'tcp(7) - Linux manual page', u: 'https://man7.org/linux/man-pages/man7/tcp.7.html', p: 'Linux man-pages', n: '실험의 TCP keepalive: 기본 2시간(7,200초) 유휴 뒤 75초 간격으로 9번 확인하고 응답이 없으면 끊음' },
+    { t: 'Cached apps freezer', u: 'https://source.android.com/docs/core/perf/cached-apps-freezer', p: 'Android (Google)', n: '실험의 모바일 백그라운드: 안드로이드 14 이상은 캐시 상태에 들어간 앱 프로세스를 10초 뒤 얼림' },
+    { t: 'RFC 5880: Bidirectional Forwarding Detection (BFD)', u: 'https://www.rfc-editor.org/rfc/rfc5880', p: 'IETF', n: '라우팅 프로토콜의 초 단위 Hello보다 빠르게 경로 고장을 감지하는 BFD' },
+    { t: 'RFC 2923: TCP Problems with Path MTU Discovery', u: 'https://www.rfc-editor.org/rfc/rfc2923', p: 'IETF', n: 'ICMP가 막혀 큰 패킷만 사라지는 경로 MTU 블랙홀' },
   ],
 });
 
@@ -7525,7 +7582,7 @@ K.register('distance', function (root) {
   const cAcc = K.choice(g2, { label: '가입자망', value: P.acc, options: [['wired', '유선'], ['wifi', '와이파이'], ['lte', 'LTE']], onChange: v => { P.acc = v; changed(); } });
   const g3 = K.group(F.controls, '시간');
   const hhmm = v => String(Math.floor(v) % 24).padStart(2, '0') + ':' + (v % 1 ? '30' : '00');
-  const sHour = K.slider(g3, { label: '내 쪽 시각', min: 0, max: 23.5, step: 0.5, value: P.hour, fmt: hhmm, onInput: v => { P.hour = v; changed(); }, hint: '저녁 9~11시는 모두가 영상을 보고 게임을 하는 시간이라 통신사 사이·국제 구간이 붐빕니다.' });
+  const sHour = K.slider(g3, { label: '내 쪽 시각', min: 0, max: 23.5, step: 0.5, value: P.hour, fmt: hhmm, onInput: v => { P.hour = v; changed(); }, hint: '저녁 9~11시 무렵은 모두가 영상을 보고 게임을 하는 시간이라 통신사 사이·국제 구간이 붐비기 쉽습니다.' });
 
   const ctlSet = () => { cMe.set(P.me, false); cSrv.set(P.srv, false); sRoute.set(P.route, false); tCut.set(P.cut, false); cAcc.set(P.acc, false); sHour.set(P.hour, false); };
   const preset = o => () => { Object.assign(P, DEF, o); ctlSet(); changed(); };

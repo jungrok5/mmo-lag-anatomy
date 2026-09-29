@@ -44,7 +44,7 @@ Object.assign(DATA.secRefs, {
     { t: 'Flow-Based Sessions', u: 'https://www.juniper.net/documentation/us/en/software/junos/flow-packet-processing/topics/topic-map/security-flow-based-session-for-srx-series-devices.html', p: 'Juniper Networks', n: '실험의 회사 방화벽: SRX 방화벽 기본 세션 타임아웃 TCP 1,800초(30분), UDP 60초' },
     { t: 'An Experimental Study of Home Gateway Characteristics (IMC 2010)', u: 'https://conferences.sigcomm.org/imc/2010/papers/p260.pdf', p: 'ACM', n: '실험의 가정 공유기 값: UDP 매핑 중앙값 90초(양방향 트래픽이면 180초), TCP 중앙값 약 60분' },
     { t: 'A Multi-perspective Analysis of Carrier-Grade NAT Deployment (IMC 2016)', u: 'https://www.icir.org/vern/papers/cgn-imc16.pdf', p: 'ACM', n: '실험의 CGNAT UDP 30초: CGN UDP 매핑 중앙값 유선망 35초·모바일망 65초, 측정된 NAT의 74%가 1분 이하' },
-    { t: 'tcp(7) — Linux manual page', u: 'https://man7.org/linux/man-pages/man7/tcp.7.html', p: 'Linux man-pages', n: '실험의 TCP keepalive: 기본 2시간(7,200초) 유휴 뒤 75초 간격으로 9번 확인하고 응답이 없으면 끊음' },
+    { t: 'tcp(7) - Linux manual page', u: 'https://man7.org/linux/man-pages/man7/tcp.7.html', p: 'Linux man-pages', n: '실험의 TCP keepalive: 기본 2시간(7,200초) 유휴 뒤 75초 간격으로 9번 확인하고 응답이 없으면 끊음' },
     { t: 'Cached apps freezer', u: 'https://source.android.com/docs/core/perf/cached-apps-freezer', p: 'Android (Google)', n: '실험의 모바일 백그라운드: 안드로이드 14 이상은 캐시 상태에 들어간 앱 프로세스를 10초 뒤 얼림' },
     { t: 'RFC 5880: Bidirectional Forwarding Detection (BFD)', u: 'https://www.rfc-editor.org/rfc/rfc5880', p: 'IETF', n: '라우팅 프로토콜의 초 단위 Hello보다 빠르게 경로 고장을 감지하는 BFD' },
     { t: 'RFC 2923: TCP Problems with Path MTU Discovery', u: 'https://www.rfc-editor.org/rfc/rfc2923', p: 'IETF', n: 'ICMP가 막혀 큰 패킷만 사라지는 경로 MTU 블랙홀' },
