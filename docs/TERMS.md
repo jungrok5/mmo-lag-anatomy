@@ -129,7 +129,7 @@
 | 흩뿌리기 (타이머·만료 시각) | 무작위로 분산 | causes |
 | 색인, 칸 (DB), 표 구조 변경 | 인덱스, 컬럼, 스키마 변경(DDL) | causes |
 | 되돌리기 기록 | 언두 로그 | causes |
-| 교착 (DB) | 데드락 | causes |
+| 교착 (DB) | 데드락 | causes. 스레드 락의 교착도 데드락으로 맞춤(“데드락(교착 상태)” 풀이는 둠) |
 | 잠금 확대 | 잠금 에스컬레이션 | causes |
 | 바늘·원판 (HDD) | 헤드·플래터 | causes |
 | 짝 (GRO 묶음) | 함께 묶을 다음 패킷 | causes |
@@ -147,7 +147,7 @@
 | 굶주림 | starvation | causes |
 | 모양 (트래픽) | 패턴 | causes |
 | 쏟아 낸다, 쏘아 보낸다 | 한꺼번에 보낸다, 송신 버스트 | causes |
-| 파파팍 | 한 번에 몰아서 이동 | causes |
+| 파파팍 | 한 번에 몰아서 이동 | causes·body(첫 화면). 증상 별칭 “파파파팍”은 둠 |
 | 시간 지연 (EVE) | Time Dilation | causes |
 | 벽시계 | wall clock. 단조 시계는 monotonic clock 병기 | causes |
 | 자동 확장 | 오토스케일링 | causes. 용어집 표제어(오토스케일)와 맞춤 |
@@ -183,7 +183,7 @@
 | 갈아 끼운다 (스레드) | 전환한다 | sims(ladder) |
 | 묻고 답을 받는다, 물어본다 (서버 간) | 요청하고 응답을 받는다, 호출한다 | sims(ladder) |
 | 영겁 | 아주 긴 시간 | sims(ladder) |
-| 쥐다, 쥠 (락) | 잡다, 보유 | sims(locks) |
+| 쥐다, 쥠 (락·잠금·메모리) | 잡다, 보유, (메모리를) 쓰다 | sims(locks·dbpool), causes-1·3, refs-data |
 | 공유 자료 | 공유 데이터 | sims(locks) |
 | 조각 (Nagle의 작은 세그먼트) | 작은 패킷 | sims(nagle) |
 | 답장 / 얹어 보낸다 (TCP) | 응답 / 실어 보낸다 | sims(nagle) |

@@ -54,7 +54,7 @@ K.register('arch', function (root) {
 @media (max-width:900px){.arch-hint{display:block}}
 .arch-fx{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:16px;align-items:start}
 @media (max-width:760px){.arch-fx{grid-template-columns:minmax(0,1fr)}}
-.arch-fx h5{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.03em;margin:0 0 8px}
+.arch-fx h4{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.03em;margin:0 0 8px}
 .arch-list,.arch-chain{list-style:none;margin:0;padding:0;display:grid;gap:8px}
 .arch-item{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:9px 12px;display:grid;gap:7px}
 .arch-item .who{font-size:14px;color:var(--ink);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
@@ -381,8 +381,8 @@ K.register('arch', function (root) {
   // 효과 목록 (그림 아래)
   const listEl = K.el('ul', { class: 'arch-list' }), chainEl = K.el('ol', { class: 'arch-chain' });
   F.stage.append(K.el('div', { class: 'arch-fx' },
-    K.el('div', null, K.el('h5', { text: '플레이어가 겪는 일' }), listEl),
-    K.el('div', null, K.el('h5', { text: '서버 사이에서 번진 일' }), chainEl)));
+    K.el('div', null, K.el('h4', { text: '플레이어가 겪는 일' }), listEl),
+    K.el('div', null, K.el('h4', { text: '서버 사이에서 번진 일' }), chainEl)));
 
   // ---------- 갱신 ----------
   let lastEff = {}, lastCause = {};

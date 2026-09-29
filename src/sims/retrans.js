@@ -442,7 +442,7 @@ K.register('retrans', function (root) {
       else if (P.mode === 'game') {
         const rackAt = Math.max(P.gap, P.rtt / 4) + P.rtt; // RACK: 다음 패킷의 SACK이 돌아오는 시점
         msg += P.gap < P.rtoMin
-          ? `RACK-TLP가 켜져 있어 다음 패킷이 도착했다는 SACK이 오는 순간, 약 ${K.ms(rackAt)} 만에 손실을 감지하고 다시 보냅니다. 그래도 잃은 패킷은 평소(${K.ms(P.rtt / 2)})보다 늦은 약 ${K.ms(rackAt + P.rtt / 2)} 만에 도착하고, 그동안 뒤 패킷도 함께 <b>멈춤</b>입니다.`
+          ? `RACK-TLP가 켜져 있어 다음 패킷이 도착했다는 SACK이 오는 순간, 약 ${K.ms(rackAt)} 만에 손실을 감지하고 다시 보냅니다. 그래도 잃은 패킷은 평소(${K.ms(P.rtt / 2)})보다 늦은 약 ${K.ms(rackAt + P.rtt / 2)} 만에 도착합니다. 그동안 뒤 패킷도 함께 기다리므로 화면은 <b>멈춤</b>입니다.`
           : `RACK-TLP가 켜져 있지만 패킷 간격(${P.gap}ms)이 길어 다음 패킷보다 TLP가 먼저 나갑니다. 아직 ACK를 받지 못한 패킷이 하나뿐이면 TLP도 지연 ACK를 감안해 RTO와 비슷하게(약 ${K.ms(P.rtt + P.rtoMin)}) 기다리므로 효과가 작습니다.`;
       }
       else msg += `대용량 전송은 뒤따르는 패킷이 많아 빠른 재전송으로 대부분 복구되지만, 손실이 난 왕복마다 혼잡 윈도우가 30% 줄어 속도가 떨어집니다. RTO까지 가면 혼잡 윈도우가 1로 떨어져 처음부터 다시 늘립니다.`;

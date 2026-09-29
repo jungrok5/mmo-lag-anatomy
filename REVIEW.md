@@ -956,9 +956,9 @@
 
 ## 한눈에 보기
 
-- 원인 카드 출처 605건, 장별 출처 264건, 서로 다른 자료 433건, 발행처 65곳.
-- 발행처 상위: Microsoft 59, IETF 53, Linux kernel 46, AWS 32, Unity 23, MySQL 19, ACM 15, PostgreSQL 15, Epic Games 14, Linux man-pages 13, Android 12.
-- 링크 점검(`npm run links`): 433건 모두 열림.
+- 원인 카드 출처 608건, 장별 출처 268건, 서로 다른 자료 436건, 발행처 65곳(최종 검수 뒤 기준).
+- 발행처 상위: Microsoft 61, IETF 53, Linux kernel 47, AWS 32, Unity 23, MySQL 19, ACM 15, PostgreSQL 15, Epic Games 14, Linux man-pages 13, Android 12.
+- 링크 점검(`npm run links`): 436건 모두 열림.
 - 사이트에서는 원인 카드의 “출처”, 장 끝의 “이 장의 출처”, 맨 뒤 “참고 문헌” 장(발행처별, 어느 카드·장에서 인용했는지 표시)에 나옵니다.
 
 ## 자료와 달라 고친 사실
@@ -967,7 +967,7 @@
 |---|---|---|---|
 | dc-cloud-conntrack, rt-mapping | AWS 6세대 Nitro 인스턴스 350초, 이전 세대 5일 | Nitro v6 인스턴스 유형 350초, 그 밖의 유형 5일 | AWS EC2 보안 그룹 연결 추적 문서 |
 | TCP 재전송 장, 용어 사전(RACK-TLP) | 윈도우는 RACK이 11·서버 2022부터 기본 | 10(1607)·서버 2016부터 TLP와 RACK이 기본, 잃은 재전송까지 복구하는 새 RACK은 서버 2022부터 | Microsoft 네트워킹 블로그, IETF 98 TCPM 발표 |
-| TCP 재전송 장 | pktmon 서버 2019 이상 | 빌드 19041 이상에 내장 | Microsoft Learn |
+| TCP 재전송 장 | pktmon 서버 2019 이상 | 빌드 19041 이상에 내장으로 고쳤다가, 최종 검수에서 “윈도우 10 1809·서버 2019 이상에 내장”으로 되돌림 | Microsoft Learn(Pktmon 명령 문서) |
 | TCP 재전송 장 설정표 | tcp_recovery 설명 | 리눅스 6.17부터 RACK이 유일한 손실 판단이라 0으로 해도 효과 없음 추가 | 커널 ip-sysctl 문서(6.16과 6.17 비교) |
 | cg-sync-load | 셰이더 하나 컴파일에 수십 ms | 수십 ms, 길면 100ms 이상 | Epic Games PSO 문서 |
 | hn-rrc | 무선 연결을 다시 올리는 데 약 50~200ms | 수십~수백 ms(실측 예: 약 0.3~0.6초) | SIGCOMM 2013 실측(중앙값 435ms), ITU-R M.2134 |

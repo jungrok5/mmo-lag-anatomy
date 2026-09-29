@@ -30,7 +30,7 @@ K.register('dbpool', function (root) {
       '<span><i class="box" style="background:transparent;box-shadow:inset 0 0 0 1.5px var(--muted)"></i>빈 커넥션</span>' +
       '<span><i class="box" style="background:var(--s1)"></i>쿼리 실행</span>' +
       `<span><i class="box" style="background:${hatch};box-shadow:inset 0 0 0 1.5px var(--s2)"></i>행 잠금 기다림</span>` +
-      '<span><i class="box" style="background:var(--s3)"></i>잠금 쥔 요청</span>' +
+      '<span><i class="box" style="background:var(--s3)"></i>잠금 잡은 요청</span>' +
       '<span><i class="dot" style="background:var(--s4)"></i>대기 중 요청</span></span>',
   });
   const legendL = () => '<span class="legend"><span><i style="background:var(--s1)"></i>중간값</span><span><i style="background:var(--s2)"></i>99% 값</span>' +
@@ -54,7 +54,7 @@ K.register('dbpool', function (root) {
   const sCores = K.slider(g2, { label: 'DB CPU 코어', min: 2, max: 64, step: 2, value: P.cores, unit: '개', onInput: v => { P.cores = v; }, hint: '동시에 도는 쿼리가 코어보다 많으면 모두가 그만큼 느려집니다.' });
   const g3 = K.group(F.controls, '핫 로우 (여러 요청이 고치는 행)');
   const sHot = K.slider(g3, { label: '같은 행을 고치는 비율', min: 0, max: 100, value: P.hot, unit: '%', onInput: v => { P.hot = v; }, hint: '길드 창고, 경매장 인기 아이템처럼 모두가 같은 행을 고치려는 경우입니다.' });
-  const sLock = K.slider(g3, { label: '행 잠금 시간 (트랜잭션 길이)', min: 1, max: 100, value: P.lockMs, unit: 'ms', onInput: v => { P.lockMs = v; }, hint: '쿼리 뒤에도 잠금을 쥔 채 다른 일을 하는 시간. 그동안 같은 행을 원하는 요청은 모두 기다립니다.' });
+  const sLock = K.slider(g3, { label: '행 잠금 시간 (트랜잭션 길이)', min: 1, max: 100, value: P.lockMs, unit: 'ms', onInput: v => { P.lockMs = v; }, hint: '쿼리 뒤에도 잠금을 잡은 채 다른 일을 하는 시간. 그동안 같은 행을 원하는 요청은 모두 기다립니다.' });
 
   K.presets(F, [
     { label: '평소', apply() { set(800, 32, 'idx', 5, 10, 5000, 16); } },

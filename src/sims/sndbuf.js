@@ -404,7 +404,7 @@ K.register('sndbuf', function (root) {
       msg = `${K.flag('warn')}<b>느린 클라이언트에게는 가장 새 업데이트 하나만 남기고 나머지는 버립니다.</b> 서버 스레드는 기다리지 않으니 틱은 ${K.n(f, 1)}Hz 그대로이고 다른 클라이언트는 멀쩡합니다. 느린 클라이언트는 업데이트를 ${K.pct(dr)} 건너뛰어 <b>뚝뚝 끊김</b>과 작은 <b>순간이동</b>을 겪습니다. 이미 송신 버퍼에 담긴 ${P.buf}KB는 순서대로 빠져야 해서 그 클라이언트의 화면은 ${sL == null ? '—' : K.ms(sL)} 늦습니다. 버퍼를 작게 잡을수록 이 지연이 줄어듭니다.`;
     } else if (P.pol === 'kick') {
       const kicked = slowC.filter(c => c.st === 'kicked'), lag = slowC.filter(c => c.st === 'ok' && c.aq.length);
-      if (kicked.length) msg = `${K.flag('bad')}<b>클라이언트 ${kicked.map(c => c.i + 1).join('·')}이 5초 넘게 밀려서 연결을 끊었습니다.</b> 그 클라이언트는 <b>접속 끊김</b>을 겪지만, 서버와 다른 클라이언트는 멀쩡합니다(틱 ${K.n(f, 1)}Hz). 회선이 그대로면 재접속해도 다시 밀리고 다시 끊깁니다. 대신 서버 메모리는 늘 일정하게 유지됩니다.`;
+      if (kicked.length) msg = `${K.flag('bad')}<b>5초 넘게 밀린 클라이언트 ${kicked.map(c => c.i + 1).join('·')}의 연결을 끊었습니다.</b> 그 클라이언트는 <b>접속 끊김</b>을 겪지만, 서버와 다른 클라이언트는 멀쩡합니다(틱 ${K.n(f, 1)}Hz). 회선이 그대로면 재접속해도 다시 밀리고 다시 끊깁니다. 대신 서버 메모리는 늘 일정하게 유지됩니다.`;
       else if (lag.length) {
         const c = lag[0];
         msg = `${K.flag('warn')}클라이언트 ${c.i + 1}에게 못 보낸 데이터가 서버 메모리에 쌓이는 중입니다(${K.n(c.af, 0)}KB). ${K.n(Math.max(0, 5 - (t - c.since) / 1000), 0)}초 안에 따라잡지 못하면 연결을 끊습니다. 그동안 그 클라이언트의 화면은 점점 늦어집니다(${K.ms(c.ema)}). 다른 클라이언트와 서버 틱은 멀쩡합니다.`;

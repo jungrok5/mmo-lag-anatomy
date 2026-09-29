@@ -109,7 +109,7 @@ K.register('npcmissing', function (root) {
     background: { t: '백그라운드 창이 처리를 덜 하고 있습니다', c: ['pt-background'], check: '백그라운드 프레임 제한, 절전, 엔진의 백그라운드 실행 설정을 확인합니다. 오래 백그라운드에 두면 수신 버퍼가 넘쳐 알림이 사라질 수 있습니다.' },
     samepc: { t: '같은 PC·같은 IP라서 생기는 충돌입니다', c: ['pt-port-collision', 'pt-session-key', 'pt-multiclient'], check: '두 클라이언트가 같은 로컬 UDP 포트를 쓰는지, 서버가 IP나 기기 ID로 세션을 구분하는지, 멀티 클라이언트 제한 정책이 있는지 확인합니다.' },
     budget: { t: '서버가 보낼 양을 줄이고 있습니다', c: ['pt-priority', 'pt-display-option'], check: '연결별 전송 예산과 우선순위 설정, 표시 인원 상한을 확인합니다. 한쪽만 그렇다면 그 연결의 대역폭 추정치가 낮게 잡혔는지 봅니다.' },
-    other: { t: '드문 경우입니다: 로그로 서버팀과 함께 확인하세요', c: ['pt-version', 'pt-clock-hold'], check: '안 보이는 NPC의 ID, 좌표, 시각을 적고 서버의 “이 연결에 보낸 개체 목록”과 비교합니다.' },
+    other: { t: '드문 경우입니다: 로그로 서버 개발자와 함께 확인하세요', c: ['pt-version', 'pt-clock-hold'], check: '안 보이는 NPC의 ID, 좌표, 시각을 적고 서버의 “이 연결에 보낸 개체 목록”과 비교합니다.' },
   };
   const tree = K.el('div', { class: 'nm-tree' });
   F.body.after(K.el('div', { class: 'cv-cap' }, K.el('b', { text: '진단 질문' }), K.el('span', { text: '실제 상황대로 답하세요' })), tree);

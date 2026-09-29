@@ -7,7 +7,7 @@ Object.assign(DATA.secRefs, {
     { t: 'RFC 6298: Computing TCP\'s Retransmission Timer', u: 'https://www.rfc-editor.org/rfc/rfc6298', p: 'IETF', n: 'RTO = SRTT + max(G, 4·RTTVAR), 초기 1초, 최소 1초 권고, 만료될 때마다 두 배, 상한을 두려면 60초 이상, 재전송한 패킷은 RTT 표본에서 뺌(Karn)' },
     { t: 'RFC 5681: TCP Congestion Control', u: 'https://www.rfc-editor.org/rfc/rfc5681', p: 'IETF', n: '세 번째 중복 ACK에서 빠른 재전송, RTO 뒤에는 혼잡 윈도우 1 세그먼트(손실 윈도우)에서 다시 시작' },
     { t: 'RFC 6675: A Conservative Loss Recovery Algorithm Based on Selective Acknowledgment (SACK) for TCP', u: 'https://www.rfc-editor.org/rfc/rfc6675', p: 'IETF', n: 'SACK 정보로 빠진 패킷을 판단하는 손실 복구(빠른 재전송의 중복 ACK·SACK 신호)' },
-    { t: 'RFC 8985: The RACK-TLP Loss Detection Algorithm for TCP', u: 'https://www.rfc-editor.org/rfc/rfc8985', p: 'IETF', n: 'RACK의 순서 뒤바뀜 여유(min_RTT/4)와 DSACK에 따른 조정, TLP 대기 2·SRTT(확인받지 못한 패킷이 하나뿐이면 지연 ACK 여유 추가), 탐침 뒤 RTO 재설정, SACK 필수' },
+    { t: 'RFC 8985: The RACK-TLP Loss Detection Algorithm for TCP', u: 'https://www.rfc-editor.org/rfc/rfc8985', p: 'IETF', n: 'RACK의 순서 뒤바뀜 여유(min_RTT/4)와 DSACK에 따른 조정, TLP 대기 2·SRTT(확인받지 못한 패킷이 하나뿐이면 지연 ACK 여유 추가), TLP를 보낸 뒤 RTO 재설정, SACK 필수' },
     { t: 'RFC 2018: TCP Selective Acknowledgment Options', u: 'https://www.rfc-editor.org/rfc/rfc2018', p: 'IETF', n: 'SACK: 받는 쪽이 중간에 빠진 부분을 알림' },
     { t: 'RFC 2883: An Extension to the Selective Acknowledgement (SACK) Option for TCP', u: 'https://www.rfc-editor.org/rfc/rfc2883', p: 'IETF', n: 'DSACK: 이미 받은 것을 또 받았다고 알려 불필요한 재전송을 드러냄' },
     { t: 'RFC 5682: Forward RTO-Recovery (F-RTO): An Algorithm for Detecting Spurious Retransmission Timeouts with TCP', u: 'https://www.rfc-editor.org/rfc/rfc5682', p: 'IETF', n: 'F-RTO: 불필요한 RTO 감지' },
@@ -15,7 +15,7 @@ Object.assign(DATA.secRefs, {
     { t: 'RFC 7323: TCP Extensions for High Performance', u: 'https://www.rfc-editor.org/rfc/rfc7323', p: 'IETF', n: '타임스탬프·윈도우 스케일 옵션, 스케일이 없으면 윈도우는 최대 64KiB' },
     { t: 'RFC 6937: Proportional Rate Reduction for TCP', u: 'https://www.rfc-editor.org/rfc/rfc6937', p: 'IETF', n: 'PRR: 복구 중 보내는 양을 새로 전달된 양에 맞춰 줄임(시뮬레이션의 복구 중 전송 한도)' },
     { t: 'RFC 9438: CUBIC for Fast and Long-Distance Networks', u: 'https://www.rfc-editor.org/rfc/rfc9438', p: 'IETF', n: 'CUBIC은 손실 때 혼잡 윈도우를 0.7배로 줄임(시뮬레이션의 30% 축소)' },
-    { t: 'RFC 9293: Transmission Control Protocol (TCP)', u: 'https://www.rfc-editor.org/rfc/rfc9293', p: 'IETF', n: '제로 윈도우 프로브: 윈도우가 0이어도 탐침을 보내고, 간격은 지수적으로 늘림' },
+    { t: 'RFC 9293: Transmission Control Protocol (TCP)', u: 'https://www.rfc-editor.org/rfc/rfc9293', p: 'IETF', n: '제로 윈도우 프로브: 윈도우가 0이어도 프로브를 보내고, 간격은 지수적으로 늘림' },
     { t: 'RFC 9000: QUIC: A UDP-Based Multiplexed and Secure Transport', u: 'https://www.rfc-editor.org/rfc/rfc9000', p: 'IETF', n: 'QUIC은 손실이 그 패킷에 담긴 스트림만 막아 다른 스트림은 계속 진행(흐름 분리)' },
     /* 표준: 손실을 줄이는 쪽 */
     { t: 'RFC 2475: An Architecture for Differentiated Services', u: 'https://www.rfc-editor.org/rfc/rfc2475', p: 'IETF', n: '셰이핑은 패킷을 늦추고, 폴리싱은 초과분을 버린다는 정의' },

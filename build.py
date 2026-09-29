@@ -98,7 +98,8 @@ def assemble(body, js_files, fragment, embed_fonts=False):
     inner_head = f"{head}\n<style>\n{css}\n</style>"
     tail = js
     if fragment:
-        return f"{inner_head}\n{body}\n{tail}\n"
+        # 조각본도 다른 페이지에 옮겨 붙이는 사본이라 저작권·허가 문구를 함께 둔다
+        return f"{notice()}\n{inner_head}\n{body}\n{tail}\n"
     return (
         f"<!doctype html>\n{notice()}\n<html lang=\"ko\">\n<head>\n"
         '<meta charset="utf-8">\n'

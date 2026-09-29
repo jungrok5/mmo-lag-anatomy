@@ -8,8 +8,8 @@ Object.assign(DATA.secRefs, {
     { t: 'Comparing Interest Management Algorithms for Massively Multiplayer Games', u: 'https://www.sable.mcgill.ca/~clump/papers/boulanger-06-comparing.pdf', p: 'ACM', n: 'NetGames 2006 논문(저자 공개본). 모든 쌍의 거리 비교는 인원이 늘면 감당하지 못하고, 격자로 나누면 주변 셀만 확인' },
     { t: 'Replication Graph in Unreal Engine', u: 'https://dev.epicgames.com/documentation/en-us/unreal-engine/replication-graph-in-unreal-engine', p: 'Epic Games', n: '월드를 격자로 나눠 셀별 목록으로 보낼 대상을 고르면 인원·액터가 많아도 서버 CPU를 아낌' },
     { t: 'Amdahl\'s Law in the Multicore Era', u: 'https://research.cs.wisc.edu/multifacet/papers/ieeecomputer08_amdahl_multicore.pdf', p: 'IEEE', n: '락 실험의 처리량 상한: 한 번에 하나만 할 수 있는 비율이 1−f면 속도 향상은 1/(1−f)를 넘지 못함' },
-    { t: 'Runtime locking correctness validator', u: 'https://docs.kernel.org/locking/lockdep-design.html', p: 'Linux kernel', n: '락 실험의 데드락: 두 락을 서로 반대 순서로 잡으면 순환 대기로 교착' },
-    { t: 'Liveness, Readiness, and Startup Probes', u: 'https://kubernetes.io/docs/concepts/workloads/pods/probes/', p: 'Kubernetes', n: '락 실험의 워치독: 교착 상태를 라이브니스 검사로 잡아 재시작, 기본은 10초마다 검사해 3번 연속 실패하면 재시작(약 30초)' },
+    { t: 'Runtime locking correctness validator', u: 'https://docs.kernel.org/locking/lockdep-design.html', p: 'Linux kernel', n: '락 실험의 데드락: 두 락을 서로 반대 순서로 잡으면 순환 대기로 데드락' },
+    { t: 'Liveness, Readiness, and Startup Probes', u: 'https://kubernetes.io/docs/concepts/workloads/pods/probes/', p: 'Kubernetes', n: '락 실험의 워치독: 데드락 상태를 라이브니스 검사로 잡아 재시작, 기본은 10초마다 검사해 3번 연속 실패하면 재시작(약 30초)' },
     { t: 'ASP.NET Core Best Practices', u: 'https://learn.microsoft.com/en-us/aspnet/core/fundamentals/best-practices', p: 'Microsoft', n: '동기 호출: 데이터 접근·I/O는 비동기로 호출, 블로킹 호출은 스레드 풀 고갈과 응답 지연을 부름' },
   ],
   'l-infra': [

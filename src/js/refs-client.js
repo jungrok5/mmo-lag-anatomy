@@ -7,7 +7,7 @@ Object.assign(DATA.secRefs, {
     { t: 'Introduction to prediction (Netcode for Entities 6.5)', u: 'https://docs.unity3d.com/Packages/com.unity.netcode@6.5/manual/intro-to-prediction.html', p: 'Unity', n: '클라이언트가 서버 결과를 기다리지 않고 자기 입력으로 먼저 움직이는 예측, 서버와 다르면 보정' },
     { t: 'Peeking into VALORANT\'s Netcode', u: 'https://technology.riotgames.com/news/peeking-valorants-netcode', p: 'Riot Games', n: '들쭉날쭉 오는 데이터를 버퍼로 고르게 만들면 매끄럽지만 그만큼 지연이 늘고, 추측이 틀리면 캐릭터가 튀거나 미끄러짐' },
     { t: 'Garbage collection modes', u: 'https://docs.unity3d.com/Manual/performance-incremental-garbage-collection.html', p: 'Unity', n: '실험의 GC 스파이크: 점진적 GC를 끄면 힙 전체를 검사하는 동안 메인 스레드가 멈춰 16ms 프레임 한도를 넘김' },
-    { t: 'Scripting.GarbageCollector.CollectIncremental', u: 'https://docs.unity3d.com/ScriptReference/Scripting.GarbageCollector.CollectIncremental.html', p: 'Unity', n: '실험의 점진적 GC 한 조각 3ms: incrementalTimeSliceNanoseconds 기본값 3ms' },
+    { t: 'Scripting.GarbageCollector.CollectIncremental', u: 'https://docs.unity3d.com/ScriptReference/Scripting.GarbageCollector.CollectIncremental.html', p: 'Unity', n: '실험의 점진적 GC 타임 슬라이스 3ms: incrementalTimeSliceNanoseconds 기본값 3ms' },
     { t: 'Shader loading', u: 'https://docs.unity3d.com/Manual/shader-loading.html', p: 'Unity', n: '실험의 새 지역 로딩: 셰이더 변형을 처음 쓸 때 드라이버가 GPU용으로 만드느라 멈출 수 있음' },
     { t: 'Frame Pacing library', u: 'https://developer.android.com/games/sdk/frame-pacing', p: 'Android (Google)', n: '실험의 V-Sync 경계: 60Hz 화면은 새 프레임이 없으면 이전 프레임을 한 번 더 보여 줌' },
     { t: 'Set fixed timestep to optimize physics simulation frequency', u: 'https://docs.unity3d.com/Manual/physics-optimization-cpu-frequency.html', p: 'Unity', n: '실험의 고정 스텝 따라잡기: 프레임이 스텝 간격보다 길면 한 프레임에 스텝을 여러 번 돌려 부담이 커짐' },

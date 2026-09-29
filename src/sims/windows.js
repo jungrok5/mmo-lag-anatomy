@@ -173,7 +173,7 @@ K.register('windows', function (root) {
       const x0 = X(total - p.comp), x1 = X(total);
       ctx.strokeStyle = C.ink2; ctx.lineWidth = 1.5;
       ctx.beginPath(); ctx.moveTo(x0, y - 6); ctx.lineTo(x0, y - 12); ctx.lineTo(x1, y - 12); ctx.lineTo(x1, y - 6); ctx.stroke();
-      K.text(ctx, `${P.judge === 'client' ? '내 화면 기준 판정' : P.judge === 'roll' ? '누른 프레임 기준 판정' : '되감기'}로 돌려받음 ${Math.round(p.comp)}ms`, (x0 + x1) / 2, y - 21, { align: 'center', size: 10.5, weight: 600, color: C.ink });
+      K.text(ctx, `${P.judge === 'client' ? '내 화면 기준 판정으로' : P.judge === 'roll' ? '누른 프레임 기준 판정으로' : '되감기로'} 돌려받음 ${Math.round(p.comp)}ms`, (x0 + x1) / 2, y - 21, { align: 'center', size: 10.5, weight: 600, color: C.ink });
     }
     // 적중 시각
     const xw = X(P.W);

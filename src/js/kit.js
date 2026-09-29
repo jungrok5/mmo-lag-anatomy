@@ -124,12 +124,20 @@
   let uid = 0;
   K.uid = (p = 'k') => p + '-' + (++uid);
 
+  // 실험 제목의 단계: 같은 장에서 바로 앞 제목이 장 제목(h2)이면 h3, 소제목(h3) 아래면 h4. 제목 단계를 건너뛰지 않게 한다
+  const headTag = root => {
+    const sec = root.closest('section');
+    let prev = null;
+    if (sec) sec.querySelectorAll('.ch-head h2, h3.sec').forEach(h => { if (h.compareDocumentPosition(root) & Node.DOCUMENT_POSITION_FOLLOWING) prev = h; });
+    return prev && prev.tagName === 'H3' ? 'h4' : 'h3';
+  };
+
   K.frame = function (root, o = {}) {
     root.classList.add('sim');
     root.innerHTML = '';
     const head = K.el('header', { class: 'sim-head' },
       K.el('span', { class: 'sim-kicker', text: o.kicker || '직접 해보기' }),
-      o.title ? K.el('h4', { html: o.title }) : null,
+      o.title ? K.el(headTag(root), { html: o.title }) : null,
       o.lead ? K.el('p', { html: o.lead }) : null);
     const presets = K.el('div', { class: 'sim-presets', hidden: true });
     const stage = K.el('div', { class: 'sim-stage' });

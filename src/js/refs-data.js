@@ -28,7 +28,7 @@ Object.assign(DATA.secRefs, {
   ],
   'l-db': [
     { t: 'How MySQL Uses Indexes', u: 'https://dev.mysql.com/doc/refman/8.4/en/mysql-indexes.html', p: 'MySQL', n: '인덱스가 없으면 첫 행부터 테이블 전체를 읽음(풀 스캔)' },
-    { t: 'InnoDB Locking', u: 'https://dev.mysql.com/doc/refman/8.4/en/innodb-locking.html', p: 'MySQL', n: '행 잠금을 쥔 트랜잭션이 끝날 때까지 같은 행을 고치려는 요청은 대기(핫 로우)' },
+    { t: 'InnoDB Locking', u: 'https://dev.mysql.com/doc/refman/8.4/en/innodb-locking.html', p: 'MySQL', n: '행 잠금을 잡은 트랜잭션이 끝날 때까지 같은 행을 고치려는 요청은 대기(핫 로우)' },
     { t: 'Number Of Database Connections', u: 'https://wiki.postgresql.org/wiki/Number_Of_Database_Connections', p: 'PostgreSQL', n: 'DB 자원을 다 쓴 뒤에는 연결을 늘려도 처리량이 떨어짐(DB 실험에서 풀을 키워도 CPU 코어가 모자라면 모두 느려지는 근거)' },
     { t: 'WAL Configuration (PostgreSQL Documentation)', u: 'https://www.postgresql.org/docs/current/wal-configuration.html', p: 'PostgreSQL', n: '체크포인트는 기본 5분 또는 WAL 1GB마다 더티 페이지를 몰아 쓰는 비싼 작업, 쓰기를 나눠 I/O 폭주를 피함' },
     { t: 'Semisynchronous Replication', u: 'https://dev.mysql.com/doc/refman/8.4/en/replication-semisync.html', p: 'MySQL', n: '비동기 복제에서 주 DB가 죽으면 커밋된 트랜잭션이 예비 DB에 없을 수 있음(전환 뒤 롤백)' },

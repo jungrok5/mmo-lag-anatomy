@@ -181,7 +181,7 @@
     const links = ALL_LAYERS.filter(l => groups[l.id]).map(l =>
       `<span><span class="note">${l.short}</span> ${groups[l.id].map(c => `<a href="#c-${c.id}">${c.t}</a>`).join(', ')}</span>`).join('');
     return `<article class="sym-card" id="s-${s.id}">
-      <header>${K.glyph(s.id)}<div><h4>${s.name}</h4><div class="alias">${s.alias}</div></div></header>
+      <header>${K.glyph(s.id)}<div><h3>${s.name}</h3><div class="alias">${s.alias}</div></div></header>
       <canvas data-anim="${s.id}" height="56" aria-label="${s.name} 움직임 예시" role="img"></canvas>
       <p>${s.what}</p>
       <div class="looks"><b>화면에서는</b>${s.looks}</div>
@@ -328,7 +328,7 @@
     const HINT = {
       me: '나만 겪는다면 먼저 <b>내 쪽 세 층</b>(게임, PC·폰, 집 네트워크)을 봅니다. 유선으로 바꾸거나, 다른 게임·영상 통화도 느린지 확인해 보세요. 회선 핑(게임 밖에서 잰 핑)은 멀쩡한데 뚝뚝 끊기면 내 PC의 프레임 문제일 가능성이 큽니다.',
       home: '같은 집 사람들이 함께 겪는다면 <b>공유기와 집 회선</b>이 1순위입니다. 누가 큰 파일을 올리거나 받고 있지 않은지, 공유기를 재부팅하면 나아지는지 보세요.',
-      region: '특정 지역·통신사만 겪는다면 <b>인터넷 회선 층</b>(경로, 피어링, 해외 구간)입니다. 게임 서버는 멀쩡할 가능성이 높습니다. 통신사별 핑 통계를 서버팀에 요청하세요.',
+      region: '특정 지역·통신사만 겪는다면 <b>인터넷 회선 층</b>(경로, 피어링, 해외 구간)입니다. 게임 서버는 멀쩡할 가능성이 높습니다. 통신사별 핑·손실 통계를 인프라팀에 요청하세요.',
       zone: '특정 장소·채널에 모인 사람들만 겪는다면 <b>서버 게임 프로세스</b>(틱 예산, 시야 계산, 브로드캐스트)가 1순위입니다. 그 장소의 인원수와 시각을 함께 전달하세요.',
       server: '서버 전체가 동시에 겪는다면 <b>서버 쪽 공통 자원</b>(메모리·GC, DB, 네트워크 장비, 서버 OS)입니다. 게임 스레드 하나가 서버 전체를 돌리는 구조라면 <b>틱 예산 초과</b>나 게임 루프 안에서 기다리는 동기 호출(DB·파일·외부 서버)도 같은 모습입니다. 정확한 시각이 가장 중요한 단서입니다.',
       feature: '특정 기능만 느리거나 실패한다면 그 기능을 맡은 <b>부가 서버나 DB</b>입니다. 전투는 멀쩡한지 함께 알려 주세요.',
@@ -495,24 +495,30 @@
   openBtn.addEventListener('click', e => { e.stopPropagation(); const o = nav.classList.toggle('is-open'); openBtn.setAttribute('aria-expanded', o ? 'true' : 'false'); });
   nav.addEventListener('click', e => { if (e.target.closest('a')) closeNav(); });
   document.addEventListener('click', e => { if (nav.classList.contains('is-open') && !nav.contains(e.target) && e.target !== openBtn) closeNav(); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeNav(); });
+  // 열린 목차를 Esc로 닫으면 초점을 목차 단추로 돌려준다(닫힌 목차 안에 초점이 남지 않게)
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && nav.classList.contains('is-open')) { closeNav(); openBtn.focus(); } });
 
   const navLinks = $$('.nav a[href^="#"]');
   const where = $('#where');
   const sections = $$('main section.chapter');
-  if (window.IntersectionObserver) {
-    const vis = new Map();
-    const io = new IntersectionObserver(es => {
-      es.forEach(e => vis.set(e.target.id, e.isIntersecting ? e.boundingClientRect.top : null));
-      let best = null, bestTop = -Infinity;
-      sections.forEach(s => { const tp = vis.get(s.id); if (tp != null && tp <= 140 && tp > bestTop) { best = s.id; bestTop = tp; } });
-      if (!best) { const first = sections.find(s => vis.get(s.id) != null); best = first && first.id; }
-      navLinks.forEach(a => a.classList.toggle('is-active', a.getAttribute('href') === '#' + best));
-      const sec = best && document.getElementById(best);
-      if (where) where.textContent = sec ? $('h2', sec).textContent : '';
-    }, { rootMargin: '-64px 0px -55% 0px', threshold: [0, 0.01, 1] });
-    sections.forEach(s => io.observe(s));
+  // 현재 위치: 머리가 화면 위쪽(140px)을 지난 장 중 마지막 장. 장이 길어 교차 이벤트가 오지 않아도 맞도록 스크롤할 때마다 위치를 잰다
+  let navBest, navQueued = false;
+  function trackNav() {
+    navQueued = false;
+    let best = null;
+    for (const s of sections) { if (s.getBoundingClientRect().top <= 140) best = s; else break; }
+    if (!best) best = sections.find(s => s.getBoundingClientRect().top < innerHeight) || null;
+    const id = best ? best.id : null;
+    if (id === navBest) return;
+    navBest = id;
+    navLinks.forEach(a => a.classList.toggle('is-active', a.getAttribute('href') === '#' + id));
+    if (where) where.textContent = best ? $('h2', best).textContent : '';
   }
+  const queueNav = () => { if (!navQueued) { navQueued = true; requestAnimationFrame(trackNav); } };
+  window.addEventListener('scroll', queueNav, { passive: true });
+  window.addEventListener('resize', queueNav);
+  if (window.ResizeObserver) new ResizeObserver(queueNav).observe($('main'));   // 실험이 자리를 잡으며 본문 높이가 바뀔 때도
+  trackNav();
 
   // 주소의 #c-… 로 들어오면 그 원인의 자세히를 펼친다
   function openHash() {
@@ -535,11 +541,14 @@
   }
   // 클립보드 API는 https·localhost에서만 되므로 http 서버·파일로 열었을 때는 예전 방식으로 복사한다
   const copyText = t => (navigator.clipboard && window.isSecureContext ? navigator.clipboard.writeText(t).catch(() => copyOld(t)) : copyOld(t));
+  // 버튼 이름(aria-label)은 그대로라 화면 낭독기가 “복사됨”을 듣도록 따로 알린다
+  const copyLive = K.el('p', { class: 'sr-only', 'aria-live': 'polite' });
+  document.body.append(copyLive);
   document.addEventListener('click', e => {
     const b = e.target.closest('button[data-copy]');
     if (!b) return;
     const hash = '#c-' + b.dataset.copy;
-    const show = msg => { b.textContent = msg; clearTimeout(b._t); b._t = setTimeout(() => { b.textContent = '링크 복사'; }, 1800); };
+    const show = msg => { b.textContent = msg; copyLive.textContent = msg; clearTimeout(b._t); b._t = setTimeout(() => { b.textContent = '링크 복사'; copyLive.textContent = ''; }, 1800); };
     copyText(location.href.split('#')[0] + hash).then(() => show('복사됨'), () => { history.replaceState(null, '', hash); show('주소창에서 복사하세요'); });
   });
 

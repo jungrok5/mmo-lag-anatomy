@@ -17,7 +17,7 @@
       sim: 'retrans',
       ref: [
         { t: 'net/wireless/core.c', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/wireless/core.c?h=v6.12', p: 'Linux kernel', n: '리눅스 무선 스택의 기본 재시도 한도: 짧은 프레임 7번, 긴 프레임 4번(dot11ShortRetryLimit·dot11LongRetryLimit)' },
-        { t: 'RFC 3481: TCP over Second (2.5G) and Third (3G) Generation Wireless Networks', u: 'https://www.rfc-editor.org/rfc/rfc3481', p: 'IETF', n: '모바일망은 링크 계층 재전송 덕분에 IP 손실은 적지만, 그 복구가 지연 흔들림과 지연 급등으로 나타남' },
+        { t: 'RFC 3481: TCP over Second (2.5G) and Third (3G) Generation Wireless Networks', u: 'https://www.rfc-editor.org/rfc/rfc3481', p: 'IETF', n: '모바일망은 링크 계층 재전송 덕분에 IP 손실은 적지만, 그 복구가 지터와 지연 급등으로 나타남' },
         { t: 'Wi-Fi roaming support in Apple devices', u: 'https://support.apple.com/guide/deployment/wi-fi-roaming-support-dep98f116c0f/web', p: 'Apple', n: 'AP를 옮길 때 새 AP 인증이 끝날 때까지 데이터를 보낼 수 없고, 802.1X 환경에서는 몇 초 걸릴 수 있음' },
         { t: 'RFC 8985: The RACK-TLP Loss Detection Algorithm for TCP', u: 'https://www.rfc-editor.org/rfc/rfc8985', p: 'IETF', n: 'RACK(시간 기준 손실 판단)과 TLP(끝 패킷 재전송)의 정의' },
         { t: 'IP Sysctl', u: 'https://docs.kernel.org/networking/ip-sysctl.html', p: 'Linux kernel', n: 'tcp_recovery 기본 0x1(RACK), tcp_early_retrans 기본 3(TLP 켜짐), TCP_NOTSENT_LOWAT·tcp_notsent_lowat로 아직 보내지 않은 데이터 양 제한' },
@@ -210,7 +210,7 @@
       ] },
     { id: 'rt-reorder', t: '순서 뒤바뀜으로 인한 불필요한 빠른 재전송', en: 'Reordering triggers spurious fast retransmit',
       s: '여러 경로나 묶인 링크를 지나며 패킷 순서가 바뀌면, 받는 쪽이 중복 ACK로 “빠진 패킷 있음”을 알리고 보내는 쪽은 멀쩡한 패킷을 다시 보냅니다.',
-      c: ['패킷 단위로 경로를 나누는 장비, 패킷 단위로 나눠 싣는 링크 묶음, 경로가 바뀌는 순간이 순서를 뒤섞음', '뒤 패킷이 먼저 도착해 중복 ACK 3개가 쌓임 → 빠른 재전송', '드문드문 오가는 게임 패킷은 거의 영향 없음. 사람 많은 곳의 큰 업데이트와 패치 다운로드가 느려지고 가끔 뚝뚝 끊김'],
+      c: ['패킷 단위로 경로를 나누는 장비, 패킷 단위로 나눠 싣는 LAG(링크 묶음), 경로가 바뀌는 순간이 순서를 뒤섞음', '뒤 패킷이 먼저 도착해 중복 ACK 3개가 쌓임 → 빠른 재전송', '드문드문 오가는 게임 패킷은 거의 영향 없음. 사람 많은 곳의 큰 업데이트와 패치 다운로드가 느려지고 가끔 뚝뚝 끊김'],
       sym: ['stutter', 'delay'], fx: ['jit'], who: ['region', 'server'], when: ['always', 'event'],
       own: ['net', 'sys'],
       act: { infra: '네트워크: 패킷 단위 분산 대신 연결 단위 분산(ECMP·LAG를 주소·포트 해시로). 서버 장비·OS: RACK(시간 기준 손실 판단, 순서 뒤바뀜에 강함. DSACK으로 불필요한 재전송을 감지하면 순서 뒤바뀜 허용 폭을 자동으로 늘림) 사용, 리눅스가 연결마다 자동으로 추정한 순서 뒤바뀜 정도 확인(ss -ti의 reordering 값, 시작값은 tcp_reordering=3).' },
