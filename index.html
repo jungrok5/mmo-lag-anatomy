@@ -557,6 +557,14 @@ input[type="range"]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 4px 
 .own-list details { border-top: 1px solid var(--line); padding: 6px 0; }
 .own-list summary { cursor: pointer; font-weight: 600; font-size: 14px; }
 .own-list summary .mono { font-family: var(--font-mono); color: var(--muted); font-weight: 500; margin-left: 4px; }
+.own-mat thead th { white-space: normal; min-width: 52px; }
+@media (max-width: 760px) {
+  .own-mat { font-size: 12px; border-spacing: 2px; }
+  .own-mat thead th { font-size: 11px; min-width: 40px; padding: 3px 3px; }
+  .own-mat thead th .tm { display: none; }
+  .own-mat td { min-width: 38px; }
+  .own-mat td button { min-height: 30px; font-size: 12px; }
+}
 
 </style>
 </head>
@@ -963,14 +971,14 @@ input[type="range"]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 4px 
 
         <div class="table-wrap">
           <table>
-            <thead><tr><th>팀</th><th>담당</th><th>맡는 범위</th><th>주로 쓰는 해결 수단</th></tr></thead>
+            <thead><tr><th>담당</th><th>맡는 범위</th><th>주로 쓰는 해결 수단</th></tr></thead>
             <tbody>
-              <tr><td rowspan="2"><b>게임개발팀</b></td><td><span class="own own-game"><span class="tm">게임개발팀</span>클라이언트</span></td><td>게임 클라이언트 코드: 프레임·GC·로딩, 보간·외삽·예측, 클라이언트의 네트워크 처리</td><td>코드 수정, 보간 버퍼·예측 조정, 로딩 방식 변경, 클라이언트 패치</td></tr>
+              <tr><td><span class="own own-game"><span class="tm">게임개발팀</span>클라이언트</span></td><td>게임 클라이언트 코드: 프레임·GC·로딩, 보간·외삽·예측, 클라이언트의 네트워크 처리</td><td>코드 수정, 보간 버퍼·예측 조정, 로딩 방식 변경, 클라이언트 패치</td></tr>
               <tr><td><span class="own own-game"><span class="tm">게임개발팀</span>서버</span></td><td>게임 서버 코드: 틱·스레드·락, 동기화 설계, 소켓 옵션, 쿼리·트랜잭션 설계</td><td>로직 최적화, 비동기 호출, 틱·지역 분산, 소켓 옵션(TCP_NODELAY 등), 쿼리·인덱스 설계, 서버 패치</td></tr>
-              <tr><td rowspan="3"><b>인프라팀</b></td><td><span class="own own-infra"><span class="tm">인프라팀</span>네트워크</span></td><td>회선과 IDC 네트워크 장비(스위치·라우터·방화벽·로드밸런서·DDoS 방어), 통신사·피어링</td><td>장비 설정·교체, 회선·피어링 증설, 경로 변경, 통신사 에스컬레이션, 타임아웃·세션 한도 조정</td></tr>
+              <tr><td><span class="own own-infra"><span class="tm">인프라팀</span>네트워크</span></td><td>회선과 IDC 네트워크 장비(스위치·라우터·방화벽·로드밸런서·DDoS 방어), 통신사·피어링</td><td>장비 설정·교체, 회선·피어링 증설, 경로 변경, 통신사 에스컬레이션, 타임아웃·세션 한도 조정</td></tr>
               <tr><td><span class="own own-infra"><span class="tm">인프라팀</span>서버 장비·OS</span></td><td>서버 장비·클라우드 인스턴스, OS·커널 설정, NIC, 배포·모니터링 환경</td><td>증설·인스턴스 변경, 커널 설정(sysctl), NIC 링 버퍼·인터럽트 분산, 크론·백업 시간 조정</td></tr>
               <tr><td><span class="own own-infra"><span class="tm">인프라팀</span>DB 장비</span></td><td>DB 서버·스토리지, DB 설정·복제·백업, 캐시 서버</td><td>DB 증설, 스토리지 IOPS 확보, DB 파라미터·복제 설정, 백업·체크포인트 조정</td></tr>
-              <tr><td><b>외부</b></td><td><span class="own own-ext"><span class="tm">외부</span>유저·통신사·클라우드</span></td><td>유저 PC·집 네트워크, 통신사 구간, 클라우드 사업자</td><td>유저 안내(유선 연결 등), 통신사·클라우드 사업자에 요청, 게임 쪽 우회·완화</td></tr>
+              <tr><td><span class="own own-ext"><span class="tm">외부</span>유저·통신사·클라우드</span></td><td>유저 PC·집 네트워크, 통신사 구간, 클라우드 사업자</td><td>유저 안내(유선 연결 등), 통신사·클라우드 사업자에 요청, 게임 쪽 우회·완화</td></tr>
             </tbody>
           </table>
         </div>

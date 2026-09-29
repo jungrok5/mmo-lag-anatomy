@@ -546,3 +546,11 @@ input[type="range"]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 4px 
 .own-list details { border-top: 1px solid var(--line); padding: 6px 0; }
 .own-list summary { cursor: pointer; font-weight: 600; font-size: 14px; }
 .own-list summary .mono { font-family: var(--font-mono); color: var(--muted); font-weight: 500; margin-left: 4px; }
+.own-mat thead th { white-space: normal; min-width: 52px; }
+@media (max-width: 760px) {
+  .own-mat { font-size: 12px; border-spacing: 2px; }
+  .own-mat thead th { font-size: 11px; min-width: 40px; padding: 3px 3px; }
+  .own-mat thead th .tm { display: none; }
+  .own-mat td { min-width: 38px; }
+  .own-mat td button { min-height: 30px; font-size: 12px; }
+}
