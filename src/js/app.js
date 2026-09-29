@@ -523,7 +523,7 @@
   }
   window.addEventListener('hashchange', openHash);
 
-  // 원인 링크 복사: 위키의 장애 기록에 붙여 이 원인을 가리키는 주소
+  // 원인 링크 복사: 장애 기록·티켓에 붙여 이 원인을 가리키는 주소
   function copyOld(t) {
     const ta = document.createElement('textarea');
     ta.value = t; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0';
@@ -533,7 +533,7 @@
     ta.remove();
     return ok ? Promise.resolve() : Promise.reject(new Error('copy'));
   }
-  // 클립보드 API는 https·localhost에서만 되므로 http 사내 서버·파일로 열었을 때는 예전 방식으로 복사한다
+  // 클립보드 API는 https·localhost에서만 되므로 http 서버·파일로 열었을 때는 예전 방식으로 복사한다
   const copyText = t => (navigator.clipboard && window.isSecureContext ? navigator.clipboard.writeText(t).catch(() => copyOld(t)) : copyOld(t));
   document.addEventListener('click', e => {
     const b = e.target.closest('button[data-copy]');

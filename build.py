@@ -23,7 +23,7 @@ def read(rel):
     return (SRC / rel).read_text(encoding="utf-8")
 
 
-# 글꼴: 완성본은 src/fonts/ 의 woff2를 페이지 안에 넣어 사내망처럼 외부가 막힌 곳에서도 같은 모양으로 보이게 한다.
+# 글꼴: 완성본은 src/fonts/ 의 woff2를 페이지 안에 넣어 외부 인터넷이 막힌 곳에서도 같은 모양으로 보이게 한다.
 # 조각본·시험용은 가볍게 Google Fonts에서 받는다.
 FONTS = [
     ("IBM Plex Sans KR", 400, "IBMPlexSansKR-Regular.woff2"),
@@ -43,8 +43,19 @@ FONTS_LINK = (
 )
 
 
+FONTS_NOTICE = (
+    "/* 글꼴: IBM Plex Sans KR, IBM Plex Mono (Copyright IBM Corp.), "
+    "Black Han Sans (Copyright The Black Han Sans Project Authors). SIL Open Font License 1.1 */"
+)
+
+
+def notice():
+    # MIT 라이선스는 사본마다 저작권·허가 문구를 넣으라고 하므로, 파일 하나로 퍼지는 index.html 맨 앞에 넣는다
+    return "<!--\n렉 해부도감\n\n" + (ROOT / "LICENSE").read_text(encoding="utf-8").strip() + "\n-->"
+
+
 def fonts_inline():
-    rules = []
+    rules = [FONTS_NOTICE]
     for family, weight, name in FONTS:
         data = base64.b64encode((SRC / "fonts" / name).read_bytes()).decode("ascii")
         rules.append(
@@ -83,7 +94,7 @@ def assemble(body, js_files, fragment, embed_fonts=False):
     if fragment:
         return f"{inner_head}\n{body}\n{tail}\n"
     return (
-        "<!doctype html>\n<html lang=\"ko\">\n<head>\n"
+        f"<!doctype html>\n{notice()}\n<html lang=\"ko\">\n<head>\n"
         '<meta charset="utf-8">\n'
         '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
         f"{inner_head}\n</head>\n<body>\n{body}\n{tail}\n</body>\n</html>\n"

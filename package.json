@@ -2,6 +2,7 @@
   "name": "mmo-lag-anatomy",
   "private": true,
   "description": "렉 해부도감: MMO 렉 원인 시청각 백과",
+  "license": "MIT",
   "scripts": {
     "build": "python3 build.py",
     "validate": "node tools/validate.cjs",

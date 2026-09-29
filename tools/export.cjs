@@ -1,5 +1,5 @@
 // 지식 데이터 내보내기: 원인·증상·담당·용어·출처를 마크다운과 JSON 파일 하나씩으로 뽑는다.
-// Claude 프로젝트에 올리거나 다른 도구(위키 대조 스크립트 등)에서 읽을 때 쓴다.
+// Claude 프로젝트에 올리거나 다른 도구(장애 기록 대조 스크립트 등)에서 읽을 때 쓴다.
 //   node tools/export.cjs [출력 폴더]   → <폴더>/lag-anatomy.md, <폴더>/lag-anatomy.json (기본 폴더 build/)
 const fs = require('fs'), vm = require('vm'), path = require('path');
 const ROOT = path.resolve(__dirname, '..'), JS = path.join(ROOT, 'src/js');
