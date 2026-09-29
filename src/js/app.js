@@ -390,7 +390,7 @@
     sGame.set(String(k.game), null, `전체 ${causes.length}가지 중`);
     sInfra.set(String(k.infra), null, `전체 ${causes.length}가지 중`);
     sExt.set(String(k.ext), null, '유저 환경·통신사·클라우드');
-    sBoth.set(String(both), null, '완화와 근본 해결을 나눠 맡는 경우');
+    sBoth.set(String(both), null, '두 팀이 할 일을 나눠 맡는 경우');
 
     // 층 × 담당 표. 칸의 굵은 숫자는 주 담당, +숫자는 함께 대응
     const matWrap = K.el('div', { class: 'table-wrap own-mat-wrap' });

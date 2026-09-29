@@ -797,3 +797,143 @@
 | 범인, 장비 의인화(믿다·착각하다·잠든다 등) | 원인, 감지·판단·절전 상태 등 |
 
 원인 카드 제목은 현업에서 쓰는 장애 이름으로 바꿨습니다(예: ECMP 경로 하나의 불량, thin stream의 느린 복구, 캐시 스탬피드). 고정 증상 이름(뚝뚝 끊김, 순간이동, 고무줄, 몰아치기 등)과 게임 업계 통용어(선입력, 선연출, 스킬 씹힘)는 그대로 두었습니다.
+
+---
+
+# 담당 구분 검수: 게임개발팀·인프라팀
+
+원인 216개에 붙인 해결 담당(주 담당·함께 대응)과 팀별 할 일을, 파일마다 경계 양쪽을 아는 검토자가 검수했습니다. 기준은 “이 원인이 티켓으로 오면 적힌 팀이 자기 일로 받아들이고, 다른 팀도 자기 할 일에 동의하는가”입니다. 영역별 검토자 5명 뒤에, 장애 대응 책임자 관점의 교차 검토자 1명이 파일 사이 일관성과 07장을 맞췄습니다.
+
+| 검토 영역 | 검토자 관점 |
+|---|---|
+| 클라이언트·기기·집 네트워크·통신사 | 클라이언트 리드 + 네트워크 운영 리드 |
+| 데이터센터 장비·NIC·서버 OS·소켓 | 데이터센터 네트워크 엔지니어 + 리눅스 SRE |
+| 서버 프로세스·메모리·디스크·DB·서버 구성 | MMO 서버 아키텍트 + DBA + SRE |
+| 동기화 설계·일부만 생기는 렉 | 넷코드 엔지니어 + 라이브 운영·QA 리드 |
+| TCP 재전송 | 리눅스 TCP·네트워크 운영 + 소켓 코드 담당 서버 개발자 |
+| 교차 검수 | 장애 대응 책임자(인시던트 커맨더) |
+
+## 주 담당을 바꾼 원인 (6개)
+
+| 원인 | 전 → 후 | 이유 |
+|---|---|---|
+| isp-distance (물리적 거리) | 네트워크 → 서버 인프라 | 엣지 거점은 우회만 줄이고, 근본 해결은 지역 서버 |
+| so-backlog, rt-syn (접속 대기열 넘침) | 서버 인프라 → 서버 개발 | 실제 한도는 listen 인자와 somaxconn 중 작은 쪽이고, 넘치는 원인은 accept 루프가 느린 것 |
+| db-redis-block (Redis 막힘) | DB 인프라 → 서버 개발 | KEYS·큰 키 명령은 게임 코드가 보냄(쿼리 설계와 같은 기준) |
+| pt-vram (두 클라이언트 VRAM 부족) | 외부 → 클라이언트 | 같은 원인인 co-vram과 맞춤. 엔진의 메모리 예산 관리로 없앨 수 있음 |
+| rt-mapping (NAT·LB 매핑 만료) | 서버 → 클라이언트 | 집 공유기·통신사 NAT는 안쪽에서 나가는 패킷으로만 확실히 갱신되어 하트비트를 클라이언트가 보내야 함 |
+
+## 검수로 정한 규칙
+
+- **하트비트**: 클라이언트가 가장 짧은 유휴 타임아웃의 절반 이하 간격으로 보내고 끊기면 자동 재접속, 서버는 응답하고 일정 시간 못 받으면 먼저 정리한 뒤 세션 토큰으로 이어 받음(RFC 4787). 관련 원인 10여 개를 같은 문구로 맞춤.
+- **클라우드**: 보안 그룹·ENI 연결 추적은 서버 인프라, 네트워크 ACL·VPC 라우팅·클라우드 로드밸런서는 네트워크.
+- **같은 팀 두 담당**: 한 칸에 “주 담당 먼저”로 접두어를 붙임(예: “서버: …. 클라이언트: ….”).
+- **디스크 원인**: 게임 서버 디스크와 DB 디스크 모두에서 생기는 원인은 서버 인프라가 주 담당, DB 장비가 함께.
+
+## 바로잡은 주요 내용
+
+- 07장 경계표가 “완화는 게임팀, 근본 해결은 인프라팀”이라는 틀이라 접속 대기열 넘침·유휴 끊김 티켓이 인프라팀으로 갔습니다. 행마다 카드의 주 담당을 센 “먼저 부를 곳” 배지로 바꾸고 9개 행을 카드 내용에 맞춰 다시 썼습니다.
+- 두 팀이 짝을 이뤄야만 성립하는 조치를 보탰습니다: 재접속(클라이언트), QUIC 연결 마이그레이션의 로드밸런서 라우팅(네트워크), 보안 그룹·네트워크 ACL의 ICMP 허용, 코드의 버퍼 크기가 넘지 못하는 rmem_max, UDP 추적 시간 최대 180초, ACK는 기준을 적용한 뒤 보내기, 예측 보정 뒤 재조정.
+- 새로 넣은 조치의 사실 오류를 고쳤습니다: JDK 27(JEP 523, 2026년 9월)부터 작은 컨테이너도 기본 GC가 G1, 핫 리로드는 미리 읽고 틱 사이에 한 번에 교체, 중복 지급은 주 DB의 한 트랜잭션으로 막기, 덤프 중에는 같은 포트로 새 프로세스를 못 띄움, TCP_RTO_MAX_MS를 낮추면 포기 시간도 짧아짐, WIFI_MODE_FULL_LOW_LATENCY는 안드로이드 10 이상·포그라운드 조건.
+- 넘길 때 챙길 정보에 끊긴 사람의 IP·포트·프로토콜, 끊김 사유, 하트비트 간격, 장비 타임아웃·한도, 예정 작업, 통신사·클라우드 문의 번호, 임시 조치와 되돌릴 시점을 더했습니다.
+
+## 결과
+
+주 담당 기준으로 게임개발팀 132개(클라이언트 39, 서버 93), 인프라팀 59개(네트워크 23, 서버 장비·OS 30, DB 장비 6), 외부 25개입니다. 두 팀 모두 할 일이 있는 원인은 88개입니다. 진단 도우미의 “먼저 확인할 곳”을 8개 시나리오로 확인했고, 모두 장애 대응 책임자가 먼저 부를 팀을 가리켰습니다.
+
+## 영역별 상세
+
+### 클라이언트·기기·집 네트워크·통신사
+
+| 심각도 | 원인 id | 문제 | 조치 |
+|---|---|---|---|
+| 오류 | isp-distance | 엣지는 우회만 줄임, 근본은 지역 서버 | net → sys 주 담당 |
+| 오해 소지 | co-power | 전원 연결은 노트북만, 외장 GPU 요청 대상 | NvOptimusEnablement·AmdPowerXpressRequestHighPerformance, 윈도우 그래픽 설정 안내 |
+| 오해 소지 | isp-cgnat | "타임아웃보다 짧게" → 절반 이하, 세션 토큰, 모바일 대역 연결 제한 예외 | 수정 |
+| 누락 | co-netswitch | QUIC 마이그레이션은 LB가 연결 ID로 라우팅해야 | net 추가 |
+| 누락 | isp-vpn | 터널 MTU, 공용 주소 차단 | srv 추가 |
+| 누락 | co-driver, co-wifi-scan | 게임 쪽 조치 | cli 추가 (WIFI_MODE_FULL_LOW_LATENCY, WlanSetInterface) |
+| 누락 | hn-5g-flip | 게임 완화책 | cli 추가 |
+| 누락 | isp-bgp | BGP 홀드 타임, BFD | 추가 |
+| 표현 | isp-ecmp, hn-nat | 통계 방법, 클라이언트가 보내는 이유(RFC 4787) | 보강 |
+| 유지 | hn-nat·isp-cgnat(cli), hn-rrc, co-power(ext), co-netswitch(srv), isp-peak(net)·isp-cable(ext), co-vram(cli) | 근거 맞음 | 유지 |
+
+### 데이터센터 장비·NIC·서버 OS·소켓
+
+| 심각도 | 원인 id | 문제 | 조치 |
+|---|---|---|---|
+| 오해 소지 | so-backlog | 한도는 listen 값과 somaxconn 중 작은 쪽, 원인은 accept보다 빠른 몰림 → sys 주 담당이면 티켓이 되돌아옴 | ['srv','sys','cli'] |
+| 누락 | dc-lb-idle | 재접속은 클라이언트, 끊긴 연결 정리 없음 | cli 추가, 서버 정리 |
+| 누락 | dc-cloud-conntrack | 재접속, UDP 180초 최대, NLB 경유는 추적됨 | cli 추가, 한계 명시 |
+| 누락 | dc-mtu | 보안 그룹 ICMP 허용, tcp_mtu_probing 한계 | 추가 |
+| 누락 | nic-cloud-pps | conntrack 한도 회피 방법 | 추가 |
+| 오해 소지 | so-sockbuf | SO_RCVBUF도 rmem_max를 못 넘음 | 추가 |
+| 표현 | so-fd | EMFILE 대응 모호 | 구체화 |
+| 누락 | so-steal | 중지 후 재시작 | 추가 |
+| 표현 | nic-irq | rx-flow-hash 인자 | udp4 sdfn |
+| 유지 | dc-cloud-conntrack·nic-cloud-pps(sys), dc-microburst·nic-saturate(srv), so-oom·so-timejump(srv), sk-keepalive(srv), sk-slowstart·sk-congestion(sys), nic-noisy·so-steal(ext) | 근거 맞음 | 유지 |
+| 유지 | 사실 확인 | UDP 1,200바이트, 175/90초, 설정 이름 | 맞음 |
+
+### 서버 프로세스·메모리·디스크·DB·서버 구성
+
+| 심각도 | 원인 id | 문제 | 조치 |
+|---|---|---|---|
+| 오류 | mem-gc | JDK 27(JEP 523, 2026-09 GA)부터 작은 컨테이너도 기본 G1 | "JDK 26 이하" 조건, GC 직접 지정 (조율자가 JEP 523 확인) |
+| 오류 | in-deploy | 핫 리로드 나눠 읽기는 데이터 섞임, JIT 워밍업은 코드 몫 | 미리 읽고 틱 사이 교체, 준비 완료 알림 뒤 트래픽 |
+| 오해 소지 | db-replica-lag | 주 DB 읽기만으로는 동시 요청 중복 지급 못 막음 | 한 트랜잭션(유니크 키·조건부 UPDATE), 복제본 사양·병렬 복제 |
+| 오해 소지 | dk-coredump | 덤프 중 같은 포트로 새 프로세스 불가 | 덤프 압축·업로드는 재시작 뒤 |
+| 주 담당 변경 | db-redis-block | KEYS·큰 키는 코드가 보냄 | dba → srv |
+| 누락 | dk-burst, dk-hdd, dk-fsync, dk-iops | DB 디스크 몫 | dba 추가 |
+| 누락 | db-no-index | 운영 DB 적용 담당 | 온라인 방식 적용 |
+| 표현 | db-long-tx, db-deadlock, in-bots | 칸 위치, MySQL 명시, IP 제한 단서 | 수정 |
+| 유지 | db-plan-flip, db-replica-lag, in-deploy, in-clock-skew, dk-full, sp-lock 등 | 근거 맞음 | 유지 |
+
+### 동기화 설계·일부만 생기는 렉
+
+| 심각도 | 원인 id | 문제 | 조치 |
+|---|---|---|---|
+| 오류 | pt-vram | 주 담당 외부 → co-vram(클라이언트)과 어긋남 | ['cli','ext'] |
+| 오해 소지 | sy-request-response | 서버 검증·클라 재조정 모호 | 구체화 |
+| 오해 소지 | sy-lockstep | P2P 호스트 일이 서버 칸 | 클라이언트 칸으로 |
+| 오해 소지 | sy-no-queue | 입력을 들고 있다가 보내는 구현 오해 | "받아 바로 서버에 보내는" |
+| 누락 | pt-baseline | ACK는 적용 뒤에 | 추가 |
+| 누락 | sy-optimistic-reject | 서버의 거절 줄이기 조치 | 핑만큼 여유 |
+| 누락 | sy-host | 클라이언트 측정값 전송 | 추가 |
+| 표현 | pt-phase | QA 체크리스트 위치 | 유지 |
+| 표현 | 칸 안 순서 | 클라이언트 먼저 vs 주 담당 먼저 | 편집 책임자 결정 |
+| 유지 | pt-background, pt-priority, pt-session-key, sy-lockstep, sy-chatty, sy-short-window, sy-host, pt-slow-burst, pt-isp-validation, pt-heavy-char, pt-loading-drop | 맞음 | 유지 |
+
+### TCP 재전송
+
+| 심각도 | 원인 id | 문제 | 조치 |
+|---|---|---|---|
+| 오류 | rt-mapping | 재접속인데 cli 없음, 보안 그룹이 net 칸 | cli 추가, 칸 정리 |
+| 오류 | rt-wireless | infra 칸 문장이 game 칸과 모순 | 정정, RACK·TLP 기본값 |
+| 오해 소지 | rt-mtu | 추적 연결은 PMTUD ICMP 자동 허용, 막는 곳은 네트워크 ACL | net 칸에 ACL ICMP 3/4 |
+| 오해 소지 | rt-rto-setting | RTO_MAX 낮추면 포기 시간도 짧아짐 | TCP_USER_TIMEOUT 함께 |
+| 오해 소지 | rt-spurious-delay | WIFI_MODE_FULL_LOW_LATENCY 조건 | API 29+, 포그라운드 등 |
+| 오해 소지 | rt-syn | so-backlog와 맞춤 | sys → srv 주 담당 |
+| 오해 소지 | rt-burst | 셰이퍼가 장비로 읽힘 | 서버 OS tc |
+| 누락 | rt-path, rt-zero-window, rt-wireless | srv 통계, sys nstat, NOTSENT_LOWAT | 추가 |
+| 표현 | rt-thin, rt-queue-drop | 접두어, 문장 | 수정 |
+| 유지 | rt-policer, rt-spurious-delay, rt-zero-window, rt-host-drop, rt-queue-drop, rt-thin, rt-mapping | 근거 맞음 | 유지 |
+
+### 교차 검수
+
+| 심각도 | 위치 | 문제 | 조치 |
+|---|---|---|---|
+| 오류 | dc-lb-idle, dc-cloud-conntrack | 서버가 하트비트를 보냄(규칙과 반대) | 표준 문구, cli·srv |
+| 오류 | sk-keepalive | cli 없음 | 추가 |
+| 오류 | 07장 경계표 | "완화=게임, 근본=인프라" 틀 때문에 backlog·유휴 끊김이 인프라로 | 제목·열 변경, 카드 기준 "먼저" 배지, 9행 재작성 |
+| 오류 | causes-4·5 18칸 | 접두어 순서 | own 순서로 |
+| 오해 소지 | rt-mapping infra | 보안 그룹이 net 칸 | sys 추가·분리 |
+| 오해 소지 | hn-nat, isp-cgnat, sk-rto, co-mobile-bg, co-netswitch | 표준 문구·용어 | 통일 |
+| 누락 | dc-firewall, dc-failover | 재접속 폭주·분산 | cli 추가 |
+| 누락 | dc-mtu | srv, 네트워크 ACL | 추가 |
+| 누락 | rt-stateful-fw | 게임 쪽 조치 | srv 추가 |
+| 누락 | rt-syn, so-backlog | cli, SYN 쿠키 | 추가 |
+| 누락 | rt-queue-drop | 게임 쪽 완화 | cli 추가 |
+| 표현 | rt-policer | 한 틱 메시지 합치기 | 추가 |
+| 표현 | data.js·07장 팀 표 | 클라우드·하트비트·accept 범위 | 보강 |
+| 표현 | 07장 넘길 정보 | 담당 판정 정보 | 추가, 두 팀 공통 문단 |
+| 유지 | 짝 원인들 | 근거 맞음 | 유지 |
