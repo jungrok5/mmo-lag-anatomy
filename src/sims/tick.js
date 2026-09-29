@@ -49,7 +49,7 @@ K.register('tick', function (root) {
   const g2 = K.group(F.controls, '서버 설계');
   const cHz = K.choice(g2, {
     label: '틱 목표', value: P.hz, options: [[10, '10Hz'], [20, '20Hz'], [30, '30Hz'], [60, '60Hz']],
-    onChange: v => { P.hz = +v; }, hint: 'MMO 필드는 보통 10~20Hz, 대전·액션 게임은 30~60Hz',
+    onChange: v => { P.hz = +v; }, hint: 'MMO 필드는 흔히 10~20Hz(EVE Online은 1Hz), 대전·액션 게임은 30~60Hz(VALORANT는 128Hz)',
   });
   const cAoi = K.choice(g2, {
     label: '시야(AOI) 계산', value: P.aoi, options: [['brute', '전원끼리 비교 (N²)'], ['grid', '격자로 나눠 근처만']],
