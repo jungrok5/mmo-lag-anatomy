@@ -24,7 +24,8 @@ def read(rel):
 
 def core_js():
     causes = sorted(p.relative_to(SRC).as_posix() for p in (SRC / "js").glob("causes-*.js"))
-    return CORE_JS + causes + ["js/glossary.js"]
+    refs = sorted(p.relative_to(SRC).as_posix() for p in (SRC / "js").glob("refs-*.js"))
+    return CORE_JS + causes + refs + ["js/glossary.js"]
 
 
 def sim_files():

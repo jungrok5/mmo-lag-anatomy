@@ -170,4 +170,7 @@ window.DATA = {
   ],
   causes: [],
   glossary: [],
+  /* 장별 출처. src/js/refs-*.js 가 장 id(basics, l-socket …)마다 [{ t: 제목, u: 주소, p: 발행처, n: 무엇의 근거인지 }] 를 넣는다.
+     원인 항목의 출처는 각 항목의 ref 배열(같은 모양)에 둔다. */
+  secRefs: {},
 };

@@ -31,6 +31,8 @@
     const o = OWN[id]; if (!o) return '';
     return `<span class="own own-${o.team}" title="${esc(o.name + ': ' + o.desc)}"><span class="tm">${TEAMS[o.team].name}</span>${o.short}</span>`;
   };
+  // 출처 목록: [{ t: 제목, u: 주소, p: 발행처, n: 무엇의 근거인지 }]
+  const refList = refs => `<ul class="refs">${refs.map(r => `<li><a href="${esc(r.u)}" target="_blank" rel="noopener noreferrer">${esc(r.t)}</a>${r.p ? ` <span class="rp">${esc(r.p)}</span>` : ''}${r.n ? `<span class="rn">${esc(r.n)}</span>` : ''}</li>`).join('')}</ul>`;
   const ownRow = c => {
     if (!c.own || !c.own.length) return '';
     const rest = c.own.slice(1);
@@ -137,6 +139,7 @@
       c.num ? `<dt>수치 감각</dt><dd>${c.num}</dd>` : '',
       acts || (c.fix ? `<dt>대응</dt><dd>${c.fix}</dd>` : ''),
       c.more ? `<dt>더 알아보기</dt><dd>${c.more}</dd>` : '',
+      c.ref && c.ref.length ? `<dt>출처</dt><dd>${refList(c.ref)}</dd>` : '',
     ].join('');
     return `<article class="cause" id="c-${c.id}">
       <div class="cause-top"><h4>${c.t}<span class="en">${esc(c.en)}</span></h4><div class="chips">${c.sym.map(s => symChip(s)).join('')}</div></div>
@@ -148,7 +151,7 @@
       </div>
       ${ownRow(c)}
       <div class="cause-meta">${meta}</div>
-      ${dl ? `<details><summary>수치 감각과 팀별 대응</summary><div class="more"><dl>${dl}</dl></div></details>` : ''}
+      ${dl ? `<details><summary>수치 감각과 팀별 대응${c.ref && c.ref.length ? ' · 출처' : ''}</summary><div class="more"><dl>${dl}</dl></div></details>` : ''}
     </article>`;
   }
   $$('[data-causes]').forEach(box => { box.innerHTML = (byLayer[box.dataset.causes] || []).map(causeHTML).join(''); });
@@ -442,6 +445,13 @@
     draw();
   });
 
+  /* ---------------- 장별 출처 ---------------- */
+  Object.entries(D.secRefs || {}).forEach(([id, refs]) => {
+    const sec = document.getElementById(id);
+    if (!sec || !refs || !refs.length) return;
+    sec.append(K.el('details', { class: 'sec-refs', html: `<summary>이 장의 출처 <span class="mono">${refs.length}</span></summary>${refList(refs)}` }));
+  });
+
   /* ---------------- 제보 가이드 ---------------- */
   $('#report-cols').innerHTML = D.report.map(g => `<div class="analogy" style="grid-template-columns:1fr;max-width:none"><span class="tag">${g.title}</span><ol style="margin:0;padding-left:1.2em;display:grid;gap:6px;font-size:15px">${g.items.map(i => `<li>${i}</li>`).join('')}</ol></div>`).join('');
 
@@ -449,6 +459,30 @@
   const gl = $('#gloss');
   gl.innerHTML = D.glossary.map(([k, en, d, sec]) =>
     `<div data-q="${esc((k + ' ' + en + ' ' + d).toLowerCase())}"><dt>${k}<span class="en">${esc(en)}</span></dt><dd>${d}${sec ? ` <a href="#${sec}">관련 장 →</a>` : ''}</dd></div>`).join('');
+  /* ---------------- 참고 문헌: 원인 카드와 장별 출처를 주소 기준으로 모은다 ---------------- */
+  (function () {
+    const box = $('#ref-list'); if (!box) return;
+    const all = new Map();
+    const add = (r, where) => {
+      if (!r || !r.u) return;
+      const k = r.u.replace(/#.*$/, '').replace(/\/$/, '');
+      if (!all.has(k)) all.set(k, { t: r.t, u: r.u, p: r.p || '기타', at: [] });
+      const e = all.get(k);
+      if (!e.at.some(w => w.href === where.href)) e.at.push(where);
+    };
+    D.causes.forEach(c => (c.ref || []).forEach(r => add(r, { href: '#c-' + c.id, label: c.t })));
+    Object.entries(D.secRefs || {}).forEach(([id, refs]) => {
+      const h = document.querySelector('#' + id + ' h2');
+      refs.forEach(r => add(r, { href: '#' + id, label: (h ? h.textContent : id) + ' (장)' }));
+    });
+    if (!all.size) { box.innerHTML = '<p class="note">아직 등록된 출처가 없습니다.</p>'; return; }
+    const groups = {};
+    all.forEach(e => { (groups[e.p] = groups[e.p] || []).push(e); });
+    const order = Object.keys(groups).sort((a, b) => groups[b].length - groups[a].length || a.localeCompare(b, 'ko'));
+    box.innerHTML = `<p class="note">자료 ${all.size}건, 발행처 ${order.length}곳</p>` + order.map(p => `<h3 class="ref-pub">${esc(p)} <span class="mono">${groups[p].length}</span></h3><ul class="refs bib">${groups[p].sort((a, b) => a.t.localeCompare(b.t, 'ko')).map(e =>
+      `<li><a href="${esc(e.u)}" target="_blank" rel="noopener noreferrer">${esc(e.t)}</a><details><summary>인용 ${e.at.length}곳</summary>${e.at.map(w => `<a href="${w.href}">${w.label}</a>`).join(' · ')}</details></li>`).join('')}</ul>`).join('');
+  })();
+
   $('#gloss-q').addEventListener('input', e => {
     const q = e.target.value.trim().toLowerCase();
     $$('div[data-q]', gl).forEach(d => { d.hidden = q && !d.dataset.q.includes(q); });
