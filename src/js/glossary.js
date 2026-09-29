@@ -33,7 +33,7 @@ DATA.glossary = [
   ['RTO', 'Retransmission timeout', '재전송 타이머. TCP가 패킷을 잃었다고 판단하고 다시 보내기까지 기다리는 시간. 리눅스는 핑 + 200ms 이상, 실패할수록 두 배.', 'l-socket'],
   ['Nagle 알고리즘', 'Nagle’s algorithm', '앞서 보낸 데이터의 확인(ACK)이 올 때까지 작은 데이터를 모아 두었다가 한 번에 보내, 패킷 수를 아끼는 TCP 기능. 게임에서는 대개 꺼야 합니다.', 'l-socket'],
   ['TCP_NODELAY', 'TCP_NODELAY', 'Nagle 알고리즘을 끄는 소켓 옵션. 작은 메시지를 즉시 보냅니다.', 'l-socket'],
-  ['지연 ACK', 'Delayed ACK', '받았다는 확인을 조금 늦게, 다른 데이터와 묶어 보내는 기능. 리눅스는 보통 40ms(최대 200ms), 윈도우는 200ms.', 'l-socket'],
+  ['지연 ACK', 'Delayed ACK', '받았다는 확인을 조금 늦게, 다른 데이터와 묶어 보내는 기능. 리눅스는 보통 40ms(최대 200ms), 윈도우는 예전 버전이 200ms이고 요즘 버전은 40ms.', 'l-socket'],
   ['소켓 버퍼', 'SO_SNDBUF / SO_RCVBUF', 'OS가 소켓마다 두는 송신·수신 대기 공간의 크기. 너무 작으면 넘치고, 너무 크면 오래된 데이터가 쌓여 기다립니다.', 'l-socket'],
   ['keepalive', 'SO_KEEPALIVE', '유휴 연결이 살아 있는지 확인하는 TCP 기능. 기본으로 꺼져 있고, 켜도 기본값은 2시간 뒤에야 확인합니다.', 'l-socket'],
   ['RST', 'TCP reset', '연결을 그 자리에서 강제로 끊는 TCP 신호. 아직 못 보낸 데이터는 버려집니다.', 'l-socket'],

@@ -424,7 +424,7 @@
 
     function item(c, team) {
       const act = c.act && c.act[team];
-      return `<li><div class="own-li-top"><a href="#c-${c.id}">${c.t}</a>${ownBadge(c.own[0])}</div>${act ? `<div class="own-act">${act}</div>` : `<div class="own-act note">이 팀의 할 일은 없고, ${TEAMS[leadTeam(c)].name}이 처리합니다.</div>`}</li>`;
+      return `<li><div class="own-li-top"><a href="#c-${c.id}">${c.t}</a>${ownBadge(c.own[0])}</div>${act ? `<div class="own-act">${act}</div>` : `<div class="own-act note">이 팀의 할 일은 없고, ${TEAMS[leadTeam(c)].name}에서 처리합니다.</div>`}</li>`;
     }
     function draw() {
       $$('button[data-l]', matWrap).forEach(b => b.classList.toggle('on', !!st.cell && b.dataset.l === st.cell.layer && b.dataset.o === st.cell.owner));

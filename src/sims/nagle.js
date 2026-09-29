@@ -8,7 +8,7 @@ K.register('nagle', function (root) {
     lead: 'TCP에는 “작은 패킷은 모았다가 한 번에 보내자”는 <b>Nagle 규칙</b>과, “ACK(수신 확인)는 조금 미뤘다가 응답에 실어 보내자”는 <b>지연 ACK</b>가 기본으로 켜져 있습니다. 둘 다 패킷 수를 아끼려는 규칙입니다. 그런데 게임 메시지를 헤더와 본문으로 나눠 쓰면, 두 규칙이 서로를 기다리느라 메시지마다 수십~수백 ms를 그냥 버립니다.',
     tries: [
       '처음 화면(리눅스 기본값 + 나눠 쓰기)에서 오른쪽 막대를 보세요. 핑은 20ms인데 응답은 80ms 넘게 걸립니다.',
-      '<b>지연 ACK</b>를 200ms(윈도우)로 바꿔 보세요. 메시지마다 200ms 넘게 늦어집니다. 받는 쪽이 윈도우일 때 생기는 입력 지연입니다. 서버가 Nagle을 켠 채 보내고 윈도우 PC가 받는 반대 방향에서도 똑같이 생깁니다.',
+      '<b>지연 ACK</b>를 200ms(예전 윈도우)로 바꿔 보세요. 메시지마다 200ms 넘게 늦어집니다. 받는 쪽이 예전 윈도우일 때 생기는 입력 지연입니다. 서버가 Nagle을 켠 채 보내고 예전 윈도우 PC가 받는 반대 방향에서도 똑같이 생깁니다.',
       '<b>TCP_NODELAY</b>를 켜 보세요. 헤더와 본문이 바로 연달아 나가고 노란 기다림이 사라집니다.',
       '<b>메시지 쓰는 방식</b>을 “한 번에 쓰기”로 바꿔도 풀립니다. 대기할 작은 패킷이 생기지 않기 때문입니다.',
       '“작은 이동 명령 연속”에서 NODELAY를 껐다 켜며 <b>초당 패킷 수</b>와 응답 시간을 비교하세요. Nagle이 무엇을 아끼고 무엇을 버리는지 보입니다.',
@@ -54,7 +54,7 @@ K.register('nagle', function (root) {
   const g2 = K.group(F.controls, '운영체제와 회선');
   const cAck = K.choice(g2, {
     label: '서버의 지연 ACK', value: P.delack,
-    options: [[0, '끔'], [40, '40ms 리눅스'], [200, '200ms 윈도우']],
+    options: [[0, '끔'], [40, '40ms 리눅스'], [200, '200ms 예전 윈도우']],
     onChange: v => { P.delack = +v; rerun(); },
     hint: '보낼 응답이 없으면 ACK를 이만큼 미뤘다가 따로 보냅니다.',
   });
@@ -339,7 +339,7 @@ K.register('nagle', function (root) {
   }
   K.presets(F, [
     { label: '기본값 + 나눠 쓰기 (리눅스)', apply() { setAll('split', false, 40, 20); } },
-    { label: '기본값 + 나눠 쓰기 (윈도우 서버)', apply() { setAll('split', false, 200, 20); } },
+    { label: '기본값 + 나눠 쓰기 (예전 윈도우)', apply() { setAll('split', false, 200, 20); } },
     { label: 'TCP_NODELAY 켬', apply() { setAll('split', true, 40, 20); } },
     { label: '한 번에 쓰기', apply() { setAll('one', false, 40, 20); } },
     { label: '작은 이동 명령 연속', apply() { setAll('small', false, 40, 60); } },

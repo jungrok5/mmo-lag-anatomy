@@ -314,7 +314,7 @@
               <tr><td>스위치·라우터·방화벽</td><td>포트의 CRC·입력 오류, 출력 드롭, 폴리서 초과, 세션 테이블 사용량, 드롭 로그</td><td>데이터센터 장비 구간에서 버렸는지. 5분 평균 사용률이 낮은데 출력 드롭이 늘면 마이크로버스트(아주 짧은 순간의 트래픽 몰림)</td></tr>
               <tr><td>경로</td><td><code>mtr</code>·<code>pathping</code>으로 끝까지 이어지는 손실. 수백 번 이상 보내야 1% 안팎의 손실이 보이고, 게임과 같은 TCP 포트로 보내면(<code>mtr -T -P 포트</code>) 더 정확합니다</td><td>몇 번째 구간부터 손실이 시작되는지. 중간 한 구간만 손실로 보이고 뒤는 멀쩡하면 그 장비가 측정용 응답(ICMP)을 제한하는 것일 뿐입니다. 오가는 경로가 다를 수 있어 서버 쪽에서 유저 쪽으로도 측정합니다</td></tr>
               <tr><td>패킷 캡처 (양쪽 끝)</td><td>Wireshark 필터 <code>tcp.analysis.retransmission</code>, 같은 <code>tcp.analysis.</code> 계열의 fast_retransmission, spurious_retransmission, duplicate_ack, lost_segment, zero_window</td><td>원본 패킷이 보낸 쪽 캡처에는 있고 받은 쪽에는 없으면 그 사이에서 잃은 것. 받은 쪽에도 있으면 불필요한 재전송이거나 ACK가 돌아오다 늦거나 사라진 것. 받는 서버의 링 버퍼에서 버린 패킷도 캡처에는 “사이에서 잃음”으로 보이니 네트워크 카드 카운터와 함께 봅니다</td></tr>
-              <tr><td>윈도우 서버</td><td>성능 모니터의 <code>TCPv4\Segments Retransmitted/sec</code> ÷ <code>Segments Sent/sec</code>, <code>Network Interface\Packets Received Discarded</code>, <code>netsh int tcp show global</code>, <code>pktmon</code>(빌드 19041 이상에 내장: 윈도우 10 2004·서버 2022 이후)</td><td>재전송률 추이, 네트워크 카드가 받자마자 버렸는지, TCP 설정, 윈도우 안 어디에서 버렸는지</td></tr>
+              <tr><td>윈도우 서버</td><td>성능 모니터의 <code>TCPv4\Segments Retransmitted/sec</code> ÷ <code>Segments Sent/sec</code>, <code>Network Interface\Packets Received Discarded</code>, <code>netsh int tcp show global</code>, <code>pktmon</code>(윈도우 10 1809·서버 2019 이상에 내장)</td><td>재전송률 추이, 네트워크 카드가 받자마자 버렸는지, TCP 설정, 윈도우 안 어디에서 버렸는지</td></tr>
             </tbody>
           </table>
         </div>
@@ -379,7 +379,7 @@
               <tr><td><code>net.ipv4.tcp_thin_linear_timeouts</code> / <code>TCP_THIN_LINEAR_TIMEOUTS</code></td><td>커널 설정 / 소켓 옵션</td><td>아직 ACK를 받지 못한 패킷(in-flight)이 4개 미만인 연결은 RTO를 처음 6번까지 두 배로 늘리지 않음</td><td>기본은 꺼짐. 소켓 옵션으로 게임 연결에만 켤 수 있음. 첫 RTO를 줄이지는 않음</td></tr>
               <tr><td><code>TCP_RTO_MAX_MS</code> / <code>net.ipv4.tcp_rto_max_ms</code></td><td>소켓 옵션 / 커널 설정 (리눅스 6.15 이상)</td><td>두 배씩 늘어나는 RTO의 상한(기본 120초)을 낮춤. 최소 1초</td><td>연속 손실 뒤 RTO가 수십 초로 커지지 않게 함. 죽은 연결 판정도 함께 빨라짐</td></tr>
               <tr><td><code>net.ipv4.tcp_mtu_probing</code></td><td>커널 설정</td><td>큰 패킷이 계속 사라지면 크기를 줄여 MTU 블랙홀을 통과</td><td>기본 0(꺼짐). 1 = 재전송이 3초쯤 이어져 블랙홀이 의심될 때만 줄임(그동안은 멈춤). 2 = 처음부터 1,024바이트로 시작해 조금씩 키워 봄</td></tr>
-              <tr><td><code>ip route … rto_min</code></td><td>경로 설정</td><td>그 경로의 RTO 최소값(기본 200ms)을 낮춤</td><td>서버끼리의 내부망에만. 인터넷 구간에 낮추면 불필요한 재전송이 늘어남. 리눅스 6.11 이상의 <code>net.ipv4.tcp_rto_min_us</code>는 서버 전체 값이라 인터넷 연결까지 함께 바뀜</td></tr>
+              <tr><td><code>ip route … rto_min</code></td><td>경로 설정</td><td>그 경로의 RTO 최소값(기본 200ms)을 낮춤</td><td>서버끼리의 내부망에만. 인터넷 구간에 낮추면 불필요한 재전송이 늘어남. 리눅스 6.11 이상의 <code>net.ipv4.tcp_rto_min_us</code>는 서버 전체 값이라 인터넷 연결까지 함께 바뀜. 6.15 이상은 소켓 옵션 <code>TCP_RTO_MIN_US</code>로 내부 연결에만 낮출 수 있음</td></tr>
               <tr><td><code>TCP_USER_TIMEOUT</code></td><td>소켓 옵션</td><td>재전송이 이어질 때 연결을 포기하기까지의 시간</td><td>복구를 빠르게 하지는 않음. 죽은 연결을 빨리 끊고 재접속하게 함. 설정하지 않으면 리눅스는 재전송을 15번 안팎, 약 15분 이어간 뒤에야 끊음(<code>tcp_retries2</code>)</td></tr>
               <tr><td><code>SO_KEEPALIVE</code> + <code>TCP_KEEPIDLE</code> 등</td><td>소켓 옵션</td><td>유휴 연결이 살아 있는지 확인</td><td>재전송과 별개. NAT·LB 매핑 유지와 죽은 연결 감지용</td></tr>
               <tr><td><code>fq</code> 큐 + <code>SO_MAX_PACING_RATE</code>, BBR</td><td>큐 설정 / 소켓 옵션 / 커널 설정</td><td>패킷을 고르게 나눠 보내 버스트(한꺼번에 몰아 보냄)로 인한 손실을 줄임</td><td>손실을 “예방”하는 쪽. 복구 속도와는 별개</td></tr>
