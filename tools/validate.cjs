@@ -1,4 +1,5 @@
 const fs = require('fs'), vm = require('vm');
+process.chdir(require('path').join(__dirname, '..'));   // 어느 폴더에서 실행해도 저장소 기준 경로로 읽는다
 const ctx = { window: {} }; ctx.window = ctx; vm.createContext(ctx);
 const files = ['src/js/data.js', ...fs.readdirSync('src/js').filter(f => /^causes-\d+\.js$/.test(f)).sort().map(f => 'src/js/' + f), ...fs.readdirSync('src/js').filter(f => /^refs-.+\.js$/.test(f)).sort().map(f => 'src/js/' + f), 'src/js/glossary.js'];
 for (const f of files) vm.runInContext(fs.readFileSync(f, 'utf8'), ctx, { filename: f });

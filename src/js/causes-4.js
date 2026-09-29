@@ -30,7 +30,7 @@
       ] },
     { id: 'sy-no-queue', t: '스킬 선입력 없음', en: 'No input/spell queue',
       s: '앞 스킬이 서버에서 끝났다는 확인을 받아야 다음 스킬을 누를 수 있으면, 연계마다 왕복 시간이 끼어듭니다.',
-      c: ['다음 스킬 입력을 “이전 스킬 확정 후”에만 받음', '스킬 사이마다 핑만큼 빈 시간이 생김', '연계가 뚝뚝 끊기고, 핑이 높을수록 DPS가 줄어듦'],
+      c: ['다음 스킬 입력을 “이전 스킬 확정 후”에만 받음', '스킬 사이마다 핑만큼 빈 시간이 생김', '연계 사이마다 빈틈이 생기고, 핑이 높을수록 DPS가 줄어듦'],
       sym: ['delay', 'dropped'], fx: ['lat'], who: ['me', 'feature'], when: ['action'],
       num: '쿨다운 1초짜리 연계에서 핑 150ms면 스킬 사이마다 0.15초 이상 비어, 같은 시간에 쓰는 스킬이 13% 넘게 줄어듭니다.',
       own: ['cli', 'srv'],
@@ -62,7 +62,7 @@
       sim: 'windows',
       ref: [
         { t: 'Latency Compensating Methods in Client/Server In-game Protocol Design and Optimization (Yahn W. Bernier, GDC 2001)', u: 'https://web.cs.wpi.edu/~claypool/courses/4513-B03/papers/games/bernier.pdf', p: 'Valve', n: '지연 보상이 없으면 지연만큼 앞질러 쏴야 함. 서버가 지연과 보간 시간만큼 되감아 판정하는 지연 보상' },
-        { t: 'Peeking into VALORANT\'s Netcode', u: 'https://www.riotgames.com/en/news/peeking-valorants-netcode', p: 'Riot Games', n: '서버가 사격 순간 플레이어가 보던 세계 상태로 되감아 명중 판정, 클라이언트가 보던 시뮬레이션 시각을 함께 보냄' },
+        { t: 'Peeking into VALORANT\'s Netcode', u: 'https://www.riotgames.com/en/news/peeking-valorants-netcode', p: 'Riot Games', n: '서버가 사격 순간 플레이어가 보던 게임 상태로 되감아 명중 판정, 클라이언트가 보던 시뮬레이션 시각을 함께 보냄' },
         { t: 'Source SDK 2013: player_lagcompensation.cpp', u: 'https://raw.githubusercontent.com/ValveSoftware/source-sdk-2013/master/src/game/server/player_lagcompensation.cpp', p: 'Valve', n: 'Source 엔진의 되감는 시간 = 네트워크 지연 + 보간 시간' },
       ] },
     { id: 'sy-lagcomp-overreach', t: '지연 보상 과다', en: 'Excessive lag compensation',
@@ -70,8 +70,8 @@
       c: ['핑 높은 공격자를 위해 서버가 크게 되감아 판정', '맞는 사람 화면에서는 이미 엄폐한 뒤', '“벽 뒤에서 맞았다”, 핑 높은 사람이 유리'],
       sym: ['dropped'], fx: ['lat'], who: ['me', 'region'], when: ['action'],
       own: ['srv'],
-      act: { game: '되감기 상한 두기(예: 200~250ms), 그보다 핑이 높은 공격자는 되감아 주지 않고 스스로 앞질러 쏘게 두기.' },
-      more: '되감기 판정은 “쏜 사람 우선”입니다. 회피기·방어기를 쓴 직후처럼 맞는 쪽의 행동이 중요한 순간에는 “맞는 쪽 우선”으로 예외를 두는 방식도 제안되어 있습니다.',
+      act: { game: '되감기 상한 두기(예: 200~250ms), 그보다 핑이 높은 공격자는 한도까지만 되감고 나머지는 스스로 앞질러 쏘게 두기.' },
+      more: '되감기 판정은 “쏜 사람 우선”입니다. 맞는 쪽이 자기 화면에서 이미 안전한 곳에 들어갔다면 되감지 않는 “맞는 쪽 우선” 예외도 제안되어 있습니다.',
       sim: 'windows',
       ref: [
         { t: 'Peeking into VALORANT\'s Netcode', u: 'https://www.riotgames.com/en/news/peeking-valorants-netcode', p: 'Riot Games', n: '되감기에 한도가 없으면 지연 500ms인 사람이 엄폐 0.5초 뒤에도 맞힐 수 있어 한도를 둠' },
@@ -87,7 +87,7 @@
       sim: 'syncmodels',
       ref: [
         { t: 'Latency Compensating Methods in Client/Server In-game Protocol Design and Optimization (Yahn W. Bernier, GDC 2001)', u: 'https://web.cs.wpi.edu/~claypool/courses/4513-B03/papers/games/bernier.pdf', p: 'Valve', n: '클라이언트가 결과를 보고하는 방식은 클라이언트를 믿을 수 있을 때만 가능. 해킹 우려로 권위 서버를 둠' },
-        { t: 'Peeking into VALORANT\'s Netcode', u: 'https://www.riotgames.com/en/news/peeking-valorants-netcode', p: 'Riot Games', n: '서버 권위 모델: 서버는 클라이언트가 본 세계를 절대 믿지 않음' },
+        { t: 'Peeking into VALORANT\'s Netcode', u: 'https://www.riotgames.com/en/news/peeking-valorants-netcode', p: 'Riot Games', n: '서버 권위 모델: 서버는 클라이언트가 본 게임 상태를 절대 믿지 않음' },
         { t: 'Distributed authority topologies (Netcode for GameObjects 2.5)', u: 'https://docs.unity3d.com/Packages/com.unity.netcode.gameobjects@2.5/manual/terms-concepts/distributed-authority.html', p: 'Unity', n: '권한을 클라이언트에 나누면 치팅이 쉬워지고 모든 개체를 다스리는 단일 시뮬레이션이 없어짐' },
       ] },
     { id: 'sy-lockstep', t: '락스텝에서 가장 느린 플레이어 대기', en: 'Lockstep waits for the slowest peer',
@@ -120,7 +120,7 @@
       c: ['“공격 시작”, “이펙트 재생” 이벤트를 도착 즉시 실행', '패킷마다 도착 시간이 달라 간격이 들쭉날쭉', '연속 공격 모션이 빨라졌다 느려졌다, 보스 패턴 타이밍이 매번 다름'],
       sym: ['stutter', 'burst'], fx: ['jit'], who: ['me'], when: ['always'],
       own: ['cli', 'srv'],
-      act: { game: '클라이언트: 도착 즉시가 아니라 붙은 시각에 맞춰 재생(이벤트 예약·보간 버퍼). 서버: 이벤트에 발생 시각(서버 시각)을 붙여 보내기.' },
+      act: { game: '클라이언트: 이벤트에 붙은 시각에 맞춰 재생(이벤트 예약·보간 버퍼). 서버: 이벤트에 발생 시각(서버 시각)을 붙여 보내기.' },
       sim: 'windows',
       ref: [
         { t: 'Latency Compensating Methods in Client/Server In-game Protocol Design and Optimization (Yahn W. Bernier, GDC 2001)', u: 'https://web.cs.wpi.edu/~claypool/courses/4513-B03/papers/games/bernier.pdf', p: 'Valve', n: '업데이트마다 서버 시각을 붙이고, 현재 시각에서 보간 시간(100ms)을 뺀 목표 시각의 위치로 그림' },
@@ -180,7 +180,7 @@
       sym: ['teleport', 'rubber'], fx: ['lat'], who: ['zone', 'me'], when: ['moving'],
       own: ['srv', 'cli'],
       act: { game: '서버: 경로의 중간 지점(웨이포인트)까지 함께 보내기, 주기적으로 위치 맞추기. 클라이언트: 어긋남은 부드럽게 수렴, 서버와 같은 지형 데이터 사용.' },
-      more: '클릭 이동·탭 타겟 게임이 핑에 둔감한 이유가 이 방식입니다. 대신 양쪽 결과가 같다는 보장이 없어서, 가끔 위치를 맞춰 주는 장치가 꼭 필요합니다.',
+      more: '클릭 이동·탭 타겟 게임이 핑에 둔감한 이유 중 하나가 이 방식입니다. 대신 양쪽 결과가 같다는 보장이 없어서, 가끔 위치를 맞춰 주는 장치가 꼭 필요합니다.',
       ref: [
         { t: 'Deterministic Lockstep', u: 'https://gafferongames.com/post/deterministic_lockstep/', p: 'Gaffer On Games', n: '같은 기계에서 결정적이어도 컴파일러·OS·CPU가 다르면 부동소수점 결과가 달라질 수 있음' },
         { t: 'State Synchronization', u: 'https://gafferongames.com/post/state_synchronization/', p: 'Gaffer On Games', n: '입력과 함께 상태를 보내면 완벽한 결정성 없이도 양쪽을 맞출 수 있음' },

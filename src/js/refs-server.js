@@ -5,7 +5,7 @@ Object.assign(DATA.secRefs, {
     { t: 'Introducing Time Dilation (TiDi)', u: 'https://www.eveonline.com/news/view/introducing-time-dilation-tidi', p: 'CCP Games', n: 'EVE Online의 물리 시뮬레이션은 1초에 한 번 갱신, 과부하 때 게임 시계를 늦춰 시간에 묶인 부하를 비례해서 줄임' },
     { t: 'HED-GP Technical Retrospective: What a HED-ache', u: 'https://www.eveonline.com/news/view/what-a-hed-ache', p: 'CCP Games', n: 'Time Dilation 하한 10%, n명이 한 행동을 n명에게 알리는 O(n²) 전송이 대규모 전투의 한계 요인' },
     { t: 'Handling variation in time', u: 'https://docs.unity3d.com/Manual/time-handling-variations.html', p: 'Unity', n: '틱 실험의 모델: 고정 간격 진행이 밀리면 따라잡는 단계를 몰아서 돌리고(몰아치기), 한도를 넘긴 시간은 버려 게임 시간이 느려짐(슬로우모션)' },
-    { t: 'Comparing Interest Management Algorithms for Massively Multiplayer Games', u: 'https://www.sable.mcgill.ca/~clump/papers/boulanger-06-comparing.pdf', p: 'ACM', n: 'NetGames 2006 논문(저자 공개본). 모든 쌍의 거리 비교는 인원이 늘면 감당하지 못하고, 격자로 나누면 주변 칸만 확인' },
+    { t: 'Comparing Interest Management Algorithms for Massively Multiplayer Games', u: 'https://www.sable.mcgill.ca/~clump/papers/boulanger-06-comparing.pdf', p: 'ACM', n: 'NetGames 2006 논문(저자 공개본). 모든 쌍의 거리 비교는 인원이 늘면 감당하지 못하고, 격자로 나누면 주변 셀만 확인' },
     { t: 'Replication Graph in Unreal Engine', u: 'https://dev.epicgames.com/documentation/en-us/unreal-engine/replication-graph-in-unreal-engine', p: 'Epic Games', n: '월드를 격자로 나눠 셀별 목록으로 보낼 대상을 고르면 인원·액터가 많아도 서버 CPU를 아낌' },
     { t: 'Amdahl\'s Law in the Multicore Era', u: 'https://research.cs.wisc.edu/multifacet/papers/ieeecomputer08_amdahl_multicore.pdf', p: 'IEEE', n: '락 실험의 처리량 상한: 한 번에 하나만 할 수 있는 비율이 1−f면 속도 향상은 1/(1−f)를 넘지 못함' },
     { t: 'Runtime locking correctness validator', u: 'https://docs.kernel.org/locking/lockdep-design.html', p: 'Linux kernel', n: '락 실험의 데드락: 두 락을 서로 반대 순서로 잡으면 순환 대기로 교착' },

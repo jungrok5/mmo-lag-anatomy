@@ -1,5 +1,5 @@
-// 빌드된 HTML을 헤드리스 크로미움으로 열어 콘솔 오류를 모으고 스크린샷을 남긴다.
-//   NODE_PATH=/opt/node22/lib/node_modules node tools/check.cjs build/sandbox-queue.html [out.png] [width] [--dark] [--full]
+// 빌드된 HTML을 헤드리스 크로미움으로 열어 콘솔 오류를 모으고 스크린샷을 남긴다. 오류나 가로 넘침이 있으면 종료 코드 1.
+//   node tools/check.cjs build/sandbox-queue.html [out.png] [width] [--dark] [--full]
 const { chromium } = require('./pw.cjs');
 const path = require('node:path');
 
@@ -28,7 +28,9 @@ await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
 await page.waitForTimeout(400);
 const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
 if (shot) await page.screenshot({ path: shot, fullPage: flags.has('--full') });
-console.log(JSON.stringify({ file, errors: errors.filter(e => !/fonts\.g|net::ERR|Failed to load resource/.test(e)), horizontalOverflowPx: overflow }, null, 2));
+const shown = errors.filter(e => !/fonts\.g|net::ERR|Failed to load resource/.test(e));
+console.log(JSON.stringify({ file, errors: shown, horizontalOverflowPx: overflow }, null, 2));
 await browser.close();
+process.exitCode = shown.length || overflow > 0 ? 1 : 0;
 
 })();

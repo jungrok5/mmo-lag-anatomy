@@ -128,7 +128,8 @@ K.register('chain', function (root) {
     stC.set(String(c), 'good', `간격 ${K.ms(iv.optimistic)}`);
     const u = uiTimes();
     stUi.set(K.ms(u.seq), u.seq > 600 ? 'bad' : u.seq > 250 ? 'warn' : 'good', `묶으면 ${K.ms(u.batch)}`);
-    let msg = `${K.flag(loss > 0.12 ? 'bad' : loss > 0.05 ? 'warn' : 'good')}핑 ${P.rtt}ms, 쿨다운 ${K.ms(P.gcd)}에서 “확인 후 다음 입력” 방식은 스킬 사이마다 ${K.ms(iv.confirmFirst - P.gcd)}씩 비어 10초에 ${a}번만 씁니다. 같은 사람이 선연출 게임에서는 ${c}번을 씁니다(${Math.round(loss * 100)}% 차이). 플레이어는 이것을 <b>입력 지연</b>과 “손이 굼뜨다”로 느낍니다.`;
+    const perMin = i => Math.round(60000 / i);
+    let msg = `${K.flag(loss > 0.12 ? 'bad' : loss > 0.05 ? 'warn' : 'good')}핑 ${P.rtt}ms, 쿨다운 ${K.ms(P.gcd)}에서 “확인 후 다음 입력” 방식은 스킬 사이마다 ${K.ms(iv.confirmFirst - P.gcd)}씩 비어, 선연출 게임보다 같은 시간에 쓰는 스킬이 ${Math.round(loss * 100)}% 적습니다(1분이면 약 ${perMin(iv.confirmFirst)}번 대 ${perMin(iv.optimistic)}번). 플레이어는 이것을 <b>입력 지연</b>과 “손이 굼뜨다”로 느낍니다.`;
     if (P.queue > 0 && P.queue < P.rtt + tickWait()) msg += ` 선입력 허용 시간(${P.queue}ms)이 핑+틱 대기(${K.ms(P.rtt + tickWait())})보다 짧아 왕복이 일부만 가려집니다.`;
     msg += ` 상점 구매는 왕복 ${P.trips}번이 이어져 ${K.ms(u.seq)} 걸립니다. 요청을 한 번에 묶으면 ${K.ms(u.batch)}, 목록을 미리 받아 두면 누르는 즉시 반응합니다.`;
     F.say(msg);

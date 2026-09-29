@@ -2,7 +2,7 @@
    본문·표, 시간 감각 표(DATA.times)·증상 정의(DATA.symptoms), 시뮬레이션 lab·queue·syncmodels·windows·chain·oneslow·npcmissing 의 근거. */
 Object.assign(DATA.secRefs, {
   'basics': [
-    { t: 'Teletraffic Engineering Handbook (ITU-D Study Group 2 Question 16/2)', u: 'https://www.itu.int/dms_pub/itu-d/opb/stg/D-STG-SG02.16.2.1-2002-PDF-E.pdf', p: 'ITU', n: 'M/M/1 평균 대기 W = A·s/(1−A): 이용률 50%·80%·90%에서 처리 시간의 1·4·9배. 같은 이용률이면 창구가 많을수록, 도착이 고를수록 대기가 짧음' },
+    { t: 'Teletraffic Engineering Handbook (ITU-D Study Group 2 Question 16/2)', u: 'https://www.itu.int/dms_pub/itu-d/opb/stg/D-STG-SG02.16.2.1-2002-PDF-E.pdf', p: 'ITU', n: 'M/M/1 평균 대기 W = A·s/(1−A): 이용률 50%·80%·90%에서 처리 시간의 1·4·9배. 같은 이용률이면 워커(서버)가 많을수록, 도착이 고를수록 대기가 짧음' },
     { t: 'CloudWatch metrics that are available for your instances', u: 'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/viewing_metrics_with_cloudwatch.html', p: 'AWS', n: 'EC2 CPUUtilization은 인스턴스 전체 값이며 기본 5분, 상세 모니터링 1분 단위로 집계' },
     { t: 'Designs, Lessons and Advice from Building Large Distributed Systems (Jeff Dean, LADIS 2009 keynote)', u: 'https://www.cs.cornell.edu/projects/ladis2009/talks/dean-keynote-ladis2009.pdf', p: 'Google', n: '메인 메모리 참조 100ns, 같은 데이터센터 안 왕복 500,000ns(0.5ms)' },
     { t: 'ITU-T G.114: One-way transmission time', u: 'https://www.itu.int/rec/T-REC-G.114-200305-I/en', p: 'ITU', n: '광케이블 전파 지연 5µs/km(빛의 속도 한계 계산의 근거)' },
@@ -22,7 +22,7 @@ Object.assign(DATA.secRefs, {
     { t: 'Snapshot Interpolation', u: 'https://gafferongames.com/post/snapshot_interpolation/', p: 'Gaffer On Games', n: '받은 즉시 그리면 지터로 끊기고, 보간 버퍼는 지연을 조금 늘리는 대신 매끄럽게 함' },
     { t: 'Understanding Networked Movement in the Character Movement Component for Unreal Engine', u: 'https://dev.epicgames.com/documentation/en-us/unreal-engine/understanding-networked-movement-in-the-character-movement-component-for-unreal-engine', p: 'Epic Games', n: '클라이언트 이동이 연결 문제로 빠지거나 잘못되면 서버가 위치를 보정(고무줄)' },
     { t: 'Source SDK 2013: player.cpp', u: 'https://raw.githubusercontent.com/ValveSoftware/source-sdk-2013/master/src/game/server/player.cpp', p: 'Valve', n: '틱마다 쌓이는 명령 예산으로 몰려 온 명령을 제한. 너무 엄격하면 정상 유저도 끊김' },
-    { t: 'Introducing Time Dilation (TiDi)', u: 'https://www.eveonline.com/news/view/introducing-time-dilation-tidi', p: 'CCP Games', n: '서버 과부하 때 게임 시계를 늦춰(시간 지연) 모든 것이 느리게 흐르게 하는 설계' },
+    { t: 'Introducing Time Dilation (TiDi)', u: 'https://www.eveonline.com/news/view/introducing-time-dilation-tidi', p: 'CCP Games', n: '서버 과부하 때 게임 시계를 늦춰(Time Dilation) 모든 것이 느리게 흐르게 하는 설계' },
     { t: 'CommonNetworkParametersExtensions (Unity Transport 2.5)', u: 'https://docs.unity3d.com/Packages/com.unity.transport@2.5/api/Unity.Networking.Transport.CommonNetworkParametersExtensions.html', p: 'Unity', n: '일정 시간 아무것도 받지 못하면 연결을 끊는 비활동 타임아웃' },
   ],
   'symptoms': [
@@ -30,7 +30,7 @@ Object.assign(DATA.secRefs, {
     { t: 'Understanding Networked Movement in the Character Movement Component for Unreal Engine', u: 'https://dev.epicgames.com/documentation/en-us/unreal-engine/understanding-networked-movement-in-the-character-movement-component-for-unreal-engine', p: 'Epic Games', n: '클라이언트 이동이 빠지거나 서버 계산과 다르면 서버가 보정을 보내 위치를 되돌림(고무줄)' },
     { t: 'UDP vs. TCP', u: 'https://gafferongames.com/post/udp_vs_tcp/', p: 'Gaffer On Games', n: 'TCP는 잃은 패킷을 재전송받을 때까지 뒤 데이터를 쌓아 두었다가 넘김(몰아치기)' },
     { t: 'Deterministic Lockstep', u: 'https://gafferongames.com/post/deterministic_lockstep/', p: 'Gaffer On Games', n: '밀린 입력이 한꺼번에 오면 여러 프레임을 몰아서 계산해 따라잡음' },
-    { t: 'Introducing Time Dilation (TiDi)', u: 'https://www.eveonline.com/news/view/introducing-time-dilation-tidi', p: 'CCP Games', n: '서버가 과부하일 때 게임 시계를 늦추는 시간 지연(TiDi), 과부하 때 작업이 몇 초씩 밀리는 현상' },
+    { t: 'Introducing Time Dilation (TiDi)', u: 'https://www.eveonline.com/news/view/introducing-time-dilation-tidi', p: 'CCP Games', n: '서버가 과부하일 때 게임 시계를 늦추는 Time Dilation(TiDi), 과부하 때 작업이 몇 초씩 밀리는 현상' },
     { t: 'Peeking into VALORANT\'s Netcode', u: 'https://www.riotgames.com/en/news/peeking-valorants-netcode', p: 'Riot Games', n: '버퍼링 시간은 서버 틱레이트와 클라이언트 렌더 프레임에 따라 달라짐' },
     { t: 'Using Gameplay Abilities in Unreal Engine', u: 'https://dev.epicgames.com/documentation/en-us/unreal-engine/using-gameplay-abilities-in-unreal-engine', p: 'Epic Games', n: '예측 실행한 능력을 서버가 뒤집을 수 있음(씹힘·롤백)' },
     { t: 'Actor Relevancy in Unreal Engine', u: 'https://dev.epicgames.com/documentation/en-us/unreal-engine/actor-relevancy-in-unreal-engine', p: 'Epic Games', n: '서버가 관련 없다고 본 액터는 복제되지 않거나 클라이언트에서 지워짐(안 보임)' },

@@ -1,4 +1,4 @@
-// usage: node build/rtcmp.cjs <presetIdx> <toggle substrings comma-separated or ->  <seconds>
+// usage: python3 build.py --only retrans && node tools/probes/rtcmp.cjs <presetIdx> <toggle substrings comma-separated or ->  <seconds>
 const { chromium } = require('../pw.cjs');
 const [idx, tg, secs] = [+process.argv[2], process.argv[3], +(process.argv[4] || 20)];
 (async () => {

@@ -43,15 +43,21 @@ FONTS_LINK = (
 )
 
 
-FONTS_NOTICE = (
-    "/* 글꼴: IBM Plex Sans KR, IBM Plex Mono (Copyright IBM Corp.), "
-    "Black Han Sans (Copyright The Black Han Sans Project Authors). SIL Open Font License 1.1 */"
+FONTS_LICENSE = (
+    "글꼴: IBM Plex Sans KR, IBM Plex Mono (Copyright © 2017 IBM Corp. with Reserved Font Name \"Plex\"), "
+    "Black Han Sans (Copyright 2015 The Black Han Sans Project Authors). "
+    "SIL Open Font License 1.1 (https://openfontlicense.org), 전문은 저장소의 src/fonts/OFL-*.txt"
 )
+FONTS_NOTICE = f"/* {FONTS_LICENSE} */"
 
 
 def notice():
-    # MIT 라이선스는 사본마다 저작권·허가 문구를 넣으라고 하므로, 파일 하나로 퍼지는 index.html 맨 앞에 넣는다
-    return "<!--\n렉 해부도감\n\n" + (ROOT / "LICENSE").read_text(encoding="utf-8").strip() + "\n-->"
+    # MIT 라이선스는 사본마다 저작권·허가 문구를 넣으라고 하므로, 파일 하나로 퍼지는 index.html 맨 앞에 넣는다.
+    # 페이지 안에 넣은 글꼴은 MIT가 아니라 OFL을 따르므로 함께 적는다.
+    return (
+        "<!--\n렉 해부도감\n\n" + (ROOT / "LICENSE").read_text(encoding="utf-8").strip()
+        + "\n\n" + FONTS_LICENSE + "\n-->"
+    )
 
 
 def fonts_inline():

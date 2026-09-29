@@ -3,7 +3,7 @@
 Object.assign(DATA.secRefs, {
   'l-memory': [
     { t: 'Designs, Lessons and Advice from Building Large Distributed Systems (LADIS 2009 keynote)', u: 'https://www.cs.cornell.edu/projects/ladis2009/talks/dean-keynote-ladis2009.pdf', p: 'Google', n: '숫자 감각 표의 바탕: L1 캐시 0.5ns, L2 7ns, 메인 메모리 100ns, 같은 데이터센터 왕복 0.5ms, 디스크 탐색 10ms(2009년 기준, 표의 캐시 수치는 이와 조금 다른 어림값)' },
-    { t: 'Solidigm™ D7-P5520 and D7-P5620 Product Brief', u: 'https://www.solidigm.com/products/data-center/product-briefs/d7-p5520-p5620-product-brief.html', p: 'Solidigm', n: '서버용 NVMe SSD의 4KB 무작위 읽기(QD1) 99.99% 지연 130µs: 표의 SSD 읽기·스왑 되읽기가 100µs 안팎이라는 근거' },
+    { t: 'Solidigm™ D7-P5520 and D7-P5620 Product Brief', u: 'https://www.solidigm.com/products/data-center/product-briefs/d7-p5520-p5620-product-brief.html', p: 'Solidigm', n: '서버용 NVMe SSD의 99.99% 지연(four-nines latency) 130µs: 표의 SSD 읽기·스왑 되읽기가 100µs 안팎이라는 근거' },
     { t: 'IP Sysctl', u: 'https://docs.kernel.org/networking/ip-sysctl.html', p: 'Linux kernel', n: 'tcp_rto_min_us 기본 200,000µs: 리눅스 TCP 재전송 최소 대기 200ms(표의 TCP 재전송 줄)' },
     { t: 'What is NUMA?', u: 'https://docs.kernel.org/mm/numa.html', p: 'Linux kernel', n: '다른 CPU 쪽(원격) 메모리는 로컬보다 접근이 느리고 대역폭이 낮음(표의 NUMA 줄)' },
     { t: 'JEP 439: Generational ZGC', u: 'https://openjdk.org/jeps/439', p: 'OpenJDK', n: 'G1 멈춤은 수 ms~수 초, ZGC 멈춤은 1ms 이하(본문의 힙 전체 GC 수백 ms~수 초, 표의 큰 힙 GC 1초)' },
