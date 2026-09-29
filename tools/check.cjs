@@ -1,6 +1,6 @@
 // 빌드된 HTML을 헤드리스 크로미움으로 열어 콘솔 오류를 모으고 스크린샷을 남긴다.
 //   NODE_PATH=/opt/node22/lib/node_modules node tools/check.cjs build/sandbox-queue.html [out.png] [width] [--dark] [--full]
-const { chromium } = require(process.env.PW || '/opt/node22/lib/node_modules/playwright');
+const { chromium } = require('./pw.cjs');
 const path = require('node:path');
 
 (async () => {

@@ -57,14 +57,24 @@ src/
   js/glossary.js      용어 사전
   js/app.js           데이터로 본문 채우기, 진단 도우미, 내비게이션
   sims/*.js           시뮬레이션 하나당 파일 하나 (작성 규칙은 sims/README.md)
+tools/validate.cjs    원인 데이터 검사(태그·담당·팀별 할 일·용어 사전 연결). probs가 []여야 함
 tools/check.cjs       헤드리스 크로미움으로 열어 오류·가로 넘침 확인, 스크린샷
 tools/shots.cjs       섹션별 스크린샷
+tools/probes/         실험·진단 도우미를 직접 눌러 보는 점검 스크립트(재전송·실험실·담당 탐색기 등)
+docs/OWNERS_GUIDE.md  해결 담당(own)·팀별 할 일(act) 작성 규칙
+docs/TERMS.md         표준 용어표(비유어 대신 쓸 통용 용어)
+docs/OBSERVABILITY_PLAN.md  관측으로 원인·담당을 판정하는 계획(미구현)
+REVIEW.md             영역별 검수 기록
 ```
 
 ## 고치고 다시 만들기
 
+처음 한 번: `npm install` 후 `npx playwright install chromium` (Node 18 이상, Python 3.9 이상).
+
 ```bash
+npm test                                      # 빌드 + 데이터 검사 + 1280px·390px 다크 점검
 python3 build.py                              # index.html 생성
+node tools/validate.cjs                       # 원인 데이터 검사
 python3 build.py --only lab                   # 시뮬레이션 하나만 build/sandbox-lab.html 로
 node tools/check.cjs index.html build/p.png 1280          # 오류 확인 + 스크린샷
 node tools/check.cjs index.html build/m.png 390 --dark    # 폰 폭, 다크 모드

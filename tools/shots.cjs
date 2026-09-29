@@ -1,5 +1,5 @@
 // 섹션별 스크린샷: node tools/shots.cjs index.html out-prefix width [--dark] id1 id2 ...
-const { chromium } = require(process.env.PW || '/opt/node22/lib/node_modules/playwright');
+const { chromium } = require('./pw.cjs');
 const path = require('node:path');
 (async () => {
   const a = process.argv.slice(2);
