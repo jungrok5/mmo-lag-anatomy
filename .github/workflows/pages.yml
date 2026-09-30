@@ -25,12 +25,19 @@ jobs:
       - uses: actions/checkout@v7
       - name: 데이터 검사
         run: node tools/validate.cjs
+      - name: 번역 검사
+        # 화면 글자가 모두 TR로 감싸였는지, 번역의 자리표시·태그가 원문과 맞는지. 빈 번역은 한국어로 보이고 경고만 남긴다
+        run: |
+          npm install --no-save --no-package-lock --ignore-scripts typescript@5 >/dev/null
+          node tools/i18n-wrap.cjs --check
+          node tools/i18n.cjs check
+          node tools/i18n.cjs status | sed 's/^/::notice::번역 /'
       - name: 빌드
         run: |
           python3 build.py
           git diff --quiet index.html || echo "::warning::커밋된 index.html이 src와 다릅니다. python3 build.py 뒤 커밋하세요."
       - name: 검색엔진·AI용 파일 만들기
-        # 원인·증상별 페이지, 텍스트 판, llms.txt, sitemap.xml, index.html의 정적 사본
+        # 언어마다 원인·증상별 페이지, 텍스트 판, llms.txt, index.html(정적 사본 포함). sitemap.xml은 언어판을 hreflang으로 잇는다
         run: node tools/site.cjs _site
       - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v5

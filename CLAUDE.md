@@ -62,6 +62,13 @@
   - `npm test`: 빌드, 데이터 검사, 1280px·390px 다크 화면 점검. `node tools/validate.cjs`의 `probs`는 `[]`여야 한다.
   - 출처를 바꿨으면 `npm run links`로 주소를 점검한다.
 
+## 번역
+
+- 한국어가 원문이다. 번역은 `src/i18n/<언어>/*.json`에 있고 규칙은 `docs/I18N_GUIDE.md`, 언어별 용어는 `docs/i18n/<언어>.md`.
+- 화면에 나오는 한국어 글자(코드 안)는 모두 TR`…`로 감싼다. `node tools/i18n-wrap.cjs --check`가 빠진 곳을 찾는다.
+- 한국어 문장을 고치면 `node tools/i18n.cjs sync`를 돌린다. 바뀐 항목은 번역이 빈 칸이 되고(그동안 그 자리는 한국어로 보인다) 옛 번역은 `stale`에 남는다. 번역을 채운 뒤 `node tools/i18n.cjs check`.
+- 원인 ID·장·절 ID는 언어마다 같다. 번역판 주소는 `/<언어 폴더>/`(예: `/en/c/mem-gc.html`).
+
 ## 명령
 
 ```bash
@@ -70,7 +77,9 @@ python3 build.py      # index.html 만들기 (글꼴까지 넣은 파일 하나)
 npm run validate      # 원인 데이터 검사
 npm run links         # 출처 주소 점검 (실패한 주소만 출력)
 npm run export        # build/lag-anatomy.md, build/lag-anatomy.json (Claude 프로젝트 업로드·다른 도구용)
-npm run site          # 배포본을 build/site/에 만들기(원인·증상별 페이지, 텍스트 판, llms.txt, sitemap.xml)
+npm run site          # 배포본을 build/site/에 만들기(언어마다 원인·증상별 페이지, 텍스트 판, llms.txt / sitemap.xml)
+python3 build.py --lang en   # 번역판 한 언어(build/i18n/en/index.html)
+npm run i18n          # 언어·묶음별 번역률
 ```
 
 폴더 구조와 장 목록은 `README.md`에 있다.

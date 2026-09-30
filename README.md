@@ -6,6 +6,8 @@
 
 **사이트: https://jungrok5.github.io/mmo-lag-anatomy/**
 
+한국어가 원문이고, 영어·일본어·중국어(간체·번체)·독일어·태국어·베트남어·러시아어 번역판이 `/en/`, `/ja/`, `/zh-cn/`, `/zh-tw/`, `/de/`, `/th/`, `/vi/`, `/ru/`에 있습니다. 목차 위의 언어 단추로 바꾸면 보던 자리(`#…`)가 그대로 이어집니다.
+
 `index.html` 하나를 브라우저로 열면 됩니다. 글꼴까지 파일 안에 들어 있어 외부 서버나 인터넷 연결 없이 열립니다(출처 링크를 누를 때만 외부로 나갑니다).
 웹 서버, GitHub Pages, 공유 폴더 어디에 올려도 되고, 외부 인터넷이 막힌 환경에서도 같은 모양으로 보입니다.
 
@@ -97,6 +99,7 @@ src/
   site/               배포본에 함께 올리는 파일(파비콘, 링크 미리보기 이미지, IndexNow 키)
   style.css           디자인 토큰(라이트·다크), 레이아웃, 조작부
   body.html           본문 뼈대와 장별 설명
+  js/i18n.js          번역 태그 TR`…`(화면 글자의 사전 열쇠)와 데이터 번역
   js/kit.js           시뮬레이션 공용 도구(K): 조작부, 캔버스, 차트, 색, 증상 그림
   js/data.js          레이어, 증상, 네 가지 요인, 숫자 감각, 제보 항목, 그래프 모양, 확인 수단
   js/sigs.js          원인 카드의 “그래프에서는” 작은 그림(그래프 모양 13가지)
@@ -107,6 +110,8 @@ src/
   js/app.js           데이터로 본문 채우기, 진단 도우미, 내비게이션
   js/sandbox.js       시뮬레이션 하나만 띄우는 시험 페이지의 테마 단추(build.py --only 전용)
   sims/*.js           시뮬레이션 하나당 파일 하나 (작성 규칙은 sims/README.md)
+  i18n/langs.json     언어 목록(코드, 주소 폴더, hreflang, 이름)
+  i18n/<언어>/*.json  번역: 원문 단위마다 {ctx, ko, t} (묶음: 원인 층별, 본문 장별, 실험별, 화면·데이터·용어·사례)
 tools/validate.cjs    원인 데이터 검사(태그·담당·팀별 할 일·그래프 모양·확인 방법·사례·용어 사전 연결). probs가 []여야 함
 tools/check.cjs       헤드리스 크로미움으로 열어 오류·가로 넘침 확인, 스크린샷(문제가 있으면 종료 코드 1)
 tools/shots.cjs       섹션별 스크린샷
@@ -114,13 +119,18 @@ tools/pw.cjs          Playwright 찾기(npm 설치본 → PW 환경 변수 → �
 tools/linkcheck.py    출처 주소 점검(실패한 주소만 출력)
 tools/export.cjs      원인·증상·담당·용어·출처를 마크다운·JSON 하나씩으로 내보내기
 tools/site.cjs        배포 폴더 만들기(원인·증상별 페이지, 텍스트 판, llms.txt, sitemap.xml, 정적 사본)
-tools/og.cjs          링크 미리보기 이미지(src/site/og.png) 만들기
+tools/og.cjs          링크 미리보기 이미지(src/site/og.png, 번역판은 og-<언어>.png) 만들기
+tools/i18n.cjs        번역 도구: sync(원문에 맞춤)·status·check·show·fill·pack(빌드용)
+tools/i18n-wrap.cjs   화면의 한국어 문자열을 TR로 감싸기(--check: 빠진 곳 찾기)
+tools/i18n-split.cjs  마크업이 대부분인 큰 TR 템플릿을 글 덩어리 단위로 나누기
 tools/indexnow.cjs    배포 뒤 검색엔진에 바뀐 주소 알리기
 .github/workflows/pages.yml  main에 올리면 검사 → 빌드 → GitHub Pages 배포 → IndexNow
 tools/probes/         실험·진단 도우미를 직접 눌러 보는 점검 스크립트(재전송·실험실·담당 탐색기 등). 저장소 루트에서 실행하고, 실험 점검은 먼저 build.py --only <실험 id>
 docs/OWNERS_GUIDE.md  해결 담당(own)·팀별 할 일(act) 작성 규칙
 docs/TERMS.md         표준 용어표(비유어 대신 쓸 통용 용어)
 docs/SOURCES_GUIDE.md 출처 작성 규칙(공신력 있는 자료만)
+docs/I18N_GUIDE.md    번역 규칙과 절차
+docs/i18n/<언어>.md   언어별 용어표·문체·검색어
 docs/CHECKS_GUIDE.md  그래프 모양(sig)·확인 방법(chk) 작성 규칙
 docs/OBSERVABILITY_PLAN.md  관측으로 원인·담당을 판정하는 계획(사이트의 “관측으로 판정하기” 장의 바탕)
 REVIEW.md             영역별 검수 기록
@@ -138,6 +148,9 @@ npm run links                                 # 출처 주소 점검
 npm run export                                # build/lag-anatomy.md·.json 내보내기
 npm run site                                  # 배포본을 build/site/ 에 만들기(원인·증상별 페이지 등)
 python3 build.py --only lab                   # 시뮬레이션 하나만 build/sandbox-lab.html 로
+python3 build.py --lang en                    # 영어판 build/i18n/en/index.html
+npm run i18n                                  # 언어·묶음별 번역률
+node tools/i18n.cjs sync                      # 한국어를 고친 뒤 번역 파일을 원문에 맞춤(바뀐 항목은 빈 칸, 옛 번역은 stale)
 node tools/check.cjs index.html build/p.png 1280          # 오류 확인 + 스크린샷
 node tools/check.cjs index.html build/m.png 390 --dark    # 폰 폭, 다크 모드
 ```

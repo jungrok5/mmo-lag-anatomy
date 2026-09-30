@@ -28,7 +28,7 @@ const tsLib = () => TS || (TS = (() => {
 // ---------------------------------------------------------------- 원문 단위
 const CODE_FILES = () => ['src/js/kit.js', 'src/js/sigs.js', 'src/js/sandbox.js', 'src/js/app.js',
   ...fs.readdirSync(path.join(SRC, 'sims')).filter(f => f.endsWith('.js')).sort().map(f => 'src/sims/' + f),
-  'tools/site.cjs', 'tools/export.cjs'];
+  'tools/site.cjs', 'tools/export.cjs', 'tools/og.cjs'];
 const codeGroup = f => f.startsWith('src/sims/') ? 'sim-' + path.basename(f, '.js') : f === 'src/js/app.js' ? 'ui-app' : f.startsWith('tools/') ? 'site' : 'ui-kit';
 
 function codeUnits(file) {

@@ -13,7 +13,7 @@ const HAN = /[가-힣]/;
 // 화면 글자가 들어 있는 코드. 데이터 파일(data.js, causes-*.js 등)은 문자열 그대로 번역하므로 감싸지 않는다
 const FILES = ['src/js/kit.js', 'src/js/app.js', 'src/js/sigs.js', 'src/js/sandbox.js',
   ...fs.readdirSync(path.join(ROOT, 'src/sims')).filter(f => f.endsWith('.js')).sort().map(f => 'src/sims/' + f),
-  'tools/site.cjs', 'tools/export.cjs'];
+  'tools/site.cjs', 'tools/export.cjs', 'tools/og.cjs'];
 
 const escTpl = s => s.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$\{/g, '\\${').replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\t/g, '\\t');
 const isTagged = n => n.parent && ts.isTaggedTemplateExpression(n.parent) && n.parent.template === n;
