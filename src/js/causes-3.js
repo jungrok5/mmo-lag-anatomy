@@ -381,9 +381,9 @@
       sim: 'gc',
       sig: { k: 'periodic', g: '서버 틱 시간, GC 멈춤 시간' },
       chk: {
-        look: 'GC 로그를 켜서 멈춘 시각과 길이를 서버 틱 시간 그래프에 겹쳐 봅니다. Java는 시작 옵션 -Xlog:gc*(JDK 8 이하는 -XX:+PrintGCDetails)의 Pause 줄, .NET은 dotnet-counters의 GC 멈춤 지표(.NET 9 이후 dotnet.gc.pause.time, 8 이하 % Time in GC since last GC), Go는 GODEBUG=gctrace=1이 GC마다 남기는 줄을 봅니다.',
-        yes: '틱이 튄 시각과 GC 멈춤 시각이 겹치고, 멈춤 길이가 튄 길이와 비슷함. 서버의 모든 존·채널이 같은 순간에 튐.',
-        no: 'GC 로그에 긴 멈춤이 없는데도 틱이 튀면 락·동기 호출·디스크 쓰기 같은 다른 원인. 한 존만 튀면 스크립트 엔진의 GC(mem-script-gc)나 그 존의 부하.',
+        look: 'GC 로그를 켜서 멈춘 시각과 길이를 서버 틱 시간 그래프에 겹쳐 봄. Java는 시작 옵션 -Xlog:gc*(JDK 8 이하는 -XX:+PrintGCDetails)의 Pause 줄, .NET은 dotnet-counters의 GC 멈춤 지표(.NET 9 이후 dotnet.gc.pause.time, 8 이하 % Time in GC since last GC), Go는 GODEBUG=gctrace=1이 GC마다 남기는 줄을 봄',
+        yes: '틱이 튄 시각과 GC 멈춤 시각이 겹치고, 멈춤 길이가 튄 길이와 비슷함. 서버의 모든 존·채널이 같은 순간에 튐',
+        no: 'GC 로그에 긴 멈춤이 없는데도 틱이 튀면 락·동기 호출·디스크 쓰기 같은 다른 원인. 한 존만 튀면 스크립트 엔진의 GC(mem-script-gc)나 그 존의 부하',
         by: 'ops',
       },
       ref: [
@@ -408,9 +408,9 @@
       sim: 'gc',
       sig: { k: 'periodic', g: '존별 틱 시간, 스크립트 엔진 메모리' },
       chk: {
-        look: '존별 틱 시간과, 그 존 스크립트 엔진의 메모리 사용량(Lua는 collectgarbage("count"))을 틱마다 기록해 한 그래프에 겹쳐 봅니다.',
-        yes: '스크립트 메모리가 뚝 떨어지는 순간(한 번에 몰아서 수집)과 그 존의 틱 튐이 겹치고, 다른 존은 멀쩡함.',
-        no: '스크립트 메모리 변화 없이 튀면 그 존의 부하나 락. 서버의 모든 존이 동시에 튀면 서버 GC(mem-gc)나 스왑(mem-swap).',
+        look: '존별 틱 시간과, 그 존 스크립트 엔진의 메모리 사용량(Lua는 collectgarbage("count"))을 틱마다 기록해 한 그래프에 겹쳐 봄',
+        yes: '스크립트 메모리가 뚝 떨어지는 순간(한 번에 몰아서 수집)과 그 존의 틱 튐이 겹치고, 다른 존은 멀쩡함',
+        no: '스크립트 메모리 변화 없이 튀면 그 존의 부하나 락. 서버의 모든 존이 동시에 튀면 서버 GC(mem-gc)나 스왑(mem-swap)',
         by: 'code',
       },
       ref: [
@@ -425,9 +425,9 @@
       sim: 'gc',
       sig: { k: 'load', g: 'GC 횟수, 할당 속도' },
       chk: {
-        look: 'GC 로그(Java -Xlog:gc, Go GODEBUG=gctrace=1)로 분당 GC 횟수를 세고, .NET은 dotnet-counters의 할당량과 GC 횟수(.NET 9 이후 dotnet.gc.heap.total_allocated·dotnet.gc.collections, 8 이하 Allocation Rate·Gen 0 GC Count)를 봅니다. 동시 접속 수·이벤트 시각과 겹쳐 봅니다.',
-        yes: '이벤트가 시작되면 할당 속도와 GC 횟수가 인원 증가보다 가파르게 늘고 짧은 멈춤이 잦아짐. 이벤트가 끝나면 원래대로 돌아옴.',
-        no: 'GC 횟수는 그대로인데 한 번의 멈춤이 길어지면 살아 있는 데이터가 늘어난 것(mem-gc-thrash, mem-leak).',
+        look: 'GC 로그(Java -Xlog:gc, Go GODEBUG=gctrace=1)로 분당 GC 횟수를 세고, .NET은 dotnet-counters의 할당량과 GC 횟수(.NET 9 이후 dotnet.gc.heap.total_allocated·dotnet.gc.collections, 8 이하 Allocation Rate·Gen 0 GC Count)를 봄. 동시 접속 수·이벤트 시각과 겹쳐 봄',
+        yes: '이벤트가 시작되면 할당 속도와 GC 횟수가 인원 증가보다 가파르게 늘고 짧은 멈춤이 잦아짐. 이벤트가 끝나면 원래대로 돌아옴',
+        no: 'GC 횟수는 그대로인데 한 번의 멈춤이 길어지면 살아 있는 데이터가 늘어난 것(mem-gc-thrash, mem-leak)',
         by: 'ops',
       },
       ref: [
@@ -445,9 +445,9 @@
       sim: 'leak',
       sig: { k: 'ramp', g: '프로세스 메모리(RSS), GC 직후 힙' },
       chk: {
-        look: '게임 서버 프로세스의 메모리(pidstat -r의 RSS)를 며칠 단위로 보고, GC를 쓰는 서버는 GC 직후 남은 힙을 봅니다. Java는 -Xlog:gc 줄에 나오는 GC 전·후 사용량 가운데 GC 후 값, .NET은 dotnet-counters의 GC 뒤 힙 크기(.NET 9 이후 dotnet.gc.last_collection.heap.size, 8 이하 GC Heap Size).',
-        yes: 'GC 직후 남은 힙(바닥선)이 재시작 뒤 날마다 올라가고, 인원이 적은 새벽에도 내려오지 않음.',
-        no: '힙 바닥선은 평평한데 RSS만 오르면 단편화(mem-fragment)나 네이티브 메모리 쪽. 인원을 따라 오르내리면 정상 사용량.',
+        look: '게임 서버 프로세스의 메모리(pidstat -r의 RSS)를 며칠 단위로 보고, GC를 쓰는 서버는 GC 직후 남은 힙을 봄. Java는 -Xlog:gc 줄에 나오는 GC 전·후 사용량 가운데 GC 후 값, .NET은 dotnet-counters의 GC 뒤 힙 크기(.NET 9 이후 dotnet.gc.last_collection.heap.size, 8 이하 GC Heap Size)',
+        yes: 'GC 직후 남은 힙(바닥선)이 재시작 뒤 날마다 올라가고, 인원이 적은 새벽에도 내려오지 않음',
+        no: '힙 바닥선은 평평한데 RSS만 오르면 단편화(mem-fragment)나 네이티브 메모리 쪽. 인원을 따라 오르내리면 정상 사용량',
         by: 'ops',
       },
       ref: [
@@ -467,9 +467,9 @@
       sim: 'gc',
       sig: { k: 'ceiling', g: 'GC 직후 힙, GC 시간 비율' },
       chk: {
-        look: 'GC 직후 남은 힙이 최대 힙에 얼마나 가까운지와 GC에 쓴 시간 비율을 봅니다. Java는 -Xlog:gc 줄의 “GC 후(힙 크기)”와 Pause Full 줄의 빈도, .NET은 dotnet-counters(.NET 8 이하 % Time in GC since last GC, .NET 9 이후 dotnet.gc.pause.time 증가량), Go는 GODEBUG=gctrace=1 줄 사이 간격을 봅니다.',
-        yes: 'GC 직후에도 힙이 최대치 가까이 남고 Full GC가 연달아 돌며, GC 시간 비율이 평소보다 크게(보통 10% 넘게) 올라감. 그동안 서버 전체 틱이 함께 느려짐.',
-        no: 'GC 직후 힙에 여유가 있는데 멈춤만 길면 GC 방식·설정 쪽(mem-gc).',
+        look: 'GC 직후 남은 힙이 최대 힙에 얼마나 가까운지와 GC에 쓴 시간 비율을 봄. Java는 -Xlog:gc 줄의 “GC 후(힙 크기)”와 Pause Full 줄의 빈도, .NET은 dotnet-counters(.NET 8 이하 % Time in GC since last GC, .NET 9 이후 dotnet.gc.pause.time 증가량), Go는 GODEBUG=gctrace=1 줄 사이 간격을 봄',
+        yes: 'GC 직후에도 힙이 최대치 가까이 남고 Full GC가 연달아 돌며, GC 시간 비율이 평소보다 크게(보통 10% 넘게) 올라감. 그동안 서버 전체 틱이 함께 느려짐',
+        no: 'GC 직후 힙에 여유가 있는데 멈춤만 길면 GC 방식·설정 쪽(mem-gc)',
         by: 'ops',
       },
       ref: [
@@ -490,9 +490,9 @@
       sim: 'leak',
       sig: { k: 'ramp', g: '스왑 사용량, 스왑 인·아웃' },
       chk: {
-        look: 'vmstat 1의 si·so 열(초당 스왑에서 읽어 들인·내보낸 양), /proc/pressure/memory의 some·full(메모리를 기다리느라 멈춘 시간 비율), 게임 서버 프로세스의 pidstat -r majflt/s(디스크에서 읽어 와야 했던 페이지 폴트)를 틱 시간과 겹쳐 봅니다.',
-        yes: '렉 시각에 si가 0보다 크고, 게임 서버의 majflt/s와 memory의 full 값이 함께 오름.',
-        no: 'si·so가 0이고 memory 압박(PSI)도 0 근처면 스왑이 원인이 아님. 스왑이 없는데 majflt/s와 PSI가 오르면 메모리가 바닥나 코드 페이지를 다시 읽는 상태라 메모리 확보가 먼저.',
+        look: 'vmstat 1의 si·so 열(초당 스왑에서 읽어 들인·내보낸 양), /proc/pressure/memory의 some·full(메모리를 기다리느라 멈춘 시간 비율), 게임 서버 프로세스의 pidstat -r majflt/s(디스크에서 읽어 와야 했던 페이지 폴트)를 틱 시간과 겹쳐 봄',
+        yes: '렉 시각에 si가 0보다 크고, 게임 서버의 majflt/s와 memory의 full 값이 함께 오름',
+        no: 'si·so가 0이고 memory 압박(PSI)도 0 근처면 스왑이 원인이 아님. 스왑이 없는데 majflt/s와 PSI가 오르면 메모리가 바닥나 코드 페이지를 다시 읽는 상태라 메모리 확보가 먼저',
         by: 'ops',
       },
       ref: [
@@ -514,9 +514,9 @@
       sim: 'ladder',
       sig: { k: 'high', g: '틱 시간, CPU 사용률' },
       chk: {
-        look: '게임 서버 프로세스에 perf stat -d -p PID를 걸어 사이클당 명령어 수(insn per cycle)와 L1·LLC 캐시 미스를 재고, 틱 시간·CPU 사용률과 함께 봅니다.',
-        yes: 'CPU를 계속 바쁘게 쓰는데 insn per cycle이 낮고 LLC 미스가 많음. 데이터 배치를 바꾼 빌드에서 같은 인원의 틱 시간이 크게 줄면 확정.',
-        no: 'CPU 사용률이 낮은데 틱이 느리면 락·I/O 대기처럼 CPU 밖에서 기다리는 원인.',
+        look: '게임 서버 프로세스에 perf stat -d -p PID를 걸어 사이클당 명령어 수(insn per cycle)와 L1·LLC 캐시 미스를 재고, 틱 시간·CPU 사용률과 함께 봄',
+        yes: 'CPU를 계속 바쁘게 쓰는데 insn per cycle이 낮고 LLC 미스가 많음. 데이터 배치를 바꾼 빌드에서 같은 인원의 틱 시간이 크게 줄면 확정',
+        no: 'CPU 사용률이 낮은데 틱이 느리면 락·I/O 대기처럼 CPU 밖에서 기다리는 원인',
         by: 'ops',
       },
       ref: [
@@ -532,9 +532,9 @@
       more: '누수와 모양이 같아서 힙 분석으로는 누수 지점이 안 보입니다. 리눅스 기본 할당기(glibc)는 스레드가 많은 서버에서 특히 심해, 할당기만 바꿔도 사용량이 크게 줄기도 합니다.',
       sig: { k: 'ramp', g: '프로세스 메모리(RSS)' },
       chk: {
-        look: '같은 빌드의 서버 둘을 띄워 하나만 환경 변수 MALLOC_ARENA_MAX로 glibc 아레나 수를 줄이거나 jemalloc 같은 다른 할당기로 바꾸고, 며칠 동안 pidstat -r의 RSS를 비교합니다.',
-        yes: '인원·개체 수는 비슷한데 바꾼 서버만 RSS 증가가 멈추거나 크게 줄어듦.',
-        no: '할당기를 바꿔도 똑같이 오르면 해제하지 않는 메모리(mem-leak).',
+        look: '같은 빌드의 서버 둘을 띄워 하나만 환경 변수 MALLOC_ARENA_MAX로 glibc 아레나 수를 줄이거나 jemalloc 같은 다른 할당기로 바꾸고, 며칠 동안 pidstat -r의 RSS를 비교함',
+        yes: '인원·개체 수는 비슷한데 바꾼 서버만 RSS 증가가 멈추거나 크게 줄어듦',
+        no: '할당기를 바꿔도 똑같이 오르면 해제하지 않는 메모리(mem-leak)',
         by: 'ops',
       },
       ref: [
@@ -551,9 +551,9 @@
       sim: 'ladder',
       sig: { k: 'outlier', g: '프로세스별 틱 시간, 노드별 메모리' },
       chk: {
-        look: 'numastat -p PID로 게임 서버 프로세스의 메모리가 어느 NUMA 노드에 있는지, numastat의 numa_miss·other_node가 늘어나는지 보고, 그 프로세스가 도는 CPU의 노드와 비교합니다.',
-        yes: '느린 프로세스만 메모리 대부분이 자기가 도는 CPU와 다른 노드에 있고, numactl로 CPU·메모리를 한 노드에 고정해 다시 띄우면 차이가 사라짐.',
-        no: '빠른 프로세스와 노드 배치가 같은데도 느리면 노이지 네이버, CPU 스로틀링, 그 프로세스의 부하 같은 다른 원인.',
+        look: 'numastat -p PID로 게임 서버 프로세스의 메모리가 어느 NUMA 노드에 있는지, numastat의 numa_miss·other_node가 늘어나는지 보고, 그 프로세스가 도는 CPU의 노드와 비교함',
+        yes: '느린 프로세스만 메모리 대부분이 자기가 도는 CPU와 다른 노드에 있고, numactl로 CPU·메모리를 한 노드에 고정해 다시 띄우면 차이가 사라짐',
+        no: '빠른 프로세스와 노드 배치가 같은데도 느리면 노이지 네이버, CPU 스로틀링, 그 프로세스의 부하 같은 다른 원인',
         by: 'ops',
       },
       ref: [
@@ -575,9 +575,9 @@
       sim: 'disk',
       sig: { k: 'random', g: '서버 틱 시간, 디스크 쓰기 지연' },
       chk: {
-        look: 'iostat -x 1의 w_await·aqu-sz를 틱 시간과 겹쳐 보고, perf trace -p PID --duration 10으로 게임 서버에서 10ms 넘게 걸린 write·fsync 호출과 그 스레드를 찾습니다.',
-        yes: '틱이 튄 시각에 게임 스레드의 write·fsync 호출이 수십 ms 걸리고, 그 순간 디스크 쓰기 지연도 솟음. 로그 로테이션·압축 시각과 겹치는 경우가 많음.',
-        no: '게임 스레드에 오래 걸린 시스템 호출이 없는데 틱이 튀면 GC·락·틱 예산 초과 같은 다른 원인. 로그 전용 스레드만 오래 걸리면 게임 진행에는 영향이 없음.',
+        look: 'iostat -x 1의 w_await·aqu-sz를 틱 시간과 겹쳐 보고, perf trace -p PID --duration 10으로 게임 서버에서 10ms 넘게 걸린 write·fsync 호출과 그 스레드를 찾음',
+        yes: '틱이 튄 시각에 게임 스레드의 write·fsync 호출이 수십 ms 걸리고, 그 순간 디스크 쓰기 지연도 솟음. 로그 로테이션·압축 시각과 겹치는 경우가 많음',
+        no: '게임 스레드에 오래 걸린 시스템 호출이 없는데 틱이 튀면 GC·락·틱 예산 초과 같은 다른 원인. 로그 전용 스레드만 오래 걸리면 게임 진행에는 영향이 없음',
         by: 'ops',
       },
       ref: [
@@ -597,9 +597,9 @@
       sim: 'disk',
       sig: { k: 'periodic', g: '디스크 대기열 길이, 플러시·쓰기 지연' },
       chk: {
-        look: 'iostat -x 1의 f/s·f_await(디스크가 처리한 플러시 수와 걸린 시간), w/s·aqu-sz·w_await를 정기 저장·로그아웃 시각과 겹쳐 봅니다. 예전 sysstat은 aqu-sz를 avgqu-sz로 표시합니다. 클라우드 디스크는 EBS의 VolumeQueueLength·VolumeAvgWriteLatency를 봅니다.',
-        yes: '저장 시각·로그아웃 러시마다 플러시 수와 대기열 길이가 함께 솟고 w_await·f_await가 평소의 몇 배가 됨. 그때 저장·채널 이동이 늦어짐.',
-        no: '저장·로그아웃과 상관없는 시각에 대기열이 솟으면 백업·압축(dk-backup)이나 IOPS 한도(dk-iops). 플러시 수는 그대로인데 느려지면 버스트 크레딧 소진(dk-burst) 쪽.',
+        look: 'iostat -x 1의 f/s·f_await(디스크가 처리한 플러시 수와 걸린 시간), w/s·aqu-sz·w_await를 정기 저장·로그아웃 시각과 겹쳐 봄. 예전 sysstat은 aqu-sz를 avgqu-sz로 표시함. 클라우드 디스크는 EBS의 VolumeQueueLength·VolumeAvgWriteLatency를 봄',
+        yes: '저장 시각·로그아웃 러시마다 플러시 수와 대기열 길이가 함께 솟고 w_await·f_await가 평소의 몇 배가 됨. 그때 저장·채널 이동이 늦어짐',
+        no: '저장·로그아웃과 상관없는 시각에 대기열이 솟으면 백업·압축(dk-backup)이나 IOPS 한도(dk-iops). 플러시 수는 그대로인데 느려지면 버스트 크레딧 소진(dk-burst) 쪽',
         by: 'ops',
       },
       ref: [
@@ -621,9 +621,9 @@
       sim: 'disk',
       sig: { k: 'ceiling', g: 'IOPS, 버스트 크레딧 잔량' },
       chk: {
-        look: 'CloudWatch의 EBS BurstBalance(gp2·st1·sc1), 인스턴스의 EBSIOBalance%·EBSByteBalance%(버스트하는 일부 인스턴스), 버스트형 인스턴스의 CPUCreditBalance를 봅니다. Azure는 Data Disk Used Burst IO Credits Percentage 같은 버스트 크레딧 사용률 지표를 봅니다.',
-        yes: '잔량이 0 가까이 떨어진 시각부터 IOPS(VolumeReadOps·VolumeWriteOps)가 기준 성능에서 평평해지고 VolumeQueueLength와 렉이 함께 늘어남. 피크가 몇 시간 이어진 뒤에 시작됨.',
-        no: '잔량이 모두 넉넉한데 IOPS가 평평하면 볼륨·인스턴스의 고정 한도(dk-iops).',
+        look: 'CloudWatch의 EBS BurstBalance(gp2·st1·sc1), 인스턴스의 EBSIOBalance%·EBSByteBalance%(버스트하는 일부 인스턴스), 버스트형 인스턴스의 CPUCreditBalance를 봄. Azure는 Data Disk Used Burst IO Credits Percentage 같은 버스트 크레딧 사용률 지표를 봄',
+        yes: '잔량이 0 가까이 떨어진 시각부터 IOPS(VolumeReadOps·VolumeWriteOps)가 기준 성능에서 평평해지고 VolumeQueueLength와 렉이 함께 늘어남. 피크가 몇 시간 이어진 뒤에 시작됨',
+        no: '잔량이 모두 넉넉한데 IOPS가 평평하면 볼륨·인스턴스의 고정 한도(dk-iops)',
         by: 'ops',
       },
       ref: [
@@ -646,9 +646,9 @@
       sim: 'disk',
       sig: { k: 'ceiling', g: 'IOPS, 디스크 대기열 길이' },
       chk: {
-        look: 'iostat -x 1의 r/s·w/s, rkB/s·wkB/s, aqu-sz, r_await·w_await를 봅니다. 클라우드는 EBS의 VolumeReadOps·VolumeWriteOps·VolumeQueueLength와 한도 초과 여부 VolumeIOPSExceededCheck·VolumeThroughputExceededCheck, 인스턴스 쪽 InstanceEBSIOPSExceededCheck·InstanceEBSThroughputExceededCheck를 봅니다.',
-        yes: '초당 요청 수나 전송량이 한도 값에서 평평해지고 aqu-sz와 await가 함께 치솟음. 클라우드에서는 초과 확인 지표가 1.',
-        no: '%util이 100%여도 await가 낮으면 아직 여유가 있을 수 있음. 요청을 병렬로 처리하는 SSD·RAID에서는 %util이 한도를 뜻하지 않음. 한도에 닿지 않았는데 await만 높으면 디스크 자체 지연(dk-hdd)이나 fsync(dk-fsync).',
+        look: 'iostat -x 1의 r/s·w/s, rkB/s·wkB/s, aqu-sz, r_await·w_await를 봄. 클라우드는 EBS의 VolumeReadOps·VolumeWriteOps·VolumeQueueLength와 한도 초과 여부 VolumeIOPSExceededCheck·VolumeThroughputExceededCheck, 인스턴스 쪽 InstanceEBSIOPSExceededCheck·InstanceEBSThroughputExceededCheck를 봄',
+        yes: '초당 요청 수나 전송량이 한도 값에서 평평해지고 aqu-sz와 await가 함께 치솟음. 클라우드에서는 초과 확인 지표가 1',
+        no: '%util이 100%여도 await가 낮으면 아직 여유가 있을 수 있음. 요청을 병렬로 처리하는 SSD·RAID에서는 %util이 한도를 뜻하지 않음. 한도에 닿지 않았는데 await만 높으면 디스크 자체 지연(dk-hdd)이나 fsync(dk-fsync)',
         by: 'ops',
       },
       ref: [
@@ -670,9 +670,9 @@
       more: 'DB의 트랜잭션 로그(WAL, binlog 등)는 복제본이 멈추거나 로그 백업이 빠지면 지워지지 않고 계속 쌓입니다. 이 디스크가 차면 DB의 모든 쓰기가 멈춰 저장·거래가 한꺼번에 실패합니다.',
       sig: { k: 'ramp', g: '디스크 사용률' },
       chk: {
-        look: 'df -h의 사용률과 df -i의 inode 사용률을 보고, 서버·DB 로그에서 ENOSPC 오류를 찾습니다. DB는 PostgreSQL pg_replication_slots에서 active가 false인 슬롯, MySQL SHOW BINARY LOGS의 파일 수·크기, SQL Server sys.databases의 log_reuse_wait_desc, RDS는 FreeStorageSpace를 봅니다.',
-        yes: '사용률이 며칠에 걸쳐 꾸준히 오르다 100%에 닿은 시각과 크래시·저장 실패 시각이 겹치고, 로그에 ENOSPC가 남음.',
-        no: '공간이 넉넉한데 쓰기가 실패하면 권한·파일 크기 한도 같은 다른 원인.',
+        look: 'df -h의 사용률과 df -i의 inode 사용률을 보고, 서버·DB 로그에서 ENOSPC 오류를 찾음. DB는 PostgreSQL pg_replication_slots에서 active가 false인 슬롯, MySQL SHOW BINARY LOGS의 파일 수·크기, SQL Server sys.databases의 log_reuse_wait_desc, RDS는 FreeStorageSpace를 봄',
+        yes: '사용률이 며칠에 걸쳐 꾸준히 오르다 100%에 닿은 시각과 크래시·저장 실패 시각이 겹치고, 로그에 ENOSPC가 남음',
+        no: '공간이 넉넉한데 쓰기가 실패하면 권한·파일 크기 한도 같은 다른 원인',
         by: 'ops',
       },
       ref: [
@@ -694,9 +694,9 @@
       sim: 'disk',
       sig: { k: 'periodic', g: '디스크 이용률, 디스크 대기 시간' },
       chk: {
-        look: 'sar -d로 지난 며칠 기록(/var/log/sa의 일별 파일, sadc가 -S DISK로 디스크 항목까지 모아야 함)의 %util·await·aqu-sz를 날짜별로 겹쳐 보고, 그 시각에 pidstat -d 1로 kB_rd/s·kB_wr/s가 가장 큰 프로세스를 찾아 크론·systemd 타이머 일정과 대조합니다.',
-        yes: '매일 같은 시각 await와 %util이 솟고, 그때 백업·압축·검사 프로세스가 디스크 읽기·쓰기 대부분을 차지함.',
-        no: '솟는 시각이 날마다 다르면 예약 작업일 가능성이 낮음. 그 시각 I/O 대부분이 게임 서버 자신이면 저장·로그 쪽(dk-fsync, dk-sync-log).',
+        look: 'sar -d로 지난 며칠 기록(/var/log/sa의 일별 파일, sadc가 -S DISK로 디스크 항목까지 모아야 함)의 %util·await·aqu-sz를 날짜별로 겹쳐 보고, 그 시각에 pidstat -d 1로 kB_rd/s·kB_wr/s가 가장 큰 프로세스를 찾아 크론·systemd 타이머 일정과 대조함',
+        yes: '매일 같은 시각 await와 %util이 솟고, 그때 백업·압축·검사 프로세스가 디스크 읽기·쓰기 대부분을 차지함',
+        no: '솟는 시각이 날마다 다르면 예약 작업일 가능성이 낮음. 그 시각 I/O 대부분이 게임 서버 자신이면 저장·로그 쪽(dk-fsync, dk-sync-log)',
         by: 'ops',
       },
       ref: [
@@ -714,9 +714,9 @@
       more: '클라우드에서 스냅샷(디스크 사본)으로 막 만든 서버는 처음 읽는 블록마다 원격 스토리지에서 받아 와 평소보다 훨씬 느립니다. 오토스케일링으로 새로 뜬 서버에서만 첫 입장이 유독 오래 걸린다면 이것을 의심합니다.',
       sig: { k: 'random', g: '서버 틱 시간, 디스크 읽기' },
       chk: {
-        look: '멈춘 시각을 게임 서버 로그의 던전·지역 첫 입장 기록과 맞춰 보고, 그 순간 게임 서버의 디스크 읽기(pidstat -d의 kB_rd/s)와 perf trace --duration으로 오래 걸린 read·open 호출을 봅니다. 새로 뜬 클라우드 서버라면 EBS의 VolumeAvgReadLatency를 오래된 서버와 비교합니다.',
-        yes: '처음 입장하는 순간에만 멈추고 같은 곳에 두 번째로 들어갈 때는 멈추지 않음. 멈춘 동안 게임 스레드가 파일 읽기에서 기다림.',
-        no: '이미 로딩된 지역에서도 똑같이 멈추면 틱 예산 초과·GC 같은 다른 원인.',
+        look: '멈춘 시각을 게임 서버 로그의 던전·지역 첫 입장 기록과 맞춰 보고, 그 순간 게임 서버의 디스크 읽기(pidstat -d의 kB_rd/s)와 perf trace --duration으로 오래 걸린 read·open 호출을 봄. 새로 뜬 클라우드 서버라면 EBS의 VolumeAvgReadLatency를 오래된 서버와 비교함',
+        yes: '처음 입장하는 순간에만 멈추고 같은 곳에 두 번째로 들어갈 때는 멈추지 않음. 멈춘 동안 게임 스레드가 파일 읽기에서 기다림',
+        no: '이미 로딩된 지역에서도 똑같이 멈추면 틱 예산 초과·GC 같은 다른 원인',
         by: 'code',
       },
       ref: [
@@ -734,9 +734,9 @@
       act: { game: '필요한 메모리만 담는 작은 덤프(미니 덤프) 방식 검토, 크래시 원인 수정.', infra: '덤프 크기 제한(OS 코어 덤프 설정), 빠른 디스크, 재시작과 덤프 분리(덤프 압축·업로드는 재시작 뒤 따로 처리).' },
       sig: { k: 'drop', g: '접속 수, 서버 재시작 시각' },
       chk: {
-        look: '크래시 시각과 코어 파일 크기(coredumpctl list·info, 또는 core_pattern이 가리키는 곳의 파일), 파일이 다 써진 시각, 서비스가 다시 뜬 시각을 나란히 놓고, 그동안 iostat -x의 wkB/s를 봅니다.',
-        yes: '크래시 뒤 수 GB짜리 코어 파일을 쓰는 동안 디스크 쓰기가 한도 가까이 붙어 있고, 기록이 끝난 뒤에야 재시작이 시작됨.',
-        no: '코어 덤프가 꺼져 있거나 작게 끝났는데도 재시작이 늦으면 맵 로딩이나 DB 콜드 캐시(db-cold-cache) 같은 서버 시작 과정 쪽.',
+        look: '크래시 시각과 코어 파일 크기(coredumpctl list·info, 또는 core_pattern이 가리키는 곳의 파일), 파일이 다 써진 시각, 서비스가 다시 뜬 시각을 나란히 놓고, 그동안 iostat -x의 wkB/s를 봄',
+        yes: '크래시 뒤 수 GB짜리 코어 파일을 쓰는 동안 디스크 쓰기가 한도 가까이 붙어 있고, 기록이 끝난 뒤에야 재시작이 시작됨',
+        no: '코어 덤프가 꺼져 있거나 작게 끝났는데도 재시작이 늦으면 맵 로딩이나 DB 콜드 캐시(db-cold-cache) 같은 서버 시작 과정 쪽',
         by: 'ops',
       },
       ref: [
@@ -754,9 +754,9 @@
       sim: 'ladder',
       sig: { k: 'high', g: '디스크 읽기·쓰기 지연(r_await·w_await)' },
       chk: {
-        look: 'lsblk -d -o NAME,ROTA로 회전 디스크(HDD)인지 확인하고, iostat -x 1의 r/s·w/s와 r_await·w_await를 봅니다. 가상 서버는 클라우드·스토리지 사양에서 디스크 종류를 확인합니다.',
-        yes: '회전 디스크이고, 초당 요청이 수십~백여 개 수준인데도 r_await·w_await가 늘 수 ms~수십 ms.',
-        no: 'SSD인데 지연이 높으면 대기열 포화(dk-iops)나 버스트 크레딧 소진(dk-burst) 쪽.',
+        look: 'lsblk -d -o NAME,ROTA로 회전 디스크(HDD)인지 확인하고, iostat -x 1의 r/s·w/s와 r_await·w_await를 봄. 가상 서버는 클라우드·스토리지 사양에서 디스크 종류를 확인함',
+        yes: '회전 디스크이고, 초당 요청이 수십~백여 개 수준인데도 r_await·w_await가 늘 수 ms~수십 ms',
+        no: 'SSD인데 지연이 높으면 대기열 포화(dk-iops)나 버스트 크레딧 소진(dk-burst) 쪽',
         by: 'ops',
       },
       ref: [
@@ -781,9 +781,9 @@
       sim: 'dbpool',
       sig: { k: 'step', g: 'DB 쿼리 지연, 읽은 행 수' },
       chk: {
-        look: 'MySQL은 slow query log(log_queries_not_using_indexes를 켜면 인덱스를 안 쓴 쿼리도 기록)의 Rows_examined·Rows_sent, performance_schema events_statements_summary_by_digest의 SUM_NO_INDEX_USED·SUM_ROWS_EXAMINED를 보고 EXPLAIN을 돌립니다. PostgreSQL은 pg_stat_user_tables의 seq_scan·seq_tup_read를 보고 EXPLAIN을 돌립니다.',
-        yes: '배포 뒤 새로 나타난 쿼리가 돌려준 행(Rows_sent)보다 수천 배 많은 행을 읽고(Rows_examined), EXPLAIN에 테이블 전체 스캔(MySQL type ALL, PostgreSQL Seq Scan)이 나옴. 큰 테이블의 seq_tup_read가 배포 시각부터 가파르게 늘어남.',
-        no: '인덱스를 타는데도 느리면 잠금 대기(db-hot-row, db-ddl-lock)나 실행 계획 변경(db-plan-flip). 작은 테이블의 전체 스캔은 정상일 수 있음.',
+        look: 'MySQL은 slow query log(log_queries_not_using_indexes를 켜면 인덱스를 안 쓴 쿼리도 기록)의 Rows_examined·Rows_sent, performance_schema events_statements_summary_by_digest의 SUM_NO_INDEX_USED·SUM_ROWS_EXAMINED를 보고 EXPLAIN을 돌림. PostgreSQL은 pg_stat_user_tables의 seq_scan·seq_tup_read를 보고 EXPLAIN을 돌림',
+        yes: '배포 뒤 새로 나타난 쿼리가 돌려준 행(Rows_sent)보다 수천 배 많은 행을 읽고(Rows_examined), EXPLAIN에 테이블 전체 스캔(MySQL type ALL, PostgreSQL Seq Scan)이 나옴. 큰 테이블의 seq_tup_read가 배포 시각부터 가파르게 늘어남',
+        no: '인덱스를 타는데도 느리면 잠금 대기(db-hot-row, db-ddl-lock)나 실행 계획 변경(db-plan-flip). 작은 테이블의 전체 스캔은 정상일 수 있음',
         by: 'ops',
       },
       ref: [
@@ -806,9 +806,9 @@
       sim: 'dbpool',
       sig: { k: 'load', g: '행 잠금 대기 수·시간' },
       chk: {
-        look: 'MySQL은 Innodb_row_lock_waits·Innodb_row_lock_time 증가량과 Innodb_row_lock_current_waits를 보고, sys.innodb_lock_waits로 누가 누구를 기다리는지 찾습니다. PostgreSQL은 pg_stat_activity에서 wait_event_type이 Lock인 세션, pg_locks에서 granted가 false인 요청을 보고, log_lock_waits(기본 꺼짐)를 켜면 오래 기다린 잠금이 로그에 남습니다.',
-        yes: '이벤트·인원을 따라 잠금 대기가 가파르게 늘고, 기다리는 요청 대부분이 같은 테이블의 같은 행(같은 키)을 가리킴.',
-        no: '대기가 여러 테이블·행에 고르게 흩어지면 디스크·CPU 포화 쪽. 한 세션이 잠금을 오래 잡고 놓지 않으면 오래 열린 트랜잭션(db-long-tx).',
+        look: 'MySQL은 Innodb_row_lock_waits·Innodb_row_lock_time 증가량과 Innodb_row_lock_current_waits를 보고, sys.innodb_lock_waits로 누가 누구를 기다리는지 찾음. PostgreSQL은 pg_stat_activity에서 wait_event_type이 Lock인 세션, pg_locks에서 granted가 false인 요청을 보고, log_lock_waits(기본 꺼짐)를 켜면 오래 기다린 잠금이 로그에 남음',
+        yes: '이벤트·인원을 따라 잠금 대기가 가파르게 늘고, 기다리는 요청 대부분이 같은 테이블의 같은 행(같은 키)을 가리킴',
+        no: '대기가 여러 테이블·행에 고르게 흩어지면 디스크·CPU 포화 쪽. 한 세션이 잠금을 오래 잡고 놓지 않으면 오래 열린 트랜잭션(db-long-tx)',
         by: 'ops',
       },
       ref: [
@@ -829,9 +829,9 @@
       act: { game: '잠금 순서 통일, 트랜잭션 짧게, 실패 시 자동 재시도.', infra: '데드락 감지를 켜 두고 데드락 기록을 수집해 공유, 감지를 끈 MySQL 서버는 잠금 대기 한도(기본 50초) 줄이기.' },
       sig: { k: 'random', g: '데드락 수, 거래 실패 수' },
       chk: {
-        look: 'MySQL은 SHOW ENGINE INNODB STATUS의 LATEST DETECTED DEADLOCK(가장 최근 1건), innodb_print_all_deadlocks를 켜면 에러 로그에 남는 모든 데드락, INFORMATION_SCHEMA.INNODB_METRICS의 lock_deadlocks를 봅니다. PostgreSQL은 pg_stat_database의 deadlocks, SQL Server는 기본으로 켜진 system_health 세션의 xml_deadlock_report를 봅니다. 게임 서버 쪽 오류 코드는 MySQL 1213, PostgreSQL 40P01, SQL Server 1205입니다.',
-        yes: '거래·제작 실패 시각에 데드락 수가 늘고, 기록된 두 트랜잭션이 같은 테이블들을 서로 반대 순서로 잠그고 있음.',
-        no: '데드락 수는 그대로인데 실패하면 잠금 대기 한도 초과(MySQL 오류 1205)나 핫 로우(db-hot-row).',
+        look: 'MySQL은 SHOW ENGINE INNODB STATUS의 LATEST DETECTED DEADLOCK(가장 최근 1건), innodb_print_all_deadlocks를 켜면 에러 로그에 남는 모든 데드락, INFORMATION_SCHEMA.INNODB_METRICS의 lock_deadlocks를 봄. PostgreSQL은 pg_stat_database의 deadlocks, SQL Server는 기본으로 켜진 system_health 세션의 xml_deadlock_report를 봄. 게임 서버 쪽 오류 코드는 MySQL 1213, PostgreSQL 40P01, SQL Server 1205',
+        yes: '거래·제작 실패 시각에 데드락 수가 늘고, 기록된 두 트랜잭션이 같은 테이블들을 서로 반대 순서로 잠그고 있음',
+        no: '데드락 수는 그대로인데 실패하면 잠금 대기 한도 초과(MySQL 오류 1205)나 핫 로우(db-hot-row)',
         by: 'ops',
       },
       ref: [
@@ -857,9 +857,9 @@
       sim: 'dbpool',
       sig: { k: 'ceiling', g: '사용 중 DB 연결 수, 커넥션 대기 시간' },
       chk: {
-        look: 'DB 쪽에서 게임 서버별 연결 상태를 셉니다. MySQL은 SHOW PROCESSLIST의 Host·Command(쉬는 연결은 Sleep)·Time과 Threads_connected·Threads_running, 거부된 연결 수 Connection_errors_max_connections를 봅니다. PostgreSQL은 pg_stat_activity를 client_addr·state로 묶어 셉니다. 게임 서버의 커넥션 풀 라이브러리가 대기 수·대기 시간을 내보내면 함께 봅니다.',
-        yes: '한 게임 서버의 연결이 풀 크기만큼 모두 쿼리 실행 중이고 쉬는 연결이 0인 동안 로그인·저장이 대기함. 또는 DB 전체 연결 수가 max_connections에 닿아 새 연결이 거부됨.',
-        no: '쉬는 연결이 넉넉한데도 느리면 쿼리 자체의 지연(db-no-index, db-hot-row)이나 DB 자원 포화 쪽.',
+        look: 'DB 쪽에서 게임 서버별 연결 상태를 셈. MySQL은 SHOW PROCESSLIST의 Host·Command(쉬는 연결은 Sleep)·Time과 Threads_connected·Threads_running, 거부된 연결 수 Connection_errors_max_connections를 봄. PostgreSQL은 pg_stat_activity를 client_addr·state로 묶어 셈. 게임 서버의 커넥션 풀 라이브러리가 대기 수·대기 시간을 내보내면 함께 봄',
+        yes: '한 게임 서버의 연결이 풀 크기만큼 모두 쿼리 실행 중이고 쉬는 연결이 0인 동안 로그인·저장이 대기함. 또는 DB 전체 연결 수가 max_connections에 닿아 새 연결이 거부됨',
+        no: '쉬는 연결이 넉넉한데도 느리면 쿼리 자체의 지연(db-no-index, db-hot-row)이나 DB 자원 포화 쪽',
         by: 'ops',
       },
       ref: [
@@ -880,9 +880,9 @@
       sim: 'arch',
       sig: { k: 'load', g: '복제 지연(초)' },
       chk: {
-        look: 'MySQL은 복제본에서 SHOW REPLICA STATUS의 Seconds_Behind_Source(8.0.22 이전 버전은 SHOW SLAVE STATUS)를 봅니다. PostgreSQL은 주 서버 pg_stat_replication의 write_lag·flush_lag·replay_lag, RDS는 ReplicaLag를 봅니다.',
-        yes: '“안 보인다”는 제보 시각에 지연이 수 초 이상이고, 지연이 풀린 뒤 다시 보면 정상. 쓰기 폭주나 대량 삭제, 복제본의 긴 집계 쿼리 시각에 지연이 커짐.',
-        no: '지연이 0 근처인데도 안 보이면 게임 서버의 캐시나 동기화 쪽.',
+        look: 'MySQL은 복제본에서 SHOW REPLICA STATUS의 Seconds_Behind_Source(8.0.22 이전 버전은 SHOW SLAVE STATUS)를 봄. PostgreSQL은 주 서버 pg_stat_replication의 write_lag·flush_lag·replay_lag, RDS는 ReplicaLag를 봄',
+        yes: '“안 보인다”는 제보 시각에 지연이 수 초 이상이고, 지연이 풀린 뒤 다시 보면 정상. 쓰기 폭주나 대량 삭제, 복제본의 긴 집계 쿼리 시각에 지연이 커짐',
+        no: '지연이 0 근처인데도 안 보이면 게임 서버의 캐시나 동기화 쪽',
         by: 'ops',
       },
       ref: [
@@ -902,9 +902,9 @@
       more: '변경 기록을 담는 트랜잭션 로그(MySQL의 redo 로그, PostgreSQL의 WAL)를 너무 작게 잡으면, 로그가 찰 때마다 DB가 급하게 체크포인트를 몰아 하느라 쓰기 처리량이 잠깐씩 크게 떨어집니다.',
       sig: { k: 'periodic', g: 'DB 쿼리 지연, 디스크 쓰기량' },
       chk: {
-        look: 'PostgreSQL은 log_checkpoints(최근 버전은 기본으로 켜짐) 로그의 체크포인트 시각과 쓴 버퍼 수, 체크포인트 횟수(17 이후 pg_stat_checkpointer의 num_timed·num_requested, 16 이하 pg_stat_bgwriter의 checkpoints_timed·checkpoints_req), checkpoint_warning 경고를 봅니다. MySQL은 SHOW ENGINE INNODB STATUS의 LOG 섹션에서 Log sequence number와 Last checkpoint at의 차이를 봅니다. 서버의 디스크 쓰기량·쓰기 지연을 함께 겹칩니다.',
-        yes: '쿼리 지연이 튄 시각이 체크포인트 시각과 겹치고 그때 디스크 쓰기량과 쓰기 지연이 솟음. PostgreSQL에서 요청 체크포인트(num_requested)가 시간 체크포인트(num_timed)보다 훨씬 많으면 WAL이 max_wal_size에 자주 닿아 체크포인트가 앞당겨지는 것으로 봄.',
-        no: '체크포인트 시각과 무관한 주기로 튀면 백업·배치(dk-backup, db-batch).',
+        look: 'PostgreSQL은 log_checkpoints(최근 버전은 기본으로 켜짐) 로그의 체크포인트 시각과 쓴 버퍼 수, 체크포인트 횟수(17 이후 pg_stat_checkpointer의 num_timed·num_requested, 16 이하 pg_stat_bgwriter의 checkpoints_timed·checkpoints_req), checkpoint_warning 경고를 봄. MySQL은 SHOW ENGINE INNODB STATUS의 LOG 섹션에서 Log sequence number와 Last checkpoint at의 차이를 봄. 서버의 디스크 쓰기량·쓰기 지연을 함께 겹침',
+        yes: '쿼리 지연이 튄 시각이 체크포인트 시각과 겹치고 그때 디스크 쓰기량과 쓰기 지연이 솟음. PostgreSQL에서 요청 체크포인트(num_requested)가 시간 체크포인트(num_timed)보다 훨씬 많으면 WAL이 max_wal_size에 자주 닿아 체크포인트가 앞당겨지는 것으로 봄',
+        no: '체크포인트 시각과 무관한 주기로 튀면 백업·배치(dk-backup, db-batch)',
         by: 'ops',
       },
       ref: [
@@ -925,9 +925,9 @@
       more: 'MySQL은 꺼질 때 버퍼 풀의 페이지 목록을 저장했다가 켜질 때 백그라운드에서 다시 읽어 오지만, 다 채우기까지는 시간이 걸립니다. 클라우드에서 DB를 스냅샷(디스크 사본)으로 되살렸다면 디스크 자체도 처음 읽는 블록마다 느려서 더 오래 갑니다.',
       sig: { k: 'surge', g: '디스크 읽기, 버퍼 캐시 적중률' },
       chk: {
-        look: 'MySQL은 Innodb_buffer_pool_reads(버퍼 풀에 없어 디스크에서 읽은 횟수)와 Innodb_buffer_pool_read_requests의 비율, 예열 진행 상황 Innodb_buffer_pool_load_status를 봅니다. PostgreSQL은 pg_stat_database의 blks_read·blks_hit을 봅니다. DB 서버의 디스크 읽기 수도 함께 봅니다.',
-        yes: '재시작 직후 디스크 읽기가 솟고 적중률이 낮았다가 시간이 지나며 회복되고, 그 구간에 로그인·로딩이 느림.',
-        no: '적중률이 평소와 같은데 점검 직후 느리면 로그인 폭주·N+1(db-login-storm)이나 커넥션 풀(db-pool).',
+        look: 'MySQL은 Innodb_buffer_pool_reads(버퍼 풀에 없어 디스크에서 읽은 횟수)와 Innodb_buffer_pool_read_requests의 비율, 예열 진행 상황 Innodb_buffer_pool_load_status를 봄. PostgreSQL은 pg_stat_database의 blks_read·blks_hit을 봄. DB 서버의 디스크 읽기 수도 함께 봄',
+        yes: '재시작 직후 디스크 읽기가 솟고 적중률이 낮았다가 시간이 지나며 회복되고, 그 구간에 로그인·로딩이 느림',
+        no: '적중률이 평소와 같은데 점검 직후 느리면 로그인 폭주·N+1(db-login-storm)이나 커넥션 풀(db-pool)',
         by: 'ops',
       },
       ref: [
@@ -947,9 +947,9 @@
       sim: 'dbpool',
       sig: { k: 'surge', g: 'DB 초당 쿼리 수, 로그인 수' },
       chk: {
-        look: '점검 직후 로그인 수와 DB의 초당 쿼리 수(MySQL은 Questions 증가량)를 겹쳐 보고 로그인 한 건당 쿼리 수를 계산합니다. 호출 횟수 상위 쿼리는 MySQL events_statements_summary_by_digest의 COUNT_STAR, PostgreSQL pg_stat_statements의 calls로 뽑습니다.',
-        yes: '로그인 한 건당 쿼리가 수십 개이고, 상위 쿼리가 캐릭터 ID 하나로 조회하는 같은 모양의 짧은 쿼리들임. 패치 뒤 로그인당 쿼리 수가 늘었다면 그 패치가 출발점.',
-        no: '로그인당 쿼리 수는 적은데 쿼리 하나하나가 느리면 콜드 캐시(db-cold-cache)나 인덱스(db-no-index).',
+        look: '점검 직후 로그인 수와 DB의 초당 쿼리 수(MySQL은 Questions 증가량)를 겹쳐 보고 로그인 한 건당 쿼리 수를 계산함. 호출 횟수 상위 쿼리는 MySQL events_statements_summary_by_digest의 COUNT_STAR, PostgreSQL pg_stat_statements의 calls로 뽑음',
+        yes: '로그인 한 건당 쿼리가 수십 개이고, 상위 쿼리가 캐릭터 ID 하나로 조회하는 같은 모양의 짧은 쿼리들임. 패치 뒤 로그인당 쿼리 수가 늘었다면 그 패치가 출발점',
+        no: '로그인당 쿼리 수는 적은데 쿼리 하나하나가 느리면 콜드 캐시(db-cold-cache)나 인덱스(db-no-index)',
         by: 'ops',
       },
       ref: [
@@ -968,9 +968,9 @@
       more: 'SQL Server는 한 문장이 행 잠금을 약 5,000개 넘게 잡으면 테이블 잠금으로 바꿉니다(잠금 에스컬레이션). 그 순간 같은 테이블을 쓰는 모든 요청이 멈춥니다. MySQL도 기본 설정에서 범위 조건으로 고치면 행 사이 빈틈까지 잠가(갭 락) 새 행 추가를 막습니다.',
       sig: { k: 'periodic', g: 'DB 쿼리 지연, 잠금 대기' },
       chk: {
-        look: '렉 시각에 돌던 긴 쿼리를 찾습니다. MySQL은 slow query log, PostgreSQL은 pg_stat_activity의 query_start·query를 보고, 같은 시각의 잠금 대기 지표와 배치 일정(크론, DB 이벤트 스케줄러)을 대조합니다. SQL Server는 lock_escalation 확장 이벤트로 잠금 에스컬레이션을 기록합니다.',
-        yes: '매번 같은 시각 대량 UPDATE·DELETE·집계 쿼리가 돌고, 그동안 잠금 대기와 디스크 이용률이 함께 오름.',
-        no: '그 시각에 긴 쿼리가 없으면 체크포인트(db-checkpoint)나 서버 백업(dk-backup).',
+        look: '렉 시각에 돌던 긴 쿼리를 찾음. MySQL은 slow query log, PostgreSQL은 pg_stat_activity의 query_start·query를 보고, 같은 시각의 잠금 대기 지표와 배치 일정(크론, DB 이벤트 스케줄러)을 대조함. SQL Server는 lock_escalation 확장 이벤트로 잠금 에스컬레이션을 기록함',
+        yes: '매번 같은 시각 대량 UPDATE·DELETE·집계 쿼리가 돌고, 그동안 잠금 대기와 디스크 이용률이 함께 오름',
+        no: '그 시각에 긴 쿼리가 없으면 체크포인트(db-checkpoint)나 서버 백업(dk-backup)',
         by: 'ops',
       },
       ref: [
@@ -988,9 +988,9 @@
       act: { game: '재시도 가능한 저장, 끊긴 연결을 빨리 버리고 새 주소로 다시 맺는 설정(커넥션 풀·DNS 캐시), 전환 훈련 때 재연결 확인.', infra: '동기·반동기 복제(쓰기 지연과 맞바꿈), 전환 훈련, 전환 시간·복제 지연 모니터링.' },
       sig: { k: 'drop', g: 'DB 연결 수, 쓰기 오류 수' },
       chk: {
-        look: 'DB 쪽 장애 전환 기록(RDS는 이벤트 RDS-EVENT-0013 전환 시작·RDS-EVENT-0049 전환 완료, 직접 운영하는 DB는 승격 로그)과 게임 서버의 DB 연결 수·연결 오류 수를 한 그래프에 놓습니다. 비동기 복제라면 장애 직전의 복제 지연(RDS ReplicaLag, PostgreSQL pg_stat_replication의 replay_lag)도 봅니다.',
-        yes: '저장 실패가 한 구간에 몰리고, 그 구간이 장애 전환 시작·완료 사이와 겹침. 되돌아간 양이 장애 직전 복제 지연과 비슷함. 전환이 끝난 뒤에도 오류가 이어지는 게임 서버는 옛 주소로 맺은 연결을 계속 쓰고 있는 것.',
-        no: '전환 기록이 없는 시각의 연결 끊김은 네트워크나 DB 과부하 쪽.',
+        look: 'DB 쪽 장애 전환 기록(RDS는 이벤트 RDS-EVENT-0013 전환 시작·RDS-EVENT-0049 전환 완료, 직접 운영하는 DB는 승격 로그)과 게임 서버의 DB 연결 수·연결 오류 수를 한 그래프에 놓음. 비동기 복제라면 장애 직전의 복제 지연(RDS ReplicaLag, PostgreSQL pg_stat_replication의 replay_lag)도 봄',
+        yes: '저장 실패가 한 구간에 몰리고, 그 구간이 장애 전환 시작·완료 사이와 겹침. 되돌아간 양이 장애 직전 복제 지연과 비슷함. 전환이 끝난 뒤에도 오류가 이어지는 게임 서버는 옛 주소로 맺은 연결을 계속 쓰고 있는 것',
+        no: '전환 기록이 없는 시각의 연결 끊김은 네트워크나 DB 과부하 쪽',
         by: 'ops',
       },
       ref: [
@@ -1010,9 +1010,9 @@
       act: { game: '중요 이벤트(거래, 희귀 획득)는 즉시 저장, 변경 로그 기록.', infra: '저장 주기를 줄였을 때 늘어나는 쓰기를 감당할 DB의 IOPS·CPU 여유 확인.' },
       sig: { k: 'drop', g: '접속 수, 롤백 신고 수' },
       chk: {
-        look: '크래시·장애 시각과, 롤백을 신고한 캐릭터의 마지막 저장 시각(게임 서버의 저장 로그나 DB의 수정 시각 컬럼)을 나란히 놓습니다.',
-        yes: '되돌아간 시점이 크래시 직전의 마지막 저장 시각과 일치하고, 잃은 시간이 저장 주기보다 짧음.',
-        no: '게임 서버 로그에는 저장이 끝났다고 남아 있는데도 되돌아갔으면 DB 장애 전환의 데이터 유실(db-failover)이나 복제본에서 읽은 옛 값(db-replica-lag).',
+        look: '크래시·장애 시각과, 롤백을 신고한 캐릭터의 마지막 저장 시각(게임 서버의 저장 로그나 DB의 수정 시각 컬럼)을 나란히 놓음',
+        yes: '되돌아간 시점이 크래시 직전의 마지막 저장 시각과 일치하고, 잃은 시간이 저장 주기보다 짧음',
+        no: '게임 서버 로그에는 저장이 끝났다고 남아 있는데도 되돌아갔으면 DB 장애 전환의 데이터 유실(db-failover)이나 복제본에서 읽은 옛 값(db-replica-lag)',
         by: 'code',
       },
       ref: [
@@ -1029,9 +1029,9 @@
       sim: 'arch',
       sig: { k: 'periodic', g: '캐시 적중률, DB 초당 쿼리 수' },
       chk: {
-        look: 'Redis INFO의 keyspace_hits·keyspace_misses(적중률), expired_keys, 재시작 여부(uptime_in_seconds)를 DB 초당 쿼리 수와 겹쳐 보고, 그 순간 DB에서 같은 쿼리가 동시에 몇 개 도는지(MySQL SHOW PROCESSLIST, PostgreSQL pg_stat_activity) 셉니다.',
-        yes: '캐시 미스가 한순간 치솟는 시각에 DB 쿼리 수가 함께 솟고, 동시에 도는 쿼리 대부분이 같은 데이터를 읽는 같은 쿼리임. 인기 키의 만료 주기나 Redis 재시작 시각과 겹침.',
-        no: '캐시 미스는 평소와 같은데 DB 쿼리만 늘면 로그인 폭주(db-login-storm)나 배치(db-batch).',
+        look: 'Redis INFO의 keyspace_hits·keyspace_misses(적중률), expired_keys, 재시작 여부(uptime_in_seconds)를 DB 초당 쿼리 수와 겹쳐 보고, 그 순간 DB에서 같은 쿼리가 동시에 몇 개 도는지(MySQL SHOW PROCESSLIST, PostgreSQL pg_stat_activity) 셈',
+        yes: '캐시 미스가 한순간 치솟는 시각에 DB 쿼리 수가 함께 솟고, 동시에 도는 쿼리 대부분이 같은 데이터를 읽는 같은 쿼리임. 인기 키의 만료 주기나 Redis 재시작 시각과 겹침',
+        no: '캐시 미스는 평소와 같은데 DB 쿼리만 늘면 로그인 폭주(db-login-storm)나 배치(db-batch)',
         by: 'ops',
       },
       ref: [
@@ -1051,9 +1051,9 @@
       more: 'DB는 읽는 쪽이 고치기 전 모습을 볼 수 있도록 옛 버전을 남겨 둡니다(MVCC). 가장 오래된 트랜잭션이 끝나야 이 기록을 지울 수 있어서, 트랜잭션 하나가 몇 시간 열려 있으면 MySQL은 언두 로그가, PostgreSQL은 VACUUM이 정리하지 못한 죽은 행(dead tuple)이 쌓입니다. SQL Server는 트랜잭션 로그가 줄지 않아 디스크를 채우기도 합니다.',
       sig: { k: 'ramp', g: '언두 로그 길이(History list length), 죽은 행 수' },
       chk: {
-        look: 'MySQL은 INFORMATION_SCHEMA.INNODB_TRX의 trx_started로 가장 오래된 트랜잭션을 찾고, SHOW ENGINE INNODB STATUS의 TRANSACTIONS 섹션에 나오는 History list length(아직 정리하지 못한 언두 로그 양)를 봅니다. PostgreSQL은 pg_stat_activity의 xact_start와 state가 idle in transaction인 세션, pg_stat_user_tables의 n_dead_tup을 봅니다.',
-        yes: '몇 분~몇 시간 된 트랜잭션이 있고, 그동안 History list length나 n_dead_tup이 계속 오르다 그 트랜잭션을 끝낸 뒤 정리(purge·VACUUM)가 돌면서 줄어듦.',
-        no: '오래된 트랜잭션이 없는데 전반적으로 느리면 체크포인트(db-checkpoint)나 디스크 쪽.',
+        look: 'MySQL은 INFORMATION_SCHEMA.INNODB_TRX의 trx_started로 가장 오래된 트랜잭션을 찾고, SHOW ENGINE INNODB STATUS의 TRANSACTIONS 섹션에 나오는 History list length(아직 정리하지 못한 언두 로그 양)를 봄. PostgreSQL은 pg_stat_activity의 xact_start와 state가 idle in transaction인 세션, pg_stat_user_tables의 n_dead_tup을 봄',
+        yes: '몇 분~몇 시간 된 트랜잭션이 있고, 그동안 History list length나 n_dead_tup이 계속 오르다 그 트랜잭션을 끝낸 뒤 정리(purge·VACUUM)가 돌면서 줄어듦',
+        no: '오래된 트랜잭션이 없는데 전반적으로 느리면 체크포인트(db-checkpoint)나 디스크 쪽',
         by: 'ops',
       },
       ref: [
@@ -1076,9 +1076,9 @@
       sim: 'arch',
       sig: { k: 'random', g: 'Redis 응답 지연, 느린 명령 수' },
       chk: {
-        look: 'SLOWLOG GET으로 slowlog-log-slower-than을 넘긴 명령을 보고, CONFIG SET latency-monitor-threshold로 지연 모니터(기본 꺼짐)를 켠 뒤 LATENCY LATEST·LATENCY DOCTOR로 fork·expire-cycle 같은 이벤트별 지연을 봅니다. INFO의 latest_fork_usec와 redis-cli --bigkeys로 fork 시간과 큰 키도 확인합니다.',
-        yes: '멈춘 시각에 SLOWLOG에 KEYS나 큰 키를 통째로 다루는 명령이 남아 있거나, LATENCY에 같은 시각 fork·expire-cycle 이벤트가 수십 ms 이상으로 기록됨.',
-        no: 'SLOWLOG·LATENCY가 비어 있는데 게임 서버 쪽에서만 느리면 네트워크나 게임 서버 안의 대기(SLOWLOG는 명령 실행 시간만 재고 클라이언트와 주고받는 시간은 넣지 않음).',
+        look: 'SLOWLOG GET으로 slowlog-log-slower-than을 넘긴 명령을 보고, CONFIG SET latency-monitor-threshold로 지연 모니터(기본 꺼짐)를 켠 뒤 LATENCY LATEST·LATENCY DOCTOR로 fork·expire-cycle 같은 이벤트별 지연을 봄. INFO의 latest_fork_usec와 redis-cli --bigkeys로 fork 시간과 큰 키도 확인함',
+        yes: '멈춘 시각에 SLOWLOG에 KEYS나 큰 키를 통째로 다루는 명령이 남아 있거나, LATENCY에 같은 시각 fork·expire-cycle 이벤트가 수십 ms 이상으로 기록됨',
+        no: 'SLOWLOG·LATENCY가 비어 있는데 게임 서버 쪽에서만 느리면 네트워크나 게임 서버 안의 대기(SLOWLOG는 명령 실행 시간만 재고 클라이언트와 주고받는 시간은 넣지 않음)',
         by: 'ops',
       },
       ref: [
@@ -1100,9 +1100,9 @@
       sim: 'dbpool',
       sig: { k: 'step', g: '쿼리별 평균 실행 시간' },
       chk: {
-        look: '같은 모양 쿼리의 평균 시간을 주기적으로 모아 추이를 봅니다. MySQL은 events_statements_summary_by_digest의 AVG_TIMER_WAIT, PostgreSQL은 pg_stat_statements의 mean_exec_time(12 이하는 mean_time)입니다. 느려진 전후의 실행 계획은 EXPLAIN이나 PostgreSQL auto_explain, SQL Server는 쿼리 저장소의 회귀된 쿼리(Regressed Queries) 화면으로 비교합니다.',
-        yes: '배포가 없던 시각에 한 쿼리의 평균 시간이 계단처럼 몇십 배 오르고, 그 시점이 통계 갱신·DB 재시작과 겹치며 실행 계획이 바뀌어 있음.',
-        no: '실행 계획은 그대로인데 느려졌으면 데이터 증가, 잠금 대기(db-hot-row), 디스크 쪽.',
+        look: '같은 모양 쿼리의 평균 시간을 주기적으로 모아 추이를 봄. MySQL은 events_statements_summary_by_digest의 AVG_TIMER_WAIT, PostgreSQL은 pg_stat_statements의 mean_exec_time(12 이하는 mean_time)임. 느려진 전후의 실행 계획은 EXPLAIN이나 PostgreSQL auto_explain, SQL Server는 쿼리 저장소의 회귀된 쿼리(Regressed Queries) 화면으로 비교함',
+        yes: '배포가 없던 시각에 한 쿼리의 평균 시간이 계단처럼 몇십 배 오르고, 그 시점이 통계 갱신·DB 재시작과 겹치며 실행 계획이 바뀌어 있음',
+        no: '실행 계획은 그대로인데 느려졌으면 데이터 증가, 잠금 대기(db-hot-row), 디스크 쪽',
         by: 'ops',
       },
       ref: [
@@ -1123,9 +1123,9 @@
       more: 'MySQL은 스키마를 바꿀 때 메타데이터 잠금을, PostgreSQL은 가장 강한 테이블 잠금을 잠깐 잡습니다. 변경 자체는 순식간이어도, 앞에 끝나지 않은 트랜잭션이 하나 있으면 그 뒤로 모든 요청이 대기합니다.',
       sig: { k: 'step', g: '잠금 대기 세션 수, 그 테이블의 쿼리 지연' },
       chk: {
-        look: 'MySQL은 SHOW PROCESSLIST에서 State가 Waiting for table metadata lock인 세션을 세고, sys.schema_table_lock_waits로 막고 있는 세션(blocking_pid)을 찾습니다. PostgreSQL은 pg_locks에서 granted가 false인 요청과 AccessExclusiveLock을 보고, pg_blocking_pids()로 막고 있는 세션을 찾습니다.',
-        yes: '스키마 변경을 시작한 시각부터 그 테이블을 쓰는 모든 쿼리가 잠금 대기로 쌓이고, 맨 앞에 끝나지 않은 트랜잭션이나 스키마 변경 문장이 있음.',
-        no: '대기가 특정 행에만 몰리고 같은 테이블의 다른 행은 잘 처리되면 핫 로우(db-hot-row).',
+        look: 'MySQL은 SHOW PROCESSLIST에서 State가 Waiting for table metadata lock인 세션을 세고, sys.schema_table_lock_waits로 막고 있는 세션(blocking_pid)을 찾음. PostgreSQL은 pg_locks에서 granted가 false인 요청과 AccessExclusiveLock을 보고, pg_blocking_pids()로 막고 있는 세션을 찾음',
+        yes: '스키마 변경을 시작한 시각부터 그 테이블을 쓰는 모든 쿼리가 잠금 대기로 쌓이고, 맨 앞에 끝나지 않은 트랜잭션이나 스키마 변경 문장이 있음',
+        no: '대기가 특정 행에만 몰리고 같은 테이블의 다른 행은 잘 처리되면 핫 로우(db-hot-row)',
         by: 'ops',
       },
       ref: [
@@ -1396,6 +1396,25 @@
         { t: 'openssl-x509', u: 'https://docs.openssl.org/3.0/man1/openssl-x509/', p: 'OpenSSL', n: '-enddate: 인증서 만료일(notAfter) 출력, -checkend: 지정한 초 안에 만료되는지 검사' },
         { t: 'CloudWatch metrics for your Application Load Balancer', u: 'https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-cloudwatch-metrics.html', p: 'AWS', n: 'ClientTLSNegotiationErrorCount: 클라이언트가 서버 인증서 검증에 실패해 연결을 끊은 경우 등 TLS 세션을 맺지 못한 연결 수' },
         { t: 'CloudWatch metrics for your Network Load Balancer', u: 'https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-cloudwatch-metrics.html', p: 'AWS', n: 'ClientTLSNegotiationErrorCount: 클라이언트와 TLS 리스너 사이의 협상에 실패한 TLS 핸드셰이크 수' },
+      ] },
+    { id: 'in-login-queue', t: '로그인 대기열 상한·재접속 유예 부족', en: 'Login queue cap / no reconnect grace',
+      s: '출시·점검 직후 접속이 몰리면 로그인 대기열이 상한에 닿아 새 대기를 거절하고, 기다리던 유저는 잠깐 끊긴 사이 자리를 잃어 맨 뒤로 돌아갑니다.',
+      c: ['로그인 서버가 한 번에 받을 수 있는 인원보다 접속하려는 사람이 많아 대기열을 두고, 너무 길어지면 서버를 지키려고 새 대기를 거절함', '대기열이 길수록 기다리는 시간이 늘고, 그동안 와이파이·모바일망이 잠깐만 끊겨도 대기 자리를 잃음', '접속 불가·무한 로딩, 대기 중 오류와 함께 게임 종료, 다시 맨 뒤에서 기다림'],
+      sym: ['noconnect', 'disconnect'], fx: ['stall'], who: ['server', 'me'], when: ['login', 'peak'],
+      num: '2021년 FINAL FANTASY XIV 확장팩 출시 때는 논리 데이터센터마다 대기 인원이 17,000명을 넘으면 새 대기를 거절했습니다(Error 2002). 대기 중 연결이 끊기면 로비 서버가 수십 초~1분 기다려 주고, 그 안에 다시 붙으면 대기열 중간부터 이어 가게 했습니다.',
+      own: ['srv', 'cli', 'sys'],
+      act: { game: '서버: 대기열 상한을 로그인 서버가 실제로 처리할 수 있는 양에 맞추기, 대기 중 끊긴 유저의 자리를 일정 시간 지켜 주기(재접속 유예), 순번과 예상 대기 시간 보여 주기, 대기열 길이·거절 수·대기 중 끊김 수를 지표로 남기기. 클라이언트: 대기 중 끊기면 게임을 끄지 않고 같은 자리로 자동 재접속, 재시도 간격은 지수 백오프와 지터로 흩뜨리기.', infra: '서버 장비·OS: 출시 전 부하 시험으로 로그인·로비 서버의 처리 한도를 재고, 출시 때는 예비 장비를 미리 붙일 수 있게 준비, 대기열 지표를 접속 시도 수와 같은 그래프로 보기.' },
+      more: '로그인이 몰려 DB가 느려지는 경우는 “로그인 폭주와 N+1 쿼리”, 운영체제의 접속 대기열이 넘치는 경우는 “접속 대기열(backlog) 넘침”에서 다룹니다. 이 항목은 게임이 일부러 두는 로그인 대기열의 설계 문제입니다. 대기열 상한은 로그인 서버를 지키는 안전장치라 없앨 수 없습니다. 넘치는 요청을 일찍 거절해야 처리할 수 있는 요청을 계속 처리할 수 있기 때문입니다. 대신 거절과 끊김이 유저에게 주는 손해를 줄이는 것이 핵심이고, 대기열이 길어질수록 와이파이·모바일망처럼 회선이 불안정한 유저에게 오류가 몰립니다.',
+      sig: { k: 'ceiling', g: '로그인 대기열 길이, 상한 도달로 거절한 수, 대기 중 끊김 수' },
+      chk: {
+        look: '로그인·로비 서버가 남기는 대기열 길이, 평균 대기 시간, 상한 도달로 거절한 수, 대기 중 끊김 수를 접속 시도 수와 같은 그래프에 놓고 봄',
+        yes: '출시·점검 직후 대기열 길이가 상한에 닿아 평평해지는 동안 거절 수가 늘고, 대기 중 끊김이 와이파이·모바일망 유저에게 몰림',
+        no: '대기열은 짧은데 로그인이 느리면 DB(db-login-storm)나 운영체제의 접속 대기열(so-backlog) 쪽',
+        by: 'code',
+      },
+      ref: [
+        { t: 'Response to Congestion (as of Dec. 11)', u: 'https://na.finalfantasyxiv.com/lodestone/news/detail/6a94b30182b6d963994fdc0b789264ac9f24986f', p: 'Square Enix', n: '논리 데이터센터마다 대기 인원이 17,000명을 넘으면 로그인 서버가 다운되지 않게 새 대기를 거절(Error 2002), 대기 중 끊기면 로비 서버가 수십 초~1분 기다려 그 안에 다시 붙으면 대기열 중간부터, 넘기면 맨 뒤로' },
+        { t: 'Using load shedding to avoid overload', u: 'https://aws.amazon.com/builders-library/using-load-shedding-to-avoid-overload/', p: 'Amazon Builders\' Library', n: '넘치는 요청을 일찍 거절해 처리할 수 있는 요청을 계속 처리하는 부하 차단' },
       ] },
   ]);
 })();
