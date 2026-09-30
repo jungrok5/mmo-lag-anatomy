@@ -19,6 +19,11 @@
     syncmodels: '동기화 방식 비교', windows: '판정 구간 실험', chain: '연속 행동 실험', oneslow: '한 명만 느릴 때 실험', npcmissing: '한쪽 클라 진단', retrans: 'TCP 재전송 실험',
   };
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  /* 공유 링크는 어디서 열었든(파일, 사내 사본, 아티팩트) 공개 사이트 주소로 복사한다. 주소는 package.json의 homepage(빌드가 data-site에 넣음) */
+  const SITE = (m => (m && /^https?:/.test(m.dataset.site || '') ? m.dataset.site : location.href.split('#')[0].replace(/[^/]*$/, '')))(document.querySelector('main[data-site]'));
+  const shareBtn = (link, name, cls = 'copy') => `<button type="button" class="${cls}" data-link="${link}" aria-label="${esc(name)} 링크 복사">링크 복사</button>`;
+  // 용어의 앵커: 영문 이름으로 만든다(예: 핑 → #g-ping)
+  const glossId = en => 'g-' + String(en).split(',')[0].toLowerCase().replace(/\(.*?\)/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   /* 그래프 모양(sig)과 확인 방법(chk), 실제 사례(cases): docs/CHECKS_GUIDE.md */
   const SIG = Object.fromEntries((D.sigs || []).map(s => [s.id, s]));
   const sigFig = k => (SIG[k] && window.SIGDRAW ? window.SIGDRAW(k, SIG[k].name + ' 모양의 그래프') : '');
@@ -138,7 +143,7 @@
       `<span><span class="k">누가</span>${c.who.map(w => WHO[w]).join(', ')}</span>`,
       `<span><span class="k">언제</span>${c.when.map(w => WHEN[w]).join(', ')}</span>`,
       c.sim ? `<span><span class="k">실험</span><a href="#sim-${c.sim}">${SIMNAME[c.sim] || c.sim}</a></span>` : '',
-      `<span class="cid"><span class="k">ID</span><a class="mono" href="#c-${c.id}">${c.id}</a><button type="button" class="copy" data-copy="${c.id}" aria-label="${esc(c.t)} 링크 복사">링크 복사</button></span>`,
+      `<span class="cid"><span class="k">ID</span><a class="mono" href="#c-${c.id}">${c.id}</a>${shareBtn(`c/${c.id}.html`, c.t)}</span>`,
     ].join('');
     const acts = c.act ? TEAM_ORDER.filter(t => c.act[t]).map(t => `<dt class="act act-${t}">${ACT_LABEL[t]}</dt><dd>${c.act[t]}</dd>`).join('') : '';
     const chk = c.chk ? [
@@ -208,6 +213,7 @@
       <div class="actions">
         ${s.preset ? `<button type="button" class="btn small primary" data-lab="${s.preset}">실험실에서 재현하기</button>` : ''}
         <button type="button" class="btn small" data-tri="${s.id}">진단 도우미로</button>
+        ${shareBtn(`s/${s.id}.html`, s.name, 'btn small ghost')}
       </div>
     </article>`;
   }).join('');
@@ -477,7 +483,7 @@
   /* ---------------- 용어 사전 ---------------- */
   const gl = $('#gloss');
   gl.innerHTML = D.glossary.map(([k, en, d, sec]) =>
-    `<div data-q="${esc((k + ' ' + en + ' ' + d).toLowerCase())}"><dt>${k}<span class="en">${esc(en)}</span></dt><dd>${d}${sec ? ` <a href="#${sec}">관련 장 →</a>` : ''}</dd></div>`).join('');
+    `<div data-q="${esc((k + ' ' + en + ' ' + d).toLowerCase())}"><dt id="${glossId(en)}">${k}<span class="en">${esc(en)}</span><a class="h-link" href="#${glossId(en)}" aria-label="${esc(k)} 링크 복사"></a></dt><dd>${d}${sec ? ` <a href="#${sec}">관련 장 →</a>` : ''}</dd></div>`).join('');
   /* ---------------- 참고 문헌: 원인 카드와 장별 출처를 주소 기준으로 모은다 ---------------- */
   (function () {
     const box = $('#ref-list'); if (!box) return;
@@ -562,12 +568,31 @@
   // 버튼 이름(aria-label)은 그대로라 화면 낭독기가 “복사됨”을 듣도록 따로 알린다
   const copyLive = K.el('p', { class: 'sr-only', 'aria-live': 'polite' });
   document.body.append(copyLive);
+  const share = (link, onDone) => {
+    const url = SITE + (link.charAt(0) === '#' ? link : link.replace(/^\//, ''));
+    copyText(url).then(() => onDone(true, url), () => onDone(false, url));
+  };
+  const toast = K.el('p', { class: 'share-toast', role: 'status' });
+  document.body.append(toast);
+  const flash = msg => { toast.textContent = msg; toast.classList.add('on'); clearTimeout(toast._t); toast._t = setTimeout(() => toast.classList.remove('on'), 1800); };
   document.addEventListener('click', e => {
-    const b = e.target.closest('button[data-copy]');
-    if (!b) return;
-    const hash = '#c-' + b.dataset.copy;
-    const show = msg => { b.textContent = msg; copyLive.textContent = msg; clearTimeout(b._t); b._t = setTimeout(() => { b.textContent = '링크 복사'; copyLive.textContent = ''; }, 1800); };
-    copyText(location.href.split('#')[0] + hash).then(() => show('복사됨'), () => { history.replaceState(null, '', hash); show('주소창에서 복사하세요'); });
+    const b = e.target.closest('button[data-link]');
+    if (b) {
+      const label = b.textContent;
+      const show = msg => { b.textContent = msg; copyLive.textContent = msg; clearTimeout(b._t); b._t = setTimeout(() => { b.textContent = label; copyLive.textContent = ''; }, 1800); };
+      share(b.dataset.link, ok => show(ok ? '복사됨' : '주소창에서 복사하세요'));
+      if (b.dataset.link.charAt(0) === '#') history.replaceState(null, '', b.dataset.link);
+      return;
+    }
+    // 제목·용어·단계 옆의 # 링크: 그 자리로 가면서 공개 주소를 복사한다
+    const a = e.target.closest('a.h-link');
+    if (a) share(a.getAttribute('href'), ok => { const msg = ok ? '링크를 복사했습니다' : '주소창의 주소를 복사하세요'; flash(msg); copyLive.textContent = msg; });
+  });
+  // 장·절 제목에 # 링크를 단다(글자는 CSS로 그려 제목 textContent를 바꾸지 않는다)
+  $$('main section[id] > .ch-head h2, h3.sec[id]').forEach(h => {
+    const id = h.id || h.closest('section[id]').id;
+    if (!id || $('.h-link', h)) return;
+    h.append(K.el('a', { class: 'h-link', href: '#' + id, 'aria-label': h.textContent.trim() + ' 링크 복사' }));
   });
 
   /* ---------------- 관측으로 판정하기: 그래프 모양 13가지, 확인 수단 분포 ---------------- */
@@ -578,7 +603,7 @@
     box.innerHTML = (D.sigs || []).map(g => {
       const list = D.causes.filter(c => c.sig && c.sig.k === g.id);
       return `<div class="sig-tile" id="sig-${g.id}">${sigFig(g.id)}
-        <div class="sig-body"><p class="sig-name"><b>${g.name}</b> <span class="mono">${list.length}</span></p><p>${g.desc}</p>
+        <div class="sig-body"><p class="sig-name"><b>${g.name}</b> <span class="mono">${list.length}</span><a class="h-link" href="#sig-${g.id}" aria-label="${esc(g.name)} 링크 복사"></a></p><p>${g.desc}</p>
         ${list.length ? `<details><summary>이 모양의 원인 ${list.length}가지</summary><ul>${list.map(c => `<li>${causeLink(c)} <span class="note">${layerName(c.layer)}</span></li>`).join('')}</ul></details>` : ''}</div></div>`;
     }).join('');
   })();
@@ -627,8 +652,8 @@
   (function () {
     const box = $('#playbooks'); if (!box) return;
     box.innerHTML = (D.playbooks || []).map(pb => `<div class="playbook" id="pb-${pb.id}">
-      <h4>${esc(pb.t)}</h4><p class="note">${pb.when}</p>
-      <ol class="pb-steps">${(pb.steps || []).map(st => `<li><b>${st.t}</b><p>${st.d}</p>${st.causes && st.causes.length ? `<div class="chips">${causeChips(st.causes)}</div>` : ''}</li>`).join('')}</ol>
+      <h4>${esc(pb.t)} ${shareBtn(`#pb-${pb.id}`, pb.t)}</h4><p class="note">${pb.when}</p>
+      <ol class="pb-steps">${(pb.steps || []).map((st, i) => `<li id="pb-${pb.id}-${i + 1}"><b>${st.t}</b><a class="h-link" href="#pb-${pb.id}-${i + 1}" aria-label="${i + 1}단계 링크 복사"></a><p>${st.d}</p>${st.causes && st.causes.length ? `<div class="chips">${causeChips(st.causes)}</div>` : ''}</li>`).join('')}</ol>
       ${pb.ref && pb.ref.length ? `<details><summary>출처 ${pb.ref.length}</summary>${refList(pb.ref)}</details>` : ''}</div>`).join('') || '<p class="note">준비 중입니다.</p>';
   })();
   (function () {
@@ -638,7 +663,7 @@
       <dl><dt>무슨 일</dt><dd>${x.what}</dd><dt>배울 점</dt><dd>${x.lesson}</dd></dl>
       <details class="case-why"><summary>원인 자세히</summary><p>${x.why}</p></details>
       <div class="chips">${causeChips(x.causes)}</div>
-      <p class="case-src"><a href="${esc(x.u)}" target="_blank" rel="noopener noreferrer">원문: ${esc(x.p || x.org)}</a></p></article>`).join('') || '<p class="note">준비 중입니다.</p>';
+      <p class="case-src"><a href="${esc(x.u)}" target="_blank" rel="noopener noreferrer">원문: ${esc(x.p || x.org)}</a>${shareBtn(`#case-${x.id}`, x.t)}</p></article>`).join('') || '<p class="note">준비 중입니다.</p>';
   })();
 
   /* ---------------- 증상 × 층 지도 ---------------- */

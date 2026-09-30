@@ -11,7 +11,7 @@
   - 장 본문과 표: `src/body.html`
   - 장별 출처: `src/js/refs-*.js`
   - 공개 장애 사례와 상황별 절차(패치 이후 렉, 해외 국가 추가): `src/js/cases.js`
-- 원인을 말할 때는 원인 ID와 이름을 함께 쓴다. 예: `mem-gc` 서버 GC 전체 멈춤. 사이트에서 그 카드로 가는 주소는 `index.html#c-<ID>`다.
+- 원인을 말할 때는 원인 ID와 이름을 함께 쓴다. 예: `mem-gc` 서버 GC 전체 멈춤. 링크를 줄 때는 공개 사이트(`package.json`의 `homepage`) 기준으로, 원인은 `c/<ID>.html`(원인별 페이지) 또는 `#c-<ID>`(원본 카드), 증상은 `s/<ID>.html`, 사례는 `#case-<ID>`, 절차는 `#pb-<ID>`를 쓴다. 전체 형식은 `README.md`의 “링크로 공유하기”에 있다.
 - 증상으로 물으면 사이트의 진단 도우미(`src/js/app.js`의 `triage`)와 같은 방식으로 좁힌다.
   1. 증상 이름을 `data.js`의 `symptoms` id로 바꾼다.
   2. `sym`에 그 id가 있는 원인을 모은다.

@@ -709,3 +709,20 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
   .oflow { grid-template-columns: minmax(0, 1fr); }
   .oflow li:not(:last-child)::after { right: 50%; top: auto; bottom: -8px; transform: translate(50%, 50%); border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 8px solid var(--line); border-bottom: 0; }
 }
+
+/* 공유 링크: 제목·용어·단계 옆 #, 복사 알림, 링크로 들어온 항목 강조 */
+.h-link { display: inline-block; margin-left: .35em; padding: 0 .2em; color: var(--muted); text-decoration: none; font: 600 .7em/1 var(--font-mono); vertical-align: .12em; border-radius: 4px; opacity: 0; transition: opacity .15s; }
+.h-link::before { content: "#"; }
+h2:hover > .h-link, h3:hover > .h-link, dt:hover > .h-link, li:hover > .h-link, .sig-name:hover > .h-link, .h-link:focus-visible { opacity: 1; }
+.h-link:hover { color: var(--accent); }
+@media (hover: none) { .h-link { opacity: .55; } }
+.ch-head h2 .h-link { font-size: .4em; vertical-align: .5em; }
+dt .h-link, .pb-steps .h-link, .sig-name .h-link { font-size: 12px; vertical-align: 1px; }
+h2[id], h3[id], dt[id], li[id] { scroll-margin-top: 80px; }
+dt[id]:target, .pb-steps li:target { background: var(--accent-soft); border-radius: 6px; }
+.playbook:target { outline: 2px solid var(--accent); }
+.playbook h4 .copy, .case-src .copy { margin-left: 8px; min-height: 24px; padding: 1px 8px; border: 1px solid var(--line); border-radius: 5px; background: transparent; color: var(--muted); font: inherit; font-size: 12px; font-weight: 400; cursor: pointer; vertical-align: 1px; }
+.playbook h4 .copy:hover, .case-src .copy:hover { color: var(--ink); border-color: var(--ink-2); }
+.share-toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 12px); margin: 0; padding: 8px 14px; border-radius: 8px; background: var(--ink); color: var(--surface); font-size: 13.5px; opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; z-index: 60; }
+.share-toast.on { opacity: 1; transform: translate(-50%, 0); }
+@media (prefers-reduced-motion: reduce) { .share-toast, .h-link { transition: none; } }

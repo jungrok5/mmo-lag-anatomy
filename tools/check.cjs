@@ -28,6 +28,9 @@ await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
 await page.waitForTimeout(400);
 const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
 if (shot) await page.screenshot({ path: shot, fullPage: flags.has('--full') });
+// 공유 링크(#ID)가 한 곳만 가리키도록 페이지 안의 id는 겹치면 안 된다
+const dupIds = await page.evaluate(() => { const m = {}; document.querySelectorAll('[id]').forEach(e => { m[e.id] = (m[e.id] || 0) + 1; }); return Object.keys(m).filter(k => m[k] > 1); });
+dupIds.forEach(id => errors.push(`[dup-id] ${id}`));
 const shown = errors.filter(e => !/fonts\.g|net::ERR|Failed to load resource/.test(e));
 console.log(JSON.stringify({ file, errors: shown, horizontalOverflowPx: overflow }, null, 2));
 await browser.close();

@@ -52,7 +52,7 @@ const CSS = `:root{--bg:#fff;--ink:#0f1822;--ink2:#445162;--line:#d7dde4;--soft:
 @media (prefers-color-scheme:dark){:root{--bg:#0b1016;--ink:#e5ebf1;--ink2:#a6b2bf;--line:#26313d;--soft:#151e28;--accent:#8ea0ff}}
 body{margin:0 auto;max-width:860px;padding:20px 16px 64px;background:var(--bg);color:var(--ink);font:16px/1.75 system-ui,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;word-break:keep-all;overflow-wrap:anywhere}
 a{color:var(--accent)}h1{font-size:28px;line-height:1.35;margin:.4em 0}h2{margin-top:40px;padding-top:10px;border-top:2px solid var(--line);font-size:21px}h3{margin-top:26px;font-size:18px}
-.en{font-weight:400;color:var(--ink2);font-size:.62em}.crumb,.meta,.n{color:var(--ink2);font-size:14px}
+.en{font-weight:400;color:var(--ink2);font-size:.62em}.open{margin:.2em 0 1em;font-weight:600}.crumb,.meta,.n{color:var(--ink2);font-size:14px}
 .chain{background:var(--soft);border-radius:8px;padding:12px 14px}
 dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 14px}dt{font-weight:700;color:var(--ink2);font-size:14px;padding-top:2px}dd{margin:0}
 @media (max-width:560px){dl{grid-template-columns:1fr}dd{margin-bottom:8px}}
@@ -131,6 +131,7 @@ for (const c of K.causes) {
   const body = `<p class="crumb"><a href="../">게임 렉 백서</a> › <a href="../text.html#${l.anchor}">${esc(layerName(l))}</a></p>
 <h1>${esc(c.name)} <span class="en">${esc(c.en)}</span></h1>
 <p class="meta">원인 ID <code>${c.id}</code> · ${ownerLine(c)}</p>
+<p class="open"><a href="../#c-${c.id}">그림과 실험이 있는 원본 카드로 열기 →</a></p>
 <p>${html(c.summary)}</p>
 ${chain(c)}
 ${details(c, '../')}
@@ -161,6 +162,7 @@ for (const s of K.symptoms) {
   const body = `<p class="crumb"><a href="../">게임 렉 백서</a> › <a href="../text.html#symptoms">증상별로 찾기</a></p>
 <h1>${esc(s.name)}: 원인 ${list.length}가지와 담당</h1>
 <p class="meta">다른 말: ${esc(s.alias)}</p>
+<p class="open"><a href="../#s-${s.id}">그림이 있는 원본 증상 사전으로 열기 →</a></p>
 <p>${html(s.what)}</p>
 <p>${html(s.looks)}</p>
 <p>${html(s.tell)}</p>

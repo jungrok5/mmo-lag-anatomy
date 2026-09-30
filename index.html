@@ -774,6 +774,23 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
   .oflow li:not(:last-child)::after { right: 50%; top: auto; bottom: -8px; transform: translate(50%, 50%); border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 8px solid var(--line); border-bottom: 0; }
 }
 
+/* 공유 링크: 제목·용어·단계 옆 #, 복사 알림, 링크로 들어온 항목 강조 */
+.h-link { display: inline-block; margin-left: .35em; padding: 0 .2em; color: var(--muted); text-decoration: none; font: 600 .7em/1 var(--font-mono); vertical-align: .12em; border-radius: 4px; opacity: 0; transition: opacity .15s; }
+.h-link::before { content: "#"; }
+h2:hover > .h-link, h3:hover > .h-link, dt:hover > .h-link, li:hover > .h-link, .sig-name:hover > .h-link, .h-link:focus-visible { opacity: 1; }
+.h-link:hover { color: var(--accent); }
+@media (hover: none) { .h-link { opacity: .55; } }
+.ch-head h2 .h-link { font-size: .4em; vertical-align: .5em; }
+dt .h-link, .pb-steps .h-link, .sig-name .h-link { font-size: 12px; vertical-align: 1px; }
+h2[id], h3[id], dt[id], li[id] { scroll-margin-top: 80px; }
+dt[id]:target, .pb-steps li:target { background: var(--accent-soft); border-radius: 6px; }
+.playbook:target { outline: 2px solid var(--accent); }
+.playbook h4 .copy, .case-src .copy { margin-left: 8px; min-height: 24px; padding: 1px 8px; border: 1px solid var(--line); border-radius: 5px; background: transparent; color: var(--muted); font: inherit; font-size: 12px; font-weight: 400; cursor: pointer; vertical-align: 1px; }
+.playbook h4 .copy:hover, .case-src .copy:hover { color: var(--ink); border-color: var(--ink-2); }
+.share-toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 12px); margin: 0; padding: 8px 14px; border-radius: 8px; background: var(--ink); color: var(--surface); font-size: 13.5px; opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; z-index: 60; }
+.share-toast.on { opacity: 1; transform: translate(-50%, 0); }
+@media (prefers-reduced-motion: reduce) { .share-toast, .h-link { transition: none; } }
+
 </style>
 </head>
 <body>
@@ -820,7 +837,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
     </div>
   </nav>
 
-  <main class="main" id="top">
+  <main class="main" id="top" data-site="https://jungrok5.github.io/mmo-lag-anatomy/">
     <div class="wrap">
 
       <!-- ===================== 히어로 ===================== -->
@@ -848,12 +865,12 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
           <p>네 가지 밖의 경우도 있습니다. 서버와 내 PC가 같은 일을 서로 다르게 계산하면(이동 규칙 차이, 버그) 회선이 멀쩡해도 고무줄이나 안 보임이 생깁니다. 이런 렉은 핑과 상관없이 같은 장소·같은 행동에서 되풀이되는 것이 단서입니다.</p>
         </div>
 
-        <h3 class="sec">요인에서 증상까지</h3>
+        <h3 class="sec" id="basics-chain">요인에서 증상까지</h3>
         <div id="fx-map"></div>
 
         <div class="analogy"><span class="tag">비유</span><p>택배로 생각해 보세요. 배송이 늘 3일 걸리면 <b>지연</b>, 어떤 건 하루 어떤 건 닷새 걸리면 <b>지터</b>, 상자가 사라지면 <b>손실</b>, 물류센터가 문을 닫으면 <b>정체</b>입니다. 게임은 “상자가 늦거나 안 오면 앞뒤 상자로 짐작해 채우기(보간·외삽)”, “안 오면 다시 보내 달라고 하기(재전송)” 같은 방법으로 버팁니다.</p></div>
 
-        <h3 class="sec">시간 감각부터 맞추기</h3>
+        <h3 class="sec" id="basics-time">시간 감각부터 맞추기</h3>
         <div class="prose"><p>렉 이야기는 대부분 밀리초(ms, 1/1000초) 단위입니다. 아래 표의 숫자 몇 개만 기억해도 게임개발팀·인프라팀의 말이 훨씬 잘 들립니다.</p></div>
         <div class="table-wrap">
           <table class="nums" id="time-table">
@@ -862,12 +879,12 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
           </table>
         </div>
 
-        <h3 class="sec">모든 층에 공통인 법칙 하나</h3>
+        <h3 class="sec" id="basics-law">모든 층에 공통인 법칙 하나</h3>
         <div class="prose">
           <p>CPU, 디스크, 데이터베이스, 공유기, 통신사 회선. 층은 달라도 구조는 같습니다. 요청을 처리하는 <b>워커</b>(CPU 코어, 스레드, DB 커넥션 등)가 있고, 그 앞에 <b>대기열</b>이 생깁니다. 워커가 한가하면 대기열이 비어 있지만, 바쁜 정도(이용률)가 80~90%를 넘어서면 대기열이 급격히 길어집니다. 워커 하나에 요청이 무작위로 올 때, 평균 대기는 이용률 50%에서 처리 시간만큼, 80%에서 4배, 90%에서 9배가 됩니다. “CPU가 아직 10% 남았는데 왜 렉이죠?”의 답이 여기 있습니다. 게다가 모니터링 화면의 CPU 수치는 보통 여러 코어와 1~5분을 평균한 값이라, 코어 하나만 100%인 상황이나 몇 초 동안만 몰린 순간을 가립니다.</p>
         </div>
         <div data-sim="queue" id="sim-queue"></div>
-        <h3 class="sec">이 백서가 다루는 것과 다루지 않는 것</h3>
+        <h3 class="sec" id="basics-scope">이 백서가 다루는 것과 다루지 않는 것</h3>
         <div class="prose"><p>게임 화면을 그리는 내 PC·폰부터 집 네트워크, 통신사, 데이터센터, 서버와 데이터베이스까지, 온라인 게임의 플레이 중 렉을 만드는 원인을 다룹니다. 게임 화면을 영상으로 받아 보는 <b>클라우드 게이밍</b>, 별도 서비스로 도는 <b>음성 채팅</b>, <b>패치·다운로드 속도</b>는 구조가 달라 다루지 않습니다. 다만 그 안의 네트워크 원인(와이파이, 버퍼블로트, 회선 혼잡 등)은 여기 있는 원인과 같습니다.</p></div>
       </section>
 
@@ -922,7 +939,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
           <p>그래서 핑에 대한 민감도는 장르보다 두 가지 질문이 크게 좌우합니다. <b>핵심 행동 하나가 서버 왕복을 몇 번 기다리는가</b>, 그리고 <b>게임 규칙이 허용하는 시간이 “핑 + 사람의 반응 시간”보다 넉넉한가</b>입니다.</p>
         </div>
 
-        <h3 class="sec">흔히 쓰는 동기화 방식</h3>
+        <h3 class="sec" id="sync-models">흔히 쓰는 동기화 방식</h3>
         <div class="table-wrap">
           <table class="nums sync-table">
             <thead><tr><th>방식</th><th>어떻게 동작하나</th><th>흔한 곳</th><th>핑 150ms에서 보이는 모습</th><th>약한 곳</th></tr></thead>
@@ -943,7 +960,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
 
         <div data-sim="syncmodels" id="sim-syncmodels"></div>
 
-        <h3 class="sec">핑 150ms에서도 쾌적한 게임의 공통점</h3>
+        <h3 class="sec" id="sync-comfort">핑 150ms에서도 쾌적한 게임의 공통점</h3>
         <div class="two-col">
           <div class="prose">
             <p><b>1. 행동 하나에 왕복이 한 번도 끼지 않는다.</b> 버튼을 누르면 애니메이션·효과음·이펙트를 즉시 시작하고(선연출), 서버 결과는 데미지 숫자처럼 늦어도 티 안 나는 부분에만 씁니다.</p>
@@ -960,7 +977,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
         <div data-sim="windows" id="sim-windows"></div>
         <div data-sim="chain" id="sim-chain"></div>
 
-        <h3 class="sec">민감한 건 잘못 만든 걸까?</h3>
+        <h3 class="sec" id="sync-sensitive">민감한 건 잘못 만든 걸까?</h3>
         <div class="prose">
           <p>반은 맞고 반은 틀립니다. 핑에 민감해지는 이유는 두 종류가 있습니다.</p>
         </div>
@@ -984,7 +1001,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
           </div>
         </div>
 
-        <h3 class="sec">동기화 설계에서 렉을 만드는 원인</h3>
+        <h3 class="sec" id="sync-causes">동기화 설계에서 렉을 만드는 원인</h3>
         <div class="causes" data-causes="sync"></div>
       </section>
 
@@ -996,7 +1013,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
           <p class="lede">렉 제보에서 가장 헷갈리는 경우는 몇 사람만, 또는 한쪽만 겪을 때입니다. 느린 한 사람이 다른 사람 눈에 어떻게 보이는지, 그 사람 때문에 다른 사람까지 느려지는지는 서버가 입력을 처리하는 방식과 동기화 방식에 따라 완전히 달라집니다. 같은 PC에서 띄운 두 클라이언트 중 한쪽만 NPC가 안 보이는 현상도 이 장에서 다룹니다.</p>
         </div>
 
-        <h3 class="sec">특정 유저, 특정 회선만 느리면</h3>
+        <h3 class="sec" id="partial-oneuser">특정 유저, 특정 회선만 느리면</h3>
         <div class="prose">
           <p>요즘 MMO 대부분은 <b>서버 권위</b> 구조입니다. 서버가 모든 결과를 정하고, 클라이언트는 받은 결과를 그립니다. 이 구조에서는 렉이 대부분 <b>느린 사람에게만 나타납니다</b>.</p>
           <ul>
@@ -1014,7 +1031,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
           </ul>
         </div>
 
-        <h3 class="sec">서버가 입력을 처리하는 방식에 따라 달라지는 모습</h3>
+        <h3 class="sec" id="partial-tick">서버가 입력을 처리하는 방식에 따라 달라지는 모습</h3>
         <div class="table-wrap">
           <table class="nums sync-table">
             <thead><tr><th>서버가 입력을 처리하는 방식</th><th>느린 본인이 겪는 것</th><th>다른 사람 눈에 비친 느린 사람</th><th>다른 사람 자신의 게임</th></tr></thead>
@@ -1032,7 +1049,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
         </div>
         <div data-sim="oneslow" id="sim-oneslow"></div>
 
-        <h3 class="sec">같은 PC의 두 클라이언트, 한쪽만 NPC가 안 보일 때</h3>
+        <h3 class="sec" id="partial-twoclients">같은 PC의 두 클라이언트, 한쪽만 NPC가 안 보일 때</h3>
         <div class="prose">
           <p>같은 사람이 같은 PC에서 클라이언트 두 개를 띄웠는데 한쪽만 NPC가 안 보인다면, <b>회선은 거의 원인이 아닙니다</b>. 두 클라이언트는 같은 공유기, 같은 회선을 씁니다. 차이는 세 군데에서 생깁니다.</p>
           <ol>
@@ -1044,7 +1061,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
         </div>
         <div data-sim="npcmissing" id="sim-npcmissing"></div>
 
-        <h3 class="sec">일부에게만 생기는 문제</h3>
+        <h3 class="sec" id="partial-causes">일부에게만 생기는 문제</h3>
         <div class="causes" data-causes="partial"></div>
       </section>
 
@@ -1060,7 +1077,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
           <div class="fig-scroll"><svg class="tcpfig" viewBox="0 0 640 214" role="img" aria-label="TCP 재전송 타임라인: 3번 패킷이 사라지면 4·5·6번이 도착해도 게임에 넘어가지 않고, 재전송 타이머가 끝나 3번이 다시 도착한 뒤 한꺼번에 넘어간다"><text class="lb" x="8" y="54">서버가 보냄</text><text class="lb" x="8" y="164">게임이 받음</text><line class="axis" x1="96" y1="50" x2="610" y2="50"/><line class="axis" x1="96" y1="160" x2="610" y2="160"/><g class="pk"><rect x="99" y="39" width="22" height="22" rx="4"/><text x="110" y="54">1</text></g><path class="arr" d="M110 62 L150 148"/><g class="pk"><rect x="149" y="39" width="22" height="22" rx="4"/><text x="160" y="54">2</text></g><path class="arr" d="M160 62 L200 148"/><g class="pk lost"><rect x="199" y="39" width="22" height="22" rx="4"/><text x="210" y="54">3</text></g><path class="arr lost" d="M210 62 L224 104"/><text class="x" x="228" y="112">×</text><text class="note" x="240" y="112">사라짐</text><g class="pk"><rect x="249" y="39" width="22" height="22" rx="4"/><text x="260" y="54">4</text></g><path class="arr" d="M260 62 L300 148"/><g class="pk"><rect x="299" y="39" width="22" height="22" rx="4"/><text x="310" y="54">5</text></g><path class="arr" d="M310 62 L350 148"/><g class="pk"><rect x="349" y="39" width="22" height="22" rx="4"/><text x="360" y="54">6</text></g><path class="arr" d="M360 62 L400 148"/><g class="pk got"><rect x="139" y="149" width="22" height="22" rx="4"/><text x="150" y="164">1</text></g><g class="pk got"><rect x="189" y="149" width="22" height="22" rx="4"/><text x="200" y="164">2</text></g><g class="pk held"><rect x="289" y="149" width="22" height="22" rx="4"/><text x="300" y="164">4</text></g><g class="pk held"><rect x="339" y="149" width="22" height="22" rx="4"/><text x="350" y="164">5</text></g><g class="pk held"><rect x="389" y="149" width="22" height="22" rx="4"/><text x="400" y="164">6</text></g><g class="pk resend"><rect x="479" y="39" width="22" height="22" rx="4"/><text x="490" y="54">3</text></g><path class="arr" d="M490 62 L530 148"/><path class="span" d="M210 30 L210 24 L490 24 L490 30"/><text class="note" x="350" y="18" text-anchor="middle">다시 보낼 때까지 기다림 (복구 방식에 따라 다름)</text><g class="pk got"><rect x="519" y="149" width="22" height="22" rx="4"/><text x="530" y="164">3</text></g><path class="span bad" d="M206 186 L206 192 L520 192 L520 186"/><text class="note bad" x="363" y="206" text-anchor="middle">게임에는 아무것도 안 옴: 멈춤</text><text class="note" x="546" y="182">3·4·5·6이 한꺼번에: 몰아치기</text></svg></div>
           <figcaption>50ms마다 보내는 연결에서 3번 하나가 사라진 경우입니다. TCP는 순서대로만 넘겨주므로 4·5·6번이 도착해도 3번을 다시 받을 때까지 게임에 넘기지 않습니다. 그래서 손실 하나가 <b>멈춤</b>과 그 뒤의 <b>몰아치기</b>가 됩니다. 다시 보내는 시점은 복구 방식에 따라 왕복 한 번 안팎에서 “왕복 시간 + 최소 200ms”(재전송 타이머)까지 달라집니다(아래 “재전송의 종류”).</figcaption>
         </figure>
-        <h3 class="sec">재전송이 게임을 유난히 느리게 만드는 네 가지 이유</h3>
+        <h3 class="sec" id="retrans-why">재전송이 게임을 유난히 느리게 만드는 네 가지 이유</h3>
         <div class="prose">
           <ol>
             <li><b>순서 대기(HOL 블로킹)</b>: TCP는 잃어버린 하나를 다시 받을 때까지 뒤에 도착한 패킷을 게임에 넘기지 않습니다. 하나를 잃으면 그 뒤 전부가 함께 멈췄다가 한꺼번에 풀립니다(<b>멈춤</b> 뒤 <b>몰아치기</b>).</li>
@@ -1070,7 +1087,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
           </ol>
         </div>
 
-        <h3 class="sec">재전송의 종류</h3>
+        <h3 class="sec" id="retrans-kinds">재전송의 종류</h3>
         <div class="table-wrap">
           <table class="nums sync-table">
             <thead><tr><th>종류</th><th>언제 일어나나</th><th>복구까지 걸리는 시간</th><th>게임에서 보이는 모습</th></tr></thead>
@@ -1087,7 +1104,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
 
         <div data-sim="retrans" id="sim-retrans"></div>
 
-        <h3 class="sec">어디서 잃었는지 찾는 법</h3>
+        <h3 class="sec" id="retrans-find">어디서 잃었는지 찾는 법</h3>
         <div class="prose"><p>재전송률은 “보낸 패킷 중 다시 보낸 비율”입니다. 부팅 뒤 쌓인 누적값은 평소 값에 묻히므로, 1분처럼 일정한 간격 동안 늘어난 양으로 계산합니다. 공인된 기준은 없지만, 서버 전체 평균의 대략적인 감각은 <b>0.1% 아래면 건강</b>, <b>0.1~1%면 일부 유저가 가끔 멈칫</b>, <b>1%를 넘으면 많은 유저가 체감</b>, <b>3%를 넘으면 심각</b>입니다. 모바일·해외 유저가 많은 게임은 평소 값이 더 높게 나옵니다. 그래서 숫자 하나로 판단하기보다 <b>평소 대비 몇 배 늘었는지</b>를 함께 봅니다. 평균은 소수의 나쁜 회선에 끌려가므로 <b>지역·통신사·서버·시간대별</b>로 나눠 보는 것이 원인을 찾는 지름길입니다. 연결을 중간에서 받아 서버로 새로 이어 주는 장비(프록시, 일부 로드밸런서·게이트웨이)가 있으면 게임 서버 지표에는 그 장비와 서버 사이 구간만 잡힙니다. 유저 쪽 재전송은 그 장비에서 봅니다.</p></div>
         <div class="table-wrap">
           <table class="nums sync-table">
@@ -1119,7 +1136,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
           <p>제보에 시각(초 단위), 유저의 통신사·지역, 접속 서버, 증상 이름이 있으면 인프라팀이 이 순서를 바로 밟을 수 있습니다.</p>
         </div>
 
-        <h3 class="sec">해결 방향</h3>
+        <h3 class="sec" id="retrans-fix">해결 방향</h3>
         <div class="two-col">
           <div class="prose">
             <p><b>1. 잃지 않게 (근본 해결)</b></p>
@@ -1153,7 +1170,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
           </div>
         </div>
 
-        <h3 class="sec">설정 이름 정리: 무엇을 켜고 무엇과 헷갈리나</h3>
+        <h3 class="sec" id="retrans-settings">설정 이름 정리: 무엇을 켜고 무엇과 헷갈리나</h3>
         <div class="prose"><p>재전송 복구에 관련된 설정은 대부분 <b>운영체제(커널) 설정</b>이고, 게임 연결에만 따로 켤 수 있는 소켓 옵션은 몇 개뿐입니다. 이름 때문에 자주 헷갈리는 <code>TCP_NODELAY</code>는 복구를 빠르게 하는 설정은 아닙니다. 다만 켜지 않으면(Nagle 사용) 복구 중에 새 패킷이 더 늦어집니다. 아래는 리눅스 기준이며, 윈도우는 이름과 지원 범위가 다릅니다.</p></div>
         <div class="table-wrap">
           <table class="nums sync-table">
@@ -1174,7 +1191,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
           </table>
         </div>
 
-        <h3 class="sec">TCP 재전송의 근본 원인</h3>
+        <h3 class="sec" id="retrans-causes">TCP 재전송의 근본 원인</h3>
         <div class="causes" data-causes="retrans"></div>
       </section>
 
@@ -1211,11 +1228,11 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
           </table>
         </div>
 
-        <h3 class="sec">층·주제별 담당 한눈에 보기</h3>
+        <h3 class="sec" id="owners-map">층·주제별 담당 한눈에 보기</h3>
         <p class="note">굵은 숫자는 그 담당이 주 담당인 원인 수, +숫자는 함께 대응하는 원인 수입니다. 칸을 누르면 아래에 그 원인과 팀의 할 일이 나옵니다.</p>
         <div data-sim="owners" id="sim-owners"></div>
 
-        <h3 class="sec">경계가 애매할 때: 원인이 있는 팀이 주 담당, 다른 팀은 완화와 확인</h3>
+        <h3 class="sec" id="owners-boundary">경계가 애매할 때: 원인이 있는 팀이 주 담당, 다른 팀은 완화와 확인</h3>
         <div class="prose">
           <p>주 담당은 근본 원인이 있는 곳, 또는 그것을 없앨 수 있는 곳입니다. 회선이나 장비가 원인이어도 게임개발팀은 그동안 영향을 줄이는 설계(보간 버퍼, 입력 중복 전송, 재접속)로 버티고, 서버 코드가 원인이면 인프라팀이 장비를 늘려도 잠시 미룰 뿐입니다. 자주 헷갈리는 경계는 이렇게 정했습니다.</p>
           <ul>
@@ -1242,7 +1259,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
           </table>
         </div>
 
-        <h3 class="sec">넘길 때 챙길 정보</h3>
+        <h3 class="sec" id="owners-handoff">넘길 때 챙길 정보</h3>
         <div class="two-col">
           <div class="prose">
             <p><b>게임개발팀 → 인프라팀</b></p>
@@ -1286,7 +1303,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
         </div>
         <div class="analogy"><span class="tag">비유</span><p>게임 클라이언트는 <b>생중계 화면을 만드는 방송국 부조정실</b>입니다. 현장(서버)에서 사진이 띄엄띄엄 오면 그 사이를 자연스럽게 이어 붙여 영상처럼 보여 줍니다. 사진이 늦게 오면 이어 붙일 사진이 없어 화면이 멈추고, 편집실 자체가 바빠도 방송이 끊깁니다.</p></div>
         <div data-sim="frames" id="sim-frames"></div>
-        <h3 class="sec">이 층에서 렉을 만드는 원인</h3>
+        <h3 class="sec" id="l-client-game-causes">이 층에서 렉을 만드는 원인</h3>
         <div class="causes" data-causes="client-game"></div>
       </section>
 
@@ -1303,7 +1320,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
         </div>
         <div class="analogy"><span class="tag">비유</span><p>OS는 <b>한 대뿐인 주방을 여러 요리사가 나눠 쓰게 하는 주방장</b>입니다. 게임이 급한 요리를 하고 있어도, 백신 검사라는 요리사가 화구를 차지하면 기다려야 합니다. 주방이 너무 뜨거워지면(발열) 불 세기도 줄여 버립니다.</p></div>
         <div data-sim="cpu" id="sim-cpu"></div>
-        <h3 class="sec">이 층에서 렉을 만드는 원인</h3>
+        <h3 class="sec" id="l-client-os-causes">이 층에서 렉을 만드는 원인</h3>
         <div class="causes" data-causes="client-os"></div>
       </section>
 
@@ -1321,7 +1338,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
         </div>
         <div class="analogy"><span class="tag">비유</span><p>공유기는 <b>아파트 단지의 유일한 출입구</b>입니다. 이삿짐 트럭(영상 업로드)이 줄지어 서 있으면, 급한 오토바이 퀵(게임 패킷)도 트럭 뒤에서 기다려야 합니다. 똑똑한 공유기(SQM)는 퀵 전용 차선을 따로 열어 줍니다.</p></div>
         <div data-sim="bloat" id="sim-bloat"></div>
-        <h3 class="sec">이 층에서 렉을 만드는 원인</h3>
+        <h3 class="sec" id="l-home-causes">이 층에서 렉을 만드는 원인</h3>
         <div class="causes" data-causes="home"></div>
       </section>
 
@@ -1338,7 +1355,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
         </div>
         <div class="analogy"><span class="tag">비유</span><p>통신사망은 <b>고속도로망</b>입니다. 서울에서 부산 가는 길이 막히지 않아도 거리만큼은 시간이 걸리고, 퇴근 시간 톨게이트(피어링 구간)는 막히며, 사고가 나면 내비게이션이 멀리 돌아가는 길을 안내합니다.</p></div>
         <div data-sim="distance" id="sim-distance"></div>
-        <h3 class="sec">이 층에서 렉을 만드는 원인</h3>
+        <h3 class="sec" id="l-isp-causes">이 층에서 렉을 만드는 원인</h3>
         <div class="causes" data-causes="isp"></div>
       </section>
 
@@ -1355,7 +1372,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
         </div>
         <div class="analogy"><span class="tag">비유</span><p>데이터센터 입구는 <b>공항 보안 검색대와 탑승 게이트</b>입니다. 검색대(방화벽)는 명단에 있는 사람만 통과시키고, 명단 칸이 다 차면 더 못 받습니다. 게이트 직원(로드밸런서)은 한참 조용히 앉아 있는 승객을 “떠난 사람”으로 치고 명단에서 지웁니다.</p></div>
         <div data-sim="timeouts" id="sim-timeouts"></div>
-        <h3 class="sec">이 층에서 렉을 만드는 원인</h3>
+        <h3 class="sec" id="l-dc-net-causes">이 층에서 렉을 만드는 원인</h3>
         <div class="causes" data-causes="dc-net"></div>
       </section>
 
@@ -1372,7 +1389,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
         </div>
         <div class="analogy"><span class="tag">비유</span><p>NIC는 <b>아파트 우편함</b>, 링 버퍼는 <b>우편함 칸 수</b>, 인터럽트는 <b>집배원의 초인종</b>입니다. 우편물이 쏟아지는데 꺼내는 사람이 한 명뿐이면 칸이 넘쳐 편지가 바닥에 떨어집니다. RSS는 꺼내는 사람을 여럿 두는 것입니다.</p></div>
         <div data-sim="nic" id="sim-nic"></div>
-        <h3 class="sec">이 층에서 렉을 만드는 원인</h3>
+        <h3 class="sec" id="l-nic-causes">이 층에서 렉을 만드는 원인</h3>
         <div class="causes" data-causes="nic"></div>
       </section>
 
@@ -1389,7 +1406,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
         </div>
         <div class="analogy"><span class="tag">비유</span><p>서버 OS는 <b>놀이공원의 입장 게이트와 관리 사무소</b>입니다. 개장 시간(점검 종료)에 모두가 몰리면 게이트 앞 줄(backlog)이 넘치고, 발급할 손목밴드(파일 디스크립터)가 떨어지면 더 못 들어옵니다.</p></div>
         <div data-sim="rush" id="sim-rush"></div>
-        <h3 class="sec">이 층에서 렉을 만드는 원인</h3>
+        <h3 class="sec" id="l-server-os-causes">이 층에서 렉을 만드는 원인</h3>
         <div class="causes" data-causes="server-os"></div>
       </section>
 
@@ -1409,7 +1426,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
         <div data-sim="hol" id="sim-hol"></div>
         <div data-sim="nagle" id="sim-nagle"></div>
         <div data-sim="sndbuf" id="sim-sndbuf"></div>
-        <h3 class="sec">이 층에서 렉을 만드는 원인</h3>
+        <h3 class="sec" id="l-socket-causes">이 층에서 렉을 만드는 원인</h3>
         <div class="causes" data-causes="socket"></div>
       </section>
 
@@ -1427,7 +1444,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
         <div class="analogy"><span class="tag">비유</span><p>서버의 틱은 <b>지휘자의 박자</b>입니다. 오케스트라 단원(플레이어)이 늘수록 한 박자 안에 챙겨야 할 악보가 늘어나고, 박자를 놓치면 곡 전체가 느려집니다. 누군가 악보 한 장을 찾으러 창고(DB)에 가 버리면 모두가 그 사람을 기다립니다.</p></div>
         <div data-sim="tick" id="sim-tick"></div>
         <div data-sim="locks" id="sim-locks"></div>
-        <h3 class="sec">이 층에서 렉을 만드는 원인</h3>
+        <h3 class="sec" id="l-server-proc-causes">이 층에서 렉을 만드는 원인</h3>
         <div class="causes" data-causes="server-proc"></div>
       </section>
 
@@ -1446,7 +1463,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
         <div data-sim="ladder" id="sim-ladder"></div>
         <div data-sim="gc" id="sim-gc"></div>
         <div data-sim="leak" id="sim-leak"></div>
-        <h3 class="sec">이 층에서 렉을 만드는 원인</h3>
+        <h3 class="sec" id="l-memory-causes">이 층에서 렉을 만드는 원인</h3>
         <div class="causes" data-causes="memory"></div>
       </section>
 
@@ -1463,7 +1480,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
         </div>
         <div class="analogy"><span class="tag">비유</span><p>디스크는 <b>창고</b>, IOPS는 <b>창고 문 개수</b>입니다. 문이 적으면 물건을 넣고 빼는 사람이 줄을 섭니다. 버스트 크레딧은 <b>잠깐 전력 질주할 수 있는 체력</b>이라, 다 쓰면 걷는 속도로 돌아갑니다.</p></div>
         <div data-sim="disk" id="sim-disk"></div>
-        <h3 class="sec">이 층에서 렉을 만드는 원인</h3>
+        <h3 class="sec" id="l-disk-causes">이 층에서 렉을 만드는 원인</h3>
         <div class="causes" data-causes="disk"></div>
       </section>
 
@@ -1480,7 +1497,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
         </div>
         <div class="analogy"><span class="tag">비유</span><p>DB는 <b>은행 창구</b>입니다. 창구 수(커넥션 풀)가 정해져 있고, 요청 하나가 장부 전체를 뒤지는 일(풀 스캔)을 하면 뒤의 요청이 모두 기다립니다. 모두가 같은 금고(핫 로우)를 열려고 하면 한 명씩만 들어갈 수 있습니다.</p></div>
         <div data-sim="dbpool" id="sim-dbpool"></div>
-        <h3 class="sec">이 층에서 렉을 만드는 원인</h3>
+        <h3 class="sec" id="l-db-causes">이 층에서 렉을 만드는 원인</h3>
         <div class="causes" data-causes="db"></div>
       </section>
 
@@ -1497,7 +1514,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
         </div>
         <div class="analogy"><span class="tag">비유</span><p>서버 구성은 <b>여러 부서가 결재를 주고받는 회사</b>입니다. 결재 라인 끝의 부서(DB) 한 곳이 느려지면 앞 부서들은 서류를 들고 줄을 서고, 결국 회사 전체 업무가 멈춥니다. 타임아웃은 “10분 넘게 답이 없으면 일단 반려”하는 규칙이고, 차단기는 “반려가 계속되면 한동안 그 부서로는 서류를 보내지 않고 바로 돌려보내는” 규칙입니다.</p></div>
         <div data-sim="arch" id="sim-arch"></div>
-        <h3 class="sec">이 층에서 렉을 만드는 원인</h3>
+        <h3 class="sec" id="l-infra-causes">이 층에서 렉을 만드는 원인</h3>
         <div class="causes" data-causes="infra"></div>
       </section>
 
@@ -1519,7 +1536,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
           <p class="lede">제보나 경보가 오면 <b>범위 → 시점 → 계층</b> 순서로 좁힙니다. 이상이 어디에 몰렸는지가 담당을 가장 크게 가르고, 무엇과 겹쳤는지가 원인을 좁히며, 어느 계층의 지표가 비정상인지로 확인합니다. 원인 카드마다 있는 “그래프에서는”과 “확인 방법”을 함께 쓰면, 그래프 모양으로 후보를 고르고 확인할 곳을 바로 찾을 수 있습니다.</p>
         </div>
 
-        <h3 class="sec">판정 흐름</h3>
+        <h3 class="sec" id="judge-flow">판정 흐름</h3>
         <div class="flow">
           <div class="flow-step">
             <div class="flow-no">1 범위</div>
@@ -1559,7 +1576,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
           </div>
         </div>
 
-        <h3 class="sec">판정 신호표</h3>
+        <h3 class="sec" id="judge-signals">판정 신호표</h3>
         <div class="table-wrap">
           <table>
             <thead><tr><th>확인할 것</th><th>이렇게 보이면</th><th>먼저 부를 곳</th></tr></thead>
@@ -1580,15 +1597,15 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
           </table>
         </div>
 
-        <h3 class="sec">그래프 모양으로 찾기</h3>
+        <h3 class="sec" id="judge-shapes">그래프 모양으로 찾기</h3>
         <div class="prose"><p>모니터링 그래프가 어떤 모양인지만 알아도 후보가 크게 줄어듭니다. 아래 13가지 모양마다 그 모양을 만드는 원인을 모았습니다. 원인 카드의 작은 그림도 같은 모양입니다. 실선은 주로 볼 지표, 점선은 함께 볼 지표(인원, 대기·오류 등), 옅은 점선은 평소 수준입니다.</p></div>
         <div class="sig-legend" id="sig-legend"></div>
 
-        <h3 class="sec">게임 코드 없이 얼마나 확인할 수 있나</h3>
+        <h3 class="sec" id="judge-cover">게임 코드 없이 얼마나 확인할 수 있나</h3>
         <div class="prose"><p>원인마다 가장 쉬운 확인 수단을 셌습니다. <b>인프라 도구</b>는 OS·네트워크·클라우드·DB 도구와 런타임 시작 옵션(GC 로그 등)으로 확인할 수 있어 게임 코드를 고치지 않아도 됩니다. <b>게임 로그·지표</b>는 틱 시간, 끊김 사유처럼 게임이 남겨야 보이는 것입니다. 이 칸이 많은 층일수록 개발팀에 계측을 요청할 근거가 됩니다.</p></div>
         <div id="chk-cover"></div>
 
-        <h3 class="sec">숫자 읽는 법</h3>
+        <h3 class="sec" id="judge-numbers">숫자 읽는 법</h3>
         <div class="prose">
           <p><b>평균은 튐을 감춥니다.</b> 초당 20틱 서버에서 틱의 1%만 느려도 5초에 한 번꼴로 모두가 멈칫하지만, 평균 틱 시간은 거의 변하지 않습니다. 그래서 백분위수를 함께 봅니다. <b>p50</b>(중앙값)은 절반이 이보다 빠른 값, <b>p99</b>는 100번 중 가장 느린 1번 근처의 값입니다. 유저가 “렉”으로 기억하는 것은 대개 p99 쪽입니다.</p>
           <p><b>집계 간격도 튐을 감춥니다.</b> 1분 평균 그래프에서는 1초짜리 멈춤이 1/60로 옅어집니다. 멈춤을 찾을 때는 같은 그래프의 최댓값이나 p99, 더 짧은 간격을 함께 봅니다.</p>
@@ -1607,7 +1624,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
           </table>
         </div>
 
-        <h3 class="sec">바로 할 수 있는 것, 게임 코드에 더할 것</h3>
+        <h3 class="sec" id="judge-todo">바로 할 수 있는 것, 게임 코드에 더할 것</h3>
         <div class="two-col">
           <div class="analogy" style="grid-template-columns:1fr;max-width:none"><span class="tag">게임 코드 없이</span><ul>
             <li><b>차원 붙이기</b>: 접속·로드밸런서 로그의 클라이언트 IP에 국가·통신사(ASN)를 붙여 “해외만”, “특정 통신사만”이 보이게 합니다.</li>
@@ -1633,9 +1650,9 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
           <h2>사례와 절차</h2>
           <p class="lede">자주 만나는 두 상황의 확인 순서와, 원개발사·운영사가 직접 공개한 실제 장애 사례를 모았습니다. 단계와 사례마다 관련 원인 카드로 이어집니다.</p>
         </div>
-        <h3 class="sec">상황별 절차</h3>
+        <h3 class="sec" id="cases-playbooks">상황별 절차</h3>
         <div id="playbooks"></div>
-        <h3 class="sec">실제 장애 사례</h3>
+        <h3 class="sec" id="cases-list">실제 장애 사례</h3>
         <div class="prose"><p>게임사와 인프라 회사가 스스로 공개한 사후 분석(포스트모템)만 골랐습니다. 요약은 원문이 밝힌 내용 안에서 썼고, 자세한 경위는 원문을 보세요.</p></div>
         <div class="case-list" id="case-list"></div>
       </section>
@@ -18118,6 +18135,11 @@ K.register('windows', function (root) {
     syncmodels: '동기화 방식 비교', windows: '판정 구간 실험', chain: '연속 행동 실험', oneslow: '한 명만 느릴 때 실험', npcmissing: '한쪽 클라 진단', retrans: 'TCP 재전송 실험',
   };
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  /* 공유 링크는 어디서 열었든(파일, 사내 사본, 아티팩트) 공개 사이트 주소로 복사한다. 주소는 package.json의 homepage(빌드가 data-site에 넣음) */
+  const SITE = (m => (m && /^https?:/.test(m.dataset.site || '') ? m.dataset.site : location.href.split('#')[0].replace(/[^/]*$/, '')))(document.querySelector('main[data-site]'));
+  const shareBtn = (link, name, cls = 'copy') => `<button type="button" class="${cls}" data-link="${link}" aria-label="${esc(name)} 링크 복사">링크 복사</button>`;
+  // 용어의 앵커: 영문 이름으로 만든다(예: 핑 → #g-ping)
+  const glossId = en => 'g-' + String(en).split(',')[0].toLowerCase().replace(/\(.*?\)/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   /* 그래프 모양(sig)과 확인 방법(chk), 실제 사례(cases): docs/CHECKS_GUIDE.md */
   const SIG = Object.fromEntries((D.sigs || []).map(s => [s.id, s]));
   const sigFig = k => (SIG[k] && window.SIGDRAW ? window.SIGDRAW(k, SIG[k].name + ' 모양의 그래프') : '');
@@ -18237,7 +18259,7 @@ K.register('windows', function (root) {
       `<span><span class="k">누가</span>${c.who.map(w => WHO[w]).join(', ')}</span>`,
       `<span><span class="k">언제</span>${c.when.map(w => WHEN[w]).join(', ')}</span>`,
       c.sim ? `<span><span class="k">실험</span><a href="#sim-${c.sim}">${SIMNAME[c.sim] || c.sim}</a></span>` : '',
-      `<span class="cid"><span class="k">ID</span><a class="mono" href="#c-${c.id}">${c.id}</a><button type="button" class="copy" data-copy="${c.id}" aria-label="${esc(c.t)} 링크 복사">링크 복사</button></span>`,
+      `<span class="cid"><span class="k">ID</span><a class="mono" href="#c-${c.id}">${c.id}</a>${shareBtn(`c/${c.id}.html`, c.t)}</span>`,
     ].join('');
     const acts = c.act ? TEAM_ORDER.filter(t => c.act[t]).map(t => `<dt class="act act-${t}">${ACT_LABEL[t]}</dt><dd>${c.act[t]}</dd>`).join('') : '';
     const chk = c.chk ? [
@@ -18307,6 +18329,7 @@ K.register('windows', function (root) {
       <div class="actions">
         ${s.preset ? `<button type="button" class="btn small primary" data-lab="${s.preset}">실험실에서 재현하기</button>` : ''}
         <button type="button" class="btn small" data-tri="${s.id}">진단 도우미로</button>
+        ${shareBtn(`s/${s.id}.html`, s.name, 'btn small ghost')}
       </div>
     </article>`;
   }).join('');
@@ -18576,7 +18599,7 @@ K.register('windows', function (root) {
   /* ---------------- 용어 사전 ---------------- */
   const gl = $('#gloss');
   gl.innerHTML = D.glossary.map(([k, en, d, sec]) =>
-    `<div data-q="${esc((k + ' ' + en + ' ' + d).toLowerCase())}"><dt>${k}<span class="en">${esc(en)}</span></dt><dd>${d}${sec ? ` <a href="#${sec}">관련 장 →</a>` : ''}</dd></div>`).join('');
+    `<div data-q="${esc((k + ' ' + en + ' ' + d).toLowerCase())}"><dt id="${glossId(en)}">${k}<span class="en">${esc(en)}</span><a class="h-link" href="#${glossId(en)}" aria-label="${esc(k)} 링크 복사"></a></dt><dd>${d}${sec ? ` <a href="#${sec}">관련 장 →</a>` : ''}</dd></div>`).join('');
   /* ---------------- 참고 문헌: 원인 카드와 장별 출처를 주소 기준으로 모은다 ---------------- */
   (function () {
     const box = $('#ref-list'); if (!box) return;
@@ -18661,12 +18684,31 @@ K.register('windows', function (root) {
   // 버튼 이름(aria-label)은 그대로라 화면 낭독기가 “복사됨”을 듣도록 따로 알린다
   const copyLive = K.el('p', { class: 'sr-only', 'aria-live': 'polite' });
   document.body.append(copyLive);
+  const share = (link, onDone) => {
+    const url = SITE + (link.charAt(0) === '#' ? link : link.replace(/^\//, ''));
+    copyText(url).then(() => onDone(true, url), () => onDone(false, url));
+  };
+  const toast = K.el('p', { class: 'share-toast', role: 'status' });
+  document.body.append(toast);
+  const flash = msg => { toast.textContent = msg; toast.classList.add('on'); clearTimeout(toast._t); toast._t = setTimeout(() => toast.classList.remove('on'), 1800); };
   document.addEventListener('click', e => {
-    const b = e.target.closest('button[data-copy]');
-    if (!b) return;
-    const hash = '#c-' + b.dataset.copy;
-    const show = msg => { b.textContent = msg; copyLive.textContent = msg; clearTimeout(b._t); b._t = setTimeout(() => { b.textContent = '링크 복사'; copyLive.textContent = ''; }, 1800); };
-    copyText(location.href.split('#')[0] + hash).then(() => show('복사됨'), () => { history.replaceState(null, '', hash); show('주소창에서 복사하세요'); });
+    const b = e.target.closest('button[data-link]');
+    if (b) {
+      const label = b.textContent;
+      const show = msg => { b.textContent = msg; copyLive.textContent = msg; clearTimeout(b._t); b._t = setTimeout(() => { b.textContent = label; copyLive.textContent = ''; }, 1800); };
+      share(b.dataset.link, ok => show(ok ? '복사됨' : '주소창에서 복사하세요'));
+      if (b.dataset.link.charAt(0) === '#') history.replaceState(null, '', b.dataset.link);
+      return;
+    }
+    // 제목·용어·단계 옆의 # 링크: 그 자리로 가면서 공개 주소를 복사한다
+    const a = e.target.closest('a.h-link');
+    if (a) share(a.getAttribute('href'), ok => { const msg = ok ? '링크를 복사했습니다' : '주소창의 주소를 복사하세요'; flash(msg); copyLive.textContent = msg; });
+  });
+  // 장·절 제목에 # 링크를 단다(글자는 CSS로 그려 제목 textContent를 바꾸지 않는다)
+  $$('main section[id] > .ch-head h2, h3.sec[id]').forEach(h => {
+    const id = h.id || h.closest('section[id]').id;
+    if (!id || $('.h-link', h)) return;
+    h.append(K.el('a', { class: 'h-link', href: '#' + id, 'aria-label': h.textContent.trim() + ' 링크 복사' }));
   });
 
   /* ---------------- 관측으로 판정하기: 그래프 모양 13가지, 확인 수단 분포 ---------------- */
@@ -18677,7 +18719,7 @@ K.register('windows', function (root) {
     box.innerHTML = (D.sigs || []).map(g => {
       const list = D.causes.filter(c => c.sig && c.sig.k === g.id);
       return `<div class="sig-tile" id="sig-${g.id}">${sigFig(g.id)}
-        <div class="sig-body"><p class="sig-name"><b>${g.name}</b> <span class="mono">${list.length}</span></p><p>${g.desc}</p>
+        <div class="sig-body"><p class="sig-name"><b>${g.name}</b> <span class="mono">${list.length}</span><a class="h-link" href="#sig-${g.id}" aria-label="${esc(g.name)} 링크 복사"></a></p><p>${g.desc}</p>
         ${list.length ? `<details><summary>이 모양의 원인 ${list.length}가지</summary><ul>${list.map(c => `<li>${causeLink(c)} <span class="note">${layerName(c.layer)}</span></li>`).join('')}</ul></details>` : ''}</div></div>`;
     }).join('');
   })();
@@ -18726,8 +18768,8 @@ K.register('windows', function (root) {
   (function () {
     const box = $('#playbooks'); if (!box) return;
     box.innerHTML = (D.playbooks || []).map(pb => `<div class="playbook" id="pb-${pb.id}">
-      <h4>${esc(pb.t)}</h4><p class="note">${pb.when}</p>
-      <ol class="pb-steps">${(pb.steps || []).map(st => `<li><b>${st.t}</b><p>${st.d}</p>${st.causes && st.causes.length ? `<div class="chips">${causeChips(st.causes)}</div>` : ''}</li>`).join('')}</ol>
+      <h4>${esc(pb.t)} ${shareBtn(`#pb-${pb.id}`, pb.t)}</h4><p class="note">${pb.when}</p>
+      <ol class="pb-steps">${(pb.steps || []).map((st, i) => `<li id="pb-${pb.id}-${i + 1}"><b>${st.t}</b><a class="h-link" href="#pb-${pb.id}-${i + 1}" aria-label="${i + 1}단계 링크 복사"></a><p>${st.d}</p>${st.causes && st.causes.length ? `<div class="chips">${causeChips(st.causes)}</div>` : ''}</li>`).join('')}</ol>
       ${pb.ref && pb.ref.length ? `<details><summary>출처 ${pb.ref.length}</summary>${refList(pb.ref)}</details>` : ''}</div>`).join('') || '<p class="note">준비 중입니다.</p>';
   })();
   (function () {
@@ -18737,7 +18779,7 @@ K.register('windows', function (root) {
       <dl><dt>무슨 일</dt><dd>${x.what}</dd><dt>배울 점</dt><dd>${x.lesson}</dd></dl>
       <details class="case-why"><summary>원인 자세히</summary><p>${x.why}</p></details>
       <div class="chips">${causeChips(x.causes)}</div>
-      <p class="case-src"><a href="${esc(x.u)}" target="_blank" rel="noopener noreferrer">원문: ${esc(x.p || x.org)}</a></p></article>`).join('') || '<p class="note">준비 중입니다.</p>';
+      <p class="case-src"><a href="${esc(x.u)}" target="_blank" rel="noopener noreferrer">원문: ${esc(x.p || x.org)}</a>${shareBtn(`#case-${x.id}`, x.t)}</p></article>`).join('') || '<p class="note">준비 중입니다.</p>';
   })();
 
   /* ---------------- 증상 × 층 지도 ---------------- */
