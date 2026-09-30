@@ -4,7 +4,7 @@
 const fs = require('fs'), vm = require('vm'), path = require('path');
 const ROOT = path.resolve(__dirname, '..'), JS = path.join(ROOT, 'src/js');
 const ctx = { window: {} }; ctx.window = ctx; vm.createContext(ctx);
-const files = ['data.js', ...fs.readdirSync(JS).filter(f => /^causes-\d+\.js$/.test(f)).sort(), ...fs.readdirSync(JS).filter(f => /^refs-.+\.js$/.test(f)).sort(), 'glossary.js'];
+const files = ['data.js', ...fs.readdirSync(JS).filter(f => /^causes-\d+\.js$/.test(f)).sort(), ...fs.readdirSync(JS).filter(f => /^refs-.+\.js$/.test(f)).sort(), ...(fs.existsSync(path.join(JS, 'cases.js')) ? ['cases.js'] : []), 'glossary.js'];
 for (const f of files) vm.runInContext(fs.readFileSync(path.join(JS, f), 'utf8'), ctx, { filename: f });
 const D = ctx.DATA;
 

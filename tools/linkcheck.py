@@ -5,11 +5,13 @@ import json, os, subprocess, sys, concurrent.futures as cf
 os.chdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 node = r"""
 const fs=require('fs'),vm=require('vm');const c={};c.window=c;vm.createContext(c);
-const f=['data.js',...fs.readdirSync('src/js').filter(x=>/^causes-\d+\.js$/.test(x)).sort(),...fs.readdirSync('src/js').filter(x=>/^refs-.+\.js$/.test(x)).sort()];
+const f=['data.js',...fs.readdirSync('src/js').filter(x=>/^causes-\d+\.js$/.test(x)).sort(),...fs.readdirSync('src/js').filter(x=>/^refs-.+\.js$/.test(x)).sort(),...(fs.existsSync('src/js/cases.js')?['cases.js']:[])];
 f.forEach(x=>vm.runInContext(fs.readFileSync('src/js/'+x,'utf8'),c));
 const m={};const add=(r,w)=>{(m[r.u]=m[r.u]||[]).push(w)};
 c.DATA.causes.forEach(x=>(x.ref||[]).forEach(r=>add(r,x.id)));
 Object.entries(c.DATA.secRefs||{}).forEach(([k,l])=>l.forEach(r=>add(r,'#'+k)));
+(c.DATA.cases||[]).forEach(x=>{add({u:x.u},'case:'+x.id);(x.ref||[]).forEach(r=>add(r,'case:'+x.id))});
+(c.DATA.playbooks||[]).forEach(x=>(x.ref||[]).forEach(r=>add(r,'playbook:'+x.id)));
 console.log(JSON.stringify(m));
 """
 refs = json.loads(subprocess.run(['node', '-e', node], capture_output=True, text=True, check=True).stdout)

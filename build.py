@@ -132,7 +132,8 @@ def fonts_inline():
 def core_js():
     causes = sorted(p.relative_to(SRC).as_posix() for p in (SRC / "js").glob("causes-*.js"))
     refs = sorted(p.relative_to(SRC).as_posix() for p in (SRC / "js").glob("refs-*.js"))
-    return CORE_JS + causes + refs + ["js/glossary.js"]
+    cases = ["js/cases.js"] if (SRC / "js" / "cases.js").exists() else []
+    return CORE_JS + causes + refs + cases + ["js/glossary.js"]
 
 
 def sim_files():
