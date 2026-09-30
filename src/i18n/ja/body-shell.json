@@ -13,7 +13,7 @@
     {"ctx":"#nav li","ko":"<a href=\"#sync\">동기화 방식과 체감</a>","t":"<a href=\"#sync\">同期方式と体感</a>"},
     {"ctx":"#nav li","ko":"<a href=\"#partial\">한 명만·한쪽만 이상할 때</a>","t":"<a href=\"#partial\">一人だけ・片方だけおかしいとき</a>"},
     {"ctx":"#nav li","ko":"<a href=\"#retrans\">TCP 재전송 해부</a>","t":"<a href=\"#retrans\">TCP再送の解剖</a>"},
-    {"ctx":"#nav li","ko":"<a href=\"#owners\">게임팀·인프라팀 담당 구분</a>","t":"<a href=\"#owners\">ゲームチームとインフラチームの担当分け</a>"},
+    {"ctx":"#nav li","ko":"<a href=\"#owners\">게임팀·인프라팀 담당 구분</a>","t":"<a href=\"#owners\">ゲーム開発・インフラの担当分け</a>"},
     {"ctx":"#nav div","ko":"레이어 (패킷이 지나가는 순서)","t":"レイヤー（パケットが通る順）"},
     {"ctx":"#nav div","ko":"도구","t":"ツール"},
     {"ctx":"#nav li","ko":"<a href=\"#triage\">진단 도우미</a>","t":"<a href=\"#triage\">診断ツール</a>"},

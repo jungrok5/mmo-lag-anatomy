@@ -105,7 +105,7 @@
     {"ctx":"src/sims/journey.js:153","ko":"내 행동은 클라이언트 예측을 끈 상태, 즉 서버 확인을 기다리는 경우입니다. 다른 플레이어는 서버에서 나에게 오는 한 방향만 셉니다.","t":"Your action assumes client-side prediction is off, so it waits for server confirmation. For other players, only the one-way trip from the server to you counts."},
     {"ctx":"src/sims/journey.js:156","ko":"전체 구간","t":"End to end"},
     {"ctx":"src/sims/journey.js:157","ko":"구간별 지연","t":"Delay by segment"},
-    {"ctx":"src/sims/journey.js:157","ko":"막대는 모두 같은 눈금 · 눌러서 설명 보기","t":"All bars use the same scale · tap for details"},
+    {"ctx":"src/sims/journey.js:157","ko":"막대는 모두 같은 눈금 · 눌러서 설명 보기","t":"All bars use the same scale · click for details"},
     {"ctx":"src/sims/journey.js:163","ko":"클라이언트","t":"Client"},
     {"ctx":"src/sims/journey.js:164","ko":"FPS (초당 화면 수)","t":"FPS (frames per second)"},
     {"ctx":"src/sims/journey.js:165","ko":"모니터","t":"Monitor"},

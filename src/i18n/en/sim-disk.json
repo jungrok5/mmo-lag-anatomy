@@ -56,7 +56,7 @@
     {"ctx":"src/sims/disk.js:113","ko":"저장 밀림","t":"Save backlog"},
     {"ctx":"src/sims/disk.js:113, src/sims/disk.js:418","ko":"서버가 죽으면 잃는 시간","t":"Lost if the server crashes"},
     {"ctx":"src/sims/disk.js:204","ko":"만","t":"×10⁴"},
-    {"ctx":"src/sims/disk.js:204","ko":"천","t":"K"},
+    {"ctx":"src/sims/disk.js:204","ko":"천","t":"k"},
     {"ctx":"src/sims/disk.js:207, src/sims/disk.js:208","ko":" 초","t":" s"},
     {"ctx":"src/sims/disk.js:209","ko":"분 ","t":" min "},
     {"ctx":"src/sims/disk.js:209","ko":"초","t":" s"},

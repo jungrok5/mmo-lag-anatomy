@@ -51,7 +51,7 @@
     {"ctx":"src/sims/syncmodels.js:232","ko":"빨간 영역: 100ms 안팎부터 “굼뜨다”고 느낌","t":"赤い領域：100ms前後から「もたつく」と感じる"},
     {"ctx":"src/sims/syncmodels.js:243","ko":"여기부터 락스텝 멈춤","t":"ここからロックステップが停止"},
     {"ctx":"src/sims/syncmodels.js:251","ko":"지금 {0}ms","t":"現在{0}ms"},
-    {"ctx":"src/sims/syncmodels.js:257","ko":"핑 <b>{0}ms</b><br>요청-응답 {1}ms<br>예측·클라 권위·롤백 {2}ms<br>락스텝 {3}ms{4}","t":"Ping <b>{0}ms</b><br>リクエスト・レスポンス{1}ms<br>予測・クライアント権威型・ロールバック{2}ms<br>ロックステップ{3}ms{4}"},
+    {"ctx":"src/sims/syncmodels.js:257","ko":"핑 <b>{0}ms</b><br>요청-응답 {1}ms<br>예측·클라 권위·롤백 {2}ms<br>락스텝 {3}ms{4}","t":"Ping <b>{0}ms</b><br>リクエスト・レスポンス {1}ms<br>予測・クライアント権威型・ロールバック {2}ms<br>ロックステップ {3}ms{4}"},
     {"ctx":"src/sims/syncmodels.js:257","ko":" (자주 멈춤)","t":"（頻繁に停止）"},
     {"ctx":"src/sims/syncmodels.js:270","ko":" · 확정 <b>{0}</b>ms","t":" · 確定 <b>{0}</b>ms"},
     {"ctx":"src/sims/syncmodels.js:271","ko":" · 상대 화면 <b>{0}</b>ms","t":" · 相手の画面 <b>{0}</b>ms"},

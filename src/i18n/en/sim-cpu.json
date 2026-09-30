@@ -34,7 +34,7 @@
     {"ctx":"src/sims/cpu.js:145","ko":"고성능","t":"High performance"},
     {"ctx":"src/sims/cpu.js:145","ko":"절전","t":"Power saver"},
     {"ctx":"src/sims/cpu.js:145","ko":"발열 스로틀링","t":"Thermal throttling"},
-    {"ctx":"src/sims/cpu.js:147","ko":"절전: CPU 속도 60%. 발열: 20초에 걸쳐 100% → 50%로 떨어집니다(실제로는 몇 분~20분쯤에 걸쳐 일어나는 일을 줄여 보여 줍니다).","t":"Power saver: 60% CPU speed. Throttling: drops from 100% → 50% over 20 seconds (compressed; in reality this takes anywhere from a few minutes to about 20 minutes)."},
+    {"ctx":"src/sims/cpu.js:147","ko":"절전: CPU 속도 60%. 발열: 20초에 걸쳐 100% → 50%로 떨어집니다(실제로는 몇 분~20분쯤에 걸쳐 일어나는 일을 줄여 보여 줍니다).","t":"Power saver: 60% CPU speed. Throttling: drops 100% → 50% over 20 seconds (compressed; in reality this takes anywhere from a few minutes to about 20 minutes)."},
     {"ctx":"src/sims/cpu.js:149","ko":"타이머 해상도 15.6ms (윈도우 기본값)","t":"Timer resolution 15.6 ms (Windows default)"},
     {"ctx":"src/sims/cpu.js:149","ko":"끄면 게임이 타이머를 1ms로 바꿔 쓴 상태입니다.","t":"Off means the game has switched the timer to 1 ms."},
     {"ctx":"src/sims/cpu.js:150","ko":"같이 돌고 있는 프로그램","t":"Other programs running"},

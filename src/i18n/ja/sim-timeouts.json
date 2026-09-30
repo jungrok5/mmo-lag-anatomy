@@ -82,7 +82,7 @@
     {"ctx":"src/sims/timeouts.js:298","ko":"<b>{0}</b><br>꺼져 있음","t":"<b>{0}</b><br>オフ"},
     {"ctx":"src/sims/timeouts.js:299","ko":"확인 패킷에 응답 없음","t":"確認パケットに応答なし"},
     {"ctx":"src/sims/timeouts.js:299","ko":"이미 이 연결을 지움","t":"すでにこの接続を削除済み"},
-    {"ctx":"src/sims/timeouts.js:301","ko":"<b>{0}</b> · {1}<br>유휴 시간 {2} / 한도 {3}","t":"<b>{0}</b> · {1}<br>アイドル時間{2} / 上限{3}"},
+    {"ctx":"src/sims/timeouts.js:301","ko":"<b>{0}</b> · {1}<br>유휴 시간 {2} / 한도 {3}","t":"<b>{0}</b> · {1}<br>アイドル時間 {2} / 上限 {3}"},
     {"ctx":"src/sims/timeouts.js:311","ko":"끊기지 않음","t":"切断されない"},
     {"ctx":"src/sims/timeouts.js:311","ko":"유휴 시작 뒤","t":"アイドル開始から"},
     {"ctx":"src/sims/timeouts.js:311","ko":"10분 넘게 지켜봄","t":"10分以上観察"},
