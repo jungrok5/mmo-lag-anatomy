@@ -18,7 +18,7 @@
         <li><a href="#sync">동기화 방식과 체감</a></li>
         <li><a href="#partial">한 명만·한쪽만 이상할 때</a></li>
         <li><a href="#retrans">TCP 재전송 해부</a></li>
-        <li><a href="#owners">게임팀·인프라팀 담당 구분</a></li>
+        <li><a href="#owners">게임개발팀·인프라팀 담당 구분</a></li>
       </ol>
     </div>
     <div class="nav-group">
@@ -322,7 +322,7 @@
               <tr><td>서버 네트워크 카드</td><td><code>ip -s -s link</code>의 dropped·missed·crc, <code>ethtool -S</code>의 rx_missed_errors·rx_no_buffer_count·rx_crc_errors 등(이름은 드라이버마다 다름, mlx5는 rx_out_of_buffer·rx_discards_phy), <code>/proc/net/softnet_stat</code>의 2번째 열(dropped)·3번째 열(time_squeeze)</td><td>서버 네트워크 카드가 받자마자 버렸는지(링 버퍼·CPU), 선이나 광모듈 불량(CRC)인지. softnet_stat은 CPU마다 한 줄이고 16진수입니다. time_squeeze가 계속 늘면 수신 처리 코어가 제시간에 일을 못 끝내는 것</td></tr>
               <tr><td>클라우드 네트워크</td><td>AWS ENA는 <code>ethtool -S</code>의 bw_in_allowance_exceeded, bw_out_allowance_exceeded, pps_allowance_exceeded, conntrack_allowance_exceeded, linklocal_allowance_exceeded. 기본 CloudWatch 화면에는 없어 CloudWatch 에이전트로 따로 모읍니다</td><td>인스턴스 한도에서 조용히 버렸는지. 값이 늘고 있으면 한도 초과입니다. 다른 클라우드도 VM 크기별 대역폭·연결 수 한도가 있습니다</td></tr>
               <tr><td>스위치·라우터·방화벽</td><td>포트의 CRC·입력 오류, 출력 드롭, 폴리서 초과, 세션 테이블 사용량, 드롭 로그</td><td>데이터센터 장비 구간에서 버렸는지. 5분 평균 사용률이 낮은데 출력 드롭이 늘면 마이크로버스트(아주 짧은 순간의 트래픽 몰림)</td></tr>
-              <tr><td>경로</td><td><code>mtr</code>·<code>pathping</code>으로 끝까지 이어지는 손실. 수백 번 이상 보내야 1% 안팎의 손실이 보이고, 게임과 같은 TCP 포트로 보내면(<code>mtr -T -P 포트</code>) 더 정확합니다</td><td>몇 번째 구간부터 손실이 시작되는지. 중간 한 구간만 손실로 보이고 뒤는 멀쩡하면 그 장비가 측정용 응답(ICMP)을 제한하는 것일 뿐입니다. 오가는 경로가 다를 수 있어 서버 쪽에서 유저 쪽으로도 측정합니다</td></tr>
+              <tr><td>경로</td><td><code>mtr</code>·<code>pathping</code>으로 끝까지 이어지는 손실. 수백 번 이상 보내야 1% 안팎의 손실이 보이고, 게임과 같은 TCP 포트로 보내면(<code>mtr -T -P PORT</code>) 더 정확합니다</td><td>몇 번째 구간부터 손실이 시작되는지. 중간 한 구간만 손실로 보이고 뒤는 멀쩡하면 그 장비가 측정용 응답(ICMP)을 제한하는 것일 뿐입니다. 오가는 경로가 다를 수 있어 서버 쪽에서 유저 쪽으로도 측정합니다</td></tr>
               <tr><td>패킷 캡처 (양쪽 끝)</td><td>Wireshark 필터 <code>tcp.analysis.retransmission</code>, 같은 <code>tcp.analysis.</code> 계열의 fast_retransmission, spurious_retransmission, duplicate_ack, lost_segment, zero_window</td><td>원본 패킷이 보낸 쪽 캡처에는 있고 받은 쪽에는 없으면 그 사이에서 잃은 것. 받은 쪽에도 있으면 불필요한 재전송이거나 ACK가 돌아오다 늦거나 사라진 것. 받는 서버의 링 버퍼에서 버린 패킷도 캡처에는 “사이에서 잃음”으로 보이니 네트워크 카드 카운터와 함께 봅니다</td></tr>
               <tr><td>윈도우 서버</td><td>성능 모니터의 <code>TCPv4\Segments Retransmitted/sec</code> ÷ <code>Segments Sent/sec</code>, <code>Network Interface\Packets Received Discarded</code>, <code>netsh int tcp show global</code>, <code>pktmon</code>(윈도우 10 1809·서버 2019 이상에 내장)</td><td>재전송률 추이, 네트워크 카드가 받자마자 버렸는지, TCP 설정, 윈도우 안 어디에서 버렸는지</td></tr>
             </tbody>

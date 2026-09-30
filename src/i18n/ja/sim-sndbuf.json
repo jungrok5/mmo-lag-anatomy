@@ -86,7 +86,7 @@
     {"ctx":"src/sims/sndbuf.js:342","ko":"없음","t":"なし"},
     {"ctx":"src/sims/sndbuf.js:346","ko":"{0}초<br>메모리 <b>{1}</b>","t":"{0}秒<br>メモリ <b>{1}</b>"},
     {"ctx":"src/sims/sndbuf.js:359","ko":"느린 클라이언트 등장","t":"低速クライアント登場"},
-    {"ctx":"src/sims/sndbuf.js:363","ko":"모두 정상","t":"全員正常"},
+    {"ctx":"src/sims/sndbuf.js:363","ko":"모두 정상","t":"すべて正常"},
     {"ctx":"src/sims/sndbuf.js:364","ko":"느린 클라이언트 1개 + 블로킹","t":"低速クライアント1台 + ブロッキング"},
     {"ctx":"src/sims/sndbuf.js:365","ko":"최신만 보내기","t":"最新だけ送る"},
     {"ctx":"src/sims/sndbuf.js:366","ko":"킥 정책","t":"キックポリシー"},
