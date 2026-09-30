@@ -598,6 +598,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
 .sg path { fill: none; stroke-linejoin: round; stroke-linecap: round; }
 .sg-main { stroke: var(--accent); stroke-width: 2; }
 .sg-sub { stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 3 3; }
+.sg-sub.sg-solid { stroke-dasharray: none; stroke-width: 1.2; }
 .sg-ref { stroke: var(--line); stroke-width: 1.5; stroke-dasharray: 2 3; }
 .sig-row { display: flex; align-items: center; gap: 12px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); max-width: var(--prose); }
 .sig-row p { margin: 0; font-size: 14px; color: var(--ink-2); }

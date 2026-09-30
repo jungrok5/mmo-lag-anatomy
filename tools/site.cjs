@@ -61,7 +61,7 @@ table{border-collapse:collapse;width:100%}td,th{border:1px solid var(--line);pad
 article{padding:16px 0;border-bottom:1px solid var(--line)}article h3{margin:0}
 nav.toc ul{columns:2;gap:24px}@media (max-width:560px){nav.toc ul{columns:1}}
 footer{margin-top:48px;border-top:1px solid var(--line);padding-top:12px}
-.sg{width:120px;height:36px;vertical-align:middle;margin-right:8px}.sg path{fill:none;stroke-linejoin:round;stroke-linecap:round}.sg-main{stroke:var(--accent);stroke-width:2}.sg-sub{stroke:var(--ink2);stroke-width:1.5;stroke-dasharray:3 3}.sg-ref{stroke:var(--line);stroke-width:1.5;stroke-dasharray:2 3}
+.sg{width:120px;height:36px;vertical-align:middle;margin-right:8px}.sg path{fill:none;stroke-linejoin:round;stroke-linecap:round}.sg-main{stroke:var(--accent);stroke-width:2}.sg-sub{stroke:var(--ink2);stroke-width:1.5;stroke-dasharray:3 3}.sg-solid{stroke-dasharray:none;stroke-width:1.2}.sg-ref{stroke:var(--line);stroke-width:1.5;stroke-dasharray:2 3}
 ol.steps li{margin-bottom:10px}`;
 
 function page({ rel, title, description, type = 'article', body, graph }) {

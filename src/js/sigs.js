@@ -27,7 +27,7 @@ window.SIGDRAW = (function () {
     load: { main: fn(x => 0.14 + 0.82 * x * x), subs: [fn(x => 0.14 + 0.46 * x)] },
     ceiling: { main: fn(x => Math.min(0.72, 0.14 + 1.3 * x)), subs: [fn(x => (x < 0.45 ? 0.08 : 0.08 + 1.5 * (x - 0.45)))] },
     high: { main: fn(wob(0.74, 0.025, 23)), ref: [[0, 0.22], [1, 0.22]] },
-    outlier: { main: fn(wob(0.8, 0.025, 13)), subs: [fn(wob(0.16, 0.012, 7)), fn(wob(0.27, 0.012, 9)), fn(wob(0.38, 0.012, 11))] },
+    outlier: { solid: true, main: fn(wob(0.8, 0.025, 13)), subs: [fn(wob(0.16, 0.012, 7)), fn(wob(0.27, 0.012, 9)), fn(wob(0.38, 0.012, 11))] },
     gap: { main: [[0, 0.5], [0.38, 0.5], [0.4, 0.04], [0.58, 0.04], [0.6, 0.98], [0.64, 0.5], [1, 0.5]] },
     drop: { main: [[0, 0.82], [0.5, 0.82], [0.52, 0.16], [0.75, 0.44], [1, 0.7]] },
     surge: { main: fn(x => (x < 0.3 ? 0.14 : 0.14 + 0.82 * Math.exp(-(x - 0.3) * 7)), 120) },
@@ -37,7 +37,7 @@ window.SIGDRAW = (function () {
     const s = S[k];
     if (!s) return '';
     const ref = s.ref ? `<path d="${path(s.ref)}" class="sg-ref"/>` : '';
-    const subs = (s.subs || []).map(p => `<path d="${path(p)}" class="sg-sub"/>`).join('');
+    const subs = (s.subs || []).map(p => `<path d="${path(p)}" class="sg-sub${s.solid ? ' sg-solid' : ''}"/>`).join('');
     return `<svg class="sg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${esc(label)}">${ref}${subs}<path d="${path(s.main)}" class="sg-main"/></svg>`;
   };
 })();
