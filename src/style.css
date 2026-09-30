@@ -744,7 +744,7 @@ dt[id]:target, .pb-steps li:target { background: var(--accent-soft); border-radi
 .foot-langs a[aria-current] { font-weight: 700; color: var(--ink); text-decoration: none; }
 
 :root:not(:lang(ko)) { --display-weight: 800; }
-:root:lang(en), :root:lang(de), :root:lang(vi), :root:lang(ru) {
+:root:lang(en), :root:lang(de), :root:lang(vi), :root:lang(ru), :root:lang(pt), :root:lang(es), :root:lang(id) {
   --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, sans-serif;
 }
 :root:lang(ja) { --font-body: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Yu Gothic", Meiryo, "Noto Sans JP", "IPAGothic", system-ui, sans-serif; }
@@ -754,7 +754,7 @@ dt[id]:target, .pb-steps li:target { background: var(--accent-soft); border-radi
 :root:not(:lang(ko)) { --font-display: var(--font-body); --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; }
 /* 한글의 keep-all은 중국어·일본어·태국어에서는 줄이 안 바뀌게 만든다 */
 :root:lang(ja) body, :root:lang(zh) body, :root:lang(th) body { word-break: normal; line-break: strict; }
-:root:lang(de) body, :root:lang(ru) body { hyphens: auto; }
+:root:lang(de) body, :root:lang(ru) body, :root:lang(pt) body, :root:lang(es) body { hyphens: auto; }
 :root:lang(th) body { line-height: 1.8; }
 /* 번역판은 낱말이 길 수 있다(독일어 합성어 등): 좁은 화면에서 넘치지 않게 */
 :root:not(:lang(ko)) body { overflow-wrap: anywhere; }

@@ -2,8 +2,8 @@
   "lang": "vi",
   "group": "body-symptoms",
   "entries": [
-    {"ctx":"#symptoms div","ko":"<span class=\"idx\">03</span>보이는 모양으로 찾기","t":""},
-    {"ctx":"#symptoms h2","ko":"증상 사전","t":""},
-    {"ctx":"#symptoms p","ko":"플레이어는 “렉 걸려요”라고만 말하지만, 렉의 모양은 원인을 꽤 많이 알려 줍니다. 각 증상의 작은 그림은 화면 속 캐릭터가 지나간 자리입니다. 점이 겹치면 멈춘 것, 벌어지면 빨라지거나 건너뛴 것입니다.","t":""}
+    {"ctx":"#symptoms div","ko":"<span class=\"idx\">03</span>보이는 모양으로 찾기","t":"<span class=\"idx\">03</span>Tra theo biểu hiện"},
+    {"ctx":"#symptoms h2","ko":"증상 사전","t":"Từ điển triệu chứng"},
+    {"ctx":"#symptoms p","ko":"플레이어는 “렉 걸려요”라고만 말하지만, 렉의 모양은 원인을 꽤 많이 알려 줍니다. 각 증상의 작은 그림은 화면 속 캐릭터가 지나간 자리입니다. 점이 겹치면 멈춘 것, 벌어지면 빨라지거나 건너뛴 것입니다.","t":"Người chơi thường chỉ nói “bị lag”, nhưng hình dạng của lag cho biết khá nhiều về nguyên nhân. Hình nhỏ của mỗi triệu chứng là vệt đường mà nhân vật trên màn hình đã đi qua. Các chấm chồng lên nhau nghĩa là nhân vật dừng lại; chấm giãn ra nghĩa là nhân vật nhanh lên hoặc nhảy cóc."}
   ]
 }

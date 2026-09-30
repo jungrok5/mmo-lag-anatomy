@@ -16,6 +16,9 @@
 | th | ไทย | 태국 |
 | vi | Tiếng Việt | 베트남 |
 | ru | Русский | 러시아 |
+| pt-BR | Português (Brasil) | 브라질(포르투갈 포르투갈어의 꼴은 쓰지 않는다) |
+| es | Español | 스페인과 중남미 모두가 읽는 중립 스페인어(vosotros와 지역 속어를 쓰지 않는다). 숫자는 중남미식(1,500 / 12.5) |
+| id | Bahasa Indonesia | 인도네시아 |
 
 ## 파일
 
