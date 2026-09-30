@@ -15,6 +15,13 @@
       act: { game: '플레이어별 입력 버퍼로 명령을 고르게 나눠 적용, 입력 시퀀스 번호를 보고 원래 간격대로 적용, 다른 사람 화면의 보간 버퍼만 늘리는 것으로는 부족(서버의 위치 기록 자체가 계단 모양이기 때문).', ext: '느린 유저에게 유선 연결, 와이파이·공유기 점검 안내.' },
       more: '서버 권위 구조에서는 이것이 정상 동작입니다. 느린 한 사람의 렉은 “그 사람이 이상하게 움직이는 모습”으로만 남에게 보이고, 다른 사람의 조작이나 몬스터 움직임에는 영향을 주지 않습니다. 다만 그 사람과 직접 주고받는 일(거래, 파티 기믹, PvP 판정)은 함께 늦어집니다.',
       sim: 'oneslow',
+      sig: { k: 'outlier', g: '플레이어별 틱당 적용 명령 수, 플레이어별 지터' },
+      chk: {
+        look: '서버에 플레이어별로 틱마다 적용한 이동 명령 수와 입력 시퀀스 번호를 남김. 코드 없이도 서버 쪽 패킷 캡처에서 그 유저가 보낸 패킷의 도착 간격이 몰려 있는지 볼 수 있음',
+        yes: '제보된 캐릭터만 틱당 명령 수가 0과 2~3을 오가고 그 유저의 지터·손실이 높으며, 다른 유저는 틱당 1개로 고름. 그 유저가 유선으로 바꾸면 줄어듦',
+        no: '여러 캐릭터가 한꺼번에 몰아서 움직이면 서버 틱 지연이나 보는 사람 쪽 회선. 명령은 고르게 적용되는데 그 캐릭터만 튀어 보이면 보는 쪽의 보간·표시 문제',
+        by: 'code',
+      },
       ref: [
         { t: 'Peeking into VALORANT\'s Netcode', u: 'https://www.riotgames.com/en/news/peeking-valorants-netcode', p: 'Riot Games', n: '서버는 플레이어별 이동 대기열에 도착한 입력을 틱 순서대로 넣고, 비면 예측으로 채움. 보정은 그 플레이어에게만 보이고 나머지는 매끄럽게 봄' },
         { t: 'State Synchronization', u: 'https://gafferongames.com/post/state_synchronization/', p: 'Gaffer On Games', n: '초당 60번 보낸 패킷도 한 프레임에 2개, 다음 프레임에 0개처럼 몰려 도착' },
@@ -27,6 +34,13 @@
       own: ['srv', 'cli'],
       act: { game: '서버: 행동에 붙은 입력 시각의 간격대로 실행(시각은 허용 범위 안에서만 인정), 또는 몰려 온 행동을 거절하지 말고 최소 간격(공통 쿨다운)만큼 벌려 차례로 실행, 도착 시각만 보고 쿨다운 검사하지 않기(정상 입력이 씹힘). 클라이언트: 행동에 입력 시각을 붙여 보내기.' },
       sim: 'oneslow',
+      sig: { k: 'outlier', g: '플레이어별 행동 실행 간격' },
+      chk: {
+        look: '서버 로그에 플레이어별 행동의 도착 시각, 실행 시각, 클라이언트가 붙인 입력 시각(있다면)을 남겨 실행 간격과 입력 간격을 비교. 서버 쪽 패킷 캡처에서 그 유저 패킷의 도착 간격도 함께 봄',
+        yes: '입력 간격은 정상인데 서버 도착·실행 간격이 몇 ms로 뭉쳐 있고, 뭉친 순간이 다른 사람들의 몰아치기 제보 시각과 겹침',
+        no: '입력 시각 간격부터 뭉쳐 있으면 클라이언트나 매크로 쪽. 서버 실행 간격은 고른데 남 화면에서만 뭉쳐 보이면 보는 사람의 회선',
+        by: 'code',
+      },
       ref: [
         { t: 'Understanding Networked Movement in the Character Movement Component for Unreal Engine', u: 'https://dev.epicgames.com/documentation/en-us/unreal-engine/understanding-networked-movement-in-the-character-movement-component-for-unreal-engine', p: 'Epic Games', n: '서버는 ServerMove를 받을 때마다 이동을 계산하고, 직전 이동과의 타임스탬프 차이로 시간 간격을 정함. 서버 시각과 차이가 너무 크면 그 이동을 버림' },
         { t: 'Deterministic Lockstep', u: 'https://gafferongames.com/post/deterministic_lockstep/', p: 'Gaffer On Games', n: '도착하는 대로 입력을 적용하면 60Hz로 보내도 간격이 고르지 않아 결과가 들쭉날쭉함' },
@@ -39,6 +53,13 @@
       own: ['srv', 'cli'],
       act: { game: '서버: 사람마다 회선 상태에 맞춰 버퍼 크기를 자동 조절, 밀리면 두 개씩 꺼내 따라잡기, 버퍼가 자주 비는 사람의 클라이언트에는 입력을 앞당겨 보내라고 지시. 클라이언트: 서버 지시에 맞춰 입력을 조금 더 앞당겨 보내기(클라이언트 시간 조절).' },
       sim: 'oneslow',
+      sig: { k: 'outlier', g: '플레이어별 입력 버퍼 길이·빈 횟수' },
+      chk: {
+        look: '서버에 플레이어별로 틱마다 입력 버퍼에 남은 입력 수, 버퍼가 비어 마지막 입력으로 추측해 채운 횟수, 입력 도착에서 적용까지 걸린 시간을 남김',
+        yes: '버퍼가 작은 사람은 빈 횟수가 많고 그 순간 남 화면에서 짧게 멈추며, 버퍼가 큰 사람은 입력에서 적용까지 걸린 시간이 버퍼 길이만큼 늘어 있음',
+        no: '버퍼가 거의 비지 않는데 남 화면에서 끊기면 보는 쪽의 보간 문제. 버퍼가 짧은데도 입력 지연이 크면 RTT 자체나 이중 틱 대기',
+        by: 'code',
+      },
       ref: [
         { t: 'Peeking into VALORANT\'s Netcode', u: 'https://www.riotgames.com/en/news/peeking-valorants-netcode', p: 'Riot Games', n: '서버가 클라이언트 시간 기준을 조정해 입력 대기열을 지연이 최소이면서 고르지 않은 도착을 흡수할 만큼만 유지. 서버 버퍼링 목표는 평균 반 프레임' },
         { t: 'NetworkTimeSystem class (Netcode for GameObjects 2.5)', u: 'https://docs.unity3d.com/Packages/com.unity.netcode.gameobjects@2.5/api/Unity.Netcode.NetworkTimeSystem.html', p: 'Unity', n: 'LocalBufferSec: 서버가 클라이언트 메시지를 버퍼링할 시간. 클라이언트 시간을 앞당겨 메시지가 서버에 더 일찍 도착' },
@@ -51,6 +72,13 @@
       own: ['srv', 'net'],
       act: { game: '검사는 몇 초에 걸친 누적 허용량으로, 회선 상태(핑·지터)를 참고해 기준 완화, 강제 종료 전 경고 단계, 플레이어별 입력 버퍼로 몰려 온 입력을 틱마다 고르게 나눠 오탐 자체를 줄이기.', infra: '통신사별 손실률·지터 분포를 시간대별로 확인해 게임팀에 공유, 해당 통신사 구간의 경로 점검(양방향 mtr), 필요하면 경로 변경·통신사 에스컬레이션.' },
       sim: 'oneslow',
+      sig: { k: 'peak', g: '통신사(ASN)별 검증 거절·강제 종료 수, 통신사별 지터' },
+      chk: {
+        look: '서버의 검증 거절·보정·강제 종료 로그에 접속 IP의 통신사(ASN)와 시각을 붙여 통신사·시간대별로 셈. 인프라팀은 같은 시간에 그 통신사 쪽으로 양방향 mtr을 돌려 지터·손실을 봄',
+        yes: '거절·강제 종료가 특정 통신사에 몰리고 저녁에 늘며, 같은 시간 그 통신사의 지터가 함께 높고, 몇 초 단위로 합친 이동량은 규칙 안에 있음',
+        no: '통신사와 상관없이 특정 계정만 반복되면 실제 치트 가능성. 모든 통신사에서 함께 늘면 서버 틱이 밀려 명령이 몰려 적용되는 서버 쪽 원인(틱 예산 초과)',
+        by: 'code',
+      },
       ref: [
         { t: 'Source SDK 2013: player.cpp', u: 'https://raw.githubusercontent.com/ValveSoftware/source-sdk-2013/master/src/game/server/player.cpp', p: 'Valve', n: '틱마다 쌓이는 명령 예산으로 과속을 막되, 더 엄격한 제한은 정상 유저에게도 끊김을 만든다는 개발 주석' },
         { t: 'RFC 2697: A Single Rate Three Color Marker', u: 'https://www.rfc-editor.org/rfc/rfc2697', p: 'IETF', n: '토큰 버킷: 평균 속도와 허용 버스트 크기로 판정' },
@@ -63,6 +91,13 @@
       own: ['srv', 'cli'],
       act: { game: '서버: 기믹 판정 구간을 핑만큼 여유 있게, 예고는 서버 시각으로 미리 보내기, 한 명 실패가 전멸로 이어지지 않는 설계. 클라이언트: 받은 예고를 서버 시각에 맞춰 재생.' },
       sim: 'windows',
+      sig: { k: 'outlier', g: '기믹 실패를 부른 플레이어별 RTT' },
+      chk: {
+        look: '서버 기믹 로그에 실패를 부른 플레이어, 그 사람의 입력 도착 시각, 판정 구간, 그 사람의 RTT·손실을 남김',
+        yes: '전멸을 부른 입력이 대부분 같은 한 사람의 것이고, 그 사람의 RTT가 파티 평균보다 뚜렷이 높으며 입력이 판정 구간 직후에 도착함',
+        no: '실패가 파티원에게 고르게 나뉘면 판정 구간 자체가 짧은 문제(핑에 먹히는 짧은 판정 구간). 느린 사람의 입력이 판정 구간 안에 왔는데도 실패하면 서버 판정 코드',
+        by: 'code',
+      },
       ref: [
         { t: 'NetworkTime and ticks (Netcode for GameObjects 2.5)', u: 'https://docs.unity3d.com/Packages/com.unity.netcode.gameobjects@2.5/manual/advanced-topics/networktime-ticks.html', p: 'Unity', n: '서버 시각에 맞춰 이벤트를 예약해 모두가 같은 순간에 재생하는 방법' },
         { t: 'Factors influencing the latency of simple reaction time (Frontiers in Human Neuroscience, 2015)', u: 'https://doi.org/10.3389/fnhum.2015.00131', p: 'Frontiers', n: '단순 반응 시간 평균 약 231ms' },
@@ -74,6 +109,13 @@
       own: ['srv'],
       act: { game: '제어 권한을 회선이 좋은 사람에게 넘기기(핑·손실 기준), 보고가 끊기면 서버가 즉시 회수, 보스처럼 중요한 몬스터는 서버가 직접 계산.' },
       more: '맡은 사람은 멀쩡하다고 느끼므로 제보는 “몬스터가 이상하다”로만 들어옵니다. 한 사람만 빼고 모두가 같은 몬스터를 이상하게 본다면, 그 몬스터의 제어 권한을 누가 가졌는지부터 확인합니다.',
+      sig: { k: 'outlier', g: '몬스터별 위치 보고 간격(제어 권한을 가진 클라이언트별)' },
+      chk: {
+        look: '서버에 몬스터마다 제어 권한을 가진 클라이언트와 그 클라이언트의 보고 간격, RTT, 손실을 남김. 서버 쪽 패킷 캡처에서 그 클라이언트가 보낸 패킷의 도착 간격도 볼 수 있음',
+        yes: '이상하게 움직이는 몬스터의 제어 권한이 모두 같은 한 사람에게 있고, 그 사람의 보고 간격이 들쭉날쭉하거나 끊기며, 권한을 다른 사람에게 넘기면 바로 정상',
+        no: '서버가 직접 계산하는 몬스터도 똑같이 튀면 서버 틱 지연이나 보는 사람 쪽 회선. 권한을 옮겨도 계속 튀면 명령 동기화의 경로 계산 불일치',
+        by: 'code',
+      },
       ref: [
         { t: 'Authority (Netcode for GameObjects 2.5)', u: 'https://docs.unity3d.com/Packages/com.unity.netcode.gameobjects@2.5/manual/terms-concepts/authority.html', p: 'Unity', n: '분산 권한 모델에서는 게임 인스턴스(클라이언트)마다 일부 네트워크 개체의 권한을 맡아 그 개체를 계산' },
         { t: 'Distributed authority topologies (Netcode for GameObjects 2.5)', u: 'https://docs.unity3d.com/Packages/com.unity.netcode.gameobjects@2.5/manual/terms-concepts/distributed-authority.html', p: 'Unity', n: '권한이 클라이언트에 나뉘면 단일 시뮬레이션이 없고 치팅에 취약' },
@@ -86,9 +128,17 @@
       own: ['srv', 'dba'],
       act: { game: '인벤토리·우편 보관 한도와 오래된 우편 자동 정리, 필요한 부분만 나눠 불러오기, 저장은 바뀐 부분만 게임 스레드 밖에서.', infra: '느린 쿼리 로그에서 같은 캐릭터로 반복되는 느린 조회를 찾아 게임팀에 전달, 아이템·우편 행 수가 많은 캐릭터 상위 목록 제공.' },
       more: '같은 캐릭터로 다른 PC·회선에서 접속해도 똑같이 느리고 같은 계정의 다른 캐릭터는 멀쩡하다면 캐릭터 데이터를 의심합니다. 제보에 캐릭터 이름이 꼭 필요한 이유입니다.',
+      sig: { k: 'outlier', g: '캐릭터별 접속·저장 시간, 캐릭터별 DB 조회 행 수' },
+      chk: {
+        look: 'DB의 느린 쿼리 로그(MySQL slow query log, PostgreSQL log_min_duration_statement)에서 같은 캐릭터 ID로 반복되는 느린 조회·저장을 찾고, 아이템·우편 테이블의 캐릭터별 행 수 상위 목록을 뽑음',
+        yes: '느린 쿼리가 몇몇 캐릭터 ID에 몰리고, 그 캐릭터의 아이템·우편 행 수가 평균의 수십 배이며, 다른 PC·회선에서 접속해도 똑같이 느림',
+        no: '같은 계정의 다른 캐릭터나 다른 유저도 함께 느리면 DB 장비·잠금 쪽. 그 캐릭터가 다른 PC에서는 멀쩡하면 유저 환경',
+        by: 'ops',
+      },
       ref: [
         { t: 'Extraneous Fetching antipattern', u: 'https://learn.microsoft.com/en-us/azure/architecture/antipatterns/extraneous-fetching/', p: 'Microsoft Azure', n: '필요 이상으로 데이터를 가져오면 I/O 부담이 커지고 응답이 느려짐' },
         { t: 'PostgreSQL Documentation: Error Reporting and Logging', u: 'https://www.postgresql.org/docs/current/runtime-config-logging.html', p: 'PostgreSQL', n: 'log_min_duration_statement: 일정 시간 이상 걸린 SQL을 기록해 느린 쿼리 추적' },
+        { t: 'The Slow Query Log', u: 'https://dev.mysql.com/doc/refman/8.4/en/slow-query-log.html', p: 'MySQL', n: 'long_query_time을 넘긴 쿼리를 기록하는 느린 쿼리 로그' },
       ] },
 
     /* ---- 같은 PC 두 클라이언트, 한쪽만 이상할 때 ---- */
@@ -100,6 +150,13 @@
       act: { game: '서버: 채널·페이즈 정보를 클라이언트에 보내기, QA 체크리스트에 “두 캐릭터의 채널·퀘스트 단계 확인” 추가. 클라이언트: 채널·페이즈를 화면에 표시.' },
       more: '퀘스트 진행을 계정 단위로 저장하는지 캐릭터 단위로 저장하는지도 확인합니다. 같은 계정의 두 캐릭터라면 한쪽의 진행이 다른 쪽의 페이즈를 바꿀 수 있습니다.',
       sim: 'npcmissing',
+      sig: { k: 'outlier', g: '클라이언트별 주변 개체 수, 채널·페이즈' },
+      chk: {
+        look: '두 캐릭터의 채널 번호와 해당 퀘스트 진행 단계를 게임 화면에서 비교하고, 같은 채널·단계로 맞춰 다시 봄. 서버 개체 전송 로그가 있으면 그 NPC를 그 캐릭터에게 보내지 않은 이유(채널·페이즈)를 확인',
+        yes: '두 캐릭터의 채널이나 퀘스트 단계가 다르고, 같게 맞추면 NPC가 보임',
+        no: '채널·단계가 같은데도 한쪽에만 없으면 로딩 중 도착한 등장 알림 폐기, 입장 직후 몰리는 등장 정보 유실, 시야 등록 순서 꼬임 쪽',
+        by: 'user',
+      },
       ref: [
         { t: 'Actor Relevancy in Unreal Engine', u: 'https://dev.epicgames.com/documentation/en-us/unreal-engine/actor-relevancy-in-unreal-engine', p: 'Epic Games', n: '서버는 연결마다 관련 있는(relevant) 액터만 복제하고, 관련 없는 액터는 보내지 않음' },
         { t: 'Object visibility (Netcode for GameObjects 2.5)', u: 'https://docs.unity3d.com/Packages/com.unity.netcode.gameobjects@2.5/manual/basics/object-visibility.html', p: 'Unity', n: 'CheckObjectVisibility로 클라이언트별로 보이는 개체를 정하고, 숨긴 개체는 그 클라이언트에 전송하지 않음' },
@@ -112,6 +169,13 @@
       own: ['cli', 'srv'],
       act: { game: '클라이언트: 로딩이 끝나면 “준비 완료” 보내기, 또는 로딩 중 받은 패킷을 보관했다가 처리. 서버: “준비 완료”를 받은 뒤에 주변 정보 전송.' },
       sim: 'npcmissing',
+      sig: { k: 'outlier', g: '클라이언트별 로딩 시간, 로딩 중 버린 메시지 수' },
+      chk: {
+        look: '클라이언트가 로딩 중 받아서 버린 메시지의 수·종류와 로딩 완료 시각을, 서버가 등장 알림을 보낸 시각과 비교. 같은 PC에서 두 클라이언트를 동시에 로딩하거나 로딩하는 쪽을 백그라운드 창으로 두면 재현하기 쉬움',
+        yes: '안 보이는 NPC의 등장 알림을 서버는 보냈고 도착 시각이 로딩 완료 전이며, 그 시간에 버린 메시지 수가 늘어 있음. 로딩이 긴 쪽 클라이언트에서만 생김',
+        no: '등장 알림이 로딩 완료 뒤에 도착했는데도 안 보이면 기준 스냅샷 유실이나 개체 ID 재사용 혼동. 서버가 그 NPC 알림을 아예 보내지 않았으면 시야 등록 순서 꼬임이나 채널·페이즈 차이',
+        by: 'code',
+      },
       ref: [
         { t: 'NetworkConfig class (Netcode for GameObjects 2.5)', u: 'https://docs.unity3d.com/Packages/com.unity.netcode.gameobjects@2.5/api/Unity.Netcode.NetworkConfig.html', p: 'Unity', n: 'SpawnTimeout: 아직 생성되지 않은 개체의 메시지는 보류했다가, 시간 안에 생성되지 않으면 버림' },
         { t: 'Actor Relevancy in Unreal Engine', u: 'https://dev.epicgames.com/documentation/en-us/unreal-engine/actor-relevancy-in-unreal-engine', p: 'Epic Games', n: '관련성이 없어진 액터는 클라이언트에서 지워지고, 다시 관련되면 새로 복제' },
@@ -123,6 +187,13 @@
       own: ['srv'],
       act: { game: '시야 갱신을 한 스레드·한 순서로 처리, 주기적으로 “보이는 목록” 전체를 다시 맞추기.' },
       sim: 'npcmissing',
+      sig: { k: 'random', g: '서버 보이는 목록과 클라이언트 개체 목록의 차이 수' },
+      chk: {
+        look: '서버에 시야 격자 등록, 개체의 셀 이동, 등장·퇴장 알림 발송을 틱 번호와 함께 남기고, 주기적으로 서버의 “보이는 목록”과 클라이언트가 가진 목록을 비교',
+        yes: '빠진 NPC가 그 캐릭터의 입장·순간이동 처리와 같은 틱에 셀을 옮겼고, 그 NPC에 대한 등장 알림 발송 기록이 없음',
+        no: '등장 알림은 보냈는데 클라이언트가 못 받았거나 버렸으면 전달 쪽(입장 직후 몰리는 등장 정보 유실, 로딩 중 도착한 등장 알림 폐기). 늘 같은 NPC만 빠지면 페이즈나 표시 옵션 차이',
+        by: 'code',
+      },
       ref: [
         { t: 'Replication Graph in Unreal Engine', u: 'https://dev.epicgames.com/documentation/en-us/unreal-engine/replication-graph-in-unreal-engine', p: 'Epic Games', n: 'MMORPG 등은 월드를 격자로 나눠 셀마다 액터 목록을 두고 클라이언트가 있는 셀 기준으로 전송' },
         { t: 'Actor Relevancy in Unreal Engine', u: 'https://dev.epicgames.com/documentation/en-us/unreal-engine/actor-relevancy-in-unreal-engine', p: 'Epic Games', n: '관련성은 연결마다 판단하고, 관련 없어진 액터는 클라이언트에서 지워짐' },
@@ -134,9 +205,18 @@
       own: ['srv', 'cli'],
       act: { game: '서버: 기준은 수신 확인(ACK)을 받을 때까지 반드시 재전송, 변화분은 클라이언트가 받았다고 확인한 기준에 대해서만 만들기. 클라이언트: 기준은 실제로 적용한 뒤에 수신 확인(ACK) 보내기, 모르는 개체의 변화분을 받으면 서버에 다시 요청.' },
       sim: 'npcmissing',
+      sig: { k: 'random', g: '모르는 개체의 변화분 수신 수' },
+      chk: {
+        look: '클라이언트가 기준 없이 받은 변화분을 버린 횟수와 개체 ID를, 서버가 그 개체의 기준을 보낸 시각·ACK를 받은 시각과 대조. 개발 환경에서 손실을 넣어(tc netem의 loss, Unreal 네트워크 에뮬레이션의 패킷 손실 비율) 재현',
+        yes: '안 보이는 개체에 대해 서버는 기준을 보냈지만 ACK를 받지 못했는데도 변화분만 계속 보냈고, 클라이언트는 그 변화분을 버림',
+        no: '기준이 ACK까지 받고 클라이언트에 적용됐는데 안 보이면 퇴장 알림 유실이나 개체 ID 재사용 혼동',
+        by: 'code',
+      },
       ref: [
         { t: 'Snapshot Compression', u: 'https://gafferongames.com/post/snapshot_compression/', p: 'Gaffer On Games', n: '변화분은 상대가 받았다고 확인(ack)한 기준(baseline)에 대해서만 만들어야 하고, 초기 상태는 따로 보냄' },
         { t: 'Quake III Arena source: code/server/sv_snapshot.c', u: 'https://raw.githubusercontent.com/id-Software/Quake-III-Arena/master/code/server/sv_snapshot.c', p: 'id Software', n: '클라이언트가 확인한 스냅샷을 기준으로 델타 압축하고, 기준이 너무 오래되면 전체 스냅샷을 보냄' },
+        { t: 'tc-netem(8) — Linux manual page', u: 'https://man7.org/linux/man-pages/man8/tc-netem.8.html', p: 'iproute2', n: '나가는 패킷에 지연·지터(delay TIME JITTER)와 손실(loss random PERCENT)을 넣어 실제 네트워크를 흉내 내는 시험 도구' },
+        { t: 'Using Network Emulation in Unreal Engine', u: 'https://dev.epicgames.com/documentation/en-us/unreal-engine/using-network-emulation-in-unreal-engine', p: 'Epic Games', n: '서버·클라이언트에 최소·최대 지연과 패킷 손실 비율을 넣어 시험, 콘솔에서는 NetEmulation.PktLag처럼 설정' },
       ] },
     { id: 'pt-ghost', t: '퇴장 알림 유실 (유령 개체)', en: 'Missed despawn (ghost entity)',
       s: '반대로 “사라졌다”는 알림을 놓치면, 이미 죽었거나 떠난 NPC·플레이어가 내 화면에만 남습니다.',
@@ -145,6 +225,13 @@
       own: ['srv', 'cli'],
       act: { game: '서버: 주기적으로 “지금 보이는 목록” 보내기. 클라이언트: 목록에 없는 개체는 지우기, 움직여야 할 개체가 오래 갱신이 없으면 숨기기.' },
       sim: 'npcmissing',
+      sig: { k: 'random', g: '클라이언트에만 남은 개체 수' },
+      chk: {
+        look: '서버가 보내는 “지금 보이는 목록”과 클라이언트가 가진 개체 목록을 비교해 클라이언트에만 있는 개체를 세고, 퇴장 알림의 발송·수신 로그를 개체 ID로 대조',
+        yes: '유령 개체의 퇴장 알림을 서버는 보냈는데 클라이언트 수신 기록이 없거나, 퇴장이 등장보다 먼저 도착해 순서가 뒤집혀 있음',
+        no: '서버의 보이는 목록에도 그 개체가 남아 있으면 서버 쪽 개체 정리 누락. 같은 ID로 새 개체가 나타난 직후라면 개체 ID 재사용 혼동',
+        by: 'code',
+      },
       ref: [
         { t: 'Actor Relevancy in Unreal Engine', u: 'https://dev.epicgames.com/documentation/en-us/unreal-engine/actor-relevancy-in-unreal-engine', p: 'Epic Games', n: '관련성이 없어진 동적 액터는 클라이언트에서 삭제됨' },
         { t: 'Object visibility (Netcode for GameObjects 2.5)', u: 'https://docs.unity3d.com/Packages/com.unity.netcode.gameobjects@2.5/manual/basics/object-visibility.html', p: 'Unity', n: '개체를 숨기면 그 클라이언트는 개체를 despawn·삭제' },
@@ -157,10 +244,18 @@
       own: ['srv', 'cli'],
       act: { game: '서버: 등장·퇴장 알림은 반드시 재전송이 보장되는 신뢰 채널로, 초기 정보는 나눠서 보내기. 클라이언트: 수신은 로딩과 별개의 스레드에서, 수신 버퍼 크기 늘리기.' },
       sim: 'npcmissing',
+      sig: { k: 'surge', g: '입장 직후 수신량, 등장 알림 누락 수' },
+      chk: {
+        look: '서버가 입장 직후 보낸 등장 알림 수와 클라이언트가 받은 수를 비교하고, 어느 채널(신뢰·비신뢰)로 보냈는지 봄. 서버 쪽 패킷 캡처에서 입장 직후 그 유저에게 간 양과 단편화된 패킷(Wireshark 필터 ip.flags.mf == 1 || ip.frag_offset > 0)을 봄',
+        yes: '받은 수가 보낸 수보다 적고 빠진 것이 입장 직후 몰린 구간에 모여 있으며, 비신뢰 채널로 보냈거나 큰 패킷이 단편화되어 있음. 로딩이 느린 쪽 클라이언트에서 더 자주 생김',
+        no: '보낸 수와 받은 수가 같은데 안 보이면 받은 뒤 버린 것(로딩 중 도착한 등장 알림 폐기)이나 시야 계산 문제. 입장 직후와 상관없이 수시로 빠지면 회선 손실',
+        by: 'code',
+      },
       ref: [
         { t: 'RFC 8085: UDP Usage Guidelines', u: 'https://www.rfc-editor.org/rfc/rfc8085', p: 'IETF', n: '단편화된 패킷은 프래그먼트 하나만 잃어도 통째로 사라짐' },
         { t: 'UDP vs. TCP', u: 'https://gafferongames.com/post/udp_vs_tcp/', p: 'Gaffer On Games', n: 'UDP는 전달·순서를 보장하지 않아 잃은 패킷은 직접 감지해 다시 보내야 함' },
         { t: 'Socket.ReceiveBufferSize Property', u: 'https://learn.microsoft.com/en-us/dotnet/api/system.net.sockets.socket.receivebuffersize', p: 'Microsoft', n: '소켓 수신 버퍼 기본 크기는 OS마다 다름' },
+        { t: 'Display Filter Reference: Internet Protocol Version 4', u: 'https://www.wireshark.org/docs/dfref/i/ip.html', p: 'Wireshark', n: 'ip.flags.mf(More fragments)·ip.frag_offset(Fragment Offset)로 단편화된 IP 패킷을 거름' },
       ] },
     { id: 'pt-id-reuse', t: '개체 ID 재사용 혼동', en: 'Entity ID reused without a generation counter',
       s: '죽은 NPC가 다시 나타날 때 서버가 같은 개체 ID를 다시 쓰면, 그 사이 퇴장 알림을 놓친 클라이언트는 새 NPC를 옛 NPC로 오인합니다.',
@@ -170,6 +265,13 @@
       act: { game: '서버: 개체 ID에 세대 번호를 붙여 재사용을 구분. 클라이언트: 이미 아는 ID의 등장 알림을 받으면 기존 개체를 지우고 새로 만들기.' },
       more: '서버 쪽에서도 생깁니다. 시야 안 개체 목록을 ID로만 비교하면, 두 번의 시야 갱신 사이에 죽고 같은 ID로 다시 스폰된 NPC를 “변화 없음”으로 보고 퇴장·등장 알림을 둘 다 보내지 않습니다. 시야 갱신 시점이 사람마다 어긋나 있으면 그 순간에 걸린 클라이언트만 겪습니다.',
       sim: 'npcmissing',
+      sig: { k: 'random', g: '이미 아는 ID의 등장 알림 수' },
+      chk: {
+        look: '서버에 개체 ID별 생성·삭제 시각(세대 번호가 있으면 함께)을 남기고, 클라이언트가 이미 아는 ID로 등장 알림을 받은 횟수와 시야 갱신 때 “변화 없음”으로 처리된 삭제·재생성을 셈',
+        yes: '안 보이거나 쓰러진 채 보이는 NPC의 ID가 직전에 죽은 NPC와 같고, 그 사이 그 클라이언트가 퇴장 알림을 받지 못했거나 서버가 퇴장·등장 알림을 둘 다 보내지 않음',
+        no: 'ID에 세대 번호가 있고 비교에도 쓰고 있으면 이 원인이 아님. 재사용된 ID가 아닌데도 안 보이면 등장 알림 유실 쪽',
+        by: 'code',
+      },
       ref: [
         { t: 'Entity struct (Entities 1.3)', u: 'https://docs.unity3d.com/Packages/com.unity.entities@1.3/api/Unity.Entities.Entity.html', p: 'Unity', n: 'Entity는 Index와 세대 번호(Version)로 이뤄져, 재사용된 Index가 아직 유효한지 구분' },
         { t: 'NetworkConfig class (Netcode for GameObjects 2.5)', u: 'https://docs.unity3d.com/Packages/com.unity.netcode.gameobjects@2.5/api/Unity.Netcode.NetworkConfig.html', p: 'Unity', n: 'RecycleNetworkIds·NetworkIdRecycleDelay: 네트워크 ID를 일정 시간 비운 뒤 재사용' },
@@ -181,9 +283,17 @@
       own: ['cli', 'srv'],
       act: { game: '클라이언트: 로컬 포트는 OS가 자동으로 고르게(0번 바인드). 서버: 연결마다 발급한 세션 토큰으로 연결 구분.' },
       sim: 'npcmissing',
+      sig: { k: 'outlier', g: '클라이언트별 수신 패킷 수' },
+      chk: {
+        look: '유저 PC에서 두 클라이언트를 켠 채 명령 프롬프트에서 netstat -ano -p udp로 게임 프로세스(PID)마다 연 로컬 UDP 포트를 봄. 서버 쪽에서는 두 세션이 같은 공인 IP·같은 포트로 들어오는지 확인',
+        yes: '두 게임 프로세스가 같은 로컬 포트에 묶여 있거나, 서버에서 두 세션이 같은 IP·포트로 보임. 한쪽만 켜면 정상',
+        no: '두 클라이언트가 서로 다른 로컬 포트를 쓰는데도 한쪽이 이상하면 IP·기기 기준 세션 구분 버그나 멀티 클라이언트 제한',
+        by: 'user',
+      },
       ref: [
         { t: 'Using SO_REUSEADDR and SO_EXCLUSIVEADDRUSE', u: 'https://learn.microsoft.com/en-us/windows/win32/winsock/using-so-reuseaddr-and-so-exclusiveaddruse', p: 'Microsoft', n: 'SO_REUSEADDR로 같은 포트에 두 번째로 bind하면 포트를 가로채고, 어느 소켓이 패킷을 받을지 알 수 없음' },
         { t: 'bind function (winsock.h)', u: 'https://learn.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-bind', p: 'Microsoft', n: '포트를 0으로 bind하면 동적 포트 범위(49152~65535)에서 고유 포트를 할당' },
+        { t: 'netstat', u: 'https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netstat', p: 'Microsoft', n: '-a는 TCP·UDP 포트, -n은 숫자 주소, -o는 프로세스 ID(PID), -p udp는 UDP만 표시' },
       ] },
     { id: 'pt-session-key', t: 'IP·기기 기준 세션 구분 버그', en: 'Session keyed by IP or machine ID',
       s: '서버나 중간 서버가 연결을 IP나 기기 ID로 구분하면, 같은 PC(같은 공인 IP)의 두 클라이언트를 한 사람으로 인식합니다.',
@@ -192,6 +302,13 @@
       own: ['srv', 'cli'],
       act: { game: '서버: 서버·중간 서버 모두 연결마다 고유한 세션 토큰으로 구분, 같은 집(공유기 NAT 뒤)의 여러 사람과 통신사가 IP 하나를 여러 가입자에게 나눠 주는 모바일 회선(CGNAT) 사용자도 같은 문제를 겪으니 꼭 고치기. 클라이언트: 실행한 클라이언트마다 따로 받은 세션 토큰 사용.' },
       sim: 'npcmissing',
+      sig: { k: 'outlier', g: '같은 공인 IP의 동시 세션 수, 세션 덮어쓰기 수' },
+      chk: {
+        look: '서버·중간 서버 로그에 세션을 찾을 때 쓴 키, 세션 토큰, 클라이언트 IP·포트를 남기고 같은 IP에서 두 번째 접속이 들어온 순간 기존 세션이 바뀌었는지 봄. 같은 PC에서 두 클라이언트를 차례로 켜면 재현됨',
+        yes: '두 번째 클라이언트가 접속한 순간 첫 번째 세션의 주소나 캐릭터 정보가 바뀌고, 같은 공유기나 모바일 회선(CGNAT) 뒤의 다른 유저들에게서도 같은 끊김이 보임',
+        no: '같은 IP의 두 세션이 서로 다른 토큰으로 따로 유지되면 이 원인이 아님. 두 프로세스가 같은 로컬 포트를 쓰고 있으면 고정 UDP 포트 충돌',
+        by: 'code',
+      },
       ref: [
         { t: 'RFC 6269: Issues with IP Address Sharing', u: 'https://www.rfc-editor.org/rfc/rfc6269', p: 'IETF', n: 'NAT·CGN으로 여러 가입자가 IPv4 주소 하나를 공유하면 IP만으로는 사용자를 구분할 수 없음' },
       ] },
@@ -202,6 +319,13 @@
       own: ['cli', 'srv'],
       act: { game: '클라이언트: 제한할 거면 명확한 안내 메시지, 보안 모듈에 QA용 예외 설정. 서버: 같은 기기 접속 제한에도 QA용 예외 설정.' },
       sim: 'npcmissing',
+      sig: { k: 'outlier', g: '사유별 접속 거절·끊김 수(중복 접속)' },
+      chk: {
+        look: '두 번째 클라이언트를 켤 때 나오는 메시지와 먼저 켠 쪽의 끊김 메시지를 봄. 서버의 접속 거절·강제 종료 로그에 중복 접속·같은 기기 같은 사유 코드가 남는지 확인',
+        yes: '두 번째 실행·접속 순간 거절 메시지가 뜨거나 먼저 켠 쪽이 중복 접속 사유로 끊기고, 클라이언트를 하나만 켜면 문제가 없음',
+        no: '거절·끊김 사유 없이 두 쪽 다 접속되는데 한쪽만 NPC가 안 보이면 고정 UDP 포트 충돌, 세션 구분 버그, 로딩·표시 쪽 원인',
+        by: 'user',
+      },
       ref: [
         { t: 'CreateMutexW function (synchapi.h)', u: 'https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-createmutexw', p: 'Microsoft', n: '이름 있는 뮤텍스가 이미 있으면 ERROR_ALREADY_EXISTS를 돌려줘 중복 실행 감지·단일 실행 제한에 쓰임' },
       ] },
@@ -213,10 +337,18 @@
       own: ['cli', 'ext'],
       act: { game: '네트워크 수신은 게임 루프와 별도 스레드에서 계속, 백그라운드에서도 최소 처리량 보장, 엔진의 백그라운드 실행 설정(Unity는 runInBackground) 켜기.', ext: '유저에게 그래픽 드라이버의 백그라운드 프레임 제한과 PC 절전 모드를 끄도록 안내.' },
       sim: 'npcmissing',
+      sig: { k: 'gap', g: '클라이언트 프레임 간격, 프레임당 처리한 패킷 수' },
+      chk: {
+        look: '같은 PC에서 한쪽 창을 앞에, 다른 쪽을 뒤에 두고 역할을 바꿔 가며 비교. PresentMon으로 두 프로세스의 프레임 간격을 재고, 게임 쪽 로그가 있으면 창 포커스 상태와 프레임마다 처리한 패킷 수를 봄',
+        yes: '백그라운드 창일 때만 프레임 간격이 크게 늘거나(드라이버 제한이면 설정한 프레임 수 근처에서 평평해짐) 처리가 멈추고, 창을 바꾸면 문제도 다른 클라이언트로 옮겨 감',
+        no: '앞에 있는 창에서도 똑같이 생기면 백그라운드 제한 탓이 아님. 창 위치와 상관없이 늘 같은 클라이언트만 이상하면 표시 옵션이나 버전 차이',
+        by: 'user',
+      },
       ref: [
         { t: 'Application.runInBackground', u: 'https://docs.unity3d.com/ScriptReference/Application-runInBackground.html', p: 'Unity', n: 'runInBackground 기본값은 false이며, 이때 앱은 백그라운드에서 일시 정지' },
         { t: 'Manage 3D Settings (reference) — NVIDIA Control Panel Help', u: 'https://www.nvidia.com/content/Control-Panel-Help/vLatest/en-us/mergedProjects/nv3d/Manage_3D_Settings_(reference).htm', p: 'NVIDIA', n: 'Background Application Max Frame Rate: 백그라운드 게임의 최대 프레임을 초당 20~200으로 제한' },
         { t: 'Priority Boosts', u: 'https://learn.microsoft.com/en-us/windows/win32/procthread/priority-boosts', p: 'Microsoft', n: 'Windows는 포그라운드 창의 프로세스 우선순위를 백그라운드 프로세스 이상으로 높임' },
+        { t: 'PresentMon README', u: 'https://raw.githubusercontent.com/GameTechDev/PresentMon/main/README.md', p: 'Intel', n: '윈도우 그래픽 앱의 CPU·GPU·디스플레이 프레임 시간을 앱별로 수집하는 도구' },
       ] },
     { id: 'pt-asset-lock', t: '캐시·에셋 파일 동시 접근 충돌', en: 'Shared cache / asset file lock conflicts',
       s: '두 클라이언트가 같은 캐시 폴더에 동시에 쓰거나 파일을 잠그면, 한쪽이 NPC 모델·텍스처를 못 불러옵니다.',
@@ -225,8 +357,16 @@
       own: ['cli'],
       act: { game: '클라이언트별 캐시 폴더, 파일 잠금 실패 시 재시도, 로딩 실패 시 기본 모델이라도 표시.' },
       sim: 'npcmissing',
+      sig: { k: 'outlier', g: '클라이언트별 에셋 로딩 실패 수' },
+      chk: {
+        look: '유저 PC에서 Process Monitor로 게임 설치·캐시 폴더 경로만 걸러 두 게임 프로세스의 파일 열기·쓰기 결과를 봄. 클라이언트 로그가 있으면 에셋 로딩 실패와 파일 열기 오류 코드(ERROR_SHARING_VIOLATION)를 찾음',
+        yes: '안 보이는 모델의 파일 열기가 공유 위반·잠금 실패로 끝났고 같은 시각 다른 클라이언트가 그 파일을 쓰고 있었음. 하나만 켜거나 설치·캐시 폴더를 나누면 사라짐',
+        no: '클라이언트를 하나만 켜도 같은 모델이 안 보이면 파일 손상이나 클라이언트 버전·데이터 불일치. 파일은 잘 열렸는데 안 그려지면 메모리·VRAM 부족',
+        by: 'user',
+      },
       ref: [
         { t: 'Creating and Opening Files', u: 'https://learn.microsoft.com/en-us/windows/win32/fileio/creating-and-opening-files', p: 'Microsoft', n: '공유 모드 없이 연 파일은 다른 프로세스가 열 수 없고 ERROR_SHARING_VIOLATION이 남' },
+        { t: 'Process Monitor', u: 'https://learn.microsoft.com/en-us/sysinternals/downloads/procmon', p: 'Microsoft', n: '파일 시스템·레지스트리·프로세스 활동을 실시간으로 기록하고 경로 등 모든 항목으로 거를 수 있음' },
       ] },
     { id: 'pt-vram', t: '메모리·VRAM 부족으로 스트리밍 실패', en: 'Memory / VRAM exhaustion',
       s: '클라이언트 두 개가 그래픽 메모리를 나눠 쓰면, 새로 필요한 모델·텍스처를 올릴 자리가 없어 일부가 안 그려집니다.',
@@ -235,8 +375,17 @@
       own: ['cli', 'ext'],
       act: { game: '메모리 예산에 맞춘 품질 자동 조절, 로딩 실패 시 대체 모델 표시.', ext: '두 클라이언트를 함께 켜는 유저에게 그래픽 품질을 낮추거나 저사양 모드를 쓰도록 안내, 권장 VRAM·RAM 사양 안내.' },
       sim: 'npcmissing',
+      sig: { k: 'ceiling', g: '프로세스별 전용 GPU 메모리 사용량' },
+      chk: {
+        look: '유저 PC의 작업 관리자 “세부 정보” 탭에 전용 GPU 메모리 열을 추가해 두 클라이언트의 사용량 합을 그래픽카드 VRAM 용량과 비교. 게임 쪽에는 DXGI의 QueryVideoMemoryInfo가 알려 주는 예산(Budget)과 현재 사용량(CurrentUsage)을 기록',
+        yes: '두 클라이언트 사용량 합이 VRAM 용량 근처에서 평평하고, 현재 사용량이 예산을 넘은 시각에 모델·텍스처 로딩 실패가 몰림. 품질을 낮추거나 하나만 켜면 사라짐',
+        no: 'VRAM에 여유가 있는데도 안 보이면 캐시·에셋 파일 동시 접근 충돌이나 표시 옵션 차이',
+        by: 'user',
+      },
       ref: [
         { t: 'Residency (Direct3D 12)', u: 'https://learn.microsoft.com/en-us/windows/win32/direct3d12/residency', p: 'Microsoft', n: '비디오 메모리 예산은 다른 앱으로 전환하면 크게 줄 수 있고, 예산을 넘으면 멈추거나 생성이 실패. 포그라운드가 아니면 예약분도 보장 안 됨' },
+        { t: 'GPUs in the task manager', u: 'https://devblogs.microsoft.com/directx/gpus-in-the-task-manager/', p: 'Microsoft', n: '작업 관리자 세부 정보 탭에 열을 추가하면 프로세스별 전용·공유 GPU 메모리 사용량을 볼 수 있음. 전용 GPU 메모리는 그래픽카드의 VRAM' },
+        { t: 'DXGI_QUERY_VIDEO_MEMORY_INFO structure (dxgi1_4.h)', u: 'https://learn.microsoft.com/en-us/windows/win32/api/dxgi1_4/ns-dxgi1_4-dxgi_query_video_memory_info', p: 'Microsoft', n: 'Budget(OS가 정한 비디오 메모리 예산)과 CurrentUsage(앱의 현재 사용량). 사용량이 예산을 넘으면 끊김이 생길 수 있음' },
       ] },
     { id: 'pt-display-option', t: '표시 옵션 차이', en: 'Different display settings',
       s: '표시 인원 제한, NPC 이름표·모델 숨김, 저사양 모드 같은 옵션이 두 클라이언트에서 다르면 보이는 것이 다릅니다.',
@@ -245,6 +394,13 @@
       own: ['cli'],
       act: { game: '옵션으로 숨긴 개체임을 알 수 있게 표시, 설정 파일을 클라이언트별로 분리해 섞이지 않게.' },
       sim: 'npcmissing',
+      sig: { k: 'outlier', g: '클라이언트별 화면에 그린 개체 수' },
+      chk: {
+        look: '두 클라이언트의 표시 인원 제한, 이름표·모델 숨김, 저사양 모드 설정을 나란히 비교하고 한쪽을 다른 쪽과 똑같이 맞춰 봄. 두 클라이언트가 설정 파일 하나를 함께 쓰며 서로 덮어쓰는지도 확인',
+        yes: '설정을 같게 맞추면 두 화면이 같아지고, 안 보이던 NPC는 표시 제한 인원 밖의 먼 개체나 우선순위 낮은 개체였음',
+        no: '설정을 똑같이 맞춰도 한쪽에만 없으면 채널·페이즈 차이나 등장 알림 유실 쪽',
+        by: 'user',
+      },
       ref: [
         { t: 'Changing the Quantity of Characters Displayed On-screen (FINAL FANTASY XIV UI Guide)', u: 'https://na.finalfantasyxiv.com/uiguide/faq/faq-other/setting_ch_quantity.html', p: 'Square Enix', n: '표시 제한(Character and Object Quantity) 설정으로 화면에 그리는 캐릭터·오브젝트 수를 조절' },
       ] },
@@ -255,6 +411,13 @@
       own: ['cli', 'srv'],
       act: { game: '클라이언트: 접속 시 데이터 버전 보내기, 모르는 ID를 받으면 로그를 남기고 대체 표시. 서버: 접속 시 데이터 버전을 확인해 다르면 접속 거절·패치 안내.' },
       sim: 'npcmissing',
+      sig: { k: 'step', g: '버전별 모르는 ID 수신 수' },
+      chk: {
+        look: '두 클라이언트의 실행 파일 경로와 화면·로그에 나오는 클라이언트·데이터 버전을 비교. 게임 쪽에는 접속 때 보낸 데이터 버전과 모르는 NPC·모델 ID를 받아 건너뛴 횟수를 기록',
+        yes: '두 클라이언트의 버전이나 설치 폴더가 다르고, 안 보이는 NPC가 최근 패치로 추가된 것이며, 패치를 마친 설치본에서는 보임',
+        no: '버전과 설치 폴더가 같은데 한쪽에만 없으면 채널·페이즈 차이나 로딩·전달 쪽 원인',
+        by: 'user',
+      },
       ref: [
         { t: 'NetworkConfig class (Netcode for GameObjects 2.5)', u: 'https://docs.unity3d.com/Packages/com.unity.netcode.gameobjects@2.5/api/Unity.Netcode.NetworkConfig.html', p: 'Unity', n: 'ProtocolVersion이 다르면 서로 통신하지 않고, ForceSamePrefabs로 접속 때 프리팹 목록 차이를 검사' },
       ] },
@@ -265,9 +428,17 @@
       own: ['srv', 'cli'],
       act: { game: '서버: 밀린 개체의 우선순위를 시간이 지날수록 올리기(starvation 방지), 최소 갱신 주기 보장. 클라이언트: 백그라운드에서도 수신 확인을 제때 보내 대역폭 추정이 낮아지지 않게.' },
       sim: 'npcmissing',
+      sig: { k: 'load', g: '연결별 미룬 개체 수, 연결별 전송량' },
+      chk: {
+        look: '서버에 연결마다 틱별 전송 바이트, 전송 한도(추정 대역폭), 보내지 못하고 미룬 개체 수, 개체별 마지막 전송 뒤 지난 시간을 남김. Unreal은 Networking Insights에서 연결별 패킷 크기와 그 안에 담긴 복제 개체를 볼 수 있음',
+        yes: '안 보이는 NPC가 그 연결에서 오래 미뤄진 개체이고, 그 연결의 한도가 다른 연결보다 낮으며, 사람이 붐빌수록 미룬 개체가 늘어남',
+        no: '미룬 개체가 없고 그 NPC도 제때 보냈으면 전송 뒤 단계(수신 버퍼, 로딩, 표시 옵션). 모든 연결이 한도에 붙어 있으면 서버 전체의 전송량·시야 설계 문제',
+        by: 'code',
+      },
       ref: [
         { t: 'Actor Priority in Unreal Engine', u: 'https://dev.epicgames.com/documentation/en-us/unreal-engine/actor-priority-in-unreal-engine', p: 'Epic Games', n: '대역폭이 포화되면 우선순위(거리·시선·마지막 복제 후 경과 시간)에 따라 복제할 액터를 고름. 모든 액터가 매번 복제되지는 않음' },
         { t: 'State Synchronization', u: 'https://gafferongames.com/post/state_synchronization/', p: 'Gaffer On Games', n: '우선순위 누적: 이번 패킷에 못 들어간 개체가 다음 패킷에 먼저 들어가고, 대역폭 한도는 실시간 조절' },
+        { t: 'Networking Insights in Unreal Engine', u: 'https://dev.epicgames.com/documentation/en-us/unreal-engine/networking-insights-in-unreal-engine', p: 'Epic Games', n: '연결별로 주고받은 패킷의 크기와 그 안에 담긴 복제 개체·속성을 보여 줌' },
       ] },
     { id: 'pt-clock-hold', t: '시계 추정 오차로 개체 보류', en: 'Clock estimate error holds or discards entities',
       s: '클라이언트가 추정한 서버 시각이 틀리면, 막 도착한 개체 정보를 “아직 미래”라며 보류하거나 “너무 옛날”이라며 버립니다.',
@@ -276,6 +447,13 @@
       own: ['cli'],
       act: { game: '시간 동기화를 주기적으로 다시 하고 차이가 크면 즉시 재설정, 로딩 중이나 절전 복귀 직후에 잰 값은 쓰지 않기.' },
       sim: 'npcmissing',
+      sig: { k: 'outlier', g: '클라이언트별 서버 시각 추정 오차' },
+      chk: {
+        look: '클라이언트에 추정한 서버 시각, RTT, 시간 동기화를 다시 한 시각, 개체 정보를 보류하거나 버린 횟수를 기록. 로딩 직후나 절전 복귀 직후에 재현해 봄',
+        yes: '문제가 난 클라이언트만 추정 오차가 재설정 기준(Unity는 hardResetThresholdSec, 기본 0.2초)을 넘고, 개체 정보를 미래라며 보류하거나 과거라며 버린 기록이 있으며, 시간 동기화를 다시 하면 바로 정상',
+        no: '추정 오차가 작은데 늦게 나타나면 연결별 전송 예산·우선순위나 로딩 쪽 원인',
+        by: 'code',
+      },
       ref: [
         { t: 'NetworkTimeSystem class (Netcode for GameObjects 2.5)', u: 'https://docs.unity3d.com/Packages/com.unity.netcode.gameobjects@2.5/api/Unity.Netcode.NetworkTimeSystem.html', p: 'Unity', n: '시간 차이가 hardResetThresholdSec(기본 0.2초)를 넘으면 강제로 맞추고, 평소엔 adjustmentRatio로 조금씩 빠르게·느리게 조정' },
         { t: 'NetworkTime and ticks (Netcode for GameObjects 2.5)', u: 'https://docs.unity3d.com/Packages/com.unity.netcode.gameobjects@2.5/manual/advanced-topics/networktime-ticks.html', p: 'Unity', n: 'LocalTime은 서버보다 앞서고 ServerTime은 뒤처짐. 늦게 도착한 메시지는 대기 시간이 음수가 될 수 있음' },

@@ -19,6 +19,11 @@
     syncmodels: '동기화 방식 비교', windows: '판정 구간 실험', chain: '연속 행동 실험', oneslow: '한 명만 느릴 때 실험', npcmissing: '한쪽 클라 진단', retrans: 'TCP 재전송 실험',
   };
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  /* 그래프 모양(sig)과 확인 방법(chk), 실제 사례(cases): docs/CHECKS_GUIDE.md */
+  const SIG = Object.fromEntries((D.sigs || []).map(s => [s.id, s]));
+  const sigFig = k => (SIG[k] && window.SIGDRAW ? window.SIGDRAW(k, SIG[k].name + ' 모양의 그래프') : '');
+  const CASES_OF = {};
+  (D.cases || []).forEach(x => (x.causes || []).forEach(id => (CASES_OF[id] = CASES_OF[id] || []).push(x)));
 
   /* 해결 담당: own[0]이 주 담당, 나머지는 함께 대응하는 곳. act는 팀별 할 일 */
   const OWN = Object.fromEntries((D.owners || []).map(o => [o.id, o]));
@@ -136,12 +141,23 @@
       `<span class="cid"><span class="k">ID</span><a class="mono" href="#c-${c.id}">${c.id}</a><button type="button" class="copy" data-copy="${c.id}" aria-label="${esc(c.t)} 링크 복사">링크 복사</button></span>`,
     ].join('');
     const acts = c.act ? TEAM_ORDER.filter(t => c.act[t]).map(t => `<dt class="act act-${t}">${ACT_LABEL[t]}</dt><dd>${c.act[t]}</dd>`).join('') : '';
+    const chk = c.chk ? [
+      `<dt class="chk">확인할 곳</dt><dd>${c.chk.look}</dd>`,
+      `<dt class="chk">이러면 맞음</dt><dd>${c.chk.yes}</dd>`,
+      c.chk.no ? `<dt class="chk">이러면 아님</dt><dd>${c.chk.no}</dd>` : '',
+      D.chkBy && D.chkBy[c.chk.by] ? `<dt class="chk">확인 수단</dt><dd>${D.chkBy[c.chk.by]}</dd>` : '',
+    ].join('') : '';
+    const cases = CASES_OF[c.id] || [];
     const dl = [
       c.num ? `<dt>수치 감각</dt><dd>${c.num}</dd>` : '',
+      chk,
       acts || (c.fix ? `<dt>대응</dt><dd>${c.fix}</dd>` : ''),
       c.more ? `<dt>더 알아보기</dt><dd>${c.more}</dd>` : '',
+      cases.length ? `<dt>실제 사례</dt><dd>${cases.map(x => `<a href="#case-${x.id}">${esc(x.org)} ${x.year}: ${esc(x.t)}</a>`).join('<br>')}</dd>` : '',
       c.ref && c.ref.length ? `<dt>출처</dt><dd>${refList(c.ref)}</dd>` : '',
     ].join('');
+    const sig = c.sig && SIG[c.sig.k] ? `<div class="sig-row">${sigFig(c.sig.k)}<p><b>그래프에서는</b> <a href="#sig-${c.sig.k}">${SIG[c.sig.k].name}</a><span class="sig-g"> · ${c.sig.g}</span></p></div>` : '';
+    const summary = ['수치 감각', c.chk ? '확인 방법' : '', '팀별 대응'].filter(Boolean).join('·') + (cases.length ? ' · 사례' : '') + (c.ref && c.ref.length ? ' · 출처' : '');
     return `<article class="cause" id="c-${c.id}">
       <div class="cause-top"><h4>${c.t}<span class="en">${esc(c.en)}</span></h4><div class="chips">${c.sym.map(s => symChip(s)).join('')}</div></div>
       <p class="short">${c.s}</p>
@@ -150,9 +166,10 @@
         <div class="step"><b>그러면</b>${c.c[1]}</div><div class="arr">${ARROW}</div>
         <div class="step out"><b>화면에서는</b>${c.c[2]}</div>
       </div>
+      ${sig}
       ${ownRow(c)}
       <div class="cause-meta">${meta}</div>
-      ${dl ? `<details><summary>수치 감각과 팀별 대응${c.ref && c.ref.length ? ' · 출처' : ''}</summary><div class="more"><dl>${dl}</dl></div></details>` : ''}
+      ${dl ? `<details><summary>${summary}</summary><div class="more"><dl>${dl}</dl></div></details>` : ''}
     </article>`;
   }
   $$('[data-causes]').forEach(box => { box.innerHTML = (byLayer[box.dataset.causes] || []).map(causeHTML).join(''); });
@@ -550,6 +567,82 @@
     const hash = '#c-' + b.dataset.copy;
     const show = msg => { b.textContent = msg; copyLive.textContent = msg; clearTimeout(b._t); b._t = setTimeout(() => { b.textContent = '링크 복사'; copyLive.textContent = ''; }, 1800); };
     copyText(location.href.split('#')[0] + hash).then(() => show('복사됨'), () => { history.replaceState(null, '', hash); show('주소창에서 복사하세요'); });
+  });
+
+  /* ---------------- 관측으로 판정하기: 그래프 모양 13가지, 확인 수단 분포 ---------------- */
+  const causeLink = c => `<a href="#c-${c.id}">${c.t}</a>`;
+  const layerName = id => (LAYER[id] ? LAYER[id].short || LAYER[id].name : id);
+  (function () {
+    const box = $('#sig-legend'); if (!box) return;
+    box.innerHTML = (D.sigs || []).map(g => {
+      const list = D.causes.filter(c => c.sig && c.sig.k === g.id);
+      return `<div class="sig-tile" id="sig-${g.id}">${sigFig(g.id)}
+        <div class="sig-body"><p class="sig-name"><b>${g.name}</b> <span class="mono">${list.length}</span></p><p>${g.desc}</p>
+        ${list.length ? `<details><summary>이 모양의 원인 ${list.length}가지</summary><ul>${list.map(c => `<li>${causeLink(c)} <span class="note">${layerName(c.layer)}</span></li>`).join('')}</ul></details>` : ''}</div></div>`;
+    }).join('');
+  })();
+  (function () {
+    const box = $('#chk-cover'); if (!box) return;
+    const BY = ['ops', 'code', 'user'];
+    const LABEL = { ops: '인프라 도구', code: '게임 로그·지표', user: '유저 쪽' };
+    const rows = ALL_LAYERS.map(l => {
+      const list = D.causes.filter(c => c.layer === l.id && c.chk);
+      const n = Object.fromEntries(BY.map(b => [b, list.filter(c => c.chk.by === b).length]));
+      return { l, n, total: list.length };
+    }).filter(r => r.total);
+    if (!rows.length) { box.innerHTML = ''; return; }
+    const all = Object.fromEntries(BY.map(b => [b, rows.reduce((a, r) => a + r.n[b], 0)]));
+    const sum = BY.reduce((a, b) => a + all[b], 0);
+    const bar = (n, total) => `<div class="cover-bar" role="img" aria-label="${BY.map(b => `${LABEL[b]} ${n[b]}`).join(', ')}">${BY.map((b, i) => n[b] ? `<span class="cv-${i + 1}" style="flex:${n[b]}" title="${LABEL[b]} ${n[b]}">${n[b]}</span>` : '').join('')}</div>`;
+    box.innerHTML = `<p class="legend cover-legend">${BY.map((b, i) => `<span><i class="cv-${i + 1}"></i>${LABEL[b]} ${all[b]}가지 (${Math.round(all[b] / sum * 100)}%)</span>`).join('')}</p>
+      <div class="cover">${rows.map(r => `<div class="cover-row"><a href="#${r.l.anchor || 'l-' + r.l.id}">${r.l.short || r.l.name}</a>${bar(r.n, r.total)}</div>`).join('')}</div>`;
+  })();
+
+  /* ---------------- 사례와 절차 ---------------- */
+  const CAUSE = Object.fromEntries(D.causes.map(c => [c.id, c]));
+  const causeChips = ids => (ids || []).filter(id => CAUSE[id]).map(id => `<a class="cause-chip" href="#c-${id}">${CAUSE[id].t}</a>`).join('');
+  (function () {
+    const box = $('#playbooks'); if (!box) return;
+    box.innerHTML = (D.playbooks || []).map(pb => `<div class="playbook" id="pb-${pb.id}">
+      <h4>${esc(pb.t)}</h4><p class="note">${pb.when}</p>
+      <ol class="pb-steps">${(pb.steps || []).map(st => `<li><b>${st.t}</b><p>${st.d}</p>${st.causes && st.causes.length ? `<div class="chips">${causeChips(st.causes)}</div>` : ''}</li>`).join('')}</ol>
+      ${pb.ref && pb.ref.length ? `<details><summary>출처 ${pb.ref.length}</summary>${refList(pb.ref)}</details>` : ''}</div>`).join('') || '<p class="note">준비 중입니다.</p>';
+  })();
+  (function () {
+    const box = $('#case-list'); if (!box) return;
+    box.innerHTML = (D.cases || []).map(x => `<article class="case" id="case-${x.id}">
+      <p class="case-org">${esc(x.org)} · ${x.year}</p><h4>${esc(x.t)}</h4>
+      <dl><dt>무슨 일</dt><dd>${x.what}</dd><dt>원인</dt><dd>${x.why}</dd><dt>배울 점</dt><dd>${x.lesson}</dd></dl>
+      <div class="chips">${causeChips(x.causes)}</div>
+      <p class="case-src"><a href="${esc(x.u)}" target="_blank" rel="noopener noreferrer">원문: ${esc(x.p || x.org)}</a></p></article>`).join('') || '<p class="note">준비 중입니다.</p>';
+  })();
+
+  /* ---------------- 증상 × 층 지도 ---------------- */
+  K.register('symmap', function (root) {
+    const rows = ALL_LAYERS.filter(l => D.causes.some(c => c.layer === l.id));
+    const count = (l, s) => D.causes.filter(c => c.layer === l.id && c.sym.includes(s.id));
+    const max = Math.max(...rows.flatMap(l => D.symptoms.map(s => count(l, s).length)));
+    const wrap = K.el('div', { class: 'table-wrap symmap-wrap' });
+    wrap.innerHTML = `<table class="symmap"><thead><tr><th scope="col">층·주제</th>${D.symptoms.map(s => `<th scope="col"><span>${s.name}</span></th>`).join('')}</tr></thead><tbody>${rows.map(l => `<tr><th scope="row"><a href="#${l.anchor || 'l-' + l.id}">${l.short || l.name}</a></th>${D.symptoms.map(s => {
+      const n = count(l, s).length;
+      return `<td style="--a:${n ? (0.1 + 0.75 * n / max).toFixed(2) : 0}">${n ? `<button type="button" data-l="${l.id}" data-s="${s.id}" aria-label="${esc(`${l.short || l.name} · ${s.name}: 원인 ${n}가지`)}">${n}</button>` : ''}</td>`;
+    }).join('')}</tr>`).join('')}</tbody><tfoot><tr><th scope="row">합계</th>${D.symptoms.map(s => `<td>${D.causes.filter(c => c.sym.includes(s.id)).length}</td>`).join('')}</tr></tfoot></table>`;
+    const out = K.el('div', { class: 'symmap-out', 'aria-live': 'polite' });
+    out.innerHTML = '<p class="note">칸을 누르면 그 층에서 그 증상을 만드는 원인이 여기에 나옵니다.</p>';
+    wrap.addEventListener('click', e => {
+      const b = e.target.closest('button[data-l]'); if (!b) return;
+      $$('button[aria-pressed="true"]', wrap).forEach(x => x.setAttribute('aria-pressed', 'false'));
+      b.setAttribute('aria-pressed', 'true');
+      const l = LAYER[b.dataset.l], sy = SYM[b.dataset.s];
+      const list = count(l, sy);
+      out.innerHTML = `<p class="own-list-head"><b>${l.short || l.name}</b> · ${sy.name} <span class="mono">${list.length}가지</span></p><div class="own-list"><ul>${list.map(c => `<li><div class="own-li-top">${causeLink(c)}${c.own ? ownBadge(c.own[0]) : ''}</div><div class="own-act">${c.s}</div></li>`).join('')}</ul></div>`;
+    });
+    const F = K.frame(root, {
+      kicker: '증상 사전 · 한눈에 보기', title: '어느 층이 어떤 증상을 만드나',
+      lead: '가로는 증상, 세로는 층과 주제입니다. 숫자는 그 층에서 그 증상을 만드는 원인의 수이고, 진할수록 많습니다. 같은 증상이라도 여러 층에서 생길 수 있다는 것이 한눈에 보입니다.',
+      layout: 'stack',
+    });
+    F.stage.append(wrap, out);
   });
 
   /* ---------------- 시뮬레이션 올리기 ---------------- */

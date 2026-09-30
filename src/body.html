@@ -27,6 +27,8 @@
       <div class="nav-group-title">도구</div>
       <ol>
         <li><a href="#triage">진단 도우미</a></li>
+        <li><a href="#judge">관측으로 판정하기</a></li>
+        <li><a href="#cases">사례와 절차</a></li>
         <li><a href="#report">렉 제보 잘하는 법</a></li>
         <li><a href="#glossary">용어 사전</a></li>
         <li><a href="#refs">참고 문헌</a></li>
@@ -86,6 +88,8 @@
           <p>CPU, 디스크, 데이터베이스, 공유기, 통신사 회선. 층은 달라도 구조는 같습니다. 요청을 처리하는 <b>워커</b>(CPU 코어, 스레드, DB 커넥션 등)가 있고, 그 앞에 <b>대기열</b>이 생깁니다. 워커가 한가하면 대기열이 비어 있지만, 바쁜 정도(이용률)가 80~90%를 넘어서면 대기열이 급격히 길어집니다. 워커 하나에 요청이 무작위로 올 때, 평균 대기는 이용률 50%에서 처리 시간만큼, 80%에서 4배, 90%에서 9배가 됩니다. “CPU가 아직 10% 남았는데 왜 렉이죠?”의 답이 여기 있습니다. 게다가 모니터링 화면의 CPU 수치는 보통 여러 코어와 1~5분을 평균한 값이라, 코어 하나만 100%인 상황이나 몇 초 동안만 몰린 순간을 가립니다.</p>
         </div>
         <div data-sim="queue" id="sim-queue"></div>
+        <h3 class="sec">이 백서가 다루는 것과 다루지 않는 것</h3>
+        <div class="prose"><p>게임 화면을 그리는 내 PC·폰부터 집 네트워크, 통신사, 데이터센터, 서버와 데이터베이스까지, 온라인 게임의 플레이 중 렉을 만드는 원인을 다룹니다. 게임 화면을 영상으로 받아 보는 <b>클라우드 게이밍</b>, 별도 서비스로 도는 <b>음성 채팅</b>, <b>패치·다운로드 속도</b>는 구조가 달라 다루지 않습니다. 다만 그 안의 네트워크 원인(와이파이, 버퍼블로트, 회선 혼잡 등)은 여기 있는 원인과 같습니다.</p></div>
       </section>
 
       <!-- ===================== 패킷의 이동 경로 ===================== -->
@@ -117,6 +121,7 @@
           <p class="lede">플레이어는 “렉 걸려요”라고만 말하지만, 렉의 모양은 원인을 꽤 많이 알려 줍니다. 각 증상의 작은 그림은 화면 속 캐릭터가 지나간 자리입니다. 점이 겹치면 멈춘 것, 벌어지면 빨라지거나 건너뛴 것입니다.</p>
         </div>
         <div class="sym-grid" id="sym-grid"></div>
+        <div data-sim="symmap" id="sim-symmap"></div>
       </section>
 
       <!-- ===================== 동기화 방식 ===================== -->
@@ -272,6 +277,10 @@
           <p class="lede">서버 지표에 “TCP 재전송(Retransmission)”이 늘면 렉 제보도 함께 느는 경우가 많습니다. 재전송은 “패킷이 사라졌다” 또는 “사라졌다고 잘못 판단했다”는 신호입니다. 원인은 와이파이부터 서버 네트워크 카드까지 경로 어디에나 있고, 게임처럼 작은 패킷을 드문드문 보내는 연결에서는 패킷 하나만 잃어도 수백 ms 멈춤으로 번집니다. 이 장은 재전송의 근본 원인, 원인을 찾는 방법, 해결 방향을 정리합니다.</p>
         </div>
 
+<figure class="fig">
+          <div class="fig-scroll"><svg class="tcpfig" viewBox="0 0 640 214" role="img" aria-label="TCP 재전송 타임라인: 3번 패킷이 사라지면 4·5·6번이 도착해도 게임에 넘어가지 않고, 재전송 타이머가 끝나 3번이 다시 도착한 뒤 한꺼번에 넘어간다"><text class="lb" x="8" y="54">서버가 보냄</text><text class="lb" x="8" y="164">게임이 받음</text><line class="axis" x1="96" y1="50" x2="610" y2="50"/><line class="axis" x1="96" y1="160" x2="610" y2="160"/><g class="pk"><rect x="99" y="39" width="22" height="22" rx="4"/><text x="110" y="54">1</text></g><path class="arr" d="M110 62 L150 148"/><g class="pk"><rect x="149" y="39" width="22" height="22" rx="4"/><text x="160" y="54">2</text></g><path class="arr" d="M160 62 L200 148"/><g class="pk lost"><rect x="199" y="39" width="22" height="22" rx="4"/><text x="210" y="54">3</text></g><path class="arr lost" d="M210 62 L224 104"/><text class="x" x="228" y="112">×</text><text class="note" x="240" y="112">사라짐</text><g class="pk"><rect x="249" y="39" width="22" height="22" rx="4"/><text x="260" y="54">4</text></g><path class="arr" d="M260 62 L300 148"/><g class="pk"><rect x="299" y="39" width="22" height="22" rx="4"/><text x="310" y="54">5</text></g><path class="arr" d="M310 62 L350 148"/><g class="pk"><rect x="349" y="39" width="22" height="22" rx="4"/><text x="360" y="54">6</text></g><path class="arr" d="M360 62 L400 148"/><g class="pk got"><rect x="139" y="149" width="22" height="22" rx="4"/><text x="150" y="164">1</text></g><g class="pk got"><rect x="189" y="149" width="22" height="22" rx="4"/><text x="200" y="164">2</text></g><g class="pk held"><rect x="289" y="149" width="22" height="22" rx="4"/><text x="300" y="164">4</text></g><g class="pk held"><rect x="339" y="149" width="22" height="22" rx="4"/><text x="350" y="164">5</text></g><g class="pk held"><rect x="389" y="149" width="22" height="22" rx="4"/><text x="400" y="164">6</text></g><g class="pk resend"><rect x="479" y="39" width="22" height="22" rx="4"/><text x="490" y="54">3</text></g><path class="arr" d="M490 62 L530 148"/><path class="span" d="M210 30 L210 24 L490 24 L490 30"/><text class="note" x="350" y="18" text-anchor="middle">다시 보낼 때까지 기다림 (복구 방식에 따라 다름)</text><g class="pk got"><rect x="519" y="149" width="22" height="22" rx="4"/><text x="530" y="164">3</text></g><path class="span bad" d="M206 186 L206 192 L520 192 L520 186"/><text class="note bad" x="363" y="206" text-anchor="middle">게임에는 아무것도 안 옴: 멈춤</text><text class="note" x="546" y="182">3·4·5·6이 한꺼번에: 몰아치기</text></svg></div>
+          <figcaption>50ms마다 보내는 연결에서 3번 하나가 사라진 경우입니다. TCP는 순서대로만 넘겨주므로 4·5·6번이 도착해도 3번을 다시 받을 때까지 게임에 넘기지 않습니다. 그래서 손실 하나가 <b>멈춤</b>과 그 뒤의 <b>몰아치기</b>가 됩니다. 다시 보내는 시점은 복구 방식에 따라 왕복 한 번 안팎에서 “왕복 시간 + 최소 200ms”(재전송 타이머)까지 달라집니다(아래 “재전송의 종류”).</figcaption>
+        </figure>
         <h3 class="sec">재전송이 게임을 유난히 느리게 만드는 네 가지 이유</h3>
         <div class="prose">
           <ol>
@@ -397,6 +406,17 @@
           <h2>게임개발팀이 고칠 것, 인프라팀이 고칠 것</h2>
           <p class="lede">같은 렉이라도 고치는 곳이 다릅니다. 클라이언트·서버 코드와 동기화 설계는 <b>게임개발팀</b>이, 회선·네트워크 장비·서버 장비·DB 장비는 <b>인프라팀</b>이 맡습니다. 유저의 PC와 집 네트워크, 통신사 구간, 클라우드 사업자 쪽 문제는 두 팀 모두 직접 고칠 수 없어 안내하거나 요청하거나 우회합니다. 모든 원인 카드에 <b>주 담당</b>과 <b>함께 대응할 곳</b>을 표시했고, 카드의 “수치 감각과 팀별 대응”을 펼치면 팀마다 할 일이 나뉘어 있습니다.</p>
         </div>
+        <figure class="fig">
+          <ol class="oflow">
+            <li><b>제보·경보</b><span>증상, 초 단위 시각, 서버·채널</span></li>
+            <li><b>누가 겪나</b><span>한 명·한 집 / 특정 통신사·지역 / 특정 서버·채널 / 전체</span></li>
+            <li><b>먼저 부를 곳</b><span>후보 원인 카드의 주 담당. 진단 도우미의 “먼저 확인할 곳”</span></li>
+            <li><b>넘길 정보</b><span>IP·통신사, 끊김 사유, 관련 그래프, 직전 변경</span></li>
+            <li><b>함께 할 일</b><span>카드의 팀별 할 일로 나눠 맡기</span></li>
+          </ol>
+          <figcaption>티켓이 들어와서 팀별 할 일로 나뉠 때까지의 흐름입니다. “누가 겪나”가 담당을 가장 크게 가르고, 자세한 기준은 아래 표와 <a href="#judge">관측으로 판정하기</a>에 있습니다.</figcaption>
+        </figure>
+
 
         <div class="table-wrap">
           <table>
@@ -712,10 +732,139 @@
         <div data-sim="triage" id="sim-triage"></div>
       </section>
 
+      <!-- ===================== 관측으로 판정하기 ===================== -->
+      <section class="chapter" id="judge">
+        <div class="ch-head">
+          <div class="ch-kicker"><span class="idx">T2</span>도구</div>
+          <h2>관측으로 판정하기</h2>
+          <p class="lede">제보나 경보가 오면 <b>범위 → 시점 → 계층</b> 순서로 좁힙니다. 이상이 어디에 몰렸는지가 담당을 가장 크게 가르고, 무엇과 겹쳤는지가 원인을 좁히며, 어느 계층의 지표가 비정상인지로 확인합니다. 원인 카드마다 있는 “그래프에서는”과 “확인 방법”을 함께 쓰면, 그래프 모양으로 후보를 고르고 확인할 곳을 바로 찾을 수 있습니다.</p>
+        </div>
+
+        <h3 class="sec">판정 흐름</h3>
+        <div class="flow">
+          <div class="flow-step">
+            <div class="flow-no">1 범위</div>
+            <p class="flow-q">이상이 어디에 몰렸나</p>
+            <ul>
+              <li>특정 국가·통신사(ASN) <span class="to">→</span> <span class="own own-infra"><span class="tm">인프라팀</span>네트워크</span> <span class="own own-ext"><span class="tm">외부</span>통신사</span></li>
+              <li>특정 서버·채널·존 <span class="to">→</span> 호스트 지표가 정상이면 <span class="own own-game"><span class="tm">게임개발팀</span>서버</span>, 비정상이면 <span class="own own-infra"><span class="tm">인프라팀</span>서버 장비·OS</span></li>
+              <li>특정 OS·기기·빌드 <span class="to">→</span> <span class="own own-game"><span class="tm">게임개발팀</span>클라이언트</span></li>
+              <li>한 명·한 집 <span class="to">→</span> <span class="own own-ext"><span class="tm">외부</span>유저 환경</span> (여러 명이 같은 모양이면 <span class="own own-game"><span class="tm">게임개발팀</span>클라이언트</span>)</li>
+              <li>전체가 동시에 <span class="to">→</span> 공용 자원(DB·로드밸런서·게이트웨이) 또는 방금 나간 배포</li>
+            </ul>
+          </div>
+          <div class="flow-arrow" aria-hidden="true"></div>
+          <div class="flow-step">
+            <div class="flow-no">2 시점</div>
+            <p class="flow-q">무엇과 겹치나</p>
+            <ul>
+              <li>배포·패치 직후 <span class="to">→</span> <a href="#pb-after-patch">패치 이후 렉 절차</a></li>
+              <li>설정 변경·네트워크 작업·OS 업데이트 <span class="to">→</span> 그 작업을 한 곳</li>
+              <li>정각·N분마다 <span class="to">→</span> 예약 작업·백업·GC·타이머 (<a href="#sig-periodic">일정 주기로 튐</a>)</li>
+              <li>저녁 피크 <span class="to">→</span> 회선 혼잡·부하 (<a href="#sig-peak">특정 시간대에만 높음</a>)</li>
+              <li>이벤트 시작·점검 직후 <span class="to">→</span> 인원 몰림·로그인 폭주 (<a href="#sig-surge">접속·점검 직후 폭증</a>)</li>
+              <li>오래 켜 둘수록 <span class="to">→</span> 누수·누적 (<a href="#sig-ramp">서서히 오름</a>)</li>
+            </ul>
+          </div>
+          <div class="flow-arrow" aria-hidden="true"></div>
+          <div class="flow-step">
+            <div class="flow-no">3 계층</div>
+            <p class="flow-q">어느 계층의 지표가 비정상인가</p>
+            <ol>
+              <li><b>네트워크</b>: RTT·손실·재전송률, 인터페이스 오류·폐기</li>
+              <li><b>호스트</b>: 코어별 CPU, CPU 스틸, softirq, NIC 폐기, 메모리 압박</li>
+              <li><b>게임 서버</b>: 틱 시간, 소켓 수신 대기열(Recv-Q), 스레드별 CPU, GC 로그</li>
+              <li><b>DB</b>: 쿼리 지연, 잠금 대기, 복제 지연</li>
+              <li><b>클라이언트</b>: 프레임 시간, 넷그래프, 크래시 보고</li>
+            </ol>
+          </div>
+        </div>
+
+        <h3 class="sec">판정 신호표</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>확인할 것</th><th>이렇게 보이면</th><th>먼저 부를 곳</th></tr></thead>
+            <tbody>
+              <tr><td>서버 소켓 수신 대기열(Recv-Q)</td><td>서버 프로세스가 제때 못 읽어 쌓임</td><td><span class="own own-game"><span class="tm">게임개발팀</span>서버</span> (틱 멈춤·GC·락)</td></tr>
+              <tr><td>연결별 재전송·RTT</td><td>일부 연결만, 특정 ASN에 몰림</td><td><span class="own own-infra"><span class="tm">인프라팀</span>네트워크</span> <span class="own own-ext"><span class="tm">외부</span>통신사·유저 회선</span></td></tr>
+              <tr><td></td><td>한 호스트의 모든 연결</td><td><span class="own own-infra"><span class="tm">인프라팀</span>서버 장비·OS</span> (NIC·커널)</td></tr>
+              <tr><td>패치 직후 서버 전체 재전송·대역폭 증가</td><td>패킷 크기·빈도가 바뀜</td><td><span class="own own-game"><span class="tm">게임개발팀</span>서버</span> <span class="own own-infra"><span class="tm">인프라팀</span>네트워크</span> (MTU·한도)</td></tr>
+              <tr><td>CPU 스틸·스로틀링·softirq·NIC 폐기</td><td>증가</td><td><span class="own own-infra"><span class="tm">인프라팀</span>서버 장비·OS</span></td></tr>
+              <tr><td>한 스레드만 100%, 런큐 지연, GC 멈춤</td><td>증가</td><td><span class="own own-game"><span class="tm">게임개발팀</span>서버</span></td></tr>
+              <tr><td>DB 지연 증가, 쿼리 수는 그대로</td><td>IOPS·잠금·다른 작업</td><td><span class="own own-infra"><span class="tm">인프라팀</span>DB 장비</span></td></tr>
+              <tr><td>DB 쿼리 수·모양이 패치 뒤 바뀜</td><td>N+1, 새 쿼리</td><td><span class="own own-game"><span class="tm">게임개발팀</span>서버</span></td></tr>
+              <tr><td>해외 지점의 합성 측정(RTT·손실)</td><td>나쁨</td><td><span class="own own-infra"><span class="tm">인프라팀</span>네트워크</span> <span class="own own-ext"><span class="tm">외부</span>통신사</span></td></tr>
+              <tr><td>합성 측정은 정상인데 유저만 나쁨</td><td>유저 환경 또는 클라이언트</td><td><span class="own own-ext"><span class="tm">외부</span>유저 환경</span> <span class="own own-game"><span class="tm">게임개발팀</span>클라이언트</span></td></tr>
+              <tr><td>끊김 사유 분포</td><td>하트비트 타임아웃↑ / RST↑ / 서버가 끊음↑</td><td>NAT·경로 / 장비 / 서버</td></tr>
+              <tr><td>정확한 주기(정각, N분)</td><td>예약 작업·백업·GC·이벤트</td><td>그 일정을 만든 곳</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sec">그래프 모양으로 찾기</h3>
+        <div class="prose"><p>모니터링 그래프가 어떤 모양인지만 알아도 후보가 크게 줄어듭니다. 아래 13가지 모양마다 그 모양을 만드는 원인을 모았습니다. 원인 카드의 작은 그림도 같은 모양입니다. 실선은 주로 볼 지표, 점선은 함께 볼 지표(인원, 대기·오류 등), 옅은 점선은 평소 수준입니다.</p></div>
+        <div class="sig-legend" id="sig-legend"></div>
+
+        <h3 class="sec">게임 코드 없이 얼마나 확인할 수 있나</h3>
+        <div class="prose"><p>원인마다 가장 쉬운 확인 수단을 셌습니다. <b>인프라 도구</b>는 OS·네트워크·클라우드·DB 도구와 런타임 시작 옵션(GC 로그 등)으로 확인할 수 있어 게임 코드를 고치지 않아도 됩니다. <b>게임 로그·지표</b>는 틱 시간, 끊김 사유처럼 게임이 남겨야 보이는 것입니다. 이 칸이 많은 층일수록 개발팀에 계측을 요청할 근거가 됩니다.</p></div>
+        <div id="chk-cover"></div>
+
+        <h3 class="sec">숫자 읽는 법</h3>
+        <div class="prose">
+          <p><b>평균은 튐을 감춥니다.</b> 초당 20틱 서버에서 틱의 1%만 느려도 5초에 한 번꼴로 모두가 멈칫하지만, 평균 틱 시간은 거의 변하지 않습니다. 그래서 백분위수를 함께 봅니다. <b>p50</b>(중앙값)은 절반이 이보다 빠른 값, <b>p99</b>는 100번 중 가장 느린 1번 근처의 값입니다. 유저가 “렉”으로 기억하는 것은 대개 p99 쪽입니다.</p>
+          <p><b>집계 간격도 튐을 감춥니다.</b> 1분 평균 그래프에서는 1초짜리 멈춤이 1/60로 옅어집니다. 멈춤을 찾을 때는 같은 그래프의 최댓값이나 p99, 더 짧은 간격을 함께 봅니다.</p>
+          <p><b>지터</b>는 패킷이 도착하는 간격이 얼마나 흔들리는지입니다. 평균 핑이 낮아도 지터가 크면 보간 버퍼가 비어 뚝뚝 끊김·순간이동이 생깁니다.</p>
+        </div>
+        <div data-sim="pctl" id="sim-pctl"></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>재는 방법</th><th>무엇을 재나</th><th>주의할 점</th></tr></thead>
+            <tbody>
+              <tr><td><code>ping</code> (ICMP)</td><td>장비까지 왕복 시간</td><td>라우터·서버가 ICMP 응답을 늦게 처리하거나 개수를 제한할 수 있어, 게임 패킷과 다르게 나올 수 있음. 막혀 있으면 아예 응답이 없음</td></tr>
+              <tr><td><code>mtr</code>·<code>traceroute</code></td><td>구간별 지연·손실</td><td>중간 장비 하나만 손실이 높고 그 뒤 구간이 정상이면, 그 장비가 ICMP 응답만 줄인 것일 가능성이 큼. 끝까지 이어지는 손실만 진짜 손실</td></tr>
+              <tr><td>TCP RTT (<code>ss -ti</code>의 rtt)</td><td>커널이 연결마다 잰 왕복 시간</td><td>실제 게임 연결의 값이라 가장 믿을 만함. 서버 쪽에서 유저별로 볼 수 있음</td></tr>
+              <tr><td>게임 안 핑</td><td>게임이 자체 메시지로 잰 왕복 시간</td><td>게임 루프 안에서 재면 프레임·틱 대기가 섞임. 회선이 멀쩡해도 서버·PC가 바쁘면 오름</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sec">바로 할 수 있는 것, 게임 코드에 더할 것</h3>
+        <div class="two-col">
+          <div class="analogy" style="grid-template-columns:1fr;max-width:none"><span class="tag">게임 코드 없이</span><ul>
+            <li><b>차원 붙이기</b>: 접속·로드밸런서 로그의 클라이언트 IP에 국가·통신사(ASN)를 붙여 “해외만”, “특정 통신사만”이 보이게 합니다.</li>
+            <li><b>연결 품질</b>: 서버에서 <code>ss -ti</code>나 eBPF 도구로 연결별 RTT·재전송을 모아 ASN별로 봅니다.</li>
+            <li><b>서버 밖에서 서버 속 보기</b>: 소켓 대기열, 스레드별 CPU(<code>pidstat -t</code>), 런큐 지연, 시작 옵션만으로 켜는 GC 로그.</li>
+            <li><b>경로 측정</b>: 대상 국가·통신사 쪽에서 합성 측정(RIPE Atlas, 클라우드 리전의 측정용 서버)과 <code>mtr</code>.</li>
+            <li><b>변경 기록</b>: 배포·패치·설정·네트워크 작업을 모든 그래프에 세로선으로 표시합니다. “패치 이후”를 판정하는 출발점입니다.</li>
+          </ul></div>
+          <div class="analogy" style="grid-template-columns:1fr;max-width:none"><span class="tag">게임 코드에 최소한으로</span><ul>
+            <li><b>클라이언트 요약 보고</b>: 30~60초마다 RTT p50·p95, 지터, 손실, FPS, 프레임 스파이크 수, 빌드, 서버·채널.</li>
+            <li><b>서버 틱 지표</b>: 틱 시간 p50·p99, 틱 초과 수, 존별 인원, 연결별 송신 대기열.</li>
+            <li><b>끊김 사유 코드</b>: 하트비트 타임아웃·RST·서버가 끊음·인증 실패·점검을 양쪽에 같은 코드로.</li>
+            <li><b>세션 ID와 시각</b>: 모든 로그에 세션·캐릭터·서버 ID와 동기화된 UTC 시각.</li>
+            <li><b>렉 신고 버튼</b>: 최근 60초의 RTT·FPS·틱 공백을 세션 ID와 함께 올립니다.</li>
+          </ul></div>
+        </div>
+      </section>
+
+      <!-- ===================== 사례와 절차 ===================== -->
+      <section class="chapter" id="cases">
+        <div class="ch-head">
+          <div class="ch-kicker"><span class="idx">T3</span>도구</div>
+          <h2>사례와 절차</h2>
+          <p class="lede">자주 만나는 두 상황의 확인 순서와, 원개발사·운영사가 직접 공개한 실제 장애 사례를 모았습니다. 단계와 사례마다 관련 원인 카드로 이어집니다.</p>
+        </div>
+        <h3 class="sec">상황별 절차</h3>
+        <div id="playbooks"></div>
+        <h3 class="sec">실제 장애 사례</h3>
+        <div class="prose"><p>게임사와 인프라 회사가 스스로 공개한 사후 분석(포스트모템)만 골랐습니다. 요약은 원문이 밝힌 내용 안에서 썼고, 자세한 경위는 원문을 보세요.</p></div>
+        <div class="case-list" id="case-list"></div>
+      </section>
+
       <!-- ===================== 제보 가이드 ===================== -->
       <section class="chapter" id="report">
         <div class="ch-head">
-          <div class="ch-kicker"><span class="idx">T2</span>도구</div>
+          <div class="ch-kicker"><span class="idx">T4</span>도구</div>
           <h2>렉 제보 잘하는 법</h2>
           <p class="lede">게임개발팀·인프라팀이 원인을 찾는 데 가장 오래 걸리는 부분은 “언제, 어디서, 누가”를 알아내는 일입니다. 아래 항목을 채워 주면 로그와 그래프에서 그 순간을 바로 찾을 수 있습니다.</p>
         </div>
@@ -725,7 +874,7 @@
       <!-- ===================== 용어 사전 ===================== -->
       <section class="chapter" id="glossary">
         <div class="ch-head">
-          <div class="ch-kicker"><span class="idx">T3</span>도구</div>
+          <div class="ch-kicker"><span class="idx">T5</span>도구</div>
           <h2>용어 사전</h2>
           <p class="lede">게임개발팀·인프라팀과 대화할 때 자주 나오는 말들입니다. 검색창에 한글이나 영어로 입력해 보세요.</p>
         </div>
@@ -737,7 +886,7 @@
       <!-- ===================== 참고 문헌 ===================== -->
       <section class="chapter" id="refs">
         <div class="ch-head">
-          <div class="ch-kicker"><span class="idx">T4</span>도구</div>
+          <div class="ch-kicker"><span class="idx">T6</span>도구</div>
           <h2>참고 문헌</h2>
           <p class="lede">백서의 수치·기본값·동작 설명의 근거입니다. 표준 문서(RFC), 커널·OS 문서, 클라우드·엔진·DB 공식 문서, 발표·논문 등 공신력 있는 자료만 모았습니다. 원인 카드와 각 장 끝의 “출처”에서도 같은 자료로 이어집니다. 버전이 바뀌면 기본값도 바뀔 수 있으니, 실제 적용 전에는 쓰는 버전의 문서를 확인하세요.</p>
         </div>

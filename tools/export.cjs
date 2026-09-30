@@ -15,6 +15,9 @@ const SYM = Object.fromEntries(D.symptoms.map(s => [s.id, s.name]));
 const FX = Object.fromEntries(D.fx.map(f => [f.id, f.name]));
 const OWN = Object.fromEntries(D.owners.map(o => [o.id, o]));
 const ownName = id => `${D.teams[OWN[id].team].name}·${OWN[id].name}`;
+const SIGN = Object.fromEntries((D.sigs || []).map(g => [g.id, g]));
+const CASES_OF = {};
+(D.cases || []).forEach(x => (x.causes || []).forEach(id => (CASES_OF[id] = CASES_OF[id] || []).push(x.id)));
 
 // JSON: 코드값 옆에 화면 이름을 함께 넣어 사람이 읽어도, 스크립트로 대조해도 되게 한다
 const causes = D.causes.map(c => ({
@@ -24,7 +27,10 @@ const causes = D.causes.map(c => ({
   who: c.who.map(w => ({ id: w, name: D.who[w] })), when: c.when.map(w => ({ id: w, name: D.when[w] })),
   owner: c.own[0], ownerName: ownName(c.own[0]), alsoOwners: c.own.slice(1).map(o => ({ id: o, name: ownName(o) })),
   actions: Object.fromEntries(Object.entries(c.act || {}).map(([t, v]) => [t, plain(v)])),
-  numbers: plain(c.num), more: plain(c.more), sources: c.ref || [],
+  numbers: plain(c.num), more: plain(c.more),
+  graph: c.sig ? { shape: c.sig.k, shapeName: SIGN[c.sig.k] ? SIGN[c.sig.k].name : c.sig.k, where: plain(c.sig.g) } : null,
+  check: c.chk ? { look: plain(c.chk.look), yes: plain(c.chk.yes), no: plain(c.chk.no), by: c.chk.by, byName: (D.chkBy || {})[c.chk.by] || '' } : null,
+  cases: CASES_OF[c.id] || [], sources: c.ref || [],
 }));
 const json = {
   title: '게임 렉 백서', generated: new Date().toISOString().slice(0, 10),
@@ -32,7 +38,10 @@ const json = {
   teams: D.teams, owners: D.owners, symptoms: D.symptoms.map(s => ({ id: s.id, name: s.name, alias: s.alias, what: plain(s.what), looks: plain(s.looks), tell: plain(s.tell) })),
   factors: D.fx.map(f => ({ id: f.id, name: f.name, en: f.en, desc: plain(f.desc), cope: plain(f.cope) })),
   who: D.who, when: D.when, layers: LAYERS.map(l => ({ id: l.id, name: l.name, anchor: l.anchor })),
+  graphShapes: (D.sigs || []).map(g => ({ id: g.id, name: g.name, desc: g.desc })), checkBy: D.chkBy || {},
   causes, chapterSources: D.secRefs,
+  playbooks: (D.playbooks || []).map(pb => ({ id: pb.id, title: pb.t, when: plain(pb.when), steps: (pb.steps || []).map(st => ({ title: plain(st.t), detail: plain(st.d), causes: st.causes || [] })), sources: pb.ref || [] })),
+  cases: (D.cases || []).map(x => ({ id: x.id, title: x.t, org: x.org, year: x.year, url: x.u, publisher: x.p, what: plain(x.what), why: plain(x.why), lesson: plain(x.lesson), causes: x.causes || [], sources: x.ref || [] })),
   glossary: D.glossary.map(([term, en, def, sec]) => ({ term, en, def: plain(def), section: sec })),
 };
 
@@ -59,7 +68,12 @@ for (const l of LAYERS) {
       `- 누가: ${c.who.map(w => w.name).join(', ')} / 언제: ${c.when.map(w => w.name).join(', ')}`,
       `- 주 담당: ${c.ownerName}${c.alsoOwners.length ? ` / 함께: ${c.alsoOwners.map(o => o.name).join(', ')}` : ''}`,
       ...Object.entries(c.actions).map(([t, v]) => `- ${D.teams[t].name} 할 일: ${v}`),
-      c.numbers ? `- 수치 감각: ${c.numbers}` : null, c.more ? `- 더 알아보기: ${c.more}` : null,
+      c.numbers ? `- 수치 감각: ${c.numbers}` : null,
+      c.graph ? `- 그래프에서는: ${c.graph.shapeName} (${c.graph.where})` : null,
+      c.check ? `- 확인할 곳: ${c.check.look}` : null, c.check ? `- 이러면 맞음: ${c.check.yes}` : null,
+      c.check && c.check.no ? `- 이러면 아님: ${c.check.no}` : null, c.check ? `- 확인 수단: ${c.check.byName}` : null,
+      c.more ? `- 더 알아보기: ${c.more}` : null,
+      c.cases.length ? `- 실제 사례: ${c.cases.join(', ')}` : null,
       ...(c.sources.length ? ['- 출처:', ...c.sources.map(r => `  - ${refLine(r)}`)] : []), '');
   }
 }
@@ -67,6 +81,15 @@ const chapterRefs = Object.entries(D.secRefs || {});
 if (chapterRefs.length) {
   md.push('## 장별 출처', '');
   for (const [sec, list] of chapterRefs) md.push(`### #${sec}`, '', ...list.map(r => `- ${refLine(r)}`), '');
+}
+if (json.graphShapes.length) md.push('## 그래프 모양', '', ...json.graphShapes.map(g => `- **${g.name}** (\`${g.id}\`): ${g.desc}`), '');
+if (json.playbooks.length) {
+  md.push('## 상황별 절차', '');
+  for (const pb of json.playbooks) md.push(`### ${pb.title}`, '', pb.when, '', ...pb.steps.map((st, i) => `${i + 1}. **${st.title}**: ${st.detail}${st.causes.length ? ` (원인: ${st.causes.join(', ')})` : ''}`), '');
+}
+if (json.cases.length) {
+  md.push('## 실제 장애 사례', '');
+  for (const x of json.cases) md.push(`### ${x.id} · ${x.org} ${x.year}: ${x.title}`, '', `- 무슨 일: ${x.what}`, `- 원인: ${x.why}`, `- 배울 점: ${x.lesson}`, `- 관련 원인: ${x.causes.join(', ')}`, `- 원문: [${x.publisher || x.org}](${x.url})`, '');
 }
 md.push('## 용어', '', ...json.glossary.map(g => `- **${g.term}** (${g.en}): ${g.def}`), '');
 

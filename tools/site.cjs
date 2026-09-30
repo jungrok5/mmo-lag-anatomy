@@ -11,6 +11,7 @@
 // 사이트 주소는 package.json의 homepage를 쓴다.
 const fs = require('fs'), os = require('os'), path = require('path');
 const { execFileSync } = require('child_process');
+const vm = require('vm');
 const ROOT = path.resolve(__dirname, '..');
 const PKG = require(path.join(ROOT, 'package.json'));
 const SITE = PKG.homepage.replace(/\/?$/, '/');
@@ -25,6 +26,10 @@ const MD = fs.readFileSync(path.join(tmp, 'lag-anatomy.md'), 'utf8');
 fs.rmSync(tmp, { recursive: true, force: true });
 
 const today = K.generated;
+const sctx = { window: {} }; sctx.window = sctx; vm.createContext(sctx);
+vm.runInContext(fs.readFileSync(path.join(ROOT, 'src/js/sigs.js'), 'utf8'), sctx);
+const SIGDRAW = sctx.SIGDRAW;
+const CASE = Object.fromEntries((K.cases || []).map(x => [x.id, x]));
 const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const html = s => esc(s).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
 const txt = s => String(s == null ? '' : s).replace(/\*\*/g, '');
@@ -55,7 +60,9 @@ ol.refs,ul.refs{padding-left:20px}ol.refs li,ul.refs li{margin-bottom:6px}code{f
 table{border-collapse:collapse;width:100%}td,th{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
 article{padding:16px 0;border-bottom:1px solid var(--line)}article h3{margin:0}
 nav.toc ul{columns:2;gap:24px}@media (max-width:560px){nav.toc ul{columns:1}}
-footer{margin-top:48px;border-top:1px solid var(--line);padding-top:12px}`;
+footer{margin-top:48px;border-top:1px solid var(--line);padding-top:12px}
+.sg{width:120px;height:36px;vertical-align:middle;margin-right:8px}.sg path{fill:none;stroke-linejoin:round;stroke-linecap:round}.sg-main{stroke:var(--accent);stroke-width:2}.sg-sub{stroke:var(--ink2);stroke-width:1.5;stroke-dasharray:3 3}.sg-ref{stroke:var(--line);stroke-width:1.5;stroke-dasharray:2 3}
+ol.steps li{margin-bottom:10px}`;
 
 function page({ rel, title, description, type = 'article', body, graph }) {
   const up = rel.includes('/') ? '../' : '';
@@ -100,7 +107,10 @@ const details = (c, up) => `<dl>
 <dt>담당</dt><dd>${ownerLine(c)}</dd>
 ${Object.entries(c.actions).map(([t, v]) => `<dt>${esc(K.teams[t].name)} 할 일</dt><dd>${html(v)}</dd>`).join('\n')}
 ${c.numbers ? `<dt>수치 감각</dt><dd>${html(c.numbers)}</dd>` : ''}
+${c.graph ? `<dt>그래프에서는</dt><dd>${SIGDRAW(c.graph.shape, c.graph.shapeName + ' 모양의 그래프')}${esc(c.graph.shapeName)} · ${html(c.graph.where)}</dd>` : ''}
+${c.check ? `<dt>확인할 곳</dt><dd>${html(c.check.look)}</dd><dt>이러면 맞음</dt><dd>${html(c.check.yes)}</dd>${c.check.no ? `<dt>이러면 아님</dt><dd>${html(c.check.no)}</dd>` : ''}<dt>확인 수단</dt><dd>${esc(c.check.byName)}</dd>` : ''}
 ${c.more ? `<dt>더 알아보기</dt><dd>${html(c.more)}</dd>` : ''}
+${c.cases.length ? `<dt>실제 사례</dt><dd>${c.cases.filter(id => CASE[id]).map(id => `<a href="${up}text.html#case-${id}">${esc(CASE[id].org)} ${CASE[id].year}: ${esc(CASE[id].title)}</a>`).join('<br>')}</dd>` : ''}
 </dl>`;
 
 // 출력 폴더는 통째로 지우고 다시 만든다. 저장소나 그 위 폴더를 잘못 넘기면 멈춘다
@@ -182,6 +192,7 @@ const textBody = `<h1>게임 렉 백서 텍스트 판</h1>
 <nav class="toc" aria-label="목차"><h2>목차</h2><ul>
 <li><a href="#symptoms">증상별로 찾기</a></li><li><a href="#owners">누가 고치나: 담당 코드</a></li>
 ${layers.map(l => `<li><a href="#${l.anchor}">${esc(layerName(l))} (${byLayer[l.id].length})</a></li>`).join('\n')}
+<li><a href="#playbooks">상황별 절차</a></li><li><a href="#cases">실제 장애 사례</a></li>
 <li><a href="#glossary">용어 사전</a></li><li><a href="#refs">참고 문헌</a></li></ul></nav>
 <h2 id="symptoms">증상별로 찾기</h2>
 <p>렉은 네 가지 요인에서 시작합니다: ${K.factors.map(f => `<b>${esc(f.name)}</b>(${html(f.desc)})`).join(' ')}</p>
@@ -195,6 +206,11 @@ ${layers.map(l => `<h2 id="${l.anchor}">${esc(layerName(l))}</h2>
 ${byLayer[l.id].map(c => `<article id="c-${c.id}"><h3><a href="c/${c.id}.html">${esc(c.name)}</a> <span class="en">${esc(c.en)}</span></h3>
 <p class="meta">ID <code>${c.id}</code> · ${ownerLine(c)}</p><p>${html(c.summary)}</p>${chain(c)}${details(c, '')}
 ${c.sources.length ? `<details><summary>출처 ${c.sources.length}건</summary><ul class="refs">${c.sources.map(refLi).join('')}</ul></details>` : ''}</article>`).join('\n')}`).join('\n')}
+${(K.playbooks || []).length ? `<h2 id="playbooks">상황별 절차</h2>
+${K.playbooks.map(pb => `<h3 id="pb-${pb.id}">${esc(pb.title)}</h3><p>${html(pb.when)}</p><ol class="steps">${pb.steps.map(st => `<li><b>${html(st.title)}</b>: ${html(st.detail)}${st.causes.length ? ` <span class="n">(${st.causes.map(id => `<a href="c/${id}.html">${esc((K.causes.find(c => c.id === id) || { name: id }).name)}</a>`).join(', ')})</span>` : ''}</li>`).join('')}</ol>`).join('\n')}` : ''}
+${(K.cases || []).length ? `<h2 id="cases">실제 장애 사례</h2>
+<p>게임사와 인프라 회사가 스스로 공개한 사후 분석만 골랐습니다.</p>
+${K.cases.map(x => `<article id="case-${x.id}"><h3>${esc(x.org)} ${x.year}: ${esc(x.title)}</h3><dl><dt>무슨 일</dt><dd>${html(x.what)}</dd><dt>원인</dt><dd>${html(x.why)}</dd><dt>배울 점</dt><dd>${html(x.lesson)}</dd><dt>관련 원인</dt><dd>${x.causes.map(id => `<a href="c/${id}.html">${esc((K.causes.find(c => c.id === id) || { name: id }).name)}</a>`).join(', ')}</dd><dt>원문</dt><dd><a href="${esc(x.url)}">${esc(x.publisher || x.org)}</a></dd></dl></article>`).join('\n')}` : ''}
 <h2 id="glossary">용어 사전</h2>
 <dl>${K.glossary.map(g => `<dt>${esc(g.term)}</dt><dd>${esc(g.en)}. ${html(g.def)}</dd>`).join('\n')}</dl>
 <h2 id="refs">참고 문헌</h2>
@@ -221,6 +237,9 @@ for (const l of layers) {
 }
 fill(/(<div[^>]*id="sym-grid"[^>]*>)(<\/div>)/, K.symptoms.map(s => `<article><h3><a href="s/${s.id}.html">${esc(s.name)}</a></h3><p>${html(s.what)} ${html(s.tell)}</p></article>`).join(''));
 fill(/(<dl class="gloss" id="gloss">)(<\/dl>)/, K.glossary.map(g => `<dt>${esc(g.term)} <span class="en">${esc(g.en)}</span></dt><dd>${html(g.def)}</dd>`).join(''));
+fill(/(<div class="sig-legend" id="sig-legend">)(<\/div>)/, K.graphShapes.map(g => `<article><h4>${esc(g.name)}</h4><p>${html(g.desc)}</p><p>${K.causes.filter(c => c.graph && c.graph.shape === g.id).map(c => `<a href="c/${c.id}.html">${esc(c.name)}</a>`).join(', ')}</p></article>`).join(''));
+fill(/(<div id="playbooks">)(<\/div>)/, (K.playbooks || []).map(pb => `<article><h4>${esc(pb.title)}</h4><p>${html(pb.when)}</p><ol>${pb.steps.map(st => `<li><b>${html(st.title)}</b>: ${html(st.detail)}</li>`).join('')}</ol></article>`).join('') || '<p>준비 중입니다.</p>');
+fill(/(<div class="case-list" id="case-list">)(<\/div>)/, (K.cases || []).map(x => `<article><h4>${esc(x.org)} ${x.year}: ${esc(x.title)}</h4><p>${html(x.what)} ${html(x.why)}</p><p>${html(x.lesson)} <a href="${esc(x.url)}">원문</a></p></article>`).join('') || '<p>준비 중입니다.</p>');
 fill(/(<div id="ref-list">)(<\/div>)/, `<p>자료 ${bib.size}건, 발행처 ${pubs.length}곳. 목록은 <a href="text.html#refs">텍스트 판의 참고 문헌</a>에 있습니다.</p>`);
 fs.writeFileSync(path.join(out, 'index.html'), index);
 
@@ -244,6 +263,12 @@ ${K.symptoms.map(s => `- [${s.name}](${SITE}s/${s.id}.html): 원인 ${bySym[s.id
 ${layers.map(l => `## ${layerName(l)}
 
 ${byLayer[l.id].map(c => `- [${c.name}](${SITE}c/${c.id}.html): ${txt(c.summary)}`).join('\n')}`).join('\n\n')}
+
+## 판정과 사례
+
+- [관측으로 판정하기](${SITE}#judge): 범위 → 시점 → 계층 판정 흐름, 판정 신호표, 그래프 모양 13가지, 숫자 읽는 법(평균과 p99)
+- [상황별 절차](${SITE}text.html#playbooks): 패치 이후 렉, 해외 국가·지역 추가
+- [실제 장애 사례](${SITE}text.html#cases): 원개발사·운영사가 공개한 사후 분석과 관련 원인
 
 ## Optional
 

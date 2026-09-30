@@ -18,7 +18,7 @@ ROOT = pathlib.Path(__file__).resolve().parent
 SRC = ROOT / "src"
 
 # 순서가 중요하다: kit → data → sims → app
-CORE_JS = ["js/kit.js", "js/data.js"]  # + causes-*.js, glossary.js (core_js() 참고)
+CORE_JS = ["js/kit.js", "js/data.js", "js/sigs.js"]  # + causes-*.js, glossary.js (core_js() 참고)
 APP_JS = ["js/app.js"]
 
 
