@@ -120,7 +120,7 @@
     {"ctx":"causes/so-cstate/ref/4/n","ko":"latency-performance 프로필은 절전 기능을 끄고 governor를 performance로, PM QoS로 얕은 C-state만 쓰게 함, tuned-adm active로 현재 프로필 확인","t":""},
     {"ctx":"causes/so-cstate/ref/5/n","ko":"cpupower monitor: 코어별 주파수와 절전 상태 통계","t":""},
     {"ctx":"causes/so-cstate/ref/6/n","ko":"일부 인스턴스 종류만 OS가 C-state·P-state를 제어할 수 있고 지연을 줄이려고 바꿀 수 있음, 기본 설정은 최대 성능이라 대부분의 작업에 알맞음, Graviton은 고정 주파수라 OS가 제어하지 않음","t":""},
-    {"ctx":"causes/so-oom/t","ko":"OOM 킬러","t":""},
+    {"ctx":"causes/so-oom/t","ko":"OOM 킬러","t":"OOM-Killer"},
     {"ctx":"causes/so-oom/s","ko":"리눅스는 메모리가 바닥나면 메모리를 가장 많이 쓰는 프로세스를 골라 강제로 죽입니다. 대개 게임 서버입니다.","t":""},
     {"ctx":"causes/so-oom/c/0","ko":"누수나 폭증으로 메모리 고갈, 또는 컨테이너 메모리 한도 도달","t":""},
     {"ctx":"causes/so-oom/c/1","ko":"커널이 게임 서버 프로세스를 강제 종료","t":""},
