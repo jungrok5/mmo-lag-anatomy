@@ -14,6 +14,8 @@ Target reader: a Vietnamese planner, artist, QA, PM, or junior developer. The te
 | Hero `<h1>` (body-shell) | `Sách trắng<br><span class="ping">lag game</span>` |
 | Text edition (`텍스트 판`) | Phiên bản văn bản |
 | Original (`원본`) | Bản gốc |
+| Link-preview image `<h1>` (tools/og.cjs) | `Sách trắng <span>lag game</span>` |
+| `온라인 게임 렉 원인 백과` (og kicker) | Bách khoa nguyên nhân lag game online |
 
 Why: Vietnamese players and developers write "lag" (never a Vietnamese equivalent) and search "lag game", "game bị lag", "nguyên nhân lag game". "Sách trắng" is the established Vietnamese rendering of "white paper". Write the name in sentence case; do not add "về", do not translate "lag".
 
@@ -225,7 +227,7 @@ Card labels: `누가 (겪나)` Ai gặp (phải) · `언제` Khi nào.
 
 ## 8. Terminology: general vocabulary
 
-Rule of thumb: keep the English word where Vietnamese developers and SREs say it in English (tick, snapshot, lock, thread, heartbeat, timeout, cache, index, transaction, rollback, failover, load balancer family words are the exception below). Use the Vietnamese word where it is the normal textbook and industry word (độ trễ, gói tin, hàng đợi, băng thông, nội suy, truyền lại, bộ nhớ, ổ đĩa, tường lửa).
+Rule of thumb: keep the English word where Vietnamese developers and SREs say it in English (tick, snapshot, lock, thread, heartbeat, timeout, cache, index, transaction, rollback, failover). Use the Vietnamese word where it is the normal textbook and industry word (độ trễ, gói tin, hàng đợi, băng thông, nội suy, truyền lại, bộ nhớ, ổ đĩa, tường lửa, bộ cân bằng tải). When the table gives "Vietnamese (English)", write the English in parentheses only at the first mention in a card or chapter.
 
 ### 8.1 Game side
 
