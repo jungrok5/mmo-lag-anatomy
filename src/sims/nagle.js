@@ -3,15 +3,15 @@
    위에서 아래로 시간이 흐르는 순서도로 보여 준다. */
 K.register('nagle', function (root) {
   const F = K.frame(root, {
-    kicker: '소켓과 프로토콜 · 소켓 옵션',
-    title: '작은 패킷을 모았다 보내려다 40~200ms를 버린다',
-    lead: 'TCP에는 “작은 패킷은 모았다가 한 번에 보내자”는 <b>Nagle 규칙</b>과, “ACK(수신 확인)는 조금 미뤘다가 응답에 실어 보내자”는 <b>지연 ACK</b>가 기본으로 켜져 있습니다. 둘 다 패킷 수를 아끼려는 규칙입니다. 그런데 게임 메시지를 헤더와 본문으로 나눠 쓰면, 두 규칙이 서로를 기다리느라 메시지마다 수십~수백 ms를 그냥 버립니다.',
+    kicker: TR`소켓과 프로토콜 · 소켓 옵션`,
+    title: TR`작은 패킷을 모았다 보내려다 40~200ms를 버린다`,
+    lead: TR`TCP에는 “작은 패킷은 모았다가 한 번에 보내자”는 <b>Nagle 규칙</b>과, “ACK(수신 확인)는 조금 미뤘다가 응답에 실어 보내자”는 <b>지연 ACK</b>가 기본으로 켜져 있습니다. 둘 다 패킷 수를 아끼려는 규칙입니다. 그런데 게임 메시지를 헤더와 본문으로 나눠 쓰면, 두 규칙이 서로를 기다리느라 메시지마다 수십~수백 ms를 그냥 버립니다.`,
     tries: [
-      '처음 화면(리눅스 기본값 + 나눠 쓰기)에서 오른쪽 막대를 보세요. 핑은 20ms인데 응답은 80ms 넘게 걸립니다.',
-      '<b>지연 ACK</b>를 200ms(예전 윈도우)로 바꿔 보세요. 메시지마다 200ms 넘게 늦어집니다. 받는 쪽이 예전 윈도우일 때 생기는 입력 지연입니다. 서버가 Nagle을 켠 채 보내고 예전 윈도우 PC가 받는 반대 방향에서도 똑같이 생깁니다.',
-      '<b>TCP_NODELAY</b>를 켜 보세요. 헤더와 본문이 바로 연달아 나가고 노란 기다림이 사라집니다.',
-      '<b>메시지 쓰는 방식</b>을 “한 번에 쓰기”로 바꿔도 풀립니다. 대기할 작은 패킷이 생기지 않기 때문입니다.',
-      '“작은 이동 명령 연속”에서 NODELAY를 껐다 켜며 <b>초당 패킷 수</b>와 응답 시간을 비교하세요. Nagle이 무엇을 아끼고 무엇을 버리는지 보입니다.',
+      TR`처음 화면(리눅스 기본값 + 나눠 쓰기)에서 오른쪽 막대를 보세요. 핑은 20ms인데 응답은 80ms 넘게 걸립니다.`,
+      TR`<b>지연 ACK</b>를 200ms(예전 윈도우)로 바꿔 보세요. 메시지마다 200ms 넘게 늦어집니다. 받는 쪽이 예전 윈도우일 때 생기는 입력 지연입니다. 서버가 Nagle을 켠 채 보내고 예전 윈도우 PC가 받는 반대 방향에서도 똑같이 생깁니다.`,
+      TR`<b>TCP_NODELAY</b>를 켜 보세요. 헤더와 본문이 바로 연달아 나가고 노란 기다림이 사라집니다.`,
+      TR`<b>메시지 쓰는 방식</b>을 “한 번에 쓰기”로 바꿔도 풀립니다. 대기할 작은 패킷이 생기지 않기 때문입니다.`,
+      TR`“작은 이동 명령 연속”에서 NODELAY를 껐다 켜며 <b>초당 패킷 수</b>와 응답 시간을 비교하세요. Nagle이 무엇을 아끼고 무엇을 버리는지 보입니다.`,
     ],
     layout: 'stack',
   });
@@ -20,9 +20,9 @@ K.register('nagle', function (root) {
   const P = { pat: 'split', nodelay: false, delack: 40, rtt: 20, speed: 0.1 };
   const MSS = 1460, PROC = 1, WIN = 600;
   const PAT = {
-    split: { every: 250, parts: [[8, '헤더'], [40, '본문']], hint: '8바이트 헤더를 먼저 쓰고, 40바이트 본문을 따로 씁니다. 250ms마다 행동 하나.' },
-    one: { every: 250, parts: [[48, '메시지']], hint: '헤더와 본문을 합친 48바이트를 한 번에 씁니다. 250ms마다 행동 하나.' },
-    small: { every: 16, parts: [[30, '이동']], hint: '30바이트 이동 명령을 16ms마다 씁니다(초당 약 60개).' },
+    split: { every: 250, parts: [[8, TR`헤더`], [40, TR`본문`]], hint: TR`8바이트 헤더를 먼저 쓰고, 40바이트 본문을 따로 씁니다. 250ms마다 행동 하나.` },
+    one: { every: 250, parts: [[48, TR`메시지`]], hint: TR`헤더와 본문을 합친 48바이트를 한 번에 씁니다. 250ms마다 행동 하나.` },
+    small: { every: 16, parts: [[30, TR`이동`]], hint: TR`30바이트 이동 명령을 16ms마다 씁니다(초당 약 60개).` },
   };
 
   /* ---------- 무대 ---------- */
@@ -31,41 +31,41 @@ K.register('nagle', function (root) {
   row.append(colA, colB); F.stage.append(row);
   const seq = K.canvas(colA, {
     height: w => K.clamp(Math.round(w * 0.9), 380, 540),
-    caption: '클라이언트 ↔ 서버 (시간은 아래로)',
-    right: '<span class="legend"><span><i style="background:var(--s1)"></i>데이터</span><span><i style="background:var(--s2)"></i>응답</span><span><i style="background:var(--s3)"></i>ACK</span><span><i class="box" style="background:var(--warn)"></i>기다림</span></span>',
+    caption: TR`클라이언트 ↔ 서버 (시간은 아래로)`,
+    right: TR`<span class="legend"><span><i style="background:var(--s1)"></i>데이터</span><span><i style="background:var(--s2)"></i>응답</span><span><i style="background:var(--s3)"></i>ACK</span><span><i class="box" style="background:var(--warn)"></i>기다림</span></span>`,
   });
   const bars = K.canvas(colB, {
     height: w => (colA.offsetTop === colB.offsetTop && seq.h ? seq.h : K.clamp(Math.round(w * 0.6), 200, 260)),
-    caption: '메시지별 응답 시간',
-    right: '<span class="legend"><span><i class="box" style="background:var(--s1)"></i>왕복</span><span><i class="box" style="background:var(--warn)"></i>기다림</span></span>',
+    caption: TR`메시지별 응답 시간`,
+    right: TR`<span class="legend"><span><i class="box" style="background:var(--s1)"></i>왕복</span><span><i class="box" style="background:var(--warn)"></i>기다림</span></span>`,
   });
   seq.onResize(() => bars.fit());
 
   /* ---------- 조작부 ---------- */
-  const g1 = K.group(F.controls, '게임 코드');
+  const g1 = K.group(F.controls, TR`게임 코드`);
   const cPat = K.choice(g1, {
-    label: '메시지 쓰는 방식', value: P.pat, hint: PAT[P.pat].hint,
-    options: [['one', '한 번에 쓰기'], ['split', '헤더·본문 나눠 쓰기'], ['small', '작은 메시지 연속']],
+    label: TR`메시지 쓰는 방식`, value: P.pat, hint: PAT[P.pat].hint,
+    options: [['one', TR`한 번에 쓰기`], ['split', TR`헤더·본문 나눠 쓰기`], ['small', TR`작은 메시지 연속`]],
     onChange: v => { P.pat = v; patHint(); rerun(); },
   });
   const patHintEl = cPat.el.querySelector('.ctl-hint');
   function patHint() { patHintEl.textContent = PAT[P.pat].hint; }
-  const tNd = K.toggle(g1, { label: 'TCP_NODELAY (Nagle 끄기)', value: P.nodelay, hint: '켜면 작은 패킷도 기다리지 않고 바로 보냅니다.', onChange: v => { P.nodelay = v; rerun(); } });
-  const g2 = K.group(F.controls, '운영체제와 회선');
+  const tNd = K.toggle(g1, { label: TR`TCP_NODELAY (Nagle 끄기)`, value: P.nodelay, hint: TR`켜면 작은 패킷도 기다리지 않고 바로 보냅니다.`, onChange: v => { P.nodelay = v; rerun(); } });
+  const g2 = K.group(F.controls, TR`운영체제와 회선`);
   const cAck = K.choice(g2, {
-    label: '서버의 지연 ACK', value: P.delack,
-    options: [[0, '끔'], [40, '40ms 리눅스'], [200, '200ms 예전 윈도우']],
+    label: TR`서버의 지연 ACK`, value: P.delack,
+    options: [[0, TR`끔`], [40, TR`40ms 리눅스`], [200, TR`200ms 예전 윈도우`]],
     onChange: v => { P.delack = +v; rerun(); },
-    hint: '보낼 응답이 없으면 ACK를 이만큼 미뤘다가 따로 보냅니다.',
+    hint: TR`보낼 응답이 없으면 ACK를 이만큼 미뤘다가 따로 보냅니다.`,
   });
-  const sRtt = K.slider(g2, { label: '핑(RTT, 왕복 시간)', min: 2, max: 200, step: 2, value: P.rtt, unit: 'ms', hint: '20ms ≈ 국내 서버', onInput: v => { P.rtt = v; rerun(); } });
-  const g3 = K.group(F.controls, '보기');
-  K.choice(g3, { label: '재생 속도', value: P.speed, options: [[0.1, '1/10 느리게'], [0.25, '1/4'], [0, '멈춤']], onChange: v => { P.speed = +v; }, hint: '실제로는 이 모든 일이 1초도 안 걸립니다.' });
+  const sRtt = K.slider(g2, { label: TR`핑(RTT, 왕복 시간)`, min: 2, max: 200, step: 2, value: P.rtt, unit: 'ms', hint: TR`20ms ≈ 국내 서버`, onInput: v => { P.rtt = v; rerun(); } });
+  const g3 = K.group(F.controls, TR`보기`);
+  K.choice(g3, { label: TR`재생 속도`, value: P.speed, options: [[0.1, TR`1/10 느리게`], [0.25, '1/4'], [0, TR`멈춤`]], onChange: v => { P.speed = +v; }, hint: TR`실제로는 이 모든 일이 1초도 안 걸립니다.` });
 
-  const stAvg = K.stat(F.stats, { label: '평균 응답', sub: '최근 메시지 20개' });
-  const stMax = K.stat(F.stats, { label: '최대 응답', sub: '최근 20개' });
-  const stPps = K.stat(F.stats, { label: '초당 패킷 수', unit: '개', sub: '양방향 합계' });
-  const stWaste = K.stat(F.stats, { label: '낭비된 대기', unit: '%', sub: '응답 시간 중 대기 비율' });
+  const stAvg = K.stat(F.stats, { label: TR`평균 응답`, sub: TR`최근 메시지 20개` });
+  const stMax = K.stat(F.stats, { label: TR`최대 응답`, sub: TR`최근 20개` });
+  const stPps = K.stat(F.stats, { label: TR`초당 패킷 수`, unit: TR`개`, sub: TR`양방향 합계` });
+  const stWaste = K.stat(F.stats, { label: TR`낭비된 대기`, unit: '%', sub: TR`응답 시간 중 대기 비율` });
 
   /* ---------- 모형 ---------- */
   let t, ev, pkts, holds, msgs, sendBuf, sndNxt, sndUna, hold, srv, nextWrite, msgNo, byteEnd;
@@ -86,7 +86,7 @@ K.register('nagle', function (root) {
   }
   function labelOf(parts, bytes) {
     const same = parts.every(p => p === parts[0]);
-    const name = parts.length === 1 ? parts[0] : same ? parts[0] + '×' + parts.length : parts.length <= 3 ? parts.join('+') : parts[0] + ' 외 ' + (parts.length - 1) + '개';
+    const name = parts.length === 1 ? parts[0] : same ? parts[0] + '×' + parts.length : parts.length <= 3 ? parts.join('+') : parts[0] + TR` 외 ` + (parts.length - 1) + TR`개`;
     return name + ' ' + bytes + 'B';
   }
   // 보내는 쪽(클라이언트) TCP: Nagle 규칙
@@ -122,7 +122,7 @@ K.register('nagle', function (root) {
   }
   function sendBack(tt, kind, done) {
     if (srv.ack) { srv.ack.hold.b = tt; srv.ack = null; }
-    const pk = { dir: -1, s: tt, a: tt + owd(), kind, ackTo: srv.rcv, m: done || null, lab: kind === 'ack' ? 'ACK' : done.length > 1 ? '응답×' + done.length : '응답' };
+    const pk = { dir: -1, s: tt, a: tt + owd(), kind, ackTo: srv.rcv, m: done || null, lab: kind === 'ack' ? 'ACK' : done.length > 1 ? TR`응답×` + done.length : TR`응답` };
     pkts.push(pk); ev.push({ t: pk.a, k: 'cli', p: pk });
   }
   function cliRecv(pk, tt) {
@@ -170,10 +170,10 @@ K.register('nagle', function (root) {
   function drawSeq() {
     const { ctx } = seq, C = K.C, G = seqGeo();
     ctx.clearRect(0, 0, G.w, G.h);
-    K.text(ctx, '클라이언트', G.cx, 14, { size: 12.5, weight: 700, color: C.ink, align: 'center' });
-    K.text(ctx, '서버', G.sx, 14, { size: 12.5, weight: 700, color: C.ink, align: 'center' });
-    K.text(ctx, P.nodelay ? 'NODELAY 켬' : 'Nagle 켜짐', G.cx, 29, { size: 10.5, color: C.muted, align: 'center' });
-    K.text(ctx, P.delack ? '지연 ACK ' + P.delack + 'ms' : '지연 ACK 끔', G.sx, 29, { size: 10.5, color: C.muted, align: 'center' });
+    K.text(ctx, TR`클라이언트`, G.cx, 14, { size: 12.5, weight: 700, color: C.ink, align: 'center' });
+    K.text(ctx, TR`서버`, G.sx, 14, { size: 12.5, weight: 700, color: C.ink, align: 'center' });
+    K.text(ctx, P.nodelay ? TR`NODELAY 켬` : TR`Nagle 켜짐`, G.cx, 29, { size: 10.5, color: C.muted, align: 'center' });
+    K.text(ctx, P.delack ? TR`지연 ACK ` + P.delack + 'ms' : TR`지연 ACK 끔`, G.sx, 29, { size: 10.5, color: C.muted, align: 'center' });
     ctx.save();
     ctx.beginPath(); ctx.rect(0, G.top - 2, G.w, G.bot - G.top + 4); ctx.clip();
     // 100ms 격자
@@ -198,7 +198,7 @@ K.register('nagle', function (root) {
       ctx.fillStyle = C.warn; ctx.fillRect(x - 1.5, ya, 3, yb - ya);
       ctx.fillRect(x - 5, ya - 1, 10, 2); if (hd.b != null) ctx.fillRect(x - 5, yb - 1, 10, 2);
       if (yb - ya < 12) continue;
-      const my = (ya + yb) / 2, name = c ? 'Nagle 대기' : (G.narrow ? '지연ACK' : '지연 ACK 대기'), val = K.ms(b - a);
+      const my = (ya + yb) / 2, name = c ? TR`Nagle 대기` : (G.narrow ? TR`지연ACK` : TR`지연 ACK 대기`), val = K.ms(b - a);
       const lx = c ? x - 9 : x + 9, al = c ? 'right' : 'left', list = c ? left : right;
       if (yb - ya >= 20) {
         if (!free(list, my, 28)) continue;
@@ -207,7 +207,7 @@ K.register('nagle', function (root) {
         list.push([my - 14, my + 14]);
       } else {
         if (!free(list, my, 14)) continue;
-        halo(ctx, (c ? 'Nagle ' : '지연ACK ') + val, lx, my, { size: 11, weight: 600, color: C.warnInk, align: al });
+        halo(ctx, (c ? 'Nagle ' : TR`지연ACK `) + val, lx, my, { size: 11, weight: 600, color: C.warnInk, align: al });
         list.push([my - 7, my + 7]);
       }
     }
@@ -222,7 +222,7 @@ K.register('nagle', function (root) {
         const y = G.Y(m.resp);
         K.dot(ctx, G.cx, y, 3.5, C.s2, C.paper);
         if (P.pat === 'small' || !free(left, y, 14)) continue;
-        halo(ctx, (G.narrow ? '' : '응답 ') + K.ms(m.resp - m.w), G.cx - 9, y, { size: 11, weight: 600, color: C.ink, align: 'right' });
+        halo(ctx, (G.narrow ? '' : TR`응답 `) + K.ms(m.resp - m.w), G.cx - 9, y, { size: 11, weight: 600, color: C.ink, align: 'right' });
         left.push([y - 7, y + 7]);
       }
     }
@@ -246,7 +246,7 @@ K.register('nagle', function (root) {
       let lab = pk.lab;
       if (prev && prev.dir === pk.dir && pk.s - prev.s < 2) { prev = pk; continue; }
       const next = pkts[i + 1];
-      if (next && next.dir === pk.dir && next.s - pk.s < 2) lab = pk.lab.split(' ')[0] + ', ' + next.lab.split(' ')[0] + ' (패킷 2개)';
+      if (next && next.dir === pk.dir && next.s - pk.s < 2) lab = pk.lab.split(' ')[0] + ', ' + next.lab.split(' ')[0] + TR` (패킷 2개)`;
       prev = pk;
       // 이름은 화살표가 떠나는 쪽 가까이에 둔다 (보낸 쪽마다 따로 겹침 검사)
       ctx.font = K.font(11, 500);
@@ -260,7 +260,7 @@ K.register('nagle', function (root) {
     // 지금
     ctx.strokeStyle = C.muted; ctx.setLineDash([3, 3]); ctx.lineWidth = 1;
     ctx.beginPath(); ctx.moveTo(G.cx - 16, G.bot + 0.5); ctx.lineTo(G.sx + 16, G.bot + 0.5); ctx.stroke(); ctx.setLineDash([]);
-    K.text(ctx, P.speed === 0 ? '지금 (멈춤)' : '지금', (G.cx + G.sx) / 2, G.bot + 10, { size: 10.5, weight: P.speed === 0 ? 700 : 400, color: P.speed === 0 ? C.ink2 : C.muted, align: 'center' });
+    K.text(ctx, P.speed === 0 ? TR`지금 (멈춤)` : TR`지금`, (G.cx + G.sx) / 2, G.bot + 10, { size: 10.5, weight: P.speed === 0 ? 700 : 400, color: P.speed === 0 ? C.ink2 : C.muted, align: 'center' });
   }
 
   K.hover(seq, (x, y) => {
@@ -268,8 +268,8 @@ K.register('nagle', function (root) {
     for (const hd of holds) {
       const b = hd.b != null ? hd.b : t, hx = hd.side === 'c' ? G.cx - 10 : G.sx + 10;
       if (Math.abs(x - hx) < 12 && tt >= hd.a - 3 && tt <= b + 3 && b - hd.a >= 2) {
-        return hd.side === 'c' ? `<b>Nagle 대기 ${K.ms(b - hd.a)}</b><br>앞서 보낸 데이터의 ACK가 오기 전이라 작은 패킷을 보내지 않고 모아 둡니다.`
-          : `<b>지연 ACK 대기 ${K.ms(b - hd.a)}</b><br>응답에 실어 보내려고 ACK를 미룹니다. 메시지가 반쪽이라 응답이 생기지 않습니다.`;
+        return hd.side === 'c' ? TR`<b>Nagle 대기 ${K.ms(b - hd.a)}</b><br>앞서 보낸 데이터의 ACK가 오기 전이라 작은 패킷을 보내지 않고 모아 둡니다.`
+          : TR`<b>지연 ACK 대기 ${K.ms(b - hd.a)}</b><br>응답에 실어 보내려고 ACK를 미룹니다. 메시지가 반쪽이라 응답이 생기지 않습니다.`;
       }
     }
     let best = null, bd = 16;
@@ -281,9 +281,9 @@ K.register('nagle', function (root) {
       if (Math.abs(yy - y) < bd) { bd = Math.abs(yy - y); best = pk; }
     }
     if (!best) return null;
-    const who = best.dir > 0 ? '클라이언트 → 서버' : '서버 → 클라이언트';
-    const what = best.kind === 'ack' ? 'ACK(수신 확인)만 담은 빈 패킷' : best.kind === 'resp' ? '서버의 응답 (ACK도 함께 실림)' : '게임 메시지 데이터';
-    return `<b>${best.lab}</b><br>${who}<br>${what}<br>가는 데 ${K.ms(best.a - best.s)}`;
+    const who = best.dir > 0 ? TR`클라이언트 → 서버` : TR`서버 → 클라이언트`;
+    const what = best.kind === 'ack' ? TR`ACK(수신 확인)만 담은 빈 패킷` : best.kind === 'resp' ? TR`서버의 응답 (ACK도 함께 실림)` : TR`게임 메시지 데이터`;
+    return TR`<b>${best.lab}</b><br>${who}<br>${what}<br>가는 데 ${K.ms(best.a - best.s)}`;
   });
 
   /* ---------- 응답 시간 막대 ---------- */
@@ -307,7 +307,7 @@ K.register('nagle', function (root) {
     for (let v = 0; v <= ax.max; v += ax.s) yTicks.push(v);
     const sc = K.plot(ctx, box, {
       x0: 0, x1: 20, y0: 0, y1: ax.max, yTicks, yFmt: v => K.n(v),
-      yTitle: '응답 시간 (ms)', xTitle: '최근 메시지 →',
+      yTitle: TR`응답 시간 (ms)`, xTitle: TR`최근 메시지 →`,
     });
     const slot = box.w / 20, bw = Math.max(3, slot * 0.64), off = 20 - list.length;
     list.forEach((m, i) => {
@@ -321,7 +321,7 @@ K.register('nagle', function (root) {
       }
     });
     K.hline(ctx, sc, P.rtt + PROC, { color: C.ink2, dash: [4, 3] });
-    halo(ctx, '최소(핑+처리) ' + K.ms(P.rtt + PROC), box.x + 4, sc.y(P.rtt + PROC) - 9, { size: 10.5, weight: 600, color: C.ink, align: 'left' });
+    halo(ctx, TR`최소(핑+처리) ` + K.ms(P.rtt + PROC), box.x + 4, sc.y(P.rtt + PROC) - 9, { size: 10.5, weight: 600, color: C.ink, align: 'left' });
   }
   K.hover(bars, x => {
     const { box } = barGeo(), list = done20(), slot = box.w / 20;
@@ -329,7 +329,7 @@ K.register('nagle', function (root) {
     const m = list[i];
     if (!m) return null;
     const tot = m.resp - m.w, wait = Math.max(0, tot - m.rtt - PROC);
-    return `메시지 #${m.id}<br>응답 <b>${K.ms(tot)}</b><br>왕복 ${K.ms(m.rtt)} + 처리 ${PROC}ms<br>기다림 <b>${K.ms(wait)}</b>`;
+    return TR`메시지 #${m.id}<br>응답 <b>${K.ms(tot)}</b><br>왕복 ${K.ms(m.rtt)} + 처리 ${PROC}ms<br>기다림 <b>${K.ms(wait)}</b>`;
   });
 
   /* ---------- 프리셋 ---------- */
@@ -338,11 +338,11 @@ K.register('nagle', function (root) {
     Object.assign(P, { pat, nodelay: nd, delack: ack, rtt }); patHint(); rerun();
   }
   K.presets(F, [
-    { label: '기본값 + 나눠 쓰기 (리눅스)', apply() { setAll('split', false, 40, 20); } },
-    { label: '기본값 + 나눠 쓰기 (예전 윈도우)', apply() { setAll('split', false, 200, 20); } },
-    { label: 'TCP_NODELAY 켬', apply() { setAll('split', true, 40, 20); } },
-    { label: '한 번에 쓰기', apply() { setAll('one', false, 40, 20); } },
-    { label: '작은 이동 명령 연속', apply() { setAll('small', false, 40, 60); } },
+    { label: TR`기본값 + 나눠 쓰기 (리눅스)`, apply() { setAll('split', false, 40, 20); } },
+    { label: TR`기본값 + 나눠 쓰기 (예전 윈도우)`, apply() { setAll('split', false, 200, 20); } },
+    { label: TR`TCP_NODELAY 켬`, apply() { setAll('split', true, 40, 20); } },
+    { label: TR`한 번에 쓰기`, apply() { setAll('one', false, 40, 20); } },
+    { label: TR`작은 이동 명령 연속`, apply() { setAll('small', false, 40, 60); } },
   ]).buttons[0].setAttribute('aria-pressed', 'true');
 
   /* ---------- 해설 ---------- */
@@ -366,19 +366,19 @@ K.register('nagle', function (root) {
     stWaste.set(K.n(wr * 100), wr < 0.1 ? 'good' : wr < 0.4 ? 'warn' : 'bad');
 
     let msg;
-    const tail = '플레이어는 핑 수치는 낮은데 모든 행동이 일정하게 굼뜬 <b>입력 지연</b>을 느낍니다.';
+    const tail = TR`플레이어는 핑 수치는 낮은데 모든 행동이 일정하게 굼뜬 <b>입력 지연</b>을 느낍니다.`;
     if (P.pat === 'small') {
       msg = P.nodelay
-        ? `${K.flag('good')}<b>명령을 쓰는 즉시 보냅니다.</b> 패킷은 초당 ${pps}개로 늘지만 기다림이 없어 응답은 핑(${K.ms(P.rtt)})만큼만 걸립니다. 작은 패킷이 많아지는 비용은 보통 게임 코드에서 한 틱 동안의 메시지를 묶어 한 번에 쓰는 식으로 줄입니다.`
-        : `${K.flag(wr < 0.1 ? 'good' : 'warn')}<b>Nagle이 작은 이동 명령을 모아서 보냅니다.</b> 앞 명령의 ACK(여기서는 응답)가 돌아오기 전에 쓴 명령은 모였다가 한 패킷으로 나갑니다. 패킷 수는 초당 ${pps}개로 줄어 대역폭은 아끼지만, 명령마다 평균 ${K.ms(avgWaste)}(최대 핑 한 번)가 더해집니다. Nagle은 원격 터미널이 글자 하나마다 패킷을 보내 회선이 막히던 문제를 줄이려고 만든 규칙이라, 게임에서는 아끼는 것보다 잃는 것이 더 큽니다.`;
+        ? TR`${K.flag('good')}<b>명령을 쓰는 즉시 보냅니다.</b> 패킷은 초당 ${pps}개로 늘지만 기다림이 없어 응답은 핑(${K.ms(P.rtt)})만큼만 걸립니다. 작은 패킷이 많아지는 비용은 보통 게임 코드에서 한 틱 동안의 메시지를 묶어 한 번에 쓰는 식으로 줄입니다.`
+        : TR`${K.flag(wr < 0.1 ? 'good' : 'warn')}<b>Nagle이 작은 이동 명령을 모아서 보냅니다.</b> 앞 명령의 ACK(여기서는 응답)가 돌아오기 전에 쓴 명령은 모였다가 한 패킷으로 나갑니다. 패킷 수는 초당 ${pps}개로 줄어 대역폭은 아끼지만, 명령마다 평균 ${K.ms(avgWaste)}(최대 핑 한 번)가 더해집니다. Nagle은 원격 터미널이 글자 하나마다 패킷을 보내 회선이 막히던 문제를 줄이려고 만든 규칙이라, 게임에서는 아끼는 것보다 잃는 것이 더 큽니다.`;
     } else if (P.nodelay) {
-      msg = `${K.flag('good')}<b>TCP_NODELAY를 켜서 Nagle 규칙을 껐습니다.</b> ${P.pat === 'split' ? '헤더와 본문이 곧바로 연달아 나가고, ' : ''}서버는 메시지를 다 받자마자 응답에 ACK를 실어 보냅니다. 응답은 핑 ${K.ms(P.rtt)} + 처리 1ms 그대로입니다. Nagle은 패킷 수(대역폭)를 아끼는 대신 지연을 쓰는 규칙이라, 게임 서버와 클라이언트는 거의 항상 TCP_NODELAY를 켭니다.`;
+      msg = TR`${K.flag('good')}<b>TCP_NODELAY를 켜서 Nagle 규칙을 껐습니다.</b> ${P.pat === 'split' ? TR`헤더와 본문이 곧바로 연달아 나가고, ` : ''}서버는 메시지를 다 받자마자 응답에 ACK를 실어 보냅니다. 응답은 핑 ${K.ms(P.rtt)} + 처리 1ms 그대로입니다. Nagle은 패킷 수(대역폭)를 아끼는 대신 지연을 쓰는 규칙이라, 게임 서버와 클라이언트는 거의 항상 TCP_NODELAY를 켭니다.`;
     } else if (P.pat === 'one') {
-      msg = `${K.flag(wr < 0.1 ? 'good' : 'warn')}<b>메시지를 한 번에 쓰면 Nagle에 걸릴 작은 패킷이 생기지 않습니다.</b> 새 메시지를 쓸 때 앞 메시지의 응답(ACK 포함)이 이미 돌아와 있기 때문입니다. 다만 핑이 길거나 메시지를 자주 보내 응답보다 다음 메시지가 먼저 나오면 다시 Nagle에 걸립니다. 그래서 게임은 보통 TCP_NODELAY도 함께 켭니다.`;
+      msg = TR`${K.flag(wr < 0.1 ? 'good' : 'warn')}<b>메시지를 한 번에 쓰면 Nagle에 걸릴 작은 패킷이 생기지 않습니다.</b> 새 메시지를 쓸 때 앞 메시지의 응답(ACK 포함)이 이미 돌아와 있기 때문입니다. 다만 핑이 길거나 메시지를 자주 보내 응답보다 다음 메시지가 먼저 나오면 다시 Nagle에 걸립니다. 그래서 게임은 보통 TCP_NODELAY도 함께 켭니다.`;
     } else if (P.delack === 0) {
-      msg = `${K.flag('warn')}<b>지연 ACK를 끄면 서버가 헤더를 받자마자 ACK를 보냅니다.</b> 그래도 본문은 그 ACK가 돌아올 때까지 한 번 왕복(${K.ms(P.rtt)}) 동안 대기해서 메시지마다 약 +${K.ms(avgWaste)}입니다. 핑이 멀수록 손해가 커집니다. 지연 ACK는 상대 운영체제가 정하는 값이라 우리가 확실히 고칠 수 있는 쪽은 TCP_NODELAY입니다.`;
+      msg = TR`${K.flag('warn')}<b>지연 ACK를 끄면 서버가 헤더를 받자마자 ACK를 보냅니다.</b> 그래도 본문은 그 ACK가 돌아올 때까지 한 번 왕복(${K.ms(P.rtt)}) 동안 대기해서 메시지마다 약 +${K.ms(avgWaste)}입니다. 핑이 멀수록 손해가 커집니다. 지연 ACK는 상대 운영체제가 정하는 값이라 우리가 확실히 고칠 수 있는 쪽은 TCP_NODELAY입니다.`;
     } else {
-      msg = `${K.flag('bad')}<b>헤더(8바이트)는 바로 나갔지만 본문(40바이트)은 대기 중입니다.</b> Nagle 규칙은 “ACK를 못 받은 데이터가 있으면 작은 패킷은 ACK가 올 때까지 모아 둔다”입니다. 서버는 헤더만으로는 메시지를 처리할 수 없어 응답이 없고, 그래서 ACK를 ${P.delack}ms 미룹니다(지연 ACK). 서로 기다리는 사이 메시지마다 약 <b>${K.ms(avgWaste)}</b>를 버립니다. 핑은 ${K.ms(P.rtt)}인데 응답은 ${K.ms(avg)}입니다. ${tail}`;
+      msg = TR`${K.flag('bad')}<b>헤더(8바이트)는 바로 나갔지만 본문(40바이트)은 대기 중입니다.</b> Nagle 규칙은 “ACK를 못 받은 데이터가 있으면 작은 패킷은 ACK가 올 때까지 모아 둔다”입니다. 서버는 헤더만으로는 메시지를 처리할 수 없어 응답이 없고, 그래서 ACK를 ${P.delack}ms 미룹니다(지연 ACK). 서로 기다리는 사이 메시지마다 약 <b>${K.ms(avgWaste)}</b>를 버립니다. 핑은 ${K.ms(P.rtt)}인데 응답은 ${K.ms(avg)}입니다. ${tail}`;
     }
     F.say(msg);
   });

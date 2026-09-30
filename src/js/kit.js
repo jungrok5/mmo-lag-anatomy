@@ -85,11 +85,13 @@
     const u = Math.max(1e-9, r()), v = r();
     return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
   };
-  K.n = (v, d = 0) => (Number.isFinite(v) ? v.toLocaleString('ko-KR', { minimumFractionDigits: d, maximumFractionDigits: d }) : '—');
+  // 숫자 서식은 페이지 언어를 따른다(번역판은 빌드가 I18N.locale 을 넣는다)
+  K.locale = (window.I18N && window.I18N.locale) || 'ko-KR';
+  K.n = (v, d = 0) => (Number.isFinite(v) ? v.toLocaleString(K.locale, { minimumFractionDigits: d, maximumFractionDigits: d }) : '—');
   K.ms = function (v) {
     if (!Number.isFinite(v)) return '∞';
-    if (Math.abs(v) >= 10000) return K.n(v / 1000, 0) + ' 초';
-    if (Math.abs(v) >= 1000) return K.n(v / 1000, 1) + ' 초';
+    if (Math.abs(v) >= 10000) return K.n(v / 1000, 0) + TR` 초`;
+    if (Math.abs(v) >= 1000) return K.n(v / 1000, 1) + TR` 초`;
     if (v !== 0 && Math.abs(v) < 0.001) return K.n(v * 1e6, 0) + ' ns';
     if (v !== 0 && Math.abs(v) < 0.1) return K.n(v * 1000, 0) + ' µs';
     if (v !== 0 && Math.abs(v) < 1) return K.n(v, 2) + ' ms';
@@ -136,7 +138,7 @@
     root.classList.add('sim');
     root.innerHTML = '';
     const head = K.el('header', { class: 'sim-head' },
-      K.el('span', { class: 'sim-kicker', text: o.kicker || '직접 해보기' }),
+      K.el('span', { class: 'sim-kicker', text: o.kicker || TR`직접 해보기` }),
       o.title ? K.el(headTag(root), { html: o.title }) : null,
       o.lead ? K.el('p', { html: o.lead }) : null);
     const presets = K.el('div', { class: 'sim-presets', hidden: true });
@@ -150,7 +152,7 @@
     let tries = null;
     if (o.tries && o.tries.length) {
       tries = K.el('details', { class: 'sim-try', open: true },
-        K.el('summary', { text: '이렇게 해보세요' }),
+        K.el('summary', { text: TR`이렇게 해보세요` }),
         K.el('ol', null, o.tries.map(t => K.el('li', { html: t }))));
       root.append(tries);
     }
@@ -242,7 +244,7 @@
     return b;
   };
 
-  K.presets = function (frame, list, label = '상황 불러오기') {
+  K.presets = function (frame, list, label = TR`상황 불러오기`) {
     const box = frame.presets || frame;
     box.hidden = false;
     box.innerHTML = '';
@@ -266,9 +268,9 @@
 
   /* ---------------- 상태 표시 ---------------- */
   const FLAG = {
-    good: ['좋음', '<svg viewBox="0 0 10 10" aria-hidden="true"><circle cx="5" cy="5" r="4.5"/></svg>'],
-    warn: ['주의', '<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M5 .6 9.6 9.4H.4z"/></svg>'],
-    bad: ['나쁨', '<svg viewBox="0 0 10 10" aria-hidden="true"><rect x=".8" y=".8" width="8.4" height="8.4" rx="1"/></svg>'],
+    good: [TR`좋음`, '<svg viewBox="0 0 10 10" aria-hidden="true"><circle cx="5" cy="5" r="4.5"/></svg>'],
+    warn: [TR`주의`, '<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M5 .6 9.6 9.4H.4z"/></svg>'],
+    bad: [TR`나쁨`, '<svg viewBox="0 0 10 10" aria-hidden="true"><rect x=".8" y=".8" width="8.4" height="8.4" rx="1"/></svg>'],
   };
   K.flag = s => (s && FLAG[s] ? `<span class="flag ${s}">${FLAG[s][1]}${FLAG[s][0]}</span>` : '');
 
@@ -428,8 +430,12 @@
   };
 
   /* ---------------- 그리기 ---------------- */
+  // 캔버스 글꼴: 한국어판은 한글 글꼴, 번역판은 그 언어의 본문 글꼴(style.css의 :lang 값)
+  let sans = null;
+  const sansFont = () => sans || (sans = K.locale === 'ko-KR' ? '"IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif'
+    : (getComputedStyle(document.documentElement).getPropertyValue('--font-body').trim() || 'system-ui, sans-serif'));
   K.font = (size = 12, weight = 400, mono = false) =>
-    `${weight} ${size}px ${mono ? '"IBM Plex Mono", ui-monospace, Menlo, monospace' : '"IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif'}`;
+    `${weight} ${size}px ${mono ? '"IBM Plex Mono", ui-monospace, Menlo, monospace' : sansFont()}`;
   K.text = function (ctx, str, x, y, o = {}) {
     ctx.font = K.font(o.size || 11, o.weight || 400, o.mono);
     ctx.fillStyle = o.color || K.C.ink2;
@@ -560,9 +566,9 @@
       const id = el.dataset.sim;
       const fn = K.SIMS[id];
       el.dataset.mounted = '1';
-      if (!fn) { el.innerHTML = `<p class="sim-error">시뮬레이션 “${id}”를 찾지 못했습니다.</p>`; return; }
+      if (!fn) { el.innerHTML = TR`<p class="sim-error">시뮬레이션 “${id}”를 찾지 못했습니다.</p>`; return; }
       try { fn(el, el.dataset); }
-      catch (e) { console.error('[sim ' + id + ']', e); el.innerHTML = `<p class="sim-error">시뮬레이션 “${id}”를 불러오다 오류가 났습니다: ${e.message}</p>`; }
+      catch (e) { console.error('[sim ' + id + ']', e); el.innerHTML = TR`<p class="sim-error">시뮬레이션 “${id}”를 불러오다 오류가 났습니다: ${e.message}</p>`; }
     });
   };
 })();

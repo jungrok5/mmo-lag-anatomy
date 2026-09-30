@@ -3,15 +3,15 @@
    그 클라이언트만 불편하거나, 서버 전체가 렉에 빠지거나, 서버가 메모리 부족으로 죽는다. */
 K.register('sndbuf', function (root) {
   const F = K.frame(root, {
-    kicker: '소켓과 프로토콜 · 송신 버퍼',
-    title: '느린 클라이언트 하나가 모두를 느리게 만드는 법',
-    lead: '서버는 틱마다 클라이언트 8개에게 업데이트를 보냅니다. 보낸 데이터는 먼저 클라이언트마다 있는 <b>송신 버퍼</b>(운영체제가 연결마다 잡아 둔 전송 대기 메모리)에 담겼다가 회선 속도만큼 빠져나갑니다. 회선이 느린 클라이언트는 이 버퍼가 금방 가득 찹니다. 그때 서버 코드가 어떻게 하느냐에 따라 그 클라이언트만 불편하거나, 서버 전체가 렉에 빠집니다.',
+    kicker: TR`소켓과 프로토콜 · 송신 버퍼`,
+    title: TR`느린 클라이언트 하나가 모두를 느리게 만드는 법`,
+    lead: TR`서버는 틱마다 클라이언트 8개에게 업데이트를 보냅니다. 보낸 데이터는 먼저 클라이언트마다 있는 <b>송신 버퍼</b>(운영체제가 연결마다 잡아 둔 전송 대기 메모리)에 담겼다가 회선 속도만큼 빠져나갑니다. 회선이 느린 클라이언트는 이 버퍼가 금방 가득 찹니다. 그때 서버 코드가 어떻게 하느냐에 따라 그 클라이언트만 불편하거나, 서버 전체가 렉에 빠집니다.`,
     tries: [
-      '처음 화면(느린 클라이언트 1개 + 블로킹)에서 <b>서버 스레드</b> 줄의 빨간 구간을 보세요. 한 클라이언트에게 보내느라 서버가 멈춰 서 있고, 정상 클라이언트 7개의 지연도 함께 올라갑니다.',
-      '<b>가득 찼을 때</b>를 “최신만 남기기”로 바꿔 보세요. 느린 클라이언트만 뚝뚝 끊기고, 서버 틱과 나머지 클라이언트는 멀쩡해집니다.',
-      '블로킹 상태에서 <b>송신 버퍼</b>를 1MB로 키워 보세요. 막히는 시점이 30초쯤 늦춰질 뿐 결국 똑같이 막히고, 느린 클라이언트의 지연은 수십 초가 됩니다.',
-      '<b>무제한 쌓기</b>를 불러와 아래 서버 메모리 그래프를 보세요. 한도를 넘는 순간 서버가 죽고 모두의 접속이 끊깁니다.',
-      '<b>보낼 양</b>을 느린 클라이언트 회선 속도보다 낮춰 보세요. 어떤 정책이든 문제가 사라집니다. 원인은 “보낼 양 > 회선 속도”입니다.',
+      TR`처음 화면(느린 클라이언트 1개 + 블로킹)에서 <b>서버 스레드</b> 줄의 빨간 구간을 보세요. 한 클라이언트에게 보내느라 서버가 멈춰 서 있고, 정상 클라이언트 7개의 지연도 함께 올라갑니다.`,
+      TR`<b>가득 찼을 때</b>를 “최신만 남기기”로 바꿔 보세요. 느린 클라이언트만 뚝뚝 끊기고, 서버 틱과 나머지 클라이언트는 멀쩡해집니다.`,
+      TR`블로킹 상태에서 <b>송신 버퍼</b>를 1MB로 키워 보세요. 막히는 시점이 30초쯤 늦춰질 뿐 결국 똑같이 막히고, 느린 클라이언트의 지연은 수십 초가 됩니다.`,
+      TR`<b>무제한 쌓기</b>를 불러와 아래 서버 메모리 그래프를 보세요. 한도를 넘는 순간 서버가 죽고 모두의 접속이 끊깁니다.`,
+      TR`<b>보낼 양</b>을 느린 클라이언트 회선 속도보다 낮춰 보세요. 어떤 정책이든 문제가 사라집니다. 원인은 “보낼 양 > 회선 속도”입니다.`,
     ],
     layout: 'side',
   });
@@ -22,47 +22,47 @@ K.register('sndbuf', function (root) {
   const WIN = 20000, TWIN = 3000;
   const P = { rate: 60, slowN: 1, slowDown: 30, buf: 64, pol: 'block' };
   const POL = {
-    block: '버퍼에 빈 공간이 생길 때까지 send()가 반환되지 않습니다. 서버 스레드가 그 자리에서 멈춥니다.',
-    latest: '버퍼가 차 있으면 가장 새 업데이트 하나만 남기고 나머지는 버립니다.',
-    kick: '못 보낸 데이터를 서버 메모리에 쌓아 두다가, 5초 넘게 밀리면 연결을 끊습니다.',
-    unlimited: '못 보낸 데이터를 서버 메모리에 끝없이 쌓습니다.',
+    block: TR`버퍼에 빈 공간이 생길 때까지 send()가 반환되지 않습니다. 서버 스레드가 그 자리에서 멈춥니다.`,
+    latest: TR`버퍼가 차 있으면 가장 새 업데이트 하나만 남기고 나머지는 버립니다.`,
+    kick: TR`못 보낸 데이터를 서버 메모리에 쌓아 두다가, 5초 넘게 밀리면 연결을 끊습니다.`,
+    unlimited: TR`못 보낸 데이터를 서버 메모리에 끝없이 쌓습니다.`,
   };
 
   /* ---------- 무대 ---------- */
   const room = K.canvas(F.stage, {
     height: 58 + 22 + N * 25 + 6,
-    caption: '서버 스레드와 클라이언트 8개',
-    right: '<span class="legend"><span><i class="box" style="background:var(--good)"></i>일함</span><span><i class="box" style="background:var(--bad)"></i>send() 대기</span><span><i class="box" style="background:var(--line)"></i>쉼</span></span>',
+    caption: TR`서버 스레드와 클라이언트 8개`,
+    right: TR`<span class="legend"><span><i class="box" style="background:var(--good)"></i>일함</span><span><i class="box" style="background:var(--bad)"></i>send() 대기</span><span><i class="box" style="background:var(--line)"></i>쉼</span></span>`,
   });
   const chart = K.canvas(F.stage, {
     height: w => K.clamp(Math.round(w * 0.36), 190, 240),
-    caption: '클라이언트 화면 지연 (최근 20초)',
-    right: '<span class="legend"><span><i style="background:var(--s1)"></i>정상 클라이언트 평균</span><span><i style="background:var(--s2)"></i>느린 클라이언트 평균</span></span>',
+    caption: TR`클라이언트 화면 지연 (최근 20초)`,
+    right: TR`<span class="legend"><span><i style="background:var(--s1)"></i>정상 클라이언트 평균</span><span><i style="background:var(--s2)"></i>느린 클라이언트 평균</span></span>`,
   });
   const memBox = K.el('div');
   F.stage.append(memBox);
-  const memCv = K.canvas(memBox, { height: 130, caption: '서버 메모리 (최근 20초)', right: '동시 접속 2,000명 기준' });
+  const memCv = K.canvas(memBox, { height: 130, caption: TR`서버 메모리 (최근 20초)`, right: TR`동시 접속 2,000명 기준` });
 
   /* ---------- 조작부 ---------- */
-  const g1 = K.group(F.controls, '서버');
-  const sRate = K.slider(g1, { label: '보낼 양 (주변 캐릭터 수)', min: 10, max: 200, step: 10, value: P.rate, unit: 'KB/s', hint: '클라이언트 하나에 1초 동안 보내는 양. 주변 캐릭터가 많을수록 커집니다.', onInput: v => { P.rate = v; } });
-  const cBuf = K.choice(g1, { label: '송신 버퍼 크기 (SO_SNDBUF)', value: P.buf, options: [[16, '16KB'], [64, '64KB'], [256, '256KB'], [1024, '1MB']], onChange: v => { P.buf = +v; } });
+  const g1 = K.group(F.controls, TR`서버`);
+  const sRate = K.slider(g1, { label: TR`보낼 양 (주변 캐릭터 수)`, min: 10, max: 200, step: 10, value: P.rate, unit: 'KB/s', hint: TR`클라이언트 하나에 1초 동안 보내는 양. 주변 캐릭터가 많을수록 커집니다.`, onInput: v => { P.rate = v; } });
+  const cBuf = K.choice(g1, { label: TR`송신 버퍼 크기 (SO_SNDBUF)`, value: P.buf, options: [[16, '16KB'], [64, '64KB'], [256, '256KB'], [1024, '1MB']], onChange: v => { P.buf = +v; } });
   const cPol = K.choice(g1, {
-    label: '가득 찼을 때', value: P.pol, hint: POL[P.pol],
-    options: [['block', '블로킹 전송'], ['latest', '최신만 남기기'], ['kick', '밀리면 킥'], ['unlimited', '무제한 쌓기']],
+    label: TR`가득 찼을 때`, value: P.pol, hint: POL[P.pol],
+    options: [['block', TR`블로킹 전송`], ['latest', TR`최신만 남기기`], ['kick', TR`밀리면 킥`], ['unlimited', TR`무제한 쌓기`]],
     onChange: v => { P.pol = v; polHint(); cl.forEach(c => { c.aq = []; c.af = 0; c.since = null; }); memBox.hidden = v !== 'unlimited'; },
   });
   const polHintEl = cPol.el.querySelector('.ctl-hint');
   function polHint() { polHintEl.textContent = POL[P.pol]; }
-  const g2 = K.group(F.controls, '클라이언트 회선');
-  const sSlowN = K.slider(g2, { label: '느린 클라이언트 수', min: 0, max: 3, step: 1, value: P.slowN, unit: '개', onInput: v => { P.slowN = v; } });
-  const sSlowD = K.slider(g2, { label: '느린 클라이언트 회선 속도', min: 5, max: 200, step: 5, value: P.slowDown, unit: 'KB/s', hint: '정상 클라이언트는 1000 KB/s. 약한 LTE나 붐비는 와이파이는 수십 KB/s까지 떨어집니다.', onInput: v => { P.slowDown = v; } });
+  const g2 = K.group(F.controls, TR`클라이언트 회선`);
+  const sSlowN = K.slider(g2, { label: TR`느린 클라이언트 수`, min: 0, max: 3, step: 1, value: P.slowN, unit: TR`개`, onInput: v => { P.slowN = v; } });
+  const sSlowD = K.slider(g2, { label: TR`느린 클라이언트 회선 속도`, min: 5, max: 200, step: 5, value: P.slowDown, unit: 'KB/s', hint: TR`정상 클라이언트는 1000 KB/s. 약한 LTE나 붐비는 와이파이는 수십 KB/s까지 떨어집니다.`, onInput: v => { P.slowDown = v; } });
 
-  const stN = K.stat(F.stats, { label: '정상 클라이언트 지연', sub: '화면이 몇 초 전 모습인지' });
-  const stS = K.stat(F.stats, { label: '느린 클라이언트 지연', sub: ' ' });
-  const stHz = K.stat(F.stats, { label: '서버 틱레이트', unit: 'Hz', sub: '목표 20Hz' });
-  const stBlk = K.stat(F.stats, { label: '스레드 막힘', unit: '%', sub: '최근 5초 중 send() 대기' });
-  const stMem = K.stat(F.stats, { label: '서버 메모리', unit: 'GB', sub: '한도 2 GB' });
+  const stN = K.stat(F.stats, { label: TR`정상 클라이언트 지연`, sub: TR`화면이 몇 초 전 모습인지` });
+  const stS = K.stat(F.stats, { label: TR`느린 클라이언트 지연`, sub: ' ' });
+  const stHz = K.stat(F.stats, { label: TR`서버 틱레이트`, unit: 'Hz', sub: TR`목표 20Hz` });
+  const stBlk = K.stat(F.stats, { label: TR`스레드 막힘`, unit: '%', sub: TR`최근 5초 중 send() 대기` });
+  const stMem = K.stat(F.stats, { label: TR`서버 메모리`, unit: 'GB', sub: TR`한도 2 GB` });
 
   /* ---------- 모형 ---------- */
   let t, cl, sv, lat, thr, marks, bands, ticks, acc;
@@ -176,14 +176,14 @@ K.register('sndbuf', function (root) {
     ctx.fill();
   }
   function rowState(c, narrow) {
-    if (c.st === 'down') return ['bad', narrow ? '다운' : '서버 다운'];
-    if (c.st === 'kicked') return ['bad', narrow ? '킥' : '끊김 (킥)'];
-    if (sv.st === 'blocked' && sv.idx === c.i) return ['bad', narrow ? '막힘' : 'send() 막힘'];
-    if (P.pol === 'latest' && t - c.skipT < 400) return ['warn', '건너뜀'];
-    if (c.aq.length) return ['warn', P.pol === 'kick' && c.since != null ? '밀림 ' + K.n(Math.max(0, 5 - (t - c.since) / 1000), 0) + '초' : '밀림'];
-    if (c.kf >= P.buf - P.rate / 20) return ['warn', narrow ? '가득' : '버퍼 가득'];
-    if (c.ema > 150) return ['warn', '늦음'];
-    return ['good', '정상'];
+    if (c.st === 'down') return ['bad', narrow ? TR`다운` : TR`서버 다운`];
+    if (c.st === 'kicked') return ['bad', narrow ? TR`킥` : TR`끊김 (킥)`];
+    if (sv.st === 'blocked' && sv.idx === c.i) return ['bad', narrow ? TR`막힘` : TR`send() 막힘`];
+    if (P.pol === 'latest' && t - c.skipT < 400) return ['warn', TR`건너뜀`];
+    if (c.aq.length) return ['warn', P.pol === 'kick' && c.since != null ? TR`밀림 ` + K.n(Math.max(0, 5 - (t - c.since) / 1000), 0) + TR`초` : TR`밀림`];
+    if (c.kf >= P.buf - P.rate / 20) return ['warn', narrow ? TR`가득` : TR`버퍼 가득`];
+    if (c.ema > 150) return ['warn', TR`늦음`];
+    return ['good', TR`정상`];
   }
   function meter(ctx, x, y, w, h, frac, col, txt) {
     ctx.fillStyle = K.C.sunk; K.rr(ctx, x, y, w, h, 3); ctx.fill();
@@ -195,12 +195,12 @@ K.register('sndbuf', function (root) {
     const { ctx, w, h } = room, C = K.C, narrow = w < 480;
     ctx.clearRect(0, 0, w, h);
     // 서버 스레드
-    K.text(ctx, narrow ? '서버 스레드' : '서버 스레드 (하나뿐)', 10, 14, { size: 12, weight: 700, color: C.ink });
+    K.text(ctx, narrow ? TR`서버 스레드` : TR`서버 스레드 (하나뿐)`, 10, 14, { size: 12, weight: 700, color: C.ink });
     let st, sc;
-    if (sv.st === 'down') { st = '서버 다운 · 재시작까지 ' + K.n(Math.max(0, (sv.downUntil - t) / 1000), 0) + '초'; sc = C.badInk; }
-    else if (sv.st === 'blocked') { st = 'send() 대기 중 → 클라이언트 ' + (sv.idx + 1); sc = C.badInk; }
-    else if (hz() < 18.5) { st = '틱이 밀리는 중'; sc = C.warnInk; }
-    else { st = '틱마다 ' + WORK + 'ms 일하고 쉼'; sc = C.goodInk; }
+    if (sv.st === 'down') { st = TR`서버 다운 · 재시작까지 ` + K.n(Math.max(0, (sv.downUntil - t) / 1000), 0) + TR`초`; sc = C.badInk; }
+    else if (sv.st === 'blocked') { st = TR`send() 대기 중 → 클라이언트 ` + (sv.idx + 1); sc = C.badInk; }
+    else if (hz() < 18.5) { st = TR`틱이 밀리는 중`; sc = C.warnInk; }
+    else { st = TR`틱마다 ` + WORK + TR`ms 일하고 쉼`; sc = C.goodInk; }
     K.text(ctx, st, w - 10, 14, { size: 11.5, weight: 600, color: sc, align: 'right' });
     const bx0 = 10, bx1 = w - 10, by = 26, bh = 14, X = tt => bx0 + ((tt - (t - TWIN)) / TWIN) * (bx1 - bx0);
     ctx.fillStyle = C.line; K.rr(ctx, bx0, by, bx1 - bx0, bh, 3); ctx.fill();
@@ -212,8 +212,8 @@ K.register('sndbuf', function (root) {
       ctx.fillRect(X(a), by, Math.max(1, X(b) - X(a)), bh);
     }
     ctx.restore();
-    K.text(ctx, '3초 전', bx0, by + bh + 9, { size: 10, color: C.muted });
-    K.text(ctx, '지금', bx1, by + bh + 9, { size: 10, color: C.muted, align: 'right' });
+    K.text(ctx, TR`3초 전`, bx0, by + bh + 9, { size: 10, color: C.muted });
+    K.text(ctx, TR`지금`, bx1, by + bh + 9, { size: 10, color: C.muted, align: 'right' });
 
     // 클라이언트 표
     const top = 72, RH = 25;
@@ -221,18 +221,18 @@ K.register('sndbuf', function (root) {
     const mx0 = 10 + nameW, space = w - 10 - stW - latW - mx0 - 8;
     const twoM = !narrow, kW = twoM ? space * 0.56 : space, aX = mx0 + kW + 8, aW = space - kW - 8;
     const hy = top - 6;
-    K.text(ctx, '클라이언트', 10, hy, { size: 10.5, color: C.muted });
-    K.text(ctx, narrow ? '송신 버퍼' : '송신 버퍼 (' + (P.buf >= 1024 ? '1MB' : P.buf + 'KB') + ')', mx0, hy, { size: 10.5, color: C.muted });
-    if (twoM) K.text(ctx, '앱 대기열', aX, hy, { size: 10.5, color: C.muted });
-    K.text(ctx, '지연', w - 10 - stW - 8, hy, { size: 10.5, color: C.muted, align: 'right' });
-    K.text(ctx, '상태', w - 10 - stW + 4, hy, { size: 10.5, color: C.muted });
+    K.text(ctx, TR`클라이언트`, 10, hy, { size: 10.5, color: C.muted });
+    K.text(ctx, narrow ? TR`송신 버퍼` : TR`송신 버퍼 (` + (P.buf >= 1024 ? '1MB' : P.buf + 'KB') + ')', mx0, hy, { size: 10.5, color: C.muted });
+    if (twoM) K.text(ctx, TR`앱 대기열`, aX, hy, { size: 10.5, color: C.muted });
+    K.text(ctx, TR`지연`, w - 10 - stW - 8, hy, { size: 10.5, color: C.muted, align: 'right' });
+    K.text(ctx, TR`상태`, w - 10 - stW + 4, hy, { size: 10.5, color: C.muted });
     for (const c of cl) {
       const y = top + c.i * RH + RH / 2, slow = isSlow(c);
       if (slow) { ctx.fillStyle = K.alpha(C.s2, 0.1); ctx.fillRect(4, y - RH / 2 + 1, w - 8, RH - 2); }
-      const nm = (narrow ? '클라이언트' : '클라이언트 ') + (c.i + 1);
+      const nm = (narrow ? TR`클라이언트` : TR`클라이언트 `) + (c.i + 1);
       K.text(ctx, nm, 10, y, { size: 12, weight: slow ? 700 : 400, color: C.ink });
       if (slow) {
-        const lab = narrow ? '느림' : '느린 회선', bx = 10 + ctx.measureText(nm).width + 5;
+        const lab = narrow ? TR`느림` : TR`느린 회선`, bx = 10 + ctx.measureText(nm).width + 5;
         ctx.font = K.font(10, 600); const tw = ctx.measureText(lab).width + 8;
         ctx.fillStyle = C.s2; K.rr(ctx, bx, y - 8, tw, 16, 4); ctx.fill();
         K.text(ctx, lab, bx + tw / 2, y + 0.5, { size: 10, weight: 600, color: '#fff', align: 'center' });
@@ -241,7 +241,7 @@ K.register('sndbuf', function (root) {
       const fk = c.kf / P.buf, colK = fk >= 0.95 ? C.bad : fk > 0.6 ? C.warn : C.accent;
       if (twoM) {
         meter(ctx, mx0, y - 6, kW, 12, off ? 0 : fk, colK, off || c.kf < 1 ? '' : K.n(c.kf, 0) + 'KB');
-        if (P.pol === 'block') K.text(ctx, '없음 (스레드가 대기)', aX, y, { size: 10.5, color: C.muted });
+        if (P.pol === 'block') K.text(ctx, TR`없음 (스레드가 대기)`, aX, y, { size: 10.5, color: C.muted });
         else {
           const cap = P.pol === 'latest' ? P.rate / 20 : 1024;
           meter(ctx, aX, y - 6, aW, 12, c.af / cap, c.af > 0 ? C.warn : C.accent, c.af > 0 ? (c.af >= 1024 ? K.n(c.af / 1024, 1) + 'MB' : K.n(c.af, 0) + 'KB') : '');
@@ -260,12 +260,12 @@ K.register('sndbuf', function (root) {
   K.hover(room, (x, y) => {
     if (y >= 22 && y <= 44) {
       const blk = blockedFrac(3000);
-      return `<b>서버 스레드</b><br>틱 ${K.n(hz(), 1)}Hz · 최근 3초 중 send() 대기 ${K.pct(blk)}<br>스레드가 하나라서 여기서 멈추면 모든 클라이언트의 틱이 멈춥니다.`;
+      return TR`<b>서버 스레드</b><br>틱 ${K.n(hz(), 1)}Hz · 최근 3초 중 send() 대기 ${K.pct(blk)}<br>스레드가 하나라서 여기서 멈추면 모든 클라이언트의 틱이 멈춥니다.`;
     }
     const i = Math.floor((y - 72) / 25), c = cl[i];
     if (!c) return null;
     const q = c.af >= 1024 ? K.n(c.af / 1024, 1) + 'MB' : K.n(c.af, 0) + 'KB';
-    return `<b>클라이언트 ${i + 1}</b> · 회선 ${isSlow(c) ? P.slowDown : NORM} KB/s<br>송신 버퍼 ${K.n(c.kf, 0)} / ${P.buf}KB` + (P.pol === 'block' ? '' : `<br>앱 대기열 ${q}`) + `<br>화면 지연 ${c.st === 'ok' ? K.ms(c.ema) : '접속 끊김'}`;
+    return TR`<b>클라이언트 ${i + 1}</b> · 회선 ${isSlow(c) ? P.slowDown : NORM} KB/s<br>송신 버퍼 ${K.n(c.kf, 0)} / ${P.buf}KB` + (P.pol === 'block' ? '' : TR`<br>앱 대기열 ${q}`) + TR`<br>화면 지연 ${c.st === 'ok' ? K.ms(c.ema) : TR`접속 끊김`}`;
   });
 
   /* ---------- 차트 ---------- */
@@ -277,7 +277,7 @@ K.register('sndbuf', function (root) {
     const all = y1 - LOG0 > 2.6 ? [20, 100, 1000, 10000, 60000] : [20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000, 60000];
     return { y1, ticks: all.filter(v => Math.log10(v) <= y1 + 1e-9).map(v => Math.log10(v)) };
   }
-  const fmtMs = v => (v >= 1000 ? K.n(v / 1000, v % 1000 ? 1 : 0) + '초' : K.n(v) + 'ms');
+  const fmtMs = v => (v >= 1000 ? K.n(v / 1000, v % 1000 ? 1 : 0) + TR`초` : K.n(v) + 'ms');
   function chartBox(co) { return { x: 50, y: 24, w: co.w - 62, h: co.h - 54 }; }
   function drawBands(ctx, sc, box, kinds) {
     for (const b of bands) {
@@ -285,7 +285,7 @@ K.register('sndbuf', function (root) {
       const a = Math.max(b.a, t - WIN), e = b.b != null ? b.b : t;
       if (e <= a) continue;
       ctx.fillStyle = K.alpha(K.C.bad, 0.1); ctx.fillRect(sc.x(a), box.y, sc.x(e) - sc.x(a), box.h);
-      if (sc.x(e) - sc.x(a) > 34) K.text(ctx, b.kind === 'down' ? '서버 다운' : '킥', (sc.x(a) + sc.x(e)) / 2, box.y + 9, { size: 10.5, weight: 600, color: K.C.badInk, align: 'center' });
+      if (sc.x(e) - sc.x(a) > 34) K.text(ctx, b.kind === 'down' ? TR`서버 다운` : TR`킥`, (sc.x(a) + sc.x(e)) / 2, box.y + 9, { size: 10.5, weight: 600, color: K.C.badInk, align: 'center' });
     }
     for (const m of marks) {
       const x = Math.round(sc.x(m.t)) + 0.5;
@@ -300,8 +300,8 @@ K.register('sndbuf', function (root) {
     ctx.clearRect(0, 0, w, h);
     const sc = K.plot(ctx, box, {
       x0: t - WIN, x1: t, y0: LOG0, y1: ax.y1, yTicks: ax.ticks, yFmt: v => fmtMs(Math.round(Math.pow(10, v))),
-      xTicks: xTicks.map(v => t + v), xFmt: v => (Math.round((v - t) / 1000) === 0 ? '지금' : Math.round((v - t) / 1000) + '초'),
-      yTitle: '지연 (눈금이 10배씩 커짐)',
+      xTicks: xTicks.map(v => t + v), xFmt: v => (Math.round((v - t) / 1000) === 0 ? TR`지금` : Math.round((v - t) / 1000) + TR`초`),
+      yTitle: TR`지연 (눈금이 10배씩 커짐)`,
     });
     drawBands(ctx, sc, box, ['kick', 'down']);
     const L = k => { const out = [], segs = []; lat.forEach(p => { if (p[k] == null) { if (out.length) segs.push(out.splice(0)); } else out.push([p.t, Math.log10(Math.max(20, p[k]))]); }); if (out.length) segs.push(out); return segs; };
@@ -319,11 +319,11 @@ K.register('sndbuf', function (root) {
     ctx.clearRect(0, 0, w, h);
     const sc = K.plot(ctx, box, {
       x0: t - WIN, x1: t, y0: 0, y1: 2.5, yTicks: [0, 1, 2], yFmt: v => v + ' GB',
-      xTicks: xTicks.map(v => t + v), xFmt: v => (Math.round((v - t) / 1000) === 0 ? '지금' : Math.round((v - t) / 1000) + '초'),
+      xTicks: xTicks.map(v => t + v), xFmt: v => (Math.round((v - t) / 1000) === 0 ? TR`지금` : Math.round((v - t) / 1000) + TR`초`),
     });
     drawBands(ctx, sc, box, ['down']);
     K.hline(ctx, sc, MEMMAX / 1024, { color: C.bad, dash: [4, 3] });
-    K.text(ctx, '한도 2 GB', box.x + 4, sc.y(MEMMAX / 1024) - 8, { size: 10.5, weight: 600, color: C.badInk });
+    K.text(ctx, TR`한도 2 GB`, box.x + 4, sc.y(MEMMAX / 1024) - 8, { size: 10.5, weight: 600, color: C.badInk });
     const segs = [], cur = [];
     lat.forEach(p => { if (p.m == null) { if (cur.length) segs.push(cur.splice(0)); } else cur.push([p.t, p.m / 1024]); });
     if (cur.length) segs.push(cur);
@@ -339,11 +339,11 @@ K.register('sndbuf', function (root) {
   K.hover(chart, x => {
     const p = nearest(chart, x);
     if (!p) return null;
-    return `${K.n((p.t - t) / 1000, 1)}초<br>정상 클라이언트 <b>${p.n == null ? '접속 끊김' : K.ms(p.n)}</b><br>느린 클라이언트 <b>${p.s == null ? (P.slowN ? '접속 끊김' : '없음') : K.ms(p.s)}</b><br>서버 틱 ${K.n(p.hz, 1)}Hz`;
+    return TR`${K.n((p.t - t) / 1000, 1)}초<br>정상 클라이언트 <b>${p.n == null ? TR`접속 끊김` : K.ms(p.n)}</b><br>느린 클라이언트 <b>${p.s == null ? (P.slowN ? TR`접속 끊김` : TR`없음`) : K.ms(p.s)}</b><br>서버 틱 ${K.n(p.hz, 1)}Hz`;
   });
   K.hover(memCv, x => {
     const p = nearest(memCv, x);
-    return p ? `${K.n((p.t - t) / 1000, 1)}초<br>메모리 <b>${p.m == null ? '서버 다운' : K.n(p.m / 1024, 2) + ' GB'}</b>` : null;
+    return p ? TR`${K.n((p.t - t) / 1000, 1)}초<br>메모리 <b>${p.m == null ? TR`서버 다운` : K.n(p.m / 1024, 2) + ' GB'}</b>` : null;
   });
 
   /* ---------- 프리셋 ---------- */
@@ -356,15 +356,15 @@ K.register('sndbuf', function (root) {
     reset();
     const n = P.slowN;
     P.slowN = 0; step(7000); P.slowN = n;
-    if (n) marks.push({ t, lab: '느린 클라이언트 등장' });
+    if (n) marks.push({ t, lab: TR`느린 클라이언트 등장` });
     step(13000);
   }
   const pr = K.presets(F, [
-    { label: '모두 정상', apply() { load({ slowN: 0 }); } },
-    { label: '느린 클라이언트 1개 + 블로킹', apply() { load({}); } },
-    { label: '최신만 보내기', apply() { load({ pol: 'latest', buf: 16 }); } },
-    { label: '킥 정책', apply() { load({ pol: 'kick' }); } },
-    { label: '무제한 쌓기', apply() { load({ pol: 'unlimited', slowN: 3, slowDown: 20, rate: 120 }); } },
+    { label: TR`모두 정상`, apply() { load({ slowN: 0 }); } },
+    { label: TR`느린 클라이언트 1개 + 블로킹`, apply() { load({}); } },
+    { label: TR`최신만 보내기`, apply() { load({ pol: 'latest', buf: 16 }); } },
+    { label: TR`킥 정책`, apply() { load({ pol: 'kick' }); } },
+    { label: TR`무제한 쌓기`, apply() { load({ pol: 'unlimited', slowN: 3, slowDown: 20, rate: 120 }); } },
   ]);
   pr.press(1);
 
@@ -377,42 +377,42 @@ K.register('sndbuf', function (root) {
     const nL = avg(normC), live = slowC.filter(c => c.st === 'ok'), sL = avg(live);
     const f = hz(), blk = blockedFrac(5000), mem = sv.st === 'down' ? null : memMB();
     stN.set(nL == null ? '—' : K.ms(nL), nL == null ? 'bad' : nL < 100 ? 'good' : nL < 200 ? 'warn' : 'bad');
-    if (!slowC.length) stS.set('—', null, '느린 클라이언트 없음');
-    else if (!live.length) stS.set('끊김', 'bad', '접속이 끊긴 상태');
-    else stS.set(K.ms(sL), sL < 150 ? 'good' : sL < 500 ? 'warn' : 'bad', '회선 ' + P.slowDown + ' KB/s');
+    if (!slowC.length) stS.set('—', null, TR`느린 클라이언트 없음`);
+    else if (!live.length) stS.set(TR`끊김`, 'bad', TR`접속이 끊긴 상태`);
+    else stS.set(K.ms(sL), sL < 150 ? 'good' : sL < 500 ? 'warn' : 'bad', TR`회선 ` + P.slowDown + ' KB/s');
     stHz.set(sv.st === 'down' ? '0' : K.n(f, 1), sv.st === 'down' || f < 15 ? 'bad' : f < 19 ? 'warn' : 'good');
     stBlk.set(K.n(blk * 100, 0), blk < 0.01 ? 'good' : blk < 0.2 ? 'warn' : 'bad');
-    stMem.set(mem == null ? '0' : K.n(mem / 1024, 2), mem == null || mem > MEMMAX * 0.9 ? 'bad' : mem > 1600 ? 'warn' : 'good', mem == null ? '서버 다운 · 재시작 중' : '한도 2 GB');
+    stMem.set(mem == null ? '0' : K.n(mem / 1024, 2), mem == null || mem > MEMMAX * 0.9 ? 'bad' : mem > 1600 ? 'warn' : 'good', mem == null ? TR`서버 다운 · 재시작 중` : TR`한도 2 GB`);
 
     const names = slowC.map(c => c.i + 1).join('·');
     const over = slowC.length > 0 && P.slowDown < P.rate;
     const kb = P.rate / 20;
     let msg;
     if (sv.st === 'down') {
-      msg = `${K.flag('bad')}<b>서버 메모리가 한도(2 GB)를 넘어 서버 프로세스가 죽었습니다.</b> 쌓인 것은 느린 클라이언트 몇 개의 데이터였지만, 접속이 끊긴 건 모든 클라이언트입니다(<b>접속 끊김</b>). 재시작까지 ${K.n(Math.max(0, (sv.downUntil - t) / 1000), 0)}초. 로그에는 “메모리 부족”만 남아서 원인을 찾기도 어렵습니다.`;
+      msg = TR`${K.flag('bad')}<b>서버 메모리가 한도(2 GB)를 넘어 서버 프로세스가 죽었습니다.</b> 쌓인 것은 느린 클라이언트 몇 개의 데이터였지만, 접속이 끊긴 건 모든 클라이언트입니다(<b>접속 끊김</b>). 재시작까지 ${K.n(Math.max(0, (sv.downUntil - t) / 1000), 0)}초. 로그에는 “메모리 부족”만 남아서 원인을 찾기도 어렵습니다.`;
     } else if (!over) {
       msg = slowC.length
-        ? `${K.flag('good')}느린 클라이언트(${names}번)의 회선(${P.slowDown} KB/s)도 보낼 양(${P.rate} KB/s)보다 빨라서 송신 버퍼가 차지 않습니다. 문제는 보낼 양이 회선보다 많을 때 생깁니다. <b>보낼 양</b>을 올려 보세요.`
-        : `${K.flag('good')}모든 클라이언트의 회선이 보낼 양(${P.rate} KB/s)보다 빠릅니다. 송신 버퍼는 틱마다 ${K.n(kb, 0)}KB쯤 찼다가 바로 비워지고, 서버 스레드는 틱마다 ${WORK}ms 일하고 나머지는 쉽니다.`;
+        ? TR`${K.flag('good')}느린 클라이언트(${names}번)의 회선(${P.slowDown} KB/s)도 보낼 양(${P.rate} KB/s)보다 빨라서 송신 버퍼가 차지 않습니다. 문제는 보낼 양이 회선보다 많을 때 생깁니다. <b>보낼 양</b>을 올려 보세요.`
+        : TR`${K.flag('good')}모든 클라이언트의 회선이 보낼 양(${P.rate} KB/s)보다 빠릅니다. 송신 버퍼는 틱마다 ${K.n(kb, 0)}KB쯤 찼다가 바로 비워지고, 서버 스레드는 틱마다 ${WORK}ms 일하고 나머지는 쉽니다.`;
     } else if (P.pol === 'block') {
       msg = blk > 0.01
-        ? `${K.flag('bad')}<b>클라이언트 ${names}의 송신 버퍼(${P.buf}KB)가 가득 찼습니다.</b> 블로킹 소켓에서 send()는 버퍼에 빈 공간이 생길 때까지 반환되지 않습니다. 하나뿐인 서버 스레드가 거기서 멈춰 서니 틱이 ${K.n(f, 1)}Hz로 떨어지고, 나머지 클라이언트도 업데이트를 늦게 받습니다. 모두가 <b>뚝뚝 끊김</b>과 <b>슬로우모션</b>을 겪습니다. <b>블로킹 소켓 + 단일 스레드 = 한 명의 나쁜 회선이 서버 전체 렉.</b>`
-        : `${K.flag('warn')}클라이언트 ${names}의 송신 버퍼가 차오르는 중입니다. 회선이 ${P.slowDown} KB/s인데 초당 ${P.rate} KB를 보내니 곧 가득 찹니다. 가득 차는 순간부터 서버 스레드가 send()에서 멈춥니다.`;
+        ? TR`${K.flag('bad')}<b>클라이언트 ${names}의 송신 버퍼(${P.buf}KB)가 가득 찼습니다.</b> 블로킹 소켓에서 send()는 버퍼에 빈 공간이 생길 때까지 반환되지 않습니다. 하나뿐인 서버 스레드가 거기서 멈춰 서니 틱이 ${K.n(f, 1)}Hz로 떨어지고, 나머지 클라이언트도 업데이트를 늦게 받습니다. 모두가 <b>뚝뚝 끊김</b>과 <b>슬로우모션</b>을 겪습니다. <b>블로킹 소켓 + 단일 스레드 = 한 명의 나쁜 회선이 서버 전체 렉.</b>`
+        : TR`${K.flag('warn')}클라이언트 ${names}의 송신 버퍼가 차오르는 중입니다. 회선이 ${P.slowDown} KB/s인데 초당 ${P.rate} KB를 보내니 곧 가득 찹니다. 가득 차는 순간부터 서버 스레드가 send()에서 멈춥니다.`;
     } else if (P.pol === 'latest') {
       const c = slowC[0];
       const dr = c ? c.dropR : 0;
-      msg = `${K.flag('warn')}<b>느린 클라이언트에게는 가장 새 업데이트 하나만 남기고 나머지는 버립니다.</b> 서버 스레드는 기다리지 않으니 틱은 ${K.n(f, 1)}Hz 그대로이고 다른 클라이언트는 멀쩡합니다. 느린 클라이언트는 업데이트를 ${K.pct(dr)} 건너뛰어 <b>뚝뚝 끊김</b>과 작은 <b>순간이동</b>을 겪습니다. 이미 송신 버퍼에 담긴 ${P.buf}KB는 순서대로 빠져야 해서 그 클라이언트의 화면은 ${sL == null ? '—' : K.ms(sL)} 늦습니다. 버퍼를 작게 잡을수록 이 지연이 줄어듭니다.`;
+      msg = TR`${K.flag('warn')}<b>느린 클라이언트에게는 가장 새 업데이트 하나만 남기고 나머지는 버립니다.</b> 서버 스레드는 기다리지 않으니 틱은 ${K.n(f, 1)}Hz 그대로이고 다른 클라이언트는 멀쩡합니다. 느린 클라이언트는 업데이트를 ${K.pct(dr)} 건너뛰어 <b>뚝뚝 끊김</b>과 작은 <b>순간이동</b>을 겪습니다. 이미 송신 버퍼에 담긴 ${P.buf}KB는 순서대로 빠져야 해서 그 클라이언트의 화면은 ${sL == null ? '—' : K.ms(sL)} 늦습니다. 버퍼를 작게 잡을수록 이 지연이 줄어듭니다.`;
     } else if (P.pol === 'kick') {
       const kicked = slowC.filter(c => c.st === 'kicked'), lag = slowC.filter(c => c.st === 'ok' && c.aq.length);
-      if (kicked.length) msg = `${K.flag('bad')}<b>5초 넘게 밀린 클라이언트 ${kicked.map(c => c.i + 1).join('·')}의 연결을 끊었습니다.</b> 그 클라이언트는 <b>접속 끊김</b>을 겪지만, 서버와 다른 클라이언트는 멀쩡합니다(틱 ${K.n(f, 1)}Hz). 회선이 그대로면 재접속해도 다시 밀리고 다시 끊깁니다. 대신 서버 메모리는 늘 일정하게 유지됩니다.`;
+      if (kicked.length) msg = TR`${K.flag('bad')}<b>5초 넘게 밀린 클라이언트 ${kicked.map(c => c.i + 1).join('·')}의 연결을 끊었습니다.</b> 그 클라이언트는 <b>접속 끊김</b>을 겪지만, 서버와 다른 클라이언트는 멀쩡합니다(틱 ${K.n(f, 1)}Hz). 회선이 그대로면 재접속해도 다시 밀리고 다시 끊깁니다. 대신 서버 메모리는 늘 일정하게 유지됩니다.`;
       else if (lag.length) {
         const c = lag[0];
-        msg = `${K.flag('warn')}클라이언트 ${c.i + 1}에게 못 보낸 데이터가 서버 메모리에 쌓이는 중입니다(${K.n(c.af, 0)}KB). ${K.n(Math.max(0, 5 - (t - c.since) / 1000), 0)}초 안에 따라잡지 못하면 연결을 끊습니다. 그동안 그 클라이언트의 화면은 점점 늦어집니다(${K.ms(c.ema)}). 다른 클라이언트와 서버 틱은 멀쩡합니다.`;
-      } else msg = `${K.flag('warn')}클라이언트 ${names}의 송신 버퍼가 차오르는 중입니다. 가득 찬 뒤 5초 넘게 밀리면 서버가 연결을 끊습니다.`;
+        msg = TR`${K.flag('warn')}클라이언트 ${c.i + 1}에게 못 보낸 데이터가 서버 메모리에 쌓이는 중입니다(${K.n(c.af, 0)}KB). ${K.n(Math.max(0, 5 - (t - c.since) / 1000), 0)}초 안에 따라잡지 못하면 연결을 끊습니다. 그동안 그 클라이언트의 화면은 점점 늦어집니다(${K.ms(c.ema)}). 다른 클라이언트와 서버 틱은 멀쩡합니다.`;
+      } else msg = TR`${K.flag('warn')}클라이언트 ${names}의 송신 버퍼가 차오르는 중입니다. 가득 찬 뒤 5초 넘게 밀리면 서버가 연결을 끊습니다.`;
     } else {
       const grow = (SCALE * slowC.filter(c => c.st === 'ok').length * Math.max(0, P.rate - P.slowDown)) / 1024;
       const eta = grow > 0 && mem != null ? (MEMMAX - mem) / grow : Infinity;
-      msg = `${K.flag(eta < 8 ? 'bad' : 'warn')}<b>느린 클라이언트에게 못 보낸 데이터를 버리지도 끊지도 않고 서버 메모리에 계속 쌓습니다.</b> 화면의 클라이언트 8개는 샘플이고 실제로는 같은 비율로 2,000명이 접속해 있다고 치면, 메모리가 초당 ${K.n(grow, 0)}MB씩 늘어납니다. 한도까지 약 ${Number.isFinite(eta) ? K.n(eta, 0) + '초' : '—'}. 느린 클라이언트의 화면은 ${sL == null ? '—' : K.ms(sL)} 뒤처져 있고 계속 늘어납니다. 다른 클라이언트는 아직 멀쩡하지만, 한도를 넘는 순간 모두의 접속이 끊깁니다.`;
+      msg = TR`${K.flag(eta < 8 ? 'bad' : 'warn')}<b>느린 클라이언트에게 못 보낸 데이터를 버리지도 끊지도 않고 서버 메모리에 계속 쌓습니다.</b> 화면의 클라이언트 8개는 샘플이고 실제로는 같은 비율로 2,000명이 접속해 있다고 치면, 메모리가 초당 ${K.n(grow, 0)}MB씩 늘어납니다. 한도까지 약 ${Number.isFinite(eta) ? K.n(eta, 0) + TR`초` : '—'}. 느린 클라이언트의 화면은 ${sL == null ? '—' : K.ms(sL)} 뒤처져 있고 계속 늘어납니다. 다른 클라이언트는 아직 멀쩡하지만, 한도를 넘는 순간 모두의 접속이 끊깁니다.`;
     }
     F.say(msg);
   });

@@ -26,12 +26,14 @@
     "build": "python3 build.py",
     "validate": "node tools/validate.cjs",
     "check": "mkdir -p build && node tools/check.cjs index.html build/p.png 1280 && node tools/check.cjs index.html build/m.png 390 --dark",
-    "test": "npm run build && npm run validate && npm run check",
+    "test": "npm run build && npm run validate && node tools/i18n-wrap.cjs --check && node tools/i18n.cjs check && npm run check",
     "links": "python3 tools/linkcheck.py",
     "export": "node tools/export.cjs",
-    "site": "python3 build.py && node tools/site.cjs"
+    "site": "python3 build.py && node tools/site.cjs",
+    "i18n": "node tools/i18n.cjs status --groups"
   },
   "devDependencies": {
-    "playwright": "^1.56.1"
+    "playwright": "^1.56.1",
+    "typescript": "^5.6.0"
   }
 }

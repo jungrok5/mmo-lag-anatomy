@@ -1,0 +1,11 @@
+[
+  { "code": "ko", "dir": "", "hreflang": "ko", "locale": "ko-KR", "og": "ko_KR", "name": "한국어", "en": "Korean" },
+  { "code": "en", "dir": "en", "hreflang": "en", "locale": "en-US", "og": "en_US", "name": "English", "en": "English", "xdefault": true },
+  { "code": "ja", "dir": "ja", "hreflang": "ja", "locale": "ja-JP", "og": "ja_JP", "name": "日本語", "en": "Japanese" },
+  { "code": "zh-CN", "dir": "zh-cn", "hreflang": "zh-CN", "locale": "zh-CN", "og": "zh_CN", "name": "简体中文", "en": "Chinese (Simplified)" },
+  { "code": "zh-TW", "dir": "zh-tw", "hreflang": "zh-TW", "alsoHreflang": ["zh-HK"], "locale": "zh-TW", "og": "zh_TW", "name": "繁體中文", "en": "Chinese (Traditional, Taiwan)" },
+  { "code": "de", "dir": "de", "hreflang": "de", "locale": "de-DE", "og": "de_DE", "name": "Deutsch", "en": "German" },
+  { "code": "th", "dir": "th", "hreflang": "th", "locale": "th-TH", "og": "th_TH", "name": "ไทย", "en": "Thai" },
+  { "code": "vi", "dir": "vi", "hreflang": "vi", "locale": "vi-VN", "og": "vi_VN", "name": "Tiếng Việt", "en": "Vietnamese" },
+  { "code": "ru", "dir": "ru", "hreflang": "ru", "locale": "ru-RU", "og": "ru_RU", "name": "Русский", "en": "Russian" }
+]

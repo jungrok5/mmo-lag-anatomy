@@ -1,52 +1,52 @@
 /* 판정 구간: 보스 예고 시간 중 얼마가 네트워크에 먹히는가. 판정 방식·연출 방식에 따라 달라진다 */
 K.register('windows', function (root) {
   const F = K.frame(root, {
-    kicker: '동기화 방식 · 판정 구간',
-    title: '예고가 “핑 + 반응 시간”보다 짧으면 실력과 상관없이 맞는다',
-    lead: '보스가 공격을 예고하고, 그 안에 피해야 한다고 합시다. 예고 시간의 일부는 패킷이 내게 오는 데, 일부는 사람이 반응하는 데, 일부는 내 입력이 서버에 가는 데 쓰입니다. 남는 시간이 없으면 아무리 잘해도 맞습니다. 탭 타겟 MMO가 핑에 둔감하고 패링 게임이 민감한 이유가 이 계산에 있습니다.',
+    kicker: TR`동기화 방식 · 판정 구간`,
+    title: TR`예고가 “핑 + 반응 시간”보다 짧으면 실력과 상관없이 맞는다`,
+    lead: TR`보스가 공격을 예고하고, 그 안에 피해야 한다고 합시다. 예고 시간의 일부는 패킷이 내게 오는 데, 일부는 사람이 반응하는 데, 일부는 내 입력이 서버에 가는 데 쓰입니다. 남는 시간이 없으면 아무리 잘해도 맞습니다. 탭 타겟 MMO가 핑에 둔감하고 패링 게임이 민감한 이유가 이 계산에 있습니다.`,
     tries: [
-      '장르 버튼을 차례로 눌러 보세요. 예고가 긴 레이드는 핑 300ms에서도 여유가 남고, 빠른 공격 패링은 핑 100ms만 돼도 모자랍니다.',
-      '<b>액션 MMO 회피</b>에서 <b>예고 전달</b>을 “서버 시각으로 미리 예약”으로 바꿔 보세요. 패킷이 늦게 오는 구간이 사라집니다. 보스 패턴을 미리 알려 주는 설계입니다.',
-      '<b>판정 기준</b>을 “지연 보상”으로 바꾸면 서버가 내가 본 시점으로 되감아 판정합니다. 억울한 피격이 줄어드는 대신, 다른 사람 화면에서는 “맞은 것 같은데 피했다”로 보일 수 있습니다.',
-      '아래 곡선에서 판정 방식마다 몇 ms 핑부터 피할 수 없게 되는지 확인하세요.',
+      TR`장르 버튼을 차례로 눌러 보세요. 예고가 긴 레이드는 핑 300ms에서도 여유가 남고, 빠른 공격 패링은 핑 100ms만 돼도 모자랍니다.`,
+      TR`<b>액션 MMO 회피</b>에서 <b>예고 전달</b>을 “서버 시각으로 미리 예약”으로 바꿔 보세요. 패킷이 늦게 오는 구간이 사라집니다. 보스 패턴을 미리 알려 주는 설계입니다.`,
+      TR`<b>판정 기준</b>을 “지연 보상”으로 바꾸면 서버가 내가 본 시점으로 되감아 판정합니다. 억울한 피격이 줄어드는 대신, 다른 사람 화면에서는 “맞은 것 같은데 피했다”로 보일 수 있습니다.`,
+      TR`아래 곡선에서 판정 방식마다 몇 ms 핑부터 피할 수 없게 되는지 확인하세요.`,
     ],
   });
 
   const GENRES = [
-    { label: '탭 타겟 레이드', W: 2000, sched: 'arrive', judge: 'now', say: '레이드 보스는 1.5~3초 예고가 흔합니다. 핑이 꽤 높아도 반응할 시간이 충분합니다.' },
-    { label: '액션 MMO 회피', W: 700, sched: 'arrive', judge: 'now', say: '0.7초 예고라도 패킷이 늦게 오고 입력이 늦게 가면 여유가 금방 사라집니다.' },
-    { label: '빠른 공격 패링', W: 450, sched: 'arrive', judge: 'now', say: '0.45초 만에 들어오는 빠른 공격을 보고 패링하는 경우입니다. 사람 반응 0.25초를 빼면 0.2초만 남아, 핑이 조금만 있어도 모자랍니다. 타이밍을 외워 미리 누르는 패링은 반응 시간이 들지 않습니다. 대신 판정 시점이 네트워크가 쓰는 시간만큼 밀려 그만큼 일찍 눌러야 하고, 지터만큼 판정 구간이 좁아집니다.' },
-    { label: '격투 게임 가드', W: 400, sched: 'arrive', judge: 'roll', say: '격투 게임은 롤백으로 내 입력을 누른 프레임 그대로 반영합니다(이 실험은 입력 지연 0프레임으로 가정). 대신 상대 공격은 핑의 절반만큼 늦게 보이고 앞부분이 잘려 나타나서, 보고 막을 시간이 그만큼 줄어듭니다. 0.25초보다 빠른 공격은 핑이 0이어도 보고 막을 수 없어 미리 읽고 막아야 합니다.' },
-    { label: '리듬 게임', W: 1500, sched: 'sched', judge: 'client', say: '리듬 게임은 박자를 미리 알고(예약), 판정도 내 기기에서 합니다. 노트가 1초 넘게 미리 보여 반응할 시간이 넉넉하고, 핑이 1초여도 판정에는 영향이 없습니다. 판정 구간(±0.05초 안팎)은 박자를 맞추는 정확도라서 반응 시간과 상관이 없습니다.' },
+    { label: TR`탭 타겟 레이드`, W: 2000, sched: 'arrive', judge: 'now', say: TR`레이드 보스는 1.5~3초 예고가 흔합니다. 핑이 꽤 높아도 반응할 시간이 충분합니다.` },
+    { label: TR`액션 MMO 회피`, W: 700, sched: 'arrive', judge: 'now', say: TR`0.7초 예고라도 패킷이 늦게 오고 입력이 늦게 가면 여유가 금방 사라집니다.` },
+    { label: TR`빠른 공격 패링`, W: 450, sched: 'arrive', judge: 'now', say: TR`0.45초 만에 들어오는 빠른 공격을 보고 패링하는 경우입니다. 사람 반응 0.25초를 빼면 0.2초만 남아, 핑이 조금만 있어도 모자랍니다. 타이밍을 외워 미리 누르는 패링은 반응 시간이 들지 않습니다. 대신 판정 시점이 네트워크가 쓰는 시간만큼 밀려 그만큼 일찍 눌러야 하고, 지터만큼 판정 구간이 좁아집니다.` },
+    { label: TR`격투 게임 가드`, W: 400, sched: 'arrive', judge: 'roll', say: TR`격투 게임은 롤백으로 내 입력을 누른 프레임 그대로 반영합니다(이 실험은 입력 지연 0프레임으로 가정). 대신 상대 공격은 핑의 절반만큼 늦게 보이고 앞부분이 잘려 나타나서, 보고 막을 시간이 그만큼 줄어듭니다. 0.25초보다 빠른 공격은 핑이 0이어도 보고 막을 수 없어 미리 읽고 막아야 합니다.` },
+    { label: TR`리듬 게임`, W: 1500, sched: 'sched', judge: 'client', say: TR`리듬 게임은 박자를 미리 알고(예약), 판정도 내 기기에서 합니다. 노트가 1초 넘게 미리 보여 반응할 시간이 넉넉하고, 핑이 1초여도 판정에는 영향이 없습니다. 판정 구간(±0.05초 안팎)은 박자를 맞추는 정확도라서 반응 시간과 상관이 없습니다.` },
   ];
   const P = { W: 700, rtt: 150, interp: 100, react: 250, tick: 20, sched: 'arrive', judge: 'now', speed: 0.5 };
   const CAP = 250; // 지연 보상 되감기 상한
 
-  const cvScene = K.canvas(F.stage, { height: w => K.clamp(w * 0.34, 150, 210), caption: '같은 공격, 두 개의 화면', right: '<span class="legend"><span><i class="dot" style="background:var(--s1)"></i>나</span><span><i class="dot" style="background:var(--s2)"></i>예고 범위</span></span>' });
-  const cvBar = K.canvas(F.stage, { height: w => (w < 520 ? 176 : 132), caption: '예고 시간은 어디에 쓰이나', right: '' });
-  const cvCurve = K.canvas(F.stage, { height: w => K.clamp(w * 0.32, 180, 230), caption: '핑에 따른 여유 시간', right: '<span class="legend"><span><i style="background:var(--s1)"></i>서버 현재 기준</span><span><i style="background:var(--s2)"></i>지연 보상</span><span><i style="background:var(--s3)"></i>클라이언트 판정</span><span><i style="background:var(--s4)"></i>롤백</span></span>' });
+  const cvScene = K.canvas(F.stage, { height: w => K.clamp(w * 0.34, 150, 210), caption: TR`같은 공격, 두 개의 화면`, right: TR`<span class="legend"><span><i class="dot" style="background:var(--s1)"></i>나</span><span><i class="dot" style="background:var(--s2)"></i>예고 범위</span></span>` });
+  const cvBar = K.canvas(F.stage, { height: w => (w < 520 ? 176 : 132), caption: TR`예고 시간은 어디에 쓰이나`, right: '' });
+  const cvCurve = K.canvas(F.stage, { height: w => K.clamp(w * 0.32, 180, 230), caption: TR`핑에 따른 여유 시간`, right: TR`<span class="legend"><span><i style="background:var(--s1)"></i>서버 현재 기준</span><span><i style="background:var(--s2)"></i>지연 보상</span><span><i style="background:var(--s3)"></i>클라이언트 판정</span><span><i style="background:var(--s4)"></i>롤백</span></span>` });
 
-  const preset = K.presets(F, GENRES.map(g => ({ label: g.label, apply() { sW.set(g.W, false); cSched.set(g.sched, false); cJudge.set(g.judge, false); Object.assign(P, { W: g.W, sched: g.sched, judge: g.judge }); genreSay = g.say; restart(); } })), '장르');
+  const preset = K.presets(F, GENRES.map(g => ({ label: g.label, apply() { sW.set(g.W, false); cSched.set(g.sched, false); cJudge.set(g.judge, false); Object.assign(P, { W: g.W, sched: g.sched, judge: g.judge }); genreSay = g.say; restart(); } })), TR`장르`);
   let genreSay = '';
-  const g1 = K.group(F.controls, '게임 규칙');
-  const sW = K.slider(g1, { label: '예고 시간 (반응해야 하는 구간)', min: 100, max: 2500, step: 10, value: P.W, fmt: v => K.ms(v), onInput: v => { P.W = v; genreSay = ''; preset.clear(); restart(); } });
-  const g2 = K.group(F.controls, '회선·서버');
-  K.slider(g2, { label: '핑(왕복)', min: 0, max: 400, step: 10, value: P.rtt, unit: 'ms', onInput: v => { P.rtt = v; } });
-  K.slider(g2, { label: '보간 버퍼', min: 0, max: 250, step: 10, value: P.interp, unit: 'ms', onInput: v => { P.interp = v; } });
-  K.choice(g2, { label: '서버 틱', value: P.tick, options: [[10, '10/초'], [20, '20/초'], [30, '30/초'], [60, '60/초']], onChange: v => { P.tick = +v; } });
-  const g3 = K.group(F.controls, '사람');
-  K.slider(g3, { label: '사람 반응 시간', min: 150, max: 400, step: 10, value: P.react, unit: 'ms', onInput: v => { P.react = v; } });
-  const g4 = K.group(F.controls, '설계');
-  const cSched = K.choice(g4, { label: '예고 전달', value: P.sched, options: [['arrive', '도착하면 재생'], ['sched', '서버 시각으로 미리 예약']], onChange: v => { P.sched = v; preset.clear(); },
-    hint: '미리 예약: 서버가 예고를 0.4초 먼저 보내고, 모두가 서버 시각에 맞춰 같은 순간에 재생합니다.' });
-  const cJudge = K.choice(g4, { label: '판정 기준', value: P.judge, options: [['now', '서버 현재 기준'], ['lagcomp', '지연 보상'], ['client', '클라이언트 판정'], ['roll', '롤백']], onChange: v => { P.judge = v; preset.clear(); },
-    hint: '이 실험의 지연 보상은 최대 250ms까지 되감습니다(게임마다 0.2~1초). 클라이언트 판정은 내 화면에서 피했으면 성공입니다. 롤백은 내 입력을 누른 프레임에 반영하지만, 상대 동작을 늦게 본 시간은 돌려받지 못합니다.' });
-  K.choice(g4, { label: '관찰 속도', value: P.speed, options: [[1, '1배'], [0.5, '0.5배'], [0.25, '0.25배']], onChange: v => { P.speed = +v; } });
+  const g1 = K.group(F.controls, TR`게임 규칙`);
+  const sW = K.slider(g1, { label: TR`예고 시간 (반응해야 하는 구간)`, min: 100, max: 2500, step: 10, value: P.W, fmt: v => K.ms(v), onInput: v => { P.W = v; genreSay = ''; preset.clear(); restart(); } });
+  const g2 = K.group(F.controls, TR`회선·서버`);
+  K.slider(g2, { label: TR`핑(왕복)`, min: 0, max: 400, step: 10, value: P.rtt, unit: 'ms', onInput: v => { P.rtt = v; } });
+  K.slider(g2, { label: TR`보간 버퍼`, min: 0, max: 250, step: 10, value: P.interp, unit: 'ms', onInput: v => { P.interp = v; } });
+  K.choice(g2, { label: TR`서버 틱`, value: P.tick, options: [[10, TR`10/초`], [20, TR`20/초`], [30, TR`30/초`], [60, TR`60/초`]], onChange: v => { P.tick = +v; } });
+  const g3 = K.group(F.controls, TR`사람`);
+  K.slider(g3, { label: TR`사람 반응 시간`, min: 150, max: 400, step: 10, value: P.react, unit: 'ms', onInput: v => { P.react = v; } });
+  const g4 = K.group(F.controls, TR`설계`);
+  const cSched = K.choice(g4, { label: TR`예고 전달`, value: P.sched, options: [['arrive', TR`도착하면 재생`], ['sched', TR`서버 시각으로 미리 예약`]], onChange: v => { P.sched = v; preset.clear(); },
+    hint: TR`미리 예약: 서버가 예고를 0.4초 먼저 보내고, 모두가 서버 시각에 맞춰 같은 순간에 재생합니다.` });
+  const cJudge = K.choice(g4, { label: TR`판정 기준`, value: P.judge, options: [['now', TR`서버 현재 기준`], ['lagcomp', TR`지연 보상`], ['client', TR`클라이언트 판정`], ['roll', TR`롤백`]], onChange: v => { P.judge = v; preset.clear(); },
+    hint: TR`이 실험의 지연 보상은 최대 250ms까지 되감습니다(게임마다 0.2~1초). 클라이언트 판정은 내 화면에서 피했으면 성공입니다. 롤백은 내 입력을 누른 프레임에 반영하지만, 상대 동작을 늦게 본 시간은 돌려받지 못합니다.` });
+  K.choice(g4, { label: TR`관찰 속도`, value: P.speed, options: [[1, TR`1배`], [0.5, TR`0.5배`], [0.25, TR`0.25배`]], onChange: v => { P.speed = +v; } });
 
-  const stLost = K.stat(F.stats, { label: '네트워크가 쓰는 시간' });
-  const stMargin = K.stat(F.stats, { label: '남는 여유' });
-  const stRes = K.stat(F.stats, { label: '결과' });
-  const stMax = K.stat(F.stats, { label: '피할 수 있는 최대 핑' });
+  const stLost = K.stat(F.stats, { label: TR`네트워크가 쓰는 시간` });
+  const stMargin = K.stat(F.stats, { label: TR`남는 여유` });
+  const stRes = K.stat(F.stats, { label: TR`결과` });
+  const stMax = K.stat(F.stats, { label: TR`피할 수 있는 최대 핑` });
 
   /* ---------------- 계산 ---------------- */
   function parts(rtt, judge = P.judge, sched = P.sched) {
@@ -86,8 +86,8 @@ K.register('windows', function (root) {
     const period = Math.max(P.W, tArrive) + 1300;
     const u = ph % period;
     const panels = [
-      { x: 0, title: '서버의 실제 상태', start: 0, move: P.judge === 'client' ? tPress + p.up : P.judge === 'roll' ? tPress : tArrive, local: false },
-      { x: pw + gap, title: '내 화면', start: tSee, move: tPress, local: true },
+      { x: 0, title: TR`서버의 실제 상태`, start: 0, move: P.judge === 'client' ? tPress + p.up : P.judge === 'roll' ? tPress : tArrive, local: false },
+      { x: pw + gap, title: TR`내 화면`, start: tSee, move: tPress, local: true },
     ];
     panels.forEach(pn => {
       ctx.save();
@@ -98,7 +98,7 @@ K.register('windows', function (root) {
       // 보스와 예고 범위의 자리 (항상 흐리게)
       ctx.fillStyle = K.alpha(C.ink2, 0.5);
       K.rr(ctx, cx - R * 2.2, cy - 14, 16, 28, 4); ctx.fill();
-      K.text(ctx, '보스', cx - R * 2.2 + 8, cy + 24, { align: 'center', size: 10.5, color: C.muted });
+      K.text(ctx, TR`보스`, cx - R * 2.2 + 8, cy + 24, { align: 'center', size: 10.5, color: C.muted });
       ctx.strokeStyle = K.alpha(C.s2, 0.25); ctx.lineWidth = 1;
       ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.stroke();
       // 이 화면에서의 예고 진행 막대
@@ -125,13 +125,13 @@ K.register('windows', function (root) {
           const verdictAt = P.judge === 'client' || P.judge === 'roll' ? hitLocal : Math.max(hitLocal, P.W + P.rtt / 2);
           if (u >= verdictAt) {
             const hit = !dodgedServer;
-            K.text(ctx, hit ? (mv > 0.5 ? '피했는데 맞음' : '피격') : '회피 성공', pw / 2, h - 14, { align: 'center', size: 12.5, weight: 700, color: hit ? C.badInk : C.goodInk });
-          } else K.text(ctx, '판정 기다리는 중…', pw / 2, h - 14, { align: 'center', size: 11.5, color: C.muted });
+            K.text(ctx, hit ? (mv > 0.5 ? TR`피했는데 맞음` : TR`피격`) : TR`회피 성공`, pw / 2, h - 14, { align: 'center', size: 12.5, weight: 700, color: hit ? C.badInk : C.goodInk });
+          } else K.text(ctx, TR`판정 기다리는 중…`, pw / 2, h - 14, { align: 'center', size: 11.5, color: C.muted });
         } else {
-          K.text(ctx, dodgedServer ? '회피' : '적중', pw / 2, h - 14, { align: 'center', size: 12.5, weight: 700, color: dodgedServer ? C.goodInk : C.badInk });
+          K.text(ctx, dodgedServer ? TR`회피` : TR`적중`, pw / 2, h - 14, { align: 'center', size: 12.5, weight: 700, color: dodgedServer ? C.goodInk : C.badInk });
         }
       }
-      if (u < pn.start) K.text(ctx, '아직 예고를 못 봄', pw / 2, h - 14, { align: 'center', size: 11.5, color: C.muted });
+      if (u < pn.start) K.text(ctx, TR`아직 예고를 못 봄`, pw / 2, h - 14, { align: 'center', size: 11.5, color: C.muted });
       ctx.restore();
     });
   }
@@ -143,11 +143,11 @@ K.register('windows', function (root) {
     ctx.clearRect(0, 0, w, h);
     const p = parts(P.rtt);
     const segs = [
-      ['패킷이 내려옴', p.seeDown, C.s1],
-      ['보간 대기', p.seeInterp, C.s2],
-      ['사람 반응', p.react, C.s3],
-      ['입력이 올라감', p.up, C.s4],
-      ['틱 대기', p.tickWait, C.s5],
+      [TR`패킷이 내려옴`, p.seeDown, C.s1],
+      [TR`보간 대기`, p.seeInterp, C.s2],
+      [TR`사람 반응`, p.react, C.s3],
+      [TR`입력이 올라감`, p.up, C.s4],
+      [TR`틱 대기`, p.tickWait, C.s5],
     ];
     const total = segs.reduce((a, s) => a + s[1], 0);
     const span = Math.max(P.W, total) * 1.08;
@@ -173,13 +173,13 @@ K.register('windows', function (root) {
       const x0 = X(total - p.comp), x1 = X(total);
       ctx.strokeStyle = C.ink2; ctx.lineWidth = 1.5;
       ctx.beginPath(); ctx.moveTo(x0, y - 6); ctx.lineTo(x0, y - 12); ctx.lineTo(x1, y - 12); ctx.lineTo(x1, y - 6); ctx.stroke();
-      K.text(ctx, `${P.judge === 'client' ? '내 화면 기준 판정으로' : P.judge === 'roll' ? '누른 프레임 기준 판정으로' : '되감기로'} 돌려받음 ${Math.round(p.comp)}ms`, (x0 + x1) / 2, y - 21, { align: 'center', size: 10.5, weight: 600, color: C.ink });
+      K.text(ctx, TR`${P.judge === 'client' ? TR`내 화면 기준 판정으로` : P.judge === 'roll' ? TR`누른 프레임 기준 판정으로` : TR`되감기로`} 돌려받음 ${Math.round(p.comp)}ms`, (x0 + x1) / 2, y - 21, { align: 'center', size: 10.5, weight: 600, color: C.ink });
     }
     // 적중 시각
     const xw = X(P.W);
     ctx.strokeStyle = C.bad; ctx.lineWidth = 2;
     ctx.beginPath(); ctx.moveTo(xw, y - 8); ctx.lineTo(xw, y + bh + 8); ctx.stroke();
-    K.text(ctx, `공격 적중 (${K.ms(P.W)})`, Math.min(xw, Rr - 4), y + bh + 18, { align: xw > Rr - 90 ? 'right' : 'center', size: 11, weight: 700, color: C.badInk });
+    K.text(ctx, TR`공격 적중 (${K.ms(P.W)})`, Math.min(xw, Rr - 4), y + bh + 18, { align: xw > Rr - 90 ? 'right' : 'center', size: 11, weight: 700, color: C.badInk });
     const usedEnd = X(p.used);
     if (p.used > P.W) {
       ctx.fillStyle = K.alpha(C.bad, 0.18);
@@ -188,7 +188,7 @@ K.register('windows', function (root) {
       ctx.strokeStyle = C.goodInk; ctx.setLineDash([3, 3]); ctx.lineWidth = 1.2;
       ctx.strokeRect(usedEnd, y + 3, xw - usedEnd, bh - 6);
       ctx.setLineDash([]);
-      if (xw - usedEnd > 56) K.text(ctx, `여유 ${Math.round(P.W - p.used)}ms`, (usedEnd + xw) / 2, y + bh / 2, { align: 'center', size: 10.5, weight: 600, color: C.goodInk });
+      if (xw - usedEnd > 56) K.text(ctx, TR`여유 ${Math.round(P.W - p.used)}ms`, (usedEnd + xw) / 2, y + bh / 2, { align: 'center', size: 10.5, weight: 600, color: C.goodInk });
     }
     // 범례 (좁은 화면은 두 줄)
     const items = segs.filter(s => s[1] > 0.5);
@@ -214,7 +214,7 @@ K.register('windows', function (root) {
     const lo = Math.min(-400, P.W - 900), hi = Math.max(200, P.W);
     const step = (hi - lo) > 2000 ? 1000 : 250;
     const ticks = []; for (let v = Math.ceil(lo / step) * step; v <= hi; v += step) ticks.push(v);
-    const sc = K.plot(ctx, box, { x0: 0, x1: 400, y0: lo, y1: hi, yTicks: ticks, yFmt: v => v + '', xTicks: [0, 100, 200, 300, 400], xFmt: v => v + 'ms', yTitle: '여유 시간 (ms, 0보다 아래면 못 피함)', xTitle: '핑' });
+    const sc = K.plot(ctx, box, { x0: 0, x1: 400, y0: lo, y1: hi, yTicks: ticks, yFmt: v => v + '', xTicks: [0, 100, 200, 300, 400], xFmt: v => v + 'ms', yTitle: TR`여유 시간 (ms, 0보다 아래면 못 피함)`, xTitle: TR`핑` });
     ctx.fillStyle = K.alpha(C.bad, 0.06);
     ctx.fillRect(box.x, sc.y(0), box.w, sc.y(lo) - sc.y(0));
     K.hline(ctx, sc, 0, { color: C.badInk });
@@ -227,37 +227,37 @@ K.register('windows', function (root) {
     ctx.strokeStyle = C.ink2; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(x, box.y); ctx.lineTo(x, box.y + box.h); ctx.stroke(); ctx.setLineDash([]);
     const m = parts(P.rtt).margin;
     K.dot(ctx, x, sc.y(K.clamp(m, lo, hi)), 5, P.judge === 'now' ? C.s1 : P.judge === 'lagcomp' ? C.s2 : P.judge === 'roll' ? C.s4 : C.s3);
-    K.text(ctx, `지금 ${P.rtt}ms`, Math.min(x + 6, box.x + box.w - 60), box.y + 8, { size: 11, weight: 600, color: C.ink });
+    K.text(ctx, TR`지금 ${P.rtt}ms`, Math.min(x + 6, box.x + box.w - 60), box.y + 8, { size: 11, weight: 600, color: C.ink });
   }
   K.hover(cvCurve, x => {
     const box = cBox();
     const r = Math.round(((x - box.x) / box.w) * 40) * 10;
     if (r < 0 || r > 400) return null;
-    const f = j => { const m = parts(r, j).margin; return `${Math.round(m)}ms${m < 0 ? ' (못 피함)' : ''}`; };
-    return `핑 <b>${r}ms</b><br>서버 현재 기준 ${f('now')}<br>지연 보상 ${f('lagcomp')}<br>클라이언트 판정 ${f('client')}<br>롤백 ${f('roll')}`;
+    const f = j => { const m = parts(r, j).margin; return `${Math.round(m)}ms${m < 0 ? TR` (못 피함)` : ''}`; };
+    return TR`핑 <b>${r}ms</b><br>서버 현재 기준 ${f('now')}<br>지연 보상 ${f('lagcomp')}<br>클라이언트 판정 ${f('client')}<br>롤백 ${f('roll')}`;
   });
 
   /* ---------------- 수치·해설 ---------------- */
   function updateText() {
     const p = parts(P.rtt);
     const net = p.seeDown + p.seeInterp + p.up + p.tickWait - p.comp;
-    stLost.set(K.ms(Math.max(0, net)), net > P.W * 0.4 ? 'bad' : net > P.W * 0.2 ? 'warn' : 'good', `예고 ${K.ms(P.W)} 중`);
+    stLost.set(K.ms(Math.max(0, net)), net > P.W * 0.4 ? 'bad' : net > P.W * 0.2 ? 'warn' : 'good', TR`예고 ${K.ms(P.W)} 중`);
     stMargin.set(K.ms(p.margin), p.margin < 0 ? 'bad' : p.margin < 100 ? 'warn' : 'good');
-    stRes.set(p.margin < 0 ? '못 피함' : '피할 수 있음', p.margin < 0 ? 'bad' : 'good');
+    stRes.set(p.margin < 0 ? TR`못 피함` : TR`피할 수 있음`, p.margin < 0 ? 'bad' : 'good');
     const mp = maxPing(P.judge);
-    stMax.set(Number.isFinite(mp) ? (mp < 0 ? '0에서도 불가' : K.ms(mp)) : '1초 넘게', mp < 60 ? 'bad' : mp < 150 ? 'warn' : 'good');
+    stMax.set(Number.isFinite(mp) ? (mp < 0 ? TR`0에서도 불가` : K.ms(mp)) : TR`1초 넘게`, mp < 60 ? 'bad' : mp < 150 ? 'warn' : 'good');
     let msg = genreSay ? genreSay + ' ' : '';
     if (p.margin < 0) {
-      msg = `${K.flag('bad')}${msg}예고 ${K.ms(P.W)} 중 네트워크가 ${K.ms(Math.max(0, net))}, 사람 반응이 ${K.ms(P.react)}를 씁니다. <b>${K.ms(-p.margin)} 모자라서 실력과 상관없이 맞습니다</b>. 플레이어는 “분명 피했는데 맞았다”(씹힘·롤백)고 느낍니다.`;
-      if (P.judge === 'now') msg += ' 지연 보상이나 예고 예약으로 네트워크가 쓰는 시간을 줄일 수 있습니다.';
+      msg = TR`${K.flag('bad')}${msg}예고 ${K.ms(P.W)} 중 네트워크가 ${K.ms(Math.max(0, net))}, 사람 반응이 ${K.ms(P.react)}를 씁니다. <b>${K.ms(-p.margin)} 모자라서 실력과 상관없이 맞습니다</b>. 플레이어는 “분명 피했는데 맞았다”(씹힘·롤백)고 느낍니다.`;
+      if (P.judge === 'now') msg += TR` 지연 보상이나 예고 예약으로 네트워크가 쓰는 시간을 줄일 수 있습니다.`;
     } else if (p.margin < 100) {
-      msg = `${K.flag('warn')}${msg}아슬아슬합니다. 여유가 ${K.ms(p.margin)}뿐이라 핑이 조금만 튀어도 억울한 피격이 생깁니다.`;
+      msg = TR`${K.flag('warn')}${msg}아슬아슬합니다. 여유가 ${K.ms(p.margin)}뿐이라 핑이 조금만 튀어도 억울한 피격이 생깁니다.`;
     } else {
-      msg = `${K.flag('good')}${msg}여유가 ${K.ms(p.margin)} 남습니다. 이 게임은 핑 ${Number.isFinite(mp) ? K.ms(mp) : '1초 넘게'}까지 버팁니다.`;
+      msg = TR`${K.flag('good')}${msg}여유가 ${K.ms(p.margin)} 남습니다. 이 게임은 핑 ${Number.isFinite(mp) ? K.ms(mp) : TR`1초 넘게`}까지 버팁니다.`;
     }
-    if (P.judge === 'client') msg += ' 클라이언트 판정은 내 화면만 보면 공정하지만, 조작된 클라이언트의 판정도 그대로 인정한다는 대가가 있습니다.';
-    if (P.judge === 'lagcomp') msg += ' 지연 보상은 내가 본 시점으로 판정해 주지만, 다른 사람 화면에서는 “맞은 것 같은데 안 맞음”으로 보일 수 있습니다.';
-    if (P.judge === 'roll') msg += ` 롤백은 내 입력을 누른 프레임 그대로 인정하지만, 상대 동작을 늦게 본 ${K.ms(p.seeDown)}는 돌려받지 못합니다. 그만큼 동작 앞부분이 잘려 보입니다.`;
+    if (P.judge === 'client') msg += TR` 클라이언트 판정은 내 화면만 보면 공정하지만, 조작된 클라이언트의 판정도 그대로 인정한다는 대가가 있습니다.`;
+    if (P.judge === 'lagcomp') msg += TR` 지연 보상은 내가 본 시점으로 판정해 주지만, 다른 사람 화면에서는 “맞은 것 같은데 안 맞음”으로 보일 수 있습니다.`;
+    if (P.judge === 'roll') msg += TR` 롤백은 내 입력을 누른 프레임 그대로 인정하지만, 상대 동작을 늦게 본 ${K.ms(p.seeDown)}는 돌려받지 못합니다. 그만큼 동작 앞부분이 잘려 보입니다.`;
     F.say(msg);
   }
 

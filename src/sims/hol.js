@@ -2,15 +2,15 @@
    뒤에 도착한 패킷을 수신 버퍼에 붙잡아 둔다. 같은 손실을 UDP 에도 똑같이 주고 나란히 비교한다. */
 K.register('hol', function (root) {
   const F = K.frame(root, {
-    kicker: '소켓과 프로토콜 · TCP vs UDP',
-    title: 'TCP는 잃어버린 패킷 하나 때문에 뒤의 패킷까지 모두 막힌다',
-    lead: '서버가 캐릭터 위치를 50ms마다 보냅니다. 위는 TCP, 아래는 UDP이고, 두 연결에서 똑같은 패킷이 똑같이 사라집니다. TCP는 받은 데이터를 <b>보낸 순서대로만</b> 게임에 넘겨줍니다. 하나가 빠지면 그 패킷이 다시 올 때까지 뒤에 도착한 패킷도 모두 기다립니다. UDP는 <b>도착하는 대로</b> 넘겨주고, 빠진 것은 건너뜁니다. 다시 보내는 규칙은 교과서 방식(뒤따르는 패킷 3개가 보내는 중복 ACK, 또는 타이머)으로 단순화했습니다. 최신 리눅스 기본인 RACK은 뒤따르는 패킷 하나로도 판단해 첫 재전송이 조금 더 빠릅니다. 또 실제 TCP는 타이머 재전송 뒤에는 한 번에 하나만 보내고 새 패킷은 서버에 남겨 두는데, 이 실험은 새 패킷을 계속 보내 수신 버퍼에 쌓이게 그렸습니다. 어느 쪽이든 게임에 전달되지 못하는 것은 같습니다(06 TCP 재전송 해부의 실험에서 비교).',
+    kicker: TR`소켓과 프로토콜 · TCP vs UDP`,
+    title: TR`TCP는 잃어버린 패킷 하나 때문에 뒤의 패킷까지 모두 막힌다`,
+    lead: TR`서버가 캐릭터 위치를 50ms마다 보냅니다. 위는 TCP, 아래는 UDP이고, 두 연결에서 똑같은 패킷이 똑같이 사라집니다. TCP는 받은 데이터를 <b>보낸 순서대로만</b> 게임에 넘겨줍니다. 하나가 빠지면 그 패킷이 다시 올 때까지 뒤에 도착한 패킷도 모두 기다립니다. UDP는 <b>도착하는 대로</b> 넘겨주고, 빠진 것은 건너뜁니다. 다시 보내는 규칙은 교과서 방식(뒤따르는 패킷 3개가 보내는 중복 ACK, 또는 타이머)으로 단순화했습니다. 최신 리눅스 기본인 RACK은 뒤따르는 패킷 하나로도 판단해 첫 재전송이 조금 더 빠릅니다. 또 실제 TCP는 타이머 재전송 뒤에는 한 번에 하나만 보내고 새 패킷은 서버에 남겨 두는데, 이 실험은 새 패킷을 계속 보내 수신 버퍼에 쌓이게 그렸습니다. 어느 쪽이든 게임에 전달되지 못하는 것은 같습니다(06 TCP 재전송 해부의 실험에서 비교).`,
     tries: [
-      '<b>다음 패킷 하나 잃어버리기</b>를 누르세요. TCP의 “게임에 전달” 줄이 끊겼다가 한 점에 몰리는 곳(몰아치기)을 찾아보세요. UDP는 하나만 빠지고 끝납니다.',
-      '<b>핑(RTT)</b>을 250ms로 올리고 다시 잃어버려 보세요. 재전송이 한 번 왕복해야 하니 멈춤도 그만큼 길어집니다.',
-      '<b>와이파이 순간 끊김</b>을 누르세요. 끊긴 0.5초 동안은 둘 다 멈추지만, TCP는 그 사이 보낸 재전송까지 사라져서 훨씬 늦게 풀립니다.',
-      '<b>연속 손실 (백오프)</b>를 누른 뒤 <b>RTO 최소값</b>을 1초로 바꿔 보세요. 원본과 재전송 두 번이 연달아 사라지면 다시 보내기까지 기다리는 시간이 매번 두 배로 늘어, 멈춤이 3초를 넘깁니다(백오프).',
-      '<b>관찰 속도 0.25×</b>로 늦추면 수신 버퍼 막대가 계단처럼 자라다가 한꺼번에 풀리는 순간을 볼 수 있습니다.',
+      TR`<b>다음 패킷 하나 잃어버리기</b>를 누르세요. TCP의 “게임에 전달” 줄이 끊겼다가 한 점에 몰리는 곳(몰아치기)을 찾아보세요. UDP는 하나만 빠지고 끝납니다.`,
+      TR`<b>핑(RTT)</b>을 250ms로 올리고 다시 잃어버려 보세요. 재전송이 한 번 왕복해야 하니 멈춤도 그만큼 길어집니다.`,
+      TR`<b>와이파이 순간 끊김</b>을 누르세요. 끊긴 0.5초 동안은 둘 다 멈추지만, TCP는 그 사이 보낸 재전송까지 사라져서 훨씬 늦게 풀립니다.`,
+      TR`<b>연속 손실 (백오프)</b>를 누른 뒤 <b>RTO 최소값</b>을 1초로 바꿔 보세요. 원본과 재전송 두 번이 연달아 사라지면 다시 보내기까지 기다리는 시간이 매번 두 배로 늘어, 멈춤이 3초를 넘깁니다(백오프).`,
+      TR`<b>관찰 속도 0.25×</b>로 늦추면 수신 버퍼 막대가 계단처럼 자라다가 한꺼번에 풀리는 순간을 볼 수 있습니다.`,
     ],
     layout: 'stack',
   });
@@ -23,34 +23,34 @@ K.register('hol', function (root) {
 
   const cv = K.canvas(F.stage, {
     height: 2 * LANE + 36,
-    caption: '패킷의 이동 경로: 서버 → 내 PC → 게임',
-    right: '<span class="legend"><span><i style="background:var(--s1)"></i>TCP</span><span><i style="background:var(--s2)"></i>UDP</span><span><i class="box" style="background:var(--warn)"></i>순서 대기</span><span>× 손실 · 점선 재전송</span></span>',
+    caption: TR`패킷의 이동 경로: 서버 → 내 PC → 게임`,
+    right: TR`<span class="legend"><span><i style="background:var(--s1)"></i>TCP</span><span><i style="background:var(--s2)"></i>UDP</span><span><i class="box" style="background:var(--warn)"></i>순서 대기</span><span>× 손실 · 점선 재전송</span></span>`,
   });
 
   /* ---------- 조작부 ---------- */
-  const g1 = K.group(F.controls, '회선 상태');
-  const sRtt = K.slider(g1, { label: '핑(RTT, 왕복 시간)', min: 20, max: 400, step: 10, value: P.rtt, unit: 'ms', onInput: v => { P.rtt = v; rtoHint(); } });
-  const sLoss = K.slider(g1, { label: '손실률', min: 0, max: 30, step: 1, value: P.loss * 100, unit: '%', onInput: v => { P.loss = v / 100; } });
-  const sJit = K.slider(g1, { label: '지터(도착 간격의 흔들림)', min: 0, max: 50, step: 5, value: P.jit, unit: 'ms', onInput: v => { P.jit = v; rtoHint(); } });
-  const g2 = K.group(F.controls, '서버와 TCP 설정');
-  const cIv = K.choice(g2, { label: '전송 간격', value: P.iv, options: [[50, '50ms (20Hz)'], [33, '33ms (30Hz)'], [100, '100ms (10Hz)']], onChange: v => { P.iv = +v; } });
+  const g1 = K.group(F.controls, TR`회선 상태`);
+  const sRtt = K.slider(g1, { label: TR`핑(RTT, 왕복 시간)`, min: 20, max: 400, step: 10, value: P.rtt, unit: 'ms', onInput: v => { P.rtt = v; rtoHint(); } });
+  const sLoss = K.slider(g1, { label: TR`손실률`, min: 0, max: 30, step: 1, value: P.loss * 100, unit: '%', onInput: v => { P.loss = v / 100; } });
+  const sJit = K.slider(g1, { label: TR`지터(도착 간격의 흔들림)`, min: 0, max: 50, step: 5, value: P.jit, unit: 'ms', onInput: v => { P.jit = v; rtoHint(); } });
+  const g2 = K.group(F.controls, TR`서버와 TCP 설정`);
+  const cIv = K.choice(g2, { label: TR`전송 간격`, value: P.iv, options: [[50, '50ms (20Hz)'], [33, '33ms (30Hz)'], [100, '100ms (10Hz)']], onChange: v => { P.iv = +v; } });
   const cRto = K.choice(g2, {
-    label: 'RTO 최소값 (재전송 타이머)', value: P.rtoMin,
-    options: [[200, '200ms 리눅스 기본'], [1000, '1초 표준 권장값']], onChange: v => { P.rtoMin = +v; rtoHint(); }, hint: ' ',
+    label: TR`RTO 최소값 (재전송 타이머)`, value: P.rtoMin,
+    options: [[200, TR`200ms 리눅스 기본`], [1000, TR`1초 표준 권장값`]], onChange: v => { P.rtoMin = +v; rtoHint(); }, hint: ' ',
   });
   const rtoHintEl = cRto.el.querySelector('.ctl-hint');
-  function rtoHint() { rtoHintEl.innerHTML = `지금 재전송 타이머 ≈ <b>${K.ms(RTO())}</b>. 재전송도 사라지면 두 배씩 늘어납니다.`; }
-  const g3 = K.group(F.controls, '사건 일으키기');
-  K.button(g3, { label: '다음 패킷 하나 잃어버리기', onClick: () => trigger('one') }).classList.add('hol-btn');
-  K.button(g3, { label: '0.5초 동안 전부 잃어버리기 (와이파이 순간 끊김)', onClick: () => trigger('wifi') }).classList.add('hol-btn');
-  const tAuto = K.toggle(g3, { label: '4초마다 마지막 사건 반복', value: P.auto, onChange: v => { P.auto = v; autoAt = t + 400; } });
-  const cSpd = K.choice(g3, { label: '관찰 속도', value: 1, options: [[1, '1×'], [0.25, '0.25× 느리게']], onChange: v => { P.speed = +v; } });
+  function rtoHint() { rtoHintEl.innerHTML = TR`지금 재전송 타이머 ≈ <b>${K.ms(RTO())}</b>. 재전송도 사라지면 두 배씩 늘어납니다.`; }
+  const g3 = K.group(F.controls, TR`사건 일으키기`);
+  K.button(g3, { label: TR`다음 패킷 하나 잃어버리기`, onClick: () => trigger('one') }).classList.add('hol-btn');
+  K.button(g3, { label: TR`0.5초 동안 전부 잃어버리기 (와이파이 순간 끊김)`, onClick: () => trigger('wifi') }).classList.add('hol-btn');
+  const tAuto = K.toggle(g3, { label: TR`4초마다 마지막 사건 반복`, value: P.auto, onChange: v => { P.auto = v; autoAt = t + 400; } });
+  const cSpd = K.choice(g3, { label: TR`관찰 속도`, value: 1, options: [[1, '1×'], [0.25, TR`0.25× 느리게`]], onChange: v => { P.speed = +v; } });
 
-  const stFreeze = K.stat(F.stats, { label: 'TCP 최대 멈춤', sub: '최근 10초' });
-  const stClump = K.stat(F.stats, { label: 'TCP 몰아치기', unit: '개', sub: '한 번에 전달된 최대 개수' });
-  const stULoss = K.stat(F.stats, { label: 'UDP 빠진 개수', unit: '개' });
-  const stDT = K.stat(F.stats, { label: 'TCP 평균 지연', sub: '보냄 → 게임에 전달' });
-  const stDU = K.stat(F.stats, { label: 'UDP 평균 지연', sub: '보냄 → 게임에 전달' });
+  const stFreeze = K.stat(F.stats, { label: TR`TCP 최대 멈춤`, sub: TR`최근 10초` });
+  const stClump = K.stat(F.stats, { label: TR`TCP 몰아치기`, unit: TR`개`, sub: TR`한 번에 전달된 최대 개수` });
+  const stULoss = K.stat(F.stats, { label: TR`UDP 빠진 개수`, unit: TR`개` });
+  const stDT = K.stat(F.stats, { label: TR`TCP 평균 지연`, sub: TR`보냄 → 게임에 전달` });
+  const stDU = K.stat(F.stats, { label: TR`UDP 평균 지연`, sub: TR`보냄 → 게임에 전달` });
 
   /* ---------- 모형 ---------- */
   let t, nextSend, seqNo, pk, ev, holes, tcpNext, udpNewest, batches, blackout;
@@ -184,12 +184,12 @@ K.register('hol', function (root) {
     const t0 = t - G.Wt;
     // 제목
     K.text(ctx, tcp ? 'TCP' : 'UDP', 10, top + 12, { size: 13, weight: 700, color: C.ink });
-    if (!G.narrow) K.text(ctx, tcp ? '보낸 순서대로만 전달' : '도착하는 대로 전달', 44, top + 12, { size: 11.5, color: C.muted });
+    if (!G.narrow) K.text(ctx, tcp ? TR`보낸 순서대로만 전달` : TR`도착하는 대로 전달`, 44, top + 12, { size: 11.5, color: C.muted });
     if (!tcp) {
       // 캐릭터 띠 범례
       const xr = G.x1, yy = top + 12;
       ctx.font = K.font(11);
-      const a = G.narrow ? '서버' : '서버의 실제 위치', b = G.narrow ? '내 화면' : '내 화면 속 캐릭터';
+      const a = G.narrow ? TR`서버` : TR`서버의 실제 위치`, b = G.narrow ? TR`내 화면` : TR`내 화면 속 캐릭터`;
       const wa = ctx.measureText(a).width;
       K.text(ctx, a, xr, yy, { size: 11, color: C.muted, align: 'right' });
       ctx.strokeStyle = C.muted; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(xr - wa - 9, yy, 4, 0, 7); ctx.stroke();
@@ -198,7 +198,7 @@ K.register('hol', function (root) {
       ctx.fillStyle = C.ink2; ctx.beginPath(); ctx.arc(xb - ctx.measureText(b).width - 8, yy, 4, 0, 7); ctx.fill();
     }
     // 레일
-    const names = G.narrow ? ['보냄', '도착', '전달', '위치'] : ['서버 보냄', '내 PC 도착', '게임에 전달', '캐릭터 위치'];
+    const names = G.narrow ? [TR`보냄`, TR`도착`, TR`전달`, TR`위치`] : [TR`서버 보냄`, TR`내 PC 도착`, TR`게임에 전달`, TR`캐릭터 위치`];
     [R.y1, R.y2, R.y3].forEach((y, i) => {
       ctx.strokeStyle = C.line; ctx.lineWidth = 1;
       ctx.beginPath(); ctx.moveTo(G.x0, Math.round(y) + 0.5); ctx.lineTo(G.x1, Math.round(y) + 0.5); ctx.stroke();
@@ -220,7 +220,7 @@ K.register('hol', function (root) {
       const xa = G.X(a), xb = G.X(b);
       ctx.fillStyle = K.alpha(C.bad, 0.13);
       ctx.fillRect(xa, R.y3 - 6, xb - xa, 12);
-      const label = (G.narrow ? '' : '멈춤 ') + K.ms(b - a);
+      const label = (G.narrow ? '' : TR`멈춤 `) + K.ms(b - a);
       ctx.font = K.font(10.5, 600);
       if (ctx.measureText(label).width + 8 < xb - Math.max(xa, G.x0)) K.text(ctx, label, (Math.max(xa, G.x0) + xb) / 2, R.y3 + 14, { size: 10.5, weight: 600, color: C.badInk, align: 'center' });
     }
@@ -246,8 +246,8 @@ K.register('hol', function (root) {
         c += dd; px = tt;
         if (c === 0 && peak >= 2) {
           ctx.font = K.font(10.5, 600);
-          const lw = ctx.measureText(peak + '개 대기').width;
-          label(ctx, peak + '개 대기', K.clamp(peakX, G.x0 + lw, G.x1 - 2), R.y2 - Math.min(20, 3 + peak * 2.2) - 7, { color: C.warnInk, align: 'right' });
+          const lw = ctx.measureText(peak + TR`개 대기`).width;
+          label(ctx, peak + TR`개 대기`, K.clamp(peakX, G.x0 + lw, G.x1 - 2), R.y2 - Math.min(20, 3 + peak * 2.2) - 7, { color: C.warnInk, align: 'right' });
           peak = 0;
         }
       }
@@ -255,7 +255,7 @@ K.register('hol', function (root) {
         const hh = Math.min(20, 3 + c * 2.2), xa = G.X(px);
         ctx.fillStyle = K.alpha(C.warn, 0.55); ctx.fillRect(xa, R.y2 - hh, G.X(t) - xa, hh);
         ctx.fillStyle = C.warn; ctx.fillRect(xa, R.y2 - hh, G.X(t) - xa, 1.5);
-        label(ctx, c + '개 대기 중', G.x1 - 2, R.y2 - hh - 7, { weight: 700, color: C.warnInk, align: 'right' });
+        label(ctx, c + TR`개 대기 중`, G.x1 - 2, R.y2 - hh - 7, { weight: 700, color: C.warnInk, align: 'right' });
       }
     }
 
@@ -326,9 +326,9 @@ K.register('hol', function (root) {
     K.dot(ctx, dx, R.y4, 5, col, C.paper);
     const since = t - (tcp ? lastTD : lastUD);
     let tag = null, tc = C.badInk;
-    if (since > freezeThr()) tag = '멈춤 ' + K.ms(since);
-    else if (tcp && t - clump.t < 500) { tag = '몰아치기 ×' + clump.n; tc = C.warnInk; }
-    else if (!tcp && t - udpJump.t < 450) { tag = udpJump.n + '개 건너뜀'; tc = C.warnInk; }
+    if (since > freezeThr()) tag = TR`멈춤 ` + K.ms(since);
+    else if (tcp && t - clump.t < 500) { tag = TR`몰아치기 ×` + clump.n; tc = C.warnInk; }
+    else if (!tcp && t - udpJump.t < 450) { tag = udpJump.n + TR`개 건너뜀`; tc = C.warnInk; }
     if (tag) {
       // 유령(서버 위치)은 늘 앞쪽에 있으니 글자는 점 왼쪽에, 자리가 없으면 둘 다 지난 오른쪽에
       ctx.font = K.font(11, 700);
@@ -354,10 +354,10 @@ K.register('hol', function (root) {
     const ay = h - 10;
     for (let k = 0; k <= G.Wt / 1000; k++) {
       const x = G.X(t - k * 1000);
-      K.text(ctx, k === 0 ? '지금' : '−' + k + '초', x, ay, { size: 10.5, mono: k > 0, color: C.muted, align: k === 0 ? 'right' : 'center' });
+      K.text(ctx, k === 0 ? TR`지금` : '−' + k + TR`초`, x, ay, { size: 10.5, mono: k > 0, color: C.muted, align: k === 0 ? 'right' : 'center' });
     }
-    if (blackout && t >= blackout.a && t < blackout.b + 200) K.text(ctx, '와이파이 끊김', G.x1, 12, { size: 11, weight: 700, color: C.badInk, align: 'right' });
-    else if (P.speed < 1) K.text(ctx, '0.25× 느리게 보는 중', G.x1, 12, { size: 11, color: C.muted, align: 'right' });
+    if (blackout && t >= blackout.a && t < blackout.b + 200) K.text(ctx, TR`와이파이 끊김`, G.x1, 12, { size: 11, weight: 700, color: C.badInk, align: 'right' });
+    else if (P.speed < 1) K.text(ctx, TR`0.25× 느리게 보는 중`, G.x1, 12, { size: 11, color: C.muted, align: 'right' });
   }
 
   K.hover(cv, (x, y) => {
@@ -377,19 +377,19 @@ K.register('hol', function (root) {
     if (tcp) {
       if (onDel && p.tD != null) {
         const b = batches.find(q => Math.abs(q.t - p.tD) < 0.01);
-        if (b && b.c > 1) return `<b>${b.c}개가 한꺼번에 게임에 전달</b><br>#${b.n} ~ #${b.n + b.c - 1}<br>직전 전달 뒤 ${K.ms(b.gap)} 만에`;
+        if (b && b.c > 1) return TR`<b>${b.c}개가 한꺼번에 게임에 전달</b><br>#${b.n} ~ #${b.n + b.c - 1}<br>직전 전달 뒤 ${K.ms(b.gap)} 만에`;
       }
       let s = `<b>#${p.n}</b>`;
-      if (p.lost) s += ` · 처음 보낸 것이 사라짐<br>재전송 ${p.tx.length - 1}번` + (p.tx.some(x => x.k === 2) ? ' (타이머)' : p.tx.length > 1 ? ' (빠른 재전송)' : '');
-      if (p.tA != null) s += `<br>내 PC 도착 +${K.ms(p.tA - p.s)}`;
-      if (p.tD != null) s += `<br>순서 대기 ${K.ms(p.tD - p.tA)}<br>게임 전달 +${K.ms(p.tD - p.s)}`;
-      else if (p.tA != null) s += '<br>앞 패킷을 기다리는 중';
+      if (p.lost) s += TR` · 처음 보낸 것이 사라짐<br>재전송 ${p.tx.length - 1}번` + (p.tx.some(x => x.k === 2) ? TR` (타이머)` : p.tx.length > 1 ? TR` (빠른 재전송)` : '');
+      if (p.tA != null) s += TR`<br>내 PC 도착 +${K.ms(p.tA - p.s)}`;
+      if (p.tD != null) s += TR`<br>순서 대기 ${K.ms(p.tD - p.tA)}<br>게임 전달 +${K.ms(p.tD - p.s)}`;
+      else if (p.tA != null) s += TR`<br>앞 패킷을 기다리는 중`;
       return s;
     }
-    if (p.lost) return `<b>#${p.n}</b> 사라짐<br>UDP는 다시 보내지 않습니다. 게임은 이 업데이트를 건너뜁니다.`;
-    if (p.late) return `<b>#${p.n}</b> 늦게 도착<br>더 새로운 업데이트가 먼저 와서 버렸습니다.`;
-    if (p.uD != null) return `<b>#${p.n}</b> 도착하자마자 전달<br>보냄 → 게임 +${K.ms(p.uD - p.s)}`;
-    return `<b>#${p.n}</b> 가는 중`;
+    if (p.lost) return TR`<b>#${p.n}</b> 사라짐<br>UDP는 다시 보내지 않습니다. 게임은 이 업데이트를 건너뜁니다.`;
+    if (p.late) return TR`<b>#${p.n}</b> 늦게 도착<br>더 새로운 업데이트가 먼저 와서 버렸습니다.`;
+    if (p.uD != null) return TR`<b>#${p.n}</b> 도착하자마자 전달<br>보냄 → 게임 +${K.ms(p.uD - p.s)}`;
+    return TR`<b>#${p.n}</b> 가는 중`;
   });
 
   /* ---------- 프리셋 ---------- */
@@ -398,11 +398,11 @@ K.register('hol', function (root) {
     cRto.set(o.rto || 200); cIv.set(50); tAuto.set(o.auto !== false);
   }
   K.presets(F, [
-    { label: '손실 없음', apply() { setAll({ rtt: 100, loss: 0, auto: false }); } },
-    { label: '가끔 손실 (2%)', apply() { setAll({ rtt: 100, loss: 2 }); trigger('one'); } },
-    { label: '먼 서버 + 손실 (RTT 250, 3%)', apply() { setAll({ rtt: 250, loss: 3 }); trigger('one'); } },
-    { label: '와이파이 순간 끊김', apply() { setAll({ rtt: 60, loss: 0 }); trigger('wifi'); } },
-    { label: '연속 손실 (백오프)', apply() { setAll({ rtt: 100, loss: 0 }); trigger('burst'); } },
+    { label: TR`손실 없음`, apply() { setAll({ rtt: 100, loss: 0, auto: false }); } },
+    { label: TR`가끔 손실 (2%)`, apply() { setAll({ rtt: 100, loss: 2 }); trigger('one'); } },
+    { label: TR`먼 서버 + 손실 (RTT 250, 3%)`, apply() { setAll({ rtt: 250, loss: 3 }); trigger('one'); } },
+    { label: TR`와이파이 순간 끊김`, apply() { setAll({ rtt: 60, loss: 0 }); trigger('wifi'); } },
+    { label: TR`연속 손실 (백오프)`, apply() { setAll({ rtt: 100, loss: 0 }); trigger('burst'); } },
   ]).buttons[1].setAttribute('aria-pressed', 'true');
   rtoHint();
 
@@ -432,7 +432,7 @@ K.register('hol', function (root) {
     const S = stats(), base = P.rtt / 2 + P.jit / 2;
     stFreeze.set(K.ms(S.maxGap), S.maxGap <= 2 * P.iv + P.jit + 5 ? 'good' : S.maxGap <= 250 ? 'warn' : 'bad');
     stClump.set(K.n(S.maxC), S.maxC <= 1 ? 'good' : S.maxC <= 4 ? 'warn' : 'bad');
-    stULoss.set(K.n(S.uLost), S.uLost === 0 ? 'good' : S.uLost / Math.max(1, S.uAll) < 0.05 ? 'warn' : 'bad', `최근 10초 ${S.uAll}개 중`);
+    stULoss.set(K.n(S.uLost), S.uLost === 0 ? 'good' : S.uLost / Math.max(1, S.uAll) < 0.05 ? 'warn' : 'bad', TR`최근 10초 ${S.uAll}개 중`);
     stDT.set(K.ms(S.aT), S.aT < base + 15 ? 'good' : S.aT < base + 80 ? 'warn' : 'bad');
     stDU.set(K.ms(S.aU), S.aU < base + 15 ? 'good' : S.aU < base + 80 ? 'warn' : 'bad');
 
@@ -442,31 +442,31 @@ K.register('hol', function (root) {
     for (let i = batches.length - 1; i >= 0 && t - batches[i].t < 1600; i--) if (batches[i].c >= 3) { lb = batches[i]; break; }
     let msg;
     if (blackout && t >= blackout.a && t < blackout.b) {
-      msg = `${K.flag('bad')}<b>와이파이가 끊겼습니다.</b> 0.5초 동안은 어떤 패킷도 오지 않으니 TCP와 UDP 모두 캐릭터가 <b>멈춤</b> 상태입니다. 차이는 연결이 돌아온 직후에 나옵니다. TCP는 끊긴 사이 보낸 재전송까지 사라져 타이머가 두 배로 늘어납니다.`;
+      msg = TR`${K.flag('bad')}<b>와이파이가 끊겼습니다.</b> 0.5초 동안은 어떤 패킷도 오지 않으니 TCP와 UDP 모두 캐릭터가 <b>멈춤</b> 상태입니다. 차이는 연결이 돌아온 직후에 나옵니다. TCP는 끊긴 사이 보낸 재전송까지 사라져 타이머가 두 배로 늘어납니다.`;
     } else if (hole && hole.lost && hole.tA == null && t > hole.s + hole.d / 2) {
       const tx = hole.tx[hole.tx.length - 1];
       let why;
-      if (!tx.lost && tx.k > 0 && t < tx.s + tx.d) why = '재전송 패킷이 오고 있습니다.';
-      else if (hole.bo > 0) why = `재전송마저 사라져서 다음 재전송까지 <b>${K.ms(RTO() * Math.pow(2, hole.bo))}</b>를 기다립니다(타이머가 매번 두 배로 늘어나는 백오프).`;
-      else if (!hole.fr) why = `이 실험의 서버는 교과서 규칙대로 뒤따라 온 패킷 3개가 보내는 중복 ACK(수신 확인)로 빠진 것을 감지하거나, ${K.ms(RTO())} 타이머가 끝나야 다시 보냅니다.`;
-      else why = '빠른 재전송 패킷이 사라졌습니다. 이제 타이머가 끝날 때까지 기다려야 합니다.';
+      if (!tx.lost && tx.k > 0 && t < tx.s + tx.d) why = TR`재전송 패킷이 오고 있습니다.`;
+      else if (hole.bo > 0) why = TR`재전송마저 사라져서 다음 재전송까지 <b>${K.ms(RTO() * Math.pow(2, hole.bo))}</b>를 기다립니다(타이머가 매번 두 배로 늘어나는 백오프).`;
+      else if (!hole.fr) why = TR`이 실험의 서버는 교과서 규칙대로 뒤따라 온 패킷 3개가 보내는 중복 ACK(수신 확인)로 빠진 것을 감지하거나, ${K.ms(RTO())} 타이머가 끝나야 다시 보냅니다.`;
+      else why = TR`빠른 재전송 패킷이 사라졌습니다. 이제 타이머가 끝날 때까지 기다려야 합니다.`;
       const behind = hole.rtoed
-        ? `뒤의 패킷 ${waiting}개도 앞 시퀀스 번호가 비어 있어 게임에 전달되지 못합니다(실제 TCP는 타이머 재전송 뒤 새 패킷을 서버에 남겨 두지만, 이 실험은 수신 버퍼에 쌓이게 그렸습니다).`
-        : waiting ? `뒤에 온 ${waiting}개는 이미 내 PC에 와 있지만, 앞 시퀀스 번호가 비어 있어 수신 버퍼에서 기다립니다.` : '뒤따라 오는 패킷도 도착하는 대로 수신 버퍼에서 대기하게 됩니다.';
-      msg = `${K.flag('bad')}<b>TCP: #${hole.n}번 패킷이 사라졌습니다.</b> ${behind} ${why} 그동안 게임은 새 위치를 하나도 못 받아 캐릭터가 <b>멈춤</b>입니다. 같은 순간 UDP는 #${hole.n}번만 빼고 계속 전달하고 있습니다.`;
+        ? TR`뒤의 패킷 ${waiting}개도 앞 시퀀스 번호가 비어 있어 게임에 전달되지 못합니다(실제 TCP는 타이머 재전송 뒤 새 패킷을 서버에 남겨 두지만, 이 실험은 수신 버퍼에 쌓이게 그렸습니다).`
+        : waiting ? TR`뒤에 온 ${waiting}개는 이미 내 PC에 와 있지만, 앞 시퀀스 번호가 비어 있어 수신 버퍼에서 기다립니다.` : TR`뒤따라 오는 패킷도 도착하는 대로 수신 버퍼에서 대기하게 됩니다.`;
+      msg = TR`${K.flag('bad')}<b>TCP: #${hole.n}번 패킷이 사라졌습니다.</b> ${behind} ${why} 그동안 게임은 새 위치를 하나도 못 받아 캐릭터가 <b>멈춤</b>입니다. 같은 순간 UDP는 #${hole.n}번만 빼고 계속 전달하고 있습니다.`;
     } else if (lb) {
       // 여러 개를 잃으면 구멍이 차례로 메워지며 여러 번 풀린다. 마지막 묶음 직전 간격이 아니라 이번 사건의 가장 긴 공백을 말한다.
       const gapMax = batches.reduce((a, b) => (b.t >= lb.t - 1600 && b.t <= lb.t ? Math.max(a, b.gap) : a), 0);
-      msg = `${K.flag('warn')}<b>빠졌던 #${lb.n}번이 다시 도착하자, 기다리던 것까지 ${lb.c}개가 한 번에 게임에 전달됐습니다.</b> 게임은 ${K.ms(gapMax)} 동안 새 패킷이 없다가 밀린 업데이트를 한꺼번에 처리합니다. 플레이어는 캐릭터가 멈췄다가 한꺼번에 앞으로 튀는 <b>몰아치기</b>를 봅니다. UDP 쪽은 그 하나만 빠져서 거의 티가 나지 않거나 작은 <b>순간이동</b>으로 끝납니다.`;
+      msg = TR`${K.flag('warn')}<b>빠졌던 #${lb.n}번이 다시 도착하자, 기다리던 것까지 ${lb.c}개가 한 번에 게임에 전달됐습니다.</b> 게임은 ${K.ms(gapMax)} 동안 새 패킷이 없다가 밀린 업데이트를 한꺼번에 처리합니다. 플레이어는 캐릭터가 멈췄다가 한꺼번에 앞으로 튀는 <b>몰아치기</b>를 봅니다. UDP 쪽은 그 하나만 빠져서 거의 티가 나지 않거나 작은 <b>순간이동</b>으로 끝납니다.`;
     } else if (P.loss === 0 && !P.auto && !blackout) {
-      msg = `${K.flag('good')}손실이 없으면 TCP와 UDP는 똑같습니다. 둘 다 ${P.iv}ms마다 고르게 전달합니다. 차이는 패킷이 하나라도 사라지는 순간에 생깁니다. <b>다음 패킷 하나 잃어버리기</b>를 눌러 보세요.`;
+      msg = TR`${K.flag('good')}손실이 없으면 TCP와 UDP는 똑같습니다. 둘 다 ${P.iv}ms마다 고르게 전달합니다. 차이는 패킷이 하나라도 사라지는 순간에 생깁니다. <b>다음 패킷 하나 잃어버리기</b>를 눌러 보세요.`;
     } else {
       const perSec = (1000 / P.iv) * P.loss;
-      const EV = { one: '패킷 하나 잃어버리기', wifi: '와이파이 순간 끊김', burst: '연속 손실' };
+      const EV = { one: TR`패킷 하나 잃어버리기`, wifi: TR`와이파이 순간 끊김`, burst: TR`연속 손실` };
       const why = [];
-      if (P.loss > 0) why.push(`손실률 ${K.pct(P.loss)}면 ${perSec >= 1 ? `1초에 ${K.n(perSec, 1)}개꼴로` : `${K.n(1 / perSec, 1)}초에 한 번꼴로`} 패킷이 사라집니다.`);
-      if (P.auto) why.push(`4초마다 “${EV[lastEvent]}” 사건이 다시 일어납니다.`);
-      msg = `${K.flag(P.loss >= 0.05 ? 'bad' : 'warn')}지금은 잠잠합니다. ${why.join(' ')} 패킷이 사라질 때마다 TCP는 핑 한 번 이상 <b>멈춤</b> 뒤 <b>몰아치기</b>를 하고, UDP는 하나를 건너뜁니다. 그래서 액션·FPS 게임은 UDP 위에 “꼭 필요한 것만 다시 보내는” 자체 규칙을 구현해 씁니다.`;
+      if (P.loss > 0) why.push(TR`손실률 ${K.pct(P.loss)}면 ${perSec >= 1 ? TR`1초에 ${K.n(perSec, 1)}개꼴로` : TR`${K.n(1 / perSec, 1)}초에 한 번꼴로`} 패킷이 사라집니다.`);
+      if (P.auto) why.push(TR`4초마다 “${EV[lastEvent]}” 사건이 다시 일어납니다.`);
+      msg = TR`${K.flag(P.loss >= 0.05 ? 'bad' : 'warn')}지금은 잠잠합니다. ${why.join(' ')} 패킷이 사라질 때마다 TCP는 핑 한 번 이상 <b>멈춤</b> 뒤 <b>몰아치기</b>를 하고, UDP는 하나를 건너뜁니다. 그래서 액션·FPS 게임은 UDP 위에 “꼭 필요한 것만 다시 보내는” 자체 규칙을 구현해 씁니다.`;
     }
     F.say(msg);
   });

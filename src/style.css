@@ -138,7 +138,7 @@ button { font: inherit; color: inherit; }
   font-size: 13.5px;
 }
 .nav-brand { display: flex; align-items: baseline; gap: 8px; margin-bottom: 18px; text-decoration: none; color: var(--ink); }
-.nav-brand b { font-family: var(--font-display); font-weight: 400; font-size: 22px; letter-spacing: 0.01em; }
+.nav-brand b { font-family: var(--font-display); font-weight: var(--display-weight, 400); font-size: 22px; letter-spacing: 0.01em; }
 .nav-brand span { color: var(--muted); font-size: 12px; }
 .nav-group { margin-top: 18px; }
 .nav-group-title { font-size: 11px; letter-spacing: 0.04em; color: var(--muted); font-weight: 600; margin: 0 0 6px 2px; }
@@ -176,7 +176,7 @@ button { font: inherit; color: inherit; }
     backdrop-filter: blur(8px);
     border-bottom: 1px solid var(--line);
   }
-  .topbar b { font-family: var(--font-display); font-weight: 400; font-size: 18px; }
+  .topbar b { font-family: var(--font-display); font-weight: var(--display-weight, 400); font-size: 18px; }
   .topbar .where { margin-left: auto; font-size: 12.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 }
 @media (prefers-reduced-motion: reduce) { .nav { transition: none; } }
@@ -201,7 +201,7 @@ button { font: inherit; color: inherit; }
 .hero { padding-block: 48px 28px; display: grid; gap: 28px; }
 .hero-top { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 36px; align-items: end; }
 .hero h1 {
-  font-family: var(--font-display); font-weight: 400;
+  font-family: var(--font-display); font-weight: var(--display-weight, 400);
   font-size: clamp(52px, 8.4vw, 104px); line-height: 0.98; letter-spacing: -0.01em;
   margin-top: 10px;
 }
@@ -224,7 +224,7 @@ button { font: inherit; color: inherit; }
 .ch-head { display: grid; gap: 10px; margin-bottom: 26px; }
 .ch-kicker { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 12.5px; color: var(--muted); letter-spacing: 0.02em; font-weight: 600; }
 .ch-kicker .idx { font-family: var(--font-mono); color: var(--accent); letter-spacing: 0; }
-.ch-head h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(32px, 4.4vw, 48px); letter-spacing: -0.005em; line-height: 1.12; }
+.ch-head h2 { font-family: var(--font-display); font-weight: var(--display-weight, 400); font-size: clamp(32px, 4.4vw, 48px); letter-spacing: -0.005em; line-height: 1.12; }
 .ch-head .lede { font-size: 17.5px; color: var(--ink-2); max-width: var(--prose); line-height: 1.7; }
 .prose { max-width: var(--prose); display: grid; gap: 14px; }
 .prose p { color: var(--ink); }
@@ -726,3 +726,37 @@ dt[id]:target, .pb-steps li:target { background: var(--accent-soft); border-radi
 .share-toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 12px); margin: 0; padding: 8px 14px; border-radius: 8px; background: var(--ink); color: var(--surface); font-size: 13.5px; opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; z-index: 60; }
 .share-toast.on { opacity: 1; transform: translate(-50%, 0); }
 @media (prefers-reduced-motion: reduce) { .share-toast, .h-link { transition: none; } }
+
+/* ---------- 번역판: 언어 바꾸기, 언어별 글꼴·줄바꿈 (html lang으로 고른다) ---------- */
+.langs { position: relative; font-size: 13px; }
+.langs summary { display: inline-flex; align-items: center; gap: 6px; min-height: 30px; padding: 3px 10px; border: 1px solid var(--line); border-radius: 999px; cursor: pointer; color: var(--ink-2); list-style: none; background: var(--surface); }
+.langs summary::-webkit-details-marker { display: none; }
+.langs summary svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.3; }
+.langs[open] summary { border-color: var(--ink-2); color: var(--ink); }
+.langs ul { position: absolute; z-index: 70; top: calc(100% + 6px); left: 0; margin: 0; padding: 6px; list-style: none; min-width: 170px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 8px 24px rgb(0 0 0 / .14); }
+.langs li a { display: block; padding: 6px 10px; border-radius: 6px; color: var(--ink); text-decoration: none; }
+.langs li a:hover { background: var(--paper); }
+.langs li a[aria-current] { font-weight: 700; color: var(--accent); }
+.nav .langs { margin: -8px 0 16px; }
+.topbar .langs { margin-left: auto; }
+.topbar .langs ul { left: auto; right: 0; }
+.foot-langs a { margin-inline: 2px; }
+.foot-langs a[aria-current] { font-weight: 700; color: var(--ink); text-decoration: none; }
+
+:root:not(:lang(ko)) { --display-weight: 800; }
+:root:lang(en), :root:lang(de), :root:lang(vi), :root:lang(ru) {
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, sans-serif;
+}
+:root:lang(ja) { --font-body: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Yu Gothic", Meiryo, "Noto Sans JP", "IPAGothic", system-ui, sans-serif; }
+:root:lang(zh-CN) { --font-body: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", system-ui, sans-serif; }
+:root:lang(zh-TW) { --font-body: "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", "Source Han Sans TC", system-ui, sans-serif; }
+:root:lang(th) { --font-body: "Noto Sans Thai", "Leelawadee UI", Thonburi, Tahoma, system-ui, sans-serif; }
+:root:not(:lang(ko)) { --font-display: var(--font-body); --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; }
+/* 한글의 keep-all은 중국어·일본어·태국어에서는 줄이 안 바뀌게 만든다 */
+:root:lang(ja) body, :root:lang(zh) body, :root:lang(th) body { word-break: normal; line-break: strict; }
+:root:lang(de) body, :root:lang(ru) body { hyphens: auto; }
+:root:lang(th) body { line-height: 1.8; }
+/* 번역판은 낱말이 길 수 있다(독일어 합성어 등): 좁은 화면에서 넘치지 않게 */
+:root:not(:lang(ko)) body { overflow-wrap: anywhere; }
+:root:lang(en) body { hyphens: auto; }
+:root:not(:lang(ko)) .own { white-space: normal; max-width: 100%; }
