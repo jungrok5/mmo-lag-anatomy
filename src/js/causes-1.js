@@ -225,7 +225,7 @@
       sym: ['stutter', 'dropped'], fx: ['lat'], who: ['me'], when: ['uptime', 'random'],
       own: ['cli'],
       act: { game: '주기적으로 시간 동기화(왕복 시간 측정 후 보정), 급하게 바꾸지 말고 서서히 맞추기, 경과 시간은 PC 시각 대신 단조 시계(monotonic clock)로 재기.' },
-      more: '경과 시간을 PC의 날짜·시각(wall clock)으로 재면, 윈도우가 인터넷 시간에 맞춰 시계를 고치거나 사용자가 시계를 바꾸는 순간 게임 시각이 튑니다. 경과 시간은 되돌아가지 않는 단조 시계(monotonic clock. Stopwatch 등)로 재야 합니다.',
+      more: '경과 시간을 PC의 날짜·시각(wall clock)으로 재면, 윈도우가 인터넷 시간에 맞춰 시계를 고치거나 사용자가 시계를 바꾸는 순간 게임 시각이 튑니다. 경과 시간은 되돌아가지 않는 단조 시계(monotonic clock, Stopwatch 등)로 재야 합니다.',
       sig: { k: 'ramp', g: '추정 서버 시각의 오차' },
       chk: {
         look: '클라이언트가 추정한 서버 시각과 서버가 패킷에 담아 보낸 서버 시각(틱 번호)의 차이를 주기적으로 기록',
