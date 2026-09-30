@@ -17,7 +17,7 @@
       sim: 'retrans',
       sig: { k: 'outlier', g: '연결별 재전송률, 연결별 RTT(핑)' },
       chk: {
-        look: '유저 PC에서 공유기(게이트웨이) 주소와 게임 서버로 각각 ping을 수백 번 보내 손실과 지연 폭을 비교하고, 유선이나 모바일 데이터로 바꿔 다시 잽니다. 서버에서는 ss -ti로 그 유저 연결의 retrans와 rtt(평균/편차)를 봅니다.',
+        look: '유저 PC에서 공유기(게이트웨이) 주소와 게임 서버로 각각 ping을 수백 번 보내 손실과 지연 폭을 비교하고, 유선이나 모바일 데이터로 바꿔 다시 잼. 서버에서는 ss -ti로 그 유저 연결의 retrans와 rtt(평균/편차)를 봄',
         yes: '공유기까지 가는 ping에서 이미 손실이나 들쭉날쭉한 지연이 보이고, 유선으로 바꾸면 사라짐. 서버에서 보면 그 유저 연결만 retrans와 RTT 편차가 큼',
         no: '공유기까지는 깨끗하고 그 너머에서 손실이 시작되면 통신사·경로 쪽(“병목 대기열 넘침”, “경로 변경·ECMP 불량 경로”). 같은 통신사 유저 여럿이 동시에 나빠지면 통신사 구간부터 봄',
         by: 'user',
@@ -42,7 +42,7 @@
       sim: 'retrans',
       sig: { k: 'peak', g: '재전송률, RTT(핑)' },
       chk: {
-        look: '서버 재전송률(nstat을 1분 간격으로 실행한 TcpRetransSegs ÷ TcpOutSegs 증가분)과 연결별 RTT를 지역·통신사·시간대별로 나눠 보고, 우리 회선·스위치 포트의 출력 폐기(ifOutDiscards)를 함께 봅니다. 문제 지역으로 피크 시간과 한가한 시간에 mtr을 떠서 비교합니다.',
+        look: '서버 재전송률(nstat을 1분 간격으로 실행한 TcpRetransSegs ÷ TcpOutSegs 증가분)과 연결별 RTT를 지역·통신사·시간대별로 나눠 보고, 우리 회선·스위치 포트의 출력 폐기(ifOutDiscards)를 함께 봄. 문제 지역으로 피크 시간과 한가한 시간에 mtr을 떠서 비교함',
         yes: '저녁 피크에만 재전송률이 오르고, 손실 직전에 RTT가 먼저 오름(대기열이 차는 모습). mtr에서 피크 시간에만 어느 구간부터 끝까지 손실과 지연이 함께 늘어남',
         no: '손실 직전에 RTT가 오르지 않으면 “폴리서의 초과분 폐기”. 시간대와 상관없이 늘 비슷하게 잃으면 “물리 오류”나 “경로 변경·ECMP 불량 경로”',
         by: 'ops',
@@ -69,7 +69,7 @@
       sim: 'retrans',
       sig: { k: 'load', g: '스위치 포트 출력 폐기 수, 재전송률' },
       chk: {
-        look: '서버가 붙은 스위치 포트와 그 윗단 포트의 출력 폐기(ifOutDiscards)를 몇 초 간격으로 모으고, 클라우드면 ethtool -S의 bw_out_allowance_exceeded·pps_allowance_exceeded를 봅니다. 같은 시각의 재전송을 bcc tcpretrans로 모아 맞춰 봅니다.',
+        look: '서버가 붙은 스위치 포트와 그 윗단 포트의 출력 폐기(ifOutDiscards)를 몇 초 간격으로 모으고, 클라우드면 ethtool -S의 bw_out_allowance_exceeded·pps_allowance_exceeded를 봄. 같은 시각의 재전송을 bcc tcpretrans로 모아 맞춰 봄',
         yes: '분 단위 평균 사용률은 낮은데 출력 폐기나 allowance 초과가 늘고, 그 양이 동시 접속·한곳에 모인 인원을 따라 커짐. 재전송이 한 유저 대역에 몰리지 않고 그 서버의 여러 연결에서 같은 순간에 생김',
         no: '같은 포트에 CRC·입력 오류가 함께 늘면 “물리 오류”. 받는 서버의 NIC 폐기 카운터나 softnet dropped가 늘면 “수신 서버 호스트의 패킷 폐기”',
         by: 'ops',
@@ -93,7 +93,7 @@
       sim: 'retrans',
       sig: { k: 'ceiling', g: '짧은 간격의 송신량, 폴리서·allowance 초과 카운터' },
       chk: {
-        look: '폴리서가 걸린 장비의 초과(exceed)·폐기 카운터를 보고, 클라우드면 ethtool -S의 bw_out_allowance_exceeded·pps_allowance_exceeded를 봅니다. 손실이 난 연결은 ss -ti의 rtt나 패킷 캡처로 손실 직전의 RTT를 봅니다.',
+        look: '폴리서가 걸린 장비의 초과(exceed)·폐기 카운터를 보고, 클라우드면 ethtool -S의 bw_out_allowance_exceeded·pps_allowance_exceeded를 봄. 손실이 난 연결은 ss -ti의 rtt나 패킷 캡처로 손실 직전의 RTT를 봄',
         yes: '초과 카운터가 늘고, 짧은 간격으로 본 송신량이 어떤 값에서 잘린 듯 평평함. 손실 직전에 RTT가 오르지 않고, 버스트가 큰 순간에만 여러 패킷이 한꺼번에 사라짐',
         no: '손실 직전에 RTT가 먼저 오르면 대기열 넘침(“병목 대기열 넘침”, “송신 버스트로 얕은 버퍼 넘침”). 초과 카운터가 그대로면 다른 원인',
         by: 'ops',
@@ -115,7 +115,7 @@
       sim: 'retrans',
       sig: { k: 'outlier', g: '포트별 CRC 오류 수, 서버·포트별 재전송률' },
       chk: {
-        look: '링크 양쪽 끝의 CRC 카운터를 봅니다. 서버는 ethtool -S의 rx_crc_errors나 ip -s -s link의 crc, 스위치는 포트의 FCS 오류(dot3StatsFCSErrors)·입력 오류(ifInErrors). 광 링크면 ethtool -m과 스위치의 광모듈 정보로 수신 광 세기를 봅니다.',
+        look: '링크 양쪽 끝의 CRC 카운터를 봄. 서버는 ethtool -S의 rx_crc_errors나 ip -s -s link의 crc, 스위치는 포트의 FCS 오류(dot3StatsFCSErrors)·입력 오류(ifInErrors). 광 링크면 ethtool -m과 스위치의 광모듈 정보로 수신 광 세기를 봄',
         yes: '한 포트의 CRC 오류가 시간대와 상관없이 꾸준히 늘고, 그 포트를 지나는 서버·연결만 재전송률이 높음. 같은 종류의 다른 링크보다 수신 광 세기가 낮음',
         no: 'CRC는 그대로인데 출력 폐기만 늘면 대기열 넘침(“송신 버스트로 얕은 버퍼 넘침”, “병목 대기열 넘침”). 한쪽의 늦은 충돌과 다른 쪽의 CRC가 함께 늘면 “듀플렉스 불일치”',
         by: 'ops',
@@ -135,7 +135,7 @@
       sim: 'retrans',
       sig: { k: 'load', g: '포트 늦은 충돌·CRC 오류 수, 재전송률' },
       chk: {
-        look: '링크 양쪽의 실제 속도·듀플렉스를 봅니다. 서버는 인터페이스 이름만 붙여 실행한 ethtool, 스위치는 포트 상태나 SNMP의 dot3StatsDuplexStatus. 늦은 충돌(서버 tx_window_errors, 스위치 dot3StatsLateCollisions)과 CRC 오류도 함께 봅니다.',
+        look: '링크 양쪽의 실제 속도·듀플렉스를 봄. 서버는 인터페이스 이름만 붙여 실행한 ethtool, 스위치는 포트 상태나 SNMP의 dot3StatsDuplexStatus. 늦은 충돌(서버 tx_window_errors, 스위치 dot3StatsLateCollisions)과 CRC 오류도 함께 봄',
         yes: '한쪽은 반이중, 다른 쪽은 전이중으로 나옴. 트래픽이 늘 때마다 반이중 쪽은 늦은 충돌, 전이중 쪽은 CRC 오류가 함께 늘어남',
         no: '양쪽 속도·듀플렉스가 같고 CRC만 늘면 “물리 오류”. 10Gbps 이상 링크는 반이중이 없으니 이 원인에서 뺌',
         by: 'ops',
@@ -158,7 +158,7 @@
       sim: 'nic',
       sig: { k: 'ceiling', g: '코어별 softirq 사용률, NIC 폐기 카운터' },
       chk: {
-        look: 'ethtool -S의 폐기 카운터(rx_missed_errors 등, mlx5는 rx_out_of_buffer·rx_discards_phy), ip -s -s link의 missed, /proc/net/softnet_stat의 2번째 열(dropped)·3번째 열(time_squeeze)을 보고, mpstat -P ALL로 코어별 %soft(소프트 인터럽트 처리)를 봅니다. 가상 머신이면 %steal도 봅니다.',
+        look: 'ethtool -S의 폐기 카운터(rx_missed_errors 등, mlx5는 rx_out_of_buffer·rx_discards_phy), ip -s -s link의 missed, /proc/net/softnet_stat의 2번째 열(dropped)·3번째 열(time_squeeze)을 보고, mpstat -P ALL로 코어별 %soft(소프트 인터럽트 처리)를 봄. 가상 머신이면 %steal도 봄',
         yes: '사람이 몰리는 시각에 폐기 카운터나 softnet dropped가 늘고, 수신 처리를 맡은 코어의 %soft가 100% 가까이에서 더 오르지 못함. 그 서버의 모든 연결에서 동시에 입력이 늦어짐',
         no: '서버의 폐기 카운터가 그대로이고 재전송이 특정 지역·통신사 연결에 몰리면 경로 쪽 손실. 서버가 보낸 패킷을 경로에서 잃으면 서버의 nstat TcpRetransSegs가 늘고 이 카운터들은 그대로임',
         by: 'ops',
@@ -185,7 +185,7 @@
       sim: 'retrans',
       sig: { k: 'ceiling', g: 'conntrack 항목 수(nf_conntrack_count), 새 접속 실패 수' },
       chk: {
-        look: '리눅스 서버는 nf_conntrack_count와 nf_conntrack_max, dmesg의 “nf_conntrack: table full, dropping packet”, /proc/net/stat/nf_conntrack의 drop·invalid(코어마다 한 줄, 16진수)를 봅니다. 방화벽은 세션 테이블 사용량과 드롭 로그, AWS는 ethtool -S의 conntrack_allowance_exceeded를 봅니다.',
+        look: '리눅스 서버는 nf_conntrack_count와 nf_conntrack_max, dmesg의 “nf_conntrack: table full, dropping packet”, /proc/net/stat/nf_conntrack의 drop·invalid(코어마다 한 줄, 16진수)를 봄. 방화벽은 세션 테이블 사용량과 드롭 로그, AWS는 ethtool -S의 conntrack_allowance_exceeded를 봄',
         yes: '항목 수가 한도에서 평평해지고, 같은 시각에 table full 로그와 drop, 또는 conntrack_allowance_exceeded가 늘어남. 비대칭 경로면 한도에는 여유가 있는데 invalid와 방화벽 드롭 로그가 특정 경로의 연결에서 늘어남',
         no: '항목 수가 한도에서 멀고 invalid·드롭 로그도 그대로면 다른 원인. 테이블은 여유가 있는데 방화벽의 CPU나 초당 패킷 수가 가득하면 “중간 장비 처리 한도 초과”',
         by: 'ops',
@@ -206,7 +206,7 @@
       act: { game: '게임 트래픽 패턴(포트, 패킷 크기, 초당 패킷 수)을 인프라팀에 공유, 한 틱에 보낼 작은 메시지는 모아서 한 번에 보내 패킷 수 줄이기.', infra: '장비의 CPU·초당 패킷 수·드롭 카운터를 게임 지표와 함께 보기, 작은 패킷 기준으로 장비 용량 잡기, 게임 포트는 무거운 검사에서 빼기, DDoS 방어 규칙을 게임 트래픽 패턴에 맞추기.' },
       sig: { k: 'ceiling', g: '장비 초당 패킷 수·CPU 사용률, 장비 드롭 수' },
       chk: {
-        look: '장비의 CPU·초당 패킷 수·드롭 카운터를 보고, 장비 앞뒤 스위치 포트의 패킷 수를 같은 간격으로 비교합니다. 동시 접속 수, 서버 재전송률과 한 화면에 겹쳐 봅니다.',
+        look: '장비의 CPU·초당 패킷 수·드롭 카운터를 보고, 장비 앞뒤 스위치 포트의 패킷 수를 같은 간격으로 비교함. 동시 접속 수, 서버 재전송률과 한 화면에 겹쳐 봄',
         yes: '피크·이벤트 때 장비의 초당 패킷 수나 CPU가 한 값에서 더 오르지 못하고, 장비로 들어간 패킷보다 나온 패킷이 적어지며, 같은 시각에 그 뒤 서버 전체의 재전송률이 함께 오름',
         no: '장비 앞뒤 패킷 수가 같고 장비 드롭도 없으면 다른 원인. 서버의 NIC 폐기 카운터나 softnet dropped가 늘면 “수신 서버 호스트의 패킷 폐기”',
         by: 'ops',
@@ -225,7 +225,7 @@
       sim: 'retrans',
       sig: { k: 'outlier', g: '연결별 RTO·backoff, 지역·통신사별 끊김 수' },
       chk: {
-        look: '문제 연결의 재전송을 서버 쪽 패킷 캡처나 bcc tcpretrans -s(시퀀스 번호 표시)로 보고, ss -ti로 그 연결의 mss·pmtu·backoff를 봅니다. 서버에서 그 유저 주소로 작은 ping과 DF를 켠 1,500바이트 ping(ping -M do -s 1472)을 보내 비교합니다.',
+        look: '문제 연결의 재전송을 서버 쪽 패킷 캡처나 bcc tcpretrans -s(시퀀스 번호 표시)로 보고, ss -ti로 그 연결의 mss·pmtu·backoff를 봄. 서버에서 그 유저 주소로 작은 ping과 DF를 켠 1,500바이트 ping(ping -M do -s 1472)을 보내 비교함',
         yes: 'MSS만큼 꽉 찬 패킷이 같은 시퀀스 번호로 간격을 두 배씩 늘리며 계속 재전송되고, 그보다 작은 패킷은 오감. 크기 초과 ICMP(Wireshark 필터 icmp.type == 3 and icmp.code == 4)는 오지 않고, 작은 ping은 응답하는데 큰 DF ping만 응답 없이 사라짐',
         no: '작은 패킷도 함께 사라지면 크기와 상관없는 손실(“병목 대기열 넘침”, “경로 변경·ECMP 불량 경로”). 크기 초과 ICMP가 도착하고 ss -ti의 pmtu가 줄어들면 경로 MTU 탐색이 제대로 동작하는 것',
         by: 'ops',
@@ -257,7 +257,7 @@
       sim: 'timeouts',
       sig: { k: 'drop', g: '끊김 수, 끊기기 전 유휴 시간' },
       chk: {
-        look: '끊긴 연결의 마지막 몇 분을 서버 쪽 패킷 캡처로 보고, 살아 있는 연결은 ss -ti의 lastsnd·lastrcv(마지막으로 보내고 받은 뒤 지난 ms)로 유휴 시간을 봅니다. nstat의 TcpExtTCPAbortOnTimeout(타이머가 다 돼 연결을 포기한 수)도 함께 봅니다.',
+        look: '끊긴 연결의 마지막 몇 분을 서버 쪽 패킷 캡처로 보고, 살아 있는 연결은 ss -ti의 lastsnd·lastrcv(마지막으로 보내고 받은 뒤 지난 ms)로 유휴 시간을 봄. nstat의 TcpExtTCPAbortOnTimeout(타이머가 다 돼 연결을 포기한 수)도 함께 봄',
         yes: '끊긴 연결마다 직전 유휴 시간이 비슷한 값(경로에 있는 장비의 유휴 타임아웃, 예: AWS Nitro v6 인스턴스 보안 그룹의 350초)을 넘었고, 유휴 뒤 첫 패킷부터 ACK 없이 재전송만 이어지다 포기하거나 곧바로 RST가 돌아옴',
         no: '유휴 시간과 상관없이 게임 중에도 끊기면 다른 원인(“경로 변경·ECMP 불량 경로”, “방화벽·연결 추적의 폐기”). 하트비트가 가장 짧은 유휴 타임아웃의 절반 이하 간격으로 오가는 연결이면 이 원인에서 뺌',
         by: 'ops',
@@ -281,7 +281,7 @@
       sim: 'retrans',
       sig: { k: 'step', g: 'RTT(핑), 지역·통신사별 재전송률' },
       chk: {
-        look: 'bcc tcpretrans -c로 재전송을 연결별로 모아 겪는 유저의 주소·포트를 뽑고, 서버에서 유저 쪽으로, 유저 쪽에서 서버로 게임과 같은 TCP 포트로 mtr(mtr -T -P 포트)을 떠서 비교합니다. 재접속 전후 결과도 비교합니다.',
+        look: 'bcc tcpretrans -c로 재전송을 연결별로 모아 겪는 유저의 주소·포트를 뽑고, 서버에서 유저 쪽으로, 유저 쪽에서 서버로 게임과 같은 TCP 포트로 mtr(mtr -T -P 포트)을 떠서 비교함. 재접속 전후 결과도 비교함',
         yes: '어느 시각을 기점으로 한 지역·통신사의 RTT가 계단처럼 바뀌며 몇 초 손실이 몰리거나, 같은 통신사 안에서도 일부 연결(주소·포트 조합)만 꾸준히 재전송하고 재접속하면 나아짐. 일반 ping은 멀쩡한데 TCP mtr에서만 손실이 보이기도 함',
         no: '그 통신사의 모든 연결이 저녁 피크에 함께 나빠지면 “병목 대기열 넘침”. 한 유저만 나쁘고 공유기까지 가는 ping부터 손실이면 “무선 구간 손실”',
         by: 'ops',
@@ -305,7 +305,7 @@
       sim: 'retrans',
       sig: { k: 'random', g: 'RTT(핑), 불필요한 RTO 수' },
       chk: {
-        look: 'nstat을 1분 간격으로 실행해 TcpExtTCPTimeouts(RTO 만료), TcpExtTCPSpuriousRTOs, TcpExtTCPDSACKRecv, TcpExtTCPLostRetransmit의 증가분을 함께 봅니다. 패킷 캡처가 있으면 Wireshark 필터 tcp.analysis.spurious_retransmission을 씁니다.',
+        look: 'nstat을 1분 간격으로 실행해 TcpExtTCPTimeouts(RTO 만료), TcpExtTCPSpuriousRTOs, TcpExtTCPDSACKRecv, TcpExtTCPLostRetransmit의 증가분을 함께 봄. 패킷 캡처가 있으면 Wireshark 필터 tcp.analysis.spurious_retransmission을 씀',
         yes: 'RTO가 늘 때 TcpExtTCPSpuriousRTOs나 TcpExtTCPDSACKRecv도 함께 늘고, 같은 시각에 RTT가 수백 ms로 튐. 받는 쪽 캡처에 원본과 재전송이 모두 도착해 있음',
         no: 'TcpExtTCPSpuriousRTOs·DSACK은 그대로인데 TcpExtTCPLostRetransmit(다시 보낸 것까지 또 잃음)이 늘면 실제 손실. RTT는 튀지 않는데 DSACK만 꾸준히 많으면 “순서 뒤바뀜으로 인한 불필요한 빠른 재전송”',
         by: 'ops',
@@ -332,7 +332,7 @@
       sim: 'retrans',
       sig: { k: 'high', g: '순서 뒤바뀜 감지 수, DSACK 수신 수' },
       chk: {
-        look: 'nstat의 TcpExtTCPSACKReorder·TcpExtTCPTSReorder(순서 뒤바뀜을 감지한 횟수)와 TcpExtTCPDSACKRecv를 보고, 연결별로는 ss -ti의 reordering(3이 아니면 표시)·reord_seen을 봅니다. 패킷 캡처에서는 Wireshark 필터 tcp.analysis.out_of_order를 씁니다.',
+        look: 'nstat의 TcpExtTCPSACKReorder·TcpExtTCPTSReorder(순서 뒤바뀜을 감지한 횟수)와 TcpExtTCPDSACKRecv를 보고, 연결별로는 ss -ti의 reordering(3이 아니면 표시)·reord_seen을 봄. 패킷 캡처에서는 Wireshark 필터 tcp.analysis.out_of_order를 씀',
         yes: '순서 뒤바뀜 카운터와 DSACK이 시간대와 상관없이 꾸준히 오르고, 특정 경로·장비를 지나는 연결의 reordering 값이 3보다 커져 있음. 받는 쪽 캡처에서 뒤 패킷이 먼저 오고 앞 패킷도 곧 도착함',
         no: '순서 뒤바뀜 카운터는 그대로이고 TcpExtTCPLostRetransmit이 늘면 실제 손실. RTT가 튀는 순간에만 DSACK이 늘면 “지연 급등으로 인한 불필요한 재전송”',
         by: 'ops',
@@ -358,7 +358,7 @@
       sim: 'retrans',
       sig: { k: 'outlier', g: '연결별 RTT(핑)' },
       chk: {
-        look: '유저 PC에서 업로드(영상 업로드·클라우드 백업)를 켠 상태와 끈 상태로 게임 서버 ping을 비교합니다. 서버에서는 ss -ti로 그 유저 연결의 rtt를 봅니다.',
+        look: '유저 PC에서 업로드(영상 업로드·클라우드 백업)를 켠 상태와 끈 상태로 게임 서버 ping을 비교함. 서버에서는 ss -ti로 그 유저 연결의 rtt를 봄',
         yes: '업로드 중에만 ping이 수백 ms로 오르고 입력 지연·고무줄이 생기며, 업로드를 멈추면 곧 돌아옴. 서버에서 보면 그때 그 연결의 rtt도 함께 오름',
         no: '업로드와 상관없이 손실과 지연이 생기면 “무선 구간 손실”이나 경로 쪽 원인. 서버에서 유저로 가는 방향만 늦고 업로드와 상관없으면 “병목 대기열 넘침”',
         by: 'user',
@@ -379,7 +379,7 @@
       sim: 'retrans',
       sig: { k: 'high', g: '연결별 RTO, 불필요한 RTO 수' },
       chk: {
-        look: '서버의 RTO 최소값 설정(ip route show의 rto_min, 리눅스 6.11 이상은 sysctl net.ipv4.tcp_rto_min_us)과 ss -ti의 rto·rtt를 보고, nstat의 TcpExtTCPSpuriousRTOs 증가분을 봅니다.',
+        look: '서버의 RTO 최소값 설정(ip route show의 rto_min, 리눅스 6.11 이상은 sysctl net.ipv4.tcp_rto_min_us)과 ss -ti의 rto·rtt를 보고, nstat의 TcpExtTCPSpuriousRTOs 증가분을 봄',
         yes: '최소값을 낮춘 서버에서 인터넷 연결의 rto가 rtt에 바짝 붙어 있고 TcpExtTCPSpuriousRTOs가 많이 늘어남. 기본값 그대로면 게임 연결의 rto가 rtt보다 200ms 이상 크고, 손실 한 번마다 그만큼 멈춤',
         no: 'rto가 기본 계산대로(rtt + 200ms 안팎)이고 불필요한 RTO도 적은데 멈춤이 유난히 길면 연속 손실이나 복구 방식 쪽(“thin stream의 느린 복구”, “중간 장비의 TCP 옵션 제거”)',
         by: 'ops',
@@ -411,7 +411,7 @@
       sim: 'retrans',
       sig: { k: 'gap', g: '연결별 수신량, RTO 만료 수' },
       chk: {
-        look: 'nstat의 TcpExtTCPTimeouts(RTO 만료)·TcpExtTCPFastRetrans(빠른 재전송)·TcpExtTCPLossProbes·TcpExtTCPLossProbeRecovery(TLP) 증가분을 비교하고, 게임 연결을 ss -ti로 보아 rto·backoff를 봅니다. 서버의 net.ipv4.tcp_recovery·tcp_early_retrans·tcp_sack 값도 확인합니다.',
+        look: 'nstat의 TcpExtTCPTimeouts(RTO 만료)·TcpExtTCPFastRetrans(빠른 재전송)·TcpExtTCPLossProbes·TcpExtTCPLossProbeRecovery(TLP) 증가분을 비교하고, 게임 연결을 ss -ti로 보아 rto·backoff를 봄. 서버의 net.ipv4.tcp_recovery·tcp_early_retrans·tcp_sack 값도 확인함',
         yes: '재전송 가운데 RTO 만료가 빠른 재전송보다 많고, 게임 연결에서 backoff가 0보다 큰 경우(RTO를 겪는 중)가 자주 보임. 멈춘 동안 받은 양이 0이다가 복구되면 한꺼번에 몰려옴',
         no: '같은 서버의 대용량 전송도 똑같이 오래 멈추면 연결 모양과 상관없는 손실 문제. SACK·타임스탬프가 빠진 연결에 몰리면 “중간 장비의 TCP 옵션 제거”',
         by: 'ops',
@@ -439,7 +439,7 @@
       sim: 'retrans',
       sig: { k: 'high', g: 'SACK 없이 시작한 복구 수(TcpExtTCPRenoRecovery)' },
       chk: {
-        look: 'ss -ti에서 연결마다 sack·wscale 표시가 있는지 보고, nstat의 TcpExtTCPRenoRecovery(SACK 없이 시작한 복구)와 TcpExtTCPSackRecovery의 비율, TcpExtTCPSACKDiscard(앞뒤가 맞지 않아 버린 SACK 블록 수)를 봅니다. 의심 경로는 양쪽 끝에서 SYN을 캡처해 옵션(Wireshark의 tcp.options.sack_perm 등)을 비교합니다.',
+        look: 'ss -ti에서 연결마다 sack·wscale 표시가 있는지 보고, nstat의 TcpExtTCPRenoRecovery(SACK 없이 시작한 복구)와 TcpExtTCPSackRecovery의 비율, TcpExtTCPSACKDiscard(앞뒤가 맞지 않아 버린 SACK 블록 수)를 봄. 의심 경로는 양쪽 끝에서 SYN을 캡처해 옵션(Wireshark의 tcp.options.sack_perm 등)을 비교함',
         yes: '특정 경로·장비를 지나는 연결만 sack·wscale이 빠져 있고 TcpExtTCPRenoRecovery 비중이 높음. 보낸 쪽 SYN에 있던 SACK 허용 옵션이 받은 쪽 SYN에는 없음. 시퀀스 번호 무작위화가 원인이면 옵션은 남아 있는데 TcpExtTCPSACKDiscard가 늘어남',
         no: '모든 연결에서 sack이 빠져 있으면 서버의 net.ipv4.tcp_sack 값부터 확인. 옵션이 온전하고 TcpExtTCPSACKDiscard도 그대로면 복구가 느린 이유는 다른 곳(“thin stream의 느린 복구”)',
         by: 'ops',
@@ -465,7 +465,7 @@
       sim: 'retrans',
       sig: { k: 'gap', g: '연결별 수신량, 제로 윈도우 횟수' },
       chk: {
-        look: '패킷 캡처에서 Wireshark 필터 tcp.analysis.zero_window로 윈도우 0을 알린 쪽을 찾습니다. 서버의 nstat에서는 TcpExtTCPToZeroWindowAdv(서버가 윈도우 0을 알림)와 TcpExtTCPWinProbe(상대의 윈도우 0에 프로브를 보냄)를 나눠 보고, 서버 소켓의 Recv-Q(ss에서 프로그램이 아직 읽지 않은 바이트)를 봅니다.',
+        look: '패킷 캡처에서 Wireshark 필터 tcp.analysis.zero_window로 윈도우 0을 알린 쪽을 찾음. 서버의 nstat에서는 TcpExtTCPToZeroWindowAdv(서버가 윈도우 0을 알림)와 TcpExtTCPWinProbe(상대의 윈도우 0에 프로브를 보냄)를 나눠 보고, 서버 소켓의 Recv-Q(ss에서 프로그램이 아직 읽지 않은 바이트)를 봄',
         yes: '멈춘 동안 재전송은 없고 제로 윈도우와 프로브만 오감. 서버의 TcpExtTCPToZeroWindowAdv나 서버 소켓의 Recv-Q가 늘면 서버가 제때 읽지 못하는 것, TcpExtTCPWinProbe가 늘면 클라이언트가 제때 읽지 못하는 것',
         no: '캡처에 제로 윈도우가 없고 같은 데이터가 다시 보내지면 손실이나 불필요한 재전송 쪽 원인',
         by: 'ops',
@@ -489,7 +489,7 @@
       sim: 'rush',
       sig: { k: 'surge', g: '접속 시도 수, 접속 대기열 넘침 수' },
       chk: {
-        look: '서버의 nstat에서 TcpExtListenOverflows·TcpExtListenDrops와 dmesg의 “Possible SYN flooding on port” 경고를 보고, ss -lnt로 접속 대기 소켓의 Recv-Q(accept를 기다리는 연결 수)가 Send-Q(backlog 한도)에 닿는지 봅니다. 서버 쪽 캡처로 SYN이 도착하는지, SYN-ACK를 돌려보내는지 확인합니다.',
+        look: '서버의 nstat에서 TcpExtListenOverflows·TcpExtListenDrops와 dmesg의 “Possible SYN flooding on port” 경고를 보고, ss -lnt로 접속 대기 소켓의 Recv-Q(accept를 기다리는 연결 수)가 Send-Q(backlog 한도)에 닿는지 봄. 서버 쪽 캡처로 SYN이 도착하는지, SYN-ACK를 돌려보내는지 확인함',
         yes: '점검 직후 접속 폭주 때 TcpExtListenOverflows가 늘고 Recv-Q가 Send-Q에 붙어 있음. 캡처에서 같은 클라이언트의 SYN이 초 단위 간격으로 다시 오는데 서버가 응답하지 않음',
         no: 'SYN이 서버까지 오지 않고 서버 카운터도 그대로면 앞단 방화벽·DDoS 방어가 버린 것이니 그 장비의 SYN 제한·드롭 로그를 봄. 서버가 SYN-ACK를 보냈는데도 접속이 늦으면 돌아가는 방향의 손실',
         by: 'ops',
