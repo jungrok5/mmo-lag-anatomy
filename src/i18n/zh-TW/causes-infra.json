@@ -35,7 +35,7 @@
     {"ctx":"causes/in-zone-transfer/chk/yes","ko":"긴 로딩·입장 실패 제보 시각에 이관 시간이 늘거나 실패가 몰리고, 대상 서버가 붐비거나 빈 인스턴스가 바닥나 있음","t":""},
     {"ctx":"causes/in-zone-transfer/chk/no","ko":"이관은 빨리 끝났는데 도착한 뒤 멈추면 밀집 지역 진입 시 스폰 폭주나 클라이언트 로딩 쪽","t":""},
     {"ctx":"causes/in-zone-transfer/ref/0/n","ko":"로딩 없는 월드를 격자로 나눠 여러 서버(허브)가 맡고 플레이어가 이동하면 상태를 허브에서 허브로 넘김, 세션형 모드는 공유 풀에서 남는 서버를 받아 씀","t":""},
-    {"ctx":"causes/in-cascade/t","ko":"연쇄 장애","t":""},
+    {"ctx":"causes/in-cascade/t","ko":"연쇄 장애","t":"連鎖故障"},
     {"ctx":"causes/in-cascade/s","ko":"한 서비스가 느려지면 그걸 부르는 서버들이 응답을 기다리며 묶이고, 상관없는 기능까지 멈춥니다.","t":""},
     {"ctx":"causes/in-cascade/c/0","ko":"DB·인증 같은 한 서비스가 느려짐","t":""},
     {"ctx":"causes/in-cascade/c/1","ko":"호출하는 서버들의 스레드와 연결이 응답을 기다리며 묶이고, 실패한 요청의 재시도가 부하를 더함","t":""},

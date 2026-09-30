@@ -87,6 +87,9 @@
   };
   // 숫자 서식은 페이지 언어를 따른다(번역판은 빌드가 I18N.locale 을 넣는다)
   K.locale = (window.I18N && window.I18N.locale) || 'ko-KR';
+  // 두 문장 잇기: 앞 문장 끝에 마침표를 찍고 띄운다. 번역판은 이 틀을 번역해 중국어·일본어는 “。”로 잇는다
+  K.then = (a, b) => (a ? TR`${a}. ${b}` : b);
+  K.firstSentence = s => (String(s).match(/^[\s\S]*?[.。！？!?](?=\s|$)/) || [String(s)])[0];
   K.n = (v, d = 0) => (Number.isFinite(v) ? v.toLocaleString(K.locale, { minimumFractionDigits: d, maximumFractionDigits: d }) : '—');
   K.ms = function (v) {
     if (!Number.isFinite(v)) return '∞';

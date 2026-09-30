@@ -79,7 +79,7 @@
     {"ctx":"src/sims/gc.js:343","ko":"풀린 뒤 몰아서 처리","t":""},
     {"ctx":"src/sims/gc.js:343","ko":"밀리지 않음","t":""},
     {"ctx":"src/sims/gc.js:344","ko":"1분 중 {0}","t":""},
-    {"ctx":"src/sims/gc.js:346","ko":"멈춤","t":""},
+    {"ctx":"src/sims/gc.js:346","ko":"멈춤","t":"卡住"},
     {"ctx":"src/sims/gc.js:346","ko":"짧은 멈춤","t":""},
     {"ctx":"src/sims/gc.js:346","ko":"슬로우모션 직전","t":""},
     {"ctx":"src/sims/gc.js:346","ko":"매끄러움","t":""},

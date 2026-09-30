@@ -158,7 +158,6 @@
     {"ctx":"glossary/g-rollback/0","ko":"롤백","t":"回滾"},
     {"ctx":"glossary/g-rollback/2","ko":"저장이 취소되어 이전 상태로 돌아가는 것. 플레이어는 “아이템이 사라졌다”고 느낍니다.","t":"存檔被取消、回到先前的狀態。玩家會覺得「道具不見了」。"},
     {"ctx":"glossary/g-cache/0","ko":"캐시","t":"快取"},
-    {"ctx":"glossary/g-cache/1","ko":"Cache (Redis 등)","t":"Cache (Redis 等)"},
     {"ctx":"glossary/g-cache/2","ko":"자주 쓰는 데이터를 빠른 곳에 복사해 둔 것. DB 부하를 줄입니다.","t":"把常用資料複製一份放在較快的地方，以減輕 DB 負載。"},
     {"ctx":"glossary/g-checkpoint/0","ko":"체크포인트","t":"檢查點"},
     {"ctx":"glossary/g-checkpoint/2","ko":"DB가 메모리에 모아 둔 변경분을 주기적으로 디스크에 몰아 쓰는 일. 그 순간 저장·조회가 잠깐 느려질 수 있습니다.","t":"DB 定期把累積在記憶體中的變更一次寫入磁碟。在那個當下，存檔與查詢可能會短暫變慢。"},
@@ -238,5 +237,8 @@
     {"ctx":"glossary/g-tls-certificate/2","ko":"서버가 진짜 그 서버임을 증명하는 전자 문서. 유효 기간이 있어 만료되면 암호화 연결이 실패해 접속할 수 없습니다.","t":"證明伺服器確實是本尊的電子文件。有效期限一到就會讓加密連線失敗，無法連線。"},
     {"ctx":"glossary/g-frame-generation/0","ko":"프레임 생성","t":"畫格生成"},
     {"ctx":"glossary/g-frame-generation/2","ko":"그래픽카드가 실제로 그린 프레임 사이에 예측한 프레임을 끼워 넣어 FPS를 높이는 기술. 화면은 부드러워지지만 입력에서 화면까지의 지연은 늘 수 있습니다.","t":"顯示卡在實際繪製的畫格之間插入預測畫格來提高 FPS 的技術。畫面會更流暢，但從輸入到畫面的延遲可能增加。"}
+  ],
+  "stale": [
+    {"ctx":"glossary/g-cache/1","ko":"Cache (Redis 등)","t":"Cache (Redis 等)"}
   ]
 }

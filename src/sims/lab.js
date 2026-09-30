@@ -775,9 +775,9 @@ K.register('lab', function (root) {
     } else if (E('burst')) {
       msg = TR`${K.flag('bad')}<b>${afterStall ? TR`멈춤 뒤 몰아치기` : TR`몰아치기`}</b>: ${E('burst').text}. 멈춰 있던 동안의 움직임이 한 번에 들어와 ${P.mode === 'queue' ? TR`빨리 감기처럼 재생됩니다` : P.mode === 'interp' ? TR`보간 버퍼를 넘어서면 한 번에 건너뜁니다(순간이동)` : TR`한 번에 점프합니다`}.`;
     } else if (E('rubber') || (P.predict && P.validate && E('clip'))) {
-      msg = TR`${K.flag('bad')}<b>고무줄</b>: ${E('rubber') ? E('rubber').text + '. ' : ''}${P.validate && E('clip') ? (E('rubber') ? TR`명령이 몰려 도착해 서버의 이동 검증이 잘라 냈기 때문입니다.` : E('clip').text + TR`. 잘린 만큼 내 캐릭터가 뒤로 당겨집니다.`) :P.loss > 0 && P.lossDir !== 'down' && !P.redundancy ? TR`서버가 받지 못한 이동 명령만큼 위치가 모자랍니다. “입력 중복 전송”을 켜면 대부분 사라집니다.` : TR`서버와 내 예측이 어긋났습니다.`}`;
+      msg = TR`${K.flag('bad')}<b>고무줄</b>: ${K.then(E('rubber') && E('rubber').text, P.validate && E('clip') ? (E('rubber') ? TR`명령이 몰려 도착해 서버의 이동 검증이 잘라 냈기 때문입니다.` : K.then(E('clip').text, TR`잘린 만큼 내 캐릭터가 뒤로 당겨집니다.`)) : P.loss > 0 && P.lossDir !== 'down' && !P.redundancy ? TR`서버가 받지 못한 이동 명령만큼 위치가 모자랍니다. “입력 중복 전송”을 켜면 대부분 사라집니다.` : TR`서버와 내 예측이 어긋났습니다.`)}`;
     } else if (E('teleport')) {
-      msg = `${K.flag('bad')}<b>${afterStall ? TR`멈춤 뒤 순간이동` : TR`순간이동`}</b>: ${E('teleport').text}. ${afterStall ? TR`서버가 멈췄다 풀리면서 밀린 틱을 몰아서 계산해, 그 사이 이동한 거리를 한 프레임에 건너뛰었습니다.` : TR`패킷이 한동안 끊겼거나(손실·회선 끊김·서버 멈춤) 늦게 와서, 그 사이 이동한 거리를 한 프레임에 건너뛰었습니다.`}${P.mode === 'extrap' ? TR` 외삽은 모서리에서 방향이 바뀐 걸 모르고 직진하다 되돌아오기도 합니다.` : ''}`;
+      msg = `${K.flag('bad')}<b>${afterStall ? TR`멈춤 뒤 순간이동` : TR`순간이동`}</b>: ${K.then(E('teleport').text, afterStall ? TR`서버가 멈췄다 풀리면서 밀린 틱을 몰아서 계산해, 그 사이 이동한 거리를 한 프레임에 건너뛰었습니다.` : TR`패킷이 한동안 끊겼거나(손실·회선 끊김·서버 멈춤) 늦게 와서, 그 사이 이동한 거리를 한 프레임에 건너뛰었습니다.`)}${P.mode === 'extrap' ? TR` 외삽은 모서리에서 방향이 바뀐 걸 모르고 직진하다 되돌아오기도 합니다.` : ''}`;
     } else if (P.load > 100) {
       msg = TR`${K.flag('warn')}<b>슬로우모션</b>: 서버가 틱 하나에 예산의 ${P.load}%를 씁니다. 1초에 ${tickRate}번만 계산하고, 이 실험의 서버는 틱마다 정해진 ${K.ms(1000 / P.tick)}만큼만 게임 시간을 진행하므로 게임 시간이 ${K.n(Math.min(1, 100 / P.load), 2)}배속으로 흐릅니다. 다른 플레이어와 몬스터가 모두 같이 느려집니다(흐른 시간만큼 한 번에 진행하는 서버라면 속도는 그대로이고 뚝뚝 끊김·순간이동으로 보입니다). 회선은 멀쩡하니 게임 밖에서 잰 핑은 그대로이고, 게임 안 핑은 서버 처리 대기가 섞여 있으면 조금 오를 수 있습니다.`;
     } else if (fps < 25) {

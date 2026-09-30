@@ -70,7 +70,7 @@
   /* ---------------- 히어로: 네 가지 요인 ---------------- */
   const thesis = $('#thesis');
   thesis.innerHTML = TR`<div class="thesis-head"><b>렉은 대부분 네 가지 요인 중 하나에서 시작합니다.</b> 원인이 어느 층에 있든 게임에 미치는 영향은 크게 이 넷으로 묶이고, 게임이 이를 가리는 방식에 따라 렉의 모양이 정해집니다.</div>` +
-    D.fx.map(f => `<div><span class="fx-name">${K.fxIcon(f.id).replace('<svg', '<svg width="16" height="16"')}${f.name}</span><p>${f.how}. ${f.desc.split('. ')[0].replace(/\.$/, '')}.</p></div>`).join('');
+    D.fx.map(f => `<div><span class="fx-name">${K.fxIcon(f.id).replace('<svg', '<svg width="16" height="16"')}${f.name}</span><p>${K.then(f.how, K.firstSentence(f.desc))}</p></div>`).join('');
 
   /* ---------------- 기본 개념: 요인 → 대처 → 증상 ---------------- */
   const fxMap = $('#fx-map');

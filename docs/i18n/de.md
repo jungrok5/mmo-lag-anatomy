@@ -138,7 +138,7 @@ Rules for symptom names in prose:
 | db | 데이터베이스 → Datenbank | DB | Serverseite |
 | infra | 서버 구성과 운영 → Serverarchitektur und Betrieb | 구성·운영 → Architektur/Betrieb | Serverseite |
 | sync (topic) | 동기화 설계 → Synchronisationsdesign | Synchronisationsdesign | 설계 → Design |
-| partial (topic) | 일부에게만 생기는 문제 → Probleme, die nur einige betreffen | 일부만 → Nur einige | 범위 → Betroffenenkreis |
+| partial (topic) | 일부에게만 생기는 문제 → Probleme, die nur einige betreffen | 일부만 → Nur einige | 범위 → Umfang |
 | retrans (topic) | TCP 재전송의 근본 원인 → Grundursachen von TCP-Retransmissions | TCP 재전송 → TCP-Retransmissions | 원인 → Ursache |
 
 Chapter headings that reuse these names must match exactly. Other chapter titles (for consistency across groups):
@@ -155,7 +155,8 @@ Chapter headings that reuse these names must match exactly. Other chapter titles
 | 게임개발팀이 고칠 것, 인프라팀이 고칠 것 | Was das Entwicklungsteam behebt, was das Infrastrukturteam behebt |
 | 진단 도우미 | Diagnosehilfe |
 | 관측으로 판정하기 | Diagnose anhand von Messdaten |
-| 범위 → 시점 → 계층 | Betroffenenkreis → Zeitpunkt → Schicht |
+| 범위 → 시점 → 계층 (judge flow, in sentences) | Betroffenenkreis → Zeitpunkt → Schicht |
+| 범위 (standalone key: topic side, table header, filter label) | Umfang |
 | 판정 신호표 | Signaltabelle |
 | 사례와 절차 | Fallbeispiele und Playbooks |
 | 상황별 절차 | Playbooks für typische Situationen |
@@ -186,6 +187,8 @@ Chapter headings that reuse these names must match exactly. Other chapter titles
 | 누가 고치나 | Wer behebt es | |
 | 에스컬레이션 | Eskalation | |
 | 안내 (to users) / 요청 (to providers) / 우회 | Hinweis an Spieler / Anfrage an Anbieter / Workaround | |
+| team·owner joiner `{0}·{1}` | `{1} ({0})` | "Server-Entwicklung (Entwicklungsteam)" |
+| sentence joiner `{0}. {1}` | `{0}. {1}` | |
 
 ### 6.5 Who / when (`who`, `when`)
 
@@ -499,7 +502,33 @@ How they are used:
 - Spelling for search consistency: "Onlinespiel" (Duden-preferred), "Input-Lag", "Ping-Spikes", "Paketverlust", "WLAN", "Router".
 - Do not stuff keywords. Use a search phrase only where the sentence needs that word anyway.
 
-## 9. Checklist before `fill`
+## 9. Shared keys (already fixed; reuse exactly)
+
+These Korean strings exist as whole entries both in the phase-1 groups and in other groups. The build keeps only one German string per Korean key, so use these verbatim wherever the whole entry is identical, even if the context feels slightly different.
+
+| Korean key | German | Also appears in |
+|---|---|---|
+| 뚝뚝 끊김 / 순간이동 / 고무줄 / 몰아치기 / 슬로우모션 / 입력 지연 / 멈춤 / 씹힘·롤백 / 접속 끊김 / 접속 불가·무한 로딩 | the symptom names of 6.1 | sim-arch, sim-lab, sim-oneslow, sim-gc, sim-nagle (the playback option "멈춤" is also "Freeze"), sim-sndbuf |
+| 지연 / 지터 / 손실 / 패킷 손실 | Latenz / Jitter / Paketverlust / Paketverlust | sim-bloat, sim-distance, sim-oneslow, sim-syncmodels, sim-sndbuf, sim-lab |
+| 클라이언트 / 서버 / 네트워크 | Client / Server / Netzwerk | many sims |
+| 좋음 / 주의 / 나쁨 | Gut / Achtung / Schlecht | sim-bloat, sim-ladder, body-judge, body-retrans |
+| 범위 | Umfang | ui-app (filter label) |
+| 담당 / 주 담당 / 팀 | Zuständigkeit / Hauptzuständig / Team | body-owners, ui-app |
+| 요인 / 언제 | Faktoren / Wann | ui-app |
+| 확인할 곳 / 이러면 맞음 / 이러면 아님 / 확인 수단 | Wo nachsehen / Spricht dafür / Spricht dagegen / Prüfmittel | ui-app |
+| 수치 감각 / 더 알아보기 / 실제 사례 / 출처 | Größenordnungen / Mehr dazu / Reale Fälle / Quellen | ui-app |
+| 무슨 일 / 배울 점 | Was geschah / Lehren daraus | ui-app |
+| 상황별 절차 / 실제 장애 사례 / 용어 사전 / 참고 문헌 / 목차 | Playbooks für typische Situationen / Reale Störungsfälle / Glossar / Quellenverzeichnis / Inhalt | body-cases, body-glossary, body-refs, body-shell |
+| 관측으로 판정하기 | Diagnose anhand von Messdaten | body-judge |
+| layer names (클라이언트 게임 프로세스, 데이터센터 네트워크 장비, 서버 OS (커널), 메모리, 디스크, 데이터베이스, 서버 구성과 운영, 서버 네트워크 카드, 일부에게만 생기는 문제, TCP 재전송의 근본 원인) | see 6.3 | body-l-* headings, body-partial, body-retrans |
+| the five owner descriptions (게임 클라이언트 코드: …, 게임 서버 코드: …, 회선과 IDC …, 서버 장비·클라우드 …, DB 서버·스토리지 …) | copy from `src/i18n/de/data.json` (`owners/*/desc`) | body-owners |
+| glossary terms used as cause titles (타이머 해상도, 복제 지연, 캐시 스탬피드, 연쇄 장애, 메모리 누수, 스왑, 캐시 미스, OOM 킬러, 데드락) | Timer-Auflösung, Replikationsverzögerung, Cache-Stampede, Kaskadierender Ausfall, Speicherleck, Swap, Cache-Miss, OOM-Killer, Deadlock | causes-* |
+| other glossary terms reused as sim labels (방화벽, 로드밸런서, 게이트웨이, 캐시, 선연출, 발열 스로틀링, 타임아웃, 버스트 크레딧, 틱레이트, 보간, 보간 버퍼, 클라이언트 예측, 틱, 핑, 데드락, 링 버퍼, 집계 간격, 이용률, 재전송률, 불필요한 재전송, 락스텝, 롤백, 지연 보상) | as in `src/i18n/de/glossary.json` | sim-* |
+| 같은 데이터센터 서버끼리 왕복 | Server zu Server im selben Rechenzentrum, hin und zurück | sim-ladder |
+| 설계 | Design | sim-windows |
+| " 초" (after a number) | " s" | sim-disk |
+
+## 10. Checklist before `fill`
 
 - Placeholders `{0}` … all present; HTML tags identical in number and attributes; `href`, `id`, `class`, `data-*` untouched.
 - Symptom names exactly as in 6.1; factor names as in 6.2; layer names as in 6.3.

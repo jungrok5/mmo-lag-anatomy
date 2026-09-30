@@ -47,7 +47,7 @@
     {"ctx":"extraLayers/partial/short","ko":"일부만","t":"У части игроков"},
     {"ctx":"extraLayers/partial/side","ko":"범위","t":"Охват"},
     {"ctx":"extraLayers/retrans/name","ko":"TCP 재전송의 근본 원인","t":"Первопричины повторных передач TCP"},
-    {"ctx":"extraLayers/retrans/short","ko":"TCP 재전송","t":"Ретрансмиты TCP"},
+    {"ctx":"extraLayers/retrans/short","ko":"TCP 재전송","t":"Повторная передача TCP"},
     {"ctx":"extraLayers/retrans/side","ko":"원인","t":"Причина"},
     {"ctx":"teams/game/name","ko":"게임개발팀","t":"Команда разработки"},
     {"ctx":"teams/game/desc","ko":"클라이언트·서버 코드와 동기화 설계","t":"Код клиента и сервера, архитектура синхронизации"},

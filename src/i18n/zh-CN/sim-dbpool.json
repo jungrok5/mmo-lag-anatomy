@@ -56,7 +56,7 @@
     {"ctx":"src/sims/dbpool.js:76","ko":"대기 중 요청","t":""},
     {"ctx":"src/sims/dbpool.js:76, src/sims/dbpool.js:77","ko":"건","t":""},
     {"ctx":"src/sims/dbpool.js:77","ko":"초당 실패","t":""},
-    {"ctx":"src/sims/dbpool.js:77","ko":"타임아웃","t":""},
+    {"ctx":"src/sims/dbpool.js:77","ko":"타임아웃","t":"超时"},
     {"ctx":"src/sims/dbpool.js:78","ko":"풀 사용률","t":""},
     {"ctx":"src/sims/dbpool.js:200","ko":"커넥션 대기열 {0}건","t":""},
     {"ctx":"src/sims/dbpool.js:209","ko":"대기 없음: 오자마자 커넥션을 받습니다","t":""},

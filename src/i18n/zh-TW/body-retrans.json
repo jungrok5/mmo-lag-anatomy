@@ -61,7 +61,7 @@
     {"ctx":"#retrans td","ko":"재전송 한 건씩 (리눅스)","t":""},
     {"ctx":"#retrans td","ko":"eBPF 도구 <code>tcpretrans</code>(bcc). <code>-c</code>는 연결별 집계, <code>-l</code>은 TLP 포함","t":""},
     {"ctx":"#retrans td","ko":"재전송이 날 때마다 상대 IP·포트·연결 상태를 한 줄씩 보여 줍니다. 패킷 캡처 없이 가볍게, 어느 유저 대역·서버에 몰리는지 확인","t":""},
-    {"ctx":"#retrans td","ko":"서버 네트워크 카드","t":""},
+    {"ctx":"#retrans td","ko":"서버 네트워크 카드","t":"伺服器網路卡"},
     {"ctx":"#retrans td","ko":"<code>ip -s -s link</code>의 dropped·missed·crc, <code>ethtool -S</code>의 rx_missed_errors·rx_no_buffer_count·rx_crc_errors 등(이름은 드라이버마다 다름, mlx5는 rx_out_of_buffer·rx_discards_phy), <code>/proc/net/softnet_stat</code>의 2번째 열(dropped)·3번째 열(time_squeeze)","t":""},
     {"ctx":"#retrans td","ko":"서버 네트워크 카드가 받자마자 버렸는지(링 버퍼·CPU), 선이나 광모듈 불량(CRC)인지. softnet_stat은 CPU마다 한 줄이고 16진수입니다. time_squeeze가 계속 늘면 수신 처리 코어가 제시간에 일을 못 끝내는 것","t":""},
     {"ctx":"#retrans td","ko":"클라우드 네트워크","t":""},
@@ -113,7 +113,7 @@
     {"ctx":"#retrans th","ko":"설정","t":""},
     {"ctx":"#retrans th","ko":"어디서","t":""},
     {"ctx":"#retrans th","ko":"무엇을 바꾸나","t":""},
-    {"ctx":"#retrans th","ko":"주의","t":""},
+    {"ctx":"#retrans th","ko":"주의","t":"注意"},
     {"ctx":"#retrans td","ko":"소켓 옵션","t":""},
     {"ctx":"#retrans td","ko":"Nagle 끄기. 작은 메시지를 모으지 않고 바로 보냄","t":""},
     {"ctx":"#retrans td","ko":"손실이 없어도 생기는 40~200ms 대기를 없앰. <b>재전송 타이머(RTO) 자체는 그대로</b>. 다만 Nagle이 켜져 있으면 복구를 기다리는 동안 새 패킷까지 묶여 복구 뒤 한 왕복을 더 기다리고, 빠른 재전송·RACK이 기대는 뒤따르는 패킷도 사라져 RTO까지 가기 쉬움. 게임은 켜는 것이 보통","t":""},
@@ -144,6 +144,6 @@
     {"ctx":"#retrans td","ko":"큐 설정 / 소켓 옵션 / 커널 설정","t":""},
     {"ctx":"#retrans td","ko":"패킷을 고르게 나눠 보내 버스트(한꺼번에 몰아 보냄)로 인한 손실을 줄임","t":""},
     {"ctx":"#retrans td","ko":"손실을 “예방”하는 쪽. 복구 속도와는 별개","t":""},
-    {"ctx":"#retrans-causes","ko":"TCP 재전송의 근본 원인","t":""}
+    {"ctx":"#retrans-causes","ko":"TCP 재전송의 근본 원인","t":"TCP 重傳的根本原因"}
   ]
 }
