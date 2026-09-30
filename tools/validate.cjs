@@ -52,11 +52,13 @@ for (const c of D.causes) {
   if (c.sig) {
     if (!SIGS.has(c.sig.k)) p('sig.k ' + c.sig.k);
     if (!c.sig.g) p('sig.g missing');
-  } else sigMissing++;
+  } else { sigMissing++; p('sig missing'); }
   if (c.chk) {
     for (const k of ['look', 'yes']) if (!c.chk[k]) p('chk.' + k + ' missing');
     if (!BY.has(c.chk.by)) p('chk.by ' + c.chk.by);
-  } else chkMissing++;
+    // 화면에 HTML로 그대로 들어가므로 <b> 말고는 꺾쇠 열기를 쓰지 않는다
+    for (const k of ['look', 'yes', 'no']) if (/<(?!\/?b>)/.test(c.chk[k] || '')) p('chk.' + k + ' has <');
+  } else { chkMissing++; p('chk missing'); }
 }
 // 실제 장애 사례와 상황별 절차(src/js/cases.js)
 (D.cases || []).forEach(x => {
