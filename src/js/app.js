@@ -376,13 +376,14 @@
       const route = {};
       scored.slice(0, 10).forEach(({ c }) => { if (c.own && OWN[c.own[0]]) route[c.own[0]] = (route[c.own[0]] || 0) + 1; });
       const routeHTML = Object.keys(route).length ? `<p class="tri-route"><span class="k">먼저 확인할 곳</span>${Object.entries(route).sort((a, b) => b[1] - a[1]).map(([id, k]) => `${ownBadge(id)}<span class="mono">${k}</span>`).join('')}<span class="note">상위 10개 원인의 주 담당</span></p>` : '';
-      out.innerHTML = routeHTML + scored.slice(0, 10).map(({ c, score, why }) => {
+      out.innerHTML = routeHTML + scored.slice(0, 10).map(({ c, score, why }, i) => {
         const pct = Math.round((score / max) * 100);
         return `<div class="tri-item">
           <div class="score">${pct}%<div class="meter"><i style="width:${pct}%"></i></div></div>
           <div><a href="#c-${c.id}">${c.t}</a> <span class="layer">· ${LAYER[c.layer].name}</span> ${c.own && c.own.length ? ownBadge(c.own[0]) : ''}
           <div class="why">${c.s}</div>
-          <div class="why"><span class="note">맞는 조건: ${why.join(' · ')}</span></div></div>
+          <div class="why"><span class="note">맞는 조건: ${why.join(' · ')}</span></div>
+          ${c.chk && i < 3 ? `<div class="why tri-chk"><span class="k">먼저 볼 것</span>${c.chk.look}${c.sig && SIG[c.sig.k] ? ` <span class="note">· 그래프 모양: <a href="#sig-${c.sig.k}">${SIG[c.sig.k].name}</a></span>` : ''}</div>` : ''}</div>
         </div>`;
       }).join('') + (scored.length > 10 ? `<p class="note">그 밖에 ${scored.length - 10}가지 원인이 일부 조건과 맞습니다.</p>` : '');
     }
@@ -588,14 +589,36 @@
     const rows = ALL_LAYERS.map(l => {
       const list = D.causes.filter(c => c.layer === l.id && c.chk);
       const n = Object.fromEntries(BY.map(b => [b, list.filter(c => c.chk.by === b).length]));
-      return { l, n, total: list.length };
+      return { l, n, list, total: list.length };
     }).filter(r => r.total);
     if (!rows.length) { box.innerHTML = ''; return; }
     const all = Object.fromEntries(BY.map(b => [b, rows.reduce((a, r) => a + r.n[b], 0)]));
     const sum = BY.reduce((a, b) => a + all[b], 0);
-    const bar = (n, total) => `<div class="cover-bar" role="img" aria-label="${BY.map(b => `${LABEL[b]} ${n[b]}`).join(', ')}">${BY.map((b, i) => n[b] ? `<span class="cv-${i + 1}" style="flex:${n[b]}" title="${LABEL[b]} ${n[b]}">${n[b]}</span>` : '').join('')}</div>`;
+    const bar = n => `<div class="cover-bar" role="img" aria-label="${BY.map(b => `${LABEL[b]} ${n[b]}`).join(', ')}">${BY.map((b, i) => n[b] ? `<span class="cv-${i + 1}" style="flex:${n[b]}" title="${LABEL[b]} ${n[b]}">${n[b]}</span>` : '').join('')}</div>`;
+    // 관측 커버리지 계산기: 가진 수단을 고르면 확인할 수 있는 원인 수와 아직 안 보이는 원인 목록을 보여 준다
+    const have = new Set(['ops']);
+    const pick = K.el('fieldset', { class: 'cover-pick' }, K.el('legend', { text: '지금 가진 확인 수단' }));
+    const opts = K.el('div', { class: 'opts' });
+    BY.forEach((b, i) => {
+      const id = 'cvp-' + b;
+      const inp = K.el('input', { type: 'checkbox', id, value: b });
+      inp.checked = have.has(b);
+      inp.addEventListener('change', () => { inp.checked ? have.add(b) : have.delete(b); calc(); });
+      opts.append(inp, K.el('label', { for: id, html: `<i class="cv-dot cv-${i + 1}"></i>${LABEL[b]}` }));
+    });
+    pick.append(opts);
+    const res = K.el('div', { class: 'cover-res', 'aria-live': 'polite' });
     box.innerHTML = `<p class="legend cover-legend">${BY.map((b, i) => `<span><i class="cv-${i + 1}"></i>${LABEL[b]} ${all[b]}가지 (${Math.round(all[b] / sum * 100)}%)</span>`).join('')}</p>
-      <div class="cover">${rows.map(r => `<div class="cover-row"><a href="#${r.l.anchor || 'l-' + r.l.id}">${r.l.short || r.l.name}</a>${bar(r.n, r.total)}</div>`).join('')}</div>`;
+      <div class="cover">${rows.map(r => `<div class="cover-row"><a href="#${r.l.anchor || 'l-' + r.l.id}">${r.l.short || r.l.name}</a>${bar(r.n)}</div>`).join('')}</div>`;
+    box.append(pick, res);
+    function calc() {
+      const ok = rows.reduce((a, r) => a + r.list.filter(c => have.has(c.chk.by)).length, 0);
+      const miss = rows.map(r => ({ r, list: r.list.filter(c => !have.has(c.chk.by)) })).filter(x => x.list.length);
+      const missN = sum - ok;
+      res.innerHTML = `<p class="sim-say">${K.flag(ok / sum >= 0.7 ? 'good' : 'warn')}고른 수단으로 확인할 수 있는 원인은 <b>${ok}가지</b>(전체 ${sum}가지의 ${Math.round(ok / sum * 100)}%)입니다.${missN ? ` 나머지 <b>${missN}가지</b>는 다른 수단으로 확인하는 편이 쉽습니다.${have.has('code') ? '' : ' 게임 로그·지표가 필요한 원인은 개발팀에 계측을 요청할 목록이 됩니다.'}` : ''}</p>
+        ${miss.length ? `<details class="cover-miss"><summary>다른 수단이 필요한 원인 ${missN}가지</summary>${miss.map(({ r, list }) => `<p class="cover-miss-l"><b>${r.l.short || r.l.name}</b> <span class="note">${list.length}</span></p><div class="chips">${list.map(c => `<a class="cause-chip cv-b-${BY.indexOf(c.chk.by) + 1}" href="#c-${c.id}" title="${LABEL[c.chk.by]}">${c.t}</a>`).join('')}</div>`).join('')}</details>` : ''}`;
+    }
+    calc();
   })();
 
   /* ---------------- 사례와 절차 ---------------- */
@@ -612,7 +635,8 @@
     const box = $('#case-list'); if (!box) return;
     box.innerHTML = (D.cases || []).map(x => `<article class="case" id="case-${x.id}">
       <p class="case-org">${esc(x.org)} · ${x.year}</p><h4>${esc(x.t)}</h4>
-      <dl><dt>무슨 일</dt><dd>${x.what}</dd><dt>원인</dt><dd>${x.why}</dd><dt>배울 점</dt><dd>${x.lesson}</dd></dl>
+      <dl><dt>무슨 일</dt><dd>${x.what}</dd><dt>배울 점</dt><dd>${x.lesson}</dd></dl>
+      <details class="case-why"><summary>원인 자세히</summary><p>${x.why}</p></details>
       <div class="chips">${causeChips(x.causes)}</div>
       <p class="case-src"><a href="${esc(x.u)}" target="_blank" rel="noopener noreferrer">원문: ${esc(x.p || x.org)}</a></p></article>`).join('') || '<p class="note">준비 중입니다.</p>';
   })();
