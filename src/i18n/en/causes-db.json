@@ -100,7 +100,7 @@
     {"ctx":"causes/db-replica-lag/ref/3/n","ko":"8.0.22부터 SHOW SLAVE STATUS 대신 SHOW REPLICA STATUS, 그 이전 버전은 SHOW SLAVE STATUS","t":"From 8.0.22, SHOW REPLICA STATUS replaces SHOW SLAVE STATUS; earlier versions use SHOW SLAVE STATUS"},
     {"ctx":"causes/db-replica-lag/ref/4/n","ko":"pg_stat_replication의 write_lag·flush_lag·replay_lag: 주 서버가 WAL을 기록한 뒤 복제본이 쓰고·디스크에 내리고·적용했다고 알릴 때까지 걸린 시간","t":"write_lag, flush_lag, and replay_lag in pg_stat_replication: time from the primary writing WAL until the replica reports it has written, flushed to disk, and applied it"},
     {"ctx":"causes/db-replica-lag/ref/5/n, causes/db-failover/ref/5/n","ko":"ReplicaLag: 읽기 복제본이 원본보다 뒤처진 시간(초)","t":"ReplicaLag: how far a read replica lags behind its source (seconds)"},
-    {"ctx":"causes/db-checkpoint/t","ko":"체크포인트·로그 플러시","t":"Checkpoints and log flushes"},
+    {"ctx":"causes/db-checkpoint/t","ko":"체크포인트·로그 플러시","t":"Checkpoint / log flush"},
     {"ctx":"causes/db-checkpoint/s","ko":"DB가 메모리의 변경분을 주기적으로 디스크에 몰아서 쓰는 순간 쿼리가 느려집니다.","t":"Queries slow down at the moments the DB periodically writes its accumulated in-memory changes to disk in bulk."},
     {"ctx":"causes/db-checkpoint/c/0","ko":"변경분이 쌓여 주기적으로 디스크에 기록","t":"Changes pile up and are periodically written to disk"},
     {"ctx":"causes/db-checkpoint/c/1","ko":"그 순간 디스크가 바빠져 쿼리 지연","t":"The disk gets busy at that moment and queries slow down"},
