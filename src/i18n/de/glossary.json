@@ -158,7 +158,6 @@
     {"ctx":"glossary/g-rollback/0","ko":"롤백","t":""},
     {"ctx":"glossary/g-rollback/2","ko":"저장이 취소되어 이전 상태로 돌아가는 것. 플레이어는 “아이템이 사라졌다”고 느낍니다.","t":""},
     {"ctx":"glossary/g-cache/0","ko":"캐시","t":""},
-    {"ctx":"glossary/g-cache/1","ko":"Cache (Redis 등)","t":""},
     {"ctx":"glossary/g-cache/2","ko":"자주 쓰는 데이터를 빠른 곳에 복사해 둔 것. DB 부하를 줄입니다.","t":""},
     {"ctx":"glossary/g-checkpoint/0","ko":"체크포인트","t":""},
     {"ctx":"glossary/g-checkpoint/2","ko":"DB가 메모리에 모아 둔 변경분을 주기적으로 디스크에 몰아 쓰는 일. 그 순간 저장·조회가 잠깐 느려질 수 있습니다.","t":""},

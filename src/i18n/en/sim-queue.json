@@ -26,7 +26,7 @@
     {"ctx":"src/sims/queue.js:32","ko":"워커 수","t":""},
     {"ctx":"src/sims/queue.js:32","ko":"개","t":""},
     {"ctx":"src/sims/queue.js:32","ko":"워커 = CPU 코어, 스레드, DB 커넥션, 디스크 채널, 회선 등","t":""},
-    {"ctx":"src/sims/queue.js:34, src/sims/queue.js:155","ko":"이용률","t":""},
+    {"ctx":"src/sims/queue.js:34, src/sims/queue.js:155","ko":"이용률","t":"Utilization"},
     {"ctx":"src/sims/queue.js:35","ko":"대기열 길이","t":""},
     {"ctx":"src/sims/queue.js:35","ko":"건","t":""},
     {"ctx":"src/sims/queue.js:36","ko":"평균 대기(측정)","t":""},

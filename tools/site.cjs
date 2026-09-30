@@ -293,7 +293,7 @@ ${pubs.map(([p, list]) => `<h3>${esc(p)} <span class="n">${list.length}</span></
 
   // ---------- llms.txt, llms-full.txt ----------
   const others = LANGS.filter(l => l !== L);
-  const llms = `# ${NAME} (Game Lag White Paper)
+  const llms = `# ${NAME}${NAME === 'Game Lag White Paper' ? '' : ' (Game Lag White Paper)'}
 
 > ${TR`온라인 게임에서 렉(뚝뚝 끊김, 순간이동, 고무줄, 몰아치기, 입력 지연, 멈춤, 접속 끊김 등)이 생기는 원인 ${K.causes.length}가지를 내 화면부터 서버 데이터베이스까지 13개 층과 3개 주제(동기화 설계, 일부에게만 생기는 문제, TCP 재전송)로 나눠 설명하는 백서입니다. MMO 사례를 중심으로 썼지만 대부분은 장르와 상관없이 온라인 게임 전반에 해당합니다. 원인마다 왜 → 그러면 → 화면에서는의 세 단계, 관련 증상, 수치 감각, 해결 담당(게임개발팀·인프라팀·외부)과 팀별 할 일, 그래프 모양과 확인 방법, 공신력 있는 출처(RFC, 커널·OS·클라우드·엔진·DB 공식 문서, 논문)를 담았습니다.`}
 

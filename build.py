@@ -107,7 +107,7 @@ def seo(head):
         "description": desc, "inLanguage": LANG["code"], "isPartOf": {"@id": url + "#website"},
         "image": og_image(), "license": "https://opensource.org/licenses/MIT", "isAccessibleForFree": True,
         "author": {"@type": "Person", "name": "jungrok5", "url": "https://github.com/jungrok5"},
-        "about": [tr(x) for x in ["게임 렉", "네트워크 지연", "지터", "패킷 손실", "넷코드", "TCP 재전송", "게임 서버 성능", "MMO"]],
+        "about": [tr("게임 렉"), tr("네트워크 지연"), tr("지터"), tr("패킷 손실"), tr("넷코드"), tr("TCP 재전송"), tr("게임 서버 성능"), "MMO"],
         "keywords": tr("렉 원인, 게임 렉, 핑, 끊김, 순간이동, 고무줄, 입력 지연, 접속 끊김, 서버 렉, 넷코드, TCP 재전송, 게임개발팀, 인프라팀"),
     }
     if LANG["code"] != "ko":

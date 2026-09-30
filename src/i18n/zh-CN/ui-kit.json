@@ -2,14 +2,14 @@
   "lang": "zh-CN",
   "group": "ui-kit",
   "entries": [
-    {"ctx":"src/js/kit.js:93, src/js/kit.js:94","ko":" 초","t":""},
-    {"ctx":"src/js/kit.js:141","ko":"직접 해보기","t":""},
-    {"ctx":"src/js/kit.js:155","ko":"이렇게 해보세요","t":""},
-    {"ctx":"src/js/kit.js:247","ko":"상황 불러오기","t":""},
-    {"ctx":"src/js/kit.js:271","ko":"좋음","t":""},
-    {"ctx":"src/js/kit.js:272","ko":"주의","t":""},
-    {"ctx":"src/js/kit.js:273","ko":"나쁨","t":""},
-    {"ctx":"src/js/kit.js:569","ko":"<p class=\"sim-error\">시뮬레이션 “{0}”를 찾지 못했습니다.</p>","t":""},
-    {"ctx":"src/js/kit.js:571","ko":"<p class=\"sim-error\">시뮬레이션 “{0}”를 불러오다 오류가 났습니다: {1}</p>","t":""}
+    {"ctx":"src/js/kit.js:93, src/js/kit.js:94","ko":" 초","t":" 秒"},
+    {"ctx":"src/js/kit.js:141","ko":"직접 해보기","t":"动手试试"},
+    {"ctx":"src/js/kit.js:155","ko":"이렇게 해보세요","t":"可以这样试"},
+    {"ctx":"src/js/kit.js:247","ko":"상황 불러오기","t":"载入场景"},
+    {"ctx":"src/js/kit.js:271","ko":"좋음","t":"良好"},
+    {"ctx":"src/js/kit.js:272","ko":"주의","t":"注意"},
+    {"ctx":"src/js/kit.js:273","ko":"나쁨","t":"差"},
+    {"ctx":"src/js/kit.js:569","ko":"<p class=\"sim-error\">시뮬레이션 “{0}”를 찾지 못했습니다.</p>","t":"<p class=\"sim-error\">找不到模拟“{0}”。</p>"},
+    {"ctx":"src/js/kit.js:571","ko":"<p class=\"sim-error\">시뮬레이션 “{0}”를 불러오다 오류가 났습니다: {1}</p>","t":"<p class=\"sim-error\">加载模拟“{0}”时出错：{1}</p>"}
   ]
 }
