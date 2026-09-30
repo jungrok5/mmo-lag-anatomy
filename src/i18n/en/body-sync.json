@@ -36,7 +36,7 @@
     {"ctx":"#sync td","ko":"서버가 공격자가 보던 과거 시점으로 되감아 명중을 판정한다.","t":"The server rewinds to the past moment the attacker was seeing and registers the hit there."},
     {"ctx":"#sync td","ko":"FPS, 논타겟 액션","t":"FPS games, non-target action"},
     {"ctx":"#sync td","ko":"쏜 사람은 공정하게 느끼지만, 맞는 사람은 “엄폐했는데 맞음”","t":"The shooter feels it’s fair, but the target gets “I was behind cover and still got hit”"},
-    {"ctx":"#sync td","ko":"맞는 쪽의 억울함. 공격자 핑이 높을수록 크게 되감아 심해짐","t":"Unfair from the target’s side. The higher the attacker’s ping, the further the rewind and the worse it gets"},
+    {"ctx":"#sync td","ko":"맞는 쪽의 억울함. 공격자 핑이 높을수록 크게 되감아 심해짐","t":"Feels unfair to the target. The higher the attacker’s ping, the further the rewind and the worse it gets"},
     {"ctx":"#sync td","ko":"<b>명령·목적지 동기화</b>","t":"<b>Command/destination sync</b>"},
     {"ctx":"#sync td","ko":"“여기로 가라”, “이 대상 공격”처럼 의도만 보내고 양쪽이 알아서 계산한다.","t":"Send only the intent, like “go here” or “attack this target,” and both sides work out the rest."},
     {"ctx":"#sync td","ko":"클릭 이동 MMO, 탭 타겟 전투, MOBA 일부","t":"Click-to-move MMOs, tab-target combat, some MOBAs"},
