@@ -2,7 +2,7 @@
 //   python3 build.py && node tools/site.cjs [출력 폴더]   (기본 build/site)
 // AI 수집기 상당수는 자바스크립트를 실행하지 않으므로, 자바스크립트가 그리는 내용을 HTML에도 넣는다.
 //   index.html      빌드한 완성본 + 원인 카드·증상·용어의 정적 사본(자바스크립트가 돌면 원래 화면으로 바뀜)
-//   c/<ID>.html     원인마다 한 페이지(216개). 질문과 딱 맞는 페이지가 인용되기 쉽다
+//   c/<ID>.html     원인마다 한 페이지. 질문과 딱 맞는 페이지가 인용되기 쉽다
 //   s/<ID>.html     증상마다 한 페이지: 그 증상을 만드는 원인 목록
 //   text.html       전체를 한 페이지로 읽는 텍스트 판
 //   llms.txt        AI용 안내(llmstxt.org 형식), llms-full.txt 전체 마크다운

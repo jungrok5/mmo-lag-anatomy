@@ -550,20 +550,32 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
 /* ---------- 진단 도우미 ---------- */
 .triage { display: grid; gap: 18px; }
 .triage > .btn { justify-self: start; }
+.cover-pick { border: 0; margin: 4px 0 0; padding: 0; display: grid; gap: 8px; }
+.cover-pick legend { font-weight: 700; font-size: 14px; margin-bottom: 6px; padding: 0; }
+.cv-dot { display: inline-block; width: 9px; height: 9px; border-radius: 3px; }
+.cover-res .sim-say { margin-top: 10px; }
+.cover-miss { margin-top: 8px; font-size: 13px; }
+.cover-miss summary { cursor: pointer; font-weight: 600; }
+.cover-miss-l { margin: 10px 0 4px; font-size: 13px; }
+.cause-chip[class*=cv-b-]::before { content: ''; display: inline-block; width: 7px; height: 7px; border-radius: 2px; margin-right: 5px; vertical-align: 1px; }
+.cause-chip.cv-b-1::before { background: var(--s1); } .cause-chip.cv-b-2::before { background: var(--s2); } .cause-chip.cv-b-3::before { background: var(--s3); }
+.tri-item .tri-chk { margin-top: 3px; }
+.tri-item .tri-chk .k { font-size: 11px; font-weight: 700; color: var(--muted); margin-right: 4px; }
 .triage fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 8px; }
 .triage legend { font-weight: 700; font-size: 15px; margin-bottom: 6px; padding: 0; }
-.triage .opts { display: flex; flex-wrap: wrap; gap: 6px; }
-.triage .opts input { position: absolute; opacity: 0; width: 1px; height: 1px; }
-.triage .opts label { display: inline-flex; align-items: center; gap: 6px; padding: 6px 11px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-size: 13.5px; color: var(--ink-2); }
+.triage .opts, .cover-pick .opts { display: flex; flex-wrap: wrap; gap: 6px; }
+.triage .opts input, .cover-pick .opts input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.triage .opts label, .cover-pick .opts label { display: inline-flex; align-items: center; gap: 6px; padding: 6px 11px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-size: 13.5px; color: var(--ink-2); }
 .triage .opts label svg { width: 30px; height: 12px; color: var(--ink-2); }
-.triage .opts input:checked + label { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.triage .opts input:checked + label, .cover-pick .opts input:checked + label { background: var(--ink); color: var(--surface); border-color: var(--ink); }
 .triage .opts input:checked + label svg { color: var(--surface); }
-.triage .opts input:focus-visible + label { outline: 2px solid var(--accent); outline-offset: 2px; }
+.triage .opts input:focus-visible + label, .cover-pick .opts input:focus-visible + label { outline: 2px solid var(--accent); outline-offset: 2px; }
 .tri-results { display: grid; gap: 8px; }
 .tri-item { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 12px; align-items: start; padding: 11px 14px; border-radius: 8px; background: var(--paper); border: 1px solid var(--line); }
 .tri-item .score { font: 600 13px/1 var(--font-mono); color: var(--accent); padding-top: 4px; }
 .tri-item .score .meter { margin-top: 6px; height: 5px; }
 .tri-item a { font-weight: 700; }
+.tri-item .tri-chk a { font-weight: 500; }
 .tri-item .why { font-size: 13px; color: var(--ink-2); }
 .tri-item .layer { font-size: 12px; color: var(--muted); }
 
@@ -650,6 +662,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
 .sg path { fill: none; stroke-linejoin: round; stroke-linecap: round; }
 .sg-main { stroke: var(--accent); stroke-width: 2; }
 .sg-sub { stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 3 3; }
+.sg-sub.sg-solid { stroke-dasharray: none; stroke-width: 1.2; }
 .sg-ref { stroke: var(--line); stroke-width: 1.5; stroke-dasharray: 2 3; }
 .sig-row { display: flex; align-items: center; gap: 12px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); max-width: var(--prose); }
 .sig-row p { margin: 0; font-size: 14px; color: var(--ink-2); }
@@ -724,6 +737,9 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
 .case dt { color: var(--muted); font-weight: 700; font-size: 12.5px; padding-top: 2px; }
 .case dd { margin: 0; color: var(--ink-2); }
 .case-src { margin: 0; font-size: 13px; }
+.case-why { font-size: 14px; color: var(--ink-2); }
+.case-why summary { cursor: pointer; font-size: 13px; font-weight: 600; color: var(--muted); }
+.case-why p { margin: 6px 0 0; }
 @media (max-width: 420px) { .case-list { grid-template-columns: minmax(0, 1fr); } .case dl { grid-template-columns: minmax(0, 1fr); } }
 
 /* 장 요약 그림 */
@@ -2475,8 +2491,8 @@ window.SIGDRAW = (function () {
     peak: { main: fn(x => 0.22 + 0.64 * Math.exp(-Math.pow((x - 0.68) / 0.12, 2))) },
     load: { main: fn(x => 0.14 + 0.82 * x * x), subs: [fn(x => 0.14 + 0.46 * x)] },
     ceiling: { main: fn(x => Math.min(0.72, 0.14 + 1.3 * x)), subs: [fn(x => (x < 0.45 ? 0.08 : 0.08 + 1.5 * (x - 0.45)))] },
-    high: { main: fn(wob(0.74, 0.03, 50)), ref: [[0, 0.22], [1, 0.22]] },
-    outlier: { main: fn(wob(0.78, 0.03, 37)), subs: [fn(wob(0.16, 0.02, 41)), fn(wob(0.24, 0.02, 29)), fn(wob(0.32, 0.02, 53))] },
+    high: { main: fn(wob(0.74, 0.025, 23)), ref: [[0, 0.22], [1, 0.22]] },
+    outlier: { solid: true, main: fn(wob(0.8, 0.025, 13)), subs: [fn(wob(0.16, 0.012, 7)), fn(wob(0.27, 0.012, 9)), fn(wob(0.38, 0.012, 11))] },
     gap: { main: [[0, 0.5], [0.38, 0.5], [0.4, 0.04], [0.58, 0.04], [0.6, 0.98], [0.64, 0.5], [1, 0.5]] },
     drop: { main: [[0, 0.82], [0.5, 0.82], [0.52, 0.16], [0.75, 0.44], [1, 0.7]] },
     surge: { main: fn(x => (x < 0.3 ? 0.14 : 0.14 + 0.82 * Math.exp(-(x - 0.3) * 7)), 120) },
@@ -2486,7 +2502,7 @@ window.SIGDRAW = (function () {
     const s = S[k];
     if (!s) return '';
     const ref = s.ref ? `<path d="${path(s.ref)}" class="sg-ref"/>` : '';
-    const subs = (s.subs || []).map(p => `<path d="${path(p)}" class="sg-sub"/>`).join('');
+    const subs = (s.subs || []).map(p => `<path d="${path(p)}" class="sg-sub${s.solid ? ' sg-solid' : ''}"/>`).join('');
     return `<svg class="sg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${esc(label)}">${ref}${subs}<path d="${path(s.main)}" class="sg-main"/></svg>`;
   };
 })();
@@ -3683,10 +3699,19 @@ window.SIGDRAW = (function () {
       act: { game: '비싼 계산 줄이기, 틱을 여러 스레드로 나누기, 인원 분산(채널), 틱 처리 시간을 지표로 남기기.', infra: '틱 시간과 코어별 CPU 사용률을 모니터링·경보에 추가, 단일 코어 성능(클럭)이 높은 CPU·인스턴스 검토.' },
       more: '틱이 늦을 때의 모습은 서버 설계에 따라 다릅니다. 틱마다 게임 상태를 정해진 시간(예: 50ms)만큼 진행하는 서버는 게임 시간 자체가 느려져 슬로우모션이 됩니다. 실제로 흐른 시간만큼 한 번에 움직이는 서버는 게임 진행 속도는 지키지만, 패킷이 드물고 한 번에 크게 움직여 뚝뚝 끊김·순간이동으로 보입니다. 어느 쪽이든 입력 반응은 늦어집니다. 게임 스레드 하나가 서버 전체를 맡으면 서버 전체가, 지역마다 스레드를 나눴다면 그 지역이 느려집니다. EVE Online처럼 대규모 전투에서 일부러 게임 시간을 최대 10배까지 늦춰(Time Dilation) 계산을 따라잡게 하는 게임도 있습니다.',
       sim: 'tick',
+      sig: { k: 'load', g: '서버 틱 시간, 존·채널별 인원, 게임 스레드 CPU' },
+      chk: {
+        look: '서버가 남기는 틱 처리 시간(p99)·틱 초과 횟수를 존·채널별 인원과 같은 그래프에 놓고 봄. 틱 지표가 없으면 pidstat -t 1로 게임 스레드 하나의 CPU 사용률',
+        yes: '인원이 몰린 시각에 틱 시간이 예산(20틱이면 50ms)을 넘고, 그동안 게임 스레드의 CPU 사용률이 100% 가까이 붙어 있음',
+        no: '틱이 넘치는데 게임 스레드 CPU가 낮으면 기다림 쪽 원인(GC 멈춤, 락, 동기 호출). bcc runqlat의 런큐 지연이 길면 스레드가 CPU를 배정받지 못한 것이라 CPU 부족·스레드 과다 쪽',
+        by: 'code',
+      },
       ref: [
         { t: 'VALORANT\'s 128-Tick Servers', u: 'https://www.riotgames.com/en/news/valorants-128-tick-servers', p: 'Riot Games', n: '128틱 서버는 한 프레임을 7.8125ms 안에 끝내야 함, 서버 프레임 시간을 하위 시스템별로 재고 예산을 나눠 관리' },
         { t: 'HED-GP Technical Retrospective: What a HED-ache', u: 'https://www.eveonline.com/news/view/what-a-hed-ache', p: 'CCP Games', n: 'EVE Online은 과부하 때 Time Dilation으로 게임 시간을 늦추고 하한은 10%(10배 느림), 평소 노드 CPU는 80% 아래' },
         { t: 'Handling variation in time', u: 'https://docs.unity3d.com/Manual/time-handling-variations.html', p: 'Unity', n: '고정 간격 시뮬레이션이 밀리면 따라잡는 단계를 몰아서 돌리고, 한도를 넘긴 시간은 버려 게임 시간이 실제보다 느리게 흐름' },
+        { t: 'pidstat(1) — Linux manual page', u: 'https://man7.org/linux/man-pages/man1/pidstat.1.html', p: 'sysstat', n: '-t로 프로세스에 속한 스레드별 통계(CPU 사용률 등)를 함께 표시' },
+        { t: 'Demonstrations of runqlat, the Linux eBPF/bcc version', u: 'https://raw.githubusercontent.com/iovisor/bcc/master/tools/runqlat_example.txt', p: 'IO Visor', n: '스케줄러 런큐 지연(작업이 CPU를 배정받기까지 기다린 시간)을 히스토그램으로 보여 줌' },
       ] },
     { id: 'sp-aoi', t: '시야(AOI) 계산 폭증 (N²)', en: 'Area-of-interest explosion',
       s: '누가 누구를 볼 수 있는지 모두끼리 비교하면, 인원이 10배가 될 때 계산은 100배가 됩니다.',
@@ -3696,9 +3721,17 @@ window.SIGDRAW = (function () {
       own: ['srv'],
       act: { game: '격자·구역으로 나눠 근처만 비교, 멀리 있는 대상은 드물게 갱신, 한 사람이 보는 인원에 상한.' },
       sim: 'tick',
+      sig: { k: 'load', g: '서버 틱 시간, 한곳에 모인 인원' },
+      chk: {
+        look: '존·채널별 인원과 틱 시간을 같은 그래프에 놓고, 틱 안에서 시야 계산에 쓴 시간을 따로 잰 값. 따로 잰 값이 없으면 perf top -p로 게임 프로세스의 함수별 CPU 비중',
+        yes: '한곳에 모인 인원이 2배가 될 때 틱 시간이 4배 가까이 늘고, 시야·거리 계산 함수가 CPU 시간의 대부분을 차지함',
+        no: '틱 시간이 인원에 비례해 늘거나 전송·직렬화 함수의 비중이 크면 브로드캐스트 폭증이나 직렬화·압축 비용 쪽',
+        by: 'code',
+      },
       ref: [
         { t: 'Comparing Interest Management Algorithms for Massively Multiplayer Games', u: 'https://www.sable.mcgill.ca/~clump/papers/boulanger-06-comparing.pdf', p: 'ACM', n: 'NetGames 2006 논문(저자 공개본). 모든 쌍의 거리를 재는 방식은 인원이 늘면 감당하지 못하고, 정사각형 격자로 나누면 주변 9개 셀만 확인' },
         { t: 'Replication Graph in Unreal Engine', u: 'https://dev.epicgames.com/documentation/en-us/unreal-engine/replication-graph-in-unreal-engine', p: 'Epic Games', n: '액터마다 모든 접속을 따져 보는 기본 방식은 인원·액터가 많으면 서버 CPU 병목, MMORPG 등은 월드를 격자로 나눠 셀별 목록을 재사용' },
+        { t: 'perf-top(1) — Linux manual page', u: 'https://man7.org/linux/man-pages/man1/perf-top.1.html', p: 'perf', n: '실행 중인 프로세스(-p)나 스레드(-t)의 CPU 사용 비중을 함수(심볼)별로 실시간 표시' },
       ] },
     { id: 'sp-broadcast', t: '브로드캐스트 폭증', en: 'Broadcast fan-out (N×N)',
       s: '한 명의 움직임을 그를 보는 모두에게 보내면, 모인 인원의 제곱만큼 보낼 업데이트가 생깁니다.',
@@ -3708,10 +3741,19 @@ window.SIGDRAW = (function () {
       own: ['srv', 'sys'],
       act: { game: '거리·중요도별 갱신 빈도 낮추기(가까운 적은 매 틱, 먼 사람은 1초에 몇 번), 한 사람에게 보내는 양에 상한을 두고 중요한 것부터 채우기, 여러 업데이트를 한 패킷에 묶기, 표시 인원 상한.', infra: '서버별 송신 대역폭·초당 패킷 수를 NIC·인스턴스 네트워크 한도와 비교해 경보, 대규모 이벤트 전 여유 확인.' },
       sim: 'tick',
+      sig: { k: 'load', g: '서버 송신 패킷·바이트, 한곳에 모인 인원' },
+      chk: {
+        look: 'sar -n DEV 1의 txpck/s·txkB/s(서버 NIC가 초당 보낸 패킷·KB)를 인원 그래프와 함께 봄. 클라우드 인스턴스는 ethtool -S의 한도 초과 카운터(AWS ENA는 bw_out_allowance_exceeded·pps_allowance_exceeded)',
+        yes: '모인 인원이 늘 때 송신 패킷·바이트가 인원보다 가파르게(제곱에 가깝게) 늘고, 한도에 닿은 시각부터 한도 초과 카운터나 송신 폐기가 증가',
+        no: '송신량은 그대로인데 틱 시간만 늘면 시야 계산·게임 로직 쪽',
+        by: 'ops',
+      },
       ref: [
         { t: 'HED-GP Technical Retrospective: What a HED-ache', u: 'https://www.eveonline.com/news/view/what-a-hed-ache', p: 'CCP Games', n: 'n명이 한 행동을 n명이 봐야 하는 O(n²) 전송이 대규모 함대전의 피할 수 없는 한계 요인' },
         { t: 'Actor Priority in Unreal Engine', u: 'https://dev.epicgames.com/documentation/en-us/unreal-engine/actor-priority-in-unreal-engine', p: 'Epic Games', n: '연결 대역폭이 포화되면 액터마다 우선순위(거리·시선·마지막 전송 뒤 지난 시간)를 매겨 중요한 것부터 대역폭을 나눠 줌' },
         { t: 'Detailed Actor Replication Flow in Unreal Engine', u: 'https://dev.epicgames.com/documentation/en-us/unreal-engine/detailed-actor-replication-flow-in-unreal-engine', p: 'Epic Games', n: 'NetUpdateFrequency로 액터별 갱신 빈도를 정하고, 우선순위 순으로 보내다 연결이 포화되면 나머지는 다음 틱으로 미룸' },
+        { t: 'sar(1) — Linux manual page', u: 'https://man7.org/linux/man-pages/man1/sar.1.html', p: 'sysstat', n: 'sar -n DEV의 rxpck/s·txpck/s(초당 받은·보낸 패킷), rxkB/s·txkB/s(초당 받은·보낸 KB)' },
+        { t: 'Monitor network performance for ENA settings on your EC2 instance', u: 'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-network-performance-ena.html', p: 'AWS', n: 'bw_out_allowance_exceeded(송신 대역폭 한도 초과)·pps_allowance_exceeded(PPS 한도 초과)로 큐에 쌓이거나 버려진 패킷 수' },
       ] },
     { id: 'sp-hotzone', t: '단일 스레드 지역 과부하(핫스팟)', en: 'Single-threaded hot zone',
       s: '지역마다 스레드 하나가 맡는 구조에서 한곳에 사람이 몰리면 그 코어 하나만 100%가 됩니다.',
@@ -3722,9 +3764,17 @@ window.SIGDRAW = (function () {
       act: { game: '채널 분산, 지역 내부 병렬화, 인원 상한.', infra: '코어별 CPU 사용률을 모니터링·경보에 추가(서버 전체 평균에는 코어 하나의 포화가 묻힘).' },
       more: '다른 지역이 멀쩡한 것은 지역마다 틱을 따로 돌릴 때의 이야기입니다. 여러 지역 스레드가 매 틱 서로를 기다렸다가 함께 다음 틱으로 넘어가는 구조라면, 가장 바쁜 지역 하나가 서버 전체의 틱을 늦춥니다.',
       sim: 'tick',
+      sig: { k: 'load', g: '코어별 CPU 사용률, 스레드별 CPU' },
+      chk: {
+        look: 'mpstat -P ALL 1로 코어별 사용률, pidstat -t 1로 게임 프로세스의 스레드별 CPU를 보고, 가장 바쁜 스레드가 맡은 존의 인원과 비교',
+        yes: '서버 전체 CPU는 낮은데 스레드 하나(코어 하나)만 100% 가까이 붙어 있고, 그 시각 그 스레드가 맡은 존에 사람이 몰려 있음',
+        no: '여러 코어가 고르게 높으면 서버 전체 과부하. 한 코어의 %soft(수신 처리)만 높으면 NIC 인터럽트 단일 코어 집중 쪽',
+        by: 'ops',
+      },
       ref: [
         { t: 'Time Dilation – How’s That Going?', u: 'https://www.eveonline.com/news/view/time-dilation-hows-that-going', p: 'CCP Games', n: 'EVE Online의 Time Dilation은 노드 단위라 한 노드에 함께 올라간 먼 성계까지 느려짐, 큰 전투는 성계 4개만 올린 강화 노드에서 처리' },
-        { t: 'mpstat(1) — Linux manual page', u: 'https://man7.org/linux/man-pages/man1/mpstat.1.html', p: 'sysstat', n: '프로세서별 사용률과 전체 평균을 따로 보여 줌(-P ALL)' },
+        { t: 'mpstat(1) — Linux manual page', u: 'https://man7.org/linux/man-pages/man1/mpstat.1.html', p: 'sysstat', n: '프로세서별 사용률과 전체 평균을 따로 보여 줌(-P ALL), %soft는 소프트웨어 인터럽트 처리에 쓴 시간 비율' },
+        { t: 'pidstat(1) — Linux manual page', u: 'https://man7.org/linux/man-pages/man1/pidstat.1.html', p: 'sysstat', n: '-t로 프로세스에 속한 스레드별 통계(CPU 사용률 등)를 함께 표시' },
       ] },
     { id: 'sp-lock', t: '락 경합', en: 'Lock contention',
       s: '여러 스레드가 같은 데이터를 쓰려고 락 하나를 기다리면, 스레드를 늘려도 한 번에 하나씩만 실행됩니다.',
@@ -3735,9 +3785,19 @@ window.SIGDRAW = (function () {
       act: { game: '락을 잘게 나누기, 락 안에서 하는 일 줄이기, 메시지 기반 구조(데이터마다 담당 스레드를 정하고 다른 스레드는 메시지로 요청만 보내기).' },
       more: '여러 스레드가 게임 데이터를 함께 고치는 구조에서 생깁니다. 지역·기능마다 스레드 하나가 맡고 메시지로만 주고받는 구조는 락이 거의 없는 대신, 한 스레드에 일이 몰리는 문제(단일 스레드 지역 과부하)를 조심해야 합니다. 게임 스레드가 느린 저장 작업이 잡은 락을 기다리면 그 틱 전체가 멈춥니다.',
       sim: 'locks',
+      sig: { k: 'load', g: '요청 처리 시간, 스레드별 CPU·컨텍스트 스위칭' },
+      chk: {
+        look: 'pidstat -w -t 1로 스레드별 자발적 컨텍스트 스위칭(cswch/s, 자원을 기다리며 멈춘 횟수), bcc offcputime -p로 스레드가 CPU를 떠나 어디서 기다리는지(호출 스택별 대기 시간). .NET은 dotnet-counters의 Monitor Lock Contention Count',
+        yes: '부하가 늘어도 CPU 사용률은 낮게 머무는데 처리 시간이 늘고, 대기 시간의 대부분이 락을 잡으려는 호출 스택에 몰려 있으며 락 경합 수가 함께 오름',
+        no: 'CPU가 꽉 차 있으면 계산량 문제(틱 예산 초과, 단일 스레드 지역 과부하). 기다리는 곳이 DB·파일 호출이면 게임 스레드의 동기 호출 쪽',
+        by: 'ops',
+      },
       ref: [
         { t: 'Amdahl\'s Law in the Multicore Era', u: 'https://research.cs.wisc.edu/multifacet/papers/ieeecomputer08_amdahl_multicore.pdf', p: 'IEEE', n: 'IEEE Computer 2008 논문(저자 공개본). 병렬로 나눌 수 없는 비율이 1−f면 코어를 아무리 늘려도 속도 향상은 1/(1−f)를 넘지 못함(암달의 법칙)' },
         { t: 'Request scheduling', u: 'https://learn.microsoft.com/en-us/dotnet/orleans/grains/request-scheduling', p: 'Microsoft', n: 'Orleans의 그레인(액터)은 요청을 하나씩 끝까지 처리하는 단일 스레드 실행 모델이라 상태를 동시에 고치지 않음, 서로의 응답을 기다리면 데드락 가능' },
+        { t: 'pidstat(1) — Linux manual page', u: 'https://man7.org/linux/man-pages/man1/pidstat.1.html', p: 'sysstat', n: '-w의 cswch/s는 자원을 기다리느라 멈춘 자발적 컨텍스트 스위칭 수, -t로 스레드별 표시' },
+        { t: 'Demonstrations of offcputime, the Linux eBPF/bcc version', u: 'https://raw.githubusercontent.com/iovisor/bcc/master/tools/offcputime_example.txt', p: 'IO Visor', n: '스레드가 멈춰 CPU를 떠난 시간(off-CPU)을 호출 스택별로 합산, -p로 프로세스 지정' },
+        { t: 'Well-known EventCounters in .NET', u: 'https://learn.microsoft.com/en-us/dotnet/core/diagnostics/available-counters', p: 'Microsoft', n: 'Monitor Lock Contention Count(monitor-lock-contention-count): 모니터 락을 잡으려다 경합이 생긴 횟수' },
       ] },
     { id: 'sp-deadlock', t: '데드락', en: 'Deadlock',
       s: '두 스레드가 서로 상대가 잡은 락을 기다리면 영원히 멈춥니다.',
@@ -3746,9 +3806,20 @@ window.SIGDRAW = (function () {
       own: ['srv'],
       act: { game: '락 순서 규칙, 타임아웃 있는 락, 워치독과 멈춘 순간의 스레드 덤프 남기기.' },
       sim: 'locks',
+      sig: { k: 'drop', g: '접속 수, 서버 송신량' },
+      chk: {
+        look: '멈춘 동안 모든 스레드의 호출 스택을 뜸. JVM은 jstack(데드락을 자동으로 찾아 표시), .NET은 dotnet-stack, 네이티브 서버는 gdb의 thread apply all bt, 또는 gcore로 코어 파일을 떠 두고 재시작한 뒤 분석',
+        yes: '두 개 이상의 스레드가 서로 상대가 잡은 락을 기다리는 스택으로 멈춰 있고, 그동안 프로세스 CPU 사용률이 0에 가까움',
+        no: '멈춘 동안 스레드 하나가 CPU 100%로 돌고 있으면 무한 루프. 스레드들이 DB·외부 응답을 기다리고 있으면 동기 호출이나 스레드 풀 고갈 쪽',
+        by: 'ops',
+      },
       ref: [
         { t: 'Runtime locking correctness validator', u: 'https://docs.kernel.org/locking/lockdep-design.html', p: 'Linux kernel', n: '두 락을 서로 반대 순서로 잡으면 순환 대기로 데드락(lock inversion deadlock), 리눅스 커널은 락 순서를 검사해 미리 경고' },
         { t: 'Liveness, Readiness, and Startup Probes', u: 'https://kubernetes.io/docs/concepts/workloads/pods/probes/', p: 'Kubernetes', n: '실행 중이지만 진행하지 못하는 데드락 상태를 라이브니스 검사로 잡아 컨테이너를 재시작' },
+        { t: 'Diagnostic Tools (Java SE 21 Troubleshooting Guide)', u: 'https://docs.oracle.com/en/java/javase/21/troubleshoot/diagnostic-tools.html', p: 'Oracle', n: 'jstack은 실행 중인 JVM의 모든 스레드 스택을 출력하고 데드락도 찾아 표시(Found one Java-level deadlock)' },
+        { t: 'dotnet-stack diagnostic tool - .NET CLI', u: 'https://learn.microsoft.com/en-us/dotnet/core/diagnostics/dotnet-stack', p: 'Microsoft', n: '.NET 프로세스의 모든 스레드의 관리 스택을 캡처해 출력' },
+        { t: 'Threads (Debugging with GDB)', u: 'https://sourceware.org/gdb/current/onlinedocs/gdb.html/Threads.html', p: 'GNU Project', n: 'thread apply all로 모든 스레드에 같은 명령(bt: 호출 스택 출력)을 실행' },
+        { t: 'gcore(1) — Linux manual page', u: 'https://man7.org/linux/man-pages/man1/gcore.1.html', p: 'gdb', n: '실행 중인 프로그램의 코어 파일을 만들고, 만든 뒤에도 프로그램은 그대로 계속 실행' },
       ] },
     { id: 'sp-sync-call', t: '게임 스레드의 동기 호출', en: 'Synchronous DB / file I/O on the game loop',
       s: '틱 도중 DB 응답이나 파일 쓰기를 기다리면, 그 시간만큼 서버의 게임 진행 전체가 멈춥니다.',
@@ -3758,9 +3829,17 @@ window.SIGDRAW = (function () {
       own: ['srv'],
       act: { game: '느린 일(DB 조회·저장, 로그 쓰기, 외부 API 호출)은 모두 비동기로 넘기고 결과는 다음 틱에 반영(타임아웃만 두면 기다리는 동안은 여전히 멈춤).' },
       sim: 'tick',
+      sig: { k: 'random', g: '서버 틱 시간, DB 쿼리 지연' },
+      chk: {
+        look: '틱 시간 그래프와 DB 쿼리 지연(slow query log 등)·디스크 지연을 같은 시간축에 놓고 봄. 틱 지표가 없으면 bcc offcputime -p로 게임 스레드가 어디서 기다리는지',
+        yes: '틱이 튄 시각이 DB·파일 지연이 튄 시각과 겹치고, 게임 스레드의 대기 시간이 DB 응답 수신·파일 쓰기 호출 스택에 몰려 있음',
+        no: 'DB·디스크 지연이 조용한데 틱이 튀면 GC 멈춤이나 락 경합 쪽',
+        by: 'code',
+      },
       ref: [
         { t: 'Designs, Lessons and Advice from Building Large Distributed Systems', u: 'https://www.cs.cornell.edu/projects/ladis2009/talks/dean-keynote-ladis2009.pdf', p: 'Google', n: 'LADIS 2009 기조연설(Jeff Dean). 같은 데이터센터 안 왕복 약 0.5ms(500,000ns)' },
         { t: 'ASP.NET Core Best Practices', u: 'https://learn.microsoft.com/en-us/aspnet/core/fundamentals/best-practices', p: 'Microsoft', n: '데이터 접근·I/O·오래 걸리는 작업은 비동기로 호출, 동기 블로킹 호출은 스레드 풀 고갈과 응답 지연을 부름' },
+        { t: 'Demonstrations of offcputime, the Linux eBPF/bcc version', u: 'https://raw.githubusercontent.com/iovisor/bcc/master/tools/offcputime_example.txt', p: 'IO Visor', n: '스레드가 멈춰 CPU를 떠난 시간(off-CPU)을 호출 스택별로 합산, -p로 프로세스 지정' },
       ] },
     { id: 'sp-queue', t: '메시지 큐 적체', en: 'Mailbox / job queue backlog',
       s: '요청이 처리 속도보다 빨리 들어와 대기열에 쌓이면, 뒤쪽 요청은 몇 초 뒤에야 처리되거나 버려집니다.',
@@ -3769,9 +3848,18 @@ window.SIGDRAW = (function () {
       own: ['srv'],
       act: { game: '대기열 길이 모니터링, 오래된 요청 우선 폐기 정책, 처리 병렬화.' },
       sim: 'queue',
+      sig: { k: 'ceiling', g: '큐 길이·가장 오래된 메시지 나이, 초당 처리 수' },
+      chk: {
+        look: '서버가 남기는 큐별 길이, 가장 오래된 메시지의 나이, 초당 들어온 수·처리한 수·버린 수. 코드 지표가 없으면 ss(또는 netstat)로 게임 소켓의 Recv-Q(커널이 받아 두었지만 프로세스가 아직 읽지 않은 양)',
+        yes: '들어오는 수가 처리 수를 넘는 동안 처리 수는 한 값에서 더 오르지 못하고, 큐 길이·나이와 버린 수가 계속 늘어남',
+        no: '큐가 짧고 나이도 작은데 반응이 늦으면 회선 지연이나 틱 자체의 지연 쪽',
+        by: 'code',
+      },
       ref: [
         { t: 'Avoiding insurmountable queue backlogs', u: 'https://d1.awsstatic.com/builderslibrary/pdfs/avoiding-insurmountable-queue-backlogs.pdf', p: 'AWS', n: 'Amazon Builders\' Library. 적체는 대기 중인 메시지의 나이로 감시, 실시간 시스템은 새 데이터부터 처리(LIFO에 가깝게), 오래된 메시지는 버리기도 함' },
         { t: 'Site Reliability Engineering, Chapter 22: Addressing Cascading Failures', u: 'https://sre.google/sre-book/addressing-cascading-failures/', p: 'Google', n: '처리 속도보다 요청이 빠르면 큐가 차서 지연이 늘고, FIFO 대신 LIFO나 CoDel로 이미 쓸모없어진 오래된 요청을 덜어 냄' },
+        { t: 'ss(8) — Linux manual page', u: 'https://man7.org/linux/man-pages/man8/ss.8.html', p: 'iproute2', n: '소켓 통계를 보여 주는 도구(netstat과 비슷한 정보), -p로 소켓을 쓰는 프로세스 표시' },
+        { t: 'netstat(8) — Linux manual page', u: 'https://man7.org/linux/man-pages/man8/netstat.8.html', p: 'net-tools', n: 'Recv-Q: 연결된 소켓에서 사용자 프로그램이 아직 가져가지 않은 바이트 수' },
       ] },
     { id: 'sp-timer-burst', t: '타이머 동시 발동 몰림', en: 'Synchronized timers',
       s: '모든 몬스터 리스폰, 모든 버프 만료, 정각 보상이 같은 틱에 몰리면 그 틱만 수십 배 무거워집니다.',
@@ -3779,6 +3867,13 @@ window.SIGDRAW = (function () {
       sym: ['freeze', 'stutter'], fx: ['stall'], who: ['zone', 'server'], when: ['periodic'],
       own: ['srv'],
       act: { game: '타이머 시각을 무작위로 조금씩 분산, 여러 틱에 나눠 처리.' },
+      sig: { k: 'periodic', g: '서버 틱 시간' },
+      chk: {
+        look: '틱 시간이 튄 시각들을 모아 간격을 봄(정각, 5분마다 등). 같은 시각에 도는 리스폰·버프 만료·보상·자동 저장 타이머 목록과 대조',
+        yes: '틱이 매번 같은 시각이나 같은 간격으로 튀고, 그 시각에 한꺼번에 발동하는 게임 타이머 작업이 있음',
+        no: '주기는 있지만 GC 로그의 멈춤 시각이나 서버의 크론·백업 시각과 겹치면 서버 GC 전체 멈춤, 예약 작업 쪽',
+        by: 'code',
+      },
       ref: [
         { t: 'Timeouts, retries, and backoff with jitter', u: 'https://d1.awsstatic.com/builderslibrary/pdfs/timeouts-retries-and-backoff-with-jitter.pdf', p: 'AWS', n: 'Amazon Builders\' Library. 모든 타이머·주기 작업·지연 작업에 지터를 더해 같은 시각에 몰리는 부하를 흩뜨림, 여러 서버의 1분 주기 요청이 매분 첫 몇 초에 몰린 사례' },
       ] },
@@ -3789,8 +3884,16 @@ window.SIGDRAW = (function () {
       own: ['srv'],
       act: { game: '경로 캐시, 계산 횟수 상한, 여러 틱에 나누기.' },
       sim: 'tick',
+      sig: { k: 'load', g: '서버 틱 시간, 존별 몬스터 수' },
+      chk: {
+        look: '존별로 플레이어를 추적 중인 몬스터 수와 틱 시간. 따로 센 값이 없으면 perf top -p로 게임 프로세스의 함수별 CPU 비중',
+        yes: '몰이 사냥·대규모 스폰 때 틱 시간이 늘고, 길찾기(경로 탐색) 함수가 CPU 시간의 큰 비중을 차지',
+        no: '몬스터는 적고 플레이어만 많을 때 틱이 늘면 시야 계산이나 브로드캐스트 쪽',
+        by: 'code',
+      },
       ref: [
         { t: 'AI.NavMesh.pathfindingIterationsPerFrame', u: 'https://docs.unity3d.com/ScriptReference/AI.NavMesh-pathfindingIterationsPerFrame.html', p: 'Unity', n: '길찾기를 프레임마다 정해진 노드 수만큼만 처리해 여러 프레임에 나눔, 경로가 길거나 요청이 한꺼번에 많을 때도 게임이 매끄러움' },
+        { t: 'perf-top(1) — Linux manual page', u: 'https://man7.org/linux/man-pages/man1/perf-top.1.html', p: 'perf', n: '실행 중인 프로세스(-p)의 CPU 사용 비중을 함수(심볼)별로 실시간 표시' },
       ] },
     { id: 'sp-serialize', t: '직렬화·압축 비용', en: 'Serialization / compression cost',
       s: '보낼 데이터를 바이트로 바꾸고 압축하는 데도 CPU가 들고, 사람이 많으면 이 비용이 폭증합니다.',
@@ -3798,9 +3901,19 @@ window.SIGDRAW = (function () {
       sym: ['delay'], fx: ['stall', 'lat'], who: ['zone'], when: ['event'],
       own: ['srv'],
       act: { game: '한 번 만든 패킷을 여러 명에게 재사용, 가벼운 포맷.' },
+      more: '패킷을 암호화하는 연결(TLS·DTLS 등)이라면 암호화·복호화도 CPU를 씁니다. AES-GCM 같은 대칭 암호는 코어 하나가 초당 수 GB를 처리할 만큼 빨라 평소 비중은 작지만, 한 번에 암호화하는 단위(레코드)가 작을수록 효율이 떨어집니다. 접속마다 한 번 하는 핸드셰이크의 공개키 연산은 코어 하나가 초당 약 1천 번(RSA 2048 서명)에서 2만 번(ECDSA P-256 서명) 정도라 로그인이 몰릴 때 부담이 됩니다.',
+      sig: { k: 'load', g: '서버 CPU 사용률, 패킷을 만드는 스레드의 CPU' },
+      chk: {
+        look: 'perf top -p로 게임 프로세스의 CPU 시간 중 직렬화·압축·암호화 함수(zlib·LZ4·OpenSSL 같은 라이브러리 함수 포함)의 비중을 인원이 적을 때와 몰릴 때 비교',
+        yes: '인원이 몰릴수록 직렬화·압축·암호화 함수의 비중이 커지고, 패킷을 만드는 스레드의 CPU가 먼저 포화',
+        no: '이 함수들의 비중이 작으면 시야 계산·게임 로직 쪽',
+        by: 'ops',
+      },
       ref: [
         { t: 'Introduction to Iris in Unreal Engine', u: 'https://dev.epicgames.com/documentation/en-us/unreal-engine/introduction-to-iris-in-unreal-engine', p: 'Epic Games', n: '복제할 상태를 양자화한 사본 하나로 들고 있어 비싼 작업을 줄이고, 그 작업을 여러 접속이 나눠 씀' },
         { t: 'VALORANT\'s 128-Tick Servers', u: 'https://www.riotgames.com/en/news/valorants-128-tick-servers', p: 'Riot Games', n: '매 프레임 복제 변수를 클라이언트마다 비교해 바뀐 값을 묶는 방식은 메모리를 여기저기 읽는 느린 작업이라 서버 CPU를 크게 씀' },
+        { t: 'How "expensive" is crypto anyway?', u: 'https://blog.cloudflare.com/how-expensive-is-crypto-anyway/', p: 'Cloudflare', n: 'BoringSSL 측정: AES-128-GCM 초당 약 3.7GB(레코드 크기에 따라 크게 달라짐), 코어 하나가 초당 RSA 2048 서명 1,120번·ECDSA P-256 서명 18,477번, Cloudflare 엣지 서버에서 TLS 라이브러리가 쓴 CPU는 약 1.8%' },
+        { t: 'perf-top(1) — Linux manual page', u: 'https://man7.org/linux/man-pages/man1/perf-top.1.html', p: 'perf', n: '실행 중인 프로세스(-p)의 CPU 사용 비중을 함수(심볼)별로 실시간 표시' },
       ] },
     { id: 'sp-crash', t: '서버 크래시', en: 'Server process crash',
       s: '처리하지 못한 오류로 서버 프로세스가 죽으면, 그 서버에 있던 모두의 접속이 동시에 끊깁니다.',
@@ -3808,9 +3921,17 @@ window.SIGDRAW = (function () {
       sym: ['disconnect', 'dropped'], fx: ['stall'], who: ['zone', 'server'], when: ['random', 'action'],
       own: ['srv', 'sys'],
       act: { game: '크래시 덤프 분석으로 원인 수정, 자주 저장.', infra: '프로세스 자동 재시작, 크래시 덤프 수집·보관 환경, 서버 다운 즉시 경보.' },
+      sig: { k: 'drop', g: '접속 수, 프로세스 재시작 횟수' },
+      chk: {
+        look: 'coredumpctl list의 코어 덤프 기록(시각, PID, 종료 신호)과 서비스 관리자(systemd)의 비정상 종료·재시작 기록. 윈도우 서버는 WER이 남긴 덤프 파일',
+        yes: '접속 수가 한순간 0 가까이 떨어진 시각에 게임 서버 프로세스의 비정상 종료와 코어 덤프가 있음',
+        no: '프로세스는 계속 살아 있는데 접속이 끊겼으면 네트워크 장비·유휴 타임아웃 쪽. 오래 멈춘 뒤 워치독이 재시작한 기록이면 무한 루프·데드락 쪽',
+        by: 'ops',
+      },
       ref: [
         { t: 'Collecting User-Mode Dumps', u: 'https://learn.microsoft.com/en-us/windows/win32/wer/collecting-user-mode-dumps', p: 'Microsoft', n: '윈도우 오류 보고(WER)로 사용자 모드 프로그램이 크래시할 때 전체·미니 덤프를 로컬에 모으도록 설정' },
         { t: 'systemd.service(5) — Linux manual page', u: 'https://man7.org/linux/man-pages/man5/systemd.service.5.html', p: 'systemd', n: 'Restart=on-failure는 비정상 종료·신호 종료(코어 덤프 포함)·워치독 시간 초과 때 서비스를 자동 재시작, 오래 도는 서비스에 권장' },
+        { t: 'coredumpctl(1) — Linux manual page', u: 'https://man7.org/linux/man-pages/man1/coredumpctl.1.html', p: 'systemd', n: 'systemd-coredump가 저장한 코어 덤프를 list로 조회, 크래시 시각·PID·크래시를 일으킨 신호 표시' },
       ] },
     { id: 'sp-threadpool', t: '스레드 풀 고갈', en: 'Thread pool starvation',
       s: '작업을 처리할 워커 스레드가 모두 느린 작업에 묶이면 새 요청은 무작정 기다립니다.',
@@ -3819,8 +3940,15 @@ window.SIGDRAW = (function () {
       own: ['srv'],
       act: { game: '느린 호출에 타임아웃, 기능별 스레드 풀 분리, 비동기화.' },
       more: '패킷 받기와 게임 로직이 같은 워커 스레드 풀을 나눠 쓰는 구조라면, 느린 작업 몇 개가 워커를 모두 점유하는 순간 서버 전체의 패킷 처리가 멈춥니다.',
+      sig: { k: 'ceiling', g: '스레드 풀 스레드 수·대기열 길이, 요청 처리 시간' },
+      chk: {
+        look: '.NET은 dotnet-counters monitor의 스레드 풀 스레드 수(dotnet.thread_pool.thread.count)와 대기열 길이(dotnet.thread_pool.queue.length)를 보고, dotnet-stack으로 워커 스레드들이 어디서 기다리는지 확인. JVM·네이티브 서버는 스레드 덤프로 같은 것을 확인',
+        yes: 'CPU 사용률은 100%보다 한참 낮은데 스레드 수가 천천히 계속 늘거나 상한에 붙어 있고, 대기열이 쌓이며, 워커 대부분이 같은 외부 호출(DB·HTTP) 응답을 기다림',
+        no: '대기열이 비어 있는데도 느리면 호출 대상 자체가 느린 것이라 연쇄 장애·외부 서비스 의존 쪽',
+        by: 'ops',
+      },
       ref: [
-        { t: 'Debug ThreadPool Starvation', u: 'https://learn.microsoft.com/en-us/dotnet/core/diagnostics/debug-threadpool-starvation', p: 'Microsoft', n: '풀에 남은 스레드가 없어 새 작업이 대기하면 응답이 느려짐, 스레드를 점유하는 블로킹 코드가 원인' },
+        { t: 'Debug ThreadPool Starvation', u: 'https://learn.microsoft.com/en-us/dotnet/core/diagnostics/debug-threadpool-starvation', p: 'Microsoft', n: '풀에 남은 스레드가 없어 새 작업이 대기하면 응답이 느려짐, 스레드를 점유하는 블로킹 코드가 원인. dotnet-counters에서 CPU는 100%보다 한참 낮은데 dotnet.thread_pool.thread.count가 천천히 계속 늘면 고갈 신호(dotnet.thread_pool.queue.length도 큰 경우가 많음), dotnet-stack으로 스레드가 기다리는 곳 확인' },
         { t: 'Avoiding insurmountable queue backlogs', u: 'https://d1.awsstatic.com/builderslibrary/pdfs/avoiding-insurmountable-queue-backlogs.pdf', p: 'AWS', n: '동시 처리 수 = 도착률 × 지연(리틀의 법칙). 초당 100건에서 지연이 100ms에서 10초로 늘면 스레드 10개가 1,000개로 늘어 풀이 고갈' },
         { t: 'Bulkhead Pattern', u: 'https://learn.microsoft.com/en-us/azure/architecture/patterns/bulkhead', p: 'Microsoft Azure', n: '호출 대상마다 커넥션·스레드 풀을 따로 두면 한 대상의 장애가 그 풀만 막음' },
       ] },
@@ -3830,9 +3958,18 @@ window.SIGDRAW = (function () {
       sym: ['freeze', 'disconnect'], fx: ['stall'], who: ['zone', 'server'], when: ['action', 'random'],
       own: ['srv'],
       act: { game: '반복 상한, 워치독, 문제 입력 재현 테스트.' },
+      sig: { k: 'drop', g: '접속 수, 스레드별 CPU' },
+      chk: {
+        look: '멈춘 동안 pidstat -t 1로 스레드별 CPU를 보고, 100%로 도는 스레드가 어느 함수에서 도는지 perf top -t(스레드 ID)나 gdb로 확인. 이미 재시작됐다면 워치독 시간 초과 기록(systemd의 WatchdogSec, 쿠버네티스 라이브니스 검사 실패)',
+        yes: '서버가 멈춘 동안 게임 스레드 하나가 CPU 100%로 붙어 있고, 스택이 같은 함수·반복문 안에서 계속 돎',
+        no: '멈춘 동안 CPU가 0에 가까우면 데드락이나 외부 응답 대기 쪽',
+        by: 'ops',
+      },
       ref: [
         { t: 'systemd.service(5) — Linux manual page', u: 'https://man7.org/linux/man-pages/man5/systemd.service.5.html', p: 'systemd', n: 'WatchdogSec=: 서비스가 정한 시간 안에 살아 있다는 신호(WATCHDOG=1)를 보내지 않으면 실패로 보고 종료, Restart= 설정에 따라 자동 재시작' },
         { t: 'Liveness, Readiness, and Startup Probes', u: 'https://kubernetes.io/docs/concepts/workloads/pods/probes/', p: 'Kubernetes', n: '실행 중이지만 진행하지 못하는 상태를 라이브니스 검사로 잡아 재시작, 기본은 10초마다 검사해 3번 연속 실패하면 재시작' },
+        { t: 'pidstat(1) — Linux manual page', u: 'https://man7.org/linux/man-pages/man1/pidstat.1.html', p: 'sysstat', n: '-t로 프로세스에 속한 스레드별 통계(CPU 사용률 등)를 함께 표시' },
+        { t: 'perf-top(1) — Linux manual page', u: 'https://man7.org/linux/man-pages/man1/perf-top.1.html', p: 'perf', n: '실행 중인 스레드(-t)나 프로세스(-p)의 CPU 사용 비중을 함수(심볼)별로 실시간 표시' },
       ] },
     { id: 'sp-hot-entity', t: '한 대상에 몰린 전투 (월드 보스)', en: 'Hot entity / combat event fan-out',
       s: '수백 명이 보스 하나를 동시에 때리면, 보스 한 마리의 계산이 한곳에 몰리고 타격 정보가 보는 모두에게 전송됩니다.',
@@ -3841,6 +3978,13 @@ window.SIGDRAW = (function () {
       num: '800명이 초당 2번씩 때리면 초당 1,600번의 타격. 이를 보는 800명에게 모두 알리면 초당 128만 개의 메시지입니다.',
       own: ['srv'],
       act: { game: '남의 데미지 숫자·이펙트는 묶거나 생략, 한 대상에 걸리는 디버프 수 상한, 타격 처리를 여러 틱에 나누기.' },
+      sig: { k: 'load', g: '서버 틱 시간, 송신 메시지 수' },
+      chk: {
+        look: '보스전 시각의 틱 시간과 송신 패킷 수를 보스 주변 인원과 함께 보고, 가능하면 대상별 초당 이벤트(타격·버프·디버프) 수',
+        yes: '보스 주변 인원이 늘 때 틱 시간과 송신량이 가파르게 늘고, 보스 한 마리의 초당 이벤트 수가 다른 대상보다 수십 배 많음',
+        no: '보스와 상관없이 한곳에 모이기만 해도 똑같이 느려지면 시야 계산이나 브로드캐스트 폭증 쪽',
+        by: 'code',
+      },
       ref: [
         { t: 'HED-GP Technical Retrospective: What a HED-ache', u: 'https://www.eveonline.com/news/view/what-a-hed-ache', p: 'CCP Games', n: '공격 한 번도 보는 모든 클라이언트에 알려야 해서 n명이 n명에게 알리는 O(n²) 부담이 생기고, 메시지가 많은 드론 공격은 이 부담이 더 빨리 커짐' },
       ] },
@@ -3851,6 +3995,13 @@ window.SIGDRAW = (function () {
       num: '한 명의 외형·장비·버프 정보가 300바이트면 500명은 약 150KB. 평소 한 틱 전송량(수 KB)의 수십 배가 한순간에 몰립니다.',
       own: ['srv', 'cli'],
       act: { game: '서버: 가까운 순서로 여러 틱에 나눠 보내기, 외형 정보 캐시. 클라이언트: 로딩 화면 동안 미리 받기, 받은 캐릭터를 여러 프레임에 나눠 생성.' },
+      sig: { k: 'surge', g: '연결별 송신 바이트, 클라이언트 프레임 시간' },
+      chk: {
+        look: '붐비는 곳에 도착한 직후 몇 초 동안 그 연결로 보낸 바이트·패킷 수(서버 로그)와 클라이언트 프레임 시간(넷그래프·클라이언트 로그)',
+        yes: '도착 직후 그 연결의 송신량이 평소 한 틱의 수십 배로 솟았다가 가라앉고, 같은 순간 클라이언트 프레임 시간도 튐',
+        no: '한산한 곳으로 이동해도 똑같이 멈추면 존 이동(서버 간 이관)이나 클라이언트 로딩 쪽',
+        by: 'code',
+      },
       ref: [
         { t: 'Detailed Actor Replication Flow in Unreal Engine', u: 'https://dev.epicgames.com/documentation/en-us/unreal-engine/detailed-actor-replication-flow-in-unreal-engine', p: 'Epic Games', n: '액터 채널을 처음 열 때 초기 위치·회전 같은 정보를 함께 보내고, 연결이 포화되면 남은 액터는 다음 틱으로 미룸' },
         { t: 'Actor Priority in Unreal Engine', u: 'https://dev.epicgames.com/documentation/en-us/unreal-engine/actor-priority-in-unreal-engine', p: 'Epic Games', n: '거리와 시선 방향으로 우선순위를 매겨 가깝고 보이는 액터부터 보냄' },
@@ -3863,9 +4014,40 @@ window.SIGDRAW = (function () {
       own: ['srv'],
       act: { game: '지역별 개체 수를 지표로 남겨 추세 보기, 개체마다 수명과 개수 상한, 주기적 정리.' },
       more: '메모리 누수와 비슷하게 오래 켤수록 나빠지지만, 메모리는 넉넉한데 틱 시간만 늘어난다는 점이 다릅니다. 개체 수 그래프가 점검 주기마다 톱니 모양이면 이 경우입니다.',
+      sig: { k: 'sawtooth', g: '존별 개체 수, 서버 틱 시간' },
+      chk: {
+        look: '존·서버별 개체 수(바닥 아이템·소환물·타이머)와 틱 시간을 점검 주기보다 긴 기간(몇 주)으로 봄',
+        yes: '점검 직후 낮게 시작한 개체 수와 틱 시간이 날마다 오르다가 점검·재시작 때 뚝 떨어지기를 반복하고, 그동안 메모리는 넉넉함',
+        no: '틱은 그대로인데 메모리만 계속 오르면 메모리 누수 쪽',
+        by: 'code',
+      },
       ref: [
         { t: 'Actor Ticking in Unreal Engine', u: 'https://dev.epicgames.com/documentation/en-us/unreal-engine/actor-ticking-in-unreal-engine', p: 'Epic Games', n: '액터·컴포넌트는 따로 간격을 정하지 않으면 매 프레임 한 번씩 틱을 돌고, 필요 없으면 틱을 끌 수 있음' },
         { t: 'AActor::SetLifeSpan', u: 'https://dev.epicgames.com/documentation/en-us/unreal-engine/API/Runtime/Engine/AActor/SetLifeSpan', p: 'Epic Games', n: '액터에 수명을 정하면 만료될 때 자동으로 파괴' },
+      ] },
+    { id: 'sp-patch-traffic', t: '패치로 트래픽 패턴이 바뀜', en: 'Patch changes traffic pattern',
+      s: '새 콘텐츠·이펙트·동기화 항목이 패킷 크기와 빈도를 늘리면, 잘되던 서버가 패치 뒤부터 MTU·대역폭·패킷 수 한도에 걸립니다.',
+      c: ['패치로 새 스킬 이펙트·동기화 항목·아이템 정보가 늘어 패킷이 커지거나 잦아짐', '큰 패킷은 MTU를 넘어 단편화되고, 늘어난 양은 대역폭·클라우드 PPS 한도·송신 버퍼에 걸림', '패치 직후부터 붐비는 곳에서 순간이동·스킬 씹힘·입력 지연. 인프라는 바꾼 것이 없는데 손실이 늘어남'],
+      sym: ['teleport', 'dropped', 'delay'], fx: ['loss', 'lat'], who: ['server', 'zone', 'region'], when: ['event', 'peak', 'always'],
+      num: 'UDP 패킷은 1,200바이트 이하가 안전하고, 인터넷 경로 MTU는 보통 1,500바이트, 터널을 지나면 더 작습니다. 이를 넘은 패킷은 단편화되고, 프래그먼트 하나만 잃어도 패킷 전체를 잃습니다. 유저당 초당 패킷이 20% 늘면 서버 전체도 20% 늘어, 한도 가까이 쓰던 인스턴스는 바로 넘칩니다.',
+      own: ['srv', 'sys', 'net'],
+      act: { game: '패킷을 1,200바이트 이하로 직접 나누기, 새 동기화 항목은 변경분만 보내고 거리·중요도에 따라 빈도 낮추기, 배포 전 테스트 서버에서 유저당 초당 패킷·바이트와 가장 큰 패킷 크기를 이전 빌드와 비교, 트래픽 지표에 빌드 버전 남기기.', infra: '서버 장비·OS: 배포 시각을 그래프에 표시하고 유저당 초당 패킷·바이트와 평균 패킷 크기를 배포 전후로 비교, 인스턴스 한도 초과 카운터 경보, 필요하면 더 큰 인스턴스. 네트워크: 방화벽·로드밸런서·DDoS 방어 장비의 처리 한도와 프래그먼트 차단 여부 점검.' },
+      more: '“잘되던 게 패치 뒤부터”라는 제보에서 게임 쪽 원인입니다. 패치 노트에 네트워크 변경이 없어도, 새 이펙트나 동기화 항목 하나가 붐비는 곳에서는 수백 명분으로 곱해집니다. 늘어난 트래픽이 실제로 걸리는 곳은 “UDP 패킷의 IP 단편화”, “클라우드 PPS 한도 초과”, “NIC 대역폭 포화”, “커널 소켓 버퍼 부족” 항목에서 다룹니다.',
+      sig: { k: 'step', g: '유저당 초당 패킷·바이트, 평균 패킷 크기' },
+      chk: {
+        look: '배포 시각 앞뒤로 서버 NIC의 초당 패킷·바이트(sar -n DEV의 rxpck/s·txpck/s·rxkB/s·txkB/s, EC2는 NetworkPacketsOut·NetworkOut)를 동시 접속 수로 나눠 비교. 평균 패킷 크기는 바이트 ÷ 패킷, 크기 분포는 패킷 캡처를 Wireshark의 Packet Lengths 통계로',
+        yes: '배포 직후부터 유저당 패킷·바이트나 평균 패킷 크기가 한 단계 올라 머물고, 같은 시각부터 서버가 만든 프래그먼트 수(sar -n IP의 fragcrt/s)나 인스턴스 한도 초과 카운터(AWS ENA의 pps_allowance_exceeded·bw_out_allowance_exceeded)가 늘어남',
+        no: '트래픽 패턴은 배포 전후가 같은데 지연·손실만 늘었으면 같은 시각의 인프라 변경(설정, 경로, 장비)을 봄',
+        by: 'ops',
+      },
+      ref: [
+        { t: 'RFC 8085: UDP Usage Guidelines', u: 'https://www.rfc-editor.org/rfc/rfc8085', p: 'IETF', n: 'UDP 앱은 경로 MTU를 넘는 데이터그램을 보내지 말아야 함(SHOULD NOT), 프래그먼트 하나를 잃으면 단편화된 패킷 전체를 잃음' },
+        { t: 'RFC 8899: Packetization Layer Path MTU Discovery for Datagram Transports', u: 'https://www.rfc-editor.org/rfc/rfc8899', p: 'IETF', n: 'UDP 같은 데이터그램 전송의 기본 안전 크기(BASE_PLPMTU)로 1,200바이트 권장' },
+        { t: 'Maximum transmission unit and maximum segment size', u: 'https://developers.cloudflare.com/magic-transit/reference/mtu-mss/', p: 'Cloudflare', n: '인터넷 경로 MTU 1,500, GRE 터널을 지나면 1,476' },
+        { t: 'Monitor network performance for ENA settings on your EC2 instance', u: 'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-network-performance-ena.html', p: 'AWS', n: 'pps_allowance_exceeded·bw_out_allowance_exceeded: 인스턴스의 PPS·송신 대역폭 한도를 넘어 큐에 쌓이거나 버려진 패킷 수' },
+        { t: 'sar(1) — Linux manual page', u: 'https://man7.org/linux/man-pages/man1/sar.1.html', p: 'sysstat', n: 'sar -n DEV의 rxpck/s·txpck/s(초당 패킷)·rxkB/s·txkB/s(초당 KB), sar -n IP의 fragcrt/s(초당 만든 IP 프래그먼트, ipFragCreates)' },
+        { t: 'CloudWatch metrics that are available for your instances', u: 'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/viewing_metrics_with_cloudwatch.html', p: 'AWS', n: 'NetworkPacketsOut(인스턴스가 모든 네트워크 인터페이스로 보낸 패킷 수)·NetworkOut(보낸 바이트 수)' },
+        { t: '8.7. Packet Lengths', u: 'https://www.wireshark.org/docs/wsug_html_chunked/ChStatPacketLengths.html', p: 'Wireshark', n: '캡처한 패킷을 길이 구간별로 나눠 개수·평균·최소·최대를 보여 줌' },
       ] },
   ]);
 
@@ -3880,6 +4062,13 @@ window.SIGDRAW = (function () {
       act: { game: '멈춤이 짧은 GC(ZGC, Shenandoah, 목표 시간을 줄인 G1)를 실행 옵션으로 직접 지정, 할당 줄이기, 힙 크기 조정.', infra: '힙을 넉넉히 줄 수 있는 메모리의 인스턴스, 컨테이너에는 CPU 2개 이상·메모리 약 1.8GB 이상 배정(JDK 26 이하는 그보다 작으면 Serial GC를 기본으로 고름), GC 멈춤 시간 모니터링.' },
       more: 'Java의 G1은 한 번 멈춤 목표가 기본 200ms라, 20틱 서버에서는 틱 4개에 해당합니다. 컨테이너에 CPU를 2개 미만이나 메모리를 약 1.8GB 미만으로 주면 JDK 26 이하의 Java는 단일 스레드로 수집하는 Serial GC를 기본 GC로 골라 멈춤이 훨씬 길어집니다. C#(.NET) 서버는 보통 서버 GC와 백그라운드 GC를 켜지만, 새 객체를 담는 0·1세대(Gen0·1) 수집과 압축을 동반한 Full GC는 여전히 모든 스레드를 멈춥니다. Go는 멈춤이 보통 1ms 미만이지만, 할당이 많으면 메모리를 요청한 쪽이 GC 작업을 분담해야 해서 틱이 느려집니다. 어느 방식이든 할당이 수집보다 빠르면 결국 게임 스레드가 멈춥니다. G1은 Full GC로 넘어가고, ZGC는 메모리를 요청한 스레드를 수집이 끝날 때까지 멈춥니다.',
       sim: 'gc',
+      sig: { k: 'periodic', g: '서버 틱 시간, GC 멈춤 시간' },
+      chk: {
+        look: 'GC 로그를 켜서 멈춘 시각과 길이를 서버 틱 시간 그래프에 겹쳐 봅니다. Java는 시작 옵션 -Xlog:gc*(JDK 8 이하는 -XX:+PrintGCDetails)의 Pause 줄, .NET은 dotnet-counters의 GC 멈춤 지표(.NET 9 이후 dotnet.gc.pause.time, 8 이하 % Time in GC since last GC), Go는 GODEBUG=gctrace=1이 GC마다 남기는 줄을 봅니다.',
+        yes: '틱이 튄 시각과 GC 멈춤 시각이 겹치고, 멈춤 길이가 튄 길이와 비슷함. 서버의 모든 존·채널이 같은 순간에 튐.',
+        no: 'GC 로그에 긴 멈춤이 없는데도 틱이 튀면 락·동기 호출·디스크 쓰기 같은 다른 원인. 한 존만 튀면 스크립트 엔진의 GC(mem-script-gc)나 그 존의 부하.',
+        by: 'ops',
+      },
       ref: [
         { t: 'Garbage-First (G1) Garbage Collector', u: 'https://docs.oracle.com/en/java/javase/25/gctuning/garbage-first-g1-garbage-collector1.html', p: 'Oracle', n: 'G1 멈춤 목표 기본값 200ms(MaxGCPauseMillis), 수집 중 메모리가 바닥나면 힙 전체를 멈추고 압축하는 Full GC로 넘어감' },
         { t: 'JEP 523: Make G1 the Default Garbage Collector in All Environments', u: 'https://openjdk.org/jeps/523', p: 'OpenJDK', n: '그동안 CPU 1개이거나 메모리 1792MB 미만이면 Serial GC를 기본으로 골랐고, JDK 27부터는 어디서나 G1이 기본' },
@@ -3887,6 +4076,10 @@ window.SIGDRAW = (function () {
         { t: 'JEP 189: Shenandoah: A Low-Pause-Time Garbage Collector (Experimental)', u: 'https://openjdk.org/jeps/189', p: 'OpenJDK', n: 'Shenandoah 멈춤 시간은 힙이 200MB든 200GB든 비슷함' },
         { t: 'Background garbage collection', u: 'https://learn.microsoft.com/en-us/dotnet/standard/garbage-collection/background-gc', p: '.NET', n: '백그라운드 GC는 2세대 수집에만 적용되고, 0·1세대 수집(포그라운드 GC)은 관리 스레드를 모두 멈춤' },
         { t: 'A Guide to the Go Garbage Collector', u: 'https://go.dev/doc/gc-guide', p: 'Go', n: 'Go GC는 대부분 동시에 돌고 짧은 전체 멈춤만 있음, 할당이 많으면 고루틴이 GC 일을 떠맡아(assist) 지연이 생김' },
+        { t: 'JEP 271: Unified GC Logging', u: 'https://openjdk.org/jeps/271', p: 'OpenJDK', n: 'JDK 9부터 GC 로그를 통합 로깅(-Xlog)으로 다시 구현, -Xlog:gc는 예전 -XX:+PrintGC처럼 GC마다 한 줄' },
+        { t: 'The java Command', u: 'https://docs.oracle.com/en/java/javase/25/docs/specs/man/java.html', p: 'Oracle', n: '예전 GC 로그 옵션을 -Xlog로 바꾸는 표: -XX:+PrintGCDetails는 -Xlog:gc*' },
+        { t: 'dotnet-counters diagnostic tool', u: 'https://learn.microsoft.com/en-us/dotnet/core/diagnostics/dotnet-counters', p: '.NET', n: '.NET 9 이후는 System.Runtime 미터(dotnet.gc.pause.time 등), .NET 8 이하는 예전 EventCounter(% Time in GC since last GC 등)로 표시' },
+        { t: 'runtime package', u: 'https://pkg.go.dev/runtime', p: 'Go', n: 'GODEBUG=gctrace=1: GC마다 한 줄, 단계별 벽시계 시간, GC 시작·끝의 힙 크기와 목표 힙' },
       ] },
     { id: 'mem-script-gc', t: '스크립트 엔진의 GC 멈춤', en: 'Scripting VM GC (Lua, etc.)',
       s: 'C++ 서버라도 퀘스트·AI·스킬을 Lua 같은 스크립트로 돌리면, 스크립트 엔진의 GC가 도는 동안 그 존이 멈춥니다.',
@@ -3896,8 +4089,15 @@ window.SIGDRAW = (function () {
       own: ['srv'],
       act: { game: '점진적·세대별 GC 설정, 틱마다 조금씩 GC 진행, 스크립트의 임시 객체 줄이기.' },
       sim: 'gc',
+      sig: { k: 'periodic', g: '존별 틱 시간, 스크립트 엔진 메모리' },
+      chk: {
+        look: '존별 틱 시간과, 그 존 스크립트 엔진의 메모리 사용량(Lua는 collectgarbage("count"))을 틱마다 기록해 한 그래프에 겹쳐 봅니다.',
+        yes: '스크립트 메모리가 뚝 떨어지는 순간(한 번에 몰아서 수집)과 그 존의 틱 튐이 겹치고, 다른 존은 멀쩡함.',
+        no: '스크립트 메모리 변화 없이 튀면 그 존의 부하나 락. 서버의 모든 존이 동시에 튀면 서버 GC(mem-gc)나 스왑(mem-swap).',
+        by: 'code',
+      },
       ref: [
-        { t: 'Lua 5.4 Reference Manual', u: 'https://www.lua.org/manual/5.4/manual.html', p: 'Lua.org', n: '점진적 모드는 수집을 작은 단계로 나눠 실행 사이에 끼워 넣고(단계를 크게 잡으면 전체 멈춤), 세대별 모드의 major 수집은 모든 객체를 도는 전체 멈춤' },
+        { t: 'Lua 5.4 Reference Manual', u: 'https://www.lua.org/manual/5.4/manual.html', p: 'Lua.org', n: '점진적 모드는 수집을 작은 단계로 나눠 실행 사이에 끼워 넣고(단계를 크게 잡으면 전체 멈춤), 세대별 모드의 major 수집은 모든 객체를 도는 전체 멈춤, collectgarbage("count")는 Lua가 쓰는 메모리 총량(KB)' },
       ] },
     { id: 'mem-alloc', t: '할당 폭주', en: 'Allocation storms',
       s: '이벤트 중 임시 객체를 대량으로 만들면 GC가 평소보다 훨씬 자주 돕니다.',
@@ -3906,9 +4106,17 @@ window.SIGDRAW = (function () {
       own: ['srv'],
       act: { game: '오브젝트 풀, 재사용 버퍼, 할당 프로파일링.' },
       sim: 'gc',
+      sig: { k: 'load', g: 'GC 횟수, 할당 속도' },
+      chk: {
+        look: 'GC 로그(Java -Xlog:gc, Go GODEBUG=gctrace=1)로 분당 GC 횟수를 세고, .NET은 dotnet-counters의 할당량과 GC 횟수(.NET 9 이후 dotnet.gc.heap.total_allocated·dotnet.gc.collections, 8 이하 Allocation Rate·Gen 0 GC Count)를 봅니다. 동시 접속 수·이벤트 시각과 겹쳐 봅니다.',
+        yes: '이벤트가 시작되면 할당 속도와 GC 횟수가 인원 증가보다 가파르게 늘고 짧은 멈춤이 잦아짐. 이벤트가 끝나면 원래대로 돌아옴.',
+        no: 'GC 횟수는 그대로인데 한 번의 멈춤이 길어지면 살아 있는 데이터가 늘어난 것(mem-gc-thrash, mem-leak).',
+        by: 'ops',
+      },
       ref: [
-        { t: 'Garbage Collector Implementation', u: 'https://docs.oracle.com/en/java/javase/25/gctuning/garbage-collector-implementation.html', p: 'Oracle', n: 'Young 영역이 차면 minor GC, 살아남은 객체 일부가 Old 영역으로 옮겨지고 Old가 차면 힙 전체를 수집(minor보다 훨씬 오래 걸림)' },
-        { t: 'A Guide to the Go Garbage Collector', u: 'https://go.dev/doc/gc-guide', p: 'Go', n: '할당 속도가 높을수록 GC 주기가 잦아짐' },
+        { t: 'Garbage Collector Implementation', u: 'https://docs.oracle.com/en/java/javase/25/gctuning/garbage-collector-implementation.html', p: 'Oracle', n: 'Young 영역이 차면 minor GC, 살아남은 객체 일부가 Old 영역으로 옮겨지고 Old가 차면 힙 전체를 수집(minor보다 훨씬 오래 걸림), -Xlog:gc는 GC마다 한 줄씩 기록' },
+        { t: 'A Guide to the Go Garbage Collector', u: 'https://go.dev/doc/gc-guide', p: 'Go', n: '할당 속도가 높을수록 GC 주기가 잦아짐, GODEBUG=gctrace=1로 GC 추적 출력' },
+        { t: 'dotnet-counters diagnostic tool', u: 'https://learn.microsoft.com/en-us/dotnet/core/diagnostics/dotnet-counters', p: '.NET', n: '.NET 9 이후는 dotnet.gc.heap.total_allocated·dotnet.gc.collections, .NET 8 이하는 Allocation Rate·Gen 0 GC Count로 표시' },
       ] },
     { id: 'mem-leak', t: '메모리 누수', en: 'Memory leak',
       s: '해제되지 않는 메모리가 조금씩 쌓여, 며칠 뒤 GC 폭주·스왑·강제 종료로 이어집니다.',
@@ -3918,9 +4126,19 @@ window.SIGDRAW = (function () {
       act: { game: '힙 덤프 분석, 장시간 부하 테스트.', infra: '프로세스별 메모리 사용량 추세 모니터링과 경보.' },
       more: '정기 점검으로 매주 재시작하면 누수가 가려져 오래 발견되지 않습니다. 점검이 한 번 미뤄지거나 이벤트로 인원이 늘었을 때 갑자기 드러나는 경우가 많습니다.',
       sim: 'leak',
+      sig: { k: 'ramp', g: '프로세스 메모리(RSS), GC 직후 힙' },
+      chk: {
+        look: '게임 서버 프로세스의 메모리(pidstat -r의 RSS)를 며칠 단위로 보고, GC를 쓰는 서버는 GC 직후 남은 힙을 봅니다. Java는 -Xlog:gc 줄의 “GC 전->GC 후(힙 크기)”, .NET은 dotnet-counters의 GC 뒤 힙 크기(.NET 9 이후 dotnet.gc.last_collection.heap.size, 8 이하 GC Heap Size).',
+        yes: 'GC 직후 남은 힙(바닥선)이 재시작 뒤 날마다 올라가고, 인원이 적은 새벽에도 내려오지 않음.',
+        no: '힙 바닥선은 평평한데 RSS만 오르면 단편화(mem-fragment)나 네이티브 메모리 쪽. 인원을 따라 오르내리면 정상 사용량.',
+        by: 'ops',
+      },
       ref: [
         { t: 'Troubleshoot Memory Leaks', u: 'https://docs.oracle.com/en/java/javase/25/troubleshoot/troubleshooting-memory-leaks.html', p: 'Oracle', n: '실행이 점점 느려지면 누수를 의심, 결국 메모리가 바닥나 비정상 종료. 누수 분석의 핵심 자료는 힙 덤프' },
         { t: 'Debug a memory leak in .NET', u: 'https://learn.microsoft.com/en-us/dotnet/core/diagnostics/debug-memory-leak', p: '.NET', n: 'GC가 있어도 필요 없는 객체를 계속 참조하면 누수, 성능 저하와 OutOfMemoryException. 메모리 추세 확인과 덤프 분석' },
+        { t: 'Garbage Collector Implementation', u: 'https://docs.oracle.com/en/java/javase/25/gctuning/garbage-collector-implementation.html', p: 'Oracle', n: '-Xlog:gc 줄은 “GC 전 사용량->GC 후 사용량(힙 크기)” 형식' },
+        { t: 'dotnet-counters diagnostic tool', u: 'https://learn.microsoft.com/en-us/dotnet/core/diagnostics/dotnet-counters', p: '.NET', n: '.NET 9 이후는 dotnet.gc.last_collection.heap.size, .NET 8 이하는 GC Heap Size로 표시' },
+        { t: 'pidstat(1) — Linux manual page', u: 'https://man7.org/linux/man-pages/man1/pidstat.1.html', p: 'sysstat', n: '-r: 프로세스별 RSS(실제 램에 올라 있는 메모리)와 페이지 폴트' },
       ] },
     { id: 'mem-gc-thrash', t: 'GC 스래싱 (힙 여유 부족)', en: 'GC thrashing (heap nearly full)',
       s: '살아 있는 데이터가 힙 한도에 가까워지면, GC가 돌아도 회수할 것이 거의 없어 GC가 쉬지 않고 반복됩니다.',
@@ -3930,10 +4148,19 @@ window.SIGDRAW = (function () {
       own: ['srv', 'sys'],
       act: { game: '힙을 피크 때 살아 있는 데이터보다 넉넉하게(보통 2배 이상) 설정, 오래 참조하는 데이터·누수 줄이기.', infra: 'GC 시간 비율 경보, 버티지 말고 빨리 재시작, 힙을 키울 수 있게 메모리가 넉넉한 인스턴스.' },
       sim: 'gc',
+      sig: { k: 'ceiling', g: 'GC 직후 힙, GC 시간 비율' },
+      chk: {
+        look: 'GC 직후 남은 힙이 최대 힙에 얼마나 가까운지와 GC에 쓴 시간 비율을 봅니다. Java는 -Xlog:gc 줄의 “GC 후(힙 크기)”와 Pause Full 줄의 빈도, .NET은 dotnet-counters(.NET 8 이하 % Time in GC since last GC, .NET 9 이후 dotnet.gc.pause.time 증가량), Go는 GODEBUG=gctrace=1 줄 사이 간격을 봅니다.',
+        yes: 'GC 직후에도 힙이 최대치 가까이 남고 Full GC가 연달아 돌며, GC 시간 비율이 평소보다 크게(보통 10% 넘게) 올라감. 그동안 서버 전체 틱이 함께 느려짐.',
+        no: 'GC 직후 힙에 여유가 있는데 멈춤만 길면 GC 방식·설정 쪽(mem-gc).',
+        by: 'ops',
+      },
       ref: [
         { t: 'The Parallel Collector', u: 'https://docs.oracle.com/en/java/javase/25/gctuning/parallel-collector1.html', p: 'Oracle', n: '병렬 GC는 전체 시간의 98% 넘게 GC를 하고도 힙을 2% 미만 회수하면 OutOfMemoryError' },
-        { t: 'Garbage-First Garbage Collector Tuning', u: 'https://docs.oracle.com/en/java/javase/25/gctuning/garbage-first-garbage-collector-tuning.html', p: 'Oracle', n: 'G1은 기본(GCTimeRatio=12)으로 GC 시간을 전체의 약 8% 이하로 맞추도록 힙 크기를 정함' },
-        { t: 'A Guide to the Go Garbage Collector', u: 'https://go.dev/doc/gc-guide', p: 'Go', n: '기본 GOGC=100이면 목표 힙이 살아 있는 힙의 약 2배, 메모리 한도에 붙으면 GC가 쉬지 않고 도는 스래싱' },
+        { t: 'Garbage-First Garbage Collector Tuning', u: 'https://docs.oracle.com/en/java/javase/25/gctuning/garbage-first-garbage-collector-tuning.html', p: 'Oracle', n: 'G1은 기본(GCTimeRatio=12)으로 GC 시간을 전체의 약 8% 이하로 맞추도록 힙 크기를 정함, 힙 점유가 너무 높아 생긴 Full GC는 로그의 Pause Full (G1 Compaction Pause)로 찾음' },
+        { t: 'A Guide to the Go Garbage Collector', u: 'https://go.dev/doc/gc-guide', p: 'Go', n: '기본 GOGC=100이면 목표 힙이 살아 있는 힙의 약 2배, 메모리 한도에 붙으면 GC가 쉬지 않고 도는 스래싱, GODEBUG=gctrace=1로 GC 추적 출력' },
+        { t: 'Garbage Collector Implementation', u: 'https://docs.oracle.com/en/java/javase/25/gctuning/garbage-collector-implementation.html', p: 'Oracle', n: '-Xlog:gc 줄은 GC 종류(Pause Young, Pause Full)와 “GC 전 사용량->GC 후 사용량(힙 크기)”, 멈춘 시간' },
+        { t: 'dotnet-counters diagnostic tool', u: 'https://learn.microsoft.com/en-us/dotnet/core/diagnostics/dotnet-counters', p: '.NET', n: '.NET 9 이후는 dotnet.gc.pause.time, .NET 8 이하는 % Time in GC since last GC로 표시' },
       ] },
     { id: 'mem-swap', t: '스왑', en: 'Swapping',
       s: '메모리가 모자라 OS가 일부를 디스크로 내보내면, 그 메모리를 쓸 때마다 1,000배 넘게 느린 디스크를 기다립니다.',
@@ -3944,12 +4171,22 @@ window.SIGDRAW = (function () {
       act: { game: '프로세스 메모리 사용량에 상한(힙 크기 등)을 두고 누수 점검.', infra: '게임 서버는 스왑을 쓰지 않도록 설정, 메모리 경보로 대응, 스왑을 끄면 메모리가 모자라는 순간 강제 종료(OOM)되므로 피크 사용량보다 램을 넉넉히 확보.' },
       more: 'GC를 쓰는 서버는 수집할 때 힙 곳곳을 읽기 때문에, 힙 일부만 스왑돼도 GC 한 번이 수 초~수십 초로 늘어날 수 있습니다. 스왑을 끄면 스왑 때문에 느려지는 단계 없이 강제 종료(OOM)로 넘어가므로, 여유 메모리를 먼저 확보해야 합니다. 스왑이 없어도 메모리가 바닥에 가까우면 OS가 실행 파일의 코드 페이지까지 메모리에서 내렸다가 다시 읽느라, 강제 종료 전에 한동안 서버 전체가 심하게 느려질 수 있습니다.',
       sim: 'leak',
+      sig: { k: 'ramp', g: '스왑 사용량, 스왑 인·아웃' },
+      chk: {
+        look: 'vmstat 1의 si·so 열(초당 스왑에서 읽어 들인·내보낸 양), /proc/pressure/memory의 some·full(메모리를 기다리느라 멈춘 시간 비율), 게임 서버 프로세스의 pidstat -r majflt/s(디스크에서 읽어 와야 했던 페이지 폴트)를 틱 시간과 겹쳐 봅니다.',
+        yes: '렉 시각에 si가 0보다 크고, 게임 서버의 majflt/s와 memory의 full 값이 함께 오름.',
+        no: 'si·so가 0이고 memory 압박(PSI)도 0 근처면 스왑이 원인이 아님. 스왑이 없는데 majflt/s와 PSI가 오르면 메모리가 바닥나 코드 페이지를 다시 읽는 상태라 메모리 확보가 먼저.',
+        by: 'ops',
+      },
       ref: [
         { t: 'Designs, Lessons and Advice from Building Large Distributed Systems (LADIS 2009 keynote)', u: 'https://www.cs.cornell.edu/projects/ladis2009/talks/dean-keynote-ladis2009.pdf', p: 'Google', n: '“Numbers Everyone Should Know”: 메인 메모리 참조 100ns, 디스크 탐색 10ms(2009년 기준)' },
         { t: 'Documentation for /proc/sys/vm/', u: 'https://docs.kernel.org/admin-guide/sysctl/vm.html', p: 'Linux kernel', n: 'swappiness: 스왑과 파일 페이지 회수의 상대 비용, 스왑은 무작위 I/O라 비쌈' },
         { t: 'Concepts overview', u: 'https://docs.kernel.org/admin-guide/mm/concepts.html', p: 'Linux kernel', n: '디스크에 원본이 있는 페이지 캐시와 스왑 가능한 페이지를 회수하고, 그래도 모자라면 OOM 킬러가 프로세스를 죽임' },
         { t: 'Solidigm™ D7-P5520 and D7-P5620 Product Brief', u: 'https://www.solidigm.com/products/data-center/product-briefs/d7-p5520-p5620-product-brief.html', p: 'Solidigm', n: '서버용 NVMe SSD의 99.99% 지연(four-nines latency) 130µs: SSD 한 번 읽기가 100µs 안팎이라는 근거' },
         { t: 'Amazon EBS General Purpose SSD volumes', u: 'https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html', p: 'AWS', n: '클라우드 기본 디스크(gp3)의 지연은 한 자릿수 ms' },
+        { t: 'vmstat(8) — Linux manual page', u: 'https://man7.org/linux/man-pages/man8/vmstat.8.html', p: 'procps-ng', n: 'si: 초당 스왑에서 읽어 들인 메모리, so: 초당 스왑으로 내보낸 메모리' },
+        { t: 'PSI - Pressure Stall Information', u: 'https://docs.kernel.org/accounting/psi.html', p: 'Linux kernel', n: '/proc/pressure/memory의 some(일부 작업이 멈춘 시간 비율)과 full(모든 작업이 동시에 멈춘 시간 비율)' },
+        { t: 'pidstat(1) — Linux manual page', u: 'https://man7.org/linux/man-pages/man1/pidstat.1.html', p: 'sysstat', n: '-r: majflt/s(디스크에서 페이지를 읽어 와야 했던 폴트 수)' },
       ] },
     { id: 'mem-cache-miss', t: '캐시 미스', en: 'CPU cache misses',
       s: '데이터가 메모리 여기저기 흩어져 있으면 CPU가 매번 느린 RAM까지 가서 기다립니다.',
@@ -3958,8 +4195,16 @@ window.SIGDRAW = (function () {
       own: ['srv'],
       act: { game: '자주 함께 쓰는 데이터를 연속으로 배치(데이터 지향 설계).' },
       sim: 'ladder',
+      sig: { k: 'high', g: '틱 시간, CPU 사용률' },
+      chk: {
+        look: '게임 서버 프로세스에 perf stat -d -p PID를 걸어 사이클당 명령어 수(insn per cycle)와 L1·LLC 캐시 미스를 재고, 틱 시간·CPU 사용률과 함께 봅니다.',
+        yes: 'CPU를 계속 바쁘게 쓰는데 insn per cycle이 낮고 LLC 미스가 많음. 데이터 배치를 바꾼 빌드에서 같은 인원의 틱 시간이 크게 줄면 확정.',
+        no: 'CPU 사용률이 낮은데 틱이 느리면 락·I/O 대기처럼 CPU 밖에서 기다리는 원인.',
+        by: 'ops',
+      },
       ref: [
         { t: 'Designs, Lessons and Advice from Building Large Distributed Systems (LADIS 2009 keynote)', u: 'https://www.cs.cornell.edu/projects/ladis2009/talks/dean-keynote-ladis2009.pdf', p: 'Google', n: 'L1 캐시 0.5ns, L2 캐시 7ns, 메인 메모리 100ns(2009년 기준): RAM까지 가면 캐시보다 한두 자릿수 느림' },
+        { t: 'perf-stat(1) — Linux manual page', u: 'https://man7.org/linux/man-pages/man1/perf-stat.1.html', p: 'perf', n: '-p로 실행 중인 프로세스의 하드웨어 이벤트를 세고 insn per cycle을 보여 줌, -d는 L1·LLC 데이터 캐시 이벤트를 더함' },
       ] },
     { id: 'mem-fragment', t: '메모리 단편화', en: 'Heap fragmentation',
       s: '할당과 해제를 반복해 빈 공간이 잘게 쪼개지면, 실제로 쓰는 양보다 훨씬 많은 메모리를 점유하게 됩니다.',
@@ -3968,9 +4213,17 @@ window.SIGDRAW = (function () {
       own: ['srv'],
       act: { game: '크기별 메모리 풀, 단편화에 강한 할당기(jemalloc, mimalloc 등).' },
       more: '누수와 모양이 같아서 힙 분석으로는 누수 지점이 안 보입니다. 리눅스 기본 할당기(glibc)는 스레드가 많은 서버에서 특히 심해, 할당기만 바꿔도 사용량이 크게 줄기도 합니다.',
+      sig: { k: 'ramp', g: '프로세스 메모리(RSS)' },
+      chk: {
+        look: '같은 빌드의 서버 둘을 띄워 하나만 환경 변수 MALLOC_ARENA_MAX로 glibc 아레나 수를 줄이거나 jemalloc 같은 다른 할당기로 바꾸고, 며칠 동안 pidstat -r의 RSS를 비교합니다.',
+        yes: '인원·개체 수는 비슷한데 바꾼 서버만 RSS 증가가 멈추거나 크게 줄어듦.',
+        no: '할당기를 바꿔도 똑같이 오르면 해제하지 않는 메모리(mem-leak).',
+        by: 'ops',
+      },
       ref: [
-        { t: 'mallopt(3) — Linux manual page', u: 'https://man7.org/linux/man-pages/man3/mallopt.3.html', p: 'Linux man-pages', n: 'glibc malloc은 스레드 경합을 줄이려고 아레나를 CPU 수의 배수까지 만들고, 아레나가 많을수록 메모리 사용이 늘어남(M_ARENA_MAX로 제한)' },
+        { t: 'mallopt(3) — Linux manual page', u: 'https://man7.org/linux/man-pages/man3/mallopt.3.html', p: 'Linux man-pages', n: 'glibc malloc은 스레드 경합을 줄이려고 아레나를 CPU 수의 배수까지 만들고, 아레나가 많을수록 메모리 사용이 늘어남(M_ARENA_MAX로 제한, 환경 변수 MALLOC_ARENA_MAX로도 설정)' },
         { t: 'jemalloc memory allocator', u: 'https://jemalloc.net/', p: 'jemalloc', n: '단편화 회피와 동시성 확장을 중시하는 범용 malloc 구현' },
+        { t: 'pidstat(1) — Linux manual page', u: 'https://man7.org/linux/man-pages/man1/pidstat.1.html', p: 'sysstat', n: '-r: 프로세스별 RSS(실제 램에 올라 있는 메모리)' },
       ] },
     { id: 'mem-numa', t: 'NUMA 원격 메모리', en: 'Remote NUMA access',
       s: 'CPU가 두 개인 서버에서 반대편 CPU에 붙은 메모리를 쓰면 접근이 느려집니다.',
@@ -3979,9 +4232,17 @@ window.SIGDRAW = (function () {
       own: ['sys'],
       act: { infra: '프로세스·메모리를 한 소켓에 고정(numactl), 소켓이 둘이면 소켓마다 게임 서버 프로세스를 나눠 배치.' },
       sim: 'ladder',
+      sig: { k: 'outlier', g: '프로세스별 틱 시간, 노드별 메모리' },
+      chk: {
+        look: 'numastat -p PID로 게임 서버 프로세스의 메모리가 어느 NUMA 노드에 있는지, numastat의 numa_miss·other_node가 늘어나는지 보고, 그 프로세스가 도는 CPU의 노드와 비교합니다.',
+        yes: '느린 프로세스만 메모리 대부분이 자기가 도는 CPU와 다른 노드에 있고, numactl로 CPU·메모리를 한 노드에 고정해 다시 띄우면 차이가 사라짐.',
+        no: '빠른 프로세스와 노드 배치가 같은데도 느리면 노이지 네이버, CPU 스로틀링, 그 프로세스의 부하 같은 다른 원인.',
+        by: 'ops',
+      },
       ref: [
         { t: 'What is NUMA?', u: 'https://docs.kernel.org/mm/numa.html', p: 'Linux kernel', n: '같은 셀의 메모리는 더 빠르고 대역폭이 크며, 다른(원격) 셀의 메모리는 접근이 느림' },
         { t: 'numactl(8) — Linux manual page', u: 'https://man7.org/linux/man-pages/man8/numactl.8.html', p: 'numactl', n: '--cpunodebind·--membind로 프로세스의 CPU와 메모리를 특정 NUMA 노드에 고정' },
+        { t: 'numastat(8) — Linux manual page', u: 'https://man7.org/linux/man-pages/man8/numastat.8.html', p: 'numactl', n: 'numa_miss(원하던 노드가 아닌 곳에 할당)·other_node(다른 노드에서 도는 프로세스가 이 노드에 할당) 카운터, -p로 프로세스의 노드별 메모리' },
       ] },
   ]);
 
@@ -3995,10 +4256,19 @@ window.SIGDRAW = (function () {
       act: { game: '비동기 로깅(메모리 버퍼 + 별도 스레드), 로그 양 줄이기, 게임 스레드에서 fsync 하지 않기.', infra: '로그 로테이션·압축은 I/O 우선순위를 낮춰 실행, 로그를 데이터와 다른 디스크에, 디스크 쓰기 지연 모니터링.' },
       more: '보통 OS는 쓰기를 먼저 메모리(페이지 캐시)에 받아 두고 나중에 디스크로 내려보내서, 로그 한 줄은 대개 곧바로 끝납니다. 멈춤은 fsync로 확실한 저장을 요구할 때, 밀린 쓰기가 한도를 넘어 OS가 쓰기 호출을 블로킹할 때, 로그 파일을 로테이션하거나 압축할 때 생깁니다. 그래서 평소엔 멀쩡하다가 디스크가 바쁜 순간에만 튑니다.',
       sim: 'disk',
+      sig: { k: 'random', g: '서버 틱 시간, 디스크 쓰기 지연' },
+      chk: {
+        look: 'iostat -x 1의 w_await·aqu-sz를 틱 시간과 겹쳐 보고, perf trace -p PID --duration 10으로 게임 서버에서 10ms 넘게 걸린 write·fsync 호출과 그 스레드를 찾습니다.',
+        yes: '틱이 튄 시각에 게임 스레드의 write·fsync 호출이 수십 ms 걸리고, 그 순간 디스크 쓰기 지연도 솟음. 로그 로테이션·압축 시각과 겹치는 경우가 많음.',
+        no: '게임 스레드에 오래 걸린 시스템 호출이 없는데 틱이 튀면 GC·락·틱 예산 초과 같은 다른 원인. 로그 전용 스레드만 오래 걸리면 게임 진행에는 영향이 없음.',
+        by: 'ops',
+      },
       ref: [
         { t: 'fsync(2) — Linux manual page', u: 'https://man7.org/linux/man-pages/man2/fsync.2.html', p: 'Linux man-pages', n: 'fsync는 바뀐 데이터를 디스크(디스크 캐시 포함)까지 내려보내고, 장치가 완료를 알릴 때까지 블록' },
         { t: 'Documentation for /proc/sys/vm/', u: 'https://docs.kernel.org/admin-guide/sysctl/vm.html', p: 'Linux kernel', n: '밀린 쓰기(dirty)가 dirty_ratio에 닿으면 쓰기를 하는 프로세스가 직접 디스크 기록을 떠맡음' },
         { t: 'ionice(1) — Linux manual page', u: 'https://man7.org/linux/man-pages/man1/ionice.1.html', p: 'util-linux', n: 'idle I/O 우선순위로 돌린 작업은 다른 프로그램이 디스크를 쓰지 않을 때만 디스크 시간을 받음' },
+        { t: 'iostat(1) — Linux manual page', u: 'https://man7.org/linux/man-pages/man1/iostat.1.html', p: 'sysstat', n: '-x: w_await(쓰기 요청이 대기열에서 기다린 시간을 포함한 평균 처리 시간), aqu-sz(평균 대기열 길이, 예전 이름 avgqu-sz)' },
+        { t: 'perf-trace(1) — Linux manual page', u: 'https://man7.org/linux/man-pages/man1/perf-trace.1.html', p: 'perf', n: '-p로 실행 중인 프로세스의 시스템 호출을 추적, --duration으로 지정한 ms보다 오래 걸린 호출만 표시' },
       ] },
     { id: 'dk-fsync', t: 'fsync 폭주', en: 'fsync storms',
       s: '데이터를 “확실히” 디스크에 쓰도록 요청하면 디스크에 따라 한 번에 0.1ms~수십 ms가 걸리고, 몰리면 대기열이 길어집니다.',
@@ -4008,11 +4278,20 @@ window.SIGDRAW = (function () {
       own: ['srv', 'sys', 'dba'],
       act: { game: '저장 묶어서 한 번에(여러 저장을 fsync 한 번으로), 저장 시각 분산.', infra: '서버 장비·OS: 전원 보호 기능이 있는 서버용 SSD, 디스크 대기열 길이·fsync 지연 모니터링. DB 장비: 저장이 DB로 가면 DB 로그 디스크도 같은 SSD로, 커밋 지연 모니터링.' },
       sim: 'disk',
+      sig: { k: 'periodic', g: '디스크 대기열 길이, 플러시·쓰기 지연' },
+      chk: {
+        look: 'iostat -x 1의 f/s·f_await(디스크가 처리한 플러시 수와 걸린 시간), w/s·aqu-sz·w_await를 정기 저장·로그아웃 시각과 겹쳐 봅니다. 예전 sysstat은 aqu-sz를 avgqu-sz로 표시합니다. 클라우드 디스크는 EBS의 VolumeQueueLength·VolumeAvgWriteLatency를 봅니다.',
+        yes: '저장 시각·로그아웃 러시마다 플러시 수와 대기열 길이가 함께 솟고 w_await·f_await가 평소의 몇 배가 됨. 그때 저장·채널 이동이 늦어짐.',
+        no: '저장·로그아웃과 상관없는 시각에 대기열이 솟으면 백업·압축(dk-backup)이나 IOPS 한도(dk-iops). 플러시 수는 그대로인데 느려지면 버스트 크레딧 소진(dk-burst) 쪽.',
+        by: 'ops',
+      },
       ref: [
         { t: 'fsync(2) — Linux manual page', u: 'https://man7.org/linux/man-pages/man2/fsync.2.html', p: 'Linux man-pages', n: 'fsync는 디스크 캐시까지 비우고 장치가 완료를 알릴 때까지 블록' },
         { t: 'Reliability (PostgreSQL Documentation)', u: 'https://www.postgresql.org/docs/current/wal-reliability.html', p: 'PostgreSQL', n: '일반 SATA 디스크와 많은 SSD는 정전에 날아가는 쓰기 캐시를 가져, 확실한 저장에는 배터리·전원 보호가 있는 캐시가 필요' },
         { t: 'Amazon EBS General Purpose SSD volumes', u: 'https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html', p: 'AWS', n: '클라우드 기본 디스크(gp3) 지연은 한 자릿수 ms, io2 Block Express는 16KiB I/O 평균 500µs 미만' },
         { t: 'Designs, Lessons and Advice from Building Large Distributed Systems (LADIS 2009 keynote)', u: 'https://www.cs.cornell.edu/projects/ladis2009/talks/dean-keynote-ladis2009.pdf', p: 'Google', n: 'HDD 탐색 한 번 10ms' },
+        { t: 'iostat(1) — Linux manual page', u: 'https://man7.org/linux/man-pages/man1/iostat.1.html', p: 'sysstat', n: '-x: f/s·f_await(디스크가 처리한 플러시 요청 수와 평균 시간), w/s, w_await, aqu-sz(예전 이름 avgqu-sz)' },
+        { t: 'Amazon CloudWatch metrics for Amazon EBS', u: 'https://docs.aws.amazon.com/ebs/latest/userguide/using_cloudwatch_ebs.html', p: 'AWS', n: 'VolumeQueueLength(완료를 기다리는 요청 수), VolumeAvgWriteLatency(1분 평균 쓰기 지연, Nitro 인스턴스)' },
       ] },
     { id: 'dk-burst', t: '클라우드 디스크 버스트 크레딧 소진', en: 'Burst credit depletion',
       s: '일부 클라우드 디스크와 작은 서버 사양은 잠깐 기준보다 빠르게 쓸 수 있는 버스트 크레딧이 있어서, 바쁜 시간이 길어져 크레딧이 바닥나면 속도가 갑자기 떨어집니다.',
@@ -4023,11 +4302,21 @@ window.SIGDRAW = (function () {
       act: { infra: '서버 장비·OS: 성능 보장형 디스크(gp3, IOPS 지정형), 크레딧 잔량 경보, 인스턴스의 디스크 대역폭 버스트 한도와 CPU 크레딧도 함께 확인. DB 장비: 관리형 DB를 포함한 DB 디스크도 성능 보장형으로 바꾸고 크레딧 잔량 경보.' },
       more: '디스크가 멀쩡해도 작은 가상 서버는 인스턴스의 디스크 대역폭 자체에 버스트 한도(하루 최소 30분 등)가 있어 같은 모양이 나옵니다. CPU 크레딧을 쓰는 저가형 서버도 크레딧이 바닥나면 기준 성능까지 느려집니다.',
       sim: 'disk',
+      sig: { k: 'ceiling', g: 'IOPS, 버스트 크레딧 잔량' },
+      chk: {
+        look: 'CloudWatch의 EBS BurstBalance(gp2·st1·sc1), 인스턴스의 EBSIOBalance%·EBSByteBalance%(버스트하는 일부 인스턴스), 버스트형 인스턴스의 CPUCreditBalance를 봅니다. Azure는 Data Disk Used Burst IO Credits Percentage 같은 버스트 크레딧 사용률 지표를 봅니다.',
+        yes: '잔량이 0 가까이 떨어진 시각부터 IOPS(VolumeReadOps·VolumeWriteOps)가 기준 성능에서 평평해지고 VolumeQueueLength와 렉이 함께 늘어남. 피크가 몇 시간 이어진 뒤에 시작됨.',
+        no: '잔량이 모두 넉넉한데 IOPS가 평평하면 볼륨·인스턴스의 고정 한도(dk-iops).',
+        by: 'ops',
+      },
       ref: [
         { t: 'Amazon EBS General Purpose SSD volumes', u: 'https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html', p: 'AWS', n: 'gp2 기준 성능은 GiB당 3 IOPS(최소 100), I/O 크레딧으로 3,000 IOPS까지 버스트, 크레딧 540만 개로 최소 30분. gp3는 버스트 없이 늘 3,000 IOPS' },
         { t: 'Managed disk bursting', u: 'https://learn.microsoft.com/en-us/azure/virtual-machines/disk-bursting', p: 'Microsoft Azure', n: 'Premium SSD P20 이하는 크레딧 기반 버스트, 크레딧이 가득 차면 최대 버스트 속도로 30분' },
         { t: 'Amazon EBS-optimized instance types', u: 'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-optimized.html', p: 'AWS', n: '일부 인스턴스는 EBS 최대 성능을 24시간에 한 번 30분만 유지하고 이후 기준 성능으로 돌아감' },
         { t: 'Standard mode for burstable performance instances', u: 'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances-standard-mode.html', p: 'AWS', n: '표준 모드의 버스트형 인스턴스는 CPU 크레딧이 떨어지면 CPU 사용률을 기준 수준으로 (급락하지 않게 서서히) 낮춤' },
+        { t: 'Amazon CloudWatch metrics for Amazon EBS', u: 'https://docs.aws.amazon.com/ebs/latest/userguide/using_cloudwatch_ebs.html', p: 'AWS', n: 'BurstBalance: gp2의 I/O 크레딧, st1·sc1의 처리량 크레딧 잔량(%), VolumeReadOps·VolumeWriteOps·VolumeQueueLength' },
+        { t: 'CloudWatch metrics that are available for your instances', u: 'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/viewing_metrics_with_cloudwatch.html', p: 'AWS', n: 'EBSIOBalance%·EBSByteBalance%: 24시간에 한 번 30분 버스트하는 일부 인스턴스의 EBS 크레딧 잔량, CPUCreditBalance: 버스트형 인스턴스의 CPU 크레딧 잔량' },
+        { t: 'Disk metrics', u: 'https://learn.microsoft.com/en-us/azure/virtual-machines/disks-metrics', p: 'Microsoft Azure', n: 'Data Disk Used Burst IO Credits Percentage 등 디스크·VM 버스트 크레딧 사용률(5분 간격)' },
       ] },
     { id: 'dk-iops', t: 'IOPS 한도·대기열 포화', en: 'IOPS limit / queue saturation',
       s: '디스크가 1초에 처리할 수 있는 요청 수를 넘으면 대기열이 길어져 지연이 폭증합니다.',
@@ -4038,12 +4327,22 @@ window.SIGDRAW = (function () {
       act: { game: '요청 합치기, 자주 읽는 데이터는 캐시, 게임 스레드에서 디스크를 기다리지 않게 비동기로.', infra: '서버 장비·OS: 더 빠른 디스크, 인스턴스 유형별 디스크 대역폭·IOPS 한도 확인, 디스크 이용률·대기열 경보, 큰 파일 복사는 한가한 시간에. DB 장비: DB 디스크도 IOPS·처리량 이용률 경보, DB 인스턴스 사양의 디스크 한도 확인.' },
       more: '클라우드에서는 디스크 한도와 별도로 서버 사양(인스턴스 유형)마다 디스크 대역폭·IOPS 한도가 있습니다. 비싼 디스크를 붙여도 서버가 작으면 인스턴스 한도에서 막힙니다.',
       sim: 'disk',
+      sig: { k: 'ceiling', g: 'IOPS, 디스크 대기열 길이' },
+      chk: {
+        look: 'iostat -x 1의 r/s·w/s, rkB/s·wkB/s, aqu-sz, r_await·w_await를 봅니다. 클라우드는 EBS의 VolumeReadOps·VolumeWriteOps·VolumeQueueLength와 한도 초과 여부 VolumeIOPSExceededCheck·VolumeThroughputExceededCheck, 인스턴스 쪽 InstanceEBSIOPSExceededCheck·InstanceEBSThroughputExceededCheck를 봅니다.',
+        yes: '초당 요청 수나 전송량이 한도 값에서 평평해지고 aqu-sz와 await가 함께 치솟음. 클라우드에서는 초과 확인 지표가 1.',
+        no: '%util이 100%여도 await가 낮으면 아직 여유가 있을 수 있음. 요청을 병렬로 처리하는 SSD·RAID에서는 %util이 한도를 뜻하지 않음. 한도에 닿지 않았는데 await만 높으면 디스크 자체 지연(dk-hdd)이나 fsync(dk-fsync).',
+        by: 'ops',
+      },
       ref: [
         { t: 'Exos X18 Data Sheet', u: 'https://www.seagate.com/www-content/datasheets/pdfs/exos-x18-mango-DS2045-1N-2007US-en_US.pdf', p: 'Seagate', n: '7,200rpm 서버용 HDD의 4K 무작위 읽기 170 IOPS(QD16)' },
         { t: 'D3-S4520 SSD', u: 'https://www.solidigm.com/products/data-center/d3/s4520.html', p: 'Solidigm', n: '서버용 SATA SSD 4KB 무작위 읽기·쓰기 최대 92K/48K IOPS' },
         { t: 'Solidigm™ D7-P5520 and D7-P5620 Product Brief', u: 'https://www.solidigm.com/products/data-center/product-briefs/d7-p5520-p5620-product-brief.html', p: 'Solidigm', n: '서버용 NVMe SSD 무작위 읽기·쓰기 1,000K/200K IOPS' },
         { t: 'Amazon EBS General Purpose SSD volumes', u: 'https://docs.aws.amazon.com/ebs/latest/userguide/general-purpose.html', p: 'AWS', n: 'gp3 기본 성능 3,000 IOPS와 125MiB/s, 둘은 따로 늘릴 수 있는 별개 한도' },
         { t: 'Amazon EBS-optimized instance types', u: 'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-optimized.html', p: 'AWS', n: '인스턴스 유형마다 EBS 대역폭·처리량·IOPS의 기준·최대 한도가 따로 있음' },
+        { t: 'iostat(1) — Linux manual page', u: 'https://man7.org/linux/man-pages/man1/iostat.1.html', p: 'sysstat', n: '-x: r/s·w/s, rkB/s·wkB/s, aqu-sz(예전 이름 avgqu-sz), r_await·w_await, %util. 요청을 병렬로 처리하는 RAID·최신 SSD에서는 %util이 성능 한도를 나타내지 않음' },
+        { t: 'Amazon CloudWatch metrics for Amazon EBS', u: 'https://docs.aws.amazon.com/ebs/latest/userguide/using_cloudwatch_ebs.html', p: 'AWS', n: 'VolumeIOPSExceededCheck·VolumeThroughputExceededCheck: 볼륨의 IOPS·처리량 한도를 넘기려 했으면 1(Nitro 인스턴스), VolumeQueueLength' },
+        { t: 'CloudWatch metrics that are available for your instances', u: 'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/viewing_metrics_with_cloudwatch.html', p: 'AWS', n: 'InstanceEBSIOPSExceededCheck·InstanceEBSThroughputExceededCheck: 인스턴스의 EBS IOPS·처리량 한도를 넘기려 했으면 1' },
       ] },
     { id: 'dk-full', t: '디스크 가득 참', en: 'Disk full',
       s: '로그와 덤프가 쌓여 디스크가 가득 차면 쓰기가 실패하고, 대비가 없으면 서버가 죽습니다.',
@@ -4052,11 +4351,22 @@ window.SIGDRAW = (function () {
       own: ['sys', 'dba', 'srv'],
       act: { game: '쓰기 실패를 처리해 크래시 대신 저장 재시도와 경보, 불필요한 로그·덤프 줄이기.', infra: '서버 장비·OS: 로그 로테이션, 용량 경보, 로그와 데이터 디스크 분리. DB 장비: DB 트랜잭션 로그(WAL, binlog)가 복제 중단·로그 백업 누락으로 쌓이지 않는지 감시.' },
       more: 'DB의 트랜잭션 로그(WAL, binlog 등)는 복제본이 멈추거나 로그 백업이 빠지면 지워지지 않고 계속 쌓입니다. 이 디스크가 차면 DB의 모든 쓰기가 멈춰 저장·거래가 한꺼번에 실패합니다.',
+      sig: { k: 'ramp', g: '디스크 사용률' },
+      chk: {
+        look: 'df -h의 사용률과 df -i의 inode 사용률을 보고, 서버·DB 로그에서 ENOSPC 오류를 찾습니다. DB는 PostgreSQL pg_replication_slots에서 active가 false인 슬롯, MySQL SHOW BINARY LOGS의 파일 수·크기, SQL Server sys.databases의 log_reuse_wait_desc, RDS는 FreeStorageSpace를 봅니다.',
+        yes: '사용률이 며칠에 걸쳐 꾸준히 오르다 100%에 닿은 시각과 크래시·저장 실패 시각이 겹치고, 로그에 ENOSPC가 남음.',
+        no: '공간이 넉넉한데 쓰기가 실패하면 권한·파일 크기 한도 같은 다른 원인.',
+        by: 'ops',
+      },
       ref: [
         { t: 'write(2) — Linux manual page', u: 'https://man7.org/linux/man-pages/man2/write.2.html', p: 'Linux man-pages', n: '장치에 공간이 없으면 쓰기가 ENOSPC 오류로 실패' },
         { t: 'Monitoring Disk Usage (PostgreSQL Documentation)', u: 'https://www.postgresql.org/docs/current/diskusage.html', p: 'PostgreSQL', n: 'WAL 디스크가 가득 차면 DB 서버가 패닉으로 종료될 수 있음' },
         { t: 'Log-Shipping Standby Servers (PostgreSQL Documentation)', u: 'https://www.postgresql.org/docs/current/warm-standby.html', p: 'PostgreSQL', n: '복제 슬롯은 복제본이 받을 때까지 WAL을 지우지 않아 pg_wal 공간을 채울 수 있음(max_slot_wal_keep_size로 제한)' },
-        { t: 'Troubleshoot a full transaction log (SQL Server Error 9002)', u: 'https://learn.microsoft.com/en-us/sql/relational-databases/logs/troubleshoot-a-full-transaction-log-sql-server-error-9002', p: 'Microsoft SQL Server', n: '로그가 가득 차면 DB는 읽기만 되고 수정 불가, 로그 백업 누락·복제 지연·긴 트랜잭션이 로그 정리를 막는 흔한 원인' },
+        { t: 'Troubleshoot a full transaction log (SQL Server Error 9002)', u: 'https://learn.microsoft.com/en-us/sql/relational-databases/logs/troubleshoot-a-full-transaction-log-sql-server-error-9002', p: 'Microsoft SQL Server', n: '로그가 가득 차면 DB는 읽기만 되고 수정 불가, 로그 백업 누락·복제 지연·긴 트랜잭션이 로그 정리를 막는 흔한 원인, 무엇이 막는지는 sys.databases의 log_reuse_wait_desc로 확인' },
+        { t: 'df(1) — Linux manual page', u: 'https://man7.org/linux/man-pages/man1/df.1.html', p: 'coreutils', n: '파일 시스템별 사용량, -i는 블록 대신 inode 사용량' },
+        { t: 'pg_replication_slots (PostgreSQL Documentation)', u: 'https://www.postgresql.org/docs/current/view-pg-replication-slots.html', p: 'PostgreSQL', n: 'active: 지금 스트리밍 중인 슬롯인지, wal_status: 슬롯이 잡아 둔 WAL이 max_wal_size를 넘었는지' },
+        { t: 'SHOW BINARY LOGS Statement', u: 'https://dev.mysql.com/doc/refman/8.4/en/show-binary-logs.html', p: 'MySQL', n: '서버의 바이너리 로그 파일 목록과 파일 크기(File_size)' },
+        { t: 'Amazon CloudWatch metrics for Amazon RDS', u: 'https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-metrics.html', p: 'AWS', n: 'FreeStorageSpace: DB 인스턴스의 남은 저장 공간' },
       ] },
     { id: 'dk-backup', t: '백업·압축·검사 작업', en: 'Backup / compression / scans',
       s: '새벽 백업, 로그 압축, 보안 검사가 디스크를 독점하면 게임 서버의 읽기·쓰기가 밀립니다.',
@@ -4065,9 +4375,18 @@ window.SIGDRAW = (function () {
       own: ['sys', 'dba'],
       act: { infra: '서버 장비·OS: 백업·압축·검사 작업의 I/O 우선순위 낮추기, 시각 분산. DB 장비: 백업은 복제본에서.' },
       sim: 'disk',
+      sig: { k: 'periodic', g: '디스크 이용률, 디스크 대기 시간' },
+      chk: {
+        look: 'sar -d로 지난 며칠 기록(/var/log/sa의 일별 파일, sadc가 -S DISK로 디스크 항목까지 모아야 함)의 %util·await·aqu-sz를 날짜별로 겹쳐 보고, 그 시각에 pidstat -d 1로 kB_rd/s·kB_wr/s가 가장 큰 프로세스를 찾아 크론·systemd 타이머 일정과 대조합니다.',
+        yes: '매일 같은 시각 await와 %util이 솟고, 그때 백업·압축·검사 프로세스가 디스크 읽기·쓰기 대부분을 차지함.',
+        no: '솟는 시각이 날마다 다르면 예약 작업일 가능성이 낮음. 그 시각 I/O 대부분이 게임 서버 자신이면 저장·로그 쪽(dk-fsync, dk-sync-log).',
+        by: 'ops',
+      },
       ref: [
         { t: 'ionice(1) — Linux manual page', u: 'https://man7.org/linux/man-pages/man1/ionice.1.html', p: 'util-linux', n: 'idle 클래스로 돌린 작업은 다른 프로그램이 디스크를 쓰지 않을 때만 디스크 시간을 받음' },
         { t: 'Using Replication for Backups', u: 'https://dev.mysql.com/doc/refman/8.4/en/replication-solutions-backups.html', p: 'MySQL', n: '복제본을 멈추고 백업해도 주 DB 운영에 영향이 없음' },
+        { t: 'sar(1) — Linux manual page', u: 'https://man7.org/linux/man-pages/man1/sar.1.html', p: 'sysstat', n: '-d: 일별 기록 파일(기본 /var/log/sa)의 장치별 await·aqu-sz·%util, 디스크 항목은 sadc의 -S DISK 옵션으로 모아야 함' },
+        { t: 'pidstat(1) — Linux manual page', u: 'https://man7.org/linux/man-pages/man1/pidstat.1.html', p: 'sysstat', n: '-d: 프로세스별 kB_rd/s·kB_wr/s(초당 디스크 읽기·쓰기량)' },
       ] },
     { id: 'dk-lazy-load', t: '서버의 지연 로딩', en: 'Lazy loading on the server',
       s: '서버가 던전·맵 데이터를 처음 요청받을 때 디스크에서 읽으면, 그 틱 동안 모두가 멈춥니다.',
@@ -4076,9 +4395,19 @@ window.SIGDRAW = (function () {
       own: ['srv', 'sys'],
       act: { game: '서버 시작 때 미리 로딩, 비동기 로딩.', infra: '스냅샷으로 막 만든 서버는 서비스 투입 전 디스크 예열(전체 블록을 한 번 읽기) 또는 빠른 스냅샷 복원 기능 사용.' },
       more: '클라우드에서 스냅샷(디스크 사본)으로 막 만든 서버는 처음 읽는 블록마다 원격 스토리지에서 받아 와 평소보다 훨씬 느립니다. 오토스케일링으로 새로 뜬 서버에서만 첫 입장이 유독 오래 걸린다면 이것을 의심합니다.',
+      sig: { k: 'random', g: '서버 틱 시간, 디스크 읽기' },
+      chk: {
+        look: '멈춘 시각을 게임 서버 로그의 던전·지역 첫 입장 기록과 맞춰 보고, 그 순간 게임 서버의 디스크 읽기(pidstat -d의 kB_rd/s)와 perf trace --duration으로 오래 걸린 read·open 호출을 봅니다. 새로 뜬 클라우드 서버라면 EBS의 VolumeAvgReadLatency를 오래된 서버와 비교합니다.',
+        yes: '처음 입장하는 순간에만 멈추고 같은 곳에 두 번째로 들어갈 때는 멈추지 않음. 멈춘 동안 게임 스레드가 파일 읽기에서 기다림.',
+        no: '이미 로딩된 지역에서도 똑같이 멈추면 틱 예산 초과·GC 같은 다른 원인.',
+        by: 'code',
+      },
       ref: [
         { t: 'Initialize Amazon EBS volumes', u: 'https://docs.aws.amazon.com/ebs/latest/userguide/ebs-initialize.html', p: 'AWS', n: '스냅샷으로 만든 볼륨은 블록을 S3에서 받아 오는 동안 지연이 늘고 성능이 떨어짐, dd·fio로 전체 블록을 읽어 미리 초기화' },
         { t: 'Amazon EBS fast snapshot restore', u: 'https://docs.aws.amazon.com/ebs/latest/userguide/ebs-fast-snapshot-restore.html', p: 'AWS', n: '빠른 스냅샷 복원은 만들 때부터 초기화된 볼륨을 줘 첫 접근 지연을 없앰' },
+        { t: 'pidstat(1) — Linux manual page', u: 'https://man7.org/linux/man-pages/man1/pidstat.1.html', p: 'sysstat', n: '-d: 프로세스별 kB_rd/s(초당 디스크 읽기량)' },
+        { t: 'perf-trace(1) — Linux manual page', u: 'https://man7.org/linux/man-pages/man1/perf-trace.1.html', p: 'perf', n: '--duration으로 지정한 ms보다 오래 걸린 시스템 호출만 표시' },
+        { t: 'Amazon CloudWatch metrics for Amazon EBS', u: 'https://docs.aws.amazon.com/ebs/latest/userguide/using_cloudwatch_ebs.html', p: 'AWS', n: 'VolumeAvgReadLatency: 1분 평균 읽기 지연(Nitro 인스턴스)' },
       ] },
     { id: 'dk-coredump', t: '코어 덤프 기록', en: 'Core dump writing',
       s: '서버가 죽을 때 수 GB 메모리를 디스크에 기록하느라 재시작이 몇 분씩 늦어지기도 합니다.',
@@ -4086,9 +4415,18 @@ window.SIGDRAW = (function () {
       sym: ['noconnect'], fx: ['stall'], who: ['server'], when: ['random'],
       own: ['sys', 'srv'],
       act: { game: '필요한 메모리만 담는 작은 덤프(미니 덤프) 방식 검토, 크래시 원인 수정.', infra: '덤프 크기 제한(OS 코어 덤프 설정), 빠른 디스크, 재시작과 덤프 분리(덤프 압축·업로드는 재시작 뒤 따로 처리).' },
+      sig: { k: 'drop', g: '접속 수, 서버 재시작 시각' },
+      chk: {
+        look: '크래시 시각과 코어 파일 크기(coredumpctl list·info, 또는 core_pattern이 가리키는 곳의 파일), 파일이 다 써진 시각, 서비스가 다시 뜬 시각을 나란히 놓고, 그동안 iostat -x의 wkB/s를 봅니다.',
+        yes: '크래시 뒤 수 GB짜리 코어 파일을 쓰는 동안 디스크 쓰기가 한도 가까이 붙어 있고, 기록이 끝난 뒤에야 재시작이 시작됨.',
+        no: '코어 덤프가 꺼져 있거나 작게 끝났는데도 재시작이 늦으면 맵 로딩이나 DB 콜드 캐시(db-cold-cache) 같은 서버 시작 과정 쪽.',
+        by: 'ops',
+      },
       ref: [
         { t: 'core(5) — Linux manual page', u: 'https://man7.org/linux/man-pages/man5/core.5.html', p: 'Linux man-pages', n: 'RLIMIT_CORE로 코어 파일 크기 상한, coredump_filter로 담을 메모리 영역 선택, 코어 덤프를 프로그램으로 파이프해 따로 처리' },
         { t: 'Minidump Files', u: 'https://learn.microsoft.com/en-us/windows/win32/debug/minidump-files', p: 'Microsoft', n: '미니 덤프는 크래시 덤프 정보의 유용한 일부만 담아 빠르고 작게 만듦' },
+        { t: 'coredumpctl(1) — Linux manual page', u: 'https://man7.org/linux/man-pages/man1/coredumpctl.1.html', p: 'systemd', n: 'list: 저널에 남은 코어 덤프 목록(TIME은 커널이 알린 크래시 시각), info: 덤프별 상세와 디스크에 쓴 크기' },
+        { t: 'iostat(1) — Linux manual page', u: 'https://man7.org/linux/man-pages/man1/iostat.1.html', p: 'sysstat', n: '-x: wkB/s(초당 디스크 쓰기량)' },
       ] },
     { id: 'dk-hdd', t: 'HDD 탐색 지연', en: 'HDD seek latency',
       s: 'HDD는 헤드가 플래터 위를 움직여야(탐색, seek) 해서 흩어진 데이터를 읽고 쓰는 데 한 번에 10ms 가까이 걸립니다.',
@@ -4097,9 +4435,19 @@ window.SIGDRAW = (function () {
       own: ['sys', 'dba', 'srv'],
       act: { game: '순차 쓰기 위주 설계.', infra: '서버 장비·OS: SSD로 교체(흩어진 읽기·쓰기가 많은 저장 디스크부터). DB 장비: 흩어진 읽기·쓰기가 가장 많은 DB 디스크를 먼저 SSD로 교체.' },
       sim: 'ladder',
+      sig: { k: 'high', g: '디스크 읽기·쓰기 지연(r_await·w_await)' },
+      chk: {
+        look: 'lsblk -d -o NAME,ROTA로 회전 디스크(HDD)인지 확인하고, iostat -x 1의 r/s·w/s와 r_await·w_await를 봅니다. 가상 서버는 클라우드·스토리지 사양에서 디스크 종류를 확인합니다.',
+        yes: '회전 디스크이고, 초당 요청이 수십~백여 개 수준인데도 r_await·w_await가 늘 수 ms~수십 ms.',
+        no: 'SSD인데 지연이 높으면 대기열 포화(dk-iops)나 버스트 크레딧 소진(dk-burst) 쪽.',
+        by: 'ops',
+      },
       ref: [
         { t: 'Designs, Lessons and Advice from Building Large Distributed Systems (LADIS 2009 keynote)', u: 'https://www.cs.cornell.edu/projects/ladis2009/talks/dean-keynote-ladis2009.pdf', p: 'Google', n: '디스크 탐색 한 번 10ms, 디스크에서 1MB 순차 읽기 20ms' },
         { t: 'Exos X18 Data Sheet', u: 'https://www.seagate.com/www-content/datasheets/pdfs/exos-x18-mango-DS2045-1N-2007US-en_US.pdf', p: 'Seagate', n: '7,200rpm HDD 평균 회전 지연 4.16ms, 4K 무작위 읽기 170 IOPS' },
+        { t: 'lsblk(8) — Linux manual page', u: 'https://man7.org/linux/man-pages/man8/lsblk.8.html', p: 'util-linux', n: '-o로 출력 열 선택, 장치 토폴로지 열에 ROTA(회전형 여부) 포함' },
+        { t: 'ABI stable symbols', u: 'https://docs.kernel.org/admin-guide/abi-stable.html', p: 'Linux kernel', n: '/sys/block/(디스크)/queue/rotational: 장치가 회전형인지 비회전형인지 나타냄' },
+        { t: 'iostat(1) — Linux manual page', u: 'https://man7.org/linux/man-pages/man1/iostat.1.html', p: 'sysstat', n: '-x: r/s·w/s, r_await·w_await(대기열에서 기다린 시간을 포함한 요청당 평균 처리 시간)' },
       ] },
   ]);
 
@@ -4114,11 +4462,22 @@ window.SIGDRAW = (function () {
       act: { game: '새 쿼리는 배포 전 실행 계획 검토, 인덱스 추가, 고치는 쿼리(UPDATE·DELETE)도 인덱스를 타는지 확인.', infra: '느린 쿼리 로그 감시, 풀 스캔 쿼리를 찾아 게임팀에 공유, 운영 중 인덱스 추가는 잠금이 짧은 온라인 방식으로 적용.' },
       more: '읽기만 느려지는 것이 아닙니다. 인덱스 없이 고치는 쿼리(UPDATE·DELETE)는 DB에 따라 스캔한 행까지 잠가, 상관없는 플레이어의 저장까지 막을 수 있습니다.',
       sim: 'dbpool',
+      sig: { k: 'step', g: 'DB 쿼리 지연, 읽은 행 수' },
+      chk: {
+        look: 'MySQL은 slow query log(log_queries_not_using_indexes를 켜면 인덱스를 안 쓴 쿼리도 기록)의 Rows_examined·Rows_sent, performance_schema events_statements_summary_by_digest의 SUM_NO_INDEX_USED·SUM_ROWS_EXAMINED를 보고 EXPLAIN을 돌립니다. PostgreSQL은 pg_stat_user_tables의 seq_scan·seq_tup_read를 보고 EXPLAIN을 돌립니다.',
+        yes: '배포 뒤 새로 나타난 쿼리가 돌려준 행(Rows_sent)보다 수천 배 많은 행을 읽고(Rows_examined), EXPLAIN에 테이블 전체 스캔(MySQL type ALL, PostgreSQL Seq Scan)이 나옴. 큰 테이블의 seq_tup_read가 배포 시각부터 가파르게 늘어남.',
+        no: '인덱스를 타는데도 느리면 잠금 대기(db-hot-row, db-ddl-lock)나 실행 계획 변경(db-plan-flip). 작은 테이블의 전체 스캔은 정상일 수 있음.',
+        by: 'ops',
+      },
       ref: [
         { t: 'How MySQL Uses Indexes', u: 'https://dev.mysql.com/doc/refman/8.4/en/mysql-indexes.html', p: 'MySQL', n: '인덱스가 없으면 첫 행부터 테이블 전체를 읽고, 테이블이 클수록 비용이 커짐' },
         { t: 'Locks Set by Different SQL Statements in InnoDB', u: 'https://dev.mysql.com/doc/refman/8.4/en/innodb-locks-set.html', p: 'MySQL', n: '맞는 인덱스가 없어 테이블 전체를 스캔하면 모든 행이 잠겨 다른 사용자의 추가까지 막힘' },
         { t: 'The Slow Query Log', u: 'https://dev.mysql.com/doc/refman/8.4/en/slow-query-log.html', p: 'MySQL', n: 'long_query_time(기본 10초)을 넘긴 쿼리 기록, 인덱스를 안 쓰는 쿼리도 따로 기록 가능' },
         { t: 'CREATE INDEX (PostgreSQL Documentation)', u: 'https://www.postgresql.org/docs/current/sql-createindex.html', p: 'PostgreSQL', n: 'CONCURRENTLY로 만들면 쓰기를 막지 않고 인덱스 생성, 일반 생성은 끝날 때까지 쓰기를 막음' },
+        { t: 'Statement Summary Tables', u: 'https://dev.mysql.com/doc/refman/8.4/en/performance-schema-statement-summary-tables.html', p: 'MySQL', n: 'events_statements_summary_by_digest: 같은 모양 쿼리별 SUM_NO_INDEX_USED(인덱스 없이 실행한 횟수)·SUM_ROWS_EXAMINED' },
+        { t: 'EXPLAIN Output Format', u: 'https://dev.mysql.com/doc/refman/8.4/en/explain-output.html', p: 'MySQL', n: 'type이 ALL이면 테이블 전체 스캔, 보통 인덱스를 추가해 피함' },
+        { t: 'The Cumulative Statistics System (PostgreSQL Documentation)', u: 'https://www.postgresql.org/docs/current/monitoring-stats.html', p: 'PostgreSQL', n: 'pg_stat_user_tables의 seq_scan(순차 스캔 횟수)·seq_tup_read(순차 스캔으로 읽은 행 수)' },
+        { t: 'Using EXPLAIN (PostgreSQL Documentation)', u: 'https://www.postgresql.org/docs/current/using-explain.html', p: 'PostgreSQL', n: 'Seq Scan: 테이블의 모든 행을 차례로 읽는 실행 계획' },
       ] },
     { id: 'db-hot-row', t: '핫 로우 잠금 경합', en: 'Hot row lock contention',
       s: '모두가 같은 행(길드 창고, 경매장 인기 아이템, 서버 전체 카운터)을 고치려 하면 한 명씩만 잠금을 얻습니다.',
@@ -4128,10 +4487,21 @@ window.SIGDRAW = (function () {
       own: ['srv', 'dba'],
       act: { game: '행을 나누기(샤딩된 카운터), 트랜잭션 짧게, 메모리에서 모아 한 번에 반영.', infra: '행 잠금 대기 시간·건수를 모니터링해 경합이 몰리는 행을 찾아 공유.' },
       sim: 'dbpool',
+      sig: { k: 'load', g: '행 잠금 대기 수·시간' },
+      chk: {
+        look: 'MySQL은 Innodb_row_lock_waits·Innodb_row_lock_time 증가량과 Innodb_row_lock_current_waits를 보고, sys.innodb_lock_waits로 누가 누구를 기다리는지 찾습니다. PostgreSQL은 pg_stat_activity에서 wait_event_type이 Lock인 세션, pg_locks에서 granted가 false인 요청을 보고, log_lock_waits(기본 꺼짐)를 켜면 오래 기다린 잠금이 로그에 남습니다.',
+        yes: '이벤트·인원을 따라 잠금 대기가 가파르게 늘고, 기다리는 요청 대부분이 같은 테이블의 같은 행(같은 키)을 가리킴.',
+        no: '대기가 여러 테이블·행에 고르게 흩어지면 디스크·CPU 포화 쪽. 한 세션이 잠금을 오래 잡고 놓지 않으면 오래 열린 트랜잭션(db-long-tx).',
+        by: 'ops',
+      },
       ref: [
         { t: 'InnoDB Locking', u: 'https://dev.mysql.com/doc/refman/8.4/en/innodb-locking.html', p: 'MySQL', n: '한 트랜잭션이 행(인덱스 레코드)에 잠금을 걸면 다른 트랜잭션은 그 행을 고치지 못하고 기다림' },
         { t: 'How to Minimize and Handle Deadlocks', u: 'https://dev.mysql.com/doc/refman/8.4/en/innodb-deadlocks-handling.html', p: 'MySQL', n: '트랜잭션을 작고 짧게 유지하고 관련 변경 직후 바로 커밋해 충돌을 줄이라는 권고' },
-        { t: 'Server Status Variables', u: 'https://dev.mysql.com/doc/refman/8.4/en/server-status-variables.html', p: 'MySQL', n: 'Innodb_row_lock_waits·Innodb_row_lock_time으로 행 잠금 대기 횟수와 시간을 확인' },
+        { t: 'Server Status Variables', u: 'https://dev.mysql.com/doc/refman/8.4/en/server-status-variables.html', p: 'MySQL', n: 'Innodb_row_lock_waits·Innodb_row_lock_time으로 행 잠금 대기 횟수와 시간, Innodb_row_lock_current_waits로 지금 기다리는 수를 확인' },
+        { t: 'The innodb_lock_waits and x$innodb_lock_waits Views', u: 'https://dev.mysql.com/doc/refman/8.4/en/sys-innodb-lock-waits.html', p: 'MySQL', n: '기다리는 쿼리(waiting_query)와 막고 있는 세션(blocking_pid), 대기 시간(wait_age)' },
+        { t: 'The Cumulative Statistics System (PostgreSQL Documentation)', u: 'https://www.postgresql.org/docs/current/monitoring-stats.html', p: 'PostgreSQL', n: 'pg_stat_activity의 wait_event_type: Lock이면 무거운 잠금을 기다리는 중' },
+        { t: 'pg_locks (PostgreSQL Documentation)', u: 'https://www.postgresql.org/docs/current/view-pg-locks.html', p: 'PostgreSQL', n: 'granted가 false면 그 프로세스가 잠금을 얻으려고 기다리는 중' },
+        { t: 'Error Reporting and Logging (PostgreSQL Documentation)', u: 'https://www.postgresql.org/docs/current/runtime-config-logging.html', p: 'PostgreSQL', n: 'log_lock_waits: deadlock_timeout보다 오래 잠금을 기다리면 로그를 남김, 기본 꺼짐' },
       ] },
     { id: 'db-deadlock', t: 'DB 데드락', en: 'Database deadlock',
       s: '두 트랜잭션(한 묶음으로 처리되는 DB 작업)이 서로 상대가 잠근 행을 기다리면 DB가 한쪽을 강제로 취소합니다.',
@@ -4140,12 +4510,24 @@ window.SIGDRAW = (function () {
       num: '감지까지 MySQL(InnoDB)은 거의 즉시, PostgreSQL은 기본 1초, SQL Server는 최대 5초쯤 걸립니다. 그동안 두 요청 모두 멈춰 있습니다. 동시 요청이 아주 많아 MySQL의 감지를 꺼 둔 서버라면 잠금 대기 한도(기본 50초)까지 기다립니다.',
       own: ['srv', 'dba'],
       act: { game: '잠금 순서 통일, 트랜잭션 짧게, 실패 시 자동 재시도.', infra: '데드락 감지를 켜 두고 데드락 기록을 수집해 공유, 감지를 끈 MySQL 서버는 잠금 대기 한도(기본 50초) 줄이기.' },
+      sig: { k: 'random', g: '데드락 수, 거래 실패 수' },
+      chk: {
+        look: 'MySQL은 SHOW ENGINE INNODB STATUS의 LATEST DETECTED DEADLOCK(가장 최근 1건), innodb_print_all_deadlocks를 켜면 에러 로그에 남는 모든 데드락, INFORMATION_SCHEMA.INNODB_METRICS의 lock_deadlocks를 봅니다. PostgreSQL은 pg_stat_database의 deadlocks, SQL Server는 기본으로 켜진 system_health 세션의 xml_deadlock_report를 봅니다. 게임 서버 쪽 오류 코드는 MySQL 1213, PostgreSQL 40P01, SQL Server 1205입니다.',
+        yes: '거래·제작 실패 시각에 데드락 수가 늘고, 기록된 두 트랜잭션이 같은 테이블들을 서로 반대 순서로 잠그고 있음.',
+        no: '데드락 수는 그대로인데 실패하면 잠금 대기 한도 초과(MySQL 오류 1205)나 핫 로우(db-hot-row).',
+        by: 'ops',
+      },
       ref: [
         { t: 'InnoDB Startup Options and System Variables', u: 'https://dev.mysql.com/doc/refman/8.4/en/innodb-parameters.html', p: 'MySQL', n: '감지가 켜져 있으면(기본) InnoDB는 데드락을 즉시 감지해 롤백, innodb_lock_wait_timeout 기본 50초' },
         { t: 'Deadlock Detection', u: 'https://dev.mysql.com/doc/refman/8.4/en/innodb-deadlock-detection.html', p: 'MySQL', n: '동시성이 아주 높으면 감지 자체가 느려질 수 있어 끄고 잠금 대기 한도에 맡기기도 함' },
         { t: 'Lock Management (PostgreSQL Documentation)', u: 'https://www.postgresql.org/docs/current/runtime-config-locks.html', p: 'PostgreSQL', n: 'deadlock_timeout 기본 1초: 이만큼 잠금을 기다린 뒤에야 데드락 검사' },
-        { t: 'Deadlocks guide', u: 'https://learn.microsoft.com/en-us/sql/relational-databases/sql-server-deadlocks-guide', p: 'Microsoft SQL Server', n: '데드락 검사 기본 간격 5초, 데드락이 자주 나면 100ms까지 줄어듦' },
+        { t: 'Deadlocks guide', u: 'https://learn.microsoft.com/en-us/sql/relational-databases/sql-server-deadlocks-guide', p: 'Microsoft SQL Server', n: '데드락 검사 기본 간격 5초, 데드락이 자주 나면 100ms까지 줄어듦, 기본으로 켜진 system_health 세션이 xml_deadlock_report를 수집, 희생된 쪽은 오류 1205' },
         { t: 'How to Minimize and Handle Deadlocks', u: 'https://dev.mysql.com/doc/refman/8.4/en/innodb-deadlocks-handling.html', p: 'MySQL', n: '여러 행·테이블은 늘 같은 순서로 고치기, 실패하면 다시 시도, innodb_print_all_deadlocks로 모든 데드락 기록' },
+        { t: 'InnoDB Standard Monitor and Lock Monitor Output', u: 'https://dev.mysql.com/doc/refman/8.4/en/innodb-standard-monitor.html', p: 'MySQL', n: 'LATEST DETECTED DEADLOCK: 가장 최근 데드락의 두 트랜잭션, 잡은·기다린 잠금, 롤백한 쪽' },
+        { t: 'InnoDB INFORMATION_SCHEMA Metrics Table', u: 'https://dev.mysql.com/doc/refman/8.4/en/innodb-information-schema-metrics-table.html', p: 'MySQL', n: 'INNODB_METRICS의 lock_deadlocks 카운터(기본 활성)' },
+        { t: 'Server Error Message Reference', u: 'https://dev.mysql.com/doc/mysql-errors/8.4/en/server-error-reference.html', p: 'MySQL', n: '1213 ER_LOCK_DEADLOCK(데드락), 1205 ER_LOCK_WAIT_TIMEOUT(잠금 대기 한도 초과)' },
+        { t: 'The Cumulative Statistics System (PostgreSQL Documentation)', u: 'https://www.postgresql.org/docs/current/monitoring-stats.html', p: 'PostgreSQL', n: 'pg_stat_database의 deadlocks: 이 DB에서 감지한 데드락 수' },
+        { t: 'PostgreSQL Error Codes (PostgreSQL Documentation)', u: 'https://www.postgresql.org/docs/current/errcodes-appendix.html', p: 'PostgreSQL', n: '40P01 deadlock_detected' },
       ] },
     { id: 'db-pool', t: '커넥션 풀 고갈', en: 'Connection pool exhaustion',
       s: 'DB와 맺어 둔 연결 수가 정해져 있어서, 느린 쿼리가 연결을 점유하면 나머지는 대기합니다.',
@@ -4156,10 +4538,20 @@ window.SIGDRAW = (function () {
       act: { game: '느린 쿼리 제거, 풀 크기와 대기 타임아웃 조정(풀을 무작정 키우지 않기), 기능별 풀 분리.', infra: 'DB의 최대 연결 수와 CPU·IOPS 여유 확인, 증설·오토스케일링 전에 서버 수 × 풀 크기가 최대 연결 수 안인지 확인, 커넥션 대기·락 대기 지표를 모니터링에 추가.' },
       more: '풀을 무작정 키우면 DB CPU와 잠금 경쟁만 늘어 모두가 같이 느려집니다. 또 서버 수 × 풀 크기가 DB의 최대 연결 수를 넘으면, 증설한 서버나 재시작한 서버가 연결조차 못 맺습니다. 오토스케일링이나 점검 직후에 흔합니다.',
       sim: 'dbpool',
+      sig: { k: 'ceiling', g: '사용 중 DB 연결 수, 커넥션 대기 시간' },
+      chk: {
+        look: 'DB 쪽에서 게임 서버별 연결 상태를 셉니다. MySQL은 SHOW PROCESSLIST의 Host·Command(쉬는 연결은 Sleep)·Time과 Threads_connected·Threads_running, 거부된 연결 수 Connection_errors_max_connections를 봅니다. PostgreSQL은 pg_stat_activity를 client_addr·state로 묶어 셉니다. 게임 서버의 커넥션 풀 라이브러리가 대기 수·대기 시간을 내보내면 함께 봅니다.',
+        yes: '한 게임 서버의 연결이 풀 크기만큼 모두 쿼리 실행 중이고 쉬는 연결이 0인 동안 로그인·저장이 대기함. 또는 DB 전체 연결 수가 max_connections에 닿아 새 연결이 거부됨.',
+        no: '쉬는 연결이 넉넉한데도 느리면 쿼리 자체의 지연(db-no-index, db-hot-row)이나 DB 자원 포화 쪽.',
+        by: 'ops',
+      },
       ref: [
         { t: 'Number Of Database Connections', u: 'https://wiki.postgresql.org/wiki/Number_Of_Database_Connections', p: 'PostgreSQL', n: 'DB 자원을 다 쓴 뒤에는 연결을 늘려도 처리량이 오히려 떨어짐, 활성 연결을 자원에 맞추고 나머지는 대기열에 두는 편이 지연·처리량 모두 좋음' },
         { t: 'Too many connections', u: 'https://dev.mysql.com/doc/refman/8.4/en/too-many-connections.html', p: 'MySQL', n: 'max_connections를 모두 쓰면 새 연결이 Too many connections 오류로 거부됨' },
         { t: 'Connections and Authentication (PostgreSQL Documentation)', u: 'https://www.postgresql.org/docs/current/runtime-config-connection.html', p: 'PostgreSQL', n: 'max_connections: 동시 연결 수 상한, 기본은 보통 100' },
+        { t: 'SHOW PROCESSLIST Statement', u: 'https://dev.mysql.com/doc/refman/8.4/en/show-processlist.html', p: 'MySQL', n: 'Host(클라이언트 주소), Command(쉬는 세션은 Sleep), Time, State' },
+        { t: 'Server Status Variables', u: 'https://dev.mysql.com/doc/refman/8.4/en/server-status-variables.html', p: 'MySQL', n: 'Threads_connected·Threads_running, Connection_errors_max_connections(max_connections에 닿아 거부된 연결 수)' },
+        { t: 'The Cumulative Statistics System (PostgreSQL Documentation)', u: 'https://www.postgresql.org/docs/current/monitoring-stats.html', p: 'PostgreSQL', n: 'pg_stat_activity: 연결마다 client_addr와 state(active, idle, idle in transaction 등)' },
       ] },
     { id: 'db-replica-lag', t: '복제 지연', en: 'Replication lag',
       s: '쓰기는 주 DB에, 읽기는 복제본에서 하는데 복제본이 늦게 따라오면 방금 쓴 내용이 안 보입니다.',
@@ -4169,10 +4561,20 @@ window.SIGDRAW = (function () {
       act: { game: '방금 쓴 데이터는 주 DB에서 읽기, 지급 여부 확인과 지급은 주 DB에서 한 트랜잭션으로(유니크 키나 조건부 UPDATE로 중복 차단).', infra: '복제 지연 경보, 복제본 사양을 주 DB 이상으로 두고 병렬 복제 적용, 대량 삭제는 잘게 나눠 실행, 복제본에서 오래 도는 집계 쿼리 관리.' },
       more: '쓰기가 많지 않아도 뒤처질 수 있습니다. 주 DB에서 10분 걸린 대량 삭제 하나는 복제본에서도 다시 실행되는 동안 그만큼 뒤처지게 만들고, 복제본에서 오래 도는 집계 쿼리도 따라가기를 늦춥니다.',
       sim: 'arch',
+      sig: { k: 'load', g: '복제 지연(초)' },
+      chk: {
+        look: 'MySQL은 복제본에서 SHOW REPLICA STATUS의 Seconds_Behind_Source(8.0.22 이전 버전은 SHOW SLAVE STATUS)를 봅니다. PostgreSQL은 주 서버 pg_stat_replication의 write_lag·flush_lag·replay_lag, RDS는 ReplicaLag를 봅니다.',
+        yes: '“안 보인다”는 제보 시각에 지연이 수 초 이상이고, 지연이 풀린 뒤 다시 보면 정상. 쓰기 폭주나 대량 삭제, 복제본의 긴 집계 쿼리 시각에 지연이 커짐.',
+        no: '지연이 0 근처인데도 안 보이면 게임 서버의 캐시나 동기화 쪽.',
+        by: 'ops',
+      },
       ref: [
         { t: 'SHOW REPLICA STATUS Statement', u: 'https://dev.mysql.com/doc/refman/8.4/en/show-replica-status.html', p: 'MySQL', n: 'Seconds_Behind_Source: 복제본이 지금 적용 중인 이벤트가 주 DB에서 기록된 시각과의 차이(복제 지연)' },
         { t: 'Replica Server Options and Variables', u: 'https://dev.mysql.com/doc/refman/8.4/en/replication-options-replica.html', p: 'MySQL', n: 'replica_parallel_workers로 여러 스레드가 트랜잭션을 병렬 적용(기본 4, 0이면 한 스레드가 순서대로)' },
         { t: 'Log-Shipping Standby Servers (PostgreSQL Documentation)', u: 'https://www.postgresql.org/docs/current/warm-standby.html', p: 'PostgreSQL', n: '스트리밍 복제는 기본 비동기라 커밋과 복제본 반영 사이에 지연이 있음(복제본이 따라갈 수 있으면 보통 1초 미만)' },
+        { t: 'MySQL 8.0 Reference Manual: SHOW REPLICA STATUS Statement', u: 'https://dev.mysql.com/doc/refman/8.0/en/show-replica-status.html', p: 'MySQL', n: '8.0.22부터 SHOW SLAVE STATUS 대신 SHOW REPLICA STATUS, 그 이전 버전은 SHOW SLAVE STATUS' },
+        { t: 'The Cumulative Statistics System (PostgreSQL Documentation)', u: 'https://www.postgresql.org/docs/current/monitoring-stats.html', p: 'PostgreSQL', n: 'pg_stat_replication의 write_lag·flush_lag·replay_lag: 주 서버가 WAL을 기록한 뒤 복제본이 쓰고·디스크에 내리고·적용했다고 알릴 때까지 걸린 시간' },
+        { t: 'Amazon CloudWatch metrics for Amazon RDS', u: 'https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-metrics.html', p: 'AWS', n: 'ReplicaLag: 읽기 복제본이 원본보다 뒤처진 시간(초)' },
       ] },
     { id: 'db-checkpoint', t: '체크포인트·로그 플러시', en: 'Checkpoint / log flush stalls',
       s: 'DB가 메모리의 변경분을 주기적으로 디스크에 몰아서 쓰는 순간 쿼리가 느려집니다.',
@@ -4181,9 +4583,21 @@ window.SIGDRAW = (function () {
       own: ['dba'],
       act: { infra: '체크포인트를 잘게 나눠 고르게, 트랜잭션 로그(redo 로그, WAL)를 넉넉하게, 빠른 디스크.' },
       more: '변경 기록을 담는 트랜잭션 로그(MySQL의 redo 로그, PostgreSQL의 WAL)를 너무 작게 잡으면, 로그가 찰 때마다 DB가 급하게 체크포인트를 몰아 하느라 쓰기 처리량이 잠깐씩 크게 떨어집니다.',
+      sig: { k: 'periodic', g: 'DB 쿼리 지연, 디스크 쓰기량' },
+      chk: {
+        look: 'PostgreSQL은 log_checkpoints(최근 버전은 기본으로 켜짐) 로그의 체크포인트 시각과 쓴 버퍼 수, 체크포인트 횟수(17 이후 pg_stat_checkpointer의 num_timed·num_requested, 16 이하 pg_stat_bgwriter의 checkpoints_timed·checkpoints_req), checkpoint_warning 경고를 봅니다. MySQL은 SHOW ENGINE INNODB STATUS의 LOG 섹션에서 Log sequence number와 Last checkpoint at의 차이를 봅니다. 서버의 디스크 쓰기량·쓰기 지연을 함께 겹칩니다.',
+        yes: '쿼리 지연이 튄 시각이 체크포인트 시각과 겹치고 그때 디스크 쓰기량과 쓰기 지연이 솟음. PostgreSQL에서 요청 체크포인트(num_requested)가 시간 체크포인트(num_timed)보다 훨씬 많으면 WAL이 max_wal_size에 자주 닿아 체크포인트가 앞당겨지는 것으로 봄.',
+        no: '체크포인트 시각과 무관한 주기로 튀면 백업·배치(dk-backup, db-batch).',
+        by: 'ops',
+      },
       ref: [
-        { t: 'WAL Configuration (PostgreSQL Documentation)', u: 'https://www.postgresql.org/docs/current/wal-configuration.html', p: 'PostgreSQL', n: '체크포인트는 기본 5분 또는 WAL 1GB(max_wal_size)마다, 더티 페이지를 모두 써서 비쌈. checkpoint_completion_target으로 쓰기를 나눠 I/O 폭주를 피함' },
+        { t: 'WAL Configuration (PostgreSQL Documentation)', u: 'https://www.postgresql.org/docs/current/wal-configuration.html', p: 'PostgreSQL', n: '체크포인트는 기본 5분 또는 WAL 1GB(max_wal_size)마다, 더티 페이지를 모두 써서 비쌈. checkpoint_completion_target으로 쓰기를 나눠 I/O 폭주를 피함. 체크포인트 간격이 checkpoint_warning보다 짧으면 max_wal_size를 늘리라는 경고를 로그에 남김' },
         { t: 'Configuring Buffer Pool Flushing', u: 'https://dev.mysql.com/doc/refman/8.4/en/innodb-buffer-pool-flushing.html', p: 'MySQL', n: 'redo 로그가 차면 급한(sharp) 체크포인트로 처리량이 잠깐 떨어짐, 적응형 플러시로 고르게 나눠 씀' },
+        { t: 'Error Reporting and Logging (PostgreSQL Documentation)', u: 'https://www.postgresql.org/docs/current/runtime-config-logging.html', p: 'PostgreSQL', n: 'log_checkpoints: 체크포인트마다 쓴 버퍼 수와 걸린 시간을 로그에 남김, 기본 켜짐' },
+        { t: 'The Cumulative Statistics System (PostgreSQL Documentation)', u: 'https://www.postgresql.org/docs/current/monitoring-stats.html', p: 'PostgreSQL', n: 'pg_stat_checkpointer의 num_timed(시간이 되어 한 체크포인트)·num_requested(요청된 체크포인트)' },
+        { t: 'PostgreSQL 17 Release Notes', u: 'https://www.postgresql.org/docs/release/17.0/', p: 'PostgreSQL', n: 'pg_stat_checkpointer 신설, 체크포인트 관련 열을 pg_stat_bgwriter에서 옮김' },
+        { t: 'The Cumulative Statistics System (PostgreSQL 16 Documentation)', u: 'https://www.postgresql.org/docs/16/monitoring-stats.html', p: 'PostgreSQL', n: '16까지는 pg_stat_bgwriter의 checkpoints_timed·checkpoints_req' },
+        { t: 'InnoDB Standard Monitor and Lock Monitor Output', u: 'https://dev.mysql.com/doc/refman/8.4/en/innodb-standard-monitor.html', p: 'MySQL', n: 'LOG 섹션: 현재 로그 시퀀스 번호와 마지막 체크포인트 위치' },
       ] },
     { id: 'db-cold-cache', t: '콜드 캐시 (재시작 직후)', en: 'Cold buffer pool after restart',
       s: 'DB를 재시작하면 메모리 캐시가 비어 있어서, 한동안 모든 조회가 디스크에서 읽힙니다.',
@@ -4192,10 +4606,19 @@ window.SIGDRAW = (function () {
       own: ['dba', 'srv'],
       act: { game: '점진적 오픈(접속 대기열로 로그인 인원을 단계적으로 늘리기).', infra: '재시작 후 캐시 예열(워밍, 버퍼 풀 저장·복원 설정 확인), 스냅샷으로 되살린 DB는 디스크도 미리 읽기.' },
       more: 'MySQL은 꺼질 때 버퍼 풀의 페이지 목록을 저장했다가 켜질 때 백그라운드에서 다시 읽어 오지만, 다 채우기까지는 시간이 걸립니다. 클라우드에서 DB를 스냅샷(디스크 사본)으로 되살렸다면 디스크 자체도 처음 읽는 블록마다 느려서 더 오래 갑니다.',
+      sig: { k: 'surge', g: '디스크 읽기, 버퍼 캐시 적중률' },
+      chk: {
+        look: 'MySQL은 Innodb_buffer_pool_reads(버퍼 풀에 없어 디스크에서 읽은 횟수)와 Innodb_buffer_pool_read_requests의 비율, 예열 진행 상황 Innodb_buffer_pool_load_status를 봅니다. PostgreSQL은 pg_stat_database의 blks_read·blks_hit을 봅니다. DB 서버의 디스크 읽기 수도 함께 봅니다.',
+        yes: '재시작 직후 디스크 읽기가 솟고 적중률이 낮았다가 시간이 지나며 회복되고, 그 구간에 로그인·로딩이 느림.',
+        no: '적중률이 평소와 같은데 점검 직후 느리면 로그인 폭주·N+1(db-login-storm)이나 커넥션 풀(db-pool).',
+        by: 'ops',
+      },
       ref: [
         { t: 'Saving and Restoring the Buffer Pool State', u: 'https://dev.mysql.com/doc/refman/8.4/en/innodb-preload-buffer-pool.html', p: 'MySQL', n: '재시작 뒤 예열 시간을 줄이려고 꺼질 때 최근 쓴 페이지 목록(기본 25%)을 저장하고 켜질 때 다시 읽음, 둘 다 기본으로 켜져 있음' },
         { t: 'pg_prewarm — preload relation data into buffer caches', u: 'https://www.postgresql.org/docs/current/pgprewarm.html', p: 'PostgreSQL', n: '공유 버퍼 내용을 주기적으로 기록해 두었다가 재시작 뒤 다시 올림(autoprewarm)' },
         { t: 'Initialize Amazon EBS volumes', u: 'https://docs.aws.amazon.com/ebs/latest/userguide/ebs-initialize.html', p: 'AWS', n: '스냅샷에서 만든 볼륨은 모든 블록을 받아 올 때까지 지연이 늘고 성능이 떨어짐' },
+        { t: 'Server Status Variables', u: 'https://dev.mysql.com/doc/refman/8.4/en/server-status-variables.html', p: 'MySQL', n: 'Innodb_buffer_pool_reads(버퍼 풀에 없어 디스크에서 직접 읽은 논리 읽기 수), Innodb_buffer_pool_read_requests, Innodb_buffer_pool_load_status(예열 진행 상황)' },
+        { t: 'The Cumulative Statistics System (PostgreSQL Documentation)', u: 'https://www.postgresql.org/docs/current/monitoring-stats.html', p: 'PostgreSQL', n: 'pg_stat_database의 blks_read(디스크에서 읽은 블록 수)·blks_hit(버퍼 캐시에서 찾은 블록 수)' },
       ] },
     { id: 'db-login-storm', t: '로그인 폭주와 N+1 쿼리', en: 'Login storm, N+1 queries',
       s: '캐릭터 하나를 불러올 때 수십 번 따로 조회하면, 수만 명 동시 로그인이 쿼리 수백만 개가 됩니다.',
@@ -4205,10 +4628,19 @@ window.SIGDRAW = (function () {
       act: { game: '한 번에 묶어서 조회, 접속 대기열, 캐시, ORM 지연 로딩이 만드는 조회 수 점검.', infra: '호출 횟수가 많은 쿼리 순위를 뽑아 공유, 점검 직후 로그인 시간대의 쿼리 수·커넥션 수 모니터링.' },
       more: 'ORM(DB 조회를 대신 만들어 주는 라이브러리)의 지연 로딩이 개발자도 모르는 사이 이런 조회를 만듭니다. 개발 서버에서는 캐릭터 몇 개라 티가 안 나고, 라이브의 동시 로그인에서 처음 드러납니다.',
       sim: 'dbpool',
+      sig: { k: 'surge', g: 'DB 초당 쿼리 수, 로그인 수' },
+      chk: {
+        look: '점검 직후 로그인 수와 DB의 초당 쿼리 수(MySQL은 Questions 증가량)를 겹쳐 보고 로그인 한 건당 쿼리 수를 계산합니다. 호출 횟수 상위 쿼리는 MySQL events_statements_summary_by_digest의 COUNT_STAR, PostgreSQL pg_stat_statements의 calls로 뽑습니다.',
+        yes: '로그인 한 건당 쿼리가 수십 개이고, 상위 쿼리가 캐릭터 ID 하나로 조회하는 같은 모양의 짧은 쿼리들임. 패치 뒤 로그인당 쿼리 수가 늘었다면 그 패치가 출발점.',
+        no: '로그인당 쿼리 수는 적은데 쿼리 하나하나가 느리면 콜드 캐시(db-cold-cache)나 인덱스(db-no-index).',
+        by: 'ops',
+      },
       ref: [
         { t: 'Efficient Querying', u: 'https://learn.microsoft.com/en-us/ef/core/performance/efficient-querying', p: '.NET', n: 'ORM의 지연 로딩은 항목마다 쿼리를 한 번씩 더 보내는 N+1 문제를 만들어 성능을 크게 떨어뜨림, 한 번에 묶어 불러오기(eager loading) 권장' },
         { t: 'pg_stat_statements — track statistics of SQL planning and execution', u: 'https://www.postgresql.org/docs/current/pgstatstatements.html', p: 'PostgreSQL', n: '문장별 실행 횟수(calls)와 총 실행 시간을 모아 호출이 많은 쿼리 순위를 뽑음' },
         { t: 'Performance Schema Statement Digests and Sampling', u: 'https://dev.mysql.com/doc/refman/8.4/en/performance-schema-statement-digests.html', p: 'MySQL', n: 'events_statements_summary_by_digest로 같은 모양의 쿼리를 묶어 횟수·시간 집계' },
+        { t: 'Statement Summary Tables', u: 'https://dev.mysql.com/doc/refman/8.4/en/performance-schema-statement-summary-tables.html', p: 'MySQL', n: '요약 테이블의 COUNT_STAR(실행 횟수)·SUM_TIMER_WAIT(총 시간)' },
+        { t: 'Server Status Variables', u: 'https://dev.mysql.com/doc/refman/8.4/en/server-status-variables.html', p: 'MySQL', n: 'Questions: 클라이언트가 보낸 문장 수' },
       ] },
     { id: 'db-batch', t: '대량 배치 작업', en: 'Batch jobs during service',
       s: '랭킹 집계, 우편 일괄 발송, 오래된 데이터 정리를 운영 중에 돌리면 잠금과 디스크를 차지합니다.',
@@ -4217,9 +4649,18 @@ window.SIGDRAW = (function () {
       own: ['srv', 'dba'],
       act: { game: '잘게 나눠 조금씩, 집계는 복제본에서.', infra: '집계용 복제본 제공, 배치는 한가한 시간대로 예약, 잠금 에스컬레이션·갭 락 대기 감시.' },
       more: 'SQL Server는 한 문장이 행 잠금을 약 5,000개 넘게 잡으면 테이블 잠금으로 바꿉니다(잠금 에스컬레이션). 그 순간 같은 테이블을 쓰는 모든 요청이 멈춥니다. MySQL도 기본 설정에서 범위 조건으로 고치면 행 사이 빈틈까지 잠가(갭 락) 새 행 추가를 막습니다.',
+      sig: { k: 'periodic', g: 'DB 쿼리 지연, 잠금 대기' },
+      chk: {
+        look: '렉 시각에 돌던 긴 쿼리를 찾습니다. MySQL은 slow query log, PostgreSQL은 pg_stat_activity의 query_start·query를 보고, 같은 시각의 잠금 대기 지표와 배치 일정(크론, DB 이벤트 스케줄러)을 대조합니다. SQL Server는 lock_escalation 확장 이벤트로 잠금 에스컬레이션을 기록합니다.',
+        yes: '매번 같은 시각 대량 UPDATE·DELETE·집계 쿼리가 돌고, 그동안 잠금 대기와 디스크 이용률이 함께 오름.',
+        no: '그 시각에 긴 쿼리가 없으면 체크포인트(db-checkpoint)나 서버 백업(dk-backup).',
+        by: 'ops',
+      },
       ref: [
-        { t: 'Transaction Locking and Row Versioning Guide', u: 'https://learn.microsoft.com/en-us/sql/relational-databases/sql-server-transaction-locking-and-row-versioning-guide', p: 'Microsoft SQL Server', n: '한 문장이 한 테이블(또는 인덱스)에서 잠금을 5,000개 이상 잡으면 잠금 에스컬레이션' },
+        { t: 'Transaction Locking and Row Versioning Guide', u: 'https://learn.microsoft.com/en-us/sql/relational-databases/sql-server-transaction-locking-and-row-versioning-guide', p: 'Microsoft SQL Server', n: '한 문장이 한 테이블(또는 인덱스)에서 잠금을 5,000개 이상 잡으면 잠금 에스컬레이션, lock_escalation 확장 이벤트로 기록' },
         { t: 'InnoDB Locking', u: 'https://dev.mysql.com/doc/refman/8.4/en/innodb-locking.html', p: 'MySQL', n: 'InnoDB 기본 격리 수준 REPEATABLE READ에서는 검색·스캔에 next-key 잠금을 써서, 갭 락이 그 빈틈의 새 행 추가를 막음' },
+        { t: 'The Slow Query Log', u: 'https://dev.mysql.com/doc/refman/8.4/en/slow-query-log.html', p: 'MySQL', n: 'long_query_time을 넘긴 쿼리를 실행 시간(Query_time)·잠금 시간(Lock_time)·읽은 행 수와 함께 기록' },
+        { t: 'The Cumulative Statistics System (PostgreSQL Documentation)', u: 'https://www.postgresql.org/docs/current/monitoring-stats.html', p: 'PostgreSQL', n: 'pg_stat_activity: 세션마다 지금 실행 중인 쿼리(query)와 시작 시각(query_start)' },
       ] },
     { id: 'db-failover', t: 'DB 장애 전환', en: 'Database failover',
       s: '주 DB가 죽어 예비 DB로 전환되는 동안 쓰기가 안 되고, 복제되지 못한 마지막 데이터는 사라질 수 있습니다.',
@@ -4228,11 +4669,21 @@ window.SIGDRAW = (function () {
       num: '관리형 DB의 자동 전환은 보통 수십 초~2분. 비동기 복제라면 복제 지연만큼(1초 미만~수 초) 최근 저장을 잃을 수 있습니다.',
       own: ['dba', 'srv'],
       act: { game: '재시도 가능한 저장, 끊긴 연결을 빨리 버리고 새 주소로 다시 맺는 설정(커넥션 풀·DNS 캐시), 전환 훈련 때 재연결 확인.', infra: '동기·반동기 복제(쓰기 지연과 맞바꿈), 전환 훈련, 전환 시간·복제 지연 모니터링.' },
+      sig: { k: 'drop', g: 'DB 연결 수, 쓰기 오류 수' },
+      chk: {
+        look: 'DB 쪽 장애 전환 기록(RDS는 이벤트 RDS-EVENT-0013 전환 시작·RDS-EVENT-0049 전환 완료, 직접 운영하는 DB는 승격 로그)과 게임 서버의 DB 연결 수·연결 오류 수를 한 그래프에 놓습니다. 비동기 복제라면 장애 직전의 복제 지연(RDS ReplicaLag, PostgreSQL pg_stat_replication의 replay_lag)도 봅니다.',
+        yes: '저장 실패가 한 구간에 몰리고, 그 구간이 장애 전환 시작·완료 사이와 겹침. 되돌아간 양이 장애 직전 복제 지연과 비슷함. 전환이 끝난 뒤에도 오류가 이어지는 게임 서버는 옛 주소의 연결을 붙잡고 있는 것.',
+        no: '전환 기록이 없는 시각의 연결 끊김은 네트워크나 DB 과부하 쪽.',
+        by: 'ops',
+      },
       ref: [
         { t: 'Failing over a Multi-AZ DB instance for Amazon RDS', u: 'https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.Failover.html', p: 'AWS', n: 'Multi-AZ 전환은 보통 60~120초, 전환 뒤 연결을 다시 맺어야 하고 JVM의 DNS 캐시 TTL은 60초 이하 권장' },
         { t: 'High availability for Amazon Aurora', u: 'https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Concepts.AuroraHighAvailability.html', p: 'AWS', n: '장애 중 읽기·쓰기가 실패하고, 보통 60초 안(흔히 30초 안)에 복구' },
         { t: 'Semisynchronous Replication', u: 'https://dev.mysql.com/doc/refman/8.4/en/replication-semisync.html', p: 'MySQL', n: '비동기 복제는 주 DB가 죽으면 커밋한 트랜잭션이 복제본에 없을 수 있음, 반동기는 복제본 하나의 수신 확인을 기다려 줄이는 대신 지연이 늘어남' },
         { t: 'Log-Shipping Standby Servers (PostgreSQL Documentation)', u: 'https://www.postgresql.org/docs/current/warm-standby.html', p: 'PostgreSQL', n: '로그 전달은 비동기라 주 서버가 죽으면 아직 보내지 못한 트랜잭션을 잃음, 스트리밍 복제 지연은 보통 1초 미만' },
+        { t: 'Amazon RDS event categories and event messages', u: 'https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Events.Messages.html', p: 'AWS', n: 'RDS-EVENT-0013: Multi-AZ 장애 전환 시작, RDS-EVENT-0049: Multi-AZ 장애 전환 완료' },
+        { t: 'Amazon CloudWatch metrics for Amazon RDS', u: 'https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-metrics.html', p: 'AWS', n: 'ReplicaLag: 읽기 복제본이 원본보다 뒤처진 시간(초)' },
+        { t: 'The Cumulative Statistics System (PostgreSQL Documentation)', u: 'https://www.postgresql.org/docs/current/monitoring-stats.html', p: 'PostgreSQL', n: 'pg_stat_replication의 replay_lag: 주 서버가 WAL을 기록한 뒤 복제본이 적용했다고 알릴 때까지 걸린 시간' },
       ] },
     { id: 'db-save-interval', t: '긴 저장 주기로 인한 진행 유실', en: 'Periodic save window',
       s: '부하를 줄이려 몇 분에 한 번만 저장하면, 그 사이 서버가 죽을 때 진행이 사라집니다.',
@@ -4240,6 +4691,13 @@ window.SIGDRAW = (function () {
       sym: ['dropped'], fx: ['loss'], who: ['server', 'zone'], when: ['random'],
       own: ['srv', 'dba'],
       act: { game: '중요 이벤트(거래, 희귀 획득)는 즉시 저장, 변경 로그 기록.', infra: '저장 주기를 줄였을 때 늘어나는 쓰기를 감당할 DB의 IOPS·CPU 여유 확인.' },
+      sig: { k: 'drop', g: '접속 수, 롤백 신고 수' },
+      chk: {
+        look: '크래시·장애 시각과, 롤백을 신고한 캐릭터의 마지막 저장 시각(게임 서버의 저장 로그나 DB의 수정 시각 컬럼)을 나란히 놓습니다.',
+        yes: '되돌아간 시점이 크래시 직전의 마지막 저장 시각과 일치하고, 잃은 시간이 저장 주기보다 짧음.',
+        no: '게임 서버 로그에는 저장이 끝났다고 남아 있는데도 되돌아갔으면 DB 장애 전환의 데이터 유실(db-failover)이나 복제본에서 읽은 옛 값(db-replica-lag).',
+        by: 'code',
+      },
       ref: [
         { t: 'Asynchronous Commit (PostgreSQL Documentation)', u: 'https://www.postgresql.org/docs/current/wal-async-commit.html', p: 'PostgreSQL', n: '기록을 모아 늦게 내리면 처리량이 오르는 대신, 장애 때 가장 최근 트랜잭션이 사라질 수 있음(같은 맞바꿈)' },
         { t: 'Redis persistence', u: 'https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/', p: 'Redis', n: 'RDB 스냅샷을 몇 분마다 만들면 비정상 종료 때 마지막 몇 분의 데이터를 잃을 각오를 해야 함' },
@@ -4252,10 +4710,20 @@ window.SIGDRAW = (function () {
       act: { game: '만료 시각을 무작위로 분산, 한 요청만 갱신하고 나머지는 옛 값 사용.', infra: 'Redis 재시작·장애 때 캐시가 통째로 비지 않게 복제본·자동 전환 구성, 캐시가 비어도 버틸 DB 여유 확인.' },
       more: 'Redis가 재시작되거나 장애로 캐시가 통째로 비어도 같은 일이 생깁니다. 캐시를 믿고 DB를 작게 잡아 둔 구조일수록 위험합니다.',
       sim: 'arch',
+      sig: { k: 'periodic', g: '캐시 적중률, DB 초당 쿼리 수' },
+      chk: {
+        look: 'Redis INFO의 keyspace_hits·keyspace_misses(적중률), expired_keys, 재시작 여부(uptime_in_seconds)를 DB 초당 쿼리 수와 겹쳐 보고, 그 순간 DB에서 같은 쿼리가 동시에 몇 개 도는지(MySQL SHOW PROCESSLIST, PostgreSQL pg_stat_activity) 셉니다.',
+        yes: '캐시 미스가 한순간 치솟는 시각에 DB 쿼리 수가 함께 솟고, 동시에 도는 쿼리 대부분이 같은 데이터를 읽는 같은 쿼리임. 인기 키의 만료 주기나 Redis 재시작 시각과 겹침.',
+        no: '캐시 미스는 평소와 같은데 DB 쿼리만 늘면 로그인 폭주(db-login-storm)나 배치(db-batch).',
+        by: 'ops',
+      },
       ref: [
         { t: 'Scaling Memcache at Facebook (NSDI \'13)', u: 'https://www.usenix.org/conference/nsdi13/technical-sessions/presentation/nishtala', p: 'USENIX', n: '자주 쓰는 키가 무효화되면 많은 읽기가 DB로 몰리는 thundering herd, 리스(한 클라이언트만 갱신)·옛 값 반환으로 막음, 캐시가 빈 클러스터는 따로 예열' },
         { t: 'Optimal Probabilistic Cache Stampede Prevention', u: 'https://www.vldb.org/pvldb/vol8/p886-vattani.pdf', p: 'VLDB Endowment', n: '인기 항목이 만료되면 여러 요청이 동시에 재생성하는 캐시 스탬피드, 만료 전에 확률적으로 미리 갱신해 막음' },
         { t: 'High availability with Redis Sentinel', u: 'https://redis.io/docs/latest/operate/oss_and_stack/management/sentinel/', p: 'Redis', n: '주 서버가 죽으면 복제본을 승격하는 자동 전환' },
+        { t: 'INFO', u: 'https://redis.io/docs/latest/commands/info/', p: 'Redis', n: 'keyspace_hits·keyspace_misses(키 조회 성공·실패 수), expired_keys(만료된 키 수), uptime_in_seconds(시작 뒤 지난 시간)' },
+        { t: 'SHOW PROCESSLIST Statement', u: 'https://dev.mysql.com/doc/refman/8.4/en/show-processlist.html', p: 'MySQL', n: '세션마다 실행 중인 문장(Info)과 현재 상태에 머문 시간(Time, 초)' },
+        { t: 'The Cumulative Statistics System (PostgreSQL Documentation)', u: 'https://www.postgresql.org/docs/current/monitoring-stats.html', p: 'PostgreSQL', n: 'pg_stat_activity: 세션마다 지금 실행 중인 쿼리(query)' },
       ] },
     { id: 'db-long-tx', t: '오래 열린 트랜잭션', en: 'Long-running transaction / MVCC purge lag',
       s: '트랜잭션 하나가 오래 열려 있으면 잠금을 계속 잡고 있고, DB가 옛 버전 데이터를 정리(purge)하지 못해 전체가 점점 느려집니다.',
@@ -4264,11 +4732,21 @@ window.SIGDRAW = (function () {
       own: ['srv', 'dba'],
       act: { game: '트랜잭션 안에서 네트워크 호출·사용자 입력 기다리지 않기, 집계 쿼리는 복제본에서.', infra: '오래 열린 트랜잭션 경보와 강제 종료, 집계용 복제본 제공, 언두 로그·죽은 행 증가 감시.' },
       more: 'DB는 읽는 쪽이 고치기 전 모습을 볼 수 있도록 옛 버전을 남겨 둡니다(MVCC). 가장 오래된 트랜잭션이 끝나야 이 기록을 지울 수 있어서, 트랜잭션 하나가 몇 시간 열려 있으면 MySQL은 언두 로그가, PostgreSQL은 VACUUM이 정리하지 못한 죽은 행(dead tuple)이 쌓입니다. SQL Server는 트랜잭션 로그가 줄지 않아 디스크를 채우기도 합니다.',
+      sig: { k: 'ramp', g: '언두 로그 길이(History list length), 죽은 행 수' },
+      chk: {
+        look: 'MySQL은 INFORMATION_SCHEMA.INNODB_TRX의 trx_started로 가장 오래된 트랜잭션을 찾고, SHOW ENGINE INNODB STATUS의 TRANSACTIONS 섹션에 나오는 History list length(아직 정리하지 못한 언두 로그 양)를 봅니다. PostgreSQL은 pg_stat_activity의 xact_start와 state가 idle in transaction인 세션, pg_stat_user_tables의 n_dead_tup을 봅니다.',
+        yes: '몇 분~몇 시간 된 트랜잭션이 있고, 그동안 History list length나 n_dead_tup이 계속 오르다 그 트랜잭션을 끝낸 뒤 정리(purge·VACUUM)가 돌면서 줄어듦.',
+        no: '오래된 트랜잭션이 없는데 전반적으로 느리면 체크포인트(db-checkpoint)나 디스크 쪽.',
+        by: 'ops',
+      },
       ref: [
         { t: 'InnoDB Multi-Versioning', u: 'https://dev.mysql.com/doc/refman/8.4/en/innodb-multi-versioning.html', p: 'MySQL', n: '옛 버전을 볼 수 있는 트랜잭션이 남아 있으면 update 언두 로그를 버리지 못해 롤백 세그먼트가 커짐, 읽기만 하는 트랜잭션도 자주 커밋 권고' },
         { t: 'Routine Vacuuming (PostgreSQL Documentation)', u: 'https://www.postgresql.org/docs/current/routine-vacuuming.html', p: 'PostgreSQL', n: '옛 행 버전은 다른 트랜잭션이 볼 수 있는 동안 지울 수 없고, 오래 열린 트랜잭션은 끝내거나 세션을 종료해야 함' },
         { t: 'Client Connection Defaults (PostgreSQL Documentation)', u: 'https://www.postgresql.org/docs/current/runtime-config-client.html', p: 'PostgreSQL', n: 'idle_in_transaction_session_timeout: 트랜잭션을 연 채 쉬는 세션을 끊어 잠금을 오래 잡고 있지 못하게 함' },
         { t: 'Troubleshoot a full transaction log (SQL Server Error 9002)', u: 'https://learn.microsoft.com/en-us/sql/relational-databases/logs/troubleshoot-a-full-transaction-log-sql-server-error-9002', p: 'Microsoft SQL Server', n: '오래 실행 중인 활성 트랜잭션이 트랜잭션 로그 정리를 막음' },
+        { t: 'The INFORMATION_SCHEMA INNODB_TRX Table', u: 'https://dev.mysql.com/doc/refman/8.4/en/information-schema-innodb-trx-table.html', p: 'MySQL', n: 'TRX_STARTED: 트랜잭션 시작 시각' },
+        { t: 'Purge Configuration', u: 'https://dev.mysql.com/doc/refman/8.4/en/innodb-purge-configuration.html', p: 'MySQL', n: '커밋된 트랜잭션의 언두 로그 목록(history list)을 purge가 정리, 밀린 양은 SHOW ENGINE INNODB STATUS의 TRANSACTIONS 섹션 History list length로 표시' },
+        { t: 'The Cumulative Statistics System (PostgreSQL Documentation)', u: 'https://www.postgresql.org/docs/current/monitoring-stats.html', p: 'PostgreSQL', n: 'pg_stat_activity의 xact_start(트랜잭션 시작 시각)와 state(idle in transaction), pg_stat_user_tables의 n_dead_tup(죽은 행 추정치)' },
       ] },
     { id: 'db-redis-block', t: 'Redis 느린 명령', en: 'Redis blocking commands (single-threaded)',
       s: 'Redis는 명령을 한 번에 하나씩 처리해서, 느린 명령 하나가 그 뒤의 모든 요청을 막습니다.',
@@ -4279,11 +4757,21 @@ window.SIGDRAW = (function () {
       act: { game: 'KEYS 대신 SCAN, 큰 키 쪼개기, 지우기는 UNLINK(백그라운드 삭제), 같은 초에 몰리는 만료 시각 분산.', infra: '느린 명령 기록(SLOWLOG) 감시, KEYS 같은 위험 명령은 운영 서버에서 막기, 큰 키 정기 점검, THP 끄고 fork할 메모리 여유 확보, RDB·AOF 저장은 복제본에서.' },
       more: '저장 파일(RDB 스냅샷)을 만들거나 AOF를 다시 쓰려고 프로세스를 복제(fork)하는 순간에도 멈춥니다. 요즘 서버에서 메모리 1GB당 약 10ms라, 30GB면 300ms쯤입니다. 큰 페이지(THP)를 켜 두면 fork 뒤 쓰기마다 큰 페이지를 통째로 복사해(copy-on-write) 멈춤과 메모리 사용이 크게 늘어서, 보통 THP를 끄고 메모리 여유를 넉넉히 둡니다. 같은 초에 만료되는 키가 아주 많을 때도 Redis가 지우느라 잠깐 멈춥니다.',
       sim: 'arch',
+      sig: { k: 'random', g: 'Redis 응답 지연, 느린 명령 수' },
+      chk: {
+        look: 'SLOWLOG GET으로 slowlog-log-slower-than을 넘긴 명령을 보고, CONFIG SET latency-monitor-threshold로 지연 모니터(기본 꺼짐)를 켠 뒤 LATENCY LATEST·LATENCY DOCTOR로 fork·expire-cycle 같은 이벤트별 지연을 봅니다. INFO의 latest_fork_usec와 redis-cli --bigkeys로 fork 시간과 큰 키도 확인합니다.',
+        yes: '멈춘 시각에 SLOWLOG에 KEYS나 큰 키를 통째로 다루는 명령이 남아 있거나, LATENCY에 같은 시각 fork·expire-cycle 이벤트가 수십 ms 이상으로 기록됨.',
+        no: 'SLOWLOG·LATENCY가 비어 있는데 게임 서버 쪽에서만 느리면 네트워크나 게임 서버 안의 대기(SLOWLOG는 명령 실행 시간만 재고 클라이언트와 주고받는 시간은 넣지 않음).',
+        by: 'ops',
+      },
       ref: [
         { t: 'Diagnosing latency issues', u: 'https://redis.io/docs/latest/operate/oss_and_stack/management/optimization/latency/', p: 'Redis', n: '요청을 한 스레드가 차례로 처리해 느린 명령이 뒤를 모두 막음, KEYS 대신 SCAN, fork는 물리 서버·최신 VM 실측 1GB당 약 9~13ms, THP는 fork 뒤 복사로 지연·메모리 급증, 같은 초에 대량 만료되면 멈춤' },
         { t: 'KEYS', u: 'https://redis.io/docs/latest/commands/keys/', p: 'Redis', n: '운영 환경에서는 극히 조심해서 쓸 것, 큰 DB에서 성능을 망가뜨릴 수 있음(보급형 노트북에서 키 100만 개에 40ms)' },
         { t: 'UNLINK', u: 'https://redis.io/docs/latest/commands/unlink/', p: 'Redis', n: '키를 즉시 떼어 내고 메모리 회수는 다른 스레드에서 하는 비동기 삭제' },
-        { t: 'SLOWLOG', u: 'https://redis.io/docs/latest/commands/slowlog/', p: 'Redis', n: '지정한 실행 시간을 넘긴 명령을 기록하는 느린 명령 로그' },
+        { t: 'SLOWLOG', u: 'https://redis.io/docs/latest/commands/slowlog/', p: 'Redis', n: 'slowlog-log-slower-than을 넘긴 명령을 기록하는 느린 명령 로그, 실행 시간에는 클라이언트와 주고받는 I/O가 빠짐' },
+        { t: 'Redis latency monitoring', u: 'https://redis.io/docs/latest/operate/oss_and_stack/management/optimization/latency-monitor/', p: 'Redis', n: 'latency-monitor-threshold 기본 0(꺼짐), LATENCY LATEST·LATENCY DOCTOR, fork·expire-cycle 같은 이벤트별 지연 기록' },
+        { t: 'INFO', u: 'https://redis.io/docs/latest/commands/info/', p: 'Redis', n: 'latest_fork_usec: 마지막 fork에 걸린 시간(마이크로초)' },
+        { t: 'Redis CLI', u: 'https://redis.io/docs/latest/develop/tools/cli/', p: 'Redis', n: '--bigkeys: 키 공간을 훑어 큰 키를 찾음' },
       ] },
     { id: 'db-plan-flip', t: '실행 계획 변경으로 인한 쿼리 지연', en: 'Query plan regression (stats, parameter sniffing)',
       s: '코드는 그대로인데 DB가 같은 쿼리를 처리하는 방법(실행 계획)을 바꾸면, 어제 2ms였던 쿼리가 오늘 수백 ms가 됩니다.',
@@ -4293,10 +4781,21 @@ window.SIGDRAW = (function () {
       act: { game: '값에 따라 결과 수가 크게 다른 쿼리는 나눠 쓰거나 계획 힌트 검토, 인덱스를 확실히 타는 쿼리 설계.', infra: '느린 쿼리와 실행 계획 기록 감시, 좋은 계획 고정(SQL Server 쿼리 저장소 등), 통계 갱신 시각 관리.' },
       more: 'SQL Server는 처음 들어온 값에 맞춰 세운 계획을 다시 씁니다(파라미터 스니핑). 아이템이 몇 개뿐인 새 캐릭터로 세운 계획이 아이템 수만 개인 오래된 캐릭터에게 쓰이면 크게 느려지고, 반대 경우도 흔합니다. 재시작으로 계획이 지워지면 멀쩡해졌다가 다시 나빠지기도 합니다.',
       sim: 'dbpool',
+      sig: { k: 'step', g: '쿼리별 평균 실행 시간' },
+      chk: {
+        look: '같은 모양 쿼리의 평균 시간을 주기적으로 모아 추이를 봅니다. MySQL은 events_statements_summary_by_digest의 AVG_TIMER_WAIT, PostgreSQL은 pg_stat_statements의 mean_exec_time(12 이하는 mean_time)입니다. 느려진 전후의 실행 계획은 EXPLAIN이나 PostgreSQL auto_explain, SQL Server는 쿼리 저장소의 회귀된 쿼리(Regressed Queries) 화면으로 비교합니다.',
+        yes: '배포가 없던 시각에 한 쿼리의 평균 시간이 계단처럼 몇십 배 오르고, 그 시점이 통계 갱신·DB 재시작과 겹치며 실행 계획이 바뀌어 있음.',
+        no: '실행 계획은 그대로인데 느려졌으면 데이터 증가, 잠금 대기(db-hot-row), 디스크 쪽.',
+        by: 'ops',
+      },
       ref: [
         { t: 'Query Processing Architecture Guide', u: 'https://learn.microsoft.com/en-us/sql/relational-databases/query-processing-architecture-guide', p: 'Microsoft SQL Server', n: '파라미터 스니핑: 컴파일·재컴파일 때 들어온 파라미터 값에 맞춰 실행 계획을 세움' },
         { t: 'Parameter Sensitive Plan Optimization', u: 'https://learn.microsoft.com/en-us/sql/relational-databases/performance/parameter-sensitive-plan-optimization', p: 'Microsoft SQL Server', n: '데이터 분포가 고르지 않으면 캐시된 계획 하나가 모든 파라미터 값에 맞지 않음' },
-        { t: 'Monitor performance by using the Query Store', u: 'https://learn.microsoft.com/en-us/sql/relational-databases/performance/monitoring-performance-by-using-the-query-store', p: 'Microsoft SQL Server', n: '통계·스키마·인덱스 변화로 계획이 바뀌고 계획 캐시는 최신 계획만 둠, 쿼리 저장소의 계획 강제로 좋은 계획 고정' },
+        { t: 'Monitor performance by using the Query Store', u: 'https://learn.microsoft.com/en-us/sql/relational-databases/performance/monitoring-performance-by-using-the-query-store', p: 'Microsoft SQL Server', n: '통계·스키마·인덱스 변화로 계획이 바뀌고 계획 캐시는 최신 계획만 둠, 쿼리 저장소의 계획 강제로 좋은 계획 고정, 회귀된 쿼리(Regressed Queries) 화면으로 느려진 쿼리와 계획 비교' },
+        { t: 'Statement Summary Tables', u: 'https://dev.mysql.com/doc/refman/8.4/en/performance-schema-statement-summary-tables.html', p: 'MySQL', n: 'events_statements_summary_by_digest: 같은 모양 쿼리별 COUNT_STAR·AVG_TIMER_WAIT(평균 시간)' },
+        { t: 'pg_stat_statements — track statistics of SQL planning and execution', u: 'https://www.postgresql.org/docs/current/pgstatstatements.html', p: 'PostgreSQL', n: '문장별 calls, total_exec_time, mean_exec_time(평균 실행 시간)' },
+        { t: 'pg_stat_statements (PostgreSQL 12 Documentation)', u: 'https://www.postgresql.org/docs/12/pgstatstatements.html', p: 'PostgreSQL', n: '12까지는 열 이름이 total_time·mean_time' },
+        { t: 'auto_explain — log execution plans of slow queries', u: 'https://www.postgresql.org/docs/current/auto-explain.html', p: 'PostgreSQL', n: 'auto_explain.log_min_duration보다 오래 걸린 쿼리의 실행 계획을 로그에 남김' },
       ] },
     { id: 'db-ddl-lock', t: '운영 중 스키마 변경(DDL) 잠금', en: 'Schema change lock (DDL / metadata lock)',
       s: '서비스 중에 테이블에 컬럼이나 인덱스를 추가하면, 잠깐 필요한 잠금 하나 때문에 그 테이블을 쓰는 모든 요청이 대기할 수 있습니다.',
@@ -4305,11 +4804,22 @@ window.SIGDRAW = (function () {
       own: ['dba', 'srv'],
       act: { game: '스키마 변경이 든 핫픽스는 DB 인프라와 일정 협의, 새 컬럼이 없어도 동작하는 코드를 먼저 배포.', infra: '잠금 대기 한도를 짧게 걸고 실패하면 다시 시도, 긴 트랜잭션이 없을 때 실행, 온라인 변경 도구 사용, 큰 테이블은 점검 시간에.' },
       more: 'MySQL은 스키마를 바꿀 때 메타데이터 잠금을, PostgreSQL은 가장 강한 테이블 잠금을 잠깐 잡습니다. 변경 자체는 순식간이어도, 앞에 끝나지 않은 트랜잭션이 하나 있으면 그 뒤로 모든 요청이 대기합니다.',
+      sig: { k: 'step', g: '잠금 대기 세션 수, 그 테이블의 쿼리 지연' },
+      chk: {
+        look: 'MySQL은 SHOW PROCESSLIST에서 State가 Waiting for table metadata lock인 세션을 세고, sys.schema_table_lock_waits로 막고 있는 세션(blocking_pid)을 찾습니다. PostgreSQL은 pg_locks에서 granted가 false인 요청과 AccessExclusiveLock을 보고, pg_blocking_pids()로 막고 있는 세션을 찾습니다.',
+        yes: '스키마 변경을 시작한 시각부터 그 테이블을 쓰는 모든 쿼리가 잠금 대기로 쌓이고, 맨 앞에 끝나지 않은 트랜잭션이나 스키마 변경 문장이 있음.',
+        no: '대기가 특정 행에만 몰리고 같은 테이블의 다른 행은 잘 처리되면 핫 로우(db-hot-row).',
+        by: 'ops',
+      },
       ref: [
         { t: 'Online DDL Performance and Concurrency', u: 'https://dev.mysql.com/doc/refman/8.4/en/innodb-online-ddl-performance.html', p: 'MySQL', n: '온라인 DDL도 끝낼 때 배타적 메타데이터 잠금이 잠깐 필요, 긴 트랜잭션이 있으면 기다리고, 기다리는 잠금 요청이 뒤의 모든 트랜잭션을 막음' },
         { t: 'Server System Variables', u: 'https://dev.mysql.com/doc/refman/8.4/en/server-system-variables.html', p: 'MySQL', n: 'lock_wait_timeout: 메타데이터 잠금 대기 한도, 기본값 31,536,000초(1년)' },
         { t: 'ALTER TABLE (PostgreSQL Documentation)', u: 'https://www.postgresql.org/docs/current/sql-altertable.html', p: 'PostgreSQL', n: '따로 적지 않은 ALTER TABLE은 가장 강한 ACCESS EXCLUSIVE 잠금을 잡음' },
         { t: 'Client Connection Defaults (PostgreSQL Documentation)', u: 'https://www.postgresql.org/docs/current/runtime-config-client.html', p: 'PostgreSQL', n: 'lock_timeout: 잠금을 이 시간 넘게 기다리면 문장을 중단' },
+        { t: 'General Thread States', u: 'https://dev.mysql.com/doc/refman/8.4/en/general-thread-states.html', p: 'MySQL', n: 'Waiting for table metadata lock: 메타데이터 잠금을 기다리는 스레드 상태' },
+        { t: 'The schema_table_lock_waits and x$schema_table_lock_waits Views', u: 'https://dev.mysql.com/doc/refman/8.4/en/sys-schema-table-lock-waits.html', p: 'MySQL', n: '메타데이터 잠금을 기다리는 세션(waiting_query)과 막고 있는 세션(blocking_pid)' },
+        { t: 'pg_locks (PostgreSQL Documentation)', u: 'https://www.postgresql.org/docs/current/view-pg-locks.html', p: 'PostgreSQL', n: 'granted가 false면 잠금을 기다리는 중, mode에 AccessExclusiveLock 같은 잠금 종류' },
+        { t: 'System Information Functions and Operators (PostgreSQL Documentation)', u: 'https://www.postgresql.org/docs/current/functions-info.html', p: 'PostgreSQL', n: 'pg_blocking_pids(): 지정한 세션이 잠금을 못 얻게 막고 있는 세션 목록' },
       ] },
   ]);
 
@@ -4322,11 +4832,23 @@ window.SIGDRAW = (function () {
       num: '같은 데이터센터 안이라 평소에는 한 번 거칠 때 1ms 미만. 게이트웨이가 과부하면 수십~수백 ms로 늘어납니다.',
       own: ['srv', 'sys', 'cli'],
       act: { game: '서버: 게이트웨이를 여러 대로 늘릴 수 있는 구조, 게이트웨이가 죽어도 다른 게이트웨이로 다시 붙으면 캐릭터가 그대로 이어지는 구조(세션 재연결). 클라이언트: 게이트웨이가 끊기면 자동 재접속.', infra: '게이트웨이 수평 확장(대수 추가), 게이트웨이별 CPU·연결 수·처리 지연 모니터링.' },
+      more: '서비스 메시(Istio 등)를 쓰면 서버마다 옆에 붙는 사이드카 프록시(Envoy)도 한 단계로 더해집니다. 서비스 사이의 요청은 보내는 쪽 사이드카와 받는 쪽 사이드카를 차례로 거치고, 프록시에 로그·지표 수집 같은 기능을 더할수록 처리 시간과 대기 시간이 늘어납니다.',
       sim: 'arch',
+      sig: { k: 'load', g: '게이트웨이 처리 지연, 게이트웨이 CPU·연결 수' },
+      chk: {
+        look: '게이트웨이의 CPU·연결 수와 게이트웨이 소켓의 Recv-Q(ss·netstat), 게이트웨이를 지나기 전과 지난 뒤의 지연 차이. 서비스 메시를 거치는 HTTP·gRPC 호출이면 Istio 표준 지표 istio_request_duration_milliseconds를 보내는 쪽(reporter=source)과 받는 쪽(reporter=destination)으로 나눠 비교',
+        yes: '게임 서버의 처리 시간은 그대로인데 게이트웨이 구간의 지연만 늘고, 그 시각 게이트웨이의 CPU가 포화되거나 Recv-Q가 쌓임',
+        no: '게이트웨이를 거치지 않는 경로(직접 접속, 다른 게이트웨이)도 똑같이 느리면 회선이나 게임 서버 쪽',
+        by: 'ops',
+      },
       ref: [
         { t: 'The Unique Architecture behind Amazon Games’ Seamless MMO New World', u: 'https://aws.amazon.com/blogs/gametech/the-unique-architecture-behind-amazon-games-seamless-mmo-new-world/', p: 'AWS', n: 'New World는 클라이언트가 공개 주소를 가진 입구 서버(REP) 4대 중 하나로 접속하고, 그 뒤의 시뮬레이션 서버(허브)와 통신' },
         { t: 'Designs, Lessons and Advice from Building Large Distributed Systems', u: 'https://www.cs.cornell.edu/projects/ladis2009/talks/dean-keynote-ladis2009.pdf', p: 'Google', n: 'LADIS 2009 기조연설(Jeff Dean). 같은 데이터센터 안 왕복 약 0.5ms' },
         { t: 'Site Reliability Engineering, Chapter 22: Addressing Cascading Failures', u: 'https://sre.google/sre-book/addressing-cascading-failures/', p: 'Google', n: '과부하로 큐가 길어지면 대기 시간이 처리 시간의 몇 배로 늘어남(처리 100ms, 큐가 스레드 수의 10배면 1.1초)' },
+        { t: 'Performance and Scalability', u: 'https://istio.io/latest/docs/ops/deployment/performance-and-scalability/', p: 'Istio', n: '사이드카 모드에서 요청은 보내는 쪽 사이드카와 받는 쪽 사이드카 프록시를 차례로 거침, 기능을 더할수록 프록시 안의 처리 경로가 길어지고 텔레메트리 수집이 다음 요청의 대기 시간을 늘림' },
+        { t: 'What is Envoy', u: 'https://www.envoyproxy.io/docs/envoy/latest/intro/what_is_envoy', p: 'Envoy', n: 'Envoy는 모든 애플리케이션 서버 옆에서 따로 도는 프로세스이고, 앱은 localhost의 Envoy를 거쳐 주고받음' },
+        { t: 'Istio Standard Metrics', u: 'https://istio.io/latest/docs/reference/config/metrics/', p: 'Istio', n: 'istio_request_duration_milliseconds(HTTP·gRPC 요청 처리 시간 분포), reporter 라벨로 보내는 쪽(source)·받는 쪽(destination) 프록시 구분' },
+        { t: 'netstat(8) — Linux manual page', u: 'https://man7.org/linux/man-pages/man8/netstat.8.html', p: 'net-tools', n: 'Recv-Q: 연결된 소켓에서 사용자 프로그램이 아직 가져가지 않은 바이트 수' },
       ] },
     { id: 'in-zone-transfer', t: '존 이동 (서버 간 이관)', en: 'Zone / server handoff',
       s: '다른 지역·던전에 들어갈 때 캐릭터 정보를 다른 서버로 넘기는 과정에서 지연과 실패가 생깁니다.',
@@ -4335,6 +4857,13 @@ window.SIGDRAW = (function () {
       own: ['srv', 'sys'],
       act: { game: '이관 데이터 줄이기, 대상 서버 미리 예약, 실패 시 원래 자리로 복귀.', infra: '던전·존 서버의 빈 인스턴스 여유 모니터링, 피크 전 대수 확보.' },
       more: '로딩 없이 이어진 심리스 월드도 서버 경계를 넘을 때 담당 서버가 바뀝니다. 경계 근처에서 잠깐 멈칫하거나 뒤로 당겨지는 고무줄이 생길 수 있습니다.',
+      sig: { k: 'load', g: '존 이동 소요 시간·실패 수' },
+      chk: {
+        look: '서버가 남기는 이관 단계별 소요 시간(저장, 전달, 불러오기)과 실패 사유, 대상 서버의 인원과 빈 인스턴스 수',
+        yes: '긴 로딩·입장 실패 제보 시각에 이관 시간이 늘거나 실패가 몰리고, 대상 서버가 붐비거나 빈 인스턴스가 바닥나 있음',
+        no: '이관은 빨리 끝났는데 도착한 뒤 멈추면 밀집 지역 진입 시 스폰 폭주나 클라이언트 로딩 쪽',
+        by: 'code',
+      },
       ref: [
         { t: 'The Unique Architecture behind Amazon Games’ Seamless MMO New World', u: 'https://aws.amazon.com/blogs/gametech/the-unique-architecture-behind-amazon-games-seamless-mmo-new-world/', p: 'AWS', n: '로딩 없는 월드를 격자로 나눠 여러 서버(허브)가 맡고 플레이어가 이동하면 상태를 허브에서 허브로 넘김, 세션형 모드는 공유 풀에서 남는 서버를 받아 씀' },
       ] },
@@ -4346,10 +4875,18 @@ window.SIGDRAW = (function () {
       act: { game: '모든 호출에 타임아웃, 서킷 브레이커, 기능별 격리(벌크헤드), 재시도는 간격을 늘리며 횟수 제한, 헬스체크 응답은 바쁜 작업과 분리.', infra: '로드밸런서 헬스체크가 잠깐 느린 서버를 바로 빼지 않도록 실패 횟수·간격에 여유, 한꺼번에 빠지는 서버 수 제한.' },
       more: '헬스체크(살아 있는지 확인하는 검사)도 연쇄를 키웁니다. 바쁜 서버가 검사에 늦게 답하면 로드밸런서가 멀쩡한 서버를 빼 버리고, 그 트래픽이 남은 서버로 몰려 다음 서버도 늦어집니다.',
       sim: 'arch',
+      sig: { k: 'ceiling', g: '서비스별 응답 시간·오류율, 스레드·커넥션 사용 수' },
+      chk: {
+        look: '서비스별 응답 시간·오류율·재시도 수를 시간축을 맞춰 한 화면에 놓고 가장 먼저 느려진 곳을 찾음. 로드밸런서 뒤라면 대상 응답 시간(AWS ALB는 TargetResponseTime), 대상의 5xx 수(HTTPCode_Target_5XX_Count), 비정상으로 빠진 대상 수(UnHealthyHostCount)',
+        yes: '한 서비스의 지연이 먼저 오르고, 뒤이어 그 서비스를 부르는 쪽의 스레드·커넥션 사용 수가 한도에 붙으며 오류가 다른 서비스로 번지고, 재시도 수와 빠진 대상 수가 함께 늘어남',
+        no: '여러 서비스가 같은 순간 함께 느려졌다면 공용 자원(DB, 네트워크, 호스트) 장애부터 봄',
+        by: 'ops',
+      },
       ref: [
         { t: 'Site Reliability Engineering, Chapter 22: Addressing Cascading Failures', u: 'https://sre.google/sre-book/addressing-cascading-failures/', p: 'Google', n: '과부하 서버가 헬스체크에 실패해 빠지면 남은 서버에 부하가 몰리고 재시도가 부하를 키움, 재시도 횟수 제한·무작위 지수 백오프·데드라인 권장' },
         { t: 'Circuit Breaker Pattern', u: 'https://learn.microsoft.com/en-us/azure/architecture/patterns/circuit-breaker', p: 'Microsoft Azure', n: '타임아웃까지 막힌 요청이 스레드·DB 연결을 점유해 상관없는 기능까지 실패시킴, 정해진 시간 안에 실패가 쌓이면 호출을 바로 거부' },
         { t: 'Timeouts, retries, and backoff with jitter', u: 'https://d1.awsstatic.com/builderslibrary/pdfs/timeouts-retries-and-backoff-with-jitter.pdf', p: 'AWS', n: 'Amazon Builders\' Library. 5단 호출에서 층마다 3번씩 재시도하면 DB 부하가 243배, 재시도는 한 곳에서만 하고 토큰 버킷으로 제한' },
+        { t: 'CloudWatch metrics for your Application Load Balancer', u: 'https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-cloudwatch-metrics.html', p: 'AWS', n: 'TargetResponseTime(요청이 로드밸런서를 떠나 대상이 응답을 시작할 때까지 걸린 시간), HTTPCode_Target_5XX_Count(대상이 낸 5xx 수), UnHealthyHostCount(비정상 대상 수)' },
       ] },
     { id: 'in-subservice', t: '부가 서버 장애', en: 'Auxiliary service outage',
       s: '채팅·파티·경매장처럼 게임 서버와 따로 도는 서버에 장애가 나면 그 기능만 동작하지 않습니다.',
@@ -4359,9 +4896,17 @@ window.SIGDRAW = (function () {
       act: { game: '실패해도 게임은 계속되게 설계, 기능별 상태 표시, 여러 기능을 중앙 서버 한 대에 몰지 않기.', infra: '부가 서버별 헬스체크·경보, 이중화와 자동 재시작.' },
       more: '파티·길드·귓속말·서버 간 이동을 한 대의 중앙 서버(월드·매니저 서버)가 모두 중계하는 구조라면, 그 서버 하나가 느려질 때 여러 기능이 한꺼번에 멈춥니다.',
       sim: 'arch',
+      sig: { k: 'drop', g: '기능별 요청 성공률, 부가 서버 연결 수·헬스체크' },
+      chk: {
+        look: '채팅·파티·경매장 같은 부가 서버별 헬스체크·프로세스 상태와 연결 수, 기능별 요청 성공률·응답 시간. 로드밸런서 뒤라면 대상 그룹의 UnHealthyHostCount',
+        yes: '제보된 기능을 맡은 서버만 헬스체크 실패나 연결 급락을 보이고, 게임 서버의 틱과 전투는 정상',
+        no: '여러 기능이 한꺼번에 멈췄으면 그 기능들을 함께 중계하는 중앙 서버나 연쇄 장애 쪽',
+        by: 'ops',
+      },
       ref: [
         { t: 'Bulkhead Pattern', u: 'https://learn.microsoft.com/en-us/azure/architecture/patterns/bulkhead', p: 'Microsoft Azure', n: '구성 요소를 풀로 격리하면 하나가 실패해도 나머지는 계속 동작하고 장애가 번지지 않음' },
         { t: 'REL05-BP01 Implement graceful degradation to transform applicable hard dependencies into soft dependencies', u: 'https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_graceful_degradation.html', p: 'AWS', n: 'AWS Well-Architected. 의존 대상이 장애여도 핵심 기능은 약간 오래된 데이터나 대체 데이터로 계속 동작하도록 설계' },
+        { t: 'CloudWatch metrics for your Network Load Balancer', u: 'https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-cloudwatch-metrics.html', p: 'AWS', n: 'UnHealthyHostCount: 헬스체크에서 비정상으로 판정된 대상 수' },
       ] },
     { id: 'in-deploy', t: '배포·재시작', en: 'Deploy / rolling restart',
       s: '업데이트를 위해 서버를 재시작할 때 연결을 옮기지 않으면 그 서버에 있던 사람들의 접속이 끊기고, 종료 직전 저장과 재접속이 한꺼번에 몰립니다.',
@@ -4371,6 +4916,13 @@ window.SIGDRAW = (function () {
       own: ['srv', 'sys'],
       act: { game: '드레인 기능(새 접속만 막고 기존 사람이 빠질 때까지 기다리기), 캐릭터를 다른 서버로 옮기기, 종료 전 저장 나눠 하기, 재시작 뒤 캐시 로딩·JIT 워밍업을 마치고 준비 완료 알리기, 핫 리로드는 별도 스레드에서 미리 읽어 두고 틱 사이에 한 번에 교체.', infra: '배포 도구가 한 대씩 드레인을 기다린 뒤 재시작, 재시작한 서버는 준비 완료(예열 끝)를 확인한 뒤 트래픽 받기, 배포 시각 공지.' },
       more: '다시 켠 직후 몇 분도 느립니다. 캐시가 비어 DB 조회가 몰리고, Java·C# 서버는 실행하면서 코드를 최적화하는 과정(JIT 워밍업)이 끝나기 전이라 같은 일에 시간이 더 듭니다. 서버를 끄지 않고 스크립트·데이터 테이블을 다시 읽는 방식(핫 리로드)도 읽는 동안 틱이 멈춰 잠깐 멈춤이 생깁니다.',
+      sig: { k: 'drop', g: '서버별 접속 수, DB 쓰기 수' },
+      chk: {
+        look: '배포 도구의 작업 기록(서버별 재시작 시각)을 접속 수·끊김 수·DB 쓰기·로그인 요청 그래프에 세로선(주석)으로 겹쳐 봄',
+        yes: '서버별 접속 수가 재시작 시각에 한 대씩 차례로 급락하고, 그 직전에 DB 쓰기가, 직후에 로그인 요청이 솟음',
+        no: '끊긴 시각이 배포·재시작 기록과 겹치지 않으면 서버 크래시나 네트워크 장비 쪽',
+        by: 'ops',
+      },
       ref: [
         { t: 'Site Reliability Engineering, Chapter 20: Load Balancing in the Datacenter', u: 'https://sre.google/sre-book/load-balancing-datacenter/', p: 'Google', n: 'SIGTERM을 받은 서버는 lame duck 상태로 새 요청을 다른 서버로 돌리고 진행 중인 요청만 마침, 재시작 직후 몇 분은 JIT 최적화 전이라 자원이 더 들어 예열 뒤 트래픽을 받게 함' },
         { t: 'Liveness, Readiness, and Startup Probes', u: 'https://kubernetes.io/docs/concepts/workloads/pods/probes/', p: 'Kubernetes', n: '레디니스 검사로 연결 수립·파일 로딩·캐시 예열이 끝날 때까지 트래픽을 보내지 않음' },
@@ -4384,8 +4936,16 @@ window.SIGDRAW = (function () {
       own: ['sys', 'srv'],
       act: { game: '채널 분산(이미 붐비는 채널에 있는 사람은 새 서버로 옮길 수 없음), 새 서버의 시작·데이터 로딩 시간 줄이기.', infra: '이벤트 전 미리 확장, 예열된 예비 서버, 줄일 때는 남은 사람이 빠진 뒤 끄기.' },
       more: '오토스케일링은 주로 로그인·게이트웨이·던전처럼 새 서버에 새 사람을 받으면 되는 곳에 씁니다. 줄일 때도 탈이 납니다. 사람이 빠진 새벽에 서버를 줄이면서 남은 사람이 빠지기를 기다리지 않고 끄면 그 사람들의 접속이 끊깁니다.',
+      sig: { k: 'surge', g: '인스턴스 수, CPU 사용률, 접속 대기' },
+      chk: {
+        look: '오토스케일링 활동 기록(확장을 결정한 시각, 새 인스턴스가 서비스에 들어간 시각)을 CPU 사용률·접속 수 그래프에 겹쳐 봄. AWS는 Auto Scaling 그룹 지표(켜 두어야 보임) GroupDesiredCapacity(목표 대수)·GroupPendingInstances(준비 중)·GroupInServiceInstances(서비스 중)',
+        yes: '접속이 급증한 뒤 몇 분 동안 목표 대수와 준비 중 인스턴스만 늘고 기존 서버의 CPU가 한도에 붙어 있다가, 서비스 중 인스턴스가 늘어난 시각부터 풀림',
+        no: '새 인스턴스가 들어온 뒤에도 느리면 서버 대수 밖의 원인(DB 같은 공용 자원, 연쇄 장애) 쪽',
+        by: 'ops',
+      },
       ref: [
         { t: 'Target tracking scaling policies for Amazon EC2 Auto Scaling', u: 'https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-target-tracking.html', p: 'AWS', n: 'EC2 기본 지표는 5분 간격(상세 모니터링을 켜면 1분)이라, 빨리 반응하려면 1분 이하 간격의 지표 권장' },
+        { t: 'Amazon CloudWatch metrics for Amazon EC2 Auto Scaling', u: 'https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-metrics.html', p: 'AWS', n: '그룹 지표는 켜야 1분 단위로 게시됨, GroupDesiredCapacity(유지하려는 대수)·GroupPendingInstances(아직 서비스 전인 인스턴스 수)·GroupInServiceInstances(서비스 중인 인스턴스 수)' },
         { t: 'Scheduled scaling for Amazon EC2 Auto Scaling', u: 'https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-scheduled-scaling.html', p: 'AWS', n: '예측할 수 있는 부하 변화에 맞춰 정한 시각에 용량을 미리 늘리고 줄임' },
         { t: 'Decrease latency for applications with long boot times using warm pools', u: 'https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-warm-pools.html', p: 'AWS', n: '부팅이 오래 걸리는 앱은 미리 초기화해 둔 인스턴스 풀(웜 풀)로 확장 지연을 줄임' },
       ] },
@@ -4396,9 +4956,17 @@ window.SIGDRAW = (function () {
       own: ['srv', 'sys'],
       act: { game: '비동기 전송, 샘플링, 버퍼 넘치면 버리기, 같은 오류 로그는 묶어서 보내기.', infra: '로그 수집기 용량을 장애 때 폭증량 기준으로 확보, 수집기 적체 경보.' },
       sim: 'arch',
+      sig: { k: 'random', g: '로그 전송량, 로그 수집기 대기열' },
+      chk: {
+        look: '서버의 초당 로그 줄 수·바이트와 로그 수집 에이전트의 대기열·버린 수를 틱 시간과 함께 봄. 멈춘 스레드가 있으면 bcc offcputime -p로 로그 쓰기·전송에서 기다리는지',
+        yes: '틱이 튄 시각에 로그 양이 평소의 수십 배로 솟고, 게임 스레드의 대기 시간이 로그 쓰기·전송 호출 스택에 몰려 있음',
+        no: '로그 양이 평소와 같거나 게임 스레드가 로그 쪽에서 기다리지 않으면 로그 폭증은 장애의 결과일 뿐이므로, 처음 오류를 낸 원인을 따로 찾음',
+        by: 'ops',
+      },
       ref: [
         { t: 'Logging in C#', u: 'https://learn.microsoft.com/en-us/dotnet/core/extensions/logging', p: 'Microsoft', n: '.NET 로그 메서드는 동기라서, 저장소가 느리면 바로 쓰지 말고 빠른 저장소에 먼저 쓴 뒤 나중에 옮기도록 권장' },
         { t: 'Asynchronous loggers', u: 'https://logging.apache.org/log4j/2.x/manual/async.html', p: 'Apache Software Foundation', n: '비동기 로깅은 짧은 폭증을 큐로 흡수하지만, 출력이 계속 느리면 큐가 차서 가장 느린 출력 속도로 떨어지거나 정책에 따라 로그를 버림(Discard)' },
+        { t: 'Demonstrations of offcputime, the Linux eBPF/bcc version', u: 'https://raw.githubusercontent.com/iovisor/bcc/master/tools/offcputime_example.txt', p: 'IO Visor', n: '스레드가 멈춰 CPU를 떠난 시간(off-CPU)을 호출 스택별로 합산, -p로 프로세스 지정' },
       ] },
     { id: 'in-clock-skew', t: '서버 간 시계 차이', en: 'Clock skew between servers',
       s: '서버마다 시계가 조금씩 다르면 쿨타임·버프·이벤트 시작 판정이 서버마다 어긋납니다.',
@@ -4408,10 +4976,18 @@ window.SIGDRAW = (function () {
       own: ['sys', 'srv'],
       act: { game: '서버 사이에는 절대 시각 대신 남은 시간으로 전달.', infra: '시간 동기화(NTP·chrony) 감시, 서버 간 시계 차이 경보.' },
       more: '한 서버의 시계가 한 번에 앞뒤로 뛰는 일은 서버 OS 층의 “시스템 시계 점프 (NTP 스텝)”에서 다룹니다.',
+      sig: { k: 'ramp', g: '서버별 시계 오프셋' },
+      chk: {
+        look: '서버마다 chronyc tracking의 System time(시스템 시계와 NTP 시계의 차이)·Last offset과 Ref time(마지막으로 시간 원본의 측정값을 반영한 시각)을 모아 비교',
+        yes: '문제 서버의 오프셋이 다른 서버보다 수백 ms 이상 벌어져 있거나 Ref time이 오래전에 멈춰 있고, 판정 어긋남이 그 서버를 오가는 이동에서만 생김',
+        no: '모든 서버의 오프셋이 수 ms 안이면 게임 쪽 시간 계산이나 클라이언트의 시계 동기화 오차 쪽',
+        by: 'ops',
+      },
       ref: [
         { t: 'RFC 5905: Network Time Protocol Version 4: Protocol and Algorithms Specification', u: 'https://www.rfc-editor.org/rfc/rfc5905', p: 'IETF', n: '빠른 LAN의 NTP 클라이언트는 보통 수백 µs 안으로 맞음' },
         { t: 'chrony – Frequently Asked Questions', u: 'https://chrony-project.org/faq.html', p: 'chrony', n: '보통 컴퓨터 시계의 드리프트는 100ppm 미만이지만 가상 머신은 더 클 수 있음, 일시 정지했다 재개한 가상 머신은 시각이 틀어져 스텝 보정이 필요할 수 있음' },
         { t: 'clock_gettime(2) — Linux manual page', u: 'https://man7.org/linux/man-pages/man2/clock_gettime.2.html', p: 'Linux man-pages', n: 'CLOCK_REALTIME은 수동 변경·NTP 보정으로 불연속하게 뛸 수 있고, CLOCK_MONOTONIC은 그런 점프의 영향을 받지 않음' },
+        { t: 'chronyc(1)', u: 'https://chrony-project.org/doc/4.6/chronyc.html', p: 'chrony', n: 'chronyc tracking의 System time(NTP 시계와 시스템 시계의 차이), Last offset(마지막 보정 때 추정한 오프셋), Ref time(시간 원본의 마지막 측정값을 반영한 시각)' },
       ] },
     { id: 'in-bots', t: '매크로·봇 과다', en: 'Bots and macros',
       s: '봇은 사람보다 훨씬 자주 요청을 보내 서버 처리량을 잠식합니다.',
@@ -4419,6 +4995,13 @@ window.SIGDRAW = (function () {
       sym: ['slowmo', 'delay'], fx: ['stall'], who: ['server', 'zone'], when: ['always', 'peak'],
       own: ['srv', 'net'],
       act: { game: '봇 탐지, 계정·캐릭터별 요청 빈도 제한.', infra: 'IP별 접속·요청 빈도 제한(PC방·모바일망은 여러 명이 한 IP를 쓰므로 여유 있게), 방화벽·WAF로 봇 대역 차단.' },
+      sig: { k: 'outlier', g: '계정·IP별 초당 요청 수' },
+      chk: {
+        look: '게임 서버 로그로 계정·캐릭터별 초당 요청 수의 분포와 상위 목록을 봄. 코드 지표가 없으면 방화벽·WAF의 IP별 요청 수',
+        yes: '소수 계정·IP가 사람이 낼 수 없는 빈도로 쉬지 않고 요청하고, 이들을 제한하면 서버 부하가 눈에 띄게 줄어듦',
+        no: '요청이 계정마다 고르게 퍼져 있으면 정상 인원 증가 쪽(틱 예산 초과, 오토스케일링 지연)',
+        by: 'code',
+      },
       ref: [
         { t: 'Using rate-based rule statements in AWS WAF', u: 'https://docs.aws.amazon.com/waf/latest/developerguide/waf-rule-statement-type-rate-based.html', p: 'AWS', n: 'IP 등 기준별로 요청 수를 세어 정한 시간 창 안에 너무 많으면 속도 제한' },
         { t: 'RFC 6269: Issues with IP Address Sharing', u: 'https://www.rfc-editor.org/rfc/rfc6269', p: 'IETF', n: '여러 가입자가 IP 하나를 함께 쓰면 IP 기준 차단·제한이 다른 사용자까지 막음' },
@@ -4430,10 +5013,71 @@ window.SIGDRAW = (function () {
       own: ['ext', 'srv'],
       act: { game: '외부 호출에 타임아웃과 친절한 안내, 인증 결과 캐시, 결제 재시도·보상 절차.', ext: '인증·결제·플랫폼 사업자에 장애 확인과 복구 요청, 유저에게 외부 서비스 장애임을 안내.' },
       sim: 'arch',
+      sig: { k: 'step', g: '외부 호출 응답 시간·오류율, 로그인 성공 수' },
+      chk: {
+        look: '플랫폼 로그인·결제·본인 인증 같은 외부 호출별 응답 시간·오류율·타임아웃 수와 사업자의 상태 페이지',
+        yes: '로그인·결제 실패가 몰린 시각부터 특정 외부 호출의 오류·타임아웃만 한 단계 올라 머물고, 사업자 상태 페이지에 같은 시각의 장애가 있음',
+        no: '외부 호출은 정상인데 로그인이 막히면 로그인 서버 자체(스레드 풀 고갈, DB)나 접속 대기열 쪽',
+        by: 'code',
+      },
       ref: [
         { t: 'Timeouts, retries, and backoff with jitter', u: 'https://d1.awsstatic.com/builderslibrary/pdfs/timeouts-retries-and-backoff-with-jitter.pdf', p: 'AWS', n: 'Amazon Builders\' Library. 응답을 기다리는 동안 스레드·연결 같은 자원을 점유하므로 타임아웃을 두고, 부작용이 있는 API는 멱등성이 보장될 때만 재시도' },
         { t: 'Circuit Breaker Pattern', u: 'https://learn.microsoft.com/en-us/azure/architecture/patterns/circuit-breaker', p: 'Microsoft Azure', n: '실패할 가능성이 큰 호출은 타임아웃까지 기다리지 않고 바로 거부해 응답 시간을 지킴' },
         { t: 'REL05-BP01 Implement graceful degradation to transform applicable hard dependencies into soft dependencies', u: 'https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_graceful_degradation.html', p: 'AWS', n: 'AWS Well-Architected. 의존 서비스가 장애여도 약간 오래된 데이터로라도 핵심 기능을 유지(인증 결과 캐시의 근거)' },
+      ] },
+    { id: 'in-region-match', t: '매치메이킹·리전 배정 오류', en: 'Wrong region assignment (matchmaking / GeoDNS)',
+      s: '가까운 리전 대신 먼 리전의 서버에 배정되면, 회선이 멀쩡해도 그 유저만 핑이 늘 높습니다.',
+      c: ['GeoIP 데이터 오류, VPN, 파티장 기준 배정, 인원이 모자랄 때 먼 리전까지 넓히는 규칙, DNS 리졸버 위치 기준 배정', '가까운 리전이 있는데도 바다 건너 리전의 서버에 접속', '해외 서비스에서 나만(또는 우리 파티만) 핑이 늘 높고 입력 지연·고무줄'],
+      sym: ['delay', 'rubber', 'dropped'], fx: ['lat'], who: ['me', 'region'], when: ['always', 'login'],
+      num: '서울 유저가 도쿄 대신 미국 서부 리전에 배정되면 핑이 약 30ms에서 약 130ms로 늘어납니다. GeoIP는 나라 단위로는 약 99.8% 맞지만, 도시 단위는 미국에서도 50km 안에 드는 비율이 약 66%이고, VPN을 쓰면 유저 대신 VPN 서버의 위치가 나옵니다.',
+      own: ['srv', 'cli', 'net', 'ext'],
+      act: { game: '서버: GeoIP 대신 클라이언트가 잰 리전별 핑으로 배정, 먼 리전으로 넓히는 규칙에 핑 상한 두기, 파티는 평균과 함께 가장 높은 파티원 핑도 보기, 배정한 리전과 그때의 핑을 로그로 남기기. 클라이언트: 리전별 핑을 UDP로 재서 매칭 요청에 함께 보내기, 접속한 리전과 핑을 화면에 표시, 리전을 직접 고르는 선택지.', infra: 'DNS로 리전을 고른다면 EDNS Client Subnet을 쓰는 설정인지 확인, GeoIP 데이터베이스 정기 갱신, 리전별 서버의 접속 로그에 GeoIP 국가·ASN을 붙여 먼 리전으로 가는 국가·통신사 찾기.', ext: '유저에게 VPN·게임 가속기를 끄고 다시 접속해 보도록 안내, 회사·해외 DNS를 쓰는 유저에게 통신사 DNS로 바꿔 보도록 안내, GeoIP 사업자에 틀린 위치 정정 요청.' },
+      more: 'DNS로 리전을 고르는 방식(지역·지연 기반 DNS)은 유저 대신 유저가 쓰는 DNS 리졸버의 주소를 보고 위치를 짐작합니다. 리졸버가 유저 주소 일부를 전달하는 EDNS Client Subnet을 지원하지 않으면, 회사 DNS나 멀리 있는 DNS를 쓰는 유저는 리졸버가 있는 곳 기준으로 배정됩니다. 매칭 시스템도 파티를 파티원 핑의 평균으로 판단하거나, 오래 기다리면 핑 기준을 넓혀 먼 리전에 배정하기도 합니다. AWS GameLift Servers도 파티 핑의 기본 기준이 평균이고, 핑 상한을 50ms에서 100ms, 200ms로 넓혀 가는 설정을 예로 듭니다.',
+      sim: 'distance',
+      sig: { k: 'outlier', g: '유저별 RTT(핑), 배정된 리전 분포' },
+      chk: {
+        look: '리전별 서버의 접속 로그(로드밸런서·flow 로그)의 클라이언트 IP에 GeoIP 국가·ASN을 붙여, 국가·통신사별로 어느 리전에 접속했는지와 그 연결의 RTT를 봄. 유저 한 명이면 그 유저가 가까운 리전 서버로 잰 핑과 비교',
+        yes: 'RTT가 높은 유저·국가가 가까운 리전 대신 먼 리전에 접속해 있고, 가까운 리전으로 잰 핑은 낮음',
+        no: '가까운 리전에 제대로 배정됐는데도 핑이 높으면 우회 라우팅이나 그 유저의 회선·와이파이 쪽',
+        by: 'ops',
+      },
+      ref: [
+        { t: 'RFC 7871: Client Subnet in DNS Queries', u: 'https://www.rfc-editor.org/rfc/rfc7871', p: 'IETF', n: '위치에 따라 다르게 답하는 DNS는 질의를 보낸 리졸버의 주소로 위치를 짐작하고, 유저와 멀리 떨어진 중앙 리졸버를 쓰면 부적절한 답이 나옴. EDNS Client Subnet(선택 기능)으로 유저 주소 일부를 전달' },
+        { t: 'How Amazon Route 53 uses EDNS0 to estimate the location of a user', u: 'https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-edns0.html', p: 'AWS', n: '리졸버가 edns-client-subnet을 지원하지 않으면 리졸버의 주소로 유저 위치를 짐작해 리졸버 위치 기준으로 답함(지역·지연 기반 라우팅 공통)' },
+        { t: 'Geolocation accuracy', u: 'https://support.maxmind.com/knowledge-base/articles/maxmind-geolocation-accuracy', p: 'MaxMind', n: '나라 단위 약 99.8%, 미국 도시 단위(50km 안) 약 66%, VPN을 쓰면 최종 사용자 대신 VPN 서버 위치, 모바일망 IP는 넓은 지역에서 쓰여 세밀한 위치를 알 수 없음, 데이터베이스는 계속 갱신해야 함, 정정 요청 가능' },
+        { t: 'FlexMatch rule types', u: 'https://docs.aws.amazon.com/gameliftservers/latest/flexmatchguide/match-rules-reference-ruletype.html', p: 'AWS', n: '지연 규칙(maxLatency)은 위치별 플레이어 지연을 보고, 파티는 기본으로 파티원 평균(partyAggregation avg)을 씀, 큐는 지연 규칙에 맞지 않는 리전에도 배치할 수 있음' },
+        { t: 'Create a player latency policy', u: 'https://docs.aws.amazon.com/gameliftservers/latest/developerguide/queues-design-latency.html', p: 'AWS', n: '모든 플레이어의 평균 지연이 가장 낮은 위치에 배치하지만 지연이 극단적인 플레이어도 배치됨, 핑 상한을 50ms에서 100ms, 200ms로 넓혀 가는 정책 예' },
+        { t: 'Amazon GameLift Servers UDP ping beacons', u: 'https://docs.aws.amazon.com/gameliftservers/latest/developerguide/reference-udp-ping-beacons.html', p: 'AWS', n: '게임 클라이언트가 호스팅 위치마다 있는 UDP 엔드포인트로 지연을 재서 배치·매칭에 씀, ICMP 핑보다 실제 게임 트래픽에 가까움' },
+        { t: 'Azure network round-trip latency statistics', u: 'https://learn.microsoft.com/en-us/azure/networking/azure-network-latency', p: 'Microsoft Azure', n: '서울(Korea Central) 기준 실측 왕복 중앙값: 도쿄 30ms, 미국 서부 124~136ms' },
+      ] },
+    { id: 'in-cert', t: 'TLS 인증서 만료·설정 오류', en: 'TLS certificate expiry / misconfiguration',
+      s: '로그인·API·패치 서버의 인증서가 만료되거나 중간 인증서가 빠지면, 그 순간부터 새로 연결하는 클라이언트의 TLS 연결이 실패합니다.',
+      c: ['인증서 유효 기간이 지났거나, 서버가 중간 인증서를 빼고 보내거나, 유저 기기의 날짜·시간이 틀림', '클라이언트가 인증서 검증에 실패해 TLS 연결을 끊음', '로그인·패치 단계에서 접속 불가·무한 로딩, 상점 같은 HTTPS 기능만 실패. 이미 접속해 있던 사람은 대개 멀쩡'],
+      sym: ['noconnect', 'dropped'], fx: ['stall'], who: ['server', 'feature', 'me'], when: ['login', 'action'],
+      num: 'Let’s Encrypt 인증서는 90일짜리라 60일마다 갱신을 권하고, AWS Certificate Manager는 DNS로 검증한 인증서를 만료 45일 전에 확인해 자동 갱신합니다. 자동 갱신이 조용히 실패하면 정확히 만료 시각에 새 접속이 한꺼번에 막힙니다.',
+      own: ['net', 'sys', 'cli'],
+      act: { game: '인증서 오류를 다른 접속 실패와 구분한 오류 코드로 남기고 안내, 날짜 오류면 기기의 날짜·시간을 자동으로 맞추라고 안내, 인증서 고정(pinning)을 쓰면 예비 키를 함께 넣고 인증서 교체 일정을 인프라팀과 맞추기.', infra: '네트워크: 로드밸런서·CDN에서 TLS를 끝내는 경우 관리형 인증서의 자동 갱신 상태와 남은 일수 경보(ACM은 DaysToExpiry), 검증용 DNS 레코드 유지. 서버 장비·OS: 서버에서 TLS를 끝내는 경우 갱신 자동화와 갱신 뒤 설정 다시 읽기, 중간 인증서까지 넣은 체인으로 설정, 로그인·API·패치 주소마다 남은 유효 기간을 밖에서 주기적으로 검사해 경보.' },
+      more: '중간 인증서가 빠진 설정은 PC 브라우저로 열면 멀쩡해 보일 수 있습니다. 브라우저는 다른 사이트에서 받아 둔 중간 인증서를 기억해 빈 곳을 채우지만, 안드로이드 앱처럼 그런 기억이 없는 클라이언트는 실패합니다. 유효 기간도 짧아지는 중입니다. Let’s Encrypt는 기본 유효 기간을 2027년 64일, 2028년 45일로 줄일 예정이라, 60일마다처럼 고정 간격으로 갱신하는 설정은 만료를 넘기게 됩니다. AWS Certificate Manager도 가져온(import) 인증서는 자동 갱신하지 않고, 검증용 DNS 레코드를 지우면 갱신에 실패합니다.',
+      sig: { k: 'drop', g: '로그인 성공 수, TLS 핸드셰이크 오류 수' },
+      chk: {
+        look: 'openssl s_client -connect 주소:443 -showcerts로 서버가 실제로 보내는 인증서 목록을 보고, 각 인증서의 만료일(notAfter)을 openssl x509 -noout -enddate로 확인. 로드밸런서에서 TLS를 끝낸다면 TLS 협상 오류 수(AWS ALB·NLB는 ClientTLSNegotiationErrorCount)와 로그인 성공 수',
+        yes: '만료일이 지났거나 서버가 보낸 목록에 중간 인증서가 빠져 있고, 오류가 늘기 시작한 시각이 만료 시각이나 인증서를 바꾼 시각과 겹침',
+        no: '인증서 목록과 만료일이 정상인데 일부 유저만 실패하면 그 유저 기기의 날짜·시간이나 오래된 OS의 루트 인증서 목록을 봄',
+        by: 'ops',
+      },
+      ref: [
+        { t: 'RFC 5280: Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile', u: 'https://www.rfc-editor.org/rfc/rfc5280', p: 'IETF', n: '인증서 유효 기간은 notBefore부터 notAfter까지, 경로 검증은 체인의 인증서마다 현재 시각이 유효 기간 안인지 확인(검증하는 쪽의 시계가 틀리면 실패)' },
+        { t: 'FAQ', u: 'https://letsencrypt.org/docs/faq/', p: 'Let\'s Encrypt', n: '기본 인증서 유효 기간 90일, 60일마다 갱신 권장' },
+        { t: 'Decreasing Certificate Lifetimes to 45 Days', u: 'https://letsencrypt.org/2025/12/02/from-90-to-45', p: 'Let\'s Encrypt', n: '기본 유효 기간을 2027년 2월 64일, 2028년 2월 45일로 단축, 60일 고정 간격 갱신으로는 부족해져 유효 기간의 약 3분의 2 시점 갱신 권장' },
+        { t: 'Renewal for domains validated by DNS', u: 'https://docs.aws.amazon.com/acm/latest/userguide/dns-renewal-validation.html', p: 'AWS', n: '만료 45일 전에 AWS 서비스에서 사용 중인지와 검증용 CNAME 레코드가 있는지 확인해 자동 갱신, 검증하지 못하면 만료 30·15·7·3·1일 전에 알림' },
+        { t: 'Managed certificate renewal in AWS Certificate Manager', u: 'https://docs.aws.amazon.com/acm/latest/userguide/managed-renewal.html', p: 'AWS', n: '가져온(import) 인증서와 이미 만료된 인증서는 자동 갱신 대상이 아님' },
+        { t: 'Supported CloudWatch metrics', u: 'https://docs.aws.amazon.com/acm/latest/userguide/cloudwatch-metrics.html', p: 'AWS', n: 'DaysToExpiry: 인증서 만료까지 남은 일수, 만료 전까지 하루 두 번 게시' },
+        { t: 'Security with network protocols', u: 'https://developer.android.com/privacy-and-security/security-ssl', p: 'Android (Google)', n: '서버가 중간 인증서를 빼고 보내면 안드로이드 앱은 SSLHandshakeException으로 실패하지만 PC 브라우저는 받아 둔 중간 인증서로 채워 오류가 안 날 수 있음, openssl s_client로 서버가 보내는 체인 확인' },
+        { t: 'Network security configuration', u: 'https://developer.android.com/privacy-and-security/security-config', p: 'Android (Google)', n: '인증서 고정을 쓰면 키 교체·CA 변경에 대비해 예비 키를 함께 넣어야 하고, 그러지 않으면 앱을 업데이트할 때까지 연결이 끊김' },
+        { t: 'openssl-s_client', u: 'https://docs.openssl.org/3.0/man1/openssl-s_client/', p: 'OpenSSL', n: '-showcerts: 서버가 보낸 인증서 목록을 보낸 순서 그대로 표시(검증된 체인이 아님)' },
+        { t: 'openssl-x509', u: 'https://docs.openssl.org/3.0/man1/openssl-x509/', p: 'OpenSSL', n: '-enddate: 인증서 만료일(notAfter) 출력, -checkend: 지정한 초 안에 만료되는지 검사' },
+        { t: 'CloudWatch metrics for your Application Load Balancer', u: 'https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-cloudwatch-metrics.html', p: 'AWS', n: 'ClientTLSNegotiationErrorCount: 클라이언트가 서버 인증서 검증에 실패해 연결을 끊은 경우 등 TLS 세션을 맺지 못한 연결 수' },
+        { t: 'CloudWatch metrics for your Network Load Balancer', u: 'https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-cloudwatch-metrics.html', p: 'AWS', n: 'ClientTLSNegotiationErrorCount: 클라이언트와 TLS 리스너 사이의 협상에 실패한 TLS 핸드셰이크 수' },
       ] },
   ]);
 })();
@@ -6151,6 +6795,165 @@ Object.assign(DATA.secRefs, {
     { t: 'systemd.service(5) — Linux manual page', u: 'https://man7.org/linux/man-pages/man5/systemd.service.5.html', p: 'systemd', n: '구성도 실험의 워치독: 살아 있다는 신호가 끊긴 서비스를 종료하고 자동 재시작' },
   ],
 });
+
+</script>
+<script>
+"use strict";
+/* ==== js/cases.js ==== */
+/* cases.js: 실제 장애 사례와 상황별 절차. 사례는 원개발사·운영사가 직접 공개한 회고·기술 글만 쓴다.
+   what·why의 사실과 수치는 원문(u)에 적힌 것만 쓰고, lesson은 이 백서의 관점(확인 신호·담당)으로 쓴다. */
+DATA.cases.push(
+  /* 게임사 사례 */
+  { id: 'eve-hedgp-2014', t: 'EVE Online HED-GP 대규모 함대전의 서버 과부하', org: 'CCP Games', year: 2014,
+    u: 'https://www.eveonline.com/news/view/what-a-hed-ache', p: 'CCP Games',
+    what: '2014년 1월 회고가 다룬 HED-GP 성계의 대규모 함대전에서 서버가 크게 과부하됐다. Time Dilation(과부하 때 게임 시간을 늦추는 기능)이 하한인 10%에 닿아 전장 전체가 슬로우모션이 된 뒤에도 부하가 계속 쌓였고, 모듈을 켜고 끄는 처리가 밀린 정도(Dogma Lateness)가 최대 게임 시간 193초, 실제 시간으로 약 32분에 이르렀다. 규모가 거의 같았던 2013년 7월 6VDT 전투는 최대 42초(실제 약 7분)였다.',
+    why: 'CCP는 성능 분석 도구가 그 자체로 부하를 더해 이런 상황에서는 돌리지 않으므로 확실하지 않다고 전제하고, 두 가지를 유력한 원인으로 꼽았다. 하나는 전투가 길어지며 처리하지 못한 부하가 계속 쌓인 것이다. 다른 하나는 드론 사용 증가로, 전투 동안 배치된 드론이 6VDT의 21,123개에서 38,852개로 84% 늘었다. 한 명의 행동을 보는 모두에게 알려야 하는 전송은 인원의 제곱(O(n²))으로 늘어나는데, 드론은 공격 한 번에 메시지가 더 많다. 드론이 공격 대상을 고르는 코드도 전장의 공격 가능한 대상을 전부 살펴서 n²에 가깝게 늘었다.',
+    lesson: '인원이 몰린 한 지역의 처리량이 한계를 넘으면 그 지역 전체가 슬로우모션이 되고, 전투가 길수록 밀린 처리가 쌓여 입력 지연이 커진다. 확인 신호는 그 지역을 맡은 서버(노드)의 틱 시간·밀린 작업량과 인원·개체 수이고, 다른 지역은 멀쩡한 것이 특징이다. 주 담당은 게임개발팀(서버)이며, 한 행동을 알릴 대상의 범위와 AI의 대상 탐색 비용이 고칠 곳이다. 게임 시간을 늦추는 설계는 과부하를 없애지는 못하지만, 모두가 같은 속도로 느려지게 해서 일부 행동만 한없이 밀리는 일을 막는다.',
+    causes: ['sp-broadcast', 'sp-aoi', 'sp-tick-overrun'],
+    ref: [
+      { t: 'Introducing Time Dilation (TiDi)', u: 'https://www.eveonline.com/news/view/introducing-time-dilation-tidi', p: 'CCP Games', n: '과부하 때 게임 시계를 늦춰 대기 작업을 적게 유지하고, 부하가 풀리면 원래 속도로 되돌리는 설계' },
+    ] },
+  { id: 'riot-direct-2015', t: '멀리 돌아가던 League of Legends 트래픽과 Riot Direct', org: 'Riot Games', year: 2015,
+    u: 'https://www.riotgames.com/en/news/fixing-internet-real-time-applications-part-i', p: 'Riot Games',
+    what: 'Riot Games가 북미 League of Legends 유저의 트래픽 경로를 분석한 기술 글이다. 실제 사례에서 샌프란시스코에서 포틀랜드로 곧장 가야 할 트래픽이 로스앤젤레스, 덴버, 시애틀을 거쳐 가서, 직선 경로라면 14ms면 될 것이 70ms 걸렸다. Riot은 라우터가 넘쳐 패킷이 버려지면 다른 챔피언이 화면에서 튀어 다니고 투사체가 순간이동하는 것처럼 보인다고 설명했다.',
+    why: 'Riot은 세 가지를 꼽았다. 백본 사업자와 통신사는 지연이 가장 짧은 경로보다 비용이 가장 싼 경로로 트래픽을 보낸다. BGP로 정해지는 경로는 멀리 돌아가 거치는 라우터 수가 늘어난다. 게임 패킷은 55바이트 안팎으로 작아서 같은 데이터양이면 1,500바이트 패킷보다 개수가 27배이고, 개수만큼 라우터 입력 버퍼를 빨리 채운다. Riot의 설명으로는 과부하된 라우터가 UDP 패킷부터 버리는 경우도 많다. 해결책으로 Riot은 미국 주요 인터넷 거점 10곳에 장비를 두고 통신사와 직접 연결(피어링)하는 자체 망 Riot Direct를 만들었다. 2부에 따르면 핑 80ms 미만으로 플레이하는 유저 비율이 9개월 남짓 동안 31%에서 50%로, 게임 서버를 시카고로 옮긴 뒤 하룻밤 사이 80%로 올랐다.',
+    lesson: '같은 나라 안에서도 특정 통신사 사용자만 핑이 유독 높으면 경로를 의심한다. 확인 신호는 통신사(ASN)별 RTT 분포와 traceroute에 찍히는 경유 도시다. 주 담당은 인프라팀(네트워크)이고, 통신사와의 직접 피어링, IX 연결, 서버 위치 선택으로 고친다. 통신사 쪽 경로 정책은 외부(통신사)와 협의할 일이다. 서버를 사용자 분포의 중심 가까이 옮기는 것만으로도 효과가 크다는 점도 이 사례가 보여 준다.',
+    causes: ['isp-routing', 'isp-distance', 'rt-queue-drop'],
+    ref: [
+      { t: 'Fixing the Internet for Real Time Applications: Part II', u: 'https://www.riotgames.com/en/news/fixing-internet-real-time-applications-part-ii', p: 'Riot Games', n: '미국 인터넷 거점 10곳에서 통신사와 피어링, 핑 80ms 미만 유저 비율 31% → 50%(9개월 남짓), 시카고 이전 뒤 50% → 80%' },
+    ] },
+  { id: 'riot-edge-2020', t: 'League of Legends 유럽·브라질 서버의 엣지 호스트 과부하', org: 'Riot Games', year: 2020,
+    u: 'https://www.leagueoflegends.com/en-gb/news/riot-games/incident-report-recent-outages-in-europe-brazil/', p: 'Riot Games',
+    what: '2020년 2월 말 League of Legends의 EUW·EUNE·BR 서버에서 여러 차례 장애가 나 새로 시작되는 게임 수가 크게 줄었다. 매칭·게임 서버 같은 뒷단 서비스는 모두 상태가 정상이었지만 들어오는 트래픽이 거의 없었다. Riot은 안정성을 확인하려고 토너먼트 모드(Clash) 일정을 한 주 미뤘다. 회고에 각 장애의 시간은 적혀 있지 않다.',
+    why: '세 가지가 겹쳤다. 한 서비스로 가는 요청이 잘못 만들어져 특정 경우에 계속 실패하고 계속 재시도되면서 요청이 폭증했다. 컨테이너 시스템과 OS 버전의 알려진 궁합 문제로 OS 내부 메모리가 새고 있었는데, 업그레이드는 전체 컨테이너 호스트의 약 60%만 끝났고 유럽·남미 클러스터는 진행 중이었다. 인터넷 트래픽을 받아 걸러 뒷단으로 보내는 엣지 컨테이너는 같은 샤드(서버군) 안에서는 떨어지게 배치됐지만 다른 샤드끼리는 막지 못해, 장애 때마다 적어도 세 샤드의 엣지 컨테이너가 호스트 한 대에 몰려 있었다. 재시도 폭증이 그 호스트에 겹치고, 메모리 누수가 그 호스트를 멈추게 했다.',
+    lesson: '뒷단 서비스가 모두 “정상이지만 트래픽이 안 들어온다”고 답하면 그 앞단(엣지·게이트웨이·로드밸런서)을 본다. 확인 신호는 호스트별 인바운드 연결 수의 쏠림과 특정 요청의 실패·재시도 비율이다. 주 담당은 게임개발팀(서버: 잘못된 요청과 재시도 방식)이고, 컨테이너 배치 규칙·OS 업그레이드·쏠림 경보는 인프라팀(시스템)이 맡는다. Riot은 요청 코드를 고치고 재시도가 급증하지 않게 바꿨으며, 샤드 사이 분산을 구현하기 전까지 쏠림 경보를 두었다.',
+    causes: ['in-gateway', 'dc-lb-imbalance', 'in-cascade'] },
+  { id: 'riot-euw-2021', t: 'League of Legends EUW 5시간 장애: 부가 DB 하나가 서버 전체를 멈춤', org: 'Riot Games', year: 2021,
+    u: 'https://www.riotgames.com/en/news/keeping-legacy-software-alive-case-study', p: 'Riot Games',
+    what: '2021년 1월 22일 League of Legends EUW 서버가 5시간 조금 넘게 제대로 동작하지 않았다. 로그인한 유저 수와 게임 중인 유저 수 지표가 한꺼번에 끊겼고, 두 차례 재시작 사이에는 로그인은 늘어도 게임은 거의 시작되지 않았다.',
+    why: '중요하지 않은 기능을 맡던 DB의 주 서버에 하드웨어 고장이 났고, 그 DB에는 예비 서버로의 자동 전환이 설정되어 있지 않았다. DB마다 커넥션 풀은 나뉘어 있었지만 모든 풀이 같은 스레드 풀을 썼고, 고장 난 DB에 보낸 작업이 끝나지 않고 스레드를 점유해 시스템 전체가 쓸 스레드가 바닥났다. 경보가 쏟아지는 가운데 직전의 DDoS 공격과 다른 지역의 하드웨어 작업을 먼저 의심하느라, 고장 난 DB의 경보는 약 1시간 뒤에야 눈에 띄었다. 모든 시스템이 한 JVM에서 도는 구조라, 재시작 뒤 재접속 부하 속에서 GC가 몇 초씩 프로세스를 멈추자 지표 전송까지 끊겼다. 로그인 대기열도 설정한 한도를 지키지 않아 유입이 들쭉날쭉했다.',
+    lesson: '중요하지 않다고 여긴 부가 DB 하나도 스레드 풀 같은 공유 자원을 통해 전체를 멈출 수 있다. 확인 신호는 DB별 대기 중인 요청 수와 스레드 풀 사용률, 그리고 로그인 수에 비해 게임 시작 수가 너무 적은 비율이다. 담당은 게임개발팀(서버: 풀 격리·타임아웃)과 인프라팀(DB: 자동 전환)이다. 경보가 쏟아질 때는 최근에 겪은 문제(공격 등)부터 의심하기 쉬우니, 판정 순서(범위 → 시점 → 계층)대로 하나씩 배제한다. 재시작 뒤에는 로그인 대기열이 설정대로 유입을 제한하는지도 함께 본다.',
+    causes: ['sp-threadpool', 'db-failover', 'in-cascade', 'mem-gc'] },
+  { id: 'roblox-2021', t: 'Roblox 73시간 장애: 서비스 디스커버리(Consul) 클러스터의 경합', org: 'Roblox', year: 2021,
+    u: 'https://about.roblox.com/newsroom/2022/01/roblox-return-to-service-10-28-10-31-2021', p: 'Roblox',
+    what: '2021년 10월 28일 오후(태평양 시간) 동시 접속자가 평소의 절반으로 떨어진 뒤 서비스 전체가 멈췄고, 10월 31일 16시 45분에야 모든 유저가 다시 들어올 수 있었다. 모두 73시간이다. Roblox는 매일 5천만 명이 이용한다고 밝혔다.',
+    why: 'Roblox는 서비스끼리 서로를 찾는 서비스 디스커버리, 헬스체크, KV 저장소에 HashiCorp Consul을 쓰는데, Consul 클러스터 하나가 여러 워크로드를 함께 맡고 있었다. 원인은 두 가지였다. 몇 달에 걸쳐 넓혀 온 Consul의 새 streaming 기능을 장애 전날 트래픽 라우팅 서비스에도 켜고 같은 때 그 노드 수를 50% 늘렸는데, 읽기와 쓰기가 모두 매우 많은 부하에서 이 기능이 공유 자원 하나에 경합을 일으켰다. 듀얼 소켓 NUMA 서버에서는 경합이 더 심했다. 또 Consul이 로그 저장에 쓰는 BoltDB의 빈 페이지 목록 관리가 병적으로 느려져, 16kB 이하를 추가할 때마다 7.8MB를 디스크에 썼다. 평소 300ms 미만이던 KV 쓰기 지연 중앙값이 2초가 됐고, 리더 서버에서 TCP 버퍼가 가득 차는 제로 윈도우도 관찰됐다. 텔레메트리가 Consul에 기대고 있어 원인을 찾는 데 필요한 지표도 함께 사라졌다.',
+    lesson: '여러 서비스가 함께 기대는 기반 시스템(서비스 디스커버리·설정 저장소·인증)이 느려지면 모든 기능이 한꺼번에 멈춘다. 확인 신호는 그 시스템의 쓰기 지연·리더 교체·CPU와, 장애 직전의 설정 변경이다. 담당은 게임개발팀(서버)과 인프라팀(시스템) 양쪽이다. 모니터링은 감시 대상 시스템에 기대지 않게 분리해야 장애 때도 지표를 볼 수 있다. 복구할 때는 캐시가 비어 있어 한꺼번에 받으면 다시 무너질 수 있으므로, Roblox는 DNS로 입장할 유저 비율을 조절하며 약 10%씩 늘렸다.',
+    causes: ['in-cascade', 'sp-lock', 'rt-zero-window', 'db-cold-cache'] },
+  { id: 'ffxiv-2021', t: 'FINAL FANTASY XIV 확장팩 출시 혼잡과 로그인 대기열 오류', org: 'Square Enix', year: 2021,
+    u: 'https://na.finalfantasyxiv.com/lodestone/news/detail/6a94b30182b6d963994fdc0b789264ac9f24986f', p: 'Square Enix',
+    what: '2021년 12월 확장팩 Endwalker의 얼리 액세스부터 각 월드가 극심하게 붐볐다. 로그인 대기열이 길어졌고, 캐릭터 선택 뒤나 대기 중에 Error 2002와 함께 클라이언트가 종료되는 일이 잦았다. 일부 월드·존의 다운(Error 3001)과 대기열 타임아웃(Error 4004)도 있었다. 12월 11일 공지 시점에도 얼리 액세스 8일째 혼잡이 이어지고 있었다.',
+    why: 'Error 2002는 두 경우에 난다. 하나는 논리 데이터센터마다 대기 인원이 17,000명을 넘을 때로, 대기열이 너무 길어져 로그인 서버가 다운되는 것을 막으려는 상한이다. 12월 7일 개발용 예비 장비를 로비 서버에 투입해 상한을 올리자 이 오류는 줄었지만 대기열은 오히려 길어졌다. 다른 하나는 대기 중 유저의 회선이 불안정할 때다. 대기 시간이 길어지면서 인터넷 경로의 패킷 손실이나 와이파이 불안정으로 연결이 잠깐 끊기는 일이 늘었고, 로비 서버는 수십 초에서 1분까지만 재연결을 기다린 뒤 대기열 맨 뒤로 돌려보낸다. Square Enix는 제보 대부분이 이 경우라고 밝혔다. 반도체 부족으로 월드를 바로 늘릴 수도 없었다.',
+    lesson: '대기열이 길어질수록 대기 중인 유저의 짧은 회선 끊김이 접속 오류로 바뀐다. 같은 혼잡에서도 와이파이나 불안정한 회선을 쓰는 사람에게 오류가 몰리는 “일부에게만” 생기는 문제가 된다. 확인 신호는 대기열 길이·대기 시간과, 끊김 사유 가운데 대기 중 연결 끊김의 비율이다. 주 담당은 게임개발팀(서버: 대기열 상한과 재연결 유예 시간)이고, 로비·월드 서버 증설은 인프라팀이 함께 한다. 재연결 유예 시간을 넉넉히 두면 유저 회선의 짧은 끊김이 대기 순번을 잃는 일로 번지는 것을 줄일 수 있다.',
+    causes: ['db-login-storm', 'hn-wifi'] },
+
+  /* 많은 게임이 기대는 인프라의 장애 */
+  { id: 'cloudflare-2020', t: 'Cloudflare 백본 설정 오류로 일부 도시의 트래픽 손실', org: 'Cloudflare', year: 2020,
+    u: 'https://blog.cloudflare.com/cloudflare-outage-on-july-17-2020/', p: 'Cloudflare',
+    what: '많은 게임이 웹·API·DDoS 방어를 CDN 사업자에 맡기므로, 게임도 함께 영향을 받는 유형의 인프라 장애다. 2020년 7월 17일 21:12부터 21:39(UTC)까지 27분 동안 Cloudflare 네트워크 전체 트래픽이 약 50% 줄었다. 영향은 백본에 연결된 미국·유럽·러시아·브라질의 일부 도시 거점에 한정됐고, 다른 거점은 정상이었다.',
+    why: '뉴어크–시카고 백본 구간 장애로 애틀랜타–워싱턴 구간이 혼잡해지자, 엔지니어가 애틀랜타의 백본 트래픽을 덜어 내려고 라우터 설정을 바꿨다. 정책 항목(term) 전체를 꺼야 했는데 그 안의 조건(prefix-list)만 꺼져, 애틀랜타 라우터가 모든 BGP 경로를 더 높은 우선순위(local-preference 200)로 백본 전체에 퍼뜨렸다. 백본에 연결된 거점의 트래픽이 모두 애틀랜타로 몰려 애틀랜타가 과부하되고, 영향받은 거점은 처리할 트래픽이 거의 없어졌다. 애틀랜타 라우터를 백본에서 빼자 복구됐다. Cloudflare는 공격이나 침해와 관계가 없다고 밝혔다.',
+    lesson: '특정 도시·지역 유저만 한꺼번에 접속 끊김이나 접속 불가·무한 로딩을 겪고 나머지는 멀쩡하면, 직전의 경로 설정 변경을 먼저 의심한다. 그래프에서는 한 거점만 CPU·트래픽이 치솟고, 영향받은 거점은 오히려 0 가까이 떨어진다. 주 담당은 인프라팀(네트워크)이고, 사업자 쪽 장애라면 외부다. Cloudflare는 백본 BGP 세션에 받을 수 있는 경로 수 상한(maximum-prefix)을 두고, 한 거점이 다른 거점의 트래픽을 끌어가지 못하게 우선순위를 조정했다.',
+    causes: ['isp-bgp', 'rt-path'] },
+  { id: 'fastly-2021', t: 'Fastly CDN 전 세계 오류', org: 'Fastly', year: 2021,
+    u: 'https://www.fastly.com/blog/summary-of-june-8-outage', p: 'Fastly',
+    what: '많은 게임이 패치 파일·런처·웹 페이지를 CDN으로 내려보내므로, 게임도 함께 영향을 받는 유형의 인프라 장애다. 2021년 6월 8일 09:47(UTC)부터 Fastly 네트워크의 85%가 오류를 돌려주었다. 49분 안에 네트워크의 95%가 정상으로 돌아왔고, 12:35에 장애가 수습됐다.',
+    why: '5월 12일 시작한 소프트웨어 배포에, 특정 고객 설정이 특정 조건을 만날 때 발동하는 버그가 들어 있었다. 6월 8일 한 고객이 정상적인 설정 변경을 올리면서 그 조건이 맞아떨어졌다. Fastly는 1분 만에 이상을 감지했고, 원인이 된 고객 설정을 찾아 끄자 복구가 시작됐다. 버그 수정 배포는 같은 날 17:25에 시작했다.',
+    lesson: '배포한 지 몇 주 지난 코드도 드문 조건을 만나면 한순간에 전 세계 장애가 된다. 게임 쪽 확인 신호는 패치·런처·웹 요청의 HTTP 오류율이 모든 지역에서 동시에 오르는 것과 CDN 사업자의 상태 페이지다. 이미 접속한 게임 연결은 CDN을 거치지 않으면 멀쩡하고, 새 접속·패치 다운로드·웹 로그인만 막히는 것이 특징이다. 주 담당은 외부(CDN 사업자)이고, 게임개발팀·인프라팀은 CDN을 둘 이상 쓰거나 원본 서버로 바로 받는 우회 경로를 준비해 둔다.',
+    causes: ['in-external'] },
+  { id: 'meta-2021', t: 'Facebook 백본 명령 하나로 DNS까지 사라진 장애', org: 'Meta', year: 2021,
+    u: 'https://engineering.fb.com/2021/10/05/networking-traffic/outage-details/', p: 'Meta',
+    what: '게임사의 자체 네트워크와 DNS에도 그대로 적용되는 인프라 장애다. 2021년 10월 4일 Facebook(현 Meta)의 서비스가 전 세계에서 접속되지 않았다. 데이터센터를 잇는 백본이 모두 끊기고, 인터넷 쪽에서 Facebook의 DNS 서버를 찾을 수 없게 됐다. 회고에 장애 시간은 적혀 있지 않다.',
+    why: '백본 용량을 점검하려고 내린 정기 유지보수 명령이 의도와 달리 백본의 모든 연결을 끊었고, 이런 명령을 막아야 할 감사 도구는 버그 때문에 막지 못했다. 소규모 거점의 DNS 서버는 데이터센터와 통신할 수 없으면 스스로 비정상으로 판단해 BGP 광고를 거두도록 되어 있어서, DNS 서버가 살아 있는데도 인터넷에서 닿을 수 없게 됐다. 평소의 원격 접속과 대역 외(out-of-band) 접속이 모두 끊기고 내부 도구도 DNS를 잃어, 엔지니어를 데이터센터로 직접 보내야 했고 보안 절차 때문에 시간이 더 걸렸다. 복구 때는 데이터센터 전력 사용이 수십 MW 단위로 급변하는 위험을 고려해 부하를 단계적으로 올렸다.',
+    lesson: '모든 지역·모든 통신사에서 동시에 접속 불가·무한 로딩이 생기면 게임 서버보다 DNS와 BGP 경로를 먼저 본다. 외부 DNS 조회와 공개된 BGP 경로 정보로 회사 밖에서도 확인할 수 있다. 주 담당은 인프라팀(네트워크)이다. 장애 때 쓸 대역 외 접속 경로와 내부 도구가 같은 DNS·네트워크에 기대지 않는지 미리 점검하고, 복구할 때는 재접속이 한꺼번에 몰리지 않게 부하를 단계적으로 올린다.',
+    causes: ['isp-bgp', 'isp-dns'],
+    ref: [
+      { t: 'Update about the October 4th outage', u: 'https://engineering.fb.com/2021/10/04/networking-traffic/outage/', p: 'Meta', n: '데이터센터 사이 트래픽을 조율하는 백본 라우터의 설정 변경이 원인, 악의적 활동은 없었음' },
+    ] },
+  { id: 'aws-2021', t: 'AWS us-east-1 내부 네트워크 혼잡', org: 'AWS', year: 2021,
+    u: 'https://aws.amazon.com/message/12721/', p: 'AWS',
+    what: '많은 게임이 서버·로그인·데이터를 퍼블릭 클라우드에 두므로, 게임도 함께 영향을 받는 유형의 인프라 장애다. 2021년 12월 7일 오전 7시 30분(태평양 표준시)부터 북버지니아 리전(us-east-1)에서 EC2 API 오류와 지연이 늘어 새 인스턴스를 띄울 수 없었고, 콘솔 로그인 실패, Route 53 설정 변경 불가, CloudWatch 지표 지연과 일부 유실이 이어졌다. 네트워크 장비는 오후 2시 22분에 완전히 회복됐다. 이미 돌던 EC2 인스턴스와 기존 DNS 응답은 영향을 받지 않았다.',
+    why: '메인 네트워크에 있는 한 서비스의 용량을 늘리는 자동 작업이 내부 네트워크의 수많은 클라이언트에서 예상하지 못한 동작을 일으켜 연결 시도가 폭증했다. 내부 네트워크와 메인 네트워크를 잇는 장비가 넘쳐 통신이 지연됐고, 지연이 다시 연결 시도와 재시도를 늘려 혼잡이 이어졌다. 클라이언트에는 이런 혼잡 때 요청 간격을 늘리는 백오프 동작이 있었지만, 잠재된 결함 때문에 제대로 동작하지 않았다. 내부 모니터링도 같은 네트워크에 기대고 있어, 운영팀은 지표를 거의 보지 못한 채 대응했다.',
+    lesson: '재시도가 간격을 늘리지 못하면 짧은 혼잡이 몇 시간짜리 장애가 된다. 게임 쪽에서 보면 이미 돌던 게임 서버는 멀쩡해도, 새 서버 증설(오토스케일링), 클라우드 API를 쓰는 로그인·매칭·결제, 모니터링이 함께 막힐 수 있다. 확인 신호는 클라우드 사업자의 상태 페이지와 클라우드 API 오류율, 인스턴스 시작 실패다. 주 담당은 외부(클라우드 사업자)이고, 게임개발팀은 모든 재시도에 무작위 간격의 지수 백오프와 횟수 제한을 두고, 인프라팀은 증설이 막혀도 버틸 여유 용량과 다른 리전 대안을 준비한다.',
+    causes: ['in-cascade', 'in-autoscale', 'in-external'] },
+  { id: 'cloudflare-dns-2025', t: 'Cloudflare 공용 DNS 1.1.1.1 장애', org: 'Cloudflare', year: 2025,
+    u: 'https://blog.cloudflare.com/cloudflare-1-1-1-1-incident-on-july-14-2025/', p: 'Cloudflare',
+    what: '유저가 기기나 공유기에 직접 설정해 쓰는 공용 DNS 리졸버의 장애로, 그 설정을 쓰는 유저에게만 모든 게임과 서비스가 함께 막히는 유형이다. 2025년 7월 14일 21:52부터 22:54(UTC)까지 62분 동안 1.1.1.1 리졸버가 전 세계에서 응답하지 않았다. Cloudflare는 많은 사용자에게 이것이 사실상 모든 인터넷 서비스를 쓸 수 없다는 뜻이었다고 밝혔다. UDP·TCP·DNS over TLS 조회가 영향을 받았고, 도메인 이름으로 접속하는 DNS over HTTPS는 비교적 안정적이었다.',
+    why: '6월 6일 앞으로 쓸 다른 서비스의 배치 구성을 준비하면서, 1.1.1.1 리졸버의 IP 대역이 실수로 그 구성에 함께 묶였다. 7월 14일 그 서비스 구성을 바꾸자 리졸버 대역을 광고하는 거점이 모든 곳에서 오프라인 거점 한 곳으로 줄었고, 전 세계에서 경로가 철회됐다. Cloudflare는 공격이나 BGP 하이재킹과는 관계가 없는 내부 설정 오류라고 밝혔다.',
+    lesson: '게임 서버와 다른 유저는 멀쩡한데 일부 유저만 로그인·패치 서버에 접속 불가·무한 로딩이면 그 유저들이 쓰는 DNS를 의심한다. 이미 연결된 세션은 유지되고 새 접속만 실패하는 것이 특징이다. 유저에게 DNS 설정을 바꾸거나 서버 주소를 직접 조회해 보게 하면 바로 가려진다. 주 담당은 외부(DNS 운영자·통신사)이고, 게임개발팀(클라이언트)이 이름 풀이 실패를 다른 오류와 구분해 안내하면 고객 지원에서 바로 판정할 수 있다.',
+    causes: ['isp-dns'] },
+  { id: 'aws-2025', t: 'AWS us-east-1 DynamoDB DNS 장애와 긴 복구', org: 'AWS', year: 2025,
+    u: 'https://aws.amazon.com/message/101925/', p: 'AWS',
+    what: '많은 게임이 서버·로그인·데이터를 퍼블릭 클라우드에 두므로, 게임도 함께 영향을 받는 유형의 인프라 장애다. 2025년 10월 19일 오후 11시 48분부터 20일 오후 2시 20분(태평양 서머타임)까지 북버지니아 리전에서 세 단계로 영향이 이어졌다. 20일 오전 2시 40분까지 DynamoDB API 오류가 늘었고, 오전 2시 25분부터 10시 36분까지 새 EC2 인스턴스 시작이 실패했으며(일부 새 인스턴스의 연결 문제는 오후 1시 50분에 해소), 오전 5시 30분부터 오후 2시 9분까지 일부 Network Load Balancer(NLB)의 연결 오류가 늘었다.',
+    why: 'DynamoDB의 DNS를 관리하는 자동화에 잠재된 경쟁 상태(race condition)가 있었다. 서로 다른 가용 영역에서 도는 두 실행기가 시점이 겹치면서 오래된 계획이 적용된 직후 삭제되어, 리전 엔드포인트(dynamodb.us-east-1.amazonaws.com)의 DNS 레코드가 빈 값이 됐다. EC2의 물리 서버 관리 시스템은 DynamoDB에 기대고 있어 그동안 서버와의 관리 계약(lease)이 만료됐고, DynamoDB가 돌아온 뒤 밀린 재설정 작업이 처리 속도보다 빨리 쌓여 “혼잡 붕괴” 상태에 빠졌다. 새로 뜬 인스턴스의 네트워크 설정이 늦게 퍼지면서 NLB 헬스체크가 성공과 실패를 오갔고, 정상 노드까지 DNS에서 빠졌다가 돌아오기를 반복했다.',
+    lesson: '한 곳의 DNS 레코드 오류가 그 서비스에 기대는 다른 서비스로 번지고, 원인이 풀린 뒤에도 밀린 작업과 헬스체크 흔들림 때문에 복구가 몇 시간 더 걸린다. 게임 쪽에서 보면 이미 돌던 서버는 버텨도 새 서버를 못 띄워 오토스케일링이 멈추고, 헬스체크가 흔들리면 로드밸런서가 멀쩡한 서버를 빼는 일이 생긴다. 확인 신호는 클라우드 상태 페이지, 관리형 서비스 API 오류율, 인스턴스 시작 실패, 로드밸런서의 정상 대상 수다. 주 담당은 외부(클라우드 사업자)이고, 인프라팀은 헬스체크 실패로 한꺼번에 빠지는 서버 수를 제한하고 다른 리전 대안을 준비한다.',
+    causes: ['in-external', 'in-cascade', 'in-autoscale', 'dc-lb-imbalance'] },
+);
+
+DATA.playbooks.push(
+  { id: 'after-patch', t: '패치 이후 렉',
+    when: '특정 패치·배포 뒤부터 렉 제보가 늘었을 때. “이번 업데이트부터 이상하다”는 제보가 모이거나, 그래프가 어느 시각부터 계단처럼 올라가 그대로 머무는 경우에 쓴다.',
+    steps: [
+      { t: '시작 시각을 확정하고 그 앞뒤의 변경을 모두 모은다',
+        d: '제보가 처음 몰린 시각과 그래프가 계단처럼 오른 시각을 찾고, 그 앞뒤로 나간 변경을 빠짐없이 적는다. 클라이언트 패치, 서버 배포, 설정 변경, DB 스키마 변경(DDL)과 재시작, 네트워크·방화벽 작업, 인프라 교체(인스턴스 종류·커널·드라이버)를 함께 본다. 배포 때마다 모니터링 도구의 주석(annotation) 기능으로 모든 그래프에 세로선을 남겨 두면 이 단계가 몇 분이면 끝난다. 게임 패치와 인프라 작업이 같은 점검 시간에 나갔으면 둘 다 후보로 남긴다. 먼저 부를 곳: 변경을 낸 게임개발팀과 인프라팀 양쪽.',
+        causes: ['in-deploy', 'db-ddl-lock', 'db-plan-flip', 'db-cold-cache'] },
+      { t: '범위를 나눈다: 빌드·기기·서버·지역',
+        d: '이상이 어느 차원에 몰렸는지 본다. 새 빌드 사용자만 나쁘면 클라이언트, 특정 OS·그래픽카드·기기만 나쁘면 클라이언트 성능이나 드라이버, 특정 서버·채널·존만 나쁘면 서버, 모두가 동시에 나쁘면 공용 자원(DB·로드밸런서·게이트웨이)이나 방금 나간 서버 배포를 먼저 의심한다. 클라이언트 텔레메트리에 빌드 번호가 있으면 옛 빌드와 새 빌드의 핑·FPS·프레임 스파이크·끊김 수를 나란히 놓는다. 핑은 그대로인데 FPS만 나빠졌으면 네트워크보다 클라이언트 성능 쪽이다. 먼저 부를 곳: 빌드·기기에 몰리면 게임개발팀(클라이언트), 서버·채널에 몰리면 게임개발팀(서버)과 인프라팀(시스템).',
+        causes: ['cg-hitch', 'cg-sync-load', 'co-vram', 'cg-crash'] },
+      { t: '새 버전과 옛 버전을 같은 시간대에 비교한다',
+        d: '배포 전후만 비교하면 요일·시간대·이벤트에 따른 변화가 섞여 판단이 흐려진다. 가능하면 새 버전을 일부 서버(카나리)에 먼저 올리고, 같은 시간대의 옛 버전 서버(대조군)와 틱 시간 p50·p99, 틱 초과 수, CPU, 메모리, 오류율을 나란히 비교한다. 이미 전체에 배포했으면 지난주 같은 요일·같은 시간대와 비교한다. 서버 전체 평균만 보면 일부 서버·존의 문제가 묻히므로 서버·존별로 나눠 본다. 먼저 부를 곳: 게임개발팀(서버).',
+        causes: ['sp-tick-overrun', 'mem-alloc', 'mem-leak', 'sp-broadcast'] },
+      { t: '트래픽 지문을 전후로 비교한다',
+        d: '서버 코드를 몰라도 네트워크 쪽에서 보이는 값으로 패치가 트래픽 모양을 바꿨는지 확인한다. 유저당 초당 패킷 수(pps)와 바이트, 평균·최대 패킷 크기, 연결 수, 틱마다 한꺼번에 나가는 송신 버스트 크기를 전후로 비교한다. 패킷이 경로 MTU(보통 1,500바이트)를 넘기 시작했으면 IP 단편화로 손실이 몇 배가 되고, 중간에 MTU가 작은 구간(터널·VPN)을 지나는 유저는 큰 패킷만 사라진다. pps가 늘었으면 클라우드 인스턴스의 PPS 한도나 방화벽·DDoS 방어 장비의 처리 한도에 닿지 않았는지 본다. 먼저 부를 곳: 지문이 바뀌었으면 증거를 붙여 게임개발팀(서버), 지문은 그대로인데 손실·재전송만 늘었으면 인프라팀(네트워크).',
+        causes: ['sk-fragment', 'rt-mtu', 'nic-cloud-pps', 'rt-burst'] },
+      { t: 'DB 쿼리의 종류와 횟수를 전후로 비교한다',
+        d: 'DB 지연이 올랐으면 쿼리 수(QPS)도 함께 올랐는지부터 본다. PostgreSQL의 pg_stat_statements나 MySQL Performance Schema의 digest 요약은 값만 다른 쿼리를 한 종류로 묶어 실행 횟수와 총 시간을 모아 주므로, 패치 전후의 상위 쿼리 목록을 비교하면 새로 생긴 쿼리, 횟수가 몇 배로 는 쿼리(N+1), 인덱스 없이 테이블 전체를 읽는 쿼리가 드러난다. 먼저 부를 곳: QPS나 쿼리 모양이 바뀌었으면 게임개발팀(서버), 쿼리는 같은데 지연만 늘었으면 인프라팀(DB: 실행 계획·IOPS·잠금).',
+        causes: ['db-no-index', 'db-login-storm', 'db-plan-flip', 'db-cache-stampede'] },
+      { t: '호스트와 서버 프로세스 지표로 계층을 가른다',
+        d: '코드 없이 OS에서 보이는 값으로 서버 안쪽과 호스트를 가른다. 서버 소켓의 수신 대기열(Recv-Q)이 쌓이면 서버 프로세스가 제때 읽지 못하는 것이고(틱 멈춤·GC·락), 스레드 하나만 100%면 단일 스레드 병목, GC 로그의 멈춤 시간이 늘었으면 메모리 사용 패턴이 바뀐 것이다. 로그 레벨을 올린 채 배포해 로그 쓰기가 늘지 않았는지도 본다. 반대로 CPU 스틸·스로틀링·NIC 드롭이 늘었으면 같은 시각에 바뀐 인프라(인스턴스 종류·커널·컨테이너 한도)를 본다. 먼저 부를 곳: 프로세스 안쪽 신호면 게임개발팀(서버), 호스트 신호면 인프라팀(시스템).',
+        causes: ['mem-gc', 'sp-hotzone', 'dk-sync-log', 'in-monitoring', 'so-cpu-quota'] },
+      { t: '되돌려서 확정하고 기록을 남긴다',
+        d: '가장 유력한 변경을 일부 서버나 일부 유저에게서만 되돌리거나(롤백, 기능 플래그 끄기) 설정을 이전 값으로 돌려, 증상이 함께 사라지는지 본다. 되돌린 쪽만 나아지면 원인이 확정된다. 되돌리는 작업도 재시작과 콜드 캐시로 잠깐 느려질 수 있으니 한가한 시간대에 한다. 결과는 원인 ID와 함께 장애 기록에 남기고, 패킷 크기·쿼리 수·틱 시간 한도를 다음 패치의 배포 전 점검 항목으로 옮긴다. 먼저 부를 곳: 변경을 낸 팀.',
+        causes: ['in-deploy', 'db-cold-cache'] },
+    ],
+    ref: [
+      { t: 'The Site Reliability Workbook, Chapter 16: Canarying Releases', u: 'https://sre.google/workbook/canarying-releases/', p: 'Google', n: '카나리는 변경을 일부에만 잠시 배포해 대조군과 비교하는 것, 시간이 지표를 가장 크게 바꾸므로 배포 전후 비교로는 성능 저하를 판단하기 어려움, 5% 카나리의 오류율 20%는 전체에서 1%로만 보임' },
+      { t: 'RFC 8085: UDP Usage Guidelines', u: 'https://www.rfc-editor.org/rfc/rfc8085', p: 'IETF', n: '프래그먼트 하나를 잃으면 패킷 전체를 잃고 일부 NAT·방화벽은 프래그먼트를 버림, UDP 앱은 경로 MTU를 넘는 패킷을 보내지 않아야 함' },
+      { t: 'pg_stat_statements — track statistics of SQL planning and execution', u: 'https://www.postgresql.org/docs/current/pgstatstatements.html', p: 'PostgreSQL', n: '값만 다른 쿼리를 한 항목으로 묶어 실행 횟수(calls)와 총 실행 시간(total_exec_time)을 모음' },
+      { t: 'Performance Schema Statement Digests and Sampling', u: 'https://dev.mysql.com/doc/refman/8.4/en/performance-schema-statement-digests.html', p: 'MySQL', n: '리터럴 값을 ?로 바꾼 digest로 쿼리를 묶고, events_statements_summary_by_digest에 종류별 횟수(COUNT_STAR)·총 시간(SUM_TIMER_WAIT) 집계' },
+    ] },
+  { id: 'new-region', t: '해외 국가·지역 추가',
+    when: '서비스 국가를 새로 열거나 새 리전·데이터센터를 추가할 때. 오픈 전 점검과, “국내는 괜찮은데 새 국가 유저만 렉”이라는 제보를 가를 때 함께 쓴다.',
+    steps: [
+      { t: '현지 통신사별 경로 품질을 오픈 전에 잰다',
+        d: '대상 국가의 주요 통신사(ASN)마다 게임 서버 후보 위치까지 왕복 시간(RTT) 분포, 지터, 손실을 잰다. 평균 하나에는 통신사별 차이가 묻히므로, 통신사별 중앙값과 95퍼센타일을 저녁 피크와 새벽으로 나눠 본다. 공개 측정망 RIPE Atlas는 국가·ASN을 골라 전 세계 프로브에서 ping·traceroute를 보낼 수 있고, 후보 리전에 임시 VM을 띄워 재도 된다. 중간 장비가 ICMP 응답을 제한하기도 하므로 가능하면 게임과 같은 프로토콜·포트로도 잰다. 특정 통신사만 유독 먼 도시를 거쳐 가면 피어링·경로 문제다. 통신사는 비용이 싼 경로를 고르기 때문에 가까운 곳도 멀리 돌아가는 일이 흔하다. 먼저 부를 곳: 인프라팀(네트워크), 경로가 통신사 쪽이면 외부(통신사·IX).',
+        causes: ['isp-distance', 'isp-routing', 'isp-peak', 'isp-cable'] },
+      { t: '측정값을 게임 설계가 버티는 한도와 비교한다',
+        d: '잰 RTT·지터를 게임의 판정 구간(회피·패링 같은 반응 시간), 지연 보상 한도, 보간 버퍼 길이, 입력 버퍼 크기와 비교한다. 예를 들어 패링 판정이 0.2초면, 왕복 지연과 보간 버퍼를 더한 값이 그보다 긴 통신사 사용자는 제때 반응해도 늦는다. 지연 보상을 넓혀 맞추면 이번에는 맞는 쪽에서 “벽 뒤에서 맞았다”는 제보가 는다. 한도를 넘는 통신사가 많으면 인프라팀은 리전·엣지 PoP를 더 가깝게 두는 방안을, 게임개발팀은 판정·보간·지연 보상 값을 검토한다. 백서의 동기화 장이 기준표다.',
+        causes: ['sy-short-window', 'sy-no-lagcomp', 'sy-lagcomp-overreach', 'cg-no-buffer'] },
+      { t: 'MTU와 UDP 통과 여부를 확인한다',
+        d: '현지 망에서 게임의 가장 큰 패킷이 온전히 지나가는지 확인한다. 단편화 금지(DF) 표시를 한 핑을 크기별로 보내 경로 MTU를 재고, PPPoE·터널·모바일망처럼 1,500바이트보다 작은 구간이 있는지 본다. UDP에서는 1,200바이트를 안전한 기본 크기로 권하는 표준이 있으니, 게임의 최대 패킷이 이보다 크면 줄이거나 나눠 보내는 방안을 게임개발팀과 정한다. 공용 와이파이·회사망·일부 통신사에서 UDP나 게임 포트가 막히거나 속도가 제한되는지도 확인하고, 막힐 때 쓸 대체 경로(TCP·443 포트)가 있는지 본다. 먼저 부를 곳: 인프라팀(네트워크)과 게임개발팀(서버: 패킷 크기).',
+        causes: ['dc-mtu', 'rt-mtu', 'sk-fragment', 'hn-captive', 'isp-shaping'] },
+      { t: 'NAT·CGNAT의 유휴 타임아웃을 재고 하트비트 간격을 맞춘다',
+        d: '현지 가정용 공유기와 모바일망(CGNAT)이 유휴 UDP 연결의 매핑을 얼마 만에 지우는지 잰다. 테스트 기기와 서버 사이에 패킷을 보내는 간격을 점점 늘려 가며, 서버의 응답이 더는 들어오지 않는 간격을 찾는다. 표준(RFC 4787)은 UDP 매핑이 2분 전에 만료되면 안 되고 기본 5분 이상을 권하지만, 실제 장비는 더 짧게 지우기도 한다. 게임의 하트비트 간격이 잰 값보다 충분히 짧은지, 로드밸런서·클라우드 보안 그룹의 유휴 타임아웃과도 맞는지 본다. 먼저 부를 곳: 게임개발팀(하트비트·타임아웃 값), 인프라팀(로드밸런서·보안 그룹 설정).',
+        causes: ['hn-nat', 'isp-cgnat', 'rt-mapping', 'dc-lb-idle', 'dc-cloud-conntrack'] },
+      { t: '현지에서 거치는 외부 서비스와 보안 장비를 확인한다',
+        d: '현지 플랫폼 로그인·결제·본인 인증이 제 속도로 응답하는지, 현지 DNS에서 로그인·패치 서버 주소가 제대로 풀리는지, CDN이 그 나라에 가까운 거점에서 패치를 내려 주는지 확인한다. DDoS 방어·방화벽의 국가 차단 규칙과 속도 제한에 새 국가의 IP 대역이 걸리지 않는지 보고, 특히 여러 가입자가 IP 하나를 나눠 쓰는 CGNAT 대역이 한꺼번에 차단되지 않는지 본다. 먼저 부를 곳: 인프라팀(보안 장비·DNS·CDN), 외부(플랫폼·결제사·통신사).',
+        causes: ['in-external', 'isp-dns', 'dc-ddos', 'isp-cgnat'] },
+      { t: '오픈 뒤에는 국가·ASN별로 나눠 본다',
+        d: '접속 로그·로드밸런서 로그의 클라이언트 IP에 국가와 ASN을 붙여 국가·통신사별로 RTT, 재전송, 끊김 수, 끊김 사유(하트비트 타임아웃·RST·서버 킥)를 본다. MaxMind GeoLite ASN 같은 공개 데이터베이스로 IP를 ASN과 조직 이름으로 바꿀 수 있고, 현지 개인정보 규정에 맞춰 IP는 /24나 ASN 단위로 줄여 보관한다. 한 ASN에만 몰리면 그 통신사 경로(인프라팀·외부), 새 국가 전체가 나쁘면 거리와 설계 한도(인프라팀·게임개발팀), 저녁에만 나빠지면 피어링 혼잡을 먼저 본다. 합성 측정은 정상인데 유저만 나쁘면 유저 환경이나 클라이언트 쪽이다.',
+        causes: ['isp-peak', 'isp-routing', 'rt-queue-drop', 'pt-isp-validation'] },
+      { t: '먼 지역 유저가 다른 유저에게 주는 영향을 확인한다',
+        d: '멀리서 접속한 유저가 늘면 그 사람 화면만 나빠지는 데서 끝나지 않는다. 느린 사람의 입력이 몰려 도착해 다른 사람 화면에서 그 캐릭터만 몰아치기로 움직이고, 서버의 속도·쿨타임 검사에 걸려 고무줄이나 스킬 거절이 생기며, 파티 기믹이나 락스텝 방식에서는 가장 느린 사람을 모두가 기다린다. 새 국가 오픈 뒤 기존 유저의 “특정 캐릭터만 이상해 보임” 제보가 늘었는지 보고, 입력 버퍼·검증 허용치·매칭 지역 분리를 게임개발팀과 정한다.',
+        causes: ['pt-slow-burst', 'pt-isp-validation', 'pt-raid-member', 'sy-lockstep'] },
+    ],
+    ref: [
+      { t: 'User-defined Measurements', u: 'https://atlas.ripe.net/docs/getting-started/user-defined-measurements', p: 'RIPE NCC', n: 'RIPE Atlas에서 국가·ASN·지역별로 프로브를 골라 ping·traceroute·DNS 측정을 일회성 또는 반복으로 실행' },
+      { t: 'Fixing the Internet for Real Time Applications: Part I', u: 'https://www.riotgames.com/en/news/fixing-internet-real-time-applications-part-i', p: 'Riot Games', n: '백본 사업자와 통신사는 지연보다 비용이 낮은 경로로 트래픽을 보내 가까운 곳도 여러 도시를 거쳐 감(14ms → 70ms 사례)' },
+      { t: 'RFC 8899: Packetization Layer Path MTU Discovery for Datagram Transports', u: 'https://www.rfc-editor.org/rfc/rfc8899', p: 'IETF', n: 'UDP 같은 데이터그램 전송의 기본 안전 크기(BASE_PLPMTU)로 1,200바이트 권장' },
+      { t: 'RFC 4787: Network Address Translation (NAT) Behavioral Requirements for Unicast UDP', u: 'https://www.rfc-editor.org/rfc/rfc4787', p: 'IETF', n: 'NAT의 UDP 매핑 타이머는 2분 전에 만료되면 안 되고(REQ-5) 기본 5분 이상 권장' },
+      { t: 'GeoLite Databases and Web Services', u: 'https://dev.maxmind.com/geoip/geolite2-free-geolocation-data/', p: 'MaxMind', n: '무료 GeoLite Country·City·ASN 데이터베이스, ASN 데이터베이스는 IP의 자율 시스템 번호와 조직 이름 제공' },
+    ] },
+);
 
 </script>
 <script>
@@ -16686,13 +17489,14 @@ K.register('windows', function (root) {
       const route = {};
       scored.slice(0, 10).forEach(({ c }) => { if (c.own && OWN[c.own[0]]) route[c.own[0]] = (route[c.own[0]] || 0) + 1; });
       const routeHTML = Object.keys(route).length ? `<p class="tri-route"><span class="k">먼저 확인할 곳</span>${Object.entries(route).sort((a, b) => b[1] - a[1]).map(([id, k]) => `${ownBadge(id)}<span class="mono">${k}</span>`).join('')}<span class="note">상위 10개 원인의 주 담당</span></p>` : '';
-      out.innerHTML = routeHTML + scored.slice(0, 10).map(({ c, score, why }) => {
+      out.innerHTML = routeHTML + scored.slice(0, 10).map(({ c, score, why }, i) => {
         const pct = Math.round((score / max) * 100);
         return `<div class="tri-item">
           <div class="score">${pct}%<div class="meter"><i style="width:${pct}%"></i></div></div>
           <div><a href="#c-${c.id}">${c.t}</a> <span class="layer">· ${LAYER[c.layer].name}</span> ${c.own && c.own.length ? ownBadge(c.own[0]) : ''}
           <div class="why">${c.s}</div>
-          <div class="why"><span class="note">맞는 조건: ${why.join(' · ')}</span></div></div>
+          <div class="why"><span class="note">맞는 조건: ${why.join(' · ')}</span></div>
+          ${c.chk && i < 3 ? `<div class="why tri-chk"><span class="k">먼저 볼 것</span>${c.chk.look}${c.sig && SIG[c.sig.k] ? ` <span class="note">· 그래프 모양: <a href="#sig-${c.sig.k}">${SIG[c.sig.k].name}</a></span>` : ''}</div>` : ''}</div>
         </div>`;
       }).join('') + (scored.length > 10 ? `<p class="note">그 밖에 ${scored.length - 10}가지 원인이 일부 조건과 맞습니다.</p>` : '');
     }
@@ -16898,14 +17702,36 @@ K.register('windows', function (root) {
     const rows = ALL_LAYERS.map(l => {
       const list = D.causes.filter(c => c.layer === l.id && c.chk);
       const n = Object.fromEntries(BY.map(b => [b, list.filter(c => c.chk.by === b).length]));
-      return { l, n, total: list.length };
+      return { l, n, list, total: list.length };
     }).filter(r => r.total);
     if (!rows.length) { box.innerHTML = ''; return; }
     const all = Object.fromEntries(BY.map(b => [b, rows.reduce((a, r) => a + r.n[b], 0)]));
     const sum = BY.reduce((a, b) => a + all[b], 0);
-    const bar = (n, total) => `<div class="cover-bar" role="img" aria-label="${BY.map(b => `${LABEL[b]} ${n[b]}`).join(', ')}">${BY.map((b, i) => n[b] ? `<span class="cv-${i + 1}" style="flex:${n[b]}" title="${LABEL[b]} ${n[b]}">${n[b]}</span>` : '').join('')}</div>`;
+    const bar = n => `<div class="cover-bar" role="img" aria-label="${BY.map(b => `${LABEL[b]} ${n[b]}`).join(', ')}">${BY.map((b, i) => n[b] ? `<span class="cv-${i + 1}" style="flex:${n[b]}" title="${LABEL[b]} ${n[b]}">${n[b]}</span>` : '').join('')}</div>`;
+    // 관측 커버리지 계산기: 가진 수단을 고르면 확인할 수 있는 원인 수와 아직 안 보이는 원인 목록을 보여 준다
+    const have = new Set(['ops']);
+    const pick = K.el('fieldset', { class: 'cover-pick' }, K.el('legend', { text: '지금 가진 확인 수단' }));
+    const opts = K.el('div', { class: 'opts' });
+    BY.forEach((b, i) => {
+      const id = 'cvp-' + b;
+      const inp = K.el('input', { type: 'checkbox', id, value: b });
+      inp.checked = have.has(b);
+      inp.addEventListener('change', () => { inp.checked ? have.add(b) : have.delete(b); calc(); });
+      opts.append(inp, K.el('label', { for: id, html: `<i class="cv-dot cv-${i + 1}"></i>${LABEL[b]}` }));
+    });
+    pick.append(opts);
+    const res = K.el('div', { class: 'cover-res', 'aria-live': 'polite' });
     box.innerHTML = `<p class="legend cover-legend">${BY.map((b, i) => `<span><i class="cv-${i + 1}"></i>${LABEL[b]} ${all[b]}가지 (${Math.round(all[b] / sum * 100)}%)</span>`).join('')}</p>
-      <div class="cover">${rows.map(r => `<div class="cover-row"><a href="#${r.l.anchor || 'l-' + r.l.id}">${r.l.short || r.l.name}</a>${bar(r.n, r.total)}</div>`).join('')}</div>`;
+      <div class="cover">${rows.map(r => `<div class="cover-row"><a href="#${r.l.anchor || 'l-' + r.l.id}">${r.l.short || r.l.name}</a>${bar(r.n)}</div>`).join('')}</div>`;
+    box.append(pick, res);
+    function calc() {
+      const ok = rows.reduce((a, r) => a + r.list.filter(c => have.has(c.chk.by)).length, 0);
+      const miss = rows.map(r => ({ r, list: r.list.filter(c => !have.has(c.chk.by)) })).filter(x => x.list.length);
+      const missN = sum - ok;
+      res.innerHTML = `<p class="sim-say">${K.flag(ok / sum >= 0.7 ? 'good' : 'warn')}고른 수단으로 확인할 수 있는 원인은 <b>${ok}가지</b>(전체 ${sum}가지의 ${Math.round(ok / sum * 100)}%)입니다.${missN ? ` 나머지 <b>${missN}가지</b>는 다른 수단으로 확인하는 편이 쉽습니다.${have.has('code') ? '' : ' 게임 로그·지표가 필요한 원인은 개발팀에 계측을 요청할 목록이 됩니다.'}` : ''}</p>
+        ${miss.length ? `<details class="cover-miss"><summary>다른 수단이 필요한 원인 ${missN}가지</summary>${miss.map(({ r, list }) => `<p class="cover-miss-l"><b>${r.l.short || r.l.name}</b> <span class="note">${list.length}</span></p><div class="chips">${list.map(c => `<a class="cause-chip cv-b-${BY.indexOf(c.chk.by) + 1}" href="#c-${c.id}" title="${LABEL[c.chk.by]}">${c.t}</a>`).join('')}</div>`).join('')}</details>` : ''}`;
+    }
+    calc();
   })();
 
   /* ---------------- 사례와 절차 ---------------- */
@@ -16922,7 +17748,8 @@ K.register('windows', function (root) {
     const box = $('#case-list'); if (!box) return;
     box.innerHTML = (D.cases || []).map(x => `<article class="case" id="case-${x.id}">
       <p class="case-org">${esc(x.org)} · ${x.year}</p><h4>${esc(x.t)}</h4>
-      <dl><dt>무슨 일</dt><dd>${x.what}</dd><dt>원인</dt><dd>${x.why}</dd><dt>배울 점</dt><dd>${x.lesson}</dd></dl>
+      <dl><dt>무슨 일</dt><dd>${x.what}</dd><dt>배울 점</dt><dd>${x.lesson}</dd></dl>
+      <details class="case-why"><summary>원인 자세히</summary><p>${x.why}</p></details>
       <div class="chips">${causeChips(x.causes)}</div>
       <p class="case-src"><a href="${esc(x.u)}" target="_blank" rel="noopener noreferrer">원문: ${esc(x.p || x.org)}</a></p></article>`).join('') || '<p class="note">준비 중입니다.</p>';
   })();
