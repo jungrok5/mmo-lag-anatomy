@@ -32,7 +32,7 @@
     {"ctx":"src/sims/locks.js:65","ko":"큰 락 하나 (40%)","t":""},
     {"ctx":"src/sims/locks.js:66, src/sims/locks.js:306","ko":"잘게 나눈 락","t":""},
     {"ctx":"src/sims/locks.js:67","ko":"스레드만 늘리기 (16개, 큰 락)","t":""},
-    {"ctx":"src/sims/locks.js:68","ko":"데드락","t":""},
+    {"ctx":"src/sims/locks.js:68","ko":"데드락","t":"เดดล็อก"},
     {"ctx":"src/sims/locks.js:71","ko":"초당 처리 작업","t":""},
     {"ctx":"src/sims/locks.js:71","ko":"건/초","t":""},
     {"ctx":"src/sims/locks.js:72","ko":"평균 락 대기","t":""},

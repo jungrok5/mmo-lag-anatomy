@@ -84,7 +84,7 @@
     {"ctx":"causes/sp-lock/ref/3/n, causes/sp-sync-call/ref/2/n","ko":"스레드가 멈춰 CPU를 떠난 시간(off-CPU)을 호출 스택별로 합산, -p로 프로세스 지정","t":""},
     {"ctx":"causes/sp-lock/ref/4/n","ko":"Monitor Lock Contention Count(monitor-lock-contention-count): 모니터 락을 잡으려다 경합이 생긴 횟수","t":""},
     {"ctx":"causes/sp-lock/ref/5/n","ko":".NET 9부터 dotnet.monitor.lock_contentions: 프로세스 시작 뒤 모니터 락을 잡으려다 경합이 생긴 횟수","t":""},
-    {"ctx":"causes/sp-deadlock/t","ko":"데드락","t":""},
+    {"ctx":"causes/sp-deadlock/t","ko":"데드락","t":"เดดล็อก"},
     {"ctx":"causes/sp-deadlock/s","ko":"두 스레드가 서로 상대가 잡은 락을 기다리면 영원히 멈춥니다.","t":""},
     {"ctx":"causes/sp-deadlock/c/0","ko":"스레드 A는 락1을 잡고 락2를, B는 락2를 잡고 락1을 기다림","t":""},
     {"ctx":"causes/sp-deadlock/c/1","ko":"둘 다 영원히 멈추고 관련 스레드도 줄줄이 멈춤","t":""},
