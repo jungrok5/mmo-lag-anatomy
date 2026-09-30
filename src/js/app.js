@@ -649,7 +649,7 @@
     const wrap = K.el('div', { class: 'table-wrap symmap-wrap' });
     wrap.innerHTML = `<table class="symmap"><thead><tr><th scope="col">층·주제</th>${D.symptoms.map(s => `<th scope="col"><span>${s.name}</span></th>`).join('')}</tr></thead><tbody>${rows.map(l => `<tr><th scope="row"><a href="#${l.anchor || 'l-' + l.id}">${l.short || l.name}</a></th>${D.symptoms.map(s => {
       const n = count(l, s).length;
-      return `<td style="--a:${n ? (0.1 + 0.75 * n / max).toFixed(2) : 0}">${n ? `<button type="button" data-l="${l.id}" data-s="${s.id}" aria-label="${esc(`${l.short || l.name} · ${s.name}: 원인 ${n}가지`)}">${n}</button>` : ''}</td>`;
+      return `<td style="--a:${n ? (0.08 + 0.47 * n / max).toFixed(2) : 0}">${n ? `<button type="button" data-l="${l.id}" data-s="${s.id}" aria-label="${esc(`${l.short || l.name} · ${s.name}: 원인 ${n}가지`)}">${n}</button>` : ''}</td>`;
     }).join('')}</tr>`).join('')}</tbody><tfoot><tr><th scope="row">합계</th>${D.symptoms.map(s => `<td>${D.causes.filter(c => c.sym.includes(s.id)).length}</td>`).join('')}</tr></tfoot></table>`;
     const out = K.el('div', { class: 'symmap-out', 'aria-live': 'polite' });
     out.innerHTML = '<p class="note">칸을 누르면 그 층에서 그 증상을 만드는 원인이 여기에 나옵니다.</p>';
@@ -671,6 +671,14 @@
 
   /* ---------------- 시뮬레이션 올리기 ---------------- */
   K.mountAll();
+  // 가로로 넘치는 표·그림은 키보드로도 스크롤할 수 있게 초점을 받게 한다(넘칠 때만)
+  const scrollers = () => $$('.table-wrap, .fig-scroll, .os-matrix').forEach(el => {
+    const over = el.scrollWidth > el.clientWidth + 1;
+    if (over && !el.hasAttribute('tabindex')) { el.tabIndex = 0; el.dataset.sc = '1'; }
+    else if (!over && el.dataset.sc) { el.removeAttribute('tabindex'); delete el.dataset.sc; }
+  });
+  scrollers();
+  let scT; window.addEventListener('resize', () => { clearTimeout(scT); scT = setTimeout(scrollers, 200); });
   openHash();
   if (location.hash) { const el = document.getElementById(location.hash.slice(1)); if (el) setTimeout(() => el.scrollIntoView(), 50); }
 })();

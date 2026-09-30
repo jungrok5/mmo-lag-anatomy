@@ -5,7 +5,7 @@
 ## 질문에 답할 때
 
 - 이 저장소의 데이터를 근거로 답한다.
-  - 원인: `src/js/causes-*.js` (216개)
+  - 원인: `src/js/causes-*.js` (228개)
   - 증상·네 가지 요인·담당 코드·누가/언제 값: `src/js/data.js`
   - 용어: `src/js/glossary.js`
   - 장 본문과 표: `src/body.html`

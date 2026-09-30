@@ -367,7 +367,7 @@ K.register('oneslow', function (root) {
   function drawMatrix() {
     const rows = [['A', 'A(느린 사람)의 화면'], ['B', 'B(정상)의 화면']];
     const cols = ['A', 'B', 'M'];
-    const head = `<tr><th></th>${cols.map(c => `<th>${c === 'M' ? '몬스터의 모습' : NAMES[c] + '의 모습'}</th>`).join('')}</tr>`;
+    const head = `<tr><th><span class="sr-only">누구의 화면</span></th>${cols.map(c => `<th>${c === 'M' ? '몬스터의 모습' : NAMES[c] + '의 모습'}</th>`).join('')}</tr>`;
     const body = rows.map(([v, name]) => `<tr><th>${name}</th>${cols.map(tg => { const j = judge(v, tg); return `<td class="v"><span class="chip ${j.lvl}">${K.glyph(j.sym)}${tg === v && j.sym === 'normal' ? (P.mode === 'lock' ? '정상 (턴 대기만큼 늦게)' : '정상 (예측으로 즉시)') : j.label}</span></td>`; }).join('')}</tr>`).join('');
     mat.innerHTML = `<table>${head}${body}</table>`;
   }
