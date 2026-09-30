@@ -52,7 +52,7 @@
     {"ctx":"src/sims/distance.js:98","ko":"예상 핑","t":""},
     {"ctx":"src/sims/distance.js:99","ko":"이 시간대 최악 핑","t":""},
     {"ctx":"src/sims/distance.js:99","ko":"100번 중 5번은 더 느림","t":""},
-    {"ctx":"src/sims/distance.js:100","ko":"손실","t":""},
+    {"ctx":"src/sims/distance.js:100","ko":"손실","t":"パケットロス"},
     {"ctx":"src/sims/distance.js:164","ko":"적도","t":""},
     {"ctx":"src/sims/distance.js:181","ko":"장애 우회 경로","t":""},
     {"ctx":"src/sims/distance.js:181","ko":"우회 경로","t":""},

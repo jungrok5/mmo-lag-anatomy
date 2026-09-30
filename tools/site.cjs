@@ -172,7 +172,8 @@ ${c.cases.length ? row(TR`실제 사례`, c.cases.filter(id => CASE[id]).map(id 
     const same = byLayer[c.layer].filter(x => x.id !== c.id);
     const sym0 = c.symptoms[0] && c.symptoms[0].id;
     const related = sym0 ? bySym[sym0].filter(x => x.id !== c.id && x.layer !== c.layer).slice(0, 8) : [];
-    const description = `${txt(c.summary)} ${TR`원인·증상·담당 팀·수치·출처를 정리한 게임 렉 백서 항목.`}`;
+    // 문장을 잇는 띄어쓰기는 언어마다 달라(중국어·일본어는 띄우지 않음) 한 문장 틀로 번역한다
+    const description = TR`${txt(c.summary)} 원인·증상·담당 팀·수치·출처를 정리한 게임 렉 백서 항목.`;
     const body = `<p class="crumb"><a href="../">${esc(NAME)}</a> › <a href="../text.html#${l.anchor}">${esc(layerName(l))}</a></p>
 <h1>${esc(c.name)} <span class="en">${esc(c.en)}</span></h1>
 <p class="meta">${TR`원인 ID`} <code>${c.id}</code> · ${ownerLine(c)}</p>
@@ -202,7 +203,7 @@ ${related.length ? `<h3>${TR`같은 증상(${esc(SYM[sym0].name)})의 다른 층
     const rel = `s/${s.id}.html`;
     const list = bySym[s.id];
     const groups = layers.map(l => [l, list.filter(c => c.layer === l.id)]).filter(([, g]) => g.length);
-    const description = `${TR`게임에서 ${s.name}(${s.alias}) 현상이 생기는 원인 ${list.length}가지와 담당 팀.`} ${txt(s.what)}`;
+    const description = TR`게임에서 ${s.name}(${s.alias}) 현상이 생기는 원인 ${list.length}가지와 담당 팀. ${txt(s.what)}`;
     const body = `<p class="crumb"><a href="../">${esc(NAME)}</a> › <a href="../text.html#symptoms">${TR`증상별로 찾기`}</a></p>
 <h1>${TR`${esc(s.name)}: 원인 ${list.length}가지와 담당`}</h1>
 <p class="meta">${TR`다른 말: ${esc(s.alias)}`}</p>
@@ -297,7 +298,7 @@ ${pubs.map(([p, list]) => `<h3>${esc(p)} <span class="n">${list.length}</span></
 
 > ${TR`온라인 게임에서 렉(뚝뚝 끊김, 순간이동, 고무줄, 몰아치기, 입력 지연, 멈춤, 접속 끊김 등)이 생기는 원인 ${K.causes.length}가지를 내 화면부터 서버 데이터베이스까지 13개 층과 3개 주제(동기화 설계, 일부에게만 생기는 문제, TCP 재전송)로 나눠 설명하는 백서입니다. MMO 사례를 중심으로 썼지만 대부분은 장르와 상관없이 온라인 게임 전반에 해당합니다. 원인마다 왜 → 그러면 → 화면에서는의 세 단계, 관련 증상, 수치 감각, 해결 담당(게임개발팀·인프라팀·외부)과 팀별 할 일, 그래프 모양과 확인 방법, 공신력 있는 출처(RFC, 커널·OS·클라우드·엔진·DB 공식 문서, 논문)를 담았습니다.`}
 
-${TR`원인은 ID(예: mem-gc)로 가리키고, 원인마다 페이지가 있습니다(예: ${BASE}c/mem-gc.html). 수치는 일반적인 서비스 환경의 대표값이고, 기본값·버전은 각 원인 페이지의 출처에 근거가 있습니다. 인용할 때는 원인 페이지 주소를 쓰면 됩니다. MIT 라이선스.`}${L.code === 'ko' ? '' : ` ${TR`원문은 한국어이고 이 판은 번역입니다: ${SITE}`}`}
+${TR`원인은 ID(예: mem-gc)로 가리키고, 원인마다 페이지가 있습니다(예: ${BASE}c/mem-gc.html). 수치는 일반적인 서비스 환경의 대표값이고, 기본값·버전은 각 원인 페이지의 출처에 근거가 있습니다. 인용할 때는 원인 페이지 주소를 쓰면 됩니다. MIT 라이선스.`}${L.code === 'ko' ? '' : TR` 원문은 한국어이고 이 판은 번역입니다: ${SITE}`}
 
 ## ${TR`문서`}
 
@@ -307,7 +308,7 @@ ${TR`원인은 ID(예: mem-gc)로 가리키고, 원인마다 페이지가 있습
 
 ## ${TR`증상별 원인`}
 
-${K.symptoms.map(s => `- [${s.name}](${BASE}s/${s.id}.html): ${TR`원인 ${bySym[s.id].length}가지.`} ${txt(s.what)}`).join('\n')}
+${K.symptoms.map(s => `- [${s.name}](${BASE}s/${s.id}.html): ${TR`원인 ${bySym[s.id].length}가지. ${txt(s.what)}`}`).join('\n')}
 
 ${layers.map(l => `## ${layerName(l)}
 

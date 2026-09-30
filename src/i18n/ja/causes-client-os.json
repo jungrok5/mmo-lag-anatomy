@@ -38,7 +38,7 @@
     {"ctx":"causes/co-power/ref/2/n","ko":"그래픽 칩이 두 개인 노트북에서 내장 그래픽으로 돌면 60FPS 게임이 30FPS가 되기도 함, AmdPowerXpressRequestHighPerformance 내보내기로 외장 그래픽 선택","t":""},
     {"ctx":"causes/co-power/ref/3/n","ko":"CPUFrequency·GPUFrequency(클럭), CPUTemperature·GPUTemperature(온도)를 프레임별로 기록","t":""},
     {"ctx":"causes/co-power/ref/4/n","ko":"작업 관리자는 프로세스별 GPU 사용률과 그 값이 어느 GPU·엔진의 것인지 보여 주는 열을 둠","t":""},
-    {"ctx":"causes/co-timer/t","ko":"타이머 해상도","t":""},
+    {"ctx":"causes/co-timer/t","ko":"타이머 해상도","t":"タイマー分解能"},
     {"ctx":"causes/co-timer/s","ko":"윈도우의 기본 타이머는 15.6ms 단위라 “1ms만 쉬기”가 실제로는 다음 타이머 주기까지, 길게는 15.6ms로 늘어납니다.","t":""},
     {"ctx":"causes/co-timer/c/0","ko":"프레임 제한·패킷 전송을 Sleep(잠깐 대기) 방식으로 구현","t":""},
     {"ctx":"causes/co-timer/c/1","ko":"OS가 15.6ms 단위로만 깨워 줌","t":""},

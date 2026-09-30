@@ -19,7 +19,8 @@ const LAYER = Object.fromEntries(LAYERS.map(l => [l.id, l]));
 const SYM = Object.fromEntries(D.symptoms.map(s => [s.id, s.name]));
 const FX = Object.fromEntries(D.fx.map(f => [f.id, f.name]));
 const OWN = Object.fromEntries(D.owners.map(o => [o.id, o]));
-const ownName = id => `${D.teams[OWN[id].team].name}·${OWN[id].name}`;
+// 팀과 담당을 잇는 기호도 언어마다 다를 수 있어 번역 문장으로 둔다
+const ownName = id => TR`${D.teams[OWN[id].team].name}·${OWN[id].name}`;
 const SIGN = Object.fromEntries((D.sigs || []).map(g => [g.id, g]));
 const CASES_OF = {};
 (D.cases || []).forEach(x => (x.causes || []).forEach(id => (CASES_OF[id] = CASES_OF[id] || []).push(x.id)));

@@ -122,7 +122,7 @@
     {"ctx":"glossary/g-thread-pool/0","ko":"스레드 풀","t":"Thread pool"},
     {"ctx":"glossary/g-thread-pool/2","ko":"미리 만들어 둔 워커 스레드 묶음. 모두 바쁘면 새 일은 기다립니다.","t":"Nhóm worker thread tạo sẵn. Khi tất cả đều bận, việc mới phải chờ."},
     {"ctx":"glossary/g-epoll/0","ko":"비동기 I/O","t":"I/O bất đồng bộ"},
-    {"ctx":"glossary/g-epoll/2","ko":"입출력을 기다리지 않고 다른 일을 하다가 완료되면 알림을 받는 방식.","t":"Cách không đứng chờ nhập xuất mà làm việc khác, khi xong thì nhận thông báo."},
+    {"ctx":"glossary/g-epoll/2","ko":"입출력을 기다리지 않고 다른 일을 하다가 완료되면 알림을 받는 방식.","t":"Cách để chương trình làm việc khác trong lúc nhập xuất đang diễn ra, khi xong thì nhận thông báo."},
     {"ctx":"glossary/g-area-of-interest/2","ko":"각 플레이어가 “볼 수 있는 범위”. 이 안의 변화만 보내 전송량을 줄입니다. 누가 범위 안에 있는지 따지는 비용을 줄이려고 보통 맵을 격자(그리드)로 나눠 가까운 셀만 봅니다.","t":"“Phạm vi nhìn thấy được” của từng người chơi. Chỉ gửi các thay đổi trong phạm vi này để giảm lượng dữ liệu. Để giảm chi phí xác định ai ở trong phạm vi, bản đồ thường được chia thành lưới (grid) và chỉ xét các ô ở gần."},
     {"ctx":"glossary/g-broadcast/0","ko":"브로드캐스트","t":"Broadcast"},
     {"ctx":"glossary/g-broadcast/2","ko":"한 변화를 그것을 볼 수 있는 여러 명에게 보내는 것. 모인 사람이 모두 서로를 보면 보낼 양이 인원의 제곱으로 늘어납니다.","t":"Gửi một thay đổi tới nhiều người có thể thấy nó. Nếu mọi người tụ tập đều thấy nhau thì lượng phải gửi tăng theo bình phương số người."},
@@ -158,7 +158,6 @@
     {"ctx":"glossary/g-rollback/0","ko":"롤백","t":"Rollback"},
     {"ctx":"glossary/g-rollback/2","ko":"저장이 취소되어 이전 상태로 돌아가는 것. 플레이어는 “아이템이 사라졌다”고 느낍니다.","t":"Việc lưu bị hủy và dữ liệu quay về trạng thái trước đó. Người chơi sẽ thấy “vật phẩm biến mất”."},
     {"ctx":"glossary/g-cache/0","ko":"캐시","t":"Cache"},
-    {"ctx":"glossary/g-cache/1","ko":"Cache (Redis 등)","t":"Cache (Redis, v.v.)"},
     {"ctx":"glossary/g-cache/2","ko":"자주 쓰는 데이터를 빠른 곳에 복사해 둔 것. DB 부하를 줄입니다.","t":"Bản sao của dữ liệu hay dùng, đặt ở nơi truy cập nhanh. Giúp giảm tải cho DB."},
     {"ctx":"glossary/g-checkpoint/0","ko":"체크포인트","t":"Checkpoint"},
     {"ctx":"glossary/g-checkpoint/2","ko":"DB가 메모리에 모아 둔 변경분을 주기적으로 디스크에 몰아 쓰는 일. 그 순간 저장·조회가 잠깐 느려질 수 있습니다.","t":"Việc DB định kỳ ghi dồn các thay đổi đang gom trong bộ nhớ xuống ổ đĩa. Vào lúc đó, việc lưu và truy vấn có thể chậm đi một chút."},
@@ -203,7 +202,7 @@
     {"ctx":"glossary/g-selective-ack/2","ko":"받는 쪽이 “이 구간은 받았고 이 부분만 빠졌다”고 자세히 알려 주는 TCP 기능. 여러 개를 잃어도 한 번에 복구할 수 있습니다.","t":"Tính năng của TCP cho bên nhận báo chi tiết “đoạn này đã nhận, chỉ thiếu phần này”. Mất nhiều gói vẫn có thể phục hồi trong một lượt."},
     {"ctx":"glossary/g-recent-ack/2","ko":"시간을 기준으로 손실을 판단하고, 한동안 ACK가 없으면 끝 패킷을 한 번 더 보내 복구를 앞당기는 TCP 기능. 최신 리눅스·안드로이드의 기본입니다. 윈도우는 10(1607)·서버 2016부터 TLP와 RACK이 기본이고, 잃은 재전송까지 복구하는 새 RACK은 서버 2022부터입니다. SACK이 켜진 연결에서만 작동합니다.","t":"Tính năng của TCP xác định mất gói dựa trên thời gian, và nếu một lúc không có ACK thì gửi lại gói cuối thêm một lần để phục hồi sớm hơn. Là mặc định trên Linux và Android mới nhất. Windows bật TLP và RACK mặc định từ Windows 10 (1607) và Server 2016; bản RACK mới, phục hồi được cả gói truyền lại bị mất, có từ Server 2022. Chỉ hoạt động trên kết nối đã bật SACK."},
     {"ctx":"glossary/g-spurious-retransmission/0","ko":"불필요한 재전송","t":"Truyền lại không cần thiết"},
-    {"ctx":"glossary/g-spurious-retransmission/2","ko":"잃지 않았는데 늦게 오거나 순서가 바뀌어 잃은 줄 알고 다시 보낸 것. 회선을 낭비하고 전송량을 괜히 줄입니다.","t":"Gói không mất mà chỉ đến muộn hoặc sai thứ tự nhưng bị nhầm là mất nên bị gửi lại. Việc này lãng phí đường truyền và làm giảm tốc độ gửi một cách vô ích."},
+    {"ctx":"glossary/g-spurious-retransmission/2","ko":"잃지 않았는데 늦게 오거나 순서가 바뀌어 잃은 줄 알고 다시 보낸 것. 회선을 낭비하고 전송량을 괜히 줄입니다.","t":"Gói tin thật ra vẫn tới, chỉ đến muộn hoặc sai thứ tự, nhưng bị nhầm là đã mất nên bị gửi lại. Việc này lãng phí đường truyền và làm giảm tốc độ gửi một cách vô ích."},
     {"ctx":"glossary/g-zero-window/0","ko":"제로 윈도우","t":"Zero window"},
     {"ctx":"glossary/g-zero-window/2","ko":"받는 쪽 버퍼가 꽉 차 “잠깐 보내지 마”라고 알린 상태. 재전송처럼 보이지만 회선은 멀쩡하고, 받는 쪽 프로그램이 제때 읽지 못한 것입니다.","t":"Trạng thái bộ đệm bên nhận đã đầy và báo “tạm ngừng gửi”. Trông giống truyền lại nhưng đường truyền vẫn ổn; thực chất là chương trình bên nhận không đọc kịp."},
     {"ctx":"glossary/g-thin-stream/2","ko":"게임처럼 작은 패킷을 드문드문 보내는 연결. 빠른 재전송 신호가 잘 모이지 않아 손실 때 오래 멈춥니다.","t":"Kết nối gửi gói nhỏ thưa thớt như game. Tín hiệu để truyền lại nhanh khó gom đủ nên khi mất gói sẽ đứng lâu."},
@@ -238,5 +237,8 @@
     {"ctx":"glossary/g-tls-certificate/2","ko":"서버가 진짜 그 서버임을 증명하는 전자 문서. 유효 기간이 있어 만료되면 암호화 연결이 실패해 접속할 수 없습니다.","t":"Tài liệu điện tử chứng minh server đúng là server đó. Chứng chỉ có thời hạn; hết hạn thì kết nối mã hóa thất bại và không thể truy cập."},
     {"ctx":"glossary/g-frame-generation/0","ko":"프레임 생성","t":"Tạo khung hình"},
     {"ctx":"glossary/g-frame-generation/2","ko":"그래픽카드가 실제로 그린 프레임 사이에 예측한 프레임을 끼워 넣어 FPS를 높이는 기술. 화면은 부드러워지지만 입력에서 화면까지의 지연은 늘 수 있습니다.","t":"Công nghệ card đồ họa chèn khung hình dự đoán vào giữa các khung hình thật để tăng FPS. Màn hình mượt hơn nhưng độ trễ từ input đến màn hình có thể tăng."}
+  ],
+  "stale": [
+    {"ctx":"glossary/g-cache/1","ko":"Cache (Redis 등)","t":"Cache (Redis, v.v.)"}
   ]
 }

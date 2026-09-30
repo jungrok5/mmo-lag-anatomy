@@ -2,7 +2,7 @@
   "lang": "ja",
   "group": "body-shell",
   "entries": [
-    {"ctx":"#nav-open, #nav@aria-label","ko":"목차","t":""},
+    {"ctx":"#nav-open, #nav@aria-label","ko":"목차","t":"目次"},
     {"ctx":" header","ko":"<b>게임 렉 백서</b>\n  <span class=\"where\" id=\"where\"></span>\n  <!--LANGS-->","t":""},
     {"ctx":"#nav","ko":"<a class=\"nav-brand\" href=\"#top\"><b>게임 렉 백서</b><span>렉 원인 백과</span></a>\n    <!--LANGS-->","t":""},
     {"ctx":"#nav div","ko":"시작하기","t":""},

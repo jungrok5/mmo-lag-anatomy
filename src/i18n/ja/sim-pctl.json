@@ -17,7 +17,7 @@
     {"ctx":"src/sims/pctl.js:29","ko":"잰 값 중 몇 %가 튀는지","t":""},
     {"ctx":"src/sims/pctl.js:30","ko":"튄 값의 크기","t":""},
     {"ctx":"src/sims/pctl.js:31","ko":"그래프","t":""},
-    {"ctx":"src/sims/pctl.js:32","ko":"집계 간격","t":""},
+    {"ctx":"src/sims/pctl.js:32","ko":"집계 간격","t":"集計間隔"},
     {"ctx":"src/sims/pctl.js:32","ko":"1초","t":""},
     {"ctx":"src/sims/pctl.js:32","ko":"10초","t":""},
     {"ctx":"src/sims/pctl.js:32","ko":"60초","t":""},
