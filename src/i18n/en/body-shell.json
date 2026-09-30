@@ -13,7 +13,7 @@
     {"ctx":"#nav li","ko":"<a href=\"#sync\">동기화 방식과 체감</a>","t":"<a href=\"#sync\">Netcode models and feel</a>"},
     {"ctx":"#nav li","ko":"<a href=\"#partial\">한 명만·한쪽만 이상할 때</a>","t":"<a href=\"#partial\">When only one player or client is affected</a>"},
     {"ctx":"#nav li","ko":"<a href=\"#retrans\">TCP 재전송 해부</a>","t":"<a href=\"#retrans\">TCP retransmission, dissected</a>"},
-    {"ctx":"#nav li","ko":"<a href=\"#owners\">게임팀·인프라팀 담당 구분</a>","t":"<a href=\"#owners\">Game team vs. infra team ownership</a>"},
+    {"ctx":"#nav li","ko":"<a href=\"#owners\">게임개발팀·인프라팀 담당 구분</a>","t":""},
     {"ctx":"#nav div","ko":"레이어 (패킷이 지나가는 순서)","t":"Layers (in the order packets pass through)"},
     {"ctx":"#nav div","ko":"도구","t":"Tools"},
     {"ctx":"#nav li","ko":"<a href=\"#triage\">진단 도우미</a>","t":"<a href=\"#triage\">Triage helper</a>"},
@@ -32,5 +32,8 @@
     {"ctx":"#top p","ko":"시뮬레이션은 원리를 보여 주기 위해 단순화한 모델입니다. 실제 장애 분석은 게임개발팀·인프라팀의 모니터링 지표와 함께 보세요.","t":"The simulations are simplified models built to show the principles. For analyzing a real outage, look at the game team’s and infra team’s monitoring metrics as well."},
     {"ctx":"#top p","ko":"자바스크립트 없이 읽는 <a href=\"%SITE%text.html\">텍스트 판</a>(원인마다 따로 된 페이지 포함), 전체 내용 마크다운 <a href=\"%SITE%llms-full.txt\">llms-full.txt</a>, AI용 안내 <a href=\"%SITE%llms.txt\">llms.txt</a>.","t":"A <a href=\"%SITE%text.html\">text edition</a> that works without JavaScript (with a separate page for each cause), the full content as Markdown in <a href=\"%SITE%llms-full.txt\">llms-full.txt</a>, and a guide for AI tools in <a href=\"%SITE%llms.txt\">llms.txt</a>."},
     {"ctx":"#top p","ko":"MIT 라이선스로 공개합니다. 글꼴(IBM Plex Sans KR, IBM Plex Mono, Black Han Sans)은 SIL Open Font License 1.1을 따릅니다.","t":"Released under the MIT License. The fonts (IBM Plex Sans KR, IBM Plex Mono, Black Han Sans) are licensed under the SIL Open Font License 1.1."}
+  ],
+  "stale": [
+    {"ctx":"#nav li","ko":"<a href=\"#owners\">게임팀·인프라팀 담당 구분</a>","t":"<a href=\"#owners\">Game team vs. infra team ownership</a>"}
   ]
 }

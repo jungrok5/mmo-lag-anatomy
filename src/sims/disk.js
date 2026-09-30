@@ -1,6 +1,7 @@
 /* 디스크 I/O: 창고(디스크)의 문이 좁아지면, 짐 넣기를 직접 기다리는 게임 스레드도 같이 멈춘다.
    위 두 차트는 10분을 10배속으로 흐르게 하고, 아래 띠는 실제 속도로 게임 서버의 최근 1초를 보여 준다. */
 K.register('disk', function (root) {
+  const TR = I18N.tr('sim-disk');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`레이어 11 · 디스크`,
     title: TR`디스크가 밀리면 게임 스레드도 같이 멈춘다`,
@@ -396,7 +397,7 @@ K.register('disk', function (root) {
     }
     if (P.backup) extra.push(TR`백업이 디스크 처리 능력의 70%를 차지하고 있습니다. 매일 같은 시각에 렉이 난다면 이런 예약 작업을 먼저 의심합니다.`);
     if (P.fsync && flag !== 'good') extra.push(TR`fsync 때문에 한 건이 ${K.ms(D.svc)}에서 ${K.ms(D.fs)}로 늘고, 디스크가 할 일도 약 2배입니다.`);
-    F.say(K.flag(flag) + msg + (extra.length ? ' ' + extra.join(' ') : ''));
+    F.say(K.flag(flag) + msg + (extra.length ? K.sp + K.sentences(extra) : ''));
   }
 
   K.loop(root, dt => {

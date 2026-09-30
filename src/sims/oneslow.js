@@ -1,6 +1,7 @@
 /* 한 명만 느릴 때: 서버 처리 방식에 따라 느린 사람 본인, 다른 사람, 몬스터가 각각 어떻게 보이는가
    서버 1대, 클라이언트 2개(A = 느린 회선, B = 정상 회선), 서버가 움직이는 몬스터 1마리 */
 K.register('oneslow', function (root) {
+  const TR = I18N.tr('sim-oneslow');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`누구에게 번지나 · 한 명만 느릴 때`,
     title: TR`느린 한 사람은 남의 화면에서 어떻게 보이고, 남에게 번질까`,
@@ -367,7 +368,7 @@ K.register('oneslow', function (root) {
   function drawMatrix() {
     const rows = [['A', TR`A(느린 사람)의 화면`], ['B', TR`B(정상)의 화면`]];
     const cols = ['A', 'B', 'M'];
-    const head = TR`<tr><th><span class="sr-only">누구의 화면</span></th>${cols.map(c => `<th>${c === 'M' ? TR`몬스터의 모습` : NAMES[c] + TR`의 모습`}</th>`).join('')}</tr>`;
+    const head = TR`<tr><th><span class="sr-only">누구의 화면</span></th>${cols.map(c => `<th>${c === 'M' ? TR`몬스터의 모습` : TR`${NAMES[c]}의 모습`}</th>`).join('')}</tr>`;
     const body = rows.map(([v, name]) => `<tr><th>${name}</th>${cols.map(tg => { const j = judge(v, tg); return `<td class="v"><span class="chip ${j.lvl}">${K.glyph(j.sym)}${tg === v && j.sym === 'normal' ? (P.mode === 'lock' ? TR`정상 (턴 대기만큼 늦게)` : TR`정상 (예측으로 즉시)`) : j.label}</span></td>`; }).join('')}</tr>`).join('');
     mat.innerHTML = `<table>${head}${body}</table>`;
   }

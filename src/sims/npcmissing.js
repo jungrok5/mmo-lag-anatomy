@@ -1,5 +1,6 @@
 /* 같은 PC 두 클라이언트 중 한쪽만 NPC가 안 보일 때: 가장 흔한 경쟁 상태(로딩 중 도착한 등장 알림 폐기)와 진단 질문 */
 K.register('npcmissing', function (root) {
+  const TR = I18N.tr('sim-npcmissing');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`누구에게 번지나 · 한쪽 클라만 이상할 때`,
     title: TR`같은 PC의 두 클라이언트, 한쪽만 NPC가 안 보인다면`,
@@ -156,9 +157,8 @@ K.register('npcmissing', function (root) {
     let msg;
     if ((o1.seen < P.n) !== (o2.seen < P.n)) {
       const [gn, gl, bn, bl, bo] = o2.seen < P.n ? [1, P.load1, 2, P.load2, o2] : [2, P.load2, 1, P.load1, o1];
-      const eun = n => (n === 1 ? TR`은` : TR`는`);
       const lost = P.n - bo.seen;
-      msg = TR`${K.flag('bad')}클라 ${gn}${eun(gn)} 로딩(${K.ms(gl)})이 끝난 뒤 등장 알림을 받아 NPC가 모두 보입니다. 클라 ${bn}${eun(bn)} 로딩(${K.ms(bl)})이 길어서, 알림 ${lost === P.n ? TR`전부` : TR`${P.n}개 중 ${lost}개`}가 패킷 처리 준비가 끝나기 전에 도착해 <b>버려졌습니다</b>. 서버는 이미 보낸 것으로 처리하므로 다시 보내지 않고, 그 NPC${lost === P.n ? '' : TR` ${lost}마리`}가 시야에서 나갔다 들어오기 전까지 클라 ${bn}에는 <b>안 보입니다</b>.`;
+      msg = TR`${K.flag('bad')}클라 ${K.josa(gn, 'eun')} 로딩(${K.ms(gl)})이 끝난 뒤 등장 알림을 받아 NPC가 모두 보입니다. 클라 ${K.josa(bn, 'eun')} 로딩(${K.ms(bl)})이 길어서, 알림 ${lost === P.n ? TR`전부` : TR`${P.n}개 중 ${lost}개`}가 패킷 처리 준비가 끝나기 전에 도착해 <b>버려졌습니다</b>. 서버는 이미 보낸 것으로 처리하므로 다시 보내지 않고, 그 NPC${lost === P.n ? '' : TR` ${lost}마리`}가 시야에서 나갔다 들어오기 전까지 클라 ${bn}에는 <b>안 보입니다</b>.`;
     }
     else if (o1.seen < P.n && o2.seen < P.n) msg = TR`${K.flag('bad')}두 클라이언트 모두 로딩이 끝나기 전에 등장 알림이 도착해 버려졌습니다(클라 1은 ${P.n - o1.seen}마리, 클라 2는 ${P.n - o2.seen}마리 안 보임). 이 구조에서는 로딩이 느린 쪽이 먼저 문제를 겪을 뿐, 누구에게나 생길 수 있습니다.`;
     else msg = TR`${K.flag('good')}${P.serverWait ? TR`서버가 준비 완료 신호를 받은 뒤에 보내므로` : P.clientQueue ? TR`클라이언트가 로딩 중 받은 패킷을 보관했다가 처리하므로` : TR`등장 알림이 로딩이 끝난 뒤 도착해`} 두 클라이언트 모두 NPC가 보입니다.`;

@@ -1,6 +1,7 @@
 /* 서버 구성도: 한 곳을 고장 내면 연쇄로 어디까지 번지는지, 플레이어는 누가 무엇을 겪는지 보여 준다.
    그림은 SVG(색은 CSS 변수라 테마 전환 자동), 번짐 규칙과 증상 표는 아래 데이터로 정해진다. */
 K.register('arch', function (root) {
+  const TR = I18N.tr('sim-arch');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`레이어 13 · 서버 구성과 운영`,
     title: TR`서버 하나에 장애가 나면 누가 무엇을 겪나`,
@@ -239,7 +240,7 @@ K.register('arch', function (root) {
     for (const k in casc) {
       const g = casc[k], all = g.ids.length === 3;
       items.push({
-        lv: g.lv, who: all ? TR`전원 (모든 필드·던전)` : g.ids.map(id => BY[id].l[0]).join(', ') + TR`에 있는 사람`, s: all ? TR`전원` : TR`일부 필드`, r: all ? 5 : 3,
+        lv: g.lv, who: all ? TR`전원 (모든 필드·던전)` : TR`${g.ids.map(id => BY[id].l[0]).join(', ')}에 있는 사람`, s: all ? TR`전원` : TR`일부 필드`, r: all ? 5 : 3,
         sym: g.lv === 2 ? [TR`멈춤`, TR`접속 끊김`] : [TR`슬로우모션`, TR`뚝뚝 끊김`, TR`입력 지연`],
         why: g.lv === 2 ? TR`게임 서버가 ${SRC[g.from]} 응답을 끝없이 기다리며 멈췄습니다. 오래 가면 하트비트(연결 유지 신호)가 끊기거나 워치독(감시 타이머)이 서버를 재시작해 모두의 접속이 끊깁니다.`
           : TR`게임 서버가 ${SRC[g.from]} 응답을 기다리는 동안 틱이 멈춥니다. 게임이 느리게 흐르거나 뚝뚝 끊기고, 입력이 늦게 반영됩니다.`,
@@ -453,7 +454,7 @@ K.register('arch', function (root) {
       if (id === 'cache' && eff[id] === 2) return;
       saved.push(P.mode === 'async'
         ? TR`<b>비동기</b>: 게임 서버가 ${nm(id)} 응답을 기다리지 않아 틱이 멈추지 않습니다.`
-        : TR`<b>서킷 브레이커</b>: ${nm(id)}${id === 'log' ? TR`을` : TR`를`} 1초까지만 기다리고 실패가 이어지면 아예 부르지 않아, 게임 서버가 오래 멈추지 않습니다. 기다리는 그 1초 동안은 틱이 멈추므로 비동기가 더 안전합니다.`);
+        : TR`<b>서킷 브레이커</b>: ${K.josa(nm(id), 'eul')} 1초까지만 기다리고 실패가 이어지면 아예 부르지 않아, 게임 서버가 오래 멈추지 않습니다. 기다리는 그 1초 동안은 틱이 멈추므로 비동기가 더 안전합니다.`);
       if (!savedSay.length) savedSay.push(P.mode === 'async' ? TR`설계 덕분에 게임 서버까지는 번지지 않았습니다.` : TR`서킷 브레이커 덕분에 게임 서버가 오래 멈추지는 않지만, 기다리는 1초 동안은 틱이 멈춥니다.`);
     });
     if (eff.auth && P.brk) {
@@ -482,7 +483,7 @@ K.register('arch', function (root) {
       groups.forEach(g => { msg += `→ <b>${gName(g.ids)} ${word(g.lv)}</b>: ${g.why}. `; });
       msg += top ? TR`누가 겪나: <b>${top.who}</b>. 무엇을: ${top.sym.join(', ')}.` : TR`플레이어는 거의 알아채지 못합니다.`;
       if (block && GAMES.some(g => cause[g])) msg += TR` 기다리는 방식을 비동기로 바꾸거나 서킷 브레이커를 켜면 번지는 범위가 줄어듭니다.`;
-      else if (savedSay.length) msg += ' ' + savedSay.join(' ');
+      else if (savedSay.length) msg += K.sp + K.sentences(savedSay);
     }
     F.say(msg);
   }

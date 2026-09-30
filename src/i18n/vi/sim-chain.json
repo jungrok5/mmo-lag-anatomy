@@ -26,7 +26,7 @@
     {"ctx":"src/sims/chain.js:23","ko":"쿨다운이 끝난 걸 보고 누르는 데 걸리는 시간","t":"Thời gian từ lúc thấy hồi chiêu xong đến lúc bấm"},
     {"ctx":"src/sims/chain.js:24","ko":"상점 UI","t":"UI cửa hàng"},
     {"ctx":"src/sims/chain.js:25","ko":"순차 왕복 수","t":"Số lượt khứ hồi tuần tự"},
-    {"ctx":"src/sims/chain.js:25","ko":"번","t":"lần"},
+    {"ctx":"src/sims/chain.js:25","ko":"번","t":" lần"},
     {"ctx":"src/sims/chain.js:25","ko":"예: 상점 열기 → 목록 → 가격 확인 → 구매 → 인벤토리 갱신","t":"Ví dụ: mở cửa hàng → danh sách → kiểm tra giá → mua → cập nhật túi đồ"},
     {"ctx":"src/sims/chain.js:26","ko":"요청당 서버 처리","t":"Server xử lý mỗi yêu cầu"},
     {"ctx":"src/sims/chain.js:28","ko":"확인 후 입력","t":"Xác nhận rồi mới nhập"},

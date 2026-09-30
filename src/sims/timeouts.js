@@ -1,6 +1,7 @@
 /* 장비별 유휴 타임아웃: 가만히 있는 연결은 길 위의 장비들이 하나씩 잊는다.
    가장 짧은 유휴 타임아웃이 범인이고, 서버가 모르면 유령 접속이 남는다. 레이어 5(네트워크 장비) 장에서 쓴다. */
 K.register('timeouts', function (root) {
+  const TR = I18N.tr('sim-timeouts');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`레이어 5 · 네트워크 장비`,
     title: TR`가만히 있으면 접속이 끊기는 이유: 장비별 유휴 타임아웃`,
@@ -20,10 +21,6 @@ K.register('timeouts', function (root) {
   const DEF = { proto: 'udp', link: 'home', hb: 0, bg: false, fw: false, lb: LB_DEF.udp, srv: 30, ka: false };
   const P = Object.assign({}, DEF);
 
-  // 받침에 따라 조사 고르기 (괄호 속 영문은 건너뛴다)
-  const jong = w => { w = w.replace(/\s*\(.*\)$/, ''); const c = w.charCodeAt(w.length - 1) - 0xac00; return c >= 0 && c < 11172 && c % 28 !== 0; };
-  const ga = w => w + (jong(w) ? TR`이` : TR`가`);
-  const eul = w => w + (jong(w) ? TR`을` : TR`를`);
   const fmtT = s => {
     if (!Number.isFinite(s)) return '∞';
     s = Math.round(s);
@@ -36,12 +33,12 @@ K.register('timeouts', function (root) {
   /* ---------- 분석 (결정적: 하트비트 시각이 정해져 있으므로 끝까지 계산해 둔다) ---------- */
   function lanes() {
     const udp = P.proto === 'udp', L = [];
-    if (P.link === 'home') L.push({ key: 'nat', idx: 0, name: TR`가정 공유기(NAT)`, T: udp ? 60 : 3600 });
-    else L.push({ key: 'cgnat', idx: 0, name: TR`통신사 공유기(CGNAT)`, T: udp ? 30 : 600 });
+    if (P.link === 'home') L.push({ key: 'nat', idx: 0, name: TR`가정 공유기(NAT)`, short: TR`가정 공유기`, T: udp ? 60 : 3600 });
+    else L.push({ key: 'cgnat', idx: 0, name: TR`통신사 공유기(CGNAT)`, short: TR`통신사 공유기`, T: udp ? 30 : 600 });
     if (P.fw) L.push({ key: 'fw', idx: 1, name: TR`회사·PC방 방화벽`, T: P.proto === 'udp' ? 120 : 300 });
     L.push({ key: 'lb', idx: 2, name: TR`로드밸런서`, T: P.lb });
-    L.push({ key: 'srv', idx: 3, name: TR`게임 서버 무응답 판정`, T: P.srv > 0 ? P.srv : Infinity });
-    if (!udp) L.push({ key: 'ka', idx: 4, name: TR`TCP keepalive (서버)`, T: P.ka ? 60 : 7200, ka: true });
+    L.push({ key: 'srv', idx: 3, name: TR`게임 서버 무응답 판정`, short: TR`게임 서버`, T: P.srv > 0 ? P.srv : Infinity });
+    if (!udp) L.push({ key: 'ka', idx: 4, name: TR`TCP keepalive (서버)`, short: 'TCP keepalive', T: P.ka ? 60 : 7200, ka: true });
     return L;
   }
   function analyze() {
@@ -309,7 +306,7 @@ K.register('timeouts', function (root) {
     if (rowsN !== A.L.length) { rowsN = A.L.length; tcv.fit && tcv.fit(); }
     const c = A.culprit;
     stCut.set(c ? fmtT(A.Tc) : TR`끊기지 않음`, c ? 'bad' : 'good', c ? TR`유휴 시작 뒤` : TR`10분 넘게 지켜봄`);
-    stWho.set(c ? c.name.replace(TR` 무응답 판정`, '').replace(/\s*\(.*\)$/, '') : TR`없음`, c ? 'bad' : 'good', c ? (c.key === 'srv' ? TR`서버가 직접 정리` : TR`알리지 않고 지움`) : TR`타이머가 제때 초기화`);
+    stWho.set(c ? c.short || c.name : TR`없음`, c ? 'bad' : 'good', c ? (c.key === 'srv' ? TR`서버가 직접 정리` : TR`알리지 않고 지움`) : TR`타이머가 제때 초기화`);
     if (!c) stSrv.set('—', null, TR`끊긴 적이 없음`);
     else if (c.key === 'srv') stSrv.set(fmtT(A.notice), 'good', TR`서버가 직접 끊음`);
     else if (Number.isFinite(A.notice)) stSrv.set(fmtT(A.notice), A.ghost ? 'bad' : 'warn', TR`끊긴 뒤 ${fmtT(A.notice - A.Tc)}`);
@@ -323,7 +320,7 @@ K.register('timeouts', function (root) {
     const lostHb = A.culprit ? A.hbs.find(x => x > A.Tc) : null;
     A.L.forEach(l => {
       if (l.ka || !Number.isFinite(l.E)) return;
-      if (l === A.culprit) ev.push([l.E, l.key === 'srv' ? TR`게임 서버가 무응답으로 보고 플레이어를 내보냄` : TR`${ga(l.name)} 연결을 지움 (여기서 끊김)`, 'bad']);
+      if (l === A.culprit) ev.push([l.E, l.key === 'srv' ? TR`게임 서버가 무응답으로 보고 플레이어를 내보냄` : TR`${K.josa(l.name, 'ga')} 연결을 지움 (여기서 끊김)`, 'bad']);
       else if (l.key !== 'srv') ev.push([l.E, TR`${l.name}도 뒤늦게 이 연결을 지움`, '']);
     });
     if (lostHb != null) ev.push([lostHb, TR`다음 하트비트가 나갔지만 서버에 닿지 못함`, 'warn']);
@@ -357,14 +354,14 @@ K.register('timeouts', function (root) {
         (byKa ? TR` 다만 keepalive는 운영체제가 보내므로 게임이 멈춰도 계속 나갑니다. 게임이 살아 있는지는 하트비트로 따로 확인해야 합니다.` : '');
     }
     let why;
-    if (bgStop) why = TR`휴대폰이 백그라운드로 가고 10초 뒤 OS가 앱을 멈춰 하트비트가 끊겼습니다. 그 뒤로 유휴 시간이 ${eul(fmtT(c.T))} 넘자`;
+    if (bgStop) why = TR`휴대폰이 백그라운드로 가고 10초 뒤 OS가 앱을 멈춰 하트비트가 끊겼습니다. 그 뒤로 유휴 시간이 ${K.josa(fmtT(c.T), 'eul')} 넘자`;
     else if (!P.hb) why = TR`하트비트가 없어 이 연결에는 ${fmtT(c.T)} 동안 아무 패킷도 지나가지 않았고, 그러자`;
-    else why = TR`하트비트 간격(${fmtT(P.hb)})이 ${c.key === 'srv' ? TR`서버의 무응답 판정` : c.name + TR`의 타임아웃`}(${fmtT(c.T)})보다 길어서`;
+    else why = TR`하트비트 간격(${fmtT(P.hb)})이 ${c.key === 'srv' ? TR`서버의 무응답 판정` : TR`${c.name}의 타임아웃`}(${fmtT(c.T)})보다 길어서`;
     if (c.key === 'srv') {
       return TR`${K.flag('bad')}${why} <b>${fmtT(A.Tc)}</b>에 <b>게임 서버</b>가 플레이어를 응답 없음으로 보고 내보냈습니다. 가만히 있던 플레이어가 다시 움직이면 접속 끊김 화면이 뜹니다. 서버가 직접 끊었으니 유령 접속은 남지 않습니다. ` +
         (bgStop ? TR`백그라운드에서는 하트비트를 보낼 수 없으니, 복귀하면 자동으로 빠르게 재접속하는 흐름을 만들어 두어야 합니다.` : TR`<b>해결:</b> 하트비트를 가장 짧은 타임아웃의 절반 이하, 예를 들어 ${fmtT(rec)}마다 보내세요.`);
     }
-    let s = TR`${K.flag('bad')}${why} <b>${fmtT(A.Tc)}</b>에 <b>${c.name}</b>${ga(c.name).slice(c.name.length)} 이 연결을 세션 테이블에서 지웠습니다. 플레이어는 가만히 있다가 다시 움직이는 순간 반응이 없다가 <b>접속 끊김</b>을 겪습니다. `;
+    let s = TR`${K.flag('bad')}${why} <b>${fmtT(A.Tc)}</b>에 ${`<b>${c.name}</b>${K.pp(c.name, 'ga')}`} 이 연결을 세션 테이블에서 지웠습니다. 플레이어는 가만히 있다가 다시 움직이는 순간 반응이 없다가 <b>접속 끊김</b>을 겪습니다. `;
     if (A.ghost) s += TR`그런데 서버는 ${Number.isFinite(A.notice) ? TR`${fmtT(A.notice - A.Tc)} 동안(${A.noticeBy === 'ka' ? TR`TCP keepalive 확인이 실패할 때까지` : TR`무응답 판정까지`})` : TR`끝까지`} 이 사실을 모릅니다. 서버에는 캐릭터가 그대로 남아(유령 접속) 재접속하면 “이미 접속 중” 오류가 나고, 필드에 가만히 선 캐릭터가 공격받기도 합니다. `;
     else s += TR`서버는 ${fmtT(A.notice)}에 ${A.noticeBy === 'ka' ? TR`TCP keepalive 확인으로` : TR`무응답 판정으로`} 감지하고 캐릭터를 정리합니다. `;
     s += bgStop ? TR`백그라운드에서는 하트비트를 보낼 수 없으니, 복귀하면 자동 재접속하고 서버는 짧은 무응답 판정으로 캐릭터를 정리해야 합니다.`

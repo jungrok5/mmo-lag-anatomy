@@ -1772,6 +1772,7 @@ dt[id]:target, .pb-steps li:target { background: var(--accent-soft); border-radi
                            사전의 열쇠는 원문 그대로이고, ${…} 자리는 {0}, {1} …로 바뀐다.
                            예: TR`원인 ${n}가지` → 열쇠 "원인 {0}가지" → 영어 "{0} causes"
                            사전에 없으면(한국어 판 포함) 원문을 그대로 돌려준다.
+   I18N.tr('묶음')         그 묶음의 사전을 먼저 보는 TR(실험 파일과 app.js 맨 앞에서 TR을 이것으로 바꾼다)
    I18N.t(문자열)          데이터처럼 이미 만들어진 문자열 하나를 번역
    I18N.applyData(객체)    객체 안의 한국어 문자열을 모두 번역(빌드 도구가 DATA에 쓴다)
 
@@ -1793,9 +1794,10 @@ dt[id]:target, .pb-steps li:target { background: var(--accent-soft); border-radi
     }
     return k;
   };
-  g.TR = function (strs) {
+  // 태그 함수 만들기. look(열쇠)이 번역을 돌려주고, 없으면(undefined) 원문을 쓴다
+  const tag = look => function (strs) {
     const k = keyOf(strs);
-    const t = I.dict[k];
+    const t = look(k);
     const n = arguments.length - 1;
     if (t === undefined) {
       if (!n) return k;
@@ -1807,6 +1809,10 @@ dt[id]:target, .pb-steps li:target { background: var(--accent-soft); border-radi
     const vals = arguments;
     return t.replace(/\{(\d+)\}/g, (m, i) => (+i < n ? vals[+i + 1] : m));
   };
+  g.TR = tag(k => I.dict[k]);
+  // 묶음 전용 태그: 실험마다 짧은 낱말(“초”, “개”, “멈춤”)의 뜻이 달라도 서로 덮어쓰지 않게,
+  // 그 묶음(sim-<실험>, ui-app)의 사전을 먼저 본다. 쓰는 곳: const TR = I18N.tr('sim-gc');
+  I.tr = group => tag(k => { const s = I.scopes && I.scopes[group]; return s && s[k] !== undefined ? s[k] : I.dict[k]; });
   I.t = s => (typeof s === 'string' && I.dict[s] !== undefined ? I.dict[s] : s);
   I.applyData = function walk(o) {
     if (Array.isArray(o)) { for (let i = 0; i < o.length; i++) o[i] = typeof o[i] === 'string' ? (HAN.test(o[i]) ? I.t(o[i]) : o[i]) : walk(o[i]); return o; }
@@ -1910,6 +1916,19 @@ dt[id]:target, .pb-steps li:target { background: var(--accent-soft); border-radi
   K.locale = (window.I18N && window.I18N.locale) || 'ko-KR';
   // 두 문장 잇기: 앞 문장 끝에 마침표를 찍고 띄운다. 번역판은 이 틀을 번역해 중국어·일본어는 “。”로 잇는다
   K.then = (a, b) => (a ? TR`${a}. ${b}` : b);
+  // 문장 여러 개 잇기: 중국어·일본어는 문장 사이를 띄우지 않는다
+  K.sp = /^(ja|zh)/.test((window.I18N && window.I18N.lang) || 'ko') ? '' : ' ';
+  K.sentences = list => list.join(K.sp);
+  // 한국어 조사(받침에 따라 이/가, 을/를, 은/는, 과/와). 괄호 속 설명은 건너뛰고, 숫자는 읽는 소리로 본다.
+  // 다른 언어에서는 빈 문자열이라, 번역문은 {0} 자리에 낱말만 받는다
+  const JOSA = { ga: ['이', '가'], eul: ['을', '를'], eun: ['은', '는'], wa: ['과', '와'] };
+  K.pp = (w, k) => {
+    if (((window.I18N && window.I18N.lang) || 'ko') !== 'ko') return '';
+    const s = String(w).replace(/\s*\(.*\)$/, ''), last = s.slice(-1), c = last.charCodeAt(0) - 0xac00;
+    const has = /\d/.test(last) ? '0136789'.includes(last) : c >= 0 && c < 11172 && c % 28 !== 0;
+    return JOSA[k][has ? 0 : 1];
+  };
+  K.josa = (w, k) => w + K.pp(w, k);
   K.firstSentence = s => (String(s).match(/^[\s\S]*?[.。！？!?](?=\s|$)/) || [String(s)])[0];
   K.n = (v, d = 0) => (Number.isFinite(v) ? v.toLocaleString(K.locale, { minimumFractionDigits: d, maximumFractionDigits: d }) : '—');
   K.ms = function (v) {
@@ -8233,6 +8252,7 @@ DATA.glossary = [
 /* 서버 구성도: 한 곳을 고장 내면 연쇄로 어디까지 번지는지, 플레이어는 누가 무엇을 겪는지 보여 준다.
    그림은 SVG(색은 CSS 변수라 테마 전환 자동), 번짐 규칙과 증상 표는 아래 데이터로 정해진다. */
 K.register('arch', function (root) {
+  const TR = I18N.tr('sim-arch');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`레이어 13 · 서버 구성과 운영`,
     title: TR`서버 하나에 장애가 나면 누가 무엇을 겪나`,
@@ -8471,7 +8491,7 @@ K.register('arch', function (root) {
     for (const k in casc) {
       const g = casc[k], all = g.ids.length === 3;
       items.push({
-        lv: g.lv, who: all ? TR`전원 (모든 필드·던전)` : g.ids.map(id => BY[id].l[0]).join(', ') + TR`에 있는 사람`, s: all ? TR`전원` : TR`일부 필드`, r: all ? 5 : 3,
+        lv: g.lv, who: all ? TR`전원 (모든 필드·던전)` : TR`${g.ids.map(id => BY[id].l[0]).join(', ')}에 있는 사람`, s: all ? TR`전원` : TR`일부 필드`, r: all ? 5 : 3,
         sym: g.lv === 2 ? [TR`멈춤`, TR`접속 끊김`] : [TR`슬로우모션`, TR`뚝뚝 끊김`, TR`입력 지연`],
         why: g.lv === 2 ? TR`게임 서버가 ${SRC[g.from]} 응답을 끝없이 기다리며 멈췄습니다. 오래 가면 하트비트(연결 유지 신호)가 끊기거나 워치독(감시 타이머)이 서버를 재시작해 모두의 접속이 끊깁니다.`
           : TR`게임 서버가 ${SRC[g.from]} 응답을 기다리는 동안 틱이 멈춥니다. 게임이 느리게 흐르거나 뚝뚝 끊기고, 입력이 늦게 반영됩니다.`,
@@ -8685,7 +8705,7 @@ K.register('arch', function (root) {
       if (id === 'cache' && eff[id] === 2) return;
       saved.push(P.mode === 'async'
         ? TR`<b>비동기</b>: 게임 서버가 ${nm(id)} 응답을 기다리지 않아 틱이 멈추지 않습니다.`
-        : TR`<b>서킷 브레이커</b>: ${nm(id)}${id === 'log' ? TR`을` : TR`를`} 1초까지만 기다리고 실패가 이어지면 아예 부르지 않아, 게임 서버가 오래 멈추지 않습니다. 기다리는 그 1초 동안은 틱이 멈추므로 비동기가 더 안전합니다.`);
+        : TR`<b>서킷 브레이커</b>: ${K.josa(nm(id), 'eul')} 1초까지만 기다리고 실패가 이어지면 아예 부르지 않아, 게임 서버가 오래 멈추지 않습니다. 기다리는 그 1초 동안은 틱이 멈추므로 비동기가 더 안전합니다.`);
       if (!savedSay.length) savedSay.push(P.mode === 'async' ? TR`설계 덕분에 게임 서버까지는 번지지 않았습니다.` : TR`서킷 브레이커 덕분에 게임 서버가 오래 멈추지는 않지만, 기다리는 1초 동안은 틱이 멈춥니다.`);
     });
     if (eff.auth && P.brk) {
@@ -8714,7 +8734,7 @@ K.register('arch', function (root) {
       groups.forEach(g => { msg += `→ <b>${gName(g.ids)} ${word(g.lv)}</b>: ${g.why}. `; });
       msg += top ? TR`누가 겪나: <b>${top.who}</b>. 무엇을: ${top.sym.join(', ')}.` : TR`플레이어는 거의 알아채지 못합니다.`;
       if (block && GAMES.some(g => cause[g])) msg += TR` 기다리는 방식을 비동기로 바꾸거나 서킷 브레이커를 켜면 번지는 범위가 줄어듭니다.`;
-      else if (savedSay.length) msg += ' ' + savedSay.join(' ');
+      else if (savedSay.length) msg += K.sp + K.sentences(savedSay);
     }
     F.say(msg);
   }
@@ -8740,6 +8760,7 @@ K.register('arch', function (root) {
 /* 버퍼블로트: 집 공유기의 올림(업로드) 대기열이 큰 업로드로 가득 차면 작은 게임 패킷도 그 뒤에 선다.
    와이파이 재전송(지터·손실)까지 함께 본다. 레이어 3(집 네트워크) 장에서 쓴다. */
 K.register('bloat', function (root) {
+  const TR = I18N.tr('sim-bloat');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`레이어 3 · 집 네트워크`,
     title: TR`동생이 영상을 올리면 내 핑이 튀는 이유 (버퍼블로트)`,
@@ -9117,7 +9138,7 @@ K.register('bloat', function (root) {
     }
     if (P.intf) parts.push(TR`2.5초마다 간섭이 0.3초씩 전파를 막아 그 순간의 패킷이 재전송을 거듭하다 사라집니다(손실 ${K.n(M.loss * 100, 1)}%). 화면에서는 주기적인 멈춤 뒤에 순간이동·고무줄로 보입니다.`);
     else if (P.sig >= 55) parts.push(TR`와이파이 신호가 약해 패킷마다 평균 ${K.n(M.retry, 1)}번 다시 보냅니다. 도착 시간이 들쭉날쭉해져(지터 ${K.ms(M.jit)}) 캐릭터가 뚝뚝 끊기${M.loss > 0 ? TR`고, 8번 모두 실패한 패킷은 사라져(손실 ${K.n(M.loss * 100, 1)}%) 순간이동·고무줄이 생깁니다` : TR`는 모습으로 보입니다`}. 공유기 가까이 가거나 랜선을 쓰면 사라집니다.`);
-    F.say(K.flag(st) + parts.join(' '));
+    F.say(K.flag(st) + K.sentences(parts));
   }
 
   K.loop(root, dt => {
@@ -9135,6 +9156,7 @@ K.register('bloat', function (root) {
 /* ==== sims/chain.js ==== */
 /* 연속 행동: 스킬 연계와 UI 흐름에서 “서버를 기다리는 횟수”가 체감을 정한다 */
 K.register('chain', function (root) {
+  const TR = I18N.tr('sim-chain');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`동기화 방식 · 연속 행동`,
     title: TR`핑은 “기다리는 횟수”만큼 곱해진다`,
@@ -9286,6 +9308,7 @@ K.register('chain', function (root) {
 /* 클라이언트 OS 스케줄러: 게임 스레드도 다른 프로그램과 똑같이 코어 앞에 줄을 선다.
    0.25ms 단위 라운드로빈(시간 조각 5ms, 공용 대기열) 모형. 화면은 실제의 1/20 속도로 흐른다. */
 K.register('cpu', function (root) {
+  const TR = I18N.tr('sim-cpu');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`레이어 2 · 클라이언트 OS`,
     title: TR`내 컴퓨터가 다른 일로 바쁘면 게임도 CPU를 기다린다`,
@@ -9633,6 +9656,7 @@ K.register('cpu', function (root) {
 /* DB 커넥션 풀: 요청 하나하나가 커넥션을 기다리고, CPU 코어를 나눠 쓰고, 핫 로우 잠금 앞에서 대기 선다.
    실제 속도(1초 = 1초)로 돌고, 응답 시간은 1초 단위로 모아 중간값·99% 값을 그린다. */
 K.register('dbpool', function (root) {
+  const TR = I18N.tr('sim-dbpool');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`레이어 12 · 데이터베이스`,
     title: TR`DB 앞에도 대기열이 생긴다: 커넥션 풀·인덱스·핫 로우 잠금`,
@@ -9991,6 +10015,7 @@ K.register('dbpool', function (root) {
 /* 디스크 I/O: 창고(디스크)의 문이 좁아지면, 짐 넣기를 직접 기다리는 게임 스레드도 같이 멈춘다.
    위 두 차트는 10분을 10배속으로 흐르게 하고, 아래 띠는 실제 속도로 게임 서버의 최근 1초를 보여 준다. */
 K.register('disk', function (root) {
+  const TR = I18N.tr('sim-disk');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`레이어 11 · 디스크`,
     title: TR`디스크가 밀리면 게임 스레드도 같이 멈춘다`,
@@ -10386,7 +10411,7 @@ K.register('disk', function (root) {
     }
     if (P.backup) extra.push(TR`백업이 디스크 처리 능력의 70%를 차지하고 있습니다. 매일 같은 시각에 렉이 난다면 이런 예약 작업을 먼저 의심합니다.`);
     if (P.fsync && flag !== 'good') extra.push(TR`fsync 때문에 한 건이 ${K.ms(D.svc)}에서 ${K.ms(D.fs)}로 늘고, 디스크가 할 일도 약 2배입니다.`);
-    F.say(K.flag(flag) + msg + (extra.length ? ' ' + extra.join(' ') : ''));
+    F.say(K.flag(flag) + msg + (extra.length ? K.sp + K.sentences(extra) : ''));
   }
 
   K.loop(root, dt => {
@@ -10417,6 +10442,7 @@ K.register('disk', function (root) {
 /* 거리·경로·시간대: 빛의 속도가 정하는 최소 핑, 경로 우회, 저녁 피크의 국제 구간 혼잡.
    레이어 4(인터넷 회선) 장에서 쓴다. */
 K.register('distance', function (root) {
+  const TR = I18N.tr('sim-distance');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`레이어 4 · 인터넷 회선`,
     title: TR`빛보다 빠른 패킷은 없다: 거리·경로·저녁 시간`,
@@ -10441,7 +10467,6 @@ K.register('distance', function (root) {
   const DEF = { me: 'seoul', srv: 'tokyo', route: 1.5, acc: 'wired', hour: 14, cut: false };
   const P = Object.assign({}, DEF);
   const D = Math.PI / 180;
-  const eun = w => { const c = w.charCodeAt(w.length - 1) - 0xac00; return w + (c >= 0 && c < 11172 && c % 28 ? TR`은` : TR`는`); };
 
   K.addStyle('distance', '.sim[data-sim="distance"] .cv-cap{flex-wrap:wrap}.sim[data-sim="distance"] .cv-cap b{white-space:nowrap}');
 
@@ -10732,7 +10757,7 @@ K.register('distance', function (root) {
     if (M.same) {
       m = TR`같은 도시 안이라 거리는 30km 남짓, 빛의 한계는 왕복 ${K.ms(M.light)}뿐입니다. 핑 <b>${K.ms(n.avg)}</b>의 대부분은 ${ACC[P.acc][0]} 가입자망과 장비를 지나는 시간입니다.`;
     } else {
-      m = TR`${M.a[0]}–${eun(M.b[0])} 직선으로 약 <b>${K.n(Math.round(M.km / 10) * 10)}km</b>입니다. 빛도 광케이블 안에서는 왕복 <b>${K.ms(M.light)}</b>가 걸립니다. `;
+      m = TR`${M.a[0]}–${K.josa(M.b[0], 'eun')} 직선으로 약 <b>${K.n(Math.round(M.km / 10) * 10)}km</b>입니다. 빛도 광케이블 안에서는 왕복 <b>${K.ms(M.light)}</b>가 걸립니다. `;
       if (M.geo > 1) m += TR`${M.geo >= 1.8 ? TR`한국·일본` : TR`홍콩`}과 유럽 사이는 직선 위로 큰 케이블이 거의 없어, 패킷은 동남아·수에즈나 미국을 돌아갑니다. `;
       m += TR`실제 경로는 ${K.n(M.route, 1)}배쯤 돌아가고 가입자망·장비까지 더해 평균 <b>${K.ms(n.avg)}</b>입니다.`;
       if (P.cut) m += TR` 해저 케이블이 끊겨 먼 경로로 우회하느라 평소보다 ${K.ms(M.light * P.route * M.geo * 0.7)}가 늘고 손실도 생겼습니다.`;
@@ -10760,6 +10785,7 @@ K.register('distance', function (root) {
 /* 클라이언트 게임 프로세스: 한 프레임의 일이 16.7ms를 넘기면 화면이 멈췄다가 튄다.
    실제 시간 위에서 "가상의 프레임"을 하나씩 끝낸다. 프레임이 끝나야만 화면 속 캐릭터 위치가 바뀐다. */
 K.register('frames', function (root) {
+  const TR = I18N.tr('sim-frames');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`레이어 1 · 클라이언트 게임`,
     title: TR`프레임이 늦으면 화면이 멈췄다 튄다`,
@@ -11179,6 +11205,7 @@ K.register('frames', function (root) {
 /* 가비지 컬렉션(GC) 멈춤: 힙이 차면 청소를 한다. 전체 멈춤 방식은 청소하는 동안 게임 스레드도 얼린다.
    살아 있는 데이터가 클수록 오래 멈추고, 그동안 밀린 틱을 나중에 몰아서 처리한다. */
 K.register('gc', function (root) {
+  const TR = I18N.tr('sim-gc');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`레이어 10 · 메모리`,
     title: TR`GC가 도는 동안 서버가 멈춘다`,
@@ -11534,6 +11561,7 @@ K.register('gc', function (root) {
 /* 머리 막힘(head-of-line blocking). TCP 는 순서를 지키려고 잃어버린 한 개가 다시 올 때까지
    뒤에 도착한 패킷을 수신 버퍼에 붙잡아 둔다. 같은 손실을 UDP 에도 똑같이 주고 나란히 비교한다. */
 K.register('hol', function (root) {
+  const TR = I18N.tr('sim-hol');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`소켓과 프로토콜 · TCP vs UDP`,
     title: TR`TCP는 잃어버린 패킷 하나 때문에 뒤의 패킷까지 모두 막힌다`,
@@ -11999,7 +12027,7 @@ K.register('hol', function (root) {
       const why = [];
       if (P.loss > 0) why.push(TR`손실률 ${K.pct(P.loss)}면 ${perSec >= 1 ? TR`1초에 ${K.n(perSec, 1)}개꼴로` : TR`${K.n(1 / perSec, 1)}초에 한 번꼴로`} 패킷이 사라집니다.`);
       if (P.auto) why.push(TR`4초마다 “${EV[lastEvent]}” 사건이 다시 일어납니다.`);
-      msg = TR`${K.flag(P.loss >= 0.05 ? 'bad' : 'warn')}지금은 잠잠합니다. ${why.join(' ')} 패킷이 사라질 때마다 TCP는 핑 한 번 이상 <b>멈춤</b> 뒤 <b>몰아치기</b>를 하고, UDP는 하나를 건너뜁니다. 그래서 액션·FPS 게임은 UDP 위에 “꼭 필요한 것만 다시 보내는” 자체 규칙을 구현해 씁니다.`;
+      msg = TR`${K.flag(P.loss >= 0.05 ? 'bad' : 'warn')}지금은 잠잠합니다. ${K.sentences(why)} 패킷이 사라질 때마다 TCP는 핑 한 번 이상 <b>멈춤</b> 뒤 <b>몰아치기</b>를 하고, UDP는 하나를 건너뜁니다. 그래서 액션·FPS 게임은 UDP 위에 “꼭 필요한 것만 다시 보내는” 자체 규칙을 구현해 씁니다.`;
     }
     F.say(msg);
   });
@@ -12012,6 +12040,7 @@ K.register('hol', function (root) {
 /* 클릭에서 화면까지: 입력 → 내 PC → 집 회선 → 인터넷 → 서버·DB → 다시 내 화면.
    구간마다 쌓이는 ms 를 한 줄 막대와 구간 목록으로 나눠 보여 준다. 전체 구간 요약 장에서 쓴다. */
 K.register('journey', function (root) {
+  const TR = I18N.tr('sim-journey');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`전체 구간 · 지연 분해`,
     title: TR`클릭에서 화면까지: 지연은 어디서 쌓이나`,
@@ -12414,6 +12443,7 @@ K.register('journey', function (root) {
      클라: 프레임마다 받은 패킷을 처리하고, 내 입력을 보내고, 다른 플레이어를 표시 방식대로 그린다.
    ========================================================================= */
 K.register('lab', function (root) {
+  const TR = I18N.tr('sim-lab');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const compact = root.dataset.compact === '1';
   const WW = 100, WH = 60, SPEED = 16; // 세계 크기(m), 이동 속도(m/s)
 
@@ -13242,6 +13272,7 @@ K.register('lab', function (root) {
 /* 지연 시간 사다리: 나노초부터 초까지, 서버가 흔히 기다리는 일들을 한 줄로 세운다.
    로그 눈금(한 칸 = 10배)과 "1나노초 = 1초" 사람 시간으로 번갈아 본다. DOM 으로 그려 좁은 화면에서도 줄바꿈된다. */
 K.register('ladder', function (root) {
+  const TR = I18N.tr('sim-ladder');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`레이어 10 · 메모리 · 숫자 감각`,
     title: TR`컴퓨터의 시간을 사람의 시간으로 늘려 보면`,
@@ -13422,6 +13453,7 @@ K.register('ladder', function (root) {
 /* 메모리 누수: 조금씩 새는 메모리가 며칠에 걸쳐 쌓이다가, 접속자가 몰리는 저녁에 RAM을 넘는다.
    RAM을 넘으면 디스크(스왑)를 쓰느라 틱이 수십 배 느려지고, 스왑까지 차면 운영체제가 서버를 강제로 끝낸다(OOM). */
 K.register('leak', function (root) {
+  const TR = I18N.tr('sim-leak');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`레이어 10 · 메모리`,
     title: TR`점검 직후엔 멀쩡하다가 사흘째 저녁부터 렉`,
@@ -13689,7 +13721,7 @@ K.register('leak', function (root) {
     const upH = S.up[i];
     const leaked = (P.leak * upH) / 1024;
     const pplGB = (S.ppl[i] * PER) / 1024;
-    if (s === 2) return TR`${K.flag('bad')} 메모리가 RAM ${P.ram}GB${P.swap ? TR`와 스왑 ${SWAP}GB를 모두` : TR`를`} 채우자 운영체제가 서버 프로세스를 강제로 끝냈습니다(OOM, 메모리 부족 종료). 이 서버의 <b>모든 플레이어</b>가 한꺼번에 <b>접속 끊김</b>을 겪고, 다시 켜지는 10분 동안 <b>접속 불가·무한 로딩</b>입니다. 다시 켜면 메모리가 비워져 멀쩡해 보이지만, 누수는 그대로라 같은 일이 되풀이됩니다.`;
+    if (s === 2) return TR`${K.flag('bad')} 메모리가 ${P.swap ? TR`RAM ${P.ram}GB와 스왑 ${SWAP}GB를 모두` : TR`RAM ${P.ram}GB를`} 채우자 운영체제가 서버 프로세스를 강제로 끝냈습니다(OOM, 메모리 부족 종료). 이 서버의 <b>모든 플레이어</b>가 한꺼번에 <b>접속 끊김</b>을 겪고, 다시 켜지는 10분 동안 <b>접속 불가·무한 로딩</b>입니다. 다시 켜면 메모리가 비워져 멀쩡해 보이지만, 누수는 그대로라 같은 일이 되풀이됩니다.`;
     if (s === 3) return TR`${K.flag('good')} 정기 점검으로 서버를 다시 켜는 중입니다. 누수된 메모리가 모두 해제되어 처음 상태로 돌아갑니다. 매일 점검하면 누수가 쌓일 틈이 없어 문제가 <b>숨어 버립니다</b>. 점검을 한 번 건너뛰거나 주기를 늘리면 그제야 드러납니다.`;
     if (s === 1) {
       const out = S.mem[i] - P.ram, tk = S.tick[i];
@@ -13740,6 +13772,7 @@ K.register('leak', function (root) {
 /* 락 경합과 데드락: 여러 스레드가 공유 자료(경매장 목록 등)를 고치려면 락을 잡아야 한다.
    락 안의 일이 길면 스레드를 늘려도 처리량이 1/f 에서 막히고, 락을 반대 순서로 잡으면 영원히 멈춘다. */
 K.register('locks', function (root) {
+  const TR = I18N.tr('sim-locks');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`레이어 9 · 서버 게임 프로세스`,
     title: TR`모든 스레드가 같은 락 하나를 기다린다`,
@@ -14126,6 +14159,7 @@ K.register('locks', function (root) {
    “ACK 는 답장에 얹으려고 잠깐 미룬다”(지연 ACK, 받는 쪽)가 서로를 기다리며 메시지마다 수십~수백 ms 를 버린다.
    위에서 아래로 시간이 흐르는 순서도로 보여 준다. */
 K.register('nagle', function (root) {
+  const TR = I18N.tr('sim-nagle');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`소켓과 프로토콜 · 소켓 옵션`,
     title: TR`작은 패킷을 모았다 보내려다 40~200ms를 버린다`,
@@ -14515,6 +14549,7 @@ K.register('nagle', function (root) {
 /* 서버 NIC: 패킷이 링 버퍼(우편함 칸)에 쌓이고, 큐마다 코어 하나가 꺼내 간다.
    칸이 다 차면 새로 온 패킷은 조용히 버려진다(ethtool -S의 rx_missed_errors 등, 이름은 드라이버마다 다름). 1ms 단위, 패킷 수로 계산(개별 패킷 아님). */
 K.register('nic', function (root) {
+  const TR = I18N.tr('sim-nic');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`레이어 6 · 서버 NIC`,
     title: TR`서버 네트워크 카드가 패킷을 버리는 순간`,
@@ -14784,6 +14819,7 @@ K.register('nic', function (root) {
 /* ==== sims/npcmissing.js ==== */
 /* 같은 PC 두 클라이언트 중 한쪽만 NPC가 안 보일 때: 가장 흔한 경쟁 상태(로딩 중 도착한 등장 알림 폐기)와 진단 질문 */
 K.register('npcmissing', function (root) {
+  const TR = I18N.tr('sim-npcmissing');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`누구에게 번지나 · 한쪽 클라만 이상할 때`,
     title: TR`같은 PC의 두 클라이언트, 한쪽만 NPC가 안 보인다면`,
@@ -14940,9 +14976,8 @@ K.register('npcmissing', function (root) {
     let msg;
     if ((o1.seen < P.n) !== (o2.seen < P.n)) {
       const [gn, gl, bn, bl, bo] = o2.seen < P.n ? [1, P.load1, 2, P.load2, o2] : [2, P.load2, 1, P.load1, o1];
-      const eun = n => (n === 1 ? TR`은` : TR`는`);
       const lost = P.n - bo.seen;
-      msg = TR`${K.flag('bad')}클라 ${gn}${eun(gn)} 로딩(${K.ms(gl)})이 끝난 뒤 등장 알림을 받아 NPC가 모두 보입니다. 클라 ${bn}${eun(bn)} 로딩(${K.ms(bl)})이 길어서, 알림 ${lost === P.n ? TR`전부` : TR`${P.n}개 중 ${lost}개`}가 패킷 처리 준비가 끝나기 전에 도착해 <b>버려졌습니다</b>. 서버는 이미 보낸 것으로 처리하므로 다시 보내지 않고, 그 NPC${lost === P.n ? '' : TR` ${lost}마리`}가 시야에서 나갔다 들어오기 전까지 클라 ${bn}에는 <b>안 보입니다</b>.`;
+      msg = TR`${K.flag('bad')}클라 ${K.josa(gn, 'eun')} 로딩(${K.ms(gl)})이 끝난 뒤 등장 알림을 받아 NPC가 모두 보입니다. 클라 ${K.josa(bn, 'eun')} 로딩(${K.ms(bl)})이 길어서, 알림 ${lost === P.n ? TR`전부` : TR`${P.n}개 중 ${lost}개`}가 패킷 처리 준비가 끝나기 전에 도착해 <b>버려졌습니다</b>. 서버는 이미 보낸 것으로 처리하므로 다시 보내지 않고, 그 NPC${lost === P.n ? '' : TR` ${lost}마리`}가 시야에서 나갔다 들어오기 전까지 클라 ${bn}에는 <b>안 보입니다</b>.`;
     }
     else if (o1.seen < P.n && o2.seen < P.n) msg = TR`${K.flag('bad')}두 클라이언트 모두 로딩이 끝나기 전에 등장 알림이 도착해 버려졌습니다(클라 1은 ${P.n - o1.seen}마리, 클라 2는 ${P.n - o2.seen}마리 안 보임). 이 구조에서는 로딩이 느린 쪽이 먼저 문제를 겪을 뿐, 누구에게나 생길 수 있습니다.`;
     else msg = TR`${K.flag('good')}${P.serverWait ? TR`서버가 준비 완료 신호를 받은 뒤에 보내므로` : P.clientQueue ? TR`클라이언트가 로딩 중 받은 패킷을 보관했다가 처리하므로` : TR`등장 알림이 로딩이 끝난 뒤 도착해`} 두 클라이언트 모두 NPC가 보입니다.`;
@@ -14958,6 +14993,7 @@ K.register('npcmissing', function (root) {
 /* 한 명만 느릴 때: 서버 처리 방식에 따라 느린 사람 본인, 다른 사람, 몬스터가 각각 어떻게 보이는가
    서버 1대, 클라이언트 2개(A = 느린 회선, B = 정상 회선), 서버가 움직이는 몬스터 1마리 */
 K.register('oneslow', function (root) {
+  const TR = I18N.tr('sim-oneslow');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`누구에게 번지나 · 한 명만 느릴 때`,
     title: TR`느린 한 사람은 남의 화면에서 어떻게 보이고, 남에게 번질까`,
@@ -15324,7 +15360,7 @@ K.register('oneslow', function (root) {
   function drawMatrix() {
     const rows = [['A', TR`A(느린 사람)의 화면`], ['B', TR`B(정상)의 화면`]];
     const cols = ['A', 'B', 'M'];
-    const head = TR`<tr><th><span class="sr-only">누구의 화면</span></th>${cols.map(c => `<th>${c === 'M' ? TR`몬스터의 모습` : NAMES[c] + TR`의 모습`}</th>`).join('')}</tr>`;
+    const head = TR`<tr><th><span class="sr-only">누구의 화면</span></th>${cols.map(c => `<th>${c === 'M' ? TR`몬스터의 모습` : TR`${NAMES[c]}의 모습`}</th>`).join('')}</tr>`;
     const body = rows.map(([v, name]) => `<tr><th>${name}</th>${cols.map(tg => { const j = judge(v, tg); return `<td class="v"><span class="chip ${j.lvl}">${K.glyph(j.sym)}${tg === v && j.sym === 'normal' ? (P.mode === 'lock' ? TR`정상 (턴 대기만큼 늦게)` : TR`정상 (예측으로 즉시)`) : j.label}</span></td>`; }).join('')}</tr>`).join('');
     mat.innerHTML = `<table>${head}${body}</table>`;
   }
@@ -15369,6 +15405,7 @@ K.register('oneslow', function (root) {
 /* 평균과 백분위: 가끔 튀는 지연이 평균·집계 그래프에서는 얼마나 옅어지는지 보여 준다.
    1분 동안 1초에 20번 잰 지연(틱 시간이나 RTT로 생각)을 만들고, 평균·p50·p99·최댓값과 집계 간격별 평균선을 비교한다. */
 K.register('pctl', function (root) {
+  const TR = I18N.tr('sim-pctl');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`관측으로 판정하기 · 숫자 읽는 법`,
     title: TR`평균은 괜찮은데 왜 렉이라고 할까`,
@@ -15490,6 +15527,7 @@ K.register('pctl', function (root) {
 /* 기다림의 법칙: 창구(처리자)와 줄(대기열). 이용률이 80%를 넘으면 대기가 폭발한다.
    모든 레이어(CPU·디스크·DB·네트워크)에 공통으로 적용되는 원리라 기본 개념 장에서 쓴다. */
 K.register('queue', function (root) {
+  const TR = I18N.tr('sim-queue');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`기본 원리 · 대기열`,
     title: TR`워커가 바쁠수록 대기열은 “갑자기” 길어진다`,
@@ -15709,6 +15747,7 @@ K.register('queue', function (root) {
 /* TCP 재전송 해부: 어디서 잃었나(근본 원인)와 어떻게 복구되나(빠른 재전송 · TLP · RTO · 불필요한 재전송)
    서버 → 클라이언트 한 방향 TCP 연결. 받는 쪽은 도착할 때마다 ACK(누적 + SACK)를 돌려보낸다. */
 K.register('retrans', function (root) {
+  const TR = I18N.tr('sim-retrans');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`TCP 재전송 · 원인과 복구`,
     title: TR`재전송 한 번이 게임에서는 왜 수백 ms 멈춤이 되나`,
@@ -16181,6 +16220,7 @@ K.register('retrans', function (root) {
 /* 서버 OS: 점검 직후 로그인 폭주. listen backlog(접속 대기 줄), 파일 디스크립터 한도, 재시도 방식, 대기열(순번표).
    사람 수를 묶음으로 계산하는 모형(100ms 단위, 0~300초). 조건이 바뀌면 300초를 통째로 다시 계산하고 재생 위치만 움직인다. */
 K.register('rush', function (root) {
+  const TR = I18N.tr('sim-rush');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`레이어 7 · 서버 OS`,
     title: TR`점검 끝! 10만 명이 동시에 접속 버튼을 누르면`,
@@ -16480,6 +16520,7 @@ K.register('rush', function (root) {
    회선이 느린 클라이언트의 송신 버퍼가 가득 찼을 때 서버 코드가 어떻게 하느냐(블로킹·최신만·킥·무제한)에 따라
    그 클라이언트만 불편하거나, 서버 전체가 렉에 빠지거나, 서버가 메모리 부족으로 죽는다. */
 K.register('sndbuf', function (root) {
+  const TR = I18N.tr('sim-sndbuf');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`소켓과 프로토콜 · 송신 버퍼`,
     title: TR`느린 클라이언트 하나가 모두를 느리게 만드는 법`,
@@ -16902,6 +16943,7 @@ K.register('sndbuf', function (root) {
 /* ==== sims/syncmodels.js ==== */
 /* 동기화 방식 비교: 같은 회선에서 같은 버튼을 눌렀을 때 방식마다 언제 반응하고 언제 확정되는가 */
 K.register('syncmodels', function (root) {
+  const TR = I18N.tr('sim-syncmodels');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`동기화 방식 · 비교`,
     title: TR`버튼 한 번, 다섯 가지 반응`,
@@ -17207,6 +17249,7 @@ K.register('syncmodels', function (root) {
    넘치면 고정 스텝 서버는 늦게 끝난 만큼 세계 시간이 느리게 흐르고(슬로우모션),
    한 번 크게 막히면 밀린 틱을 연달아 돌려 따라잡는다(멈춤 → 몰아치기). */
 K.register('tick', function (root) {
+  const TR = I18N.tr('sim-tick');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`레이어 9 · 서버 게임 프로세스`,
     title: TR`한 틱 안에 할 일이 넘치면 서버의 틱이 밀린다`,
@@ -17576,6 +17619,7 @@ K.register('tick', function (root) {
 /* 장비별 유휴 타임아웃: 가만히 있는 연결은 길 위의 장비들이 하나씩 잊는다.
    가장 짧은 유휴 타임아웃이 범인이고, 서버가 모르면 유령 접속이 남는다. 레이어 5(네트워크 장비) 장에서 쓴다. */
 K.register('timeouts', function (root) {
+  const TR = I18N.tr('sim-timeouts');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`레이어 5 · 네트워크 장비`,
     title: TR`가만히 있으면 접속이 끊기는 이유: 장비별 유휴 타임아웃`,
@@ -17595,10 +17639,6 @@ K.register('timeouts', function (root) {
   const DEF = { proto: 'udp', link: 'home', hb: 0, bg: false, fw: false, lb: LB_DEF.udp, srv: 30, ka: false };
   const P = Object.assign({}, DEF);
 
-  // 받침에 따라 조사 고르기 (괄호 속 영문은 건너뛴다)
-  const jong = w => { w = w.replace(/\s*\(.*\)$/, ''); const c = w.charCodeAt(w.length - 1) - 0xac00; return c >= 0 && c < 11172 && c % 28 !== 0; };
-  const ga = w => w + (jong(w) ? TR`이` : TR`가`);
-  const eul = w => w + (jong(w) ? TR`을` : TR`를`);
   const fmtT = s => {
     if (!Number.isFinite(s)) return '∞';
     s = Math.round(s);
@@ -17611,12 +17651,12 @@ K.register('timeouts', function (root) {
   /* ---------- 분석 (결정적: 하트비트 시각이 정해져 있으므로 끝까지 계산해 둔다) ---------- */
   function lanes() {
     const udp = P.proto === 'udp', L = [];
-    if (P.link === 'home') L.push({ key: 'nat', idx: 0, name: TR`가정 공유기(NAT)`, T: udp ? 60 : 3600 });
-    else L.push({ key: 'cgnat', idx: 0, name: TR`통신사 공유기(CGNAT)`, T: udp ? 30 : 600 });
+    if (P.link === 'home') L.push({ key: 'nat', idx: 0, name: TR`가정 공유기(NAT)`, short: TR`가정 공유기`, T: udp ? 60 : 3600 });
+    else L.push({ key: 'cgnat', idx: 0, name: TR`통신사 공유기(CGNAT)`, short: TR`통신사 공유기`, T: udp ? 30 : 600 });
     if (P.fw) L.push({ key: 'fw', idx: 1, name: TR`회사·PC방 방화벽`, T: P.proto === 'udp' ? 120 : 300 });
     L.push({ key: 'lb', idx: 2, name: TR`로드밸런서`, T: P.lb });
-    L.push({ key: 'srv', idx: 3, name: TR`게임 서버 무응답 판정`, T: P.srv > 0 ? P.srv : Infinity });
-    if (!udp) L.push({ key: 'ka', idx: 4, name: TR`TCP keepalive (서버)`, T: P.ka ? 60 : 7200, ka: true });
+    L.push({ key: 'srv', idx: 3, name: TR`게임 서버 무응답 판정`, short: TR`게임 서버`, T: P.srv > 0 ? P.srv : Infinity });
+    if (!udp) L.push({ key: 'ka', idx: 4, name: TR`TCP keepalive (서버)`, short: 'TCP keepalive', T: P.ka ? 60 : 7200, ka: true });
     return L;
   }
   function analyze() {
@@ -17884,7 +17924,7 @@ K.register('timeouts', function (root) {
     if (rowsN !== A.L.length) { rowsN = A.L.length; tcv.fit && tcv.fit(); }
     const c = A.culprit;
     stCut.set(c ? fmtT(A.Tc) : TR`끊기지 않음`, c ? 'bad' : 'good', c ? TR`유휴 시작 뒤` : TR`10분 넘게 지켜봄`);
-    stWho.set(c ? c.name.replace(TR` 무응답 판정`, '').replace(/\s*\(.*\)$/, '') : TR`없음`, c ? 'bad' : 'good', c ? (c.key === 'srv' ? TR`서버가 직접 정리` : TR`알리지 않고 지움`) : TR`타이머가 제때 초기화`);
+    stWho.set(c ? c.short || c.name : TR`없음`, c ? 'bad' : 'good', c ? (c.key === 'srv' ? TR`서버가 직접 정리` : TR`알리지 않고 지움`) : TR`타이머가 제때 초기화`);
     if (!c) stSrv.set('—', null, TR`끊긴 적이 없음`);
     else if (c.key === 'srv') stSrv.set(fmtT(A.notice), 'good', TR`서버가 직접 끊음`);
     else if (Number.isFinite(A.notice)) stSrv.set(fmtT(A.notice), A.ghost ? 'bad' : 'warn', TR`끊긴 뒤 ${fmtT(A.notice - A.Tc)}`);
@@ -17898,7 +17938,7 @@ K.register('timeouts', function (root) {
     const lostHb = A.culprit ? A.hbs.find(x => x > A.Tc) : null;
     A.L.forEach(l => {
       if (l.ka || !Number.isFinite(l.E)) return;
-      if (l === A.culprit) ev.push([l.E, l.key === 'srv' ? TR`게임 서버가 무응답으로 보고 플레이어를 내보냄` : TR`${ga(l.name)} 연결을 지움 (여기서 끊김)`, 'bad']);
+      if (l === A.culprit) ev.push([l.E, l.key === 'srv' ? TR`게임 서버가 무응답으로 보고 플레이어를 내보냄` : TR`${K.josa(l.name, 'ga')} 연결을 지움 (여기서 끊김)`, 'bad']);
       else if (l.key !== 'srv') ev.push([l.E, TR`${l.name}도 뒤늦게 이 연결을 지움`, '']);
     });
     if (lostHb != null) ev.push([lostHb, TR`다음 하트비트가 나갔지만 서버에 닿지 못함`, 'warn']);
@@ -17932,14 +17972,14 @@ K.register('timeouts', function (root) {
         (byKa ? TR` 다만 keepalive는 운영체제가 보내므로 게임이 멈춰도 계속 나갑니다. 게임이 살아 있는지는 하트비트로 따로 확인해야 합니다.` : '');
     }
     let why;
-    if (bgStop) why = TR`휴대폰이 백그라운드로 가고 10초 뒤 OS가 앱을 멈춰 하트비트가 끊겼습니다. 그 뒤로 유휴 시간이 ${eul(fmtT(c.T))} 넘자`;
+    if (bgStop) why = TR`휴대폰이 백그라운드로 가고 10초 뒤 OS가 앱을 멈춰 하트비트가 끊겼습니다. 그 뒤로 유휴 시간이 ${K.josa(fmtT(c.T), 'eul')} 넘자`;
     else if (!P.hb) why = TR`하트비트가 없어 이 연결에는 ${fmtT(c.T)} 동안 아무 패킷도 지나가지 않았고, 그러자`;
-    else why = TR`하트비트 간격(${fmtT(P.hb)})이 ${c.key === 'srv' ? TR`서버의 무응답 판정` : c.name + TR`의 타임아웃`}(${fmtT(c.T)})보다 길어서`;
+    else why = TR`하트비트 간격(${fmtT(P.hb)})이 ${c.key === 'srv' ? TR`서버의 무응답 판정` : TR`${c.name}의 타임아웃`}(${fmtT(c.T)})보다 길어서`;
     if (c.key === 'srv') {
       return TR`${K.flag('bad')}${why} <b>${fmtT(A.Tc)}</b>에 <b>게임 서버</b>가 플레이어를 응답 없음으로 보고 내보냈습니다. 가만히 있던 플레이어가 다시 움직이면 접속 끊김 화면이 뜹니다. 서버가 직접 끊었으니 유령 접속은 남지 않습니다. ` +
         (bgStop ? TR`백그라운드에서는 하트비트를 보낼 수 없으니, 복귀하면 자동으로 빠르게 재접속하는 흐름을 만들어 두어야 합니다.` : TR`<b>해결:</b> 하트비트를 가장 짧은 타임아웃의 절반 이하, 예를 들어 ${fmtT(rec)}마다 보내세요.`);
     }
-    let s = TR`${K.flag('bad')}${why} <b>${fmtT(A.Tc)}</b>에 <b>${c.name}</b>${ga(c.name).slice(c.name.length)} 이 연결을 세션 테이블에서 지웠습니다. 플레이어는 가만히 있다가 다시 움직이는 순간 반응이 없다가 <b>접속 끊김</b>을 겪습니다. `;
+    let s = TR`${K.flag('bad')}${why} <b>${fmtT(A.Tc)}</b>에 ${`<b>${c.name}</b>${K.pp(c.name, 'ga')}`} 이 연결을 세션 테이블에서 지웠습니다. 플레이어는 가만히 있다가 다시 움직이는 순간 반응이 없다가 <b>접속 끊김</b>을 겪습니다. `;
     if (A.ghost) s += TR`그런데 서버는 ${Number.isFinite(A.notice) ? TR`${fmtT(A.notice - A.Tc)} 동안(${A.noticeBy === 'ka' ? TR`TCP keepalive 확인이 실패할 때까지` : TR`무응답 판정까지`})` : TR`끝까지`} 이 사실을 모릅니다. 서버에는 캐릭터가 그대로 남아(유령 접속) 재접속하면 “이미 접속 중” 오류가 나고, 필드에 가만히 선 캐릭터가 공격받기도 합니다. `;
     else s += TR`서버는 ${fmtT(A.notice)}에 ${A.noticeBy === 'ka' ? TR`TCP keepalive 확인으로` : TR`무응답 판정으로`} 감지하고 캐릭터를 정리합니다. `;
     s += bgStop ? TR`백그라운드에서는 하트비트를 보낼 수 없으니, 복귀하면 자동 재접속하고 서버는 짧은 무응답 판정으로 캐릭터를 정리해야 합니다.`
@@ -17966,6 +18006,7 @@ K.register('timeouts', function (root) {
 /* ==== sims/windows.js ==== */
 /* 판정 구간: 보스 예고 시간 중 얼마가 네트워크에 먹히는가. 판정 방식·연출 방식에 따라 달라진다 */
 K.register('windows', function (root) {
+  const TR = I18N.tr('sim-windows');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`동기화 방식 · 판정 구간`,
     title: TR`예고가 “핑 + 반응 시간”보다 짧으면 실력과 상관없이 맞는다`,
@@ -18245,6 +18286,7 @@ K.register('windows', function (root) {
    app.js — 데이터로 본문을 채우고(원인 카드, 증상 사전, 지도, 용어), 진단 도우미와 내비게이션을 붙인다.
    ========================================================================= */
 (function () {
+  const TR = I18N.tr('ui-app');   // 화면 글자 묶음의 사전을 먼저 본다(i18n.js)
   const D = window.DATA;
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));

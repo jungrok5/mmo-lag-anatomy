@@ -71,7 +71,7 @@
     {"ctx":"#retrans td","ko":"포트의 CRC·입력 오류, 출력 드롭, 폴리서 초과, 세션 테이블 사용량, 드롭 로그","t":"ポートのCRC・入力エラー、出力ドロップ、ポリサー超過、セッションテーブル使用量、ドロップログ"},
     {"ctx":"#retrans td","ko":"데이터센터 장비 구간에서 버렸는지. 5분 평균 사용률이 낮은데 출력 드롭이 늘면 마이크로버스트(아주 짧은 순간의 트래픽 몰림)","t":"データセンター機器の区間で破棄したか。5分平均の使用率が低いのに出力ドロップが増えるなら、マイクロバースト（ごく短い瞬間のトラフィック集中）"},
     {"ctx":"#retrans td","ko":"경로","t":"経路"},
-    {"ctx":"#retrans td","ko":"<code>mtr</code>·<code>pathping</code>으로 끝까지 이어지는 손실. 수백 번 이상 보내야 1% 안팎의 손실이 보이고, 게임과 같은 TCP 포트로 보내면(<code>mtr -T -P 포트</code>) 더 정확합니다","t":"<code>mtr</code>・<code>pathping</code>で、最後まで続くロス。数百回以上送らないと1%前後のロスは見えません。ゲームと同じTCPポートに送る（<code>mtr -T -P ポート</code>）とより正確です"},
+    {"ctx":"#retrans td","ko":"<code>mtr</code>·<code>pathping</code>으로 끝까지 이어지는 손실. 수백 번 이상 보내야 1% 안팎의 손실이 보이고, 게임과 같은 TCP 포트로 보내면(<code>mtr -T -P PORT</code>) 더 정확합니다","t":""},
     {"ctx":"#retrans td","ko":"몇 번째 구간부터 손실이 시작되는지. 중간 한 구간만 손실로 보이고 뒤는 멀쩡하면 그 장비가 측정용 응답(ICMP)을 제한하는 것일 뿐입니다. 오가는 경로가 다를 수 있어 서버 쪽에서 유저 쪽으로도 측정합니다","t":"何番目の区間からロスが始まるか。途中の1区間だけがロスに見えて後ろが正常なら、その機器が測定用の応答（ICMP）をレート制限しているだけです。行きと帰りの経路が異なることがあるので、サーバー側からユーザー側へも測定します"},
     {"ctx":"#retrans td","ko":"패킷 캡처 (양쪽 끝)","t":"パケットキャプチャ（両端）"},
     {"ctx":"#retrans td","ko":"Wireshark 필터 <code>tcp.analysis.retransmission</code>, 같은 <code>tcp.analysis.</code> 계열의 fast_retransmission, spurious_retransmission, duplicate_ack, lost_segment, zero_window","t":"Wiresharkのフィルター<code>tcp.analysis.retransmission</code>、同じ<code>tcp.analysis.</code>系のfast_retransmission、spurious_retransmission、duplicate_ack、lost_segment、zero_window"},
@@ -145,5 +145,8 @@
     {"ctx":"#retrans td","ko":"패킷을 고르게 나눠 보내 버스트(한꺼번에 몰아 보냄)로 인한 손실을 줄임","t":"パケットを均等に分けて送り、バースト（一度にまとめて送ること）によるパケットロスを減らす"},
     {"ctx":"#retrans td","ko":"손실을 “예방”하는 쪽. 복구 속도와는 별개","t":"パケットロスを「予防」するためのもの。復旧速度とは別物"},
     {"ctx":"#retrans-causes","ko":"TCP 재전송의 근본 원인","t":"TCP再送の根本原因"}
+  ],
+  "stale": [
+    {"ctx":"#retrans td","ko":"<code>mtr</code>·<code>pathping</code>으로 끝까지 이어지는 손실. 수백 번 이상 보내야 1% 안팎의 손실이 보이고, 게임과 같은 TCP 포트로 보내면(<code>mtr -T -P 포트</code>) 더 정확합니다","t":"<code>mtr</code>・<code>pathping</code>で、最後まで続くロス。数百回以上送らないと1%前後のロスは見えません。ゲームと同じTCPポートに送る（<code>mtr -T -P ポート</code>）とより正確です"}
   ]
 }

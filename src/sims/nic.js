@@ -1,6 +1,7 @@
 /* 서버 NIC: 패킷이 링 버퍼(우편함 칸)에 쌓이고, 큐마다 코어 하나가 꺼내 간다.
    칸이 다 차면 새로 온 패킷은 조용히 버려진다(ethtool -S의 rx_missed_errors 등, 이름은 드라이버마다 다름). 1ms 단위, 패킷 수로 계산(개별 패킷 아님). */
 K.register('nic', function (root) {
+  const TR = I18N.tr('sim-nic');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`레이어 6 · 서버 NIC`,
     title: TR`서버 네트워크 카드가 패킷을 버리는 순간`,

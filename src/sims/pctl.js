@@ -1,6 +1,7 @@
 /* 평균과 백분위: 가끔 튀는 지연이 평균·집계 그래프에서는 얼마나 옅어지는지 보여 준다.
    1분 동안 1초에 20번 잰 지연(틱 시간이나 RTT로 생각)을 만들고, 평균·p50·p99·최댓값과 집계 간격별 평균선을 비교한다. */
 K.register('pctl', function (root) {
+  const TR = I18N.tr('sim-pctl');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`관측으로 판정하기 · 숫자 읽는 법`,
     title: TR`평균은 괜찮은데 왜 렉이라고 할까`,

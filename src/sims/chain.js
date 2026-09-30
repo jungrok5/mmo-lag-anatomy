@@ -1,5 +1,6 @@
 /* 연속 행동: 스킬 연계와 UI 흐름에서 “서버를 기다리는 횟수”가 체감을 정한다 */
 K.register('chain', function (root) {
+  const TR = I18N.tr('sim-chain');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`동기화 방식 · 연속 행동`,
     title: TR`핑은 “기다리는 횟수”만큼 곱해진다`,

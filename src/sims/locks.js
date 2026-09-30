@@ -1,6 +1,7 @@
 /* 락 경합과 데드락: 여러 스레드가 공유 자료(경매장 목록 등)를 고치려면 락을 잡아야 한다.
    락 안의 일이 길면 스레드를 늘려도 처리량이 1/f 에서 막히고, 락을 반대 순서로 잡으면 영원히 멈춘다. */
 K.register('locks', function (root) {
+  const TR = I18N.tr('sim-locks');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`레이어 9 · 서버 게임 프로세스`,
     title: TR`모든 스레드가 같은 락 하나를 기다린다`,

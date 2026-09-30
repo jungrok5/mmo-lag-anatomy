@@ -2,10 +2,10 @@
   "lang": "vi",
   "group": "body-glossary",
   "entries": [
-    {"ctx":"#glossary div","ko":"<span class=\"idx\">T5</span>도구","t":""},
+    {"ctx":"#glossary div","ko":"<span class=\"idx\">T5</span>도구","t":"<span class=\"idx\">T5</span>Công cụ"},
     {"ctx":"#glossary h2","ko":"용어 사전","t":"Thuật ngữ"},
-    {"ctx":"#glossary p","ko":"게임개발팀·인프라팀과 대화할 때 자주 나오는 말들입니다. 검색창에 한글이나 영어로 입력해 보세요.","t":""},
-    {"ctx":"#glossary label","ko":"용어 검색","t":""},
-    {"ctx":"#gloss-q@placeholder","ko":"예: 지터, RTO, 핫 로우, keepalive","t":""}
+    {"ctx":"#glossary p","ko":"게임개발팀·인프라팀과 대화할 때 자주 나오는 말들입니다. 검색창에 한글이나 영어로 입력해 보세요.","t":"Đây là những từ hay gặp khi trao đổi với đội phát triển game và đội hạ tầng. Hãy thử gõ tiếng Việt hoặc tiếng Anh vào ô tìm kiếm."},
+    {"ctx":"#glossary label","ko":"용어 검색","t":"Tìm thuật ngữ"},
+    {"ctx":"#gloss-q@placeholder","ko":"예: 지터, RTO, 핫 로우, keepalive","t":"Ví dụ: jitter, RTO, hot row, keepalive"}
   ]
 }

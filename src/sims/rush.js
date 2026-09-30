@@ -1,6 +1,7 @@
 /* 서버 OS: 점검 직후 로그인 폭주. listen backlog(접속 대기 줄), 파일 디스크립터 한도, 재시도 방식, 대기열(순번표).
    사람 수를 묶음으로 계산하는 모형(100ms 단위, 0~300초). 조건이 바뀌면 300초를 통째로 다시 계산하고 재생 위치만 움직인다. */
 K.register('rush', function (root) {
+  const TR = I18N.tr('sim-rush');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`레이어 7 · 서버 OS`,
     title: TR`점검 끝! 10만 명이 동시에 접속 버튼을 누르면`,

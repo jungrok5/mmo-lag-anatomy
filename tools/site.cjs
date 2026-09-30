@@ -81,7 +81,7 @@ const counts = [];
 
 function buildLang(L) {
   globalThis.I18N.lang = L.code;
-  globalThis.I18N.dict = L.code === 'ko' ? {} : I.dictOf(L);
+  globalThis.I18N.dict = L.code === 'ko' ? {} : I.codeDict(L, 'site');
   const BASE = baseOf(L);
   const O = path.join(out, L.dir);
   fs.mkdirSync(path.join(O, 'c'), { recursive: true });

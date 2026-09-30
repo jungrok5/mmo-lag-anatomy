@@ -42,7 +42,7 @@ svg{position:absolute;right:80px;top:96px}
   const b = await chromium.launch();
   for (const L of LANGS) {
     globalThis.I18N.lang = L.code;
-    globalThis.I18N.dict = L.code === 'ko' ? {} : I.dictOf(L);
+    globalThis.I18N.dict = L.code === 'ko' ? {} : I.codeDict(L, 'site');
     const p = await b.newPage({ viewport: { width: 1200, height: 630 } });
     await p.setContent(page(L), { waitUntil: 'networkidle' });
     await p.evaluate(() => document.fonts.ready);

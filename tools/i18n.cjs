@@ -218,6 +218,13 @@ function dictOf(lang) {
   return dict;
 }
 
+// 코드(TR)용 사전. 한 묶음의 번역을 먼저 쓰고, 없는 열쇠는 다른 묶음에서 찾는다(Node 도구: site.cjs 등은 'site')
+function codeDict(lang, group) {
+  const d = dictOf(lang);
+  for (const e of readGroup(lang, group).entries) if (e.t) d[e.ko] = e.t;
+  return d;
+}
+
 function sync(lang, units = allUnits()) {
   const known = new Map();   // 원문 → 번역(다른 묶음·stale에 있던 것도)
   const old = {};
@@ -331,10 +338,16 @@ function pack(lang, outDir) {
   fs.mkdirSync(outDir, { recursive: true });
   const dict = dictOf(lang);
   // 화면 글자 사전: 코드 묶음(ui-*, sim-*, site)의 TR 열쇠만(데이터는 아래에서 미리 번역한다)
-  const ui = {};
+  // 실험(sim-*)과 app.js(ui-app)는 묶음마다 따로 둔다: 같은 한국어 낱말이 실험마다 다른 뜻일 수 있다(I18N.tr)
+  const ui = {}, scopes = {};
   let uiMiss = 0;
-  for (const g of groupsOf(lang)) if (/^(ui-|sim-|site$)/.test(g)) for (const e of readGroup(lang, g).entries) { if (e.t) ui[e.ko] = e.t; else uiMiss++; }
-  fs.writeFileSync(path.join(outDir, 'ui.json'), JSON.stringify(ui));
+  for (const g of groupsOf(lang)) if (/^(ui-|sim-|site$)/.test(g)) {
+    const into = /^(sim-|ui-app$)/.test(g) ? (scopes[g] = {}) : ui;
+    for (const e of readGroup(lang, g).entries) { if (e.t) into[e.ko] = e.t; else uiMiss++; }
+  }
+  // ui-kit(kit.js 등)이 전체 사전에서 이긴다
+  for (const e of readGroup(lang, 'ui-kit').entries) if (e.t) ui[e.ko] = e.t;
+  fs.writeFileSync(path.join(outDir, 'ui.json'), JSON.stringify({ dict: ui, scopes }));
   const strings = {};
   for (const u of buildStrings()) if (dict[u.ko]) strings[u.ko] = dict[u.ko];
   fs.writeFileSync(path.join(outDir, 'strings.json'), JSON.stringify(strings));
@@ -348,7 +361,7 @@ function pack(lang, outDir) {
     fs.writeFileSync(path.join(outDir, f), r.html);
     bodyMiss += r.miss;
   }
-  return { ui: Object.keys(ui).length, uiMiss, dataMiss, bodyMiss };
+  return { ui: Object.keys(ui).length + Object.values(scopes).reduce((n, o) => n + Object.keys(o).length, 0), uiMiss, dataMiss, bodyMiss };
 }
 
 // ---------------------------------------------------------------- 명령
@@ -412,4 +425,4 @@ if (require.main === module) {
   }
 }
 
-module.exports = { LANGS, langOf, allUnits, dictOf, translatedData, segment, translateHTML, loadData, dataUnits, codeUnits, CODE_FILES, glossId, pack, status, check };
+module.exports = { LANGS, langOf, allUnits, dictOf, codeDict, translatedData, segment, translateHTML, loadData, dataUnits, codeUnits, CODE_FILES, glossId, pack, status, check };

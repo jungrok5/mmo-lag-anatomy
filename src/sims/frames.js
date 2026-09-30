@@ -1,6 +1,7 @@
 /* 클라이언트 게임 프로세스: 한 프레임의 일이 16.7ms를 넘기면 화면이 멈췄다가 튄다.
    실제 시간 위에서 "가상의 프레임"을 하나씩 끝낸다. 프레임이 끝나야만 화면 속 캐릭터 위치가 바뀐다. */
 K.register('frames', function (root) {
+  const TR = I18N.tr('sim-frames');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`레이어 1 · 클라이언트 게임`,
     title: TR`프레임이 늦으면 화면이 멈췄다 튄다`,

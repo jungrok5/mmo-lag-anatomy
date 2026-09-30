@@ -220,7 +220,7 @@
     {"ctx":"causes/sp-hot-entity/chk/no","ko":"보스와 상관없이 한곳에 모이기만 해도 똑같이 느려지면 시야 계산이나 브로드캐스트 폭증 쪽","t":"Things slow down just as much whenever players gather, boss or no boss: points to AOI calculation or a broadcast fan-out explosion"},
     {"ctx":"causes/sp-hot-entity/ref/0/n","ko":"공격 한 번도 보는 모든 클라이언트에 알려야 해서 n명이 n명에게 알리는 O(n²) 부담이 생기고, 메시지가 많은 드론 공격은 이 부담이 더 빨리 커짐","t":"Even a single attack must be reported to every client watching, creating an O(n²) load of n players notifying n players, and message-heavy drone attacks make this load grow even faster"},
     {"ctx":"causes/sp-spawn-burst/t","ko":"밀집 지역 진입 시 스폰 폭주","t":"Spawn burst when entering a crowded area"},
-    {"ctx":"causes/sp-spawn-burst/s","ko":"사람이 가득한 마을로 순간이동하면, 서버는 새로 보이게 된 수백 명의 외형·장비·상태를 한꺼번에 보내야 합니다.","t":"When you teleport into a town packed with players, the server has to send the appearance, gear, and status of the hundreds of players who just came into view, all at once."},
+    {"ctx":"causes/sp-spawn-burst/s","ko":"사람이 가득한 마을로 텔레포트하면, 서버는 새로 보이게 된 수백 명의 외형·장비·상태를 한꺼번에 보내야 합니다.","t":""},
     {"ctx":"causes/sp-spawn-burst/c/0","ko":"텔레포트·접속·채널 이동으로 붐비는 곳에 갑자기 나타남","t":"You suddenly appear somewhere crowded by teleporting, logging in, or switching channels"},
     {"ctx":"causes/sp-spawn-burst/c/1","ko":"수백 명분의 전체 정보를 한 번에 만들어 보내고, 내 PC도 한 번에 불러옴","t":"Full data for hundreds of players is built and sent at once, and your PC also loads it all at once"},
     {"ctx":"causes/sp-spawn-burst/c/2","ko":"도착 직후 잠깐 멈춤, 캐릭터가 늦게 하나씩 나타나고 입력이 늦음","t":"A brief pause right after arrival, characters pop in late one by one, and input lags"},
@@ -233,7 +233,7 @@
     {"ctx":"causes/sp-spawn-burst/ref/0/n","ko":"액터 채널을 처음 열 때 초기 위치·회전 같은 정보를 함께 보내고, 연결이 포화되면 남은 액터는 다음 틱으로 미룸","t":"When an actor channel is first opened, initial data such as position and rotation is sent along with it, and once the connection is saturated, the remaining actors wait for the next tick"},
     {"ctx":"causes/sp-spawn-burst/ref/1/n","ko":"거리와 시선 방향으로 우선순위를 매겨 가깝고 보이는 액터부터 보냄","t":"Actors are prioritized by distance and view direction, and the nearest visible ones are sent first"},
     {"ctx":"causes/sp-entity-buildup/t","ko":"개체 누적 (정리되지 않은 아이템·소환물)","t":"Entity buildup (items and summons never cleaned up)"},
-    {"ctx":"causes/sp-entity-buildup/s","ko":"사라져야 할 바닥 아이템, 소환수, 끝난 타이머가 정리되지 않고 쌓이면, 서버를 오래 켜 둘수록 매 틱 할 일이 늘어납니다.","t":"When ground items, summons, and finished timers that should disappear pile up without being cleaned up, every tick has more work the longer the server runs."},
+    {"ctx":"causes/sp-entity-buildup/s","ko":"사라져야 할 바닥 아이템, 소환물, 끝난 타이머가 정리되지 않고 쌓이면, 서버를 오래 켜 둘수록 매 틱 할 일이 늘어납니다.","t":""},
     {"ctx":"causes/sp-entity-buildup/c/0","ko":"바닥 아이템·소환물·만료된 타이머·빈 파티 정보가 제때 지워지지 않음","t":"Ground items, summons, expired timers, and empty party data aren’t removed on time"},
     {"ctx":"causes/sp-entity-buildup/c/1","ko":"틱마다 순회하는 목록이 날마다 길어짐","t":"The lists walked every tick grow longer day by day"},
     {"ctx":"causes/sp-entity-buildup/c/2","ko":"점검 직후엔 멀쩡하다가 며칠 지나면 그 서버·지역만 점점 굼뜸","t":"Fine right after maintenance, then after a few days only that server or area gets more and more sluggish"},
@@ -266,5 +266,9 @@
     {"ctx":"causes/sp-patch-traffic/ref/4/n","ko":"sar -n DEV의 rxpck/s·txpck/s(초당 패킷)·rxkB/s·txkB/s(초당 KB), sar -n IP의 fragcrt/s(초당 만든 IP 프래그먼트, ipFragCreates)","t":"rxpck/s and txpck/s (packets per second) and rxkB/s and txkB/s (KB per second) in sar -n DEV; fragcrt/s (IP fragments created per second, ipFragCreates) in sar -n IP"},
     {"ctx":"causes/sp-patch-traffic/ref/5/n","ko":"NetworkPacketsOut(인스턴스가 모든 네트워크 인터페이스로 보낸 패킷 수)·NetworkOut(보낸 바이트 수)","t":"NetworkPacketsOut (packets the instance sent on all network interfaces) and NetworkOut (bytes sent)"},
     {"ctx":"causes/sp-patch-traffic/ref/6/n","ko":"캡처한 패킷을 길이 구간별로 나눠 개수·평균·최소·최대를 보여 줌","t":"Splits captured packets into length ranges and shows the count, average, minimum, and maximum for each"}
+  ],
+  "stale": [
+    {"ctx":"causes/sp-spawn-burst/s","ko":"사람이 가득한 마을로 순간이동하면, 서버는 새로 보이게 된 수백 명의 외형·장비·상태를 한꺼번에 보내야 합니다.","t":"When you teleport into a town packed with players, the server has to send the appearance, gear, and status of the hundreds of players who just came into view, all at once."},
+    {"ctx":"causes/sp-entity-buildup/s","ko":"사라져야 할 바닥 아이템, 소환수, 끝난 타이머가 정리되지 않고 쌓이면, 서버를 오래 켜 둘수록 매 틱 할 일이 늘어납니다.","t":"When ground items, summons, and finished timers that should disappear pile up without being cleaned up, every tick has more work the longer the server runs."}
   ]
 }

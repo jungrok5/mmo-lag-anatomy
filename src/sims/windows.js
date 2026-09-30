@@ -1,5 +1,6 @@
 /* 판정 구간: 보스 예고 시간 중 얼마가 네트워크에 먹히는가. 판정 방식·연출 방식에 따라 달라진다 */
 K.register('windows', function (root) {
+  const TR = I18N.tr('sim-windows');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`동기화 방식 · 판정 구간`,
     title: TR`예고가 “핑 + 반응 시간”보다 짧으면 실력과 상관없이 맞는다`,

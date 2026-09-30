@@ -1,6 +1,7 @@
 /* 거리·경로·시간대: 빛의 속도가 정하는 최소 핑, 경로 우회, 저녁 피크의 국제 구간 혼잡.
    레이어 4(인터넷 회선) 장에서 쓴다. */
 K.register('distance', function (root) {
+  const TR = I18N.tr('sim-distance');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`레이어 4 · 인터넷 회선`,
     title: TR`빛보다 빠른 패킷은 없다: 거리·경로·저녁 시간`,
@@ -25,7 +26,6 @@ K.register('distance', function (root) {
   const DEF = { me: 'seoul', srv: 'tokyo', route: 1.5, acc: 'wired', hour: 14, cut: false };
   const P = Object.assign({}, DEF);
   const D = Math.PI / 180;
-  const eun = w => { const c = w.charCodeAt(w.length - 1) - 0xac00; return w + (c >= 0 && c < 11172 && c % 28 ? TR`은` : TR`는`); };
 
   K.addStyle('distance', '.sim[data-sim="distance"] .cv-cap{flex-wrap:wrap}.sim[data-sim="distance"] .cv-cap b{white-space:nowrap}');
 
@@ -316,7 +316,7 @@ K.register('distance', function (root) {
     if (M.same) {
       m = TR`같은 도시 안이라 거리는 30km 남짓, 빛의 한계는 왕복 ${K.ms(M.light)}뿐입니다. 핑 <b>${K.ms(n.avg)}</b>의 대부분은 ${ACC[P.acc][0]} 가입자망과 장비를 지나는 시간입니다.`;
     } else {
-      m = TR`${M.a[0]}–${eun(M.b[0])} 직선으로 약 <b>${K.n(Math.round(M.km / 10) * 10)}km</b>입니다. 빛도 광케이블 안에서는 왕복 <b>${K.ms(M.light)}</b>가 걸립니다. `;
+      m = TR`${M.a[0]}–${K.josa(M.b[0], 'eun')} 직선으로 약 <b>${K.n(Math.round(M.km / 10) * 10)}km</b>입니다. 빛도 광케이블 안에서는 왕복 <b>${K.ms(M.light)}</b>가 걸립니다. `;
       if (M.geo > 1) m += TR`${M.geo >= 1.8 ? TR`한국·일본` : TR`홍콩`}과 유럽 사이는 직선 위로 큰 케이블이 거의 없어, 패킷은 동남아·수에즈나 미국을 돌아갑니다. `;
       m += TR`실제 경로는 ${K.n(M.route, 1)}배쯤 돌아가고 가입자망·장비까지 더해 평균 <b>${K.ms(n.avg)}</b>입니다.`;
       if (P.cut) m += TR` 해저 케이블이 끊겨 먼 경로로 우회하느라 평소보다 ${K.ms(M.light * P.route * M.geo * 0.7)}가 늘고 손실도 생겼습니다.`;

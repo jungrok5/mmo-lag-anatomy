@@ -2,6 +2,7 @@
    회선이 느린 클라이언트의 송신 버퍼가 가득 찼을 때 서버 코드가 어떻게 하느냐(블로킹·최신만·킥·무제한)에 따라
    그 클라이언트만 불편하거나, 서버 전체가 렉에 빠지거나, 서버가 메모리 부족으로 죽는다. */
 K.register('sndbuf', function (root) {
+  const TR = I18N.tr('sim-sndbuf');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`소켓과 프로토콜 · 송신 버퍼`,
     title: TR`느린 클라이언트 하나가 모두를 느리게 만드는 법`,

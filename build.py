@@ -235,7 +235,8 @@ def lang_files(files):
 
 def source(f):
     if f == "@dict":
-        d = {"lang": LANG["code"], "locale": LANG["locale"], "dict": json.loads((PACK / "ui.json").read_text(encoding="utf-8"))}
+        ui = json.loads((PACK / "ui.json").read_text(encoding="utf-8"))
+        d = {"lang": LANG["code"], "locale": LANG["locale"], "dict": ui["dict"], "scopes": ui["scopes"]}
         return "window.I18N = " + json.dumps(d, ensure_ascii=False) + ";"
     if f == "@data":
         return (PACK / "data.js").read_text(encoding="utf-8")

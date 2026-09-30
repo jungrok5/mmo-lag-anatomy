@@ -61,7 +61,7 @@
     {"ctx":"causes/dk-iops/c/0","ko":"읽기·쓰기 요청이 디스크 처리 능력에 근접","t":"Read and write requests approach the disk’s capacity"},
     {"ctx":"causes/dk-iops/c/1","ko":"대기열이 길어짐(대개 이용률 90% 이상에서 폭증)","t":"The queue grows (usually exploding above 90% utilization)"},
     {"ctx":"causes/dk-iops/c/2","ko":"저장·로딩 지연, 동기 호출이면 멈춤","t":"Slow saves and loading; freezes if the calls are blocking"},
-    {"ctx":"causes/dk-iops/num","ko":"HDD 약 150, SATA SSD 수만, NVMe 수십만 IOPS. 클라우드 기본 디스크(AWS gp3)는 3,000 IOPS, 초당 125MB이고, IOPS와 별도인 초당 전송량 한도를 큰 파일 복사가 채우면 작은 쓰기까지 밀립니다.","t":"HDD about 150 IOPS, SATA SSD tens of thousands, NVMe hundreds of thousands. The default cloud disk (AWS gp3) gets 3,000 IOPS and 125 MB per second, and when a large file copy fills the per-second throughput limit, which is separate from IOPS, even small writes get stuck behind it."},
+    {"ctx":"causes/dk-iops/num","ko":"HDD 약 150, SATA SSD 수만, NVMe 수십만 IOPS. 클라우드 기본 디스크(AWS gp3)는 3,000 IOPS, 초당 125MiB이고, IOPS와 별도인 초당 전송량 한도를 큰 파일 복사가 채우면 작은 쓰기까지 밀립니다.","t":""},
     {"ctx":"causes/dk-iops/act/game","ko":"요청 합치기, 자주 읽는 데이터는 캐시, 게임 스레드에서 디스크를 기다리지 않게 비동기로.","t":"Merge requests, cache frequently read data, make disk access asynchronous so the game thread never waits on the disk."},
     {"ctx":"causes/dk-iops/act/infra","ko":"서버 장비·OS: 더 빠른 디스크, 인스턴스 유형별 디스크 대역폭·IOPS 한도 확인, 디스크 이용률·대기열 경보, 큰 파일 복사는 한가한 시간에. DB 장비: DB 디스크도 IOPS·처리량 이용률 경보, DB 인스턴스 사양의 디스크 한도 확인.","t":"Servers/OS: use faster disks, check disk bandwidth and IOPS limits per instance type, alert on disk utilization and queue, run large file copies during quiet hours. DB hosts: alert on IOPS and throughput utilization for DB disks too, check the disk limits of the DB instance size."},
     {"ctx":"causes/dk-iops/more","ko":"클라우드에서는 디스크 한도와 별도로 서버 사양(인스턴스 유형)마다 디스크 대역폭·IOPS 한도가 있습니다. 비싼 디스크를 붙여도 서버가 작으면 인스턴스 한도에서 막힙니다.","t":"In the cloud, each server size (instance type) has its own disk bandwidth and IOPS limits, separate from the disk’s limits. Even with an expensive disk attached, a small server gets capped at the instance limit."},
@@ -159,5 +159,8 @@
     {"ctx":"causes/dk-hdd/ref/2/n","ko":"-o로 출력 열 선택, 장치 토폴로지 열에 ROTA(회전형 여부) 포함","t":"-o selects output columns; device topology columns include ROTA (whether the device is rotational)"},
     {"ctx":"causes/dk-hdd/ref/3/n","ko":"/sys/block/(디스크)/queue/rotational: 장치가 회전형인지 비회전형인지 나타냄","t":"/sys/block/(disk)/queue/rotational: whether the device is rotational or non-rotational"},
     {"ctx":"causes/dk-hdd/ref/4/n","ko":"-x: r/s·w/s, r_await·w_await(대기열에서 기다린 시간을 포함한 요청당 평균 처리 시간)","t":"-x: r/s and w/s, r_await and w_await (average time per request, including time spent waiting in the queue)"}
+  ],
+  "stale": [
+    {"ctx":"causes/dk-iops/num","ko":"HDD 약 150, SATA SSD 수만, NVMe 수십만 IOPS. 클라우드 기본 디스크(AWS gp3)는 3,000 IOPS, 초당 125MB이고, IOPS와 별도인 초당 전송량 한도를 큰 파일 복사가 채우면 작은 쓰기까지 밀립니다.","t":"HDD about 150 IOPS, SATA SSD tens of thousands, NVMe hundreds of thousands. The default cloud disk (AWS gp3) gets 3,000 IOPS and 125 MB per second, and when a large file copy fills the per-second throughput limit, which is separate from IOPS, even small writes get stuck behind it."}
   ]
 }

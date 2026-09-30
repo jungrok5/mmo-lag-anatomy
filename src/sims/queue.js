@@ -1,6 +1,7 @@
 /* 기다림의 법칙: 창구(처리자)와 줄(대기열). 이용률이 80%를 넘으면 대기가 폭발한다.
    모든 레이어(CPU·디스크·DB·네트워크)에 공통으로 적용되는 원리라 기본 개념 장에서 쓴다. */
 K.register('queue', function (root) {
+  const TR = I18N.tr('sim-queue');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`기본 원리 · 대기열`,
     title: TR`워커가 바쁠수록 대기열은 “갑자기” 길어진다`,

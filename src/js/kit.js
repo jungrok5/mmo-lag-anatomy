@@ -89,6 +89,19 @@
   K.locale = (window.I18N && window.I18N.locale) || 'ko-KR';
   // 두 문장 잇기: 앞 문장 끝에 마침표를 찍고 띄운다. 번역판은 이 틀을 번역해 중국어·일본어는 “。”로 잇는다
   K.then = (a, b) => (a ? TR`${a}. ${b}` : b);
+  // 문장 여러 개 잇기: 중국어·일본어는 문장 사이를 띄우지 않는다
+  K.sp = /^(ja|zh)/.test((window.I18N && window.I18N.lang) || 'ko') ? '' : ' ';
+  K.sentences = list => list.join(K.sp);
+  // 한국어 조사(받침에 따라 이/가, 을/를, 은/는, 과/와). 괄호 속 설명은 건너뛰고, 숫자는 읽는 소리로 본다.
+  // 다른 언어에서는 빈 문자열이라, 번역문은 {0} 자리에 낱말만 받는다
+  const JOSA = { ga: ['이', '가'], eul: ['을', '를'], eun: ['은', '는'], wa: ['과', '와'] };
+  K.pp = (w, k) => {
+    if (((window.I18N && window.I18N.lang) || 'ko') !== 'ko') return '';
+    const s = String(w).replace(/\s*\(.*\)$/, ''), last = s.slice(-1), c = last.charCodeAt(0) - 0xac00;
+    const has = /\d/.test(last) ? '0136789'.includes(last) : c >= 0 && c < 11172 && c % 28 !== 0;
+    return JOSA[k][has ? 0 : 1];
+  };
+  K.josa = (w, k) => w + K.pp(w, k);
   K.firstSentence = s => (String(s).match(/^[\s\S]*?[.。！？!?](?=\s|$)/) || [String(s)])[0];
   K.n = (v, d = 0) => (Number.isFinite(v) ? v.toLocaleString(K.locale, { minimumFractionDigits: d, maximumFractionDigits: d }) : '—');
   K.ms = function (v) {

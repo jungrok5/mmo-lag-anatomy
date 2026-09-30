@@ -1,6 +1,7 @@
 /* 메모리 누수: 조금씩 새는 메모리가 며칠에 걸쳐 쌓이다가, 접속자가 몰리는 저녁에 RAM을 넘는다.
    RAM을 넘으면 디스크(스왑)를 쓰느라 틱이 수십 배 느려지고, 스왑까지 차면 운영체제가 서버를 강제로 끝낸다(OOM). */
 K.register('leak', function (root) {
+  const TR = I18N.tr('sim-leak');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`레이어 10 · 메모리`,
     title: TR`점검 직후엔 멀쩡하다가 사흘째 저녁부터 렉`,
@@ -268,7 +269,7 @@ K.register('leak', function (root) {
     const upH = S.up[i];
     const leaked = (P.leak * upH) / 1024;
     const pplGB = (S.ppl[i] * PER) / 1024;
-    if (s === 2) return TR`${K.flag('bad')} 메모리가 RAM ${P.ram}GB${P.swap ? TR`와 스왑 ${SWAP}GB를 모두` : TR`를`} 채우자 운영체제가 서버 프로세스를 강제로 끝냈습니다(OOM, 메모리 부족 종료). 이 서버의 <b>모든 플레이어</b>가 한꺼번에 <b>접속 끊김</b>을 겪고, 다시 켜지는 10분 동안 <b>접속 불가·무한 로딩</b>입니다. 다시 켜면 메모리가 비워져 멀쩡해 보이지만, 누수는 그대로라 같은 일이 되풀이됩니다.`;
+    if (s === 2) return TR`${K.flag('bad')} 메모리가 ${P.swap ? TR`RAM ${P.ram}GB와 스왑 ${SWAP}GB를 모두` : TR`RAM ${P.ram}GB를`} 채우자 운영체제가 서버 프로세스를 강제로 끝냈습니다(OOM, 메모리 부족 종료). 이 서버의 <b>모든 플레이어</b>가 한꺼번에 <b>접속 끊김</b>을 겪고, 다시 켜지는 10분 동안 <b>접속 불가·무한 로딩</b>입니다. 다시 켜면 메모리가 비워져 멀쩡해 보이지만, 누수는 그대로라 같은 일이 되풀이됩니다.`;
     if (s === 3) return TR`${K.flag('good')} 정기 점검으로 서버를 다시 켜는 중입니다. 누수된 메모리가 모두 해제되어 처음 상태로 돌아갑니다. 매일 점검하면 누수가 쌓일 틈이 없어 문제가 <b>숨어 버립니다</b>. 점검을 한 번 건너뛰거나 주기를 늘리면 그제야 드러납니다.`;
     if (s === 1) {
       const out = S.mem[i] - P.ram, tk = S.tick[i];

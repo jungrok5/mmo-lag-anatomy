@@ -1,6 +1,7 @@
 /* 가비지 컬렉션(GC) 멈춤: 힙이 차면 청소를 한다. 전체 멈춤 방식은 청소하는 동안 게임 스레드도 얼린다.
    살아 있는 데이터가 클수록 오래 멈추고, 그동안 밀린 틱을 나중에 몰아서 처리한다. */
 K.register('gc', function (root) {
+  const TR = I18N.tr('sim-gc');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`레이어 10 · 메모리`,
     title: TR`GC가 도는 동안 서버가 멈춘다`,

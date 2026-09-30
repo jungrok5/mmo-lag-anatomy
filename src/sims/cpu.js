@@ -1,6 +1,7 @@
 /* 클라이언트 OS 스케줄러: 게임 스레드도 다른 프로그램과 똑같이 코어 앞에 줄을 선다.
    0.25ms 단위 라운드로빈(시간 조각 5ms, 공용 대기열) 모형. 화면은 실제의 1/20 속도로 흐른다. */
 K.register('cpu', function (root) {
+  const TR = I18N.tr('sim-cpu');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`레이어 2 · 클라이언트 OS`,
     title: TR`내 컴퓨터가 다른 일로 바쁘면 게임도 CPU를 기다린다`,

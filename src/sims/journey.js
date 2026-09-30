@@ -1,6 +1,7 @@
 /* 클릭에서 화면까지: 입력 → 내 PC → 집 회선 → 인터넷 → 서버·DB → 다시 내 화면.
    구간마다 쌓이는 ms 를 한 줄 막대와 구간 목록으로 나눠 보여 준다. 전체 구간 요약 장에서 쓴다. */
 K.register('journey', function (root) {
+  const TR = I18N.tr('sim-journey');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`전체 구간 · 지연 분해`,
     title: TR`클릭에서 화면까지: 지연은 어디서 쌓이나`,

@@ -1,6 +1,7 @@
 /* 버퍼블로트: 집 공유기의 올림(업로드) 대기열이 큰 업로드로 가득 차면 작은 게임 패킷도 그 뒤에 선다.
    와이파이 재전송(지터·손실)까지 함께 본다. 레이어 3(집 네트워크) 장에서 쓴다. */
 K.register('bloat', function (root) {
+  const TR = I18N.tr('sim-bloat');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`레이어 3 · 집 네트워크`,
     title: TR`동생이 영상을 올리면 내 핑이 튀는 이유 (버퍼블로트)`,
@@ -378,7 +379,7 @@ K.register('bloat', function (root) {
     }
     if (P.intf) parts.push(TR`2.5초마다 간섭이 0.3초씩 전파를 막아 그 순간의 패킷이 재전송을 거듭하다 사라집니다(손실 ${K.n(M.loss * 100, 1)}%). 화면에서는 주기적인 멈춤 뒤에 순간이동·고무줄로 보입니다.`);
     else if (P.sig >= 55) parts.push(TR`와이파이 신호가 약해 패킷마다 평균 ${K.n(M.retry, 1)}번 다시 보냅니다. 도착 시간이 들쭉날쭉해져(지터 ${K.ms(M.jit)}) 캐릭터가 뚝뚝 끊기${M.loss > 0 ? TR`고, 8번 모두 실패한 패킷은 사라져(손실 ${K.n(M.loss * 100, 1)}%) 순간이동·고무줄이 생깁니다` : TR`는 모습으로 보입니다`}. 공유기 가까이 가거나 랜선을 쓰면 사라집니다.`);
-    F.say(K.flag(st) + parts.join(' '));
+    F.say(K.flag(st) + K.sentences(parts));
   }
 
   K.loop(root, dt => {

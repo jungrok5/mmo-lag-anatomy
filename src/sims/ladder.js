@@ -1,6 +1,7 @@
 /* 지연 시간 사다리: 나노초부터 초까지, 서버가 흔히 기다리는 일들을 한 줄로 세운다.
    로그 눈금(한 칸 = 10배)과 "1나노초 = 1초" 사람 시간으로 번갈아 본다. DOM 으로 그려 좁은 화면에서도 줄바꿈된다. */
 K.register('ladder', function (root) {
+  const TR = I18N.tr('sim-ladder');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`레이어 10 · 메모리 · 숫자 감각`,
     title: TR`컴퓨터의 시간을 사람의 시간으로 늘려 보면`,

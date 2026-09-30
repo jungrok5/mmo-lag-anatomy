@@ -2,6 +2,7 @@
    “ACK 는 답장에 얹으려고 잠깐 미룬다”(지연 ACK, 받는 쪽)가 서로를 기다리며 메시지마다 수십~수백 ms 를 버린다.
    위에서 아래로 시간이 흐르는 순서도로 보여 준다. */
 K.register('nagle', function (root) {
+  const TR = I18N.tr('sim-nagle');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`소켓과 프로토콜 · 소켓 옵션`,
     title: TR`작은 패킷을 모았다 보내려다 40~200ms를 버린다`,

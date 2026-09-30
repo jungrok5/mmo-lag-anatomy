@@ -1,6 +1,7 @@
 /* 머리 막힘(head-of-line blocking). TCP 는 순서를 지키려고 잃어버린 한 개가 다시 올 때까지
    뒤에 도착한 패킷을 수신 버퍼에 붙잡아 둔다. 같은 손실을 UDP 에도 똑같이 주고 나란히 비교한다. */
 K.register('hol', function (root) {
+  const TR = I18N.tr('sim-hol');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`소켓과 프로토콜 · TCP vs UDP`,
     title: TR`TCP는 잃어버린 패킷 하나 때문에 뒤의 패킷까지 모두 막힌다`,
@@ -466,7 +467,7 @@ K.register('hol', function (root) {
       const why = [];
       if (P.loss > 0) why.push(TR`손실률 ${K.pct(P.loss)}면 ${perSec >= 1 ? TR`1초에 ${K.n(perSec, 1)}개꼴로` : TR`${K.n(1 / perSec, 1)}초에 한 번꼴로`} 패킷이 사라집니다.`);
       if (P.auto) why.push(TR`4초마다 “${EV[lastEvent]}” 사건이 다시 일어납니다.`);
-      msg = TR`${K.flag(P.loss >= 0.05 ? 'bad' : 'warn')}지금은 잠잠합니다. ${why.join(' ')} 패킷이 사라질 때마다 TCP는 핑 한 번 이상 <b>멈춤</b> 뒤 <b>몰아치기</b>를 하고, UDP는 하나를 건너뜁니다. 그래서 액션·FPS 게임은 UDP 위에 “꼭 필요한 것만 다시 보내는” 자체 규칙을 구현해 씁니다.`;
+      msg = TR`${K.flag(P.loss >= 0.05 ? 'bad' : 'warn')}지금은 잠잠합니다. ${K.sentences(why)} 패킷이 사라질 때마다 TCP는 핑 한 번 이상 <b>멈춤</b> 뒤 <b>몰아치기</b>를 하고, UDP는 하나를 건너뜁니다. 그래서 액션·FPS 게임은 UDP 위에 “꼭 필요한 것만 다시 보내는” 자체 규칙을 구현해 씁니다.`;
     }
     F.say(msg);
   });

@@ -1,6 +1,7 @@
 /* TCP 재전송 해부: 어디서 잃었나(근본 원인)와 어떻게 복구되나(빠른 재전송 · TLP · RTO · 불필요한 재전송)
    서버 → 클라이언트 한 방향 TCP 연결. 받는 쪽은 도착할 때마다 ACK(누적 + SACK)를 돌려보낸다. */
 K.register('retrans', function (root) {
+  const TR = I18N.tr('sim-retrans');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`TCP 재전송 · 원인과 복구`,
     title: TR`재전송 한 번이 게임에서는 왜 수백 ms 멈춤이 되나`,

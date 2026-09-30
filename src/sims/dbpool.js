@@ -1,6 +1,7 @@
 /* DB 커넥션 풀: 요청 하나하나가 커넥션을 기다리고, CPU 코어를 나눠 쓰고, 핫 로우 잠금 앞에서 대기 선다.
    실제 속도(1초 = 1초)로 돌고, 응답 시간은 1초 단위로 모아 중간값·99% 값을 그린다. */
 K.register('dbpool', function (root) {
+  const TR = I18N.tr('sim-dbpool');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`레이어 12 · 데이터베이스`,
     title: TR`DB 앞에도 대기열이 생긴다: 커넥션 풀·인덱스·핫 로우 잠금`,

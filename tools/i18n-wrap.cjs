@@ -18,9 +18,11 @@ const FILES = ['src/js/kit.js', 'src/js/app.js', 'src/js/sigs.js', 'src/js/sandb
 const escTpl = s => s.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$\{/g, '\\${').replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\t/g, '\\t');
 const isTagged = n => n.parent && ts.isTaggedTemplateExpression(n.parent) && n.parent.template === n;
 // 개발자용 메시지(오류·콘솔 출력)는 번역하지 않는다
+// 한국어 조사 표(kit.js의 JOSA)도 번역하지 않는다: 다른 언어에서는 쓰이지 않는다
 const isDevMsg = n => {
   for (let p = n.parent; p && !ts.isStatement(p); p = p.parent) {
     if ((ts.isNewExpression(p) || ts.isCallExpression(p)) && /^(Error|TypeError|console\.\w+)$/.test(p.expression.getText())) return true;
+    if (ts.isVariableDeclaration(p) && p.name.getText() === 'JOSA') return true;
   }
   return false;
 };

@@ -8,6 +8,7 @@
      클라: 프레임마다 받은 패킷을 처리하고, 내 입력을 보내고, 다른 플레이어를 표시 방식대로 그린다.
    ========================================================================= */
 K.register('lab', function (root) {
+  const TR = I18N.tr('sim-lab');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const compact = root.dataset.compact === '1';
   const WW = 100, WH = 60, SPEED = 16; // 세계 크기(m), 이동 속도(m/s)
 

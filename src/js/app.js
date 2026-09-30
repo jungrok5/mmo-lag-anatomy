@@ -2,6 +2,7 @@
    app.js — 데이터로 본문을 채우고(원인 카드, 증상 사전, 지도, 용어), 진단 도우미와 내비게이션을 붙인다.
    ========================================================================= */
 (function () {
+  const TR = I18N.tr('ui-app');   // 화면 글자 묶음의 사전을 먼저 본다(i18n.js)
   const D = window.DATA;
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));

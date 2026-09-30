@@ -2,6 +2,7 @@
    넘치면 고정 스텝 서버는 늦게 끝난 만큼 세계 시간이 느리게 흐르고(슬로우모션),
    한 번 크게 막히면 밀린 틱을 연달아 돌려 따라잡는다(멈춤 → 몰아치기). */
 K.register('tick', function (root) {
+  const TR = I18N.tr('sim-tick');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`레이어 9 · 서버 게임 프로세스`,
     title: TR`한 틱 안에 할 일이 넘치면 서버의 틱이 밀린다`,

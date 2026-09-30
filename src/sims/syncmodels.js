@@ -1,5 +1,6 @@
 /* 동기화 방식 비교: 같은 회선에서 같은 버튼을 눌렀을 때 방식마다 언제 반응하고 언제 확정되는가 */
 K.register('syncmodels', function (root) {
+  const TR = I18N.tr('sim-syncmodels');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`동기화 방식 · 비교`,
     title: TR`버튼 한 번, 다섯 가지 반응`,

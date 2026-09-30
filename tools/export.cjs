@@ -9,9 +9,9 @@ const li = args.indexOf('--lang');
 const I = require('./i18n.cjs');
 const LANG = I.langOf(li >= 0 ? args[li + 1] : 'ko');
 // 번역: TR 태그와 사전(src/js/i18n.js)
-globalThis.I18N = { lang: LANG.code, dict: LANG.code === 'ko' ? {} : I.dictOf(LANG) };
+globalThis.I18N = { lang: LANG.code, dict: LANG.code === 'ko' ? {} : I.codeDict(LANG, 'site') };
 require('../src/js/i18n.js');
-const D = LANG.code === 'ko' ? I.loadData() : I.translatedData(LANG, globalThis.I18N.dict);
+const D = LANG.code === 'ko' ? I.loadData() : I.translatedData(LANG);
 
 const plain = s => String(s == null ? '' : s).replace(/<b>(.*?)<\/b>/g, '**$1**').replace(/<[^>]+>/g, '');
 const LAYERS = [...D.layers.map((l, i) => Object.assign({ n: i + 1, anchor: 'l-' + l.id }, l)), ...D.extraLayers];
