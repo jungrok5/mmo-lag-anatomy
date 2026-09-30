@@ -306,7 +306,7 @@
       sig: { k: 'random', g: 'RTT(핑), 불필요한 RTO 수' },
       chk: {
         look: 'nstat을 1분 간격으로 실행해 TcpExtTCPTimeouts(RTO 만료), TcpExtTCPSpuriousRTOs, TcpExtTCPDSACKRecv, TcpExtTCPLostRetransmit의 증가분을 함께 봅니다. 패킷 캡처가 있으면 Wireshark 필터 tcp.analysis.spurious_retransmission을 씁니다.',
-        yes: 'RTO가 늘 때 TcpExtTCPSpuriousRTOs와 TcpExtTCPDSACKRecv도 함께 늘고, 같은 시각에 RTT가 수백 ms로 튐. 받는 쪽 캡처에 원본과 재전송이 모두 도착해 있음',
+        yes: 'RTO가 늘 때 TcpExtTCPSpuriousRTOs나 TcpExtTCPDSACKRecv도 함께 늘고, 같은 시각에 RTT가 수백 ms로 튐. 받는 쪽 캡처에 원본과 재전송이 모두 도착해 있음',
         no: 'TcpExtTCPSpuriousRTOs·DSACK은 그대로인데 TcpExtTCPLostRetransmit(다시 보낸 것까지 또 잃음)이 늘면 실제 손실. RTT는 튀지 않는데 DSACK만 꾸준히 많으면 “순서 뒤바뀜으로 인한 불필요한 빠른 재전송”',
         by: 'ops',
       },
