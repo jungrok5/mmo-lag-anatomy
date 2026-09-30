@@ -486,3 +486,15 @@ How they are used:
 - Cause pages: “{name} ({English name}): game lag cause | Game Lag White Paper”.
 - Keywords meta: game lag causes, online game lag, high ping, lag spikes, stutter, teleporting, rubber-banding, input lag, disconnects, server lag, netcode, TCP retransmission, packet loss, game server troubleshooting.
 - Never stack keywords; each phrase must read as part of a sentence or a natural title.
+
+## Additional terms (added during translation)
+
+| Korean | English | Note |
+|---|---|---|
+| 먼저 부를 곳 | Who to call first: | playbooks, body (judge, owners) |
+| 확인 신호 | Signals to check: | cases |
+| 인프라팀(시스템) | infra team (servers/OS) | |
+| 거점 | location (PoP) | CDN/cloud sites |
+| 재연결 유예 시간 | reconnect grace period | |
+| 쏠림 경보 | skew alerts | |
+| 판정 순서 | decision order (scope → timing → layer) | |
