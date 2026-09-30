@@ -2,10 +2,10 @@
   "lang": "en",
   "group": "body-glossary",
   "entries": [
-    {"ctx":"#glossary div","ko":"<span class=\"idx\">T5</span>도구","t":""},
+    {"ctx":"#glossary div","ko":"<span class=\"idx\">T5</span>도구","t":"<span class=\"idx\">T5</span>Tools"},
     {"ctx":"#glossary h2","ko":"용어 사전","t":"Glossary"},
-    {"ctx":"#glossary p","ko":"게임개발팀·인프라팀과 대화할 때 자주 나오는 말들입니다. 검색창에 한글이나 영어로 입력해 보세요.","t":""},
-    {"ctx":"#glossary label","ko":"용어 검색","t":""},
-    {"ctx":"#gloss-q@placeholder","ko":"예: 지터, RTO, 핫 로우, keepalive","t":""}
+    {"ctx":"#glossary p","ko":"게임개발팀·인프라팀과 대화할 때 자주 나오는 말들입니다. 검색창에 한글이나 영어로 입력해 보세요.","t":"Words that come up often when talking with the game team and infra team. Type a term in English or Korean in the search box."},
+    {"ctx":"#glossary label","ko":"용어 검색","t":"Search terms"},
+    {"ctx":"#gloss-q@placeholder","ko":"예: 지터, RTO, 핫 로우, keepalive","t":"e.g., jitter, RTO, hot row, keepalive"}
   ]
 }
