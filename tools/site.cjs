@@ -40,7 +40,7 @@ const layers = K.layers.filter(l => byLayer[l.id]);
 const bySym = Object.fromEntries(K.symptoms.map(s => [s.id, K.causes.filter(c => c.symptoms.some(x => x.id === s.id))]));
 const SYM = Object.fromEntries(K.symptoms.map(s => [s.id, s]));
 const who = { '@type': 'Person', name: 'jungrok5', url: 'https://github.com/jungrok5' };
-const website = { '@type': 'WebSite', '@id': SITE + '#website', url: SITE, name: '렉 해부도감', alternateName: 'Lag Anatomy', inLanguage: 'ko' };
+const website = { '@type': 'WebSite', '@id': SITE + '#website', url: SITE, name: '게임 렉 백서', alternateName: 'Game Lag White Paper', inLanguage: 'ko' };
 const crumbs = list => ({ '@type': 'BreadcrumbList', itemListElement: list.map(([name, url], i) => ({ '@type': 'ListItem', position: i + 1, name, item: url })) });
 
 const CSS = `:root{--bg:#fff;--ink:#0f1822;--ink2:#445162;--line:#d7dde4;--soft:#f3f5f8;--accent:#2340c8;color-scheme:light dark}
@@ -72,7 +72,7 @@ function page({ rel, title, description, type = 'article', body, graph }) {
 <link rel="icon" href="${up}favicon.svg" type="image/svg+xml">
 <meta property="og:type" content="${type}">
 <meta property="og:locale" content="ko_KR">
-<meta property="og:site_name" content="렉 해부도감">
+<meta property="og:site_name" content="게임 렉 백서">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(description)}">
 <meta property="og:url" content="${url}">
@@ -83,7 +83,7 @@ ${ld({ '@context': 'https://schema.org', '@graph': [website, ...graph] })}
 </head>
 <body>
 ${body}
-<footer><p class="meta">렉 해부도감 · 갱신 ${today} · MIT 라이선스 · <a href="${up}text.html">전체 텍스트 판</a> · <a href="${up}">그림과 실험이 있는 원본</a>${REPO ? ` · <a href="${REPO}">GitHub</a>` : ''}<br>수치는 일반적인 서비스 환경의 대표값이며 실제 값은 게임과 인프라마다 다릅니다.</p></footer>
+<footer><p class="meta">게임 렉 백서 · 갱신 ${today} · MIT 라이선스 · <a href="${up}text.html">전체 텍스트 판</a> · <a href="${up}">그림과 실험이 있는 원본</a>${REPO ? ` · <a href="${REPO}">GitHub</a>` : ''}<br>수치는 일반적인 서비스 환경의 대표값이며 실제 값은 게임과 인프라마다 다릅니다.</p></footer>
 </body>
 </html>
 `;
@@ -117,8 +117,8 @@ for (const c of K.causes) {
   const same = byLayer[c.layer].filter(x => x.id !== c.id);
   const sym0 = c.symptoms[0] && c.symptoms[0].id;
   const related = sym0 ? bySym[sym0].filter(x => x.id !== c.id && x.layer !== c.layer).slice(0, 8) : [];
-  const description = `${txt(c.summary)} 원인·증상·담당 팀·수치·출처를 정리한 렉 해부도감 항목.`;
-  const body = `<p class="crumb"><a href="../">렉 해부도감</a> › <a href="../text.html#${l.anchor}">${esc(layerName(l))}</a></p>
+  const description = `${txt(c.summary)} 원인·증상·담당 팀·수치·출처를 정리한 게임 렉 백서 항목.`;
+  const body = `<p class="crumb"><a href="../">게임 렉 백서</a> › <a href="../text.html#${l.anchor}">${esc(layerName(l))}</a></p>
 <h1>${esc(c.name)} <span class="en">${esc(c.en)}</span></h1>
 <p class="meta">원인 ID <code>${c.id}</code> · ${ownerLine(c)}</p>
 <p>${html(c.summary)}</p>
@@ -130,13 +130,13 @@ ${c.sources.length ? `<h2>출처</h2><ol class="refs">${c.sources.map(refLi).joi
 ${related.length ? `<h3>같은 증상(${esc(SYM[sym0].name)})의 다른 층 원인</h3><ul>${related.map(x => `<li><a href="${x.id}.html">${esc(x.name)}</a> <span class="n">${esc(layerName(LAYER[x.layer]))}</span></li>`).join('')}</ul>` : ''}
 <p><a href="../#c-${c.id}">그림과 실험이 있는 원본 카드 보기</a></p>`;
   fs.writeFileSync(path.join(out, rel), page({
-    rel, title: `${c.name} (${c.en}): 렉 원인 | 렉 해부도감`, description, body,
+    rel, title: `${c.name} (${c.en}): 렉 원인 | 게임 렉 백서`, description, body,
     graph: [
       { '@type': 'TechArticle', '@id': SITE + rel + '#article', url: SITE + rel, headline: c.name, alternativeHeadline: c.en, description: txt(c.summary),
         inLanguage: 'ko', dateModified: today, isPartOf: { '@id': SITE + '#website' }, author: who, license: 'https://opensource.org/licenses/MIT', image: SITE + 'og.png',
         about: c.symptoms.map(s => s.name), keywords: [c.name, c.en, ...c.symptoms.map(s => s.name), '렉', l.name].join(', '),
         citation: c.sources.map(r => ({ '@type': 'CreativeWork', name: r.t, url: r.u, publisher: { '@type': 'Organization', name: r.p } })) },
-      crumbs([['렉 해부도감', SITE], [layerName(l), SITE + 'text.html#' + l.anchor], [c.name, SITE + rel]]),
+      crumbs([['게임 렉 백서', SITE], [layerName(l), SITE + 'text.html#' + l.anchor], [c.name, SITE + rel]]),
     ],
   }));
   urls.push(SITE + rel);
@@ -148,7 +148,7 @@ for (const s of K.symptoms) {
   const list = bySym[s.id];
   const groups = layers.map(l => [l, list.filter(c => c.layer === l.id)]).filter(([, g]) => g.length);
   const description = `게임에서 ${s.name}(${s.alias}) 현상이 생기는 원인 ${list.length}가지와 담당 팀. ${txt(s.what)}`;
-  const body = `<p class="crumb"><a href="../">렉 해부도감</a> › <a href="../text.html#symptoms">증상별로 찾기</a></p>
+  const body = `<p class="crumb"><a href="../">게임 렉 백서</a> › <a href="../text.html#symptoms">증상별로 찾기</a></p>
 <h1>${esc(s.name)}: 원인 ${list.length}가지와 담당</h1>
 <p class="meta">다른 말: ${esc(s.alias)}</p>
 <p>${html(s.what)}</p>
@@ -158,11 +158,11 @@ for (const s of K.symptoms) {
 ${groups.map(([l, g]) => `<h3>${esc(layerName(l))}</h3><ul>${g.map(c => `<li><a href="../c/${c.id}.html">${esc(c.name)}</a>: ${html(c.summary)} <span class="n">(${esc(c.ownerName)})</span></li>`).join('')}</ul>`).join('\n')}
 <p><a href="../#s-${s.id}">그림이 있는 원본 증상 사전 보기</a></p>`;
   fs.writeFileSync(path.join(out, rel), page({
-    rel, title: `${s.name} 원인: 게임 렉 증상별 원인과 담당 | 렉 해부도감`, description, body,
+    rel, title: `${s.name} 원인: 게임 렉 증상별 원인과 담당 | 게임 렉 백서`, description, body,
     graph: [
       { '@type': 'TechArticle', '@id': SITE + rel + '#article', url: SITE + rel, headline: `${s.name}: 원인과 담당`, description: txt(s.what), inLanguage: 'ko', dateModified: today, isPartOf: { '@id': SITE + '#website' }, author: who, license: 'https://opensource.org/licenses/MIT', image: SITE + 'og.png' },
       { '@type': 'ItemList', name: `${s.name}의 원인`, itemListElement: list.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, url: SITE + `c/${c.id}.html` })) },
-      crumbs([['렉 해부도감', SITE], ['증상별로 찾기', SITE + 'text.html#symptoms'], [s.name, SITE + rel]]),
+      crumbs([['게임 렉 백서', SITE], ['증상별로 찾기', SITE + 'text.html#symptoms'], [s.name, SITE + rel]]),
     ],
   }));
   urls.push(SITE + rel);
@@ -175,10 +175,10 @@ Object.values(K.chapterSources).forEach(l => l.forEach(r => { if (!bib.has(r.u))
 const byPub = {};
 [...bib.values()].forEach(r => (byPub[r.p] = byPub[r.p] || []).push(r));
 const pubs = Object.entries(byPub).sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0]));
-const textDesc = `MMO 게임에서 화면이 끊기고, 순간이동하고, 접속이 끊기는 원인 ${K.causes.length}가지를 내 화면부터 서버 데이터베이스까지 층별로 정리한 텍스트 판. 원인마다 증상, 담당 팀(게임개발팀·인프라팀), 수치, 공신력 있는 출처.`;
-const textBody = `<h1>렉 해부도감 텍스트 판</h1>
+const textDesc = `온라인 게임에서 화면이 끊기고, 순간이동하고, 접속이 끊기는 원인 ${K.causes.length}가지를 내 화면부터 서버 데이터베이스까지 층별로 정리한 텍스트 판. 원인마다 증상, 담당 팀(게임개발팀·인프라팀), 수치, 공신력 있는 출처.`;
+const textBody = `<h1>게임 렉 백서 텍스트 판</h1>
 <p>${esc(textDesc)}</p>
-<p>그림과 직접 조작하는 실험이 있는 원본은 <a href="./">렉 해부도감</a>입니다. 이 판은 같은 원인·용어·출처를 자바스크립트 없이 한 페이지에서 읽을 수 있게 모았습니다. 원인마다 따로 된 페이지(<code>c/ID.html</code>)도 있습니다. 마크다운 한 파일로는 <a href="llms-full.txt">llms-full.txt</a>에 있습니다.</p>
+<p>그림과 직접 조작하는 실험이 있는 원본은 <a href="./">게임 렉 백서</a>입니다. 이 판은 같은 원인·용어·출처를 자바스크립트 없이 한 페이지에서 읽을 수 있게 모았습니다. 원인마다 따로 된 페이지(<code>c/ID.html</code>)도 있습니다. 마크다운 한 파일로는 <a href="llms-full.txt">llms-full.txt</a>에 있습니다.</p>
 <nav class="toc" aria-label="목차"><h2>목차</h2><ul>
 <li><a href="#symptoms">증상별로 찾기</a></li><li><a href="#owners">누가 고치나: 담당 코드</a></li>
 ${layers.map(l => `<li><a href="#${l.anchor}">${esc(layerName(l))} (${byLayer[l.id].length})</a></li>`).join('\n')}
@@ -201,10 +201,10 @@ ${c.sources.length ? `<details><summary>출처 ${c.sources.length}건</summary><
 <p>자료 ${bib.size}건, 발행처 ${pubs.length}곳. 표준 문서, 커널·OS·클라우드·엔진·DB 공식 문서, 논문, 원개발사 기술 글입니다.</p>
 ${pubs.map(([p, list]) => `<h3>${esc(p)} <span class="n">${list.length}</span></h3><ul class="refs">${list.sort((a, b) => a.t.localeCompare(b.t)).map(refLi).join('')}</ul>`).join('\n')}`;
 fs.writeFileSync(path.join(out, 'text.html'), page({
-  rel: 'text.html', title: `렉 해부도감 텍스트 판: MMO 게임 렉 원인 ${K.causes.length}가지`, description: textDesc, body: textBody,
+  rel: 'text.html', title: `게임 렉 백서 텍스트 판: 온라인 게임 렉 원인 ${K.causes.length}가지`, description: textDesc, body: textBody,
   graph: [
-    { '@type': 'TechArticle', '@id': SITE + 'text.html#article', url: SITE + 'text.html', headline: '렉 해부도감 텍스트 판', alternativeHeadline: 'Lag Anatomy: MMO lag causes (text edition)', description: textDesc, inLanguage: 'ko', dateModified: today, isPartOf: { '@id': SITE + '#website' }, author: who, license: 'https://opensource.org/licenses/MIT', image: SITE + 'og.png' },
-    { '@type': 'DefinedTermSet', '@id': SITE + 'text.html#glossary', name: '렉 해부도감 용어 사전', inLanguage: 'ko', hasDefinedTerm: K.glossary.map(g => ({ '@type': 'DefinedTerm', name: g.term, alternateName: g.en, description: txt(g.def) })) },
+    { '@type': 'TechArticle', '@id': SITE + 'text.html#article', url: SITE + 'text.html', headline: '게임 렉 백서 텍스트 판', alternativeHeadline: 'Lag Anatomy: MMO lag causes (text edition)', description: textDesc, inLanguage: 'ko', dateModified: today, isPartOf: { '@id': SITE + '#website' }, author: who, license: 'https://opensource.org/licenses/MIT', image: SITE + 'og.png' },
+    { '@type': 'DefinedTermSet', '@id': SITE + 'text.html#glossary', name: '게임 렉 백서 용어 사전', inLanguage: 'ko', hasDefinedTerm: K.glossary.map(g => ({ '@type': 'DefinedTerm', name: g.term, alternateName: g.en, description: txt(g.def) })) },
   ],
 }));
 
@@ -225,9 +225,9 @@ fill(/(<div id="ref-list">)(<\/div>)/, `<p>자료 ${bib.size}건, 발행처 ${pu
 fs.writeFileSync(path.join(out, 'index.html'), index);
 
 // ---------- llms.txt, llms-full.txt ----------
-const llms = `# 렉 해부도감 (Lag Anatomy)
+const llms = `# 게임 렉 백서 (Game Lag White Paper)
 
-> MMO 게임에서 렉(뚝뚝 끊김, 순간이동, 고무줄, 몰아치기, 입력 지연, 멈춤, 접속 끊김 등)이 생기는 원인 ${K.causes.length}가지를 내 화면부터 서버 데이터베이스까지 13개 층과 3개 주제(동기화 설계, 일부에게만 생기는 문제, TCP 재전송)로 나눠 설명하는 한국어 백과입니다. 원인마다 왜 → 그러면 → 화면에서는의 세 단계, 관련 증상, 수치 감각, 해결 담당(게임개발팀·인프라팀·외부)과 팀별 할 일, 공신력 있는 출처(RFC, 커널·OS·클라우드·엔진·DB 공식 문서, 논문)를 담았습니다.
+> 온라인 게임에서 렉(뚝뚝 끊김, 순간이동, 고무줄, 몰아치기, 입력 지연, 멈춤, 접속 끊김 등)이 생기는 원인 ${K.causes.length}가지를 내 화면부터 서버 데이터베이스까지 13개 층과 3개 주제(동기화 설계, 일부에게만 생기는 문제, TCP 재전송)로 나눠 설명하는 한국어 백서입니다. MMO 사례를 중심으로 썼지만 대부분은 장르와 상관없이 온라인 게임 전반에 해당합니다. 원인마다 왜 → 그러면 → 화면에서는의 세 단계, 관련 증상, 수치 감각, 해결 담당(게임개발팀·인프라팀·외부)과 팀별 할 일, 공신력 있는 출처(RFC, 커널·OS·클라우드·엔진·DB 공식 문서, 논문)를 담았습니다.
 
 원인은 ID(예: mem-gc)로 가리키고, 원인마다 페이지가 있습니다(예: ${SITE}c/mem-gc.html). 수치는 일반적인 서비스 환경의 대표값이고, 기본값·버전은 각 원인 페이지의 출처에 근거가 있습니다. 인용할 때는 원인 페이지 주소를 쓰면 됩니다. MIT 라이선스.
 
@@ -235,7 +235,7 @@ const llms = `# 렉 해부도감 (Lag Anatomy)
 
 - [전체 내용(마크다운)](${SITE}llms-full.txt): 원인·증상·담당·용어·출처 전체를 한 파일로
 - [텍스트 판](${SITE}text.html): 같은 내용을 자바스크립트 없이 한 페이지에서 읽는 HTML
-- [렉 해부도감](${SITE}): 그림과 직접 조작하는 실험이 있는 원본
+- [게임 렉 백서](${SITE}): 그림과 직접 조작하는 실험이 있는 원본
 
 ## 증상별 원인
 

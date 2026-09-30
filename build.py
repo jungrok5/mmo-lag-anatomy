@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""렉 해부도감 빌드 스크립트.
+"""게임 렉 백서 빌드 스크립트.
 
 src/ 아래 조각들을 하나의 자급자족 HTML로 합친다.
 
@@ -28,8 +28,8 @@ def read(rel):
 
 # 사이트 주소와 제목. 주소는 package.json의 homepage 하나에만 적는다(본문의 %SITE%도 이 값으로 바뀐다)
 SITE = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))["homepage"].rstrip("/") + "/"
-TITLE = "렉 해부도감"
-TITLE_FULL = "렉 해부도감: MMO 게임 렉 원인 백과"
+TITLE = "게임 렉 백서"
+TITLE_FULL = "게임 렉 백서: 온라인 게임 렉 원인과 해결 담당"
 # 파비콘은 파일 하나로도 보이게 페이지 안에 넣는다(배포본의 다른 페이지는 src/site/favicon.svg를 쓴다)
 FAVICON = "data:image/svg+xml;base64," + base64.b64encode((SRC / "site" / "favicon.svg").read_bytes()).decode("ascii")
 
@@ -46,10 +46,10 @@ def seo(head):
     data = {
         "@context": "https://schema.org",
         "@graph": [
-            {"@type": "WebSite", "@id": SITE + "#website", "url": SITE, "name": TITLE, "alternateName": "Lag Anatomy", "inLanguage": "ko"},
+            {"@type": "WebSite", "@id": SITE + "#website", "url": SITE, "name": TITLE, "alternateName": "Game Lag White Paper", "inLanguage": "ko"},
             {
                 "@type": "TechArticle", "@id": SITE + "#article", "url": SITE, "headline": TITLE_FULL,
-                "alternativeHeadline": "Lag Anatomy: an interactive encyclopedia of MMO game lag causes",
+                "alternativeHeadline": "Game Lag White Paper: an interactive guide to online game lag causes, with MMO case studies",
                 "description": desc, "inLanguage": "ko", "isPartOf": {"@id": SITE + "#website"},
                 "image": SITE + "og.png", "license": "https://opensource.org/licenses/MIT", "isAccessibleForFree": True,
                 "author": {"@type": "Person", "name": "jungrok5", "url": "https://github.com/jungrok5"},
@@ -113,7 +113,7 @@ def notice():
     # MIT 라이선스는 사본마다 저작권·허가 문구를 넣으라고 하므로, 파일 하나로 퍼지는 index.html 맨 앞에 넣는다.
     # 페이지 안에 넣은 글꼴은 MIT가 아니라 OFL을 따르므로 함께 적는다.
     return (
-        "<!--\n렉 해부도감\n\n" + (ROOT / "LICENSE").read_text(encoding="utf-8").strip()
+        "<!--\n게임 렉 백서\n\n" + (ROOT / "LICENSE").read_text(encoding="utf-8").strip()
         + "\n\n" + FONTS_LICENSE + "\n-->"
     )
 

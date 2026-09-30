@@ -27,7 +27,7 @@ const causes = D.causes.map(c => ({
   numbers: plain(c.num), more: plain(c.more), sources: c.ref || [],
 }));
 const json = {
-  title: '렉 해부도감', generated: new Date().toISOString().slice(0, 10),
+  title: '게임 렉 백서', generated: new Date().toISOString().slice(0, 10),
   note: '원인 ID(id)로 가리킨다. 사이트 주소 뒤에 link(#c-ID)를 붙이면 그 원인 카드로 간다.',
   teams: D.teams, owners: D.owners, symptoms: D.symptoms.map(s => ({ id: s.id, name: s.name, alias: s.alias, what: plain(s.what), looks: plain(s.looks), tell: plain(s.tell) })),
   factors: D.fx.map(f => ({ id: f.id, name: f.name, en: f.en, desc: plain(f.desc), cope: plain(f.cope) })),
@@ -38,7 +38,7 @@ const json = {
 
 // 마크다운: 층 순서대로, 원인마다 카드의 모든 내용을 한 덩어리로
 const md = [];
-md.push('# 렉 해부도감 지식 데이터', '',
+md.push('# 게임 렉 백서 지식 데이터', '',
   `자동 생성(${json.generated}, \`node tools/export.cjs\`). 손으로 고치지 말고 src/js/ 를 고친 뒤 다시 뽑는다.`, '',
   `원인 ${causes.length}개, 용어 ${json.glossary.length}개. 원인은 **ID**로 가리킨다. 사이트 주소 뒤에 \`#c-ID\`를 붙이면 그 원인 카드로 간다.`, '');
 md.push('## 담당 코드', '', '| 코드 | 팀 | 담당 | 범위 |', '|---|---|---|---|',

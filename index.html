@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-렉 해부도감
+게임 렉 백서
 
 MIT License
 
@@ -30,24 +30,24 @@ SOFTWARE.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>렉 해부도감: MMO 게임 렉 원인 백과</title>
-<meta name="description" content="MMO 게임에서 화면이 끊기고, 순간이동하고, 접속이 끊기는 원인을 내 화면부터 서버 데이터베이스까지 층별로 해부하고 직접 조작하며 이해하는 백과. 원인마다 담당 팀(게임개발팀·인프라팀)과 공신력 있는 출처를 담았습니다.">
+<title>게임 렉 백서: 온라인 게임 렉 원인과 해결 담당</title>
+<meta name="description" content="온라인 게임에서 화면이 끊기고, 순간이동하고, 접속이 끊기는 원인을 내 화면부터 서버 데이터베이스까지 층별로 해부하고 직접 조작하며 이해하는 백서. MMO 사례를 중심으로, 원인마다 담당 팀(게임개발팀·인프라팀)과 공신력 있는 출처를 담았습니다.">
 <meta name="google-site-verification" content="MkGziULldBfP0Ucua6AbX0riN3P2l0pfQvmSfiAtiwI">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
 <link rel="canonical" href="https://jungrok5.github.io/mmo-lag-anatomy/">
 <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTQiIGZpbGw9IiMyMzQwYzgiLz48cG9seWxpbmUgcG9pbnRzPSI4LDQwIDIwLDQwIDI2LDM2IDMyLDE0IDM4LDQ2IDQ0LDM2IDU2LDM2IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PC9zdmc+Cg==" type="image/svg+xml">
-<link rel="alternate" type="text/markdown" href="https://jungrok5.github.io/mmo-lag-anatomy/llms-full.txt" title="렉 해부도감 전체 내용(마크다운)">
+<link rel="alternate" type="text/markdown" href="https://jungrok5.github.io/mmo-lag-anatomy/llms-full.txt" title="게임 렉 백서 전체 내용(마크다운)">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ko_KR">
-<meta property="og:site_name" content="렉 해부도감">
-<meta property="og:title" content="렉 해부도감: MMO 게임 렉 원인 백과">
-<meta property="og:description" content="MMO 게임에서 화면이 끊기고, 순간이동하고, 접속이 끊기는 원인을 내 화면부터 서버 데이터베이스까지 층별로 해부하고 직접 조작하며 이해하는 백과. 원인마다 담당 팀(게임개발팀·인프라팀)과 공신력 있는 출처를 담았습니다.">
+<meta property="og:site_name" content="게임 렉 백서">
+<meta property="og:title" content="게임 렉 백서: 온라인 게임 렉 원인과 해결 담당">
+<meta property="og:description" content="온라인 게임에서 화면이 끊기고, 순간이동하고, 접속이 끊기는 원인을 내 화면부터 서버 데이터베이스까지 층별로 해부하고 직접 조작하며 이해하는 백서. MMO 사례를 중심으로, 원인마다 담당 팀(게임개발팀·인프라팀)과 공신력 있는 출처를 담았습니다.">
 <meta property="og:url" content="https://jungrok5.github.io/mmo-lag-anatomy/">
 <meta property="og:image" content="https://jungrok5.github.io/mmo-lag-anatomy/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "@id": "https://jungrok5.github.io/mmo-lag-anatomy/#website", "url": "https://jungrok5.github.io/mmo-lag-anatomy/", "name": "렉 해부도감", "alternateName": "Lag Anatomy", "inLanguage": "ko"}, {"@type": "TechArticle", "@id": "https://jungrok5.github.io/mmo-lag-anatomy/#article", "url": "https://jungrok5.github.io/mmo-lag-anatomy/", "headline": "렉 해부도감: MMO 게임 렉 원인 백과", "alternativeHeadline": "Lag Anatomy: an interactive encyclopedia of MMO game lag causes", "description": "MMO 게임에서 화면이 끊기고, 순간이동하고, 접속이 끊기는 원인을 내 화면부터 서버 데이터베이스까지 층별로 해부하고 직접 조작하며 이해하는 백과. 원인마다 담당 팀(게임개발팀·인프라팀)과 공신력 있는 출처를 담았습니다.", "inLanguage": "ko", "isPartOf": {"@id": "https://jungrok5.github.io/mmo-lag-anatomy/#website"}, "image": "https://jungrok5.github.io/mmo-lag-anatomy/og.png", "license": "https://opensource.org/licenses/MIT", "isAccessibleForFree": true, "author": {"@type": "Person", "name": "jungrok5", "url": "https://github.com/jungrok5"}, "about": ["게임 렉", "네트워크 지연", "지터", "패킷 손실", "넷코드", "TCP 재전송", "게임 서버 성능", "MMO"], "keywords": "렉 원인, 게임 렉, 핑, 끊김, 순간이동, 고무줄, 입력 지연, 접속 끊김, 서버 렉, 넷코드, TCP 재전송, 게임개발팀, 인프라팀"}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebSite", "@id": "https://jungrok5.github.io/mmo-lag-anatomy/#website", "url": "https://jungrok5.github.io/mmo-lag-anatomy/", "name": "게임 렉 백서", "alternateName": "Game Lag White Paper", "inLanguage": "ko"}, {"@type": "TechArticle", "@id": "https://jungrok5.github.io/mmo-lag-anatomy/#article", "url": "https://jungrok5.github.io/mmo-lag-anatomy/", "headline": "게임 렉 백서: 온라인 게임 렉 원인과 해결 담당", "alternativeHeadline": "Game Lag White Paper: an interactive guide to online game lag causes, with MMO case studies", "description": "온라인 게임에서 화면이 끊기고, 순간이동하고, 접속이 끊기는 원인을 내 화면부터 서버 데이터베이스까지 층별로 해부하고 직접 조작하며 이해하는 백서. MMO 사례를 중심으로, 원인마다 담당 팀(게임개발팀·인프라팀)과 공신력 있는 출처를 담았습니다.", "inLanguage": "ko", "isPartOf": {"@id": "https://jungrok5.github.io/mmo-lag-anatomy/#website"}, "image": "https://jungrok5.github.io/mmo-lag-anatomy/og.png", "license": "https://opensource.org/licenses/MIT", "isAccessibleForFree": true, "author": {"@type": "Person", "name": "jungrok5", "url": "https://github.com/jungrok5"}, "about": ["게임 렉", "네트워크 지연", "지터", "패킷 손실", "넷코드", "TCP 재전송", "게임 서버 성능", "MMO"], "keywords": "렉 원인, 게임 렉, 핑, 끊김, 순간이동, 고무줄, 입력 지연, 접속 끊김, 서버 렉, 넷코드, TCP 재전송, 게임개발팀, 인프라팀"}]}</script>
 <script>document.documentElement.classList.add('js')</script>
 <style>
 /* 글꼴: IBM Plex Sans KR, IBM Plex Mono (Copyright © 2017 IBM Corp. with Reserved Font Name "Plex"), Black Han Sans (Copyright 2015 The Black Han Sans Project Authors). SIL Open Font License 1.1 (https://openfontlicense.org), 전문은 저장소의 src/fonts/OFL-*.txt */
@@ -63,7 +63,7 @@ SOFTWARE.
 
 <style>
 /* =========================================================
-   렉 해부도감 — 스타일
+   게임 렉 백서 — 스타일
    토큰은 :root 에 라이트 팔레트, 다크는 두 곳(OS 설정, 뷰어 토글)에서 재정의
    ========================================================= */
 :root {
@@ -650,12 +650,12 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
 <body>
 <div class="topbar">
   <button type="button" class="btn small" id="nav-open" aria-controls="nav" aria-expanded="false">목차</button>
-  <b>렉 해부도감</b>
+  <b>게임 렉 백서</b>
   <span class="where" id="where"></span>
 </div>
 <div class="shell">
   <nav class="nav" id="nav" aria-label="목차">
-    <a class="nav-brand" href="#top"><b>렉 해부도감</b><span>MMO 렉 백과</span></a>
+    <a class="nav-brand" href="#top"><b>게임 렉 백서</b><span>렉 원인 백과</span></a>
     <div class="nav-group">
       <div class="nav-group-title">시작하기</div>
       <ol>
@@ -696,8 +696,8 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
       <header class="hero">
         <div class="hero-top">
           <div>
-            <h1>렉<br>해부<span class="ping">도감</span></h1>
-            <p class="hero-lede">화면이 뚝뚝 끊기고, 캐릭터가 순간이동하고, 갑자기 한꺼번에 몰아서 움직이고, 결국 접속이 끊기는 이유. 내 게임 화면에서 서버의 데이터베이스까지 13개 층을 차례로 열어 보고, 직접 망가뜨려 보며 이해합니다.</p>
+            <h1>게임 렉<br><span class="ping">백서</span></h1>
+            <p class="hero-lede">화면이 뚝뚝 끊기고, 캐릭터가 순간이동하고, 갑자기 한꺼번에 몰아서 움직이고, 결국 접속이 끊기는 이유. 내 게임 화면에서 서버의 데이터베이스까지 13개 층을 차례로 열어 보고, 직접 망가뜨려 보며 이해합니다. MMO 사례를 중심으로 썼지만, 대부분은 장르와 상관없이 온라인 게임 전반에 해당합니다.</p>
           </div>
           <div class="thesis" id="thesis"></div>
         </div>
@@ -1357,7 +1357,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
         <div class="ch-head">
           <div class="ch-kicker"><span class="idx">T1</span>도구</div>
           <h2>진단 도우미</h2>
-          <p class="lede">렉 제보를 받았을 때 “누가, 언제, 어떤 모양으로” 세 가지만 골라 보세요. 이 도감에 실린 원인 중 가장 잘 맞는 후보를 점수 순으로 보여 줍니다. 확정 진단은 아니지만, 어느 팀에 먼저 물어볼지 정하는 데 충분합니다.</p>
+          <p class="lede">렉 제보를 받았을 때 “누가, 언제, 어떤 모양으로” 세 가지만 골라 보세요. 이 백서에 실린 원인 중 가장 잘 맞는 후보를 점수 순으로 보여 줍니다. 확정 진단은 아니지만, 어느 팀에 먼저 물어볼지 정하는 데 충분합니다.</p>
         </div>
         <div data-sim="triage" id="sim-triage"></div>
       </section>
@@ -1389,13 +1389,13 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
         <div class="ch-head">
           <div class="ch-kicker"><span class="idx">T4</span>도구</div>
           <h2>참고 문헌</h2>
-          <p class="lede">도감의 수치·기본값·동작 설명의 근거입니다. 표준 문서(RFC), 커널·OS 문서, 클라우드·엔진·DB 공식 문서, 발표·논문 등 공신력 있는 자료만 모았습니다. 원인 카드와 각 장 끝의 “출처”에서도 같은 자료로 이어집니다. 버전이 바뀌면 기본값도 바뀔 수 있으니, 실제 적용 전에는 쓰는 버전의 문서를 확인하세요.</p>
+          <p class="lede">백서의 수치·기본값·동작 설명의 근거입니다. 표준 문서(RFC), 커널·OS 문서, 클라우드·엔진·DB 공식 문서, 발표·논문 등 공신력 있는 자료만 모았습니다. 원인 카드와 각 장 끝의 “출처”에서도 같은 자료로 이어집니다. 버전이 바뀌면 기본값도 바뀔 수 있으니, 실제 적용 전에는 쓰는 버전의 문서를 확인하세요.</p>
         </div>
         <div id="ref-list"></div>
       </section>
 
       <footer class="foot">
-        <p>렉 해부도감 · 수치는 일반적인 서비스 환경의 대표값이며, 실제 값은 게임과 인프라마다 다릅니다.</p>
+        <p>게임 렉 백서 · 수치는 일반적인 서비스 환경의 대표값이며, 실제 값은 게임과 인프라마다 다릅니다.</p>
         <p>시뮬레이션은 원리를 보여 주기 위해 단순화한 모델입니다. 실제 장애 분석은 게임개발팀·인프라팀의 모니터링 지표와 함께 보세요.</p>
         <p>자바스크립트 없이 읽는 <a href="https://jungrok5.github.io/mmo-lag-anatomy/text.html">텍스트 판</a>(원인마다 따로 된 페이지 포함), 전체 내용 마크다운 <a href="https://jungrok5.github.io/mmo-lag-anatomy/llms-full.txt">llms-full.txt</a>, AI용 안내 <a href="https://jungrok5.github.io/mmo-lag-anatomy/llms.txt">llms.txt</a>.</p>
         <p>MIT 라이선스로 공개합니다. 글꼴(IBM Plex Sans KR, IBM Plex Mono, Black Han Sans)은 SIL Open Font License 1.1을 따릅니다.</p>
@@ -1981,7 +1981,7 @@ input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(
 "use strict";
 /* ==== js/data.js ==== */
 /* =========================================================================
-   data.js — 도감의 뼈대 데이터 (레이어, 증상, 네 가지 요인, 숫자 감각, 제보 항목)
+   data.js — 백서의 뼈대 데이터 (레이어, 증상, 네 가지 요인, 숫자 감각, 제보 항목)
    원인 항목은 causes-*.js 에서 DATA.causes 에 채운다.
    ========================================================================= */
 window.DATA = {
@@ -2139,7 +2139,7 @@ window.DATA = {
       '<b>서버·채널·지역 이름</b>과 <b>좌표 또는 장소</b> (예: 2채널 사막 필드 월드 보스 앞).',
       '<b>캐릭터 이름</b>. 특정 캐릭터로만 느린 경우도 있어서, 다른 캐릭터로는 괜찮은지도 함께 적어 주면 좋습니다.',
       '<b>누가 겪었나</b>: 나만 / 파티원도 / 주변 모두 / 채팅에서 서버 전체가 난리 / 같은 PC에 띄운 다른 클라이언트는 멀쩡.',
-      '<b>모양</b>: 이 도감의 증상 이름으로 (뚝뚝 끊김, 순간이동, 고무줄, 몰아치기…).',
+      '<b>모양</b>: 이 백서의 증상 이름으로 (뚝뚝 끊김, 순간이동, 고무줄, 몰아치기…).',
       '<b>얼마나 오래, 얼마나 자주</b>: 1초 한 번 / 30초마다 규칙적으로 / 10분째 계속.',
     ] },
     { title: '있으면 조사가 훨씬 빨라집니다', items: [
@@ -12017,7 +12017,7 @@ K.register('npcmissing', function (root) {
     tries: [
       '<b>클라 2 로딩 시간</b>을 400ms로 줄여 보세요. 등장 알림이 로딩이 끝난 뒤 도착해 NPC가 보입니다. 반대로 <b>서버 입장 처리 시간</b>을 100ms로 줄이면 클라 1도 알림을 놓칩니다. 서버가 빨라져서 생기는 버그입니다.',
       '<b>서버: 준비 완료 신호 뒤에 보내기</b> 또는 <b>클라: 로딩 중 받은 패킷 보관</b>을 켜 보세요. 어느 쪽이든 로딩 시간과 상관없이 NPC가 보입니다.',
-      '아래 질문에 실제 상황대로 답해 보세요. 마지막에 이 도감의 원인 항목으로 연결됩니다.',
+      '아래 질문에 실제 상황대로 답해 보세요. 마지막에 이 백서의 원인 항목으로 연결됩니다.',
     ],
   });
   K.addStyle('npcmissing', `

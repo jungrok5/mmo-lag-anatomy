@@ -23,7 +23,7 @@ p{font-size:33px;font-weight:500;color:#1f2b38;line-height:1.45;max-width:1000px
 svg{position:absolute;right:80px;top:96px}
 </style></head><body>
 <svg width="300" height="120" viewBox="0 0 300 120"><polyline points="0,90 70,90 95,80 120,10 145,110 170,78 300,78" fill="none" stroke="#2340c8" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/></svg>
-<div><div class="kick">MMO 게임 렉 원인 백과</div><h1>렉 해부<span>도감</span></h1></div>
+<div><div class="kick">온라인 게임 렉 원인 백과 · MMO 사례 중심</div><h1>게임 렉 <span>백서</span></h1></div>
 <p>화면이 끊기고, 순간이동하고, 접속이 끊기는 이유. 내 화면부터 서버 데이터베이스까지 원인 ${D.causes.length}가지를 층별로 해부합니다.</p>
 <div class="row"><span class="pill">지연·지터·손실·정체</span><span class="pill">팀별 담당 구분</span><span class="pill">직접 조작하는 실험</span><span class="pill">공신력 있는 출처</span></div>
 </body></html>`;
