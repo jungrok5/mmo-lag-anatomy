@@ -179,7 +179,7 @@
     {"ctx":"src/sims/arch.js:363","ko":"동기: 응답이 올 때까지 게임 스레드가 멈춰 기다립니다. 비동기: 요청만 보내 두고 바로 다음 틱을 돌립니다.","t":""},
     {"ctx":"src/sims/arch.js:365","ko":"타임아웃·서킷 브레이커","t":""},
     {"ctx":"src/sims/arch.js:365","ko":"상대가 느리면 1초만 기다리고 포기합니다. 계속 실패하면 한동안 아예 부르지 않고 바로 실패 처리합니다.","t":""},
-    {"ctx":"src/sims/arch.js:379","ko":"모두 정상","t":""},
+    {"ctx":"src/sims/arch.js:379","ko":"모두 정상","t":"Alle normal"},
     {"ctx":"src/sims/arch.js:380","ko":"DB 느려짐 (동기 호출)","t":""},
     {"ctx":"src/sims/arch.js:381","ko":"DB 느려짐 (비동기 + 서킷 브레이커)","t":""},
     {"ctx":"src/sims/arch.js:382","ko":"캐시 장애 → DB 과부하","t":""},
