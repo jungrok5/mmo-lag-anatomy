@@ -2,8 +2,8 @@
   "lang": "de",
   "group": "body-journey",
   "entries": [
-    {"ctx":"#journey div","ko":"<span class=\"idx\">01</span>전체 지도","t":""},
-    {"ctx":"#journey h2","ko":"패킷의 이동 경로: 내 손가락에서 서버의 DB까지","t":""},
-    {"ctx":"#journey p","ko":"스킬 버튼을 누르면 그 신호는 내 PC와 집, 통신사, 데이터센터를 지나 서버에 닿습니다. 서버 안의 여러 층에서 처리된 결과는 같은 층들을 거꾸로 지나 화면에 그려집니다. 모두 13개 층이고, 어느 층이든 막히면 렉입니다. 아래 지도에서 층을 누르면 해당 장으로 이동합니다.","t":""}
+    {"ctx":"#journey div","ko":"<span class=\"idx\">01</span>전체 지도","t":"<span class=\"idx\">01</span>Gesamtübersicht"},
+    {"ctx":"#journey h2","ko":"패킷의 이동 경로: 내 손가락에서 서버의 DB까지","t":"Der Weg eines Pakets: vom Finger bis zur Serverdatenbank"},
+    {"ctx":"#journey p","ko":"스킬 버튼을 누르면 그 신호는 내 PC와 집, 통신사, 데이터센터를 지나 서버에 닿습니다. 서버 안의 여러 층에서 처리된 결과는 같은 층들을 거꾸로 지나 화면에 그려집니다. 모두 13개 층이고, 어느 층이든 막히면 렉입니다. 아래 지도에서 층을 누르면 해당 장으로 이동합니다.","t":"Drückt man eine Skill-Taste, läuft das Signal über den eigenen PC, das Heimnetz, den Provider und das Rechenzentrum bis zum Server. Mehrere Schichten im Server verarbeiten es, und das Ergebnis durchläuft dieselben Schichten in umgekehrter Richtung, bis es auf dem Bildschirm gezeichnet wird. Insgesamt sind es 13 Schichten, und klemmt es an irgendeiner davon, entsteht Lag. Ein Klick auf eine Schicht in der Übersicht unten springt zum zugehörigen Kapitel."}
   ]
 }
