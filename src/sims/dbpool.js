@@ -330,7 +330,7 @@ K.register('dbpool', function (root) {
       if (lockUtil > 0.6 && P.hot > 0) hints.push(TR`핫 로우 잠금이 ${K.pct(Math.min(lockUtil, 1))} 바쁩니다. 같은 행을 원하는 요청이 조금만 늘어도 대기열이 급격히 길어집니다`);
       if (last.util > 0.75) hints.push(TR`커넥션 ${P.pool}개 중 평균 ${K.pct(Math.min(last.util, 1))}가 바쁩니다`);
       if (cpuUtil > 0.75) hints.push(TR`DB CPU가 ${K.pct(Math.min(cpuUtil, 1))} 바쁩니다`);
-      return K.flag('warn') + TR`평균은 ${last.mean == null ? '—' : K.ms(last.mean)}로 괜찮아 보여도 <b>100건 중 1건은 ${last.p99 == null ? '—' : K.ms(last.p99)} 넘게</b> 걸립니다. ` + (hints.length ? hints.join('. ') + '. ' : '') + TR`이벤트나 점검 직후처럼 요청이 몰리면 바로 대기열이 길어집니다.`;
+      return K.flag('warn') + TR`평균은 ${last.mean == null ? '—' : K.ms(last.mean)}로 괜찮아 보여도 <b>100건 중 1건은 ${last.p99 == null ? '—' : K.ms(last.p99)} 넘게</b> 걸립니다. ` + (hints.length ? K.sentences(hints.map(K.end)) + K.sp : '') + TR`이벤트나 점검 직후처럼 요청이 몰리면 바로 대기열이 길어집니다.`;
     }
     return K.flag('good') + TR`커넥션 ${P.pool}개 중 평균 ${K.n(last.util * P.pool, 1)}개만 바쁩니다. 쿼리가 ${P.query === 'idx' ? TR`인덱스를 타서` : TR`풀 스캔인데도 요청이 적어`} 금방 끝나고, 핫 로우 잠금에도 여유가 있습니다. 요청 대부분이 <b>${last.p50 == null ? '—' : K.ms(last.p50)}</b> 안에 돌아옵니다.`;
   }

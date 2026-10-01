@@ -1923,6 +1923,8 @@ dt[id]:target, .pb-steps li:target { background: var(--accent-soft); border-radi
   // 문장 여러 개 잇기: 중국어·일본어는 문장 사이를 띄우지 않는다
   K.sp = /^(ja|zh)/.test((window.I18N && window.I18N.lang) || 'ko') ? '' : ' ';
   K.sentences = list => list.join(K.sp);
+  // 문장 끝 마침표(번역판은 그 언어 문장 부호: 。, 태국어는 없음)
+  K.end = s => TR`${s}.`;
   // 한국어 조사(받침에 따라 이/가, 을/를, 은/는, 과/와). 괄호 속 설명은 건너뛰고, 숫자는 읽는 소리로 본다.
   // 다른 언어에서는 빈 문자열이라, 번역문은 {0} 자리에 낱말만 받는다
   const JOSA = { ga: ['이', '가'], eul: ['을', '를'], eun: ['은', '는'], wa: ['과', '와'] };
@@ -2760,7 +2762,7 @@ window.SIGDRAW = (function () {
       ] },
     { id: 'cg-asset-stream', t: '저장장치가 느려 에셋 스트리밍이 밀림', en: 'Slow storage stalls asset streaming',
       s: 'HDD처럼 느린 저장장치에서는 오픈월드의 텍스처·모델을 읽는 속도가 이동을 따라가지 못해, 개체가 늦게 뜨거나 게임이 읽기를 기다리며 끊깁니다.',
-      c: ['탈것·순간이동으로 빠르게 이동하거나 사람 많은 곳에 들어가 새 텍스처·모델이 한꺼번에 필요해짐', 'HDD 같은 느린 저장장치가 필요한 속도로 읽지 못해 읽기 요청이 쌓이고, 일부 로딩은 메인 스레드가 끝날 때까지 기다림', '텍스처가 한동안 흐릿하고 건물·캐릭터가 늦게 나타나며, 읽기를 기다리는 순간 뚝뚝 끊김·멈춤'],
+      c: ['탈것·텔레포트로 빠르게 이동하거나 사람 많은 곳에 들어가 새 텍스처·모델이 한꺼번에 필요해짐', 'HDD 같은 느린 저장장치가 필요한 속도로 읽지 못해 읽기 요청이 쌓이고, 일부 로딩은 메인 스레드가 끝날 때까지 기다림', '텍스처가 한동안 흐릿하고 건물·캐릭터가 늦게 나타나며, 읽기를 기다리는 순간 뚝뚝 끊김·멈춤'],
       sym: ['invisible', 'stutter', 'freeze'], fx: ['stall'], who: ['me'], when: ['moving', 'event'],
       num: '마이크로소프트 설명으로 예전 하드디스크는 1초에 수십 MB, NVMe SSD는 1초에 수 GB를 읽고, 이전 세대 게임은 스트리밍에 1초에 50MB 안팎을 썼습니다. SSD 속도를 전제로 이보다 훨씬 많이 읽는 게임을 HDD에서 돌리면 읽기가 이동을 따라가지 못하기 쉽습니다.',
       own: ['cli', 'ext'],
@@ -4362,7 +4364,7 @@ window.SIGDRAW = (function () {
       },
       ref: [
         { t: 'CFS Bandwidth Control', u: 'https://docs.kernel.org/scheduler/sched-bwc.html', p: 'Linux kernel', n: '주기마다 받은 할당량을 다 쓰면 다음 주기까지 스레드가 멈춤(스로틀링), 기본 주기 100ms, nr_throttled 통계' },
-        { t: 'Control Group v2', u: 'https://docs.kernel.org/admin-guide/cgroup-v2.html', p: 'Linux kernel', n: 'cpu.max는 “할당량 주기” 형식이고 기본값은 “max 100000”(100ms 주기)' },
+        { t: 'Control Group v2', u: 'https://docs.kernel.org/admin-guide/cgroup-v2.html', p: 'Linux kernel', n: 'cpu.max는 “$MAX $PERIOD”(할당량, 주기) 형식이고 기본값은 “max 100000”(100ms 주기)' },
         { t: 'Resource Management for Pods and Containers', u: 'https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/', p: 'Kubernetes', n: '컨테이너의 CPU limit은 커널이 CPU 스로틀링으로 강제하는 하드 한도' },
       ] },
     { id: 'so-cstate', t: '서버 전원 관리(C-state·주파수 조절)로 지연 튐', en: 'CPU power management latency (C-states, frequency scaling)',
@@ -4849,7 +4851,7 @@ window.SIGDRAW = (function () {
       s: '누가 누구를 볼 수 있는지 모두끼리 비교하면, 인원이 10배가 될 때 계산은 100배가 됩니다.',
       c: ['모든 캐릭터끼리 거리를 비교하거나, 격자(그리드)로 나눠도 한 셀 근처에 수백 명이 몰림', '100명이면 약 1만 번, 1,000명이면 약 100만 번 비교', '월드 보스·공성전처럼 몰린 곳에서 틱이 폭증해 슬로우모션·뚝뚝 끊김'],
       sym: ['slowmo', 'stutter'], fx: ['stall'], who: ['zone', 'server'], when: ['event'],
-      num: '거리 비교와 보임·안 보임 목록 갱신을 합쳐 한 번에 0.1µs(1천만 분의 1초)로 잡으면, 1,000명이면 한 틱에 100ms. 20틱 예산(50ms)의 두 배입니다.',
+      num: '거리 비교와 보임·안 보임 목록 갱신을 합쳐 두 사람 한 쌍마다 0.1µs(1천만 분의 1초)로 잡으면, 1,000명(약 100만 쌍)이면 한 틱에 100ms. 20틱 예산(50ms)의 두 배입니다.',
       own: ['srv'],
       act: { game: '격자·구역으로 나눠 근처만 비교, 멀리 있는 대상은 드물게 갱신, 한 사람이 보는 인원에 상한.' },
       sim: 'tick',
@@ -6196,7 +6198,7 @@ window.SIGDRAW = (function () {
       more: '중간 인증서가 빠진 설정은 PC 브라우저로 열면 멀쩡해 보일 수 있습니다. 브라우저는 다른 사이트에서 받아 둔 중간 인증서를 기억해 빈 곳을 채우지만, 안드로이드 앱처럼 그런 기억이 없는 클라이언트는 실패합니다. 유효 기간도 짧아지는 중입니다. Let’s Encrypt는 기본 유효 기간을 2027년 64일, 2028년 45일로 줄일 예정이라, 60일마다 갱신하도록 고정해 둔 설정은 64일짜리 인증서에서는 여유가 나흘뿐이고 45일짜리에서는 만료를 넘깁니다. AWS Certificate Manager도 가져온(import) 인증서는 자동 갱신하지 않고, 검증용 DNS 레코드를 지우면 갱신에 실패합니다. 로그인이 막히는 모양은 “DNS 장애·지연”과 비슷하지만, 인증서 문제는 서버 주소를 찾은 뒤 TLS 핸드셰이크에서 실패하고, 시작 시각이 만료 시각이나 인증서를 바꾼 시각과 겹칩니다.',
       sig: { k: 'drop', g: '로그인 성공 수, TLS 핸드셰이크 오류 수' },
       chk: {
-        look: 'openssl s_client -connect 주소:443 -showcerts로 서버가 실제로 보내는 인증서 목록을 보고, 각 인증서의 만료일(notAfter)을 openssl x509 -noout -enddate로 확인. 로드밸런서에서 TLS를 끝낸다면 TLS 협상 오류 수(AWS ALB·NLB는 ClientTLSNegotiationErrorCount)와 로그인 성공 수',
+        look: 'openssl s_client -connect HOST:443 -showcerts로 서버가 실제로 보내는 인증서 목록을 보고, 각 인증서의 만료일(notAfter)을 openssl x509 -noout -enddate로 확인. 로드밸런서에서 TLS를 끝낸다면 TLS 협상 오류 수(AWS ALB·NLB는 ClientTLSNegotiationErrorCount)와 로그인 성공 수',
         yes: '만료일이 지났거나 서버가 보낸 목록에 중간 인증서가 빠져 있고, 오류가 늘기 시작한 시각이 만료 시각이나 인증서를 바꾼 시각과 겹침',
         no: '인증서 목록과 만료일이 정상인데 일부 유저만 실패하면 그 유저 기기의 날짜·시간이나 오래된 OS의 루트 인증서 목록을 봄',
         by: 'ops',
@@ -6620,7 +6622,7 @@ window.SIGDRAW = (function () {
       s: '서버가 사람마다 입력을 조금 모아 두었다가 한 틱에 하나씩 꺼내 쓰면, 다른 사람 눈에는 매끄럽지만 본인 행동이 서버에서 확정되는 시점은 그만큼 늦어집니다.',
       c: ['서버가 느린 사람의 입력을 버퍼에 모아 한 틱에 하나씩 적용', '버퍼가 작으면 자주 비어 그 캐릭터가 제자리에 서거나 서버가 마지막 입력으로 추측해 움직이고, 크면 본인 입력이 늦게 확정', '작으면 남 눈에 멈칫, 크면 본인의 스킬 결과가 늦게 나옴(입력 지연)'],
       sym: ['stutter', 'delay'], fx: ['jit'], who: ['onechar', 'me'], when: ['always'],
-      num: '게임마다 다르지만 보통 1~3틱 분량입니다. VALORANT는 128틱 서버에서 평균 반 틱으로 더 짧게 유지합니다. 지터가 큰 사람만 버퍼를 늘리는 적응형이 흔합니다.',
+      num: '게임마다 다르지만 보통 1~3틱 분량입니다. VALORANT는 128틱 서버에서 서버 버퍼를 평균 반 프레임(약 4ms)으로 더 짧게 유지합니다. 지터가 큰 사람만 버퍼를 늘리는 적응형이 흔합니다.',
       own: ['srv', 'cli'],
       act: { game: '서버: 사람마다 회선 상태에 맞춰 버퍼 크기를 자동 조절, 밀리면 두 개씩 꺼내 따라잡기, 버퍼가 자주 비는 사람의 클라이언트에는 입력을 앞당겨 보내라고 지시. 클라이언트: 서버 지시에 맞춰 입력을 조금 더 앞당겨 보내기(클라이언트 시간 조절).' },
       sim: 'oneslow',
@@ -7108,7 +7110,7 @@ window.SIGDRAW = (function () {
       sig: { k: 'load', g: '스위치 포트 출력 폐기 수, 재전송률' },
       chk: {
         look: '서버가 붙은 스위치 포트와 그 윗단 포트의 출력 폐기(ifOutDiscards)를 몇 초 간격으로 모으고, 클라우드면 ethtool -S의 bw_out_allowance_exceeded·pps_allowance_exceeded를 봄. 같은 시각의 재전송을 bcc tcpretrans로 모아 맞춰 봄',
-        yes: '분 단위 평균 사용률은 낮은데 출력 폐기나 allowance 초과가 늘고, 그 양이 동시 접속·한곳에 모인 인원을 따라 커짐. 재전송이 한 유저 대역에 몰리지 않고 그 서버의 여러 연결에서 같은 순간에 생김',
+        yes: '분 단위 평균 사용률은 낮은데 출력 폐기나 allowance 초과가 늘고, 그 양이 동시 접속·한곳에 모인 인원을 따라 커짐. 재전송이 특정 유저 IP 대역(통신사·지역)에 몰리지 않고 그 서버의 여러 연결에서 같은 순간에 생김',
         no: '같은 포트에 CRC·입력 오류가 함께 늘면 “물리 오류”. 받는 서버의 NIC 폐기 카운터나 softnet dropped가 늘면 “수신 서버 호스트의 패킷 폐기”',
         by: 'ops',
       },
@@ -7981,7 +7983,7 @@ DATA.cases.push(
     u: 'https://www.leagueoflegends.com/en-gb/news/riot-games/incident-report-recent-outages-in-europe-brazil/', p: 'Riot Games',
     what: '2020년 2월 말 League of Legends의 EUW·EUNE·BR 서버에서 여러 차례 장애가 나 새로 시작되는 게임 수가 크게 줄었다. 매칭·게임 서버 같은 백엔드 서비스는 모두 상태가 정상이었지만 들어오는 트래픽이 거의 없었다. Riot은 불안정할 수 있는 클러스터에서 토너먼트 모드(Clash)를 열지 않으려고 일정을 한 주 미뤘다. 회고에 장애마다 이어진 시간은 적혀 있지 않다.',
     why: '세 가지가 겹쳤다. 한 서비스로 가는 요청이 잘못 만들어져 특정 경우에 계속 실패하고 계속 재시도되면서 요청이 폭증했다. 컨테이너 시스템과 OS 버전의 알려진 궁합 문제로 OS 내부 메모리가 새고 있었는데, 업그레이드는 Riot 전체 컨테이너 환경의 약 60%에서만 끝났고 유럽·라틴아메리카 클러스터는 진행 중이었다. 인터넷 트래픽을 받아 걸러 백엔드로 보내는 엣지 컨테이너는 같은 샤드(서버군) 안에서는 떨어지게 배치됐지만 다른 샤드끼리는 막지 못해, 장애 때마다 적어도 세 샤드의 엣지 컨테이너가 호스트 한 대에 몰려 있었다. 재시도 폭증이 그 호스트에 겹치고, 메모리 누수가 그 호스트를 멈추게 했다.',
-    lesson: '뒷단 서비스가 모두 “정상이지만 트래픽이 안 들어온다”고 답하면 그 앞단(엣지·게이트웨이·로드밸런서)을 본다. 확인 신호는 호스트별 인바운드 연결 수의 쏠림과 특정 요청의 실패·재시도 비율이다. 주 담당은 게임개발팀(서버: 잘못된 요청과 재시도 방식)이고, 컨테이너 배치 규칙·OS 업그레이드·쏠림 경보는 인프라팀(시스템)이 맡는다. Riot은 요청 코드를 고치고 재시도가 급증하지 않게 바꿨으며, 샤드 사이 분산을 구현하기 전까지 쏠림 경보를 두었다.',
+    lesson: '뒷단 서비스가 모두 “정상이지만 트래픽이 안 들어온다”고 답하면 그 앞단(엣지·게이트웨이·로드밸런서)을 본다. 확인 신호는 호스트별 인바운드 연결 수의 쏠림과 특정 요청의 실패·재시도 비율이다. 주 담당은 게임개발팀(서버: 잘못된 요청과 재시도 방식)이고, 컨테이너 배치 규칙·OS 업그레이드·쏠림 경보는 인프라팀(서버 장비·OS)이 맡는다. Riot은 요청 코드를 고치고 재시도가 급증하지 않게 바꿨으며, 샤드 사이 분산을 구현하기 전까지 쏠림 경보를 두었다.',
     causes: ['in-gateway', 'in-cascade'] },
   { id: 'riot-euw-2021', t: 'League of Legends EUW 5시간 장애: 부가 DB 하나가 서버 전체를 멈춤', org: 'Riot Games', year: 2021,
     u: 'https://www.riotgames.com/en/news/keeping-legacy-software-alive-case-study', p: 'Riot Games',
@@ -7992,8 +7994,8 @@ DATA.cases.push(
   { id: 'roblox-2021', t: 'Roblox 73시간 장애: 서비스 디스커버리(Consul) 클러스터의 경합', org: 'Roblox', year: 2021,
     u: 'https://about.roblox.com/newsroom/2022/01/roblox-return-to-service-10-28-10-31-2021', p: 'Roblox',
     what: '2021년 10월 28일 오후(태평양 시간) Consul 서버 한 대의 높은 CPU 부하로 시작해, 16시 35분 접속 중인 유저 수가 평소의 절반으로 떨어진 뒤 서비스 전체가 멈췄다. 10월 31일 16시 45분에야 모든 유저가 다시 들어올 수 있었고, 장애 시작부터 73시간이 걸렸다. Roblox는 매일 5천만 명이 이용한다고 밝혔다.',
-    why: 'Roblox는 서비스 디스커버리(서비스끼리 서로의 주소를 찾는 기능), 헬스체크, KV 저장소에 HashiCorp Consul을 쓰는데, Consul 클러스터 하나가 여러 워크로드를 함께 맡고 있었다. 근본 원인은 두 가지였다. 첫째, 몇 달에 걸쳐 넓혀 온 Consul의 새 streaming 기능을 장애 전날 트래픽 라우팅 서비스에도 켜고 그 노드 수를 50% 늘렸는데, 읽기와 쓰기가 모두 매우 많은 부하에서 이 기능이 공유 자원(Go 채널) 하나에 경합을 일으켰다. 장애 중 바꿔 넣은 코어 수가 더 많은 듀얼 소켓(NUMA) 서버에서는 경합이 더 심했다. 둘째, Consul이 Raft 로그 저장에 쓰는 BoltDB의 빈 페이지 목록(freelist) 관리가 병적으로 느려져, 16kB 이하를 추가할 때마다 7.8MB를 디스크에 썼다. 평소 300ms 미만이던 KV 쓰기 지연 중앙값이 2초가 됐고, 느린 리더 서버에서는 TCP 버퍼가 가득 차는 제로 윈도우도 관찰됐다. 텔레메트리가 Consul에 기대고 있어 원인을 찾는 데 필요한 지표도 함께 사라졌다.',
-    lesson: '여러 서비스가 함께 기대는 기반 시스템(서비스 디스커버리·설정 저장소·인증)이 느려지면 모든 기능이 한꺼번에 멈춘다. 확인 신호는 그 시스템의 쓰기 지연·리더 교체·CPU와, 장애 직전의 설정 변경이다. 담당은 게임개발팀(서버)과 인프라팀(시스템) 양쪽이다. 모니터링은 감시 대상 시스템에 기대지 않게 분리해야 장애 때도 지표를 볼 수 있다. 복구할 때는 캐시가 비어 있어 한꺼번에 받으면 다시 무너질 수 있으므로, Roblox는 DNS로 입장할 유저 비율을 조절하며 약 10%씩 늘렸다.',
+    why: 'Roblox는 서비스 디스커버리(서비스끼리 서로의 주소를 찾는 기능), 헬스체크, KV 저장소에 HashiCorp Consul을 쓰는데, Consul 클러스터 하나가 여러 워크로드를 함께 맡고 있었다. 근본 원인은 두 가지였다. 첫째, 몇 달에 걸쳐 넓혀 온 Consul의 새 streaming 기능을 장애 전날 트래픽 라우팅 서비스에도 켜고 그 서비스의 노드 수를 50% 늘렸는데, 읽기와 쓰기가 모두 매우 많은 부하에서 이 기능이 공유 자원(Go 채널) 하나에 경합을 일으켰다. 장애 중 바꿔 넣은 코어 수가 더 많은 듀얼 소켓(NUMA) 서버에서는 경합이 더 심했다. 둘째, Consul이 Raft 로그 저장에 쓰는 BoltDB의 빈 페이지 목록(freelist) 관리가 병적으로 느려져, 16kB 이하를 추가할 때마다 7.8MB를 디스크에 썼다. 평소 300ms 미만이던 KV 쓰기 지연 중앙값이 2초가 됐고, 느린 리더 서버에서는 TCP 버퍼가 가득 차는 제로 윈도우도 관찰됐다. 텔레메트리가 Consul에 기대고 있어 원인을 찾는 데 필요한 지표도 함께 사라졌다.',
+    lesson: '여러 서비스가 함께 기대는 기반 시스템(서비스 디스커버리·설정 저장소·인증)이 느려지면 모든 기능이 한꺼번에 멈춘다. 확인 신호는 그 시스템의 쓰기 지연·리더 교체·CPU와, 장애 직전의 설정 변경이다. 담당은 게임개발팀(서버)과 인프라팀(서버 장비·OS) 양쪽이다. 모니터링은 감시 대상 시스템에 기대지 않게 분리해야 장애 때도 지표를 볼 수 있다. 복구할 때는 캐시가 비어 있어 한꺼번에 받으면 다시 무너질 수 있으므로, Roblox는 DNS로 입장할 유저 비율을 조절하며 약 10%씩 늘렸다.',
     causes: ['in-cascade', 'sp-lock', 'rt-zero-window', 'db-cold-cache'] },
   { id: 'ffxiv-2021', t: 'FINAL FANTASY XIV 확장팩 출시 혼잡과 로그인 대기열 오류', org: 'Square Enix', year: 2021,
     u: 'https://na.finalfantasyxiv.com/lodestone/news/detail/6a94b30182b6d963994fdc0b789264ac9f24986f', p: 'Square Enix',
@@ -8052,7 +8054,7 @@ DATA.playbooks.push(
         d: '제보가 처음 몰린 시각과 그래프가 계단처럼 오른 시각을 찾고, 그 앞뒤로 나간 변경을 빠짐없이 적는다. 클라이언트 패치, 서버 배포, 설정 변경, DB 스키마 변경(DDL)과 재시작, 네트워크·방화벽 작업, 인프라 교체(인스턴스 종류·커널·드라이버)를 함께 본다. 배포 때마다 모니터링 도구의 주석(annotation) 기능으로 모든 그래프에 세로선을 남겨 두면 이 단계가 금방 끝난다. 게임 패치와 인프라 작업이 같은 점검 시간에 나갔으면 둘 다 후보로 남긴다. 먼저 부를 곳: 변경을 낸 게임개발팀과 인프라팀 양쪽.',
         causes: ['in-deploy', 'so-os-update', 'db-ddl-lock', 'db-plan-flip', 'db-cold-cache'] },
       { t: '범위를 나눈다: 빌드·기기·서버·지역',
-        d: '이상이 어느 차원에 몰렸는지 본다. 새 빌드 사용자만 나쁘면 클라이언트, 특정 OS·그래픽카드·기기만 나쁘면 클라이언트 성능이나 드라이버, 특정 서버·채널·존만 나쁘면 서버, 특정 국가·통신사만 나쁘면 네트워크 경로, 모두가 동시에 나쁘면 공용 자원(DB·로드밸런서·게이트웨이)이나 방금 나간 서버 배포를 먼저 의심한다. 클라이언트 텔레메트리에 빌드 번호가 있으면 옛 빌드와 새 빌드의 핑·FPS·프레임 스파이크·접속 끊김 횟수를 나란히 놓는다. 핑은 그대로인데 FPS만 나빠졌으면 네트워크보다 클라이언트 성능 쪽이다. 먼저 부를 곳: 빌드·기기에 몰리면 게임개발팀(클라이언트), 서버·채널에 몰리면 호스트 지표가 정상일 때 게임개발팀(서버)·비정상일 때 인프라팀(시스템), 국가·통신사에 몰리면 인프라팀(네트워크).',
+        d: '이상이 어느 차원에 몰렸는지 본다. 새 빌드 사용자만 나쁘면 클라이언트, 특정 OS·그래픽카드·기기만 나쁘면 클라이언트 성능이나 드라이버, 특정 서버·채널·존만 나쁘면 서버, 특정 국가·통신사만 나쁘면 네트워크 경로, 모두가 동시에 나쁘면 공용 자원(DB·로드밸런서·게이트웨이)이나 방금 나간 서버 배포를 먼저 의심한다. 클라이언트 텔레메트리에 빌드 번호가 있으면 옛 빌드와 새 빌드의 핑·FPS·프레임 스파이크·접속 끊김 횟수를 나란히 놓는다. 핑은 그대로인데 FPS만 나빠졌으면 네트워크보다 클라이언트 성능 쪽이다. 먼저 부를 곳: 빌드·기기에 몰리면 게임개발팀(클라이언트), 서버·채널에 몰리면 호스트 지표가 정상일 때 게임개발팀(서버)·비정상일 때 인프라팀(서버 장비·OS), 국가·통신사에 몰리면 인프라팀(네트워크).',
         causes: ['cg-hitch', 'cg-sync-load', 'co-vram', 'cg-crash'] },
       { t: '새 버전과 옛 버전을 같은 시간대에 비교한다',
         d: '배포 전후만 비교하면 요일·시간대·이벤트에 따른 변화가 섞여 판단이 흐려진다. 가능하면 새 버전을 일부 서버(카나리)에 먼저 올리고, 같은 시간대의 옛 버전 서버(대조군)와 틱 시간 p50·p99, 틱 초과 수, CPU, 메모리, 오류율을 나란히 비교한다. 이미 전체에 배포했으면 지난주 같은 요일·같은 시간대와 비교한다. 서버 전체 평균만 보면 일부 서버·존의 문제가 묻히므로 서버·존별로 나눠 본다. 먼저 부를 곳: 게임개발팀(서버).',
@@ -8064,7 +8066,7 @@ DATA.playbooks.push(
         d: 'DB 지연이 올랐으면 쿼리 수(QPS)도 함께 올랐는지부터 본다. PostgreSQL의 pg_stat_statements나 MySQL Performance Schema의 digest 요약은 값만 다른 쿼리를 한 종류로 묶어 실행 횟수와 총 시간을 모아 주므로, 패치 전후의 상위 쿼리 목록을 비교하면 새로 생긴 쿼리, 횟수가 몇 배로 는 쿼리(N+1), 인덱스 없이 테이블 전체를 읽는 쿼리(MySQL은 SUM_NO_INDEX_USED 열)가 드러난다. 먼저 부를 곳: QPS나 쿼리 모양이 바뀌었으면 게임개발팀(서버), 쿼리는 같은데 지연만 늘었으면 인프라팀(DB: 실행 계획·IOPS·잠금).',
         causes: ['db-no-index', 'db-login-storm', 'db-plan-flip', 'db-cache-stampede'] },
       { t: '호스트와 서버 프로세스 지표로 계층을 가른다',
-        d: '코드 없이 OS에서 보이는 값으로 서버 안쪽과 호스트를 가른다. 서버 소켓의 수신 대기열(Recv-Q)이 쌓이면 서버 프로세스가 제때 읽지 못하는 것이고(틱 멈춤·GC·락), 스레드 하나만 100%면 단일 스레드 병목, GC 로그의 멈춤 시간이 늘었으면 메모리 사용 패턴이 바뀐 것이다. 로그 레벨을 올린 채 배포해 로그 쓰기가 늘지 않았는지도 본다. 반대로 CPU 스틸·스로틀링·NIC 드롭이 늘었으면 같은 시각에 바뀐 인프라(인스턴스 종류·커널·컨테이너 한도)를 본다. 먼저 부를 곳: 프로세스 안쪽 신호면 게임개발팀(서버), 호스트 신호면 인프라팀(시스템).',
+        d: '코드 없이 OS에서 보이는 값으로 서버 안쪽과 호스트를 가른다. 서버 소켓의 수신 대기열(Recv-Q)이 쌓이면 서버 프로세스가 제때 읽지 못하는 것이고(틱 멈춤·GC·락), 스레드 하나만 100%면 단일 스레드 병목, GC 로그의 멈춤 시간이 늘었으면 메모리 사용 패턴이 바뀐 것이다. 로그 레벨을 올린 채 배포해 로그 쓰기가 늘지 않았는지도 본다. 반대로 CPU 스틸·스로틀링·NIC 드롭이 늘었으면 같은 시각에 바뀐 인프라(인스턴스 종류·커널·컨테이너 한도)를 본다. 먼저 부를 곳: 프로세스 안쪽 신호면 게임개발팀(서버), 호스트 신호면 인프라팀(서버 장비·OS).',
         causes: ['mem-gc', 'sp-hotzone', 'dk-sync-log', 'so-cpu-quota', 'so-steal', 'so-os-update'] },
       { t: '되돌려서 확정하고 기록을 남긴다',
         d: '가장 유력한 변경을 일부 서버나 일부 유저에게서만 되돌리거나(롤백, 기능 플래그 끄기) 설정을 이전 값으로 돌려, 증상이 함께 사라지는지 본다. 되돌린 쪽만 나아지면 원인이 확정된다. 되돌리는 작업도 재시작과 콜드 캐시로 잠깐 느려질 수 있으니, 급하지 않으면 한가한 시간대에 한다. 결과는 원인 ID와 함께 장애 기록에 남기고, 패킷 크기·쿼리 수·틱 시간 한도를 다음 패치의 배포 전 점검 항목으로 옮긴다. 먼저 부를 곳: 변경을 낸 팀.',
@@ -8720,7 +8722,7 @@ K.register('arch', function (root) {
     });
     const gName = ids => (ids.length === 3 && GAMES.every(g => ids.includes(g)) ? TR`게임 서버 3대` : ids.map(nm).join(', '));
     groups.forEach(g => {
-      chainEl.append(K.el('li', { class: g.lv === 2 ? 'bad' : 'warn', html: `<b>${nm(g.from)} ${word(eff[g.from])}</b> → <b>${gName(g.ids)} ${word(g.lv)}</b><br>${g.why}.` }));
+      chainEl.append(K.el('li', { class: g.lv === 2 ? 'bad' : 'warn', html: `<b>${nm(g.from)} ${word(eff[g.from])}</b> → <b>${gName(g.ids)} ${word(g.lv)}</b><br>${K.end(g.why)}` }));
     });
     // 설계가 막아 낸 연쇄
     const saved = [], savedSay = [];
@@ -8754,8 +8756,8 @@ K.register('arch', function (root) {
     if (!faults.length) msg = K.flag('good') + TR`모든 서버가 정상입니다. 그림의 상자를 누르거나 “고장 낼 곳”을 골라 보세요. 누를 때마다 정상 → 느려짐 → 멈춤 → 정상 순서로 바뀝니다.`;
     else {
       const flag = worst(items.map(statusOf));
-      msg = K.flag(flag) + faults.map(n => `<b>${n.name} ${word(own[n.id])}</b>`).join(', ') + '. ';
-      groups.forEach(g => { msg += `→ <b>${gName(g.ids)} ${word(g.lv)}</b>: ${g.why}. `; });
+      msg = K.flag(flag) + K.end(faults.map(n => `<b>${n.name} ${word(own[n.id])}</b>`).join(', ')) + K.sp;
+      groups.forEach(g => { msg += K.end(`→ <b>${gName(g.ids)} ${word(g.lv)}</b>: ${g.why}`) + K.sp; });
       msg += top ? TR`누가 겪나: <b>${top.who}</b>. 무엇을: ${top.sym.join(', ')}.` : TR`플레이어는 거의 알아채지 못합니다.`;
       if (block && GAMES.some(g => cause[g])) msg += TR` 기다리는 방식을 비동기로 바꾸거나 서킷 브레이커를 켜면 번지는 범위가 줄어듭니다.`;
       else if (savedSay.length) msg += K.sp + K.sentences(savedSay);
@@ -10009,7 +10011,7 @@ K.register('dbpool', function (root) {
       if (lockUtil > 0.6 && P.hot > 0) hints.push(TR`핫 로우 잠금이 ${K.pct(Math.min(lockUtil, 1))} 바쁩니다. 같은 행을 원하는 요청이 조금만 늘어도 대기열이 급격히 길어집니다`);
       if (last.util > 0.75) hints.push(TR`커넥션 ${P.pool}개 중 평균 ${K.pct(Math.min(last.util, 1))}가 바쁩니다`);
       if (cpuUtil > 0.75) hints.push(TR`DB CPU가 ${K.pct(Math.min(cpuUtil, 1))} 바쁩니다`);
-      return K.flag('warn') + TR`평균은 ${last.mean == null ? '—' : K.ms(last.mean)}로 괜찮아 보여도 <b>100건 중 1건은 ${last.p99 == null ? '—' : K.ms(last.p99)} 넘게</b> 걸립니다. ` + (hints.length ? hints.join('. ') + '. ' : '') + TR`이벤트나 점검 직후처럼 요청이 몰리면 바로 대기열이 길어집니다.`;
+      return K.flag('warn') + TR`평균은 ${last.mean == null ? '—' : K.ms(last.mean)}로 괜찮아 보여도 <b>100건 중 1건은 ${last.p99 == null ? '—' : K.ms(last.p99)} 넘게</b> 걸립니다. ` + (hints.length ? K.sentences(hints.map(K.end)) + K.sp : '') + TR`이벤트나 점검 직후처럼 요청이 몰리면 바로 대기열이 길어집니다.`;
     }
     return K.flag('good') + TR`커넥션 ${P.pool}개 중 평균 ${K.n(last.util * P.pool, 1)}개만 바쁩니다. 쿼리가 ${P.query === 'idx' ? TR`인덱스를 타서` : TR`풀 스캔인데도 요청이 적어`} 금방 끝나고, 핫 로우 잠금에도 여유가 있습니다. 요청 대부분이 <b>${last.p50 == null ? '—' : K.ms(last.p50)}</b> 안에 돌아옵니다.`;
   }

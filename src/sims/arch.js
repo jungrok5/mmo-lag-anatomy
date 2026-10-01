@@ -460,7 +460,7 @@ K.register('arch', function (root) {
     });
     const gName = ids => (ids.length === 3 && GAMES.every(g => ids.includes(g)) ? TR`게임 서버 3대` : ids.map(nm).join(', '));
     groups.forEach(g => {
-      chainEl.append(K.el('li', { class: g.lv === 2 ? 'bad' : 'warn', html: `<b>${nm(g.from)} ${word(eff[g.from])}</b> → <b>${gName(g.ids)} ${word(g.lv)}</b><br>${g.why}.` }));
+      chainEl.append(K.el('li', { class: g.lv === 2 ? 'bad' : 'warn', html: `<b>${nm(g.from)} ${word(eff[g.from])}</b> → <b>${gName(g.ids)} ${word(g.lv)}</b><br>${K.end(g.why)}` }));
     });
     // 설계가 막아 낸 연쇄
     const saved = [], savedSay = [];
@@ -494,8 +494,8 @@ K.register('arch', function (root) {
     if (!faults.length) msg = K.flag('good') + TR`모든 서버가 정상입니다. 그림의 상자를 누르거나 “고장 낼 곳”을 골라 보세요. 누를 때마다 정상 → 느려짐 → 멈춤 → 정상 순서로 바뀝니다.`;
     else {
       const flag = worst(items.map(statusOf));
-      msg = K.flag(flag) + faults.map(n => `<b>${n.name} ${word(own[n.id])}</b>`).join(', ') + '. ';
-      groups.forEach(g => { msg += `→ <b>${gName(g.ids)} ${word(g.lv)}</b>: ${g.why}. `; });
+      msg = K.flag(flag) + K.end(faults.map(n => `<b>${n.name} ${word(own[n.id])}</b>`).join(', ')) + K.sp;
+      groups.forEach(g => { msg += K.end(`→ <b>${gName(g.ids)} ${word(g.lv)}</b>: ${g.why}`) + K.sp; });
       msg += top ? TR`누가 겪나: <b>${top.who}</b>. 무엇을: ${top.sym.join(', ')}.` : TR`플레이어는 거의 알아채지 못합니다.`;
       if (block && GAMES.some(g => cause[g])) msg += TR` 기다리는 방식을 비동기로 바꾸거나 서킷 브레이커를 켜면 번지는 범위가 줄어듭니다.`;
       else if (savedSay.length) msg += K.sp + K.sentences(savedSay);

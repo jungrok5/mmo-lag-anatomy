@@ -47,7 +47,7 @@
     {"ctx":"src/sims/oneslow.js:312","ko":"락스텝 게임","t":"เกม lockstep"},
     {"ctx":"src/sims/oneslow.js:313","ko":"엄격한 이동 검증","t":"ตรวจการเคลื่อนที่แบบเข้มงวด"},
     {"ctx":"src/sims/oneslow.js:314","ko":"상황","t":"สถานการณ์"},
-    {"ctx":"src/sims/oneslow.js:320","ko":"서버 틱","t":"ทิกของเซิร์ฟเวอร์"},
+    {"ctx":"src/sims/oneslow.js:320","ko":"서버 틱","t":"ทิกเรตเซิร์ฟเวอร์"},
     {"ctx":"src/sims/oneslow.js:320","ko":"/초","t":"/วินาที"},
     {"ctx":"src/sims/oneslow.js:321","ko":"A가 느끼는 반응","t":"การตอบสนองที่ A รู้สึก"},
     {"ctx":"src/sims/oneslow.js:322","ko":"입력 버퍼 비어 멈춘 틱","t":"ทิกที่หยุดเพราะบัฟเฟอร์อินพุตว่าง"},

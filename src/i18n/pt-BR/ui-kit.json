@@ -3,14 +3,15 @@
   "group": "ui-kit",
   "entries": [
     {"ctx":"src/js/kit.js:91","ko":"{0}. {1}","t":"{0}. {1}"},
-    {"ctx":"src/js/kit.js:114, src/js/kit.js:115","ko":" 초","t":" s"},
-    {"ctx":"src/js/kit.js:162","ko":"직접 해보기","t":"Experimente"},
-    {"ctx":"src/js/kit.js:176","ko":"이렇게 해보세요","t":"Tente isto"},
-    {"ctx":"src/js/kit.js:268","ko":"상황 불러오기","t":"Carregar cenário"},
-    {"ctx":"src/js/kit.js:292","ko":"좋음","t":"Bom"},
-    {"ctx":"src/js/kit.js:293","ko":"주의","t":"Atenção"},
-    {"ctx":"src/js/kit.js:294","ko":"나쁨","t":"Ruim"},
-    {"ctx":"src/js/kit.js:590","ko":"<p class=\"sim-error\">시뮬레이션 “{0}”를 찾지 못했습니다.</p>","t":"<p class=\"sim-error\">Não foi possível encontrar a simulação “{0}”.</p>"},
-    {"ctx":"src/js/kit.js:592","ko":"<p class=\"sim-error\">시뮬레이션 “{0}”를 불러오다 오류가 났습니다: {1}</p>","t":"<p class=\"sim-error\">Erro ao carregar a simulação “{0}”: {1}</p>"}
+    {"ctx":"src/js/kit.js:96","ko":"{0}.","t":""},
+    {"ctx":"src/js/kit.js:116, src/js/kit.js:117","ko":" 초","t":" s"},
+    {"ctx":"src/js/kit.js:164","ko":"직접 해보기","t":"Experimente"},
+    {"ctx":"src/js/kit.js:178","ko":"이렇게 해보세요","t":"Tente isto"},
+    {"ctx":"src/js/kit.js:270","ko":"상황 불러오기","t":"Carregar cenário"},
+    {"ctx":"src/js/kit.js:294","ko":"좋음","t":"Bom"},
+    {"ctx":"src/js/kit.js:295","ko":"주의","t":"Atenção"},
+    {"ctx":"src/js/kit.js:296","ko":"나쁨","t":"Ruim"},
+    {"ctx":"src/js/kit.js:592","ko":"<p class=\"sim-error\">시뮬레이션 “{0}”를 찾지 못했습니다.</p>","t":"<p class=\"sim-error\">Não foi possível encontrar a simulação “{0}”.</p>"},
+    {"ctx":"src/js/kit.js:594","ko":"<p class=\"sim-error\">시뮬레이션 “{0}”를 불러오다 오류가 났습니다: {1}</p>","t":"<p class=\"sim-error\">Erro ao carregar a simulação “{0}”: {1}</p>"}
   ]
 }
