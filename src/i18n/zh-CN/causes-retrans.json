@@ -25,7 +25,7 @@
     {"ctx":"causes/rt-wireless/ref/6/n","ko":"RTO 최소값 TCP_RTO_MIN = 200ms","t":"RTO 最小值 TCP_RTO_MIN = 200 ms"},
     {"ctx":"causes/rt-wireless/ref/7/n","ko":"ss -ti는 retrans:지금 재전송 중인 수/누적 재전송 수와 rtt:RTT/RTT 편차(rttvar)를 표시","t":"ss -ti 显示 retrans:当前正在重传的数量/累计重传数量，以及 rtt:RTT/RTT 偏差（rttvar）"},
     {"ctx":"causes/rt-queue-drop/t","ko":"병목 대기열 넘침 (혼잡 손실)","t":"瓶颈队列溢出（拥塞丢包）"},
-    {"ctx":"causes/rt-queue-drop/s","ko":"공유기, 통신사 사이 연결 구간, 데이터센터 회선처럼 가장 좁은 곳의 대기열이 가득 차면 새로 오는 패킷을 버립니다.","t":""},
+    {"ctx":"causes/rt-queue-drop/s","ko":"공유기, 통신사 사이 연결 구간, 데이터센터 회선처럼 가장 좁은 곳의 대기열이 가득 차면 새로 오는 패킷을 버립니다.","t":"路由器、运营商之间的互联链路、数据中心线路这类最窄处的队列一旦满了，新来的数据包就会被丢弃。"},
     {"ctx":"causes/rt-queue-drop/c/0","ko":"영상·다운로드·다른 사용자 트래픽으로 병목 구간이 꽉 참","t":"视频、下载和其他用户的流量把瓶颈链路占满"},
     {"ctx":"causes/rt-queue-drop/c/1","ko":"대기열이 찬 동안 새로 도착하는 패킷이 연달아 버려짐(tail drop). 버려지지 않은 패킷도 꽉 찬 대기열 끝에서 기다림","t":"队列满的期间，新到的数据包接连被丢弃（tail drop）。没被丢弃的包也要在满队列的末尾排队"},
     {"ctx":"causes/rt-queue-drop/c/2","ko":"여러 패킷이 한꺼번에 사라져 긴 멈춤 뒤 몰아치기, 저녁 시간에 잦음","t":"多个包同时丢失，长时间卡住后表现为快进，晚上多发"},
