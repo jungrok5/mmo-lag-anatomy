@@ -48,7 +48,7 @@
     {"ctx":"src/sims/nic.js:61, src/sims/nic.js:263","ko":"NIC에 닿기 전","t":""},
     {"ctx":"src/sims/nic.js:130","ko":"들어옴 {0}/초","t":""},
     {"ctx":"src/sims/nic.js:131","ko":" → 클라우드 한도에서 {0}/초 버림","t":""},
-    {"ctx":"src/sims/nic.js:133","ko":"링 버퍼","t":""},
+    {"ctx":"src/sims/nic.js:133","ko":"링 버퍼","t":"Ring buffer"},
     {"ctx":"src/sims/nic.js:134","ko":"코어","t":""},
     {"ctx":"src/sims/nic.js:134","ko":"코어 CPU","t":""},
     {"ctx":"src/sims/nic.js:147","ko":"버림","t":""},
