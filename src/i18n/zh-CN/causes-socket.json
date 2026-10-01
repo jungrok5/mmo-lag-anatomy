@@ -137,7 +137,7 @@
     {"ctx":"causes/sk-congestion/c/0","ko":"보낼 양이 많을 때 와이파이나 회선에서 약간의 손실 발생","t":"要发送的量大时，Wi-Fi 或线路上出现少量丢包"},
     {"ctx":"causes/sk-congestion/c/1","ko":"TCP가 전송 속도를 크게 줄이고 천천히 회복(리눅스·윈도우 기본인 CUBIC은 30% 줄임)","t":"TCP 大幅降低发送速率，然后缓慢恢复（Linux、Windows 默认的 CUBIC 降低 30%）"},
     {"ctx":"causes/sk-congestion/c/2","ko":"사람 많은 곳에서 업데이트가 밀려 몰아치기·입력 지연","t":"人多的地方更新积压，表现为快进、操作延迟"},
-    {"ctx":"causes/sk-congestion/act/game","ko":"보내는 양 줄이기(관심 영역, 변경분만), 한꺼번에 몰아 보내지 않게 나눠 보내기.","t":"减少发送量（关注区域、只发变化部分）；分散发送，避免一次性集中发出。"},
+    {"ctx":"causes/sk-congestion/act/game","ko":"보내는 양 줄이기(관심 영역, 변경분만), 한꺼번에 몰아 보내지 않게 나눠 보내기.","t":"减少发送量（AOI 过滤、只发变化部分）；分散发送，避免一次性集中发出。"},
     {"ctx":"causes/sk-congestion/act/infra","ko":"BBR 같은 혼잡 제어로 바꾸기(tcp_congestion_control).","t":"改用 BBR 等拥塞控制算法（tcp_congestion_control）。"},
     {"ctx":"causes/sk-congestion/sig/g","ko":"연결별 혼잡 윈도우(cwnd)·전송률","t":"每个连接的拥塞窗口（cwnd）、发送速率"},
     {"ctx":"causes/sk-congestion/chk/look","ko":"업데이트가 밀린 유저 연결을 ss -ti로 여러 번 떠서 cwnd·ssthresh 변화와 혼잡 제어 이름(cubic·bbr)을 보고, Send-Q가 쌓이는지 함께 봄","t":"对更新积压的玩家连接多次执行 ss -ti，看 cwnd、ssthresh 的变化和拥塞控制算法名（cubic、bbr），同时看 Send-Q 是否在堆积"},
