@@ -580,3 +580,7 @@ How they are used:
 | 우편함 / 우편 | 郵便受け / 郵便 | in-game mail |
 | 몰이 사냥 | まとめ狩り | |
 | 회고 | ポストモーテム | |
+| 멈춤 (server state) | 停止 | not the symptom name フリーズ |
+| 잠시 후 다시 시도 | しばらくしてから再度お試しください | in-game message |
+| 이미 접속 중 | すでにログインしています | in-game message |
+| 로드밸런서 (tight diagram box) | 負荷分散装置 | ロードバランサー in running text |

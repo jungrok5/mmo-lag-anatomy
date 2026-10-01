@@ -75,7 +75,7 @@
     {"ctx":"src/sims/disk.js:279","ko":"밀리초 (눈금 한 칸마다 10배)","t":"Milliseconds (10× per gridline)"},
     {"ctx":"src/sims/disk.js:285","ko":"틱 막힘 0ms (비동기)","t":"Tick blocked 0 ms (async)"},
     {"ctx":"src/sims/disk.js:285","ko":"틱 막힘 0ms: 게임 스레드가 디스크를 기다리지 않음","t":"Tick blocked 0 ms: the game thread doesn’t wait on the disk"},
-    {"ctx":"src/sims/disk.js:317","ko":"최근 1초 동안 틱 {0}번 (정상 20번)","t":"Ticks in the last second: {0} (normally 20)"},
+    {"ctx":"src/sims/disk.js:317","ko":"최근 1초 동안 틱 {0}번 (정상 20번)","t":"Last 1 s: {0} ticks (of 20)"},
     {"ctx":"src/sims/disk.js:318","ko":"늦은 틱 {0}번","t":"Late ticks: {0}"},
     {"ctx":"src/sims/disk.js:318","ko":"50ms를 넘긴 틱 {0}번 · 게임 시간이 {1}% 속도로 흐름","t":"Ticks over 50 ms: {0} · game time runs at {1}% speed"},
     {"ctx":"src/sims/disk.js:319","ko":"1초 전","t":"1 s ago"},

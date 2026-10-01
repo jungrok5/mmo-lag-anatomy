@@ -40,7 +40,7 @@
     {"ctx":"src/sims/locks.js:75","ko":"스레드 늘린 이득","t":"スレッドを増やした効果"},
     {"ctx":"src/sims/locks.js:79","ko":"B(우편함)","t":"B（郵便受け）"},
     {"ctx":"src/sims/locks.js:79","ko":"A(경매장)","t":"A（取引所）"},
-    {"ctx":"src/sims/locks.js:79","ko":"번","t":"番"},
+    {"ctx":"src/sims/locks.js:79","ko":"{0}번@@잠금 이름(3번 잠금)","t":"{0}番"},
     {"ctx":"src/sims/locks.js:124","ko":" 보유","t":"を保持"},
     {"ctx":"src/sims/locks.js:131","ko":"{0} 잡고 {1} 기다림","t":"{0}を保持して{1}を待機"},
     {"ctx":"src/sims/locks.js:236","ko":"락을 쓰지 않음","t":"ロックを使わない"},
@@ -74,5 +74,8 @@
     {"ctx":"src/sims/locks.js:376","ko":"락 한 번 잡는 데","t":"ロック1回の取得あたり"},
     {"ctx":"src/sims/locks.js:377","ko":"평균 {0}개가 대기 중","t":"平均{0}本が待機中"},
     {"ctx":"src/sims/locks.js:378","ko":"이상적이면 ×{0}","t":"理想なら×{0}"}
+  ],
+  "stale": [
+    {"ctx":"src/sims/locks.js:79","ko":"번","t":"番"}
   ]
 }

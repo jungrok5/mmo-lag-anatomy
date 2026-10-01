@@ -123,7 +123,7 @@
     {"ctx":"causes/mem-fragment/c/1","ko":"빈 공간이 잘게 흩어져 OS에 돌려주지 못하고, 사용량이 누수처럼 계속 늘어남","t":"閒置空間零散分布，無法歸還給 OS，用量像洩漏一樣持續增加"},
     {"ctx":"causes/mem-fragment/c/2","ko":"오래 켤수록 스왑·메모리 부족으로 느려지다 강제 종료","t":"開越久越會因 swap 與記憶體不足而變慢，最後被強制終止"},
     {"ctx":"causes/mem-fragment/act/game","ko":"크기별 메모리 풀, 단편화에 강한 할당기(jemalloc, mimalloc 등).","t":"依大小分類的記憶體池、不易碎片化的記憶體配置器（jemalloc、mimalloc 等）。"},
-    {"ctx":"causes/mem-fragment/more","ko":"누수와 모양이 같아서 힙 분석으로는 누수 지점이 안 보입니다. 리눅스 기본 할당기(glibc)는 스레드가 많은 서버에서 특히 심해, 할당기만 바꿔도 사용량이 크게 줄기도 합니다.","t":"圖形和洩漏一模一樣，分析 heap 卻找不到洩漏點。Linux 的預設配置器（glibc）在執行緒多的伺服器上特別嚴重，有時光是換掉配置器，用量就會大幅下降。"},
+    {"ctx":"causes/mem-fragment/more","ko":"누수와 모양이 같아서 힙 분석으로는 누수 지점이 안 보입니다. 리눅스 기본 할당기(glibc)는 스레드가 많은 서버에서 특히 심해, 할당기만 바꿔도 사용량이 크게 줄기도 합니다.","t":"表現和洩漏一模一樣，但分析 heap 找不到洩漏點。Linux 的預設配置器（glibc）在執行緒多的伺服器上特別嚴重，有時光是換掉配置器，用量就會大幅下降。"},
     {"ctx":"causes/mem-fragment/sig/g","ko":"프로세스 메모리(RSS)","t":"處理程序記憶體（RSS）"},
     {"ctx":"causes/mem-fragment/chk/look","ko":"같은 빌드의 서버 둘을 띄워 하나만 환경 변수 MALLOC_ARENA_MAX로 glibc 아레나 수를 줄이거나 jemalloc 같은 다른 할당기로 바꾸고, 며칠 동안 pidstat -r의 RSS를 비교함","t":"用同一個 build 啟動兩台伺服器，只在其中一台以環境變數 MALLOC_ARENA_MAX 減少 glibc arena 數量，或換成 jemalloc 等其他配置器，比較數天內 pidstat -r 的 RSS"},
     {"ctx":"causes/mem-fragment/chk/yes","ko":"인원·개체 수는 비슷한데 바꾼 서버만 RSS 증가가 멈추거나 크게 줄어듦","t":"人數與物件數相近，只有調整過的伺服器 RSS 停止增加或增幅大減"},
