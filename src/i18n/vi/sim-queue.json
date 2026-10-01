@@ -15,7 +15,7 @@
     {"ctx":"src/sims/queue.js:20","ko":"곡선: 무작위 도착 이론값 · 점: 지금 측정값","t":"Đường cong: lý thuyết khi đến ngẫu nhiên · Điểm: giá trị đo hiện tại"},
     {"ctx":"src/sims/queue.js:22","ko":"요청","t":"Yêu cầu"},
     {"ctx":"src/sims/queue.js:23","ko":"도착 속도","t":"Tốc độ đến"},
-    {"ctx":"src/sims/queue.js:23","ko":"건/초","t":"lượt/giây"},
+    {"ctx":"src/sims/queue.js:23","ko":"건/초","t":"yêu cầu/giây"},
     {"ctx":"src/sims/queue.js:25","ko":"도착 방식","t":"Kiểu đến"},
     {"ctx":"src/sims/queue.js:26","ko":"고르게","t":"Đều đặn"},
     {"ctx":"src/sims/queue.js:26","ko":"무작위","t":"Ngẫu nhiên"},
