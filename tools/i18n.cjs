@@ -308,11 +308,13 @@ function check(lang, units, strict) {
 }
 
 // ---------------------------------------------------------------- 빌드용 묶음
-function translateHTML(src, dict) {
+// byGroup(있으면): 묶음별 사전. 같은 글자라도 그 장(body-<장>)의 번역을 먼저 쓴다
+function translateHTML(src, dict, byGroup = {}) {
   const units = segment(src).sort((a, b) => b.start - a.start);
   let out = src, miss = 0;
   for (const u of units) {
-    const t = dict[u.ko];
+    const own = byGroup[u.group];
+    const t = (own && own[u.ko]) || dict[u.ko];
     if (!t) { miss++; continue; }
     out = out.slice(0, u.start) + (u.kind === 'attr' ? t.replace(/"/g, '&quot;') : t) + out.slice(u.end);
   }
@@ -356,8 +358,10 @@ function pack(lang, outDir) {
   const D = translatedData(lang, dict);
   fs.writeFileSync(path.join(outDir, 'data.js'), '/* 번역한 데이터: tools/i18n.cjs pack 이 만든다 */\nwindow.DATA = ' + JSON.stringify(D) + ';\n');
   let bodyMiss = 0;
+  const byGroup = {};
+  for (const g of groupsOf(lang)) if (g.startsWith('body-')) { byGroup[g] = {}; for (const e of readGroup(lang, g).entries) if (e.t) byGroup[g][e.ko] = e.t; }
   for (const f of ['body.html', 'head.html']) {
-    const r = translateHTML(fs.readFileSync(path.join(SRC, f), 'utf8'), dict);
+    const r = translateHTML(fs.readFileSync(path.join(SRC, f), 'utf8'), dict, byGroup);
     fs.writeFileSync(path.join(outDir, f), r.html);
     bodyMiss += r.miss;
   }
