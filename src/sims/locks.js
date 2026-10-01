@@ -76,7 +76,7 @@ K.register('locks', function (root) {
 
   /* ---------- 시뮬레이션 ---------- */
   let now = 0, th = [], locks = [], done = [], waits = [], dl = null, real = 0;
-  const lockName = L => (P.mode === 'big' ? (L === 8 ? TR`B(우편함)` : TR`A(경매장)`) : (L === 0 ? 'A' : L === 1 ? 'B' : L + 1 + TR`번`));
+  const lockName = L => (P.mode === 'big' ? (L === 8 ? TR`B(우편함)` : TR`A(경매장)`) : (L === 0 ? 'A' : L === 1 ? 'B' : TR`${L + 1}번@@잠금 이름(3번 잠금)`));
 
   function setSt(t, st, at, until) {
     const last = t.segs[t.segs.length - 1];

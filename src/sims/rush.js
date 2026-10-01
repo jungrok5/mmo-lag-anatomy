@@ -79,7 +79,7 @@ K.register('rush', function (root) {
   }
 
   /* ---------- 화면 ---------- */
-  const fmtB = v => (v >= 10000 ? K.n(v / 10000, v % 10000 && v < 1e5 ? 1 : 0) + TR`만` : v >= 1000 ? K.n(v / 1000, v % 1000 ? 1 : 0) + TR`천` : K.n(v));
+  const fmtB = v => (K.lang !== 'ko' ? (v >= 1000 ? K.compact(v) : K.n(v)) : v >= 10000 ? K.n(v / 10000, v % 10000 && v < 1e5 ? 1 : 0) + TR`만` : v >= 1000 ? K.n(v / 1000, v % 1000 ? 1 : 0) + TR`천` : K.n(v));
   const bar = K.el('div', { style: 'display:flex;flex-wrap:wrap;gap:8px;align-items:center' });
   F.stage.append(bar);
   const bPlay = K.button(bar, { label: TR`일시정지`, kind: 'small', onClick: () => { if (t >= TEND) t = 0; playing = !playing; syncBtn(); } });

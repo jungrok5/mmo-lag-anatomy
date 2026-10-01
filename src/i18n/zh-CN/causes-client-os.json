@@ -20,7 +20,7 @@
     {"ctx":"causes/co-background/ref/2/n","ko":"실시간 보호는 파일을 열고 닫을 때마다, 폴더를 열 때마다 검사","t":""},
     {"ctx":"causes/co-background/ref/3/n","ko":"Processor Information: % Processor Time 카운터","t":""},
     {"ctx":"causes/co-background/ref/4/n","ko":"New-MpPerformanceRecording으로 녹화하고 Get-MpPerformanceReport로 검사 시간에 영향을 준 상위 파일·경로·프로세스를 봄","t":""},
-    {"ctx":"causes/co-background/ref/5/n, causes/co-vram/ref/3/n, causes/co-overlay/ref/1/n","ko":"FrameTime(프레임 사이 CPU 시간)으로 프레임별 시간을 녹화","t":""},
+    {"ctx":"causes/co-background/ref/5/n, causes/co-vram/ref/3/n, causes/co-overlay/ref/1/n","ko":"FrameTime(프레임 사이 CPU 시간)으로 프레임별 시간을 녹화","t":"用 FrameTime（帧与帧之间的 CPU 时间）录制每帧耗时"},
     {"ctx":"causes/co-power/t","ko":"절전 모드·발열 스로틀링","t":""},
     {"ctx":"causes/co-power/s","ko":"노트북 배터리 모드, 폰 절전 모드, 기기 발열 때문에 CPU·GPU 속도가 떨어집니다. 발열은 처음엔 괜찮다가 한참 뒤부터 느려지는 게 특징입니다.","t":""},
     {"ctx":"causes/co-power/c/0","ko":"배터리·절전 모드이거나 기기가 뜨거워짐","t":""},

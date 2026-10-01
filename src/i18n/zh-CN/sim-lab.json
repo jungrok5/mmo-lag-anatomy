@@ -2,7 +2,7 @@
   "lang": "zh-CN",
   "group": "sim-lab",
   "entries": [
-    {"ctx":"src/sims/lab.js:28, src/sims/lab.js:724","ko":"정상","t":""},
+    {"ctx":"src/sims/lab.js:28, src/sims/lab.js:724","ko":"정상","t":"正常"},
     {"ctx":"src/sims/lab.js:29","ko":"<b>정상</b>: 회선 핑 60ms, 약간의 지터. 게임이 재는 핑(명령→확인)에는 틱·프레임 대기가 더해져 조금 더 크게 나옵니다. 다른 플레이어는 보간 버퍼 100ms만큼 더 과거 모습으로 그려지는 대신 매끄럽게 움직이고, 내 캐릭터는 예측 덕분에 즉시 반응합니다.","t":""},
     {"ctx":"src/sims/lab.js:30","ko":"뚝뚝 끊김","t":"一卡一卡"},
     {"ctx":"src/sims/lab.js:31","ko":"<b>뚝뚝 끊김</b>: 서버 패킷이 들쭉날쭉(지터 110ms) 오는데 받자마자 그리니, 늦게 온 만큼 멈췄다가 몰려 온 만큼 튑니다. 오른쪽 “내 화면”의 상대(주황) 궤적 점 간격을 보세요.","t":""},
@@ -137,7 +137,7 @@
     {"ctx":"src/sims/lab.js:643","ko":"클라 멈춤","t":""},
     {"ctx":"src/sims/lab.js:644","ko":"연결 없음","t":""},
     {"ctx":"src/sims/lab.js:649","ko":"내 PC","t":""},
-    {"ctx":"src/sims/lab.js:653","ko":"지금","t":""},
+    {"ctx":"src/sims/lab.js:653","ko":"지금","t":"现在"},
     {"ctx":"src/sims/lab.js:653","ko":"-{0}초","t":""},
     {"ctx":"src/sims/lab.js:747","ko":"끊김","t":""},
     {"ctx":"src/sims/lab.js:752","ko":"<span>핑(명령→확인) <b>{0}{1}</b></span><span>손실 <b>{2}</b></span><span>서버 틱 <b>{3}/초</b></span><span>화면 FPS <b>{4}</b></span><span>상태 <b>{5}</b></span>","t":""},

@@ -302,7 +302,7 @@ K.register('tick', function (root) {
   }
 
   /* ---------- 해설 ---------- */
-  const kn = v => (v >= 1e8 ? K.n(v / 1e8, 1) + TR`억` : v >= 1e5 ? K.n(v / 1e4, 0) + TR`만` : v >= 1e4 ? K.n(v / 1e4, 1) + TR`만` : K.n(v));
+  const kn = v => (K.lang !== 'ko' ? (v >= 1e4 ? K.compact(v) : K.n(v)) : v >= 1e8 ? K.n(v / 1e8, 1) + TR`억` : v >= 1e5 ? K.n(v / 1e4, 0) + TR`만` : v >= 1e4 ? K.n(v / 1e4, 1) + TR`만` : K.n(v));
   function explain(avg, mx, avgParts, sp, rate, bw) {
     const B = budget();
     const hz = P.hz;

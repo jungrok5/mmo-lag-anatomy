@@ -26,7 +26,7 @@
     {"ctx":"src/sims/chain.js:24","ko":"쿨다운이 끝난 걸 보고 누르는 데 걸리는 시간","t":""},
     {"ctx":"src/sims/chain.js:25","ko":"상점 UI","t":""},
     {"ctx":"src/sims/chain.js:26","ko":"순차 왕복 수","t":""},
-    {"ctx":"src/sims/chain.js:26","ko":"번","t":""},
+    {"ctx":"src/sims/chain.js:26","ko":"번","t":" 号"},
     {"ctx":"src/sims/chain.js:26","ko":"예: 상점 열기 → 목록 → 가격 확인 → 구매 → 인벤토리 갱신","t":""},
     {"ctx":"src/sims/chain.js:27","ko":"요청당 서버 처리","t":""},
     {"ctx":"src/sims/chain.js:29","ko":"확인 후 입력","t":""},
