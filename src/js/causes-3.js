@@ -1378,7 +1378,7 @@
       more: '중간 인증서가 빠진 설정은 PC 브라우저로 열면 멀쩡해 보일 수 있습니다. 브라우저는 다른 사이트에서 받아 둔 중간 인증서를 기억해 빈 곳을 채우지만, 안드로이드 앱처럼 그런 기억이 없는 클라이언트는 실패합니다. 유효 기간도 짧아지는 중입니다. Let’s Encrypt는 기본 유효 기간을 2027년 64일, 2028년 45일로 줄일 예정이라, 60일마다 갱신하도록 고정해 둔 설정은 64일짜리 인증서에서는 여유가 나흘뿐이고 45일짜리에서는 만료를 넘깁니다. AWS Certificate Manager도 가져온(import) 인증서는 자동 갱신하지 않고, 검증용 DNS 레코드를 지우면 갱신에 실패합니다. 로그인이 막히는 모양은 “DNS 장애·지연”과 비슷하지만, 인증서 문제는 서버 주소를 찾은 뒤 TLS 핸드셰이크에서 실패하고, 시작 시각이 만료 시각이나 인증서를 바꾼 시각과 겹칩니다.',
       sig: { k: 'drop', g: '로그인 성공 수, TLS 핸드셰이크 오류 수' },
       chk: {
-        look: 'openssl s_client -connect 주소:443 -showcerts로 서버가 실제로 보내는 인증서 목록을 보고, 각 인증서의 만료일(notAfter)을 openssl x509 -noout -enddate로 확인. 로드밸런서에서 TLS를 끝낸다면 TLS 협상 오류 수(AWS ALB·NLB는 ClientTLSNegotiationErrorCount)와 로그인 성공 수',
+        look: 'openssl s_client -connect HOST:443 -showcerts로 서버가 실제로 보내는 인증서 목록을 보고, 각 인증서의 만료일(notAfter)을 openssl x509 -noout -enddate로 확인. 로드밸런서에서 TLS를 끝낸다면 TLS 협상 오류 수(AWS ALB·NLB는 ClientTLSNegotiationErrorCount)와 로그인 성공 수',
         yes: '만료일이 지났거나 서버가 보낸 목록에 중간 인증서가 빠져 있고, 오류가 늘기 시작한 시각이 만료 시각이나 인증서를 바꾼 시각과 겹침',
         no: '인증서 목록과 만료일이 정상인데 일부 유저만 실패하면 그 유저 기기의 날짜·시간이나 오래된 OS의 루트 인증서 목록을 봄',
         by: 'ops',
