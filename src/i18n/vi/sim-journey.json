@@ -170,6 +170,6 @@
     {"ctx":"src/sims/journey.js:368","ko":"피했는데 맞는 일이 잦고, 상대가 순간이동하듯 보이기도 합니다.","t":"Thường xuyên né rồi mà vẫn trúng đòn, đôi khi đối phương còn trông như dịch chuyển tức thời."},
     {"ctx":"src/sims/journey.js:371","ko":" 서버가 틱 안에 계산을 끝내지 못해 모든 플레이어의 반응이 함께 늦어집니다(입력 지연. 틱마다 정해진 시간만큼 움직이는 서버라면 슬로우모션까지).","t":" Server không tính xong trong một tick nên phản hồi của mọi người chơi cùng chậm đi (trễ thao tác; với server cho mọi thứ tiến một lượng cố định mỗi tick thì còn thành quay chậm)."},
     {"ctx":"src/sims/journey.js:372","ko":"{0}총 <b>{1}ms</b> 중 가장 큰 비중은 <b>{2}</b>({3}{4}, {5}%)이고, 그다음은 <b>{6}</b>({7}{8})입니다. {9}{10} {11}{12}","t":"{0}Trong tổng <b>{1} ms</b>, tỷ trọng lớn nhất là <b>{2}</b> ({3}{4}, {5}%), tiếp theo là <b>{6}</b> ({7}{8}). {9}{10} {11}{12}"},
-    {"ctx":"src/sims/journey.js:372","ko":" <b>도움이 되는 것:</b> ","t":" <b>Điều giúp ích:</b> "}
+    {"ctx":"src/sims/journey.js:372","ko":" <b>도움이 되는 것:</b> ","t":" <b>Cách cải thiện:</b> "}
   ]
 }

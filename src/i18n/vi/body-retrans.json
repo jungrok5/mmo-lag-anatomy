@@ -115,7 +115,7 @@
     {"ctx":"#retrans th","ko":"무엇을 바꾸나","t":"Thay đổi gì"},
     {"ctx":"#retrans th","ko":"주의","t":"Cần chú ý"},
     {"ctx":"#retrans td","ko":"소켓 옵션","t":"Tùy chọn socket"},
-    {"ctx":"#retrans td","ko":"Nagle 끄기. 작은 메시지를 모으지 않고 바로 보냄","t":"Tắt Nagle. Gửi tin nhắn nhỏ ngay, không gom lại"},
+    {"ctx":"#retrans td","ko":"Nagle 끄기. 작은 메시지를 모으지 않고 바로 보냄","t":"Tắt Nagle. Gửi message nhỏ ngay, không gom lại"},
     {"ctx":"#retrans td","ko":"손실이 없어도 생기는 40~200ms 대기를 없앰. <b>재전송 타이머(RTO) 자체는 그대로</b>. 다만 Nagle이 켜져 있으면 복구를 기다리는 동안 새 패킷까지 묶여 복구 뒤 한 왕복을 더 기다리고, 빠른 재전송·RACK이 기대는 뒤따르는 패킷도 사라져 RTO까지 가기 쉬움. 게임은 켜는 것이 보통","t":"Loại bỏ khoảng chờ 40–200 ms vốn xảy ra cả khi không mất gói. <b>Bản thân timer truyền lại (RTO) không đổi</b>. Tuy vậy, nếu Nagle đang bật, trong lúc chờ phục hồi các gói mới cũng bị giữ lại nên sau khi phục hồi phải chờ thêm một lượt khứ hồi nữa; các gói phía sau mà truyền lại nhanh và RACK dựa vào cũng không có, nên dễ đi đến RTO. Game thường bật tùy chọn này"},
     {"ctx":"#retrans td","ko":"커널 설정","t":"Cấu hình kernel"},
     {"ctx":"#retrans td","ko":"시간 기준 손실 판단. 순서 뒤바뀜에 강하고 thin stream도 빨리 복구","t":"Xác định mất gói theo thời gian. Chịu được đảo thứ tự tốt và phục hồi nhanh cả với thin stream"},

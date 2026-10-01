@@ -140,7 +140,7 @@
     {"ctx":"causes/in-bots/sig/g","ko":"계정·IP별 초당 요청 수","t":"Số yêu cầu mỗi giây theo tài khoản và IP"},
     {"ctx":"causes/in-bots/chk/look","ko":"게임 서버 로그로 계정·캐릭터별 초당 요청 수의 분포와 상위 목록을 봄. 코드 지표가 없으면 방화벽·WAF의 IP별 요청 수","t":"Dùng log server game để xem phân bố và danh sách top số yêu cầu mỗi giây theo tài khoản, nhân vật. Không có chỉ số trong code thì xem số yêu cầu theo IP trên tường lửa hoặc WAF"},
     {"ctx":"causes/in-bots/chk/yes","ko":"소수 계정·IP가 사람이 낼 수 없는 빈도로 쉬지 않고 요청하고, 이들을 제한하면 서버 부하가 눈에 띄게 줄어듦","t":"một số ít tài khoản hoặc IP gửi yêu cầu liên tục với tần suất mà người thật không thể đạt tới, và khi giới hạn nhóm này thì tải server giảm rõ rệt"},
-    {"ctx":"causes/in-bots/chk/no","ko":"요청이 계정마다 고르게 퍼져 있으면 정상 인원 증가 쪽(틱 예산 초과, 오토스케일링 지연)","t":"yêu cầu trải đều trên các tài khoản → số người chơi tăng bình thường (tick budget bị vượt, autoscaling chậm)"},
+    {"ctx":"causes/in-bots/chk/no","ko":"요청이 계정마다 고르게 퍼져 있으면 정상 인원 증가 쪽(틱 예산 초과, 오토스케일링 지연)","t":"yêu cầu trải đều trên các tài khoản → số người chơi tăng bình thường (vượt tick budget, autoscaling chậm)"},
     {"ctx":"causes/in-bots/ref/0/n","ko":"IP 등 기준별로 요청 수를 세어 정한 시간 창 안에 너무 많으면 속도 제한","t":"Đếm số yêu cầu theo tiêu chí như IP, nếu quá nhiều trong một khung thời gian định sẵn thì giới hạn tốc độ"},
     {"ctx":"causes/in-bots/ref/1/n","ko":"여러 가입자가 IP 하나를 함께 쓰면 IP 기준 차단·제한이 다른 사용자까지 막음","t":"Khi nhiều thuê bao dùng chung một IP, chặn hoặc giới hạn theo IP sẽ chặn luôn cả những người dùng khác"},
     {"ctx":"causes/in-external/t","ko":"외부 서비스 의존","t":"Phụ thuộc service bên ngoài"},

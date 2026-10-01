@@ -2,7 +2,7 @@
   "lang": "vi",
   "group": "causes-server-proc",
   "entries": [
-    {"ctx":"causes/sp-tick-overrun/t","ko":"틱 예산 초과","t":"Tick budget bị vượt"},
+    {"ctx":"causes/sp-tick-overrun/t","ko":"틱 예산 초과","t":"Vượt tick budget"},
     {"ctx":"causes/sp-tick-overrun/s","ko":"한 틱 안에 할 일이 예산을 넘으면 서버의 틱 주기가 늘어지고, 그 지역 전체가 느리게 흐르거나 뚝뚝 끊깁니다.","t":"Khi khối lượng việc trong một tick vượt budget, chu kỳ tick của server bị kéo dài, và cả khu vực đó chạy chậm lại hoặc giật khựng."},
     {"ctx":"causes/sp-tick-overrun/c/0","ko":"한 틱(예: 50ms)에 처리할 일이 예산을 넘음","t":"Việc cần xử lý trong một tick (ví dụ 50 ms) vượt budget"},
     {"ctx":"causes/sp-tick-overrun/c/1","ko":"1초에 20번 계산할 게임 상태를 8번만 계산","t":"Trạng thái game lẽ ra được tính 20 lần trong 1 giây chỉ được tính 8 lần"},
@@ -77,7 +77,7 @@
     {"ctx":"causes/sp-lock/sig/g","ko":"요청 처리 시간, 스레드별 CPU·컨텍스트 스위칭","t":"Thời gian xử lý yêu cầu, CPU và context switch theo từng thread"},
     {"ctx":"causes/sp-lock/chk/look","ko":"pidstat -w -t 1로 스레드별 자발적 컨텍스트 스위칭(cswch/s, 자원을 기다리며 멈춘 횟수), bcc offcputime -p로 스레드가 CPU를 떠나 어디서 기다리는지(호출 스택별 대기 시간). .NET은 dotnet-counters의 락 경합 수(.NET 9 이후 dotnet.monitor.lock_contentions, 8 이하 Monitor Lock Contention Count)","t":"Context switch tự nguyện theo từng thread (cswch/s, số lần dừng để chờ tài nguyên) qua pidstat -w -t 1; thread rời CPU rồi chờ ở đâu (thời gian chờ theo từng call stack) qua bcc offcputime -p. Với .NET, xem số lần tranh chấp lock trong dotnet-counters (dotnet.monitor.lock_contentions từ .NET 9, Monitor Lock Contention Count ở bản 8 trở xuống)"},
     {"ctx":"causes/sp-lock/chk/yes","ko":"부하가 늘어도 CPU 사용률은 낮게 머무는데 처리 시간이 늘고, 대기 시간의 대부분이 락을 잡으려는 호출 스택에 몰려 있으며 락 경합 수가 함께 오름","t":"tải tăng mà mức sử dụng CPU vẫn thấp nhưng thời gian xử lý tăng, phần lớn thời gian chờ dồn vào các call stack đang cố lấy lock, và số lần tranh chấp lock tăng theo"},
-    {"ctx":"causes/sp-lock/chk/no","ko":"CPU가 꽉 차 있으면 계산량 문제(틱 예산 초과, 단일 스레드 지역 과부하). 기다리는 곳이 DB·파일 호출이면 게임 스레드의 동기 호출 쪽","t":"CPU đầy → vấn đề khối lượng tính toán (tick budget bị vượt, quá tải khu vực chạy trên một thread). Chỗ chờ là lời gọi DB hoặc file → gọi đồng bộ trên game thread"},
+    {"ctx":"causes/sp-lock/chk/no","ko":"CPU가 꽉 차 있으면 계산량 문제(틱 예산 초과, 단일 스레드 지역 과부하). 기다리는 곳이 DB·파일 호출이면 게임 스레드의 동기 호출 쪽","t":"CPU đầy → vấn đề khối lượng tính toán (vượt tick budget, quá tải khu vực chạy trên một thread). Chỗ chờ là lời gọi DB hoặc file → gọi đồng bộ trên game thread"},
     {"ctx":"causes/sp-lock/ref/0/n","ko":"IEEE Computer 2008 논문(저자 공개본). 병렬로 나눌 수 없는 비율이 1−f면 코어를 아무리 늘려도 속도 향상은 1/(1−f)를 넘지 못함(암달의 법칙)","t":"Bài báo IEEE Computer 2008 (bản tác giả công bố). Nếu phần không song song hóa được là 1−f thì dù tăng bao nhiêu core, tốc độ cũng không tăng quá 1/(1−f) lần (định luật Amdahl)"},
     {"ctx":"causes/sp-lock/ref/1/n","ko":"Orleans의 그레인(액터)은 요청을 하나씩 끝까지 처리하는 단일 스레드 실행 모델이라 상태를 동시에 고치지 않음, 서로의 응답을 기다리면 데드락 가능","t":"Grain (actor) của Orleans dùng mô hình thực thi một thread, xử lý trọn từng yêu cầu một, nên trạng thái không bị sửa đồng thời; nếu các grain chờ phản hồi của nhau thì có thể deadlock"},
     {"ctx":"causes/sp-lock/ref/2/n","ko":"-w의 cswch/s는 자원을 기다리느라 멈춘 자발적 컨텍스트 스위칭 수, -t로 스레드별 표시","t":"cswch/s trong -w là số context switch tự nguyện do dừng để chờ tài nguyên; -t hiển thị theo từng thread"},

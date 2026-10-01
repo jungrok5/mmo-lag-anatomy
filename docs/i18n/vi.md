@@ -446,3 +446,21 @@ How they are used:
 - Symptom pages: `{symptom} khi chơi game: nguyên nhân lag và đội phụ trách | Sách trắng lag game` (for example `Mất kết nối khi chơi game: …`).
 - The keyword list (build.py) uses: nguyên nhân lag, lag game, game bị lag, ping cao, giật lag, giật khựng, dịch chuyển tức thời, kéo ngược, trễ thao tác, mất kết nối, lag server, netcode, truyền lại TCP, đội phát triển game, đội hạ tầng.
 - In body text, use the natural phrases where they fit the meaning (`ping nhảy`, `mất gói`, `cáp quang biển`, `giờ cao điểm buổi tối`). Do not stuff keywords.
+
+## Decisions added during review
+
+| Korean | Vietnamese | Note |
+|---|---|---|
+| 로그인 대기열 (게임) | hàng chờ đăng nhập | OS `backlog`/접속 대기열 stays `hàng đợi kết nối` |
+| 포트 / 임시 포트 | cổng / cổng tạm (ephemeral port) | `port` only inside commands, options and quoted messages (`--port`, `ICMP Port Unreachable`) |
+| 게임 서버 | server game | Vietnamese head-first order, like `client game`, `server DB`; not `game server` |
+| 틱 예산 초과 (`sp-tick-overrun`) | Vượt tick budget | cause title and every quote; replaces “Tick budget bị vượt” (also the §2 example) |
+| 얕은 버퍼 | bộ đệm nhỏ | |
+| 메시지 (네트워크) | message | `tin nhắn` only for chat and messaging apps; not `thông điệp` |
+| 존 | zone | |
+| 서버 멈춤 (서버 상태) | server bị đứng | `Đứng hình` only for the symptom |
+| 회고 (장애 회고) | bài tổng kết | |
+| 수치 감각 (카드) / 숫자 감각 (표·실험) | Con số tham khảo / Cảm nhận con số | body text quoting these labels uses the same words |
+| 확인 방법 (카드 요약) / 팀별 대응 | Cách xác nhận / Việc của từng đội | `확인 수단` stays `Cách kiểm tra` |
+| 먼저 확인할 곳 / 먼저 부를 곳 / 먼저 (표 배지) | Kiểm tra trước / Gọi ai trước / Trước tiên | |
+| 비유 / 핵심 (태그) | So sánh / Điểm mấu chốt | |

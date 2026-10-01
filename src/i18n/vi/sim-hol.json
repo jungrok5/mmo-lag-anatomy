@@ -40,7 +40,7 @@
     {"ctx":"src/sims/hol.js:188","ko":"보낸 순서대로만 전달","t":"Chỉ giao theo thứ tự đã gửi"},
     {"ctx":"src/sims/hol.js:188","ko":"도착하는 대로 전달","t":"Đến đâu giao đấy"},
     {"ctx":"src/sims/hol.js:193","ko":"서버","t":"Server"},
-    {"ctx":"src/sims/hol.js:193","ko":"서버의 실제 위치","t":"Vị trí thật trên server"},
+    {"ctx":"src/sims/hol.js:193","ko":"서버의 실제 위치","t":"Vị trí thực trên server"},
     {"ctx":"src/sims/hol.js:193","ko":"내 화면","t":"Màn hình của bạn"},
     {"ctx":"src/sims/hol.js:193","ko":"내 화면 속 캐릭터","t":"Nhân vật trên màn hình của bạn"},
     {"ctx":"src/sims/hol.js:202","ko":"보냄","t":"Gửi"},

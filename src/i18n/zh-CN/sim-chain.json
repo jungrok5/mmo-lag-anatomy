@@ -13,7 +13,7 @@
     {"ctx":"src/sims/chain.js:16","ko":"상점에서 물건 하나 사기","t":"在商店买一件物品"},
     {"ctx":"src/sims/chain.js:18","ko":"회선","t":"线路"},
     {"ctx":"src/sims/chain.js:19","ko":"핑(왕복)","t":"Ping（往返）"},
-    {"ctx":"src/sims/chain.js:20","ko":"서버 틱","t":"服务器 tick 率"},
+    {"ctx":"src/sims/chain.js:20","ko":"서버 틱","t":"服务器 tick"},
     {"ctx":"src/sims/chain.js:20","ko":"10/초","t":"10 次/秒"},
     {"ctx":"src/sims/chain.js:20","ko":"20/초","t":"20 次/秒"},
     {"ctx":"src/sims/chain.js:20","ko":"30/초","t":"30 次/秒"},
