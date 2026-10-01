@@ -50,7 +50,7 @@
     {"ctx":"src/sims/locks.js:239","ko":"경매장 락: ","t":""},
     {"ctx":"src/sims/locks.js:242","ko":"스레드 {0}","t":""},
     {"ctx":"src/sims/locks.js:262","ko":"{0}ms 전","t":""},
-    {"ctx":"src/sims/locks.js:263, src/sims/locks.js:321","ko":"지금","t":""},
+    {"ctx":"src/sims/locks.js:263, src/sims/locks.js:321","ko":"지금","t":"ตอนนี้"},
     {"ctx":"src/sims/locks.js:267","ko":"워치독 {0}초","t":""},
     {"ctx":"src/sims/locks.js:278","ko":"서버 재시작","t":""},
     {"ctx":"src/sims/locks.js:279","ko":"이 서버의 모든 유저 접속 끊김","t":""},

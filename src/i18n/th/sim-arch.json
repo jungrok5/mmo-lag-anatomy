@@ -64,7 +64,7 @@
     {"ctx":"src/sims/arch.js:118, src/sims/arch.js:119, src/sims/arch.js:137, src/sims/arch.js:140, src/sims/arch.js:141, src/sims/arch.js:144, src/sims/arch.js:145, src/sims/arch.js:148, src/sims/arch.js:149","ko":"접속 불가·무한 로딩","t":"เข้าเกมไม่ได้/โหลดไม่จบ"},
     {"ctx":"src/sims/arch.js:118, src/sims/arch.js:119, src/sims/arch.js:144, src/sims/arch.js:145, src/sims/arch.js:159, src/sims/arch.js:162, src/sims/arch.js:163, src/sims/arch.js:166, src/sims/arch.js:167, src/sims/arch.js:170","ko":"특정 기능만 안 됨","t":""},
     {"ctx":"src/sims/arch.js:125","ko":"플레이어는 거의 모름","t":""},
-    {"ctx":"src/sims/arch.js:125, src/sims/arch.js:485, src/sims/arch.js:487","ko":"없음","t":""},
+    {"ctx":"src/sims/arch.js:125, src/sims/arch.js:485, src/sims/arch.js:487","ko":"없음","t":"ไม่มี"},
     {"ctx":"src/sims/arch.js:127, src/sims/arch.js:128","ko":"필드 {0}에 있는 사람","t":""},
     {"ctx":"src/sims/arch.js:127, src/sims/arch.js:128","ko":"필드 {0}","t":""},
     {"ctx":"src/sims/arch.js:127","ko":"필드 {0} 서버의 틱이 늦어져 그 필드만 느리게 흐르거나 뚝뚝 끊기고, 이동 판정이 어긋나 뒤로 당겨집니다. 다른 필드는 멀쩡합니다.","t":""},

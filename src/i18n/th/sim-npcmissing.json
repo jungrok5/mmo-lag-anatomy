@@ -35,7 +35,7 @@
     {"ctx":"src/sims/npcmissing.js:84","ko":"등장 알림을 모두 버림 → NPC 안 보임","t":""},
     {"ctx":"src/sims/npcmissing.js:84","ko":"{0}마리 안 보임","t":""},
     {"ctx":"src/sims/npcmissing.js:86","ko":"처리 준비","t":""},
-    {"ctx":"src/sims/npcmissing.js:94","ko":"{0}초","t":""},
+    {"ctx":"src/sims/npcmissing.js:94","ko":"{0}초","t":"{0} วินาที"},
     {"ctx":"src/sims/npcmissing.js:99","ko":"두 캐릭터가 같은 채널, 같은 인스턴스, 같은 퀘스트 단계인가요?","t":""},
     {"ctx":"src/sims/npcmissing.js:99","ko":"퀘스트 진행도에 따라 NPC를 다르게 보여 주는 “페이즈”가 있는 게임이 많습니다.","t":""},
     {"ctx":"src/sims/npcmissing.js:100","ko":"안 보이는 NPC의 이름표, 그림자, 클릭 판정은 있나요? (캐릭터 모델만 없나요?)","t":""},

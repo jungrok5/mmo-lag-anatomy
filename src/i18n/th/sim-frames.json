@@ -54,7 +54,7 @@
     {"ctx":"src/sims/frames.js:180","ko":"V-Sync 경계 (17ms)","t":""},
     {"ctx":"src/sims/frames.js:181","ko":"따라잡기 폭주","t":""},
     {"ctx":"src/sims/frames.js:293","ko":"{0}초 전","t":""},
-    {"ctx":"src/sims/frames.js:294","ko":"지금","t":""},
+    {"ctx":"src/sims/frames.js:294","ko":"지금","t":"ตอนนี้"},
     {"ctx":"src/sims/frames.js:304","ko":"<b>{0}</b> · {1} FPS 속도<br>그리기 {2}<br>게임 계산 {3}{4}","t":""},
     {"ctx":"src/sims/frames.js:304","ko":" ({0}번)","t":""},
     {"ctx":"src/sims/frames.js:305","ko":" (점진적)","t":""},

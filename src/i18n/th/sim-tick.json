@@ -72,7 +72,7 @@
     {"ctx":"src/sims/tick.js:277","ko":"몰아치기 ×2","t":""},
     {"ctx":"src/sims/tick.js:282","ko":"틱 간격","t":""},
     {"ctx":"src/sims/tick.js:291","ko":"2초 전","t":""},
-    {"ctx":"src/sims/tick.js:292","ko":"지금","t":""},
+    {"ctx":"src/sims/tick.js:292","ko":"지금","t":"ตอนนี้"},
     {"ctx":"src/sims/tick.js:295","ko":"플레이어","t":""},
     {"ctx":"src/sims/tick.js:305","ko":"억","t":""},
     {"ctx":"src/sims/tick.js:305","ko":"만","t":""},
