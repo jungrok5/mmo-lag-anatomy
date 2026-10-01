@@ -114,7 +114,7 @@
     {"ctx":"secRefs/l-isp/4/n","ko":"통신사 사이 피어링 정책과 도메인 간 라우팅이 경로를 크게 늘림","t":"Chính sách peering giữa các nhà mạng và định tuyến liên miền làm tuyến đường dài ra đáng kể"},
     {"ctx":"secRefs/l-isp/5/n","ko":"일부 통신사 간 연결 구간은 매일 피크 시간마다 지연과 손실이 오르는 반복 혼잡을 보임","t":"Một số điểm kết nối giữa các nhà mạng bị tắc nghẽn lặp lại: độ trễ và mất gói tăng vào giờ cao điểm mỗi ngày"},
     {"ctx":"secRefs/l-isp/6/n","ko":"인터넷 경로 정보를 주고받는 BGP, 홀드 타임 권장 기본값 90초","t":"BGP trao đổi thông tin tuyến đường Internet, hold time mặc định khuyến nghị là 90 giây"},
-    {"ctx":"secRefs/l-isp/7/n","ko":"불안정해진 경로가 다시 안정되기까지 하루 평균 25~50초","t":"Thời gian để tuyến đường mất ổn định ổn định trở lại, tính trung bình theo ngày, là 25–50 giây"},
+    {"ctx":"secRefs/l-isp/7/n","ko":"경로가 바뀐 뒤 라우팅이 다시 안정되기까지 걸리는 시간의 하루 평균이 IPv4 25~35초, IPv6 40~50초","t":"Thời gian để định tuyến ổn định trở lại sau khi tuyến đường thay đổi, tính trung bình theo ngày, là 25–35 giây với IPv4 và 40–50 giây với IPv6"},
     {"ctx":"secRefs/l-isp/8/n","ko":"경로 장애 뒤 수렴에 수 분까지 걸리고 그동안 손실·지연이 늘어남(2000년 당시 측정)","t":"Sau sự cố tuyến đường, việc hội tụ có thể mất đến vài phút, trong thời gian đó mất gói và độ trễ tăng (số liệu đo năm 2000)"},
     {"ctx":"secRefs/l-dc-net/0/n","ko":"데이터센터 네트워크의 종단 간 지연은 1ms 미만이고, 버스트의 70% 이상이 수십 µs 안에 끝나 평균 사용률로는 안 보임","t":"Độ trễ đầu cuối trong mạng trung tâm dữ liệu dưới 1 ms, và hơn 70% burst kết thúc trong vài chục µs nên nhìn mức sử dụng trung bình không thấy"},
     {"ctx":"secRefs/l-dc-net/1/n","ko":"범용 스위치는 여러 포트가 얕은 버퍼를 나눠 쓰고, 짧은 순간 여러 흐름이 한 포트로 몰리면 버퍼가 넘쳐 손실","t":"Switch phổ thông cho nhiều cổng dùng chung một bộ đệm nhỏ; khi nhiều luồng cùng dồn vào một cổng trong khoảnh khắc ngắn, bộ đệm tràn và mất gói"},
@@ -280,5 +280,8 @@
     {"ctx":"secRefs/l-infra/6/n","ko":"배포·재시작: lame duck 상태로 새 요청을 돌린 뒤 종료, 재시작 직후 예열","t":"Triển khai và khởi động lại: chuyển sang trạng thái lame duck để đưa yêu cầu mới sang nơi khác rồi mới dừng, làm nóng (warm-up) ngay sau khi khởi động lại"},
     {"ctx":"secRefs/l-infra/7/n","ko":"확장·축소 때 인스턴스를 대기 상태로 두고 준비·정리 작업을 마침(기본 1시간까지)","t":"Khi mở rộng hoặc thu hẹp, giữ instance ở trạng thái chờ để hoàn tất việc chuẩn bị và dọn dẹp (mặc định tối đa 1 giờ)"},
     {"ctx":"secRefs/l-infra/8/n","ko":"구성도 실험의 워치독: 살아 있다는 신호가 끊긴 서비스를 종료하고 자동 재시작","t":"Watchdog trong thí nghiệm sơ đồ kiến trúc: dừng service đã mất tín hiệu còn sống và tự động khởi động lại"}
+  ],
+  "stale": [
+    {"ctx":"secRefs/l-isp/7/n","ko":"불안정해진 경로가 다시 안정되기까지 하루 평균 25~50초","t":"Thời gian để tuyến đường mất ổn định ổn định trở lại, tính trung bình theo ngày, là 25–50 giây"}
   ]
 }

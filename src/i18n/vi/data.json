@@ -173,7 +173,7 @@
     {"ctx":"report/0/items/2","ko":"<b>캐릭터 이름</b>. 특정 캐릭터로만 느린 경우도 있어서, 다른 캐릭터로는 괜찮은지도 함께 적어 주면 좋습니다.","t":"<b>Tên nhân vật</b>. Có trường hợp chỉ một nhân vật bị chậm, nên ghi thêm nhân vật khác có ổn không thì càng tốt."},
     {"ctx":"report/0/items/3","ko":"<b>누가 겪었나</b>: 나만 / 파티원도 / 주변 모두 / 채팅에서 서버 전체가 난리 / 같은 PC에 띄운 다른 클라이언트는 멀쩡.","t":"<b>Ai gặp phải</b>: chỉ mình tôi / cả đồng đội trong tổ đội / mọi người xung quanh / kênh chat nói cả server đang loạn / client khác mở trên cùng PC vẫn bình thường."},
     {"ctx":"report/0/items/4","ko":"<b>모양</b>: 이 백서의 증상 이름으로 (뚝뚝 끊김, 순간이동, 고무줄, 몰아치기…).","t":"<b>Biểu hiện</b>: dùng tên triệu chứng trong sách trắng này (giật khựng, dịch chuyển tức thời, kéo ngược, tua nhanh…)."},
-    {"ctx":"report/0/items/5","ko":"<b>얼마나 오래, 얼마나 자주</b>: 1초 한 번 / 30초마다 규칙적으로 / 10분째 계속.","t":"<b>Kéo dài bao lâu, bao lâu một lần</b>: một lần 1 giây / cứ 30 giây lại bị đều đặn / liên tục đã 10 phút."},
+    {"ctx":"report/0/items/5","ko":"<b>얼마나 오래, 얼마나 자주</b>: 한 번만 1초쯤 / 30초마다 규칙적으로 / 10분째 계속.","t":"<b>Kéo dài bao lâu, bao lâu một lần</b>: chỉ một lần, khoảng 1 giây / đều đặn cứ 30 giây một lần / liên tục suốt 10 phút nay."},
     {"ctx":"report/1/title","ko":"있으면 조사가 훨씬 빨라집니다","t":"Có những thông tin này thì điều tra nhanh hơn nhiều"},
     {"ctx":"report/1/items/0","ko":"<b>핑·손실 수치와 FPS</b> (게임 내 넷그래프·성능 표시를 켜 두면 가장 좋음).","t":"<b>Chỉ số ping, mất gói và FPS</b> (tốt nhất là bật net graph hoặc bảng hiệu năng trong game)."},
     {"ctx":"report/1/items/1","ko":"<b>연결 방식</b>: 유선 / 와이파이 / LTE·5G, 통신사 이름, 해외 여부, VPN이나 게임 가속기(경로를 우회시켜 핑을 줄여 준다는 프로그램)를 쓰는지.","t":"<b>Cách kết nối</b>: dây mạng / Wi-Fi / LTE, 5G; tên nhà mạng; có ở nước ngoài không; có dùng VPN hay phần mềm tăng tốc game (chương trình tự nhận là giảm ping bằng cách đi đường vòng) không."},
@@ -227,5 +227,8 @@
     {"ctx":"chkBy/ops","ko":"인프라 도구로 확인(게임 코드 불필요)","t":"Kiểm tra bằng công cụ hạ tầng (không cần code game)"},
     {"ctx":"chkBy/code","ko":"게임 서버·클라이언트의 로그·지표가 필요","t":"Cần log và chỉ số của server, client game"},
     {"ctx":"chkBy/user","ko":"유저 쪽 환경에서 확인","t":"Kiểm tra ở môi trường phía người chơi"}
+  ],
+  "stale": [
+    {"ctx":"report/0/items/5","ko":"<b>얼마나 오래, 얼마나 자주</b>: 1초 한 번 / 30초마다 규칙적으로 / 10분째 계속.","t":"<b>Kéo dài bao lâu, bao lâu một lần</b>: một lần 1 giây / cứ 30 giây lại bị đều đặn / liên tục đã 10 phút."}
   ]
 }

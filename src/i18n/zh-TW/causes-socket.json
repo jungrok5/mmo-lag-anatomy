@@ -23,7 +23,7 @@
     {"ctx":"causes/sk-rto/c/1","ko":"다음 시도까지 0.3 → 0.6 → 1.2 → 2.4초처럼 두 배씩 늘어남(핑 100ms 기준)","t":"到下一次嘗試的等待時間以 0.3 → 0.6 → 1.2 → 2.4 秒逐次加倍（以 ping 100ms 計）"},
     {"ctx":"causes/sk-rto/c/2","ko":"회선은 1초 끊겼는데 게임은 2초 넘게 멈춤. 더 길게 끊기면 결국 접속 끊김","t":"線路只斷了 1 秒，遊戲卻停住 2 秒以上。斷得更久最後就會斷線"},
     {"ctx":"causes/sk-rto/num","ko":"리눅스 RTO(재전송 대기 시간)는 “핑 + 200ms”가 최소이고, 연결을 맺을 때는 1초부터 시작합니다. 기본 설정(tcp_retries2=15)이면 재전송이 계속 실패해도 약 15분 뒤에야 연결을 포기합니다.","t":"Linux 的 RTO（重傳等待時間）最小為「ping + 200ms」，建立連線時從 1 秒開始。預設設定（tcp_retries2=15）下，即使重傳一直失敗，也要約 15 分鐘後才會放棄連線。"},
-    {"ctx":"causes/sk-rto/act/game","ko":"서버: 하트비트에 응답하고, 일정 시간 못 받으면 연결을 먼저 정리(TCP_USER_TIMEOUT으로 포기 시점 줄이기), 세션 토큰으로 이어 받기, 신뢰성 UDP. 클라이언트: 짧은 간격으로 하트비트를 보내고 응답이 끊기면 TCP 재전송을 기다리지 말고 빨리 재접속.","t":"伺服器：回應心跳封包，一段時間沒收到就主動清理連線（用 TCP_USER_TIMEOUT 提早放棄的時間點），用 session token 接續連線，採用可靠 UDP。用戶端：以短間隔送出心跳封包，沒有回應時不要等 TCP 重傳，儘快重新連線。"},
+    {"ctx":"causes/sk-rto/act/game","ko":"서버: 하트비트에 응답하고, 일정 시간 못 받으면 연결을 먼저 정리(TCP_USER_TIMEOUT으로 포기 시점 줄이기), 세션 토큰으로 이어 받기, 신뢰성 UDP. 클라이언트: 짧은 간격으로 하트비트를 보내고 응답이 끊기면 TCP 재전송을 기다리지 말고 빨리 재접속.","t":"伺服器：回應心跳封包，一段時間沒收到就主動清理連線（用 TCP_USER_TIMEOUT 縮短放棄連線前的等待時間），用 session token 接續連線，採用可靠 UDP。用戶端：以短間隔送出心跳封包，沒有回應時不要等 TCP 重傳，儘快重新連線。"},
     {"ctx":"causes/sk-rto/sig/g","ko":"연결별 RTO·backoff, RTO 만료 수","t":"每條連線的 RTO 與 backoff、RTO 到期次數"},
     {"ctx":"causes/sk-rto/chk/look","ko":"멈춘 연결을 ss -ti로 보고 rto(재전송 대기 ms)와 backoff(연속 만료 횟수)를, 서버 전체는 nstat -az의 TcpExtTCPTimeouts(재전송 타이머 만료 횟수) 증가량을 봄","t":"用 ss -ti 看停住的連線的 rto（重傳等待 ms）與 backoff（連續到期次數）；整個伺服器則看 nstat -az 的 TcpExtTCPTimeouts（重傳計時器到期次數）增加量"},
     {"ctx":"causes/sk-rto/chk/yes","ko":"멈춘 연결의 backoff가 1 이상이고 rto가 초 단위로 커져 있으며, 그 시각 TCPTimeouts가 늘어남","t":"停住的連線 backoff 為 1 以上，rto 已變大到以秒計，那個時間點 TCPTimeouts 增加"},

@@ -13,7 +13,7 @@
     {"ctx":"causes/so-backlog/sig/g","ko":"접속 대기열 넘침 수(ListenOverflows), 접속 시도 수","t":"連線等待佇列溢位次數（ListenOverflows）、連線嘗試次數"},
     {"ctx":"causes/so-backlog/chk/look","ko":"nstat -az의 TcpExtListenOverflows·TcpExtListenDrops 증가량을 보고, ss -ltn으로 리슨 소켓의 Recv-Q(accept를 기다리는 접속 수)와 Send-Q(backlog 한도)를 비교","t":"看 nstat -az 的 TcpExtListenOverflows、TcpExtListenDrops 增加量，並用 ss -ltn 比較 listen socket 的 Recv-Q（等待 accept 的連線數）與 Send-Q（backlog 上限）"},
     {"ctx":"causes/so-backlog/chk/yes","ko":"접속이 몰린 시각에 ListenOverflows가 늘고, 리슨 소켓의 Recv-Q가 Send-Q 값에 붙어 있음","t":"連線湧入的時間點 ListenOverflows 增加，listen socket 的 Recv-Q 貼齊 Send-Q 的值"},
-    {"ctx":"causes/so-backlog/chk/no","ko":"ListenOverflows가 그대로면 이 원인이 아님. 연결은 맺어졌는데 로딩이 안 끝나면 “로그인 폭주와 N+1 쿼리”, 정확히 일정 인원에서 막히면 “파일 디스크립터 한도”","t":"ListenOverflows 沒有變化就不是這個原因。連線已建立但讀取跑不完時是「登入湧入與 N+1 查詢」；剛好卡在固定人數時是「檔案描述子上限」"},
+    {"ctx":"causes/so-backlog/chk/no","ko":"ListenOverflows가 그대로면 이 원인이 아님. 연결은 맺어졌는데 로딩이 안 끝나면 “로그인 폭주와 N+1 쿼리”, 정확히 일정 인원에서 막히면 “파일 디스크립터 한도”","t":"ListenOverflows 沒有變化就不是這個原因。連線已建立但讀取跑不完時是「登入暴增與 N+1 查詢」；剛好卡在固定人數時是「檔案描述子上限」"},
     {"ctx":"causes/so-backlog/ref/0/n","ko":"listen의 backlog는 somaxconn을 넘으면 조용히 잘림, somaxconn 기본 4,096(5.4부터, 전에는 128), 대기열이 차면 요청을 무시해 클라이언트 재시도에 맡길 수 있음","t":"listen 的 backlog 超過 somaxconn 時會被默默截斷；somaxconn 預設 4,096（5.4 起，之前是 128）；佇列滿時可以忽略請求，交給用戶端重試"},
     {"ctx":"causes/so-backlog/ref/1/n","ko":"tcp_syn_retries: 접속 요청(SYN)을 첫 재전송 대기 1초로 여러 번 다시 보냄, tcp_abort_on_overflow 기본 꺼짐(넘쳐도 거절 응답 없음), tcp_syncookies 기본 켜짐","t":"tcp_syn_retries：連線請求（SYN）會重送多次，第一次重傳前等待 1 秒；tcp_abort_on_overflow 預設關閉（溢位也不回傳拒絕回應）；tcp_syncookies 預設開啟"},
     {"ctx":"causes/so-backlog/ref/2/n","ko":"윈도우는 대기열이 가득 차면 클라이언트가 WSAECONNREFUSED 오류를 받음","t":"Windows 在佇列滿時，用戶端會收到 WSAECONNREFUSED 錯誤"},

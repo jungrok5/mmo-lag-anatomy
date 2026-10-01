@@ -102,7 +102,7 @@
     {"ctx":"src/sims/timeouts.js:319","ko":"앱이 백그라운드에서 멈춤. 하트비트가 더는 나가지 않음","t":"App suspended in the background. Heartbeats stop going out"},
     {"ctx":"src/sims/timeouts.js:323","ko":"게임 서버가 무응답으로 보고 플레이어를 내보냄","t":"Game server treats the player as unresponsive and kicks them"},
     {"ctx":"src/sims/timeouts.js:323","ko":"{0} 연결을 지움 (여기서 끊김)","t":"{0} deletes the connection (cut here)"},
-    {"ctx":"src/sims/timeouts.js:324","ko":"{0}도 뒤늦게 이 연결을 지움","t":"{0} also deletes this connection, later"},
+    {"ctx":"src/sims/timeouts.js:324","ko":"{0}도 뒤늦게 이 연결을 지움","t":"{0} also deletes this connection later"},
     {"ctx":"src/sims/timeouts.js:326","ko":"다음 하트비트가 나갔지만 서버에 닿지 못함","t":"Next heartbeat goes out but never reaches the server"},
     {"ctx":"src/sims/timeouts.js:327","ko":"서버의 keepalive 확인 패킷에 응답이 없음. 몇 번 더 재시도","t":"No reply to the server’s keepalive probe. Retries a few more times"},
     {"ctx":"src/sims/timeouts.js:328","ko":"서버가 끊김을 감지하고 캐릭터를 정리","t":"Server detects the drop and removes the character"},

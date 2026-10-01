@@ -55,7 +55,7 @@
     {"ctx":"causes/pt-isp-validation/chk/look","ko":"서버의 검증 거절·보정·강제 종료 로그에 접속 IP의 통신사(ASN)와 시각을 붙여 통신사·시간대별로 셈. 인프라팀은 같은 시간에 그 통신사 쪽으로 양방향 mtr을 돌려 지터·손실을 봄","t":"Gắn nhà mạng (ASN) của IP kết nối và thời điểm vào log từ chối, hiệu chỉnh, buộc thoát khi kiểm tra trên server, rồi đếm theo nhà mạng và khung giờ. Đội hạ tầng chạy mtr hai chiều về phía nhà mạng đó cùng thời điểm để xem jitter và mất gói"},
     {"ctx":"causes/pt-isp-validation/chk/yes","ko":"거절·강제 종료가 특정 통신사에 몰리고 저녁에 늘며, 같은 시간 그 통신사의 지터가 함께 높고, 몇 초 단위로 합친 이동량은 규칙 안에 있음","t":"từ chối và buộc thoát dồn vào một nhà mạng cụ thể và tăng vào buổi tối, cùng lúc đó jitter của nhà mạng này cũng cao, và lượng di chuyển cộng theo đơn vị vài giây vẫn nằm trong quy tắc"},
     {"ctx":"causes/pt-isp-validation/chk/no","ko":"통신사와 상관없이 특정 계정만 반복되면 실제 치트 가능성. 모든 통신사에서 함께 늘면 서버 틱이 밀려 명령이 몰려 적용되는 서버 쪽 원인(틱 예산 초과)","t":"chỉ một số tài khoản nhất định lặp lại, bất kể nhà mạng → có thể là cheat thật. Tăng đồng loạt ở mọi nhà mạng → nguyên nhân phía server, tick server bị trễ khiến lệnh bị áp dụng dồn (vượt tick budget)"},
-    {"ctx":"causes/pt-isp-validation/ref/0/n","ko":"틱마다 쌓이는 명령 예산으로 과속을 막되, 더 엄격한 제한은 정상 유저에게도 끊김을 만든다는 개발 주석","t":"Chặn chạy quá tốc độ bằng ngân sách lệnh tích lũy qua mỗi tick; chú thích của nhà phát triển cho biết giới hạn chặt hơn sẽ làm cả người chơi bình thường cũng bị gián đoạn"},
+    {"ctx":"causes/pt-isp-validation/ref/0/n","ko":"틱마다 쌓이는 명령 예산으로 과속을 막되, 더 엄격한 제한은 정상 유저에게도 뚝뚝 끊김을 만든다는 개발 주석","t":"Chặn chạy quá tốc độ bằng ngân sách lệnh tích lũy qua mỗi tick; chú thích của nhà phát triển cho biết giới hạn chặt hơn sẽ làm cả người chơi bình thường cũng bị giật khựng"},
     {"ctx":"causes/pt-isp-validation/ref/1/n","ko":"토큰 버킷: 평균 속도와 허용 버스트 크기로 판정","t":"Token bucket: xét theo tốc độ trung bình và kích thước burst cho phép"},
     {"ctx":"causes/pt-isp-validation/ref/2/n","ko":"클라이언트·서버 타임스탬프 차이가 크면 이동을 버리거나 시간 차이 해소 절차로 처리, 서버 시각으로 계산해 속도 핵 방지","t":"Nếu chênh lệch timestamp giữa client và server lớn thì bỏ lần di chuyển đó hoặc xử lý bằng thủ tục giải quyết chênh lệch thời gian, tính theo giờ server để chống speed hack"},
     {"ctx":"causes/pt-raid-member/t","ko":"느린 파티원 한 명과 보스 기믹","t":"Một đồng đội chậm và cơ chế boss"},
@@ -315,5 +315,8 @@
     {"ctx":"causes/pt-clock-hold/chk/no","ko":"추정 오차가 작은데 늦게 나타나면 연결별 전송 예산·우선순위나 로딩 쪽 원인","t":"sai số ước tính nhỏ mà vẫn xuất hiện muộn → xem ngân sách gửi và mức ưu tiên theo kết nối hoặc nguyên nhân phía loading"},
     {"ctx":"causes/pt-clock-hold/ref/0/n","ko":"시간 차이가 hardResetThresholdSec(기본 0.2초)를 넘으면 강제로 맞추고, 평소엔 adjustmentRatio로 조금씩 빠르게·느리게 조정","t":"Chênh lệch thời gian vượt hardResetThresholdSec (mặc định 0,2 giây) thì ép khớp ngay, bình thường thì dùng adjustmentRatio để chỉnh nhanh hoặc chậm từng chút"},
     {"ctx":"causes/pt-clock-hold/ref/1/n","ko":"LocalTime은 서버보다 앞서고 ServerTime은 뒤처짐. 늦게 도착한 메시지는 대기 시간이 음수가 될 수 있음","t":"LocalTime đi trước server, ServerTime đi sau. Message tới muộn có thể có thời gian chờ âm"}
+  ],
+  "stale": [
+    {"ctx":"causes/pt-isp-validation/ref/0/n","ko":"틱마다 쌓이는 명령 예산으로 과속을 막되, 더 엄격한 제한은 정상 유저에게도 끊김을 만든다는 개발 주석","t":"Chặn chạy quá tốc độ bằng ngân sách lệnh tích lũy qua mỗi tick; chú thích của nhà phát triển cho biết giới hạn chặt hơn sẽ làm cả người chơi bình thường cũng bị gián đoạn"}
   ]
 }
