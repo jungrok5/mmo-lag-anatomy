@@ -51,7 +51,7 @@
       num: '쿨다운 1초짜리 연계에서 핑 150ms면 스킬 사이마다 0.15초 이상 비어, 같은 시간에 쓰는 스킬이 13% 넘게 줄어듭니다.',
       own: ['cli', 'srv'],
       act: { game: '클라이언트: 쿨다운 끝나기 전 일정 시간(예: 0.3~0.4초) 안의 입력도 받아 바로 서버에 보내는 선입력 허용 시간. 서버: 조금 일찍 도착한 입력을 거절하지 말고 쿨다운이 끝나는 순간 실행.' },
-      more: '예를 들어 월드 오브 워크래프트는 선입력 허용 시간을 두고 플레이어가 설정에서 조절할 수 있게 했습니다(기본값은 0.4초로 알려져 있습니다). 허용 시간이 왕복 시간보다 길면 연계 사이에 핑이 거의 끼지 않습니다.',
+      more: '예를 들어 월드 오브 워크래프트는 선입력 허용 시간을 두고 플레이어가 설정에서 조절할 수 있게 했습니다. 허용 시간이 왕복 시간보다 길면 연계 사이에 핑이 거의 끼지 않습니다.',
       sim: 'chain',
       sig: { k: 'high', g: '스킬 사이 빈 시간, RTT(핑)' },
       chk: {
@@ -235,7 +235,7 @@
         by: 'code',
       },
       ref: [
-        { t: 'Source SDK 2013: player.cpp', u: 'https://raw.githubusercontent.com/ValveSoftware/source-sdk-2013/master/src/game/server/player.cpp', p: 'Valve', n: '틱마다 쌓이는 명령 처리 예산(최대 sv_maxusrcmdprocessticks 24틱)으로 몰려 온 명령을 허용. 더 엄격하게 막으면 정상 유저도 끊겼다는 개발 주석' },
+        { t: 'Source SDK 2013: player.cpp', u: 'https://raw.githubusercontent.com/ValveSoftware/source-sdk-2013/master/src/game/server/player.cpp', p: 'Valve', n: '틱마다 쌓이는 명령 처리 예산(최대 sv_maxusrcmdprocessticks 24틱)으로 몰려 온 명령을 허용. 더 엄격하게 막으면 정상 유저도 뚝뚝 끊김을 겪었다는 개발 주석' },
         { t: 'RFC 2697: A Single Rate Three Color Marker', u: 'https://www.rfc-editor.org/rfc/rfc2697', p: 'IETF', n: '토큰 버킷: 평균 속도(CIR)와 한 번에 허용하는 버스트 크기(CBS)로 판정' },
       ] },
     { id: 'sy-host', t: '호스트(방장) 구조', en: 'Listen server / host advantage',

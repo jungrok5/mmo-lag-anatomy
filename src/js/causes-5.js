@@ -80,7 +80,7 @@
         by: 'code',
       },
       ref: [
-        { t: 'Source SDK 2013: player.cpp', u: 'https://raw.githubusercontent.com/ValveSoftware/source-sdk-2013/master/src/game/server/player.cpp', p: 'Valve', n: '틱마다 쌓이는 명령 예산으로 과속을 막되, 더 엄격한 제한은 정상 유저에게도 끊김을 만든다는 개발 주석' },
+        { t: 'Source SDK 2013: player.cpp', u: 'https://raw.githubusercontent.com/ValveSoftware/source-sdk-2013/master/src/game/server/player.cpp', p: 'Valve', n: '틱마다 쌓이는 명령 예산으로 과속을 막되, 더 엄격한 제한은 정상 유저에게도 뚝뚝 끊김을 만든다는 개발 주석' },
         { t: 'RFC 2697: A Single Rate Three Color Marker', u: 'https://www.rfc-editor.org/rfc/rfc2697', p: 'IETF', n: '토큰 버킷: 평균 속도와 허용 버스트 크기로 판정' },
         { t: 'Understanding Networked Movement in the Character Movement Component for Unreal Engine', u: 'https://dev.epicgames.com/documentation/en-us/unreal-engine/understanding-networked-movement-in-the-character-movement-component-for-unreal-engine', p: 'Epic Games', n: '클라이언트·서버 타임스탬프 차이가 크면 이동을 버리거나 시간 차이 해소 절차로 처리, 서버 시각으로 계산해 속도 핵 방지' },
       ] },

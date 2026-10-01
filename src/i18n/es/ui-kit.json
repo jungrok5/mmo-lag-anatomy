@@ -2,15 +2,15 @@
   "lang": "es",
   "group": "ui-kit",
   "entries": [
-    {"ctx":"src/js/kit.js:91","ko":"{0}. {1}","t":""},
-    {"ctx":"src/js/kit.js:109, src/js/kit.js:110","ko":" 초","t":""},
-    {"ctx":"src/js/kit.js:157","ko":"직접 해보기","t":""},
-    {"ctx":"src/js/kit.js:171","ko":"이렇게 해보세요","t":""},
-    {"ctx":"src/js/kit.js:263","ko":"상황 불러오기","t":""},
-    {"ctx":"src/js/kit.js:287","ko":"좋음","t":""},
-    {"ctx":"src/js/kit.js:288","ko":"주의","t":""},
-    {"ctx":"src/js/kit.js:289","ko":"나쁨","t":""},
-    {"ctx":"src/js/kit.js:585","ko":"<p class=\"sim-error\">시뮬레이션 “{0}”를 찾지 못했습니다.</p>","t":""},
-    {"ctx":"src/js/kit.js:587","ko":"<p class=\"sim-error\">시뮬레이션 “{0}”를 불러오다 오류가 났습니다: {1}</p>","t":""}
+    {"ctx":"src/js/kit.js:91","ko":"{0}. {1}","t":"{0}. {1}"},
+    {"ctx":"src/js/kit.js:109, src/js/kit.js:110","ko":" 초","t":" s"},
+    {"ctx":"src/js/kit.js:157","ko":"직접 해보기","t":"Pruébalo tú mismo"},
+    {"ctx":"src/js/kit.js:171","ko":"이렇게 해보세요","t":"Prueba esto"},
+    {"ctx":"src/js/kit.js:263","ko":"상황 불러오기","t":"Cargar un escenario"},
+    {"ctx":"src/js/kit.js:287","ko":"좋음","t":"Bueno"},
+    {"ctx":"src/js/kit.js:288","ko":"주의","t":"Atención"},
+    {"ctx":"src/js/kit.js:289","ko":"나쁨","t":"Malo"},
+    {"ctx":"src/js/kit.js:585","ko":"<p class=\"sim-error\">시뮬레이션 “{0}”를 찾지 못했습니다.</p>","t":"<p class=\"sim-error\">No se encontró la simulación “{0}”.</p>"},
+    {"ctx":"src/js/kit.js:587","ko":"<p class=\"sim-error\">시뮬레이션 “{0}”를 불러오다 오류가 났습니다: {1}</p>","t":"<p class=\"sim-error\">Error al cargar la simulación “{0}”: {1}</p>"}
   ]
 }
