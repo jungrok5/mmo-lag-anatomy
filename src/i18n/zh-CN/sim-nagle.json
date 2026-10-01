@@ -35,7 +35,7 @@
     {"ctx":"src/sims/nagle.js:58","ko":"200ms 예전 윈도우","t":"200 ms 旧版 Windows"},
     {"ctx":"src/sims/nagle.js:60","ko":"보낼 응답이 없으면 ACK를 이만큼 미뤘다가 따로 보냅니다.","t":"没有响应可以捎带时，ACK 推迟这么久再单独发送。"},
     {"ctx":"src/sims/nagle.js:62","ko":"핑(RTT, 왕복 시간)","t":"Ping 值（RTT，往返时间）"},
-    {"ctx":"src/sims/nagle.js:62","ko":"20ms ≈ 국내 서버","t":"20 ms ≈ 国内服务器"},
+    {"ctx":"src/sims/nagle.js:62","ko":"20ms ≈ 국내 서버","t":"20 ms ≈ 韩国国内服务器"},
     {"ctx":"src/sims/nagle.js:63","ko":"보기","t":"显示"},
     {"ctx":"src/sims/nagle.js:64","ko":"재생 속도","t":"播放速度"},
     {"ctx":"src/sims/nagle.js:64","ko":"1/10 느리게","t":"1/10 慢速"},

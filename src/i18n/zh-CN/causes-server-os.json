@@ -99,7 +99,7 @@
     {"ctx":"causes/so-cpu-quota/chk/yes","ko":"평균 CPU 사용률은 한도보다 낮은데 nr_throttled·throttled_usec가 계속 늘고, 틱이 튄 시각과 겹침","t":"平均 CPU 使用率低于上限，nr_throttled、throttled_usec 却持续增加，且与 tick 冲高的时刻重合"},
     {"ctx":"causes/so-cpu-quota/chk/no","ko":"nr_throttled가 늘지 않으면 이 원인이 아님. 가상 머신 자체가 밀리면 “CPU 스틸 (가상 머신)”","t":"nr_throttled 不增加则不是这个原因。虚拟机本身被挤占，看“CPU 窃取时间（虚拟机）”"},
     {"ctx":"causes/so-cpu-quota/ref/0/n","ko":"주기마다 받은 할당량을 다 쓰면 다음 주기까지 스레드가 멈춤(스로틀링), 기본 주기 100ms, nr_throttled 통계","t":"每个周期分到的配额用完后，线程停住直到下一个周期（限流）；默认周期 100 ms；nr_throttled 统计"},
-    {"ctx":"causes/so-cpu-quota/ref/1/n","ko":"cpu.max는 “$MAX $PERIOD”(할당량, 주기) 형식이고 기본값은 “max 100000”(100ms 주기)","t":""},
+    {"ctx":"causes/so-cpu-quota/ref/1/n","ko":"cpu.max는 “$MAX $PERIOD”(할당량, 주기) 형식이고 기본값은 “max 100000”(100ms 주기)","t":"cpu.max 的格式为“$MAX $PERIOD”（配额、周期），默认值为“max 100000”（100 ms 周期）"},
     {"ctx":"causes/so-cpu-quota/ref/2/n","ko":"컨테이너의 CPU limit은 커널이 CPU 스로틀링으로 강제하는 하드 한도","t":"容器的 CPU limit 是内核通过 CPU 限流强制执行的硬上限"},
     {"ctx":"causes/so-cstate/t","ko":"서버 전원 관리(C-state·주파수 조절)로 지연 튐","t":"服务器电源管理（C-state/调频）导致延迟跳变"},
     {"ctx":"causes/so-cstate/s","ko":"쉬는 CPU 코어는 전기를 아끼려고 깊은 절전 상태(C-state)로 들어가고 주파수도 낮춥니다. 패킷이나 타이머가 오면 깨어나고 주파수를 올리는 데 시간이 걸려, 작은 패킷 처리에 지연이 더해집니다.","t":"空闲的 CPU 核心为了省电会进入深度省电状态（C-state），频率也会降低。数据包或定时器到来时，唤醒和升频都需要时间，处理小数据包时就会多出一段延迟。"},

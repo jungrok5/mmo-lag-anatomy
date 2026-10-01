@@ -135,7 +135,7 @@
     {"ctx":"src/sims/journey.js:184","ko":"표시","t":"显示"},
     {"ctx":"src/sims/journey.js:185","ko":"보간 버퍼","t":"插值缓冲"},
     {"ctx":"src/sims/journey.js:185","ko":"“다른 플레이어” 관점에서만 쓰입니다.","t":"仅在“其他玩家”视角下使用。"},
-    {"ctx":"src/sims/journey.js:199","ko":"유선 + 국내 서버","t":"有线 + 国内服务器"},
+    {"ctx":"src/sims/journey.js:199","ko":"유선 + 국내 서버","t":"有线 + 韩国国内服务器"},
     {"ctx":"src/sims/journey.js:200","ko":"와이파이 + 가족이 영상 업로드","t":"Wi-Fi + 家人上传视频"},
     {"ctx":"src/sims/journey.js:201","ko":"LTE 접속","t":"LTE 接入"},
     {"ctx":"src/sims/journey.js:202","ko":"미국 서버 접속","t":"连接美国服务器"},
