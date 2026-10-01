@@ -58,7 +58,7 @@
     {"ctx":"tools/site.cjs:242, tools/site.cjs:260","ko":"용어 사전","t":"术语表"},
     {"ctx":"tools/site.cjs:242, tools/site.cjs:262","ko":"참고 문헌","t":"参考文献"},
     {"ctx":"tools/site.cjs:244","ko":"렉은 네 가지 요인에서 시작합니다:","t":"卡顿源于四个因素："},
-    {"ctx":"tools/site.cjs:244","ko":"<b>{0}</b>({1})","t":""},
+    {"ctx":"tools/site.cjs:244","ko":"<b>{0}</b>({1})","t":"<b>{0}</b>（{1}）"},
     {"ctx":"tools/site.cjs:245, tools/site.cjs:251","ko":"원인 {0}가지","t":"{0} 个原因"},
     {"ctx":"tools/site.cjs:247","ko":"코드","t":"代号"},
     {"ctx":"tools/site.cjs:247","ko":"팀","t":"团队"},

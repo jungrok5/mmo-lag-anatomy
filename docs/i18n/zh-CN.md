@@ -508,3 +508,49 @@ How they are used:
 - **Symptom pages** use `游戏{症状}的原因：按症状排查卡顿与负责方 | 游戏卡顿白皮书`, which produces 游戏掉线的原因, 游戏瞬移的原因, 游戏拉回的原因 and so on (8, 9, 10, 11, 12).
 - **keywords** (`build.py`): 游戏卡顿原因, 游戏卡顿, 游戏延迟高, 跳ping, 丢包, 一卡一卡, 瞬移, 拉回, 操作延迟, 掉线, 服务器卡顿, 网络同步, TCP 重传, 研发团队, 运维团队. In this machine-read list 跳ping is written without a space because that is how people type it; in prose write 跳 ping.
 - In body text, use these phrases where they are the natural wording (for example 晚高峰卡顿, 跳 ping, 帧同步、状态同步). Do not stack keywords.
+
+---
+
+## Decisions added during review
+
+| Korean | Simplified Chinese | Note |
+|---|---|---|
+| 숫자 감각 (the times table, ladder sim name) | 延迟数量级 | One name in body, ui-app, sim-ladder and refs; not 数量级直觉 |
+| TCP 재전송 해부 (ch. 06 short name) | TCP 重传剖析 | Nav and in-text links (`06 TCP 重传剖析`); the h2 stays TCP 重传：为什么会发生，为什么这么慢 |
+| 같은 PC의 두 클라이언트 | 同一台电脑上的两个客户端 | Body heading, ui-app, sim-npcmissing |
+| 연결 방식 (report form, sims) | 连接方式 | Not 接入方式 |
+| 존 (MMO zone) | 场景 | 존 이동 → 场景切换; 존별 → 各场景; 맵 stays 地图 |
+| Pointing to another cause | 看“标题” | Title exactly as that cause's `t` (or without its trailing parenthetical when the Korean drops it). Prose: 请看“标题”. Chapters keep 见“…”一章 |
+| 본인 인증 | 实名认证 | Kept after review |
+| 저장 (game data) | 存盘 | 캐릭터 저장 / 저장 데이터 → 角色存盘数据 / 存盘数据; not 存档 |
+| 턴 (lockstep) | 逻辑帧 | 回合 only for turn-based content (턴제 → 回合制) |
+| 탭 타겟 / 논타겟 | Tab 锁定 / 无锁定 | |
+| 관심 영역 (AOI) | AOI（兴趣区域） | |
+| 튕김 | 闪退 / 掉线 | Client crash 闪退; kicked from server 掉线 |
+| 서버 장비·OS (owner short) | 服务器/OS | |
+| 입력 지연 (setting value: lockstep, rollback, input lag chain) | 输入延迟 | The symptom stays 操作延迟 |
+| 기믹 / 파티 기믹 | 机制 / 需要全队配合的机制 | 보스 예고 → 预警 |
+| 등장 / 퇴장 알림 | 出现通知 / 离开通知 | |
+| 세션 토큰 / 재연결 유예 | 会话令牌 / 重连保留时间 | |
+| 리전 | 区域（region） | 리전 엔드포인트 → 区域端点 |
+| 백오프 / 지수 백오프 | 退避 / 指数退避 | |
+| 순서 대기 (HOL) | 按序等待 | First mention 按序等待（队头阻塞，HOL blocking） |
+| 크기 초과 알림 (ICMP) / 경로 MTU 탐색 | 包过大通知 / 路径 MTU 发现、MTU 探测 | |
+| 출력 드롭 / 입력 오류 | 出方向丢弃 / 入方向错误 | |
+| 임시 포트 / 인스턴스 종류·크기 | 临时端口 / 实例规格 | |
+| 회고 (postmortem article) | 复盘文章 | Glossary headword stays 故障复盘 |
+| 먼저 부를 곳 | 优先联系：(playbooks) / 先找 (tables) | |
+| 카나리 / 대조군 / 기능 플래그 | 金丝雀发布 / 对照组 / 功能开关 | |
+| 트래픽 지문 | 流量指纹 | |
+| 경쟁 상태 / 리스 / 대역 외 접속 | 竞态条件 / 租约 / 带外访问 | |
+| 확장팩 / 얼리 액세스 | 资料片 / 抢先体验 | Endwalker → 《晓月之终途》（Endwalker） |
+| 빌드 | 构建版本 | Build number → 版本号 |
+| 헬스체크 / 드레인 / 단일 장애점 | 健康检查 / 排空（drain） / 单点故障 | |
+| 쓰래싱 | 颠簸 | GC 颠簸 |
+| PC방 | 网吧 | |
+| 에스컬레이션 (to a carrier) | 升级处理 | |
+| 시스템 / 밝게 / 어둡게 (theme) | 跟随系统 / 浅色 / 深色 | |
+| 비유 / 핵심 (box tags) | 打个比方 / 要点 | |
+| 부조정실 | 导播间 | |
+| 저스트 회피 / 방치형 | 完美闪避 / 放置类 | |
+| 함께 대응할 곳 (prose) | 配合方 | The card label 함께 stays 配合 |

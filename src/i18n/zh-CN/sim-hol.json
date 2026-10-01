@@ -28,7 +28,7 @@
     {"ctx":"src/sims/hol.js:47","ko":"4초마다 마지막 사건 반복","t":"每 4 秒重复上一个事件"},
     {"ctx":"src/sims/hol.js:48","ko":"관찰 속도","t":"观察速度"},
     {"ctx":"src/sims/hol.js:48","ko":"0.25× 느리게","t":"0.25×（慢放）"},
-    {"ctx":"src/sims/hol.js:50","ko":"TCP 최대 멈춤","t":"TCP 最长卡住"},
+    {"ctx":"src/sims/hol.js:50","ko":"TCP 최대 멈춤","t":"TCP 最长卡住时长"},
     {"ctx":"src/sims/hol.js:50","ko":"최근 10초","t":"最近 10 秒"},
     {"ctx":"src/sims/hol.js:51","ko":"TCP 몰아치기","t":"TCP 快进"},
     {"ctx":"src/sims/hol.js:51, src/sims/hol.js:52","ko":"개","t":"个"},

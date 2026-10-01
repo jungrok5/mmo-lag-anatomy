@@ -2,7 +2,7 @@
   "lang": "zh-CN",
   "group": "ui-kit",
   "entries": [
-    {"ctx":"src/js/kit.js:91","ko":"{0}. {1}","t":""},
+    {"ctx":"src/js/kit.js:91","ko":"{0}. {1}","t":"{0}。{1}"},
     {"ctx":"src/js/kit.js:114, src/js/kit.js:115","ko":" 초","t":" 秒"},
     {"ctx":"src/js/kit.js:162","ko":"직접 해보기","t":"动手试试"},
     {"ctx":"src/js/kit.js:176","ko":"이렇게 해보세요","t":"可以这样试"},

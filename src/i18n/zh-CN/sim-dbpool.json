@@ -23,7 +23,7 @@
     {"ctx":"src/sims/dbpool.js:42","ko":"요청","t":"请求"},
     {"ctx":"src/sims/dbpool.js:43","ko":"초당 요청","t":"每秒请求数"},
     {"ctx":"src/sims/dbpool.js:43","ko":"건/초","t":"个/秒"},
-    {"ctx":"src/sims/dbpool.js:43","ko":"아이템 저장·거래·우편·로그인 로딩이 모두 DB 요청입니다.","t":"物品保存、交易、邮件、登录加载都是 DB 请求。"},
+    {"ctx":"src/sims/dbpool.js:43","ko":"아이템 저장·거래·우편·로그인 로딩이 모두 DB 요청입니다.","t":"物品存盘、交易、邮件、登录加载都是 DB 请求。"},
     {"ctx":"src/sims/dbpool.js:45","ko":"요청 타임아웃","t":"请求超时"},
     {"ctx":"src/sims/dbpool.js:45, src/sims/dbpool.js:258","ko":"1초","t":"1 秒"},
     {"ctx":"src/sims/dbpool.js:45","ko":"5초","t":"5 秒"},

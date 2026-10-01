@@ -154,7 +154,7 @@
     {"ctx":"src/sims/journey.js:330","ko":"느린 화면(10배): ","t":"慢放（10 倍）："},
     {"ctx":"src/sims/journey.js:330","ko":"{0} ms 지점 · {1}","t":"{0} ms 处 · {1}"},
     {"ctx":"src/sims/journey.js:332","ko":"막대에 손가락이나 마우스를 올리면 구간 설명이 보입니다.","t":"把手指或鼠标放在柱条上，可以看到各段的说明。"},
-    {"ctx":"src/sims/journey.js:352","ko":"운 나쁘면 ~{0} ms","t":"运气不好时 ~{0} ms"},
+    {"ctx":"src/sims/journey.js:352","ko":"운 나쁘면 ~{0} ms","t":"运气不好时可达 {0} ms"},
     {"ctx":"src/sims/journey.js:354","ko":"{0}{1} · 전체의 {2}%","t":"{0}{1} · 占总延迟 {2}%"},
     {"ctx":"src/sims/journey.js:357","ko":"쾌적","t":"流畅"},
     {"ctx":"src/sims/journey.js:357","ko":"느껴짐","t":"能察觉"},
