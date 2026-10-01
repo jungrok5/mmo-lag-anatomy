@@ -54,7 +54,7 @@
     {"ctx":"#judge td","ko":"DB 쿼리 수·모양이 패치 뒤 바뀜","t":""},
     {"ctx":"#judge td","ko":"N+1, 새 쿼리","t":""},
     {"ctx":"#judge td","ko":"해외 지점의 합성 측정(RTT·손실)","t":""},
-    {"ctx":"#judge td","ko":"나쁨","t":""},
+    {"ctx":"#judge td","ko":"나쁨","t":"Ruim"},
     {"ctx":"#judge td","ko":"<span class=\"own own-infra\"><span class=\"tm\">인프라팀</span>네트워크</span> <span class=\"own own-ext\"><span class=\"tm\">외부</span>통신사</span>","t":""},
     {"ctx":"#judge td","ko":"합성 측정은 정상인데 유저만 나쁨","t":""},
     {"ctx":"#judge td","ko":"유저 환경 또는 클라이언트","t":""},

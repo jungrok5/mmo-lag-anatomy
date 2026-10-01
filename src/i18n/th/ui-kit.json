@@ -3,14 +3,14 @@
   "group": "ui-kit",
   "entries": [
     {"ctx":"src/js/kit.js:91","ko":"{0}. {1}","t":"{0} {1}"},
-    {"ctx":"src/js/kit.js:96, src/js/kit.js:97","ko":" 초","t":" วินาที"},
-    {"ctx":"src/js/kit.js:144","ko":"직접 해보기","t":"ลองเอง"},
-    {"ctx":"src/js/kit.js:158","ko":"이렇게 해보세요","t":"ลองทำแบบนี้"},
-    {"ctx":"src/js/kit.js:250","ko":"상황 불러오기","t":"เลือกสถานการณ์"},
-    {"ctx":"src/js/kit.js:274","ko":"좋음","t":"ดี"},
-    {"ctx":"src/js/kit.js:275","ko":"주의","t":"ระวัง"},
-    {"ctx":"src/js/kit.js:276","ko":"나쁨","t":"แย่"},
-    {"ctx":"src/js/kit.js:572","ko":"<p class=\"sim-error\">시뮬레이션 “{0}”를 찾지 못했습니다.</p>","t":"<p class=\"sim-error\">ไม่พบการจำลอง “{0}”</p>"},
-    {"ctx":"src/js/kit.js:574","ko":"<p class=\"sim-error\">시뮬레이션 “{0}”를 불러오다 오류가 났습니다: {1}</p>","t":"<p class=\"sim-error\">เกิดข้อผิดพลาดขณะโหลดการจำลอง “{0}”: {1}</p>"}
+    {"ctx":"src/js/kit.js:109, src/js/kit.js:110","ko":" 초","t":" วินาที"},
+    {"ctx":"src/js/kit.js:157","ko":"직접 해보기","t":"ลองเอง"},
+    {"ctx":"src/js/kit.js:171","ko":"이렇게 해보세요","t":"ลองทำแบบนี้"},
+    {"ctx":"src/js/kit.js:263","ko":"상황 불러오기","t":"เลือกสถานการณ์"},
+    {"ctx":"src/js/kit.js:287","ko":"좋음","t":"ดี"},
+    {"ctx":"src/js/kit.js:288","ko":"주의","t":"ระวัง"},
+    {"ctx":"src/js/kit.js:289","ko":"나쁨","t":"แย่"},
+    {"ctx":"src/js/kit.js:585","ko":"<p class=\"sim-error\">시뮬레이션 “{0}”를 찾지 못했습니다.</p>","t":"<p class=\"sim-error\">ไม่พบการจำลอง “{0}”</p>"},
+    {"ctx":"src/js/kit.js:587","ko":"<p class=\"sim-error\">시뮬레이션 “{0}”를 불러오다 오류가 났습니다: {1}</p>","t":"<p class=\"sim-error\">เกิดข้อผิดพลาดขณะโหลดการจำลอง “{0}”: {1}</p>"}
   ]
 }

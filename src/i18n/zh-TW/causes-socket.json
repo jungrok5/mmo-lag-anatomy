@@ -62,7 +62,7 @@
     {"ctx":"causes/sk-block-send/chk/no","ko":"멈춘 스레드가 send 밖(락, DB 호출)에서 기다리면 “락 경합”, “게임 스레드의 동기 호출”","t":"停住的執行緒在 send 以外的地方（鎖、DB 呼叫）等待時是「鎖競爭」、「遊戲執行緒上的同步呼叫」"},
     {"ctx":"causes/sk-block-send/ref/0/n","ko":"송신 버퍼에 자리가 없으면 send()가 블록되고, 논블로킹 모드면 EAGAIN으로 바로 돌아옴","t":"傳送緩衝區沒有空間時 send() 會阻塞，非阻塞模式下則立刻以 EAGAIN 返回"},
     {"ctx":"causes/sk-block-send/ref/1/n","ko":"Winsock도 버퍼 공간이 없으면 논블로킹 모드가 아닌 한 send가 블록","t":"Winsock 在緩衝區空間不足時，除非是非阻塞模式，send 也會阻塞"},
-    {"ctx":"causes/sk-block-send/ref/2/n, causes/sk-slow-client/ref/1/n, causes/sk-congestion/ref/4/n, causes/sk-reuseport/ref/3/n","ko":"ss의 Recv-Q·Send-Q 값: 리슨 소켓은 accept를 기다리는 접속 수와 backlog 한도, 연결된 소켓은 앱이 아직 안 읽은 바이트와 ACK를 받지 못한 송신 바이트","t":""},
+    {"ctx":"causes/sk-block-send/ref/2/n, causes/sk-slow-client/ref/1/n, causes/sk-congestion/ref/4/n, causes/sk-reuseport/ref/3/n","ko":"ss의 Recv-Q·Send-Q 값: 리슨 소켓은 accept를 기다리는 접속 수와 backlog 한도, 연결된 소켓은 앱이 아직 안 읽은 바이트와 ACK를 받지 못한 송신 바이트","t":"ss 的 Recv-Q、Send-Q 值：listen socket 是等待 accept 的連線數與 backlog 上限；已連線的 socket 是應用程式尚未讀取的位元組數與尚未收到 ACK 的已送出位元組數"},
     {"ctx":"causes/sk-slow-client/t","ko":"느린 클라이언트(slow consumer) 처리 정책","t":""},
     {"ctx":"causes/sk-slow-client/s","ko":"보낼 게 계속 쌓이는 클라이언트에게 서버가 오래된 업데이트를 버리거나 연결을 끊습니다.","t":""},
     {"ctx":"causes/sk-slow-client/c/0","ko":"클라이언트의 회선이 서버가 보내는 양을 못 따라감","t":""},

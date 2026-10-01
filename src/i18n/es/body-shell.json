@@ -13,7 +13,7 @@
     {"ctx":"#nav li","ko":"<a href=\"#sync\">동기화 방식과 체감</a>","t":""},
     {"ctx":"#nav li","ko":"<a href=\"#partial\">한 명만·한쪽만 이상할 때</a>","t":""},
     {"ctx":"#nav li","ko":"<a href=\"#retrans\">TCP 재전송 해부</a>","t":""},
-    {"ctx":"#nav li","ko":"<a href=\"#owners\">게임팀·인프라팀 담당 구분</a>","t":""},
+    {"ctx":"#nav li","ko":"<a href=\"#owners\">게임개발팀·인프라팀 담당 구분</a>","t":""},
     {"ctx":"#nav div","ko":"레이어 (패킷이 지나가는 순서)","t":""},
     {"ctx":"#nav div","ko":"도구","t":""},
     {"ctx":"#nav li","ko":"<a href=\"#triage\">진단 도우미</a>","t":""},
