@@ -60,7 +60,7 @@
     {"ctx":"src/sims/frames.js:305","ko":" (점진적)","t":" (incremental)"},
     {"ctx":"src/sims/frames.js:306","ko":"<br>동기 로딩 {0}","t":"<br>โหลดแบบ synchronous {0}"},
     {"ctx":"src/sims/frames.js:307","ko":"<br>V-Sync 기다림 {0}","t":"<br>รอ V-Sync {0}"},
-    {"ctx":"src/sims/frames.js:322","ko":"눈금 = 2m","t":"1 ช่อง = 2 เมตร"},
+    {"ctx":"src/sims/frames.js:322","ko":"눈금 = 2m","t":"ช่องละ 2 เมตร"},
     {"ctx":"src/sims/frames.js:338","ko":"멈춤 {0}ms","t":"ค้าง {0} ms"},
     {"ctx":"src/sims/frames.js:348","ko":"서버 위치로 당겨짐 {0}m (고무줄)","t":"ถูกดึงกลับไปตำแหน่งบนเซิร์ฟเวอร์ {0} เมตร (ดีดกลับ)"},
     {"ctx":"src/sims/frames.js:348","ko":"순간이동 {0}m","t":"วาร์ป {0} เมตร"},
