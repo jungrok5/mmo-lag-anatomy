@@ -19,7 +19,7 @@
     {"ctx":"src/js/app.js:18","ko":"락 실험","t":"鎖實驗"},
     {"ctx":"src/js/app.js:18","ko":"GC 실험","t":"GC 實驗"},
     {"ctx":"src/js/app.js:18","ko":"메모리 누수 실험","t":"記憶體洩漏實驗"},
-    {"ctx":"src/js/app.js:18","ko":"숫자 감각","t":"數字感"},
+    {"ctx":"src/js/app.js:18","ko":"숫자 감각","t":"數值參考"},
     {"ctx":"src/js/app.js:19","ko":"디스크 실험","t":"磁碟實驗"},
     {"ctx":"src/js/app.js:19","ko":"DB 실험","t":"DB 實驗"},
     {"ctx":"src/js/app.js:19","ko":"서버 구성 실험","t":"伺服器架構實驗"},

@@ -28,7 +28,7 @@
     {"ctx":"src/sims/windows.js:32","ko":"게임 규칙","t":"遊戲規則"},
     {"ctx":"src/sims/windows.js:33","ko":"예고 시간 (반응해야 하는 구간)","t":"預告時間（需要反應的區間）"},
     {"ctx":"src/sims/windows.js:34","ko":"회선·서버","t":"線路／伺服器"},
-    {"ctx":"src/sims/windows.js:35","ko":"핑(왕복)","t":"Ping（來回）"},
+    {"ctx":"src/sims/windows.js:35","ko":"핑(왕복)","t":"Ping（往返）"},
     {"ctx":"src/sims/windows.js:36","ko":"보간 버퍼","t":"內插緩衝"},
     {"ctx":"src/sims/windows.js:37","ko":"서버 틱","t":"伺服器 tick"},
     {"ctx":"src/sims/windows.js:37","ko":"10/초","t":"10/秒"},

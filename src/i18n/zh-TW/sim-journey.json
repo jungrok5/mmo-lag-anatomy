@@ -98,7 +98,7 @@
     {"ctx":"src/sims/journey.js:132","ko":"화면 표시","t":"畫面顯示"},
     {"ctx":"src/sims/journey.js:132","ko":"모니터가 신호를 받아 실제로 빛을 내기까지 걸리는 시간입니다. TV는 화질 처리 때문에 특히 깁니다.","t":"螢幕從收到訊號到實際發光所需的時間。TV 因為要做畫質處理，特別久。"},
     {"ctx":"src/sims/journey.js:132","ko":"게이밍 모니터를 쓰거나 TV의 게임 모드를 켜세요.","t":"請使用電競螢幕，或開啟 TV 的遊戲模式。"},
-    {"ctx":"src/sims/journey.js:143","ko":"왕복 ","t":"來回 "},
+    {"ctx":"src/sims/journey.js:143","ko":"왕복 ","t":"往返 "},
     {"ctx":"src/sims/journey.js:151","ko":"보는 관점","t":"觀看視角"},
     {"ctx":"src/sims/journey.js:152","ko":"내 행동이 화면에 반영되기까지","t":"我的動作反映到畫面上為止"},
     {"ctx":"src/sims/journey.js:152","ko":"다른 플레이어 움직임이 내 화면에 보이기까지","t":"其他玩家的動作出現在我的畫面上為止"},
