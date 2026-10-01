@@ -265,7 +265,7 @@
     {"ctx":"causes/rt-reorder/chk/no","ko":"순서 뒤바뀜 카운터는 그대로이고 TcpExtTCPLostRetransmit이 늘면 실제 손실. RTT가 튀는 순간에만 DSACK이 늘면 “지연 급등으로 인한 불필요한 재전송”","t":"亂序計數器沒有變化、TcpExtTCPLostRetransmit 增加時，是實際遺失。只在 RTT 飆高的瞬間 DSACK 增加時，是「延遲飆升造成的不必要重傳」"},
     {"ctx":"causes/rt-reorder/ref/0/n","ko":"패킷 단위로 경로를 나누면 순서가 바뀌고, 뒤 패킷 3개 이상이 먼저 오면 TCP가 불필요한 빠른 재전송을 함","t":"依封包分配路徑會使順序改變，後面的封包有 3 個以上先到時，TCP 就會進行不必要的快速重傳"},
     {"ctx":"causes/rt-reorder/ref/1/n","ko":"흐름을 구분하는 헤더 필드의 해시로 경로를 고르는 ECMP(흐름 단위 분산)","t":"以區分流的標頭欄位雜湊值選擇路徑的 ECMP（以流為單位分散）"},
-    {"ctx":"causes/rt-reorder/ref/2/n, causes/rt-thin/ref/1/n","ko":"세 번째 중복 ACK에서 빠른 재전송","t":"在第 3 個重複 ACK 時進行快速重傳"},
+    {"ctx":"causes/rt-reorder/ref/2/n, causes/rt-thin/ref/1/n","ko":"세 번째 중복 ACK에서 빠른 재전송","t":"在第三個重複 ACK 時進行快速重傳"},
     {"ctx":"causes/rt-reorder/ref/3/n","ko":"RACK은 시간 기준으로 손실을 판단해 순서 뒤바뀜에 강하고, DSACK을 받으면 순서 뒤바뀜 허용 시간(reo_wnd)을 늘림","t":"RACK 以時間判斷遺失，因此對亂序的容忍度高；收到 DSACK 時會放寬亂序容許時間（reo_wnd）"},
     {"ctx":"causes/rt-reorder/ref/4/n","ko":"tcp_reordering 시작값 3(연결마다 tcp_max_reordering까지 자동 조정), tcp_recovery의 RACK 설정","t":"tcp_reordering 起始值 3（每條連線自動調整，最高到 tcp_max_reordering）、tcp_recovery 的 RACK 設定"},
     {"ctx":"causes/rt-reorder/ref/5/n","ko":"ss -ti는 연결의 reordering 값이 기본값 3과 다를 때 reordering:값을, 순서 뒤바뀜을 겪은 적이 있으면 reord_seen:횟수를 표시","t":"ss -ti 在連線的 reordering 值與預設值 3 不同時顯示 reordering:值，曾發生過亂序時顯示 reord_seen:次數"},

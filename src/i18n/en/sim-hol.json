@@ -52,7 +52,7 @@
     {"ctx":"src/sims/hol.js:202","ko":"게임에 전달","t":"Delivered"},
     {"ctx":"src/sims/hol.js:202","ko":"캐릭터 위치","t":"Position"},
     {"ctx":"src/sims/hol.js:224, src/sims/hol.js:330","ko":"멈춤 ","t":"Freeze "},
-    {"ctx":"src/sims/hol.js:250, src/sims/hol.js:251","ko":"개 대기","t":" waiting"},
+    {"ctx":"src/sims/hol.js:250, src/sims/hol.js:251","ko":"개 대기","t":" held"},
     {"ctx":"src/sims/hol.js:259","ko":"개 대기 중","t":" waiting now"},
     {"ctx":"src/sims/hol.js:331","ko":"몰아치기 ×","t":"Fast-forward ×"},
     {"ctx":"src/sims/hol.js:332","ko":"개 건너뜀","t":" skipped"},

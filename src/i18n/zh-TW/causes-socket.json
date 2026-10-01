@@ -142,7 +142,7 @@
     {"ctx":"causes/sk-congestion/sig/g","ko":"연결별 혼잡 윈도우(cwnd)·전송률","t":"每條連線的壅塞視窗（cwnd）與傳送速率"},
     {"ctx":"causes/sk-congestion/chk/look","ko":"업데이트가 밀린 유저 연결을 ss -ti로 여러 번 떠서 cwnd·ssthresh 변화와 혼잡 제어 이름(cubic·bbr)을 보고, Send-Q가 쌓이는지 함께 봄","t":"對狀態更新積壓的玩家連線多次執行 ss -ti，看 cwnd、ssthresh 的變化與壅塞控制演算法名稱（cubic、bbr），並一併看 Send-Q 是否累積"},
     {"ctx":"causes/sk-congestion/chk/yes","ko":"손실 뒤 cwnd가 크게 줄었다가 천천히 오르기를 반복하고, 줄어든 동안 Send-Q가 쌓여 몰아치기·입력 지연 제보 시각과 겹침","t":"每次遺失後 cwnd 大幅縮小再慢慢回升，反覆發生；縮小期間 Send-Q 累積，與快轉、輸入延遲的回報時間重疊"},
-    {"ctx":"causes/sk-congestion/chk/no","ko":"cwnd가 넉넉한데도 밀리면 받는 쪽 윈도우(“제로 윈도우 (재전송처럼 보이는 멈춤)”)나 서버 송신 쪽","t":"cwnd 很充足仍然積壓時，要查接收端視窗（「zero window（看似重傳的停住）」）或伺服器傳送端"},
+    {"ctx":"causes/sk-congestion/chk/no","ko":"cwnd가 넉넉한데도 밀리면 받는 쪽 윈도우(“제로 윈도우 (재전송처럼 보이는 멈춤)”)나 서버 송신 쪽","t":"cwnd 很充足仍然積壓時，要查接收端視窗（「Zero window（看起來像重傳的停頓）」）或伺服器傳送端"},
     {"ctx":"causes/sk-congestion/ref/0/n","ko":"CUBIC은 손실 때 윈도우를 0.7배(30% 감소), Reno는 0.5배, CUBIC이 리눅스·윈도우·애플 기본","t":"遺失時 CUBIC 把視窗乘以 0.7（減少 30%），Reno 乘以 0.5；CUBIC 是 Linux、Windows、Apple 的預設"},
     {"ctx":"causes/sk-congestion/ref/1/n","ko":"손실 기반 혼잡 제어는 혼잡 때문이 아닌 손실에도 전송률을 크게 줄임, BBR은 전달률과 RTT로 판단","t":"以遺失為依據的壅塞控制，即使遺失與壅塞無關也會大幅降低傳送速率；BBR 依傳遞速率與 RTT 判斷"},
     {"ctx":"causes/sk-congestion/ref/2/n","ko":"tcp_congestion_control로 새 연결의 혼잡 제어 알고리즘 선택","t":"以 tcp_congestion_control 選擇新連線的壅塞控制演算法"},
