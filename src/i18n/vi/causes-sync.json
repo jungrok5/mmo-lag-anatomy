@@ -224,6 +224,6 @@
     {"ctx":"causes/sy-low-send-rate/ref/0/n","ko":"초당 10회 업데이트면 보간 200ms로 한 번의 누락을 견딤. Half-Life 기본은 초당 20회·보간 100ms","t":"Cập nhật 10 lần mỗi giây thì nội suy 200 ms chịu được một lần mất gói. Mặc định của Half-Life là 20 lần mỗi giây, nội suy 100 ms"},
     {"ctx":"causes/sy-low-send-rate/ref/1/n","ko":"초당 10개면 두 개 연속 손실까지 견디려 350ms 지연이 필요, 초당 30개면 150ms로 줄어듦","t":"10 gói mỗi giây thì cần độ trễ 350 ms để chịu được mất 2 gói liên tiếp, 30 gói mỗi giây thì giảm còn 150 ms"},
     {"ctx":"causes/sy-low-send-rate/ref/2/n","ko":"우선순위 누적으로 중요한 개체를 더 자주 보내고, 대역폭 한도 안에서 나머지를 돌아가며 전송","t":"Dùng mức ưu tiên tích lũy để gửi các đối tượng quan trọng thường xuyên hơn, và gửi luân phiên các đối tượng còn lại trong giới hạn băng thông"},
-    {"ctx":"causes/sy-low-send-rate/ref/3/n","ko":"표시 필터에 맞는 패킷 수·바이트를 시간 구간별 그래프로 그림","t":"Vẽ số gói và số byte khớp với display filter thành đồ thị theo từng khoảng thời gian"}
+    {"ctx":"causes/sy-low-send-rate/ref/3/n","ko":"표시 필터에 맞는 패킷 수·바이트를 시간 구간별 그래프로 그림","t":"Vẽ số gói và số byte khớp với bộ lọc hiển thị (display filter) thành đồ thị theo từng khoảng thời gian"}
   ]
 }
