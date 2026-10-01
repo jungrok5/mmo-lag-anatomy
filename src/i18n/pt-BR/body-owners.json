@@ -11,7 +11,7 @@
     {"ctx":"#owners li","ko":"<b>넘길 정보</b><span>IP·통신사, 끊김 사유, 관련 그래프, 직전 변경</span>","t":""},
     {"ctx":"#owners li","ko":"<b>함께 할 일</b><span>카드의 팀별 할 일로 나눠 맡기</span>","t":""},
     {"ctx":"#owners figcaption","ko":"티켓이 들어와서 팀별 할 일로 나뉠 때까지의 흐름입니다. “누가 겪나”가 담당을 가장 크게 가르고, 자세한 기준은 아래 표와 <a href=\"#judge\">관측으로 판정하기</a>에 있습니다.","t":""},
-    {"ctx":"#owners th","ko":"담당","t":""},
+    {"ctx":"#owners th","ko":"담당","t":"Responsável"},
     {"ctx":"#owners th","ko":"맡는 범위","t":""},
     {"ctx":"#owners th","ko":"주로 쓰는 해결 수단","t":""},
     {"ctx":"#owners td","ko":"<span class=\"own own-game\"><span class=\"tm\">게임개발팀</span>클라이언트</span>","t":""},

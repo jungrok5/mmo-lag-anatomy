@@ -17,7 +17,7 @@
     {"ctx":"src/sims/disk.js:40","ko":"10분 흐름: 쓰기 수요와 디스크 처리 능력 (10배속)","t":""},
     {"ctx":"src/sims/disk.js:41","ko":"쓰기 수요","t":""},
     {"ctx":"src/sims/disk.js:41","ko":"처리 능력","t":""},
-    {"ctx":"src/sims/disk.js:41, src/sims/disk.js:112","ko":"버스트 크레딧","t":""},
+    {"ctx":"src/sims/disk.js:41, src/sims/disk.js:112","ko":"버스트 크레딧","t":"Créditos de burst"},
     {"ctx":"src/sims/disk.js:45","ko":"쓰기 한 건 지연과 틱이 막힌 시간","t":""},
     {"ctx":"src/sims/disk.js:46","ko":"<span class=\"legend\">{0}{1}<span><i style=\"background:none;height:0;border-top:2px dashed var(--muted)\"></i>틱 예산 50ms</span></span>","t":""},
     {"ctx":"src/sims/disk.js:46","ko":"쓰기 1건","t":""},

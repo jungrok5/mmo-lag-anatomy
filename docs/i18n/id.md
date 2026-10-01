@@ -329,6 +329,14 @@ Labels: 누가 겪나 → "Siapa yang mengalami", 누가 → "Siapa", 언제 →
 | 언어 선택 | Pilih bahasa |
 | 제보 / 렉 제보 | laporan / laporan lag |
 | 진단 / 판정 (diagnosis) | diagnosis |
+| 판정과 사례 | Diagnosis dan kasus |
+| 원본 장 | Bab di versi interaktif |
+| 그림과 실험이 있는 원본 / 그림과 직접 조작하는 실험이 있는 원본 | versi interaktif dengan gambar dan simulasi / … yang bisa Anda coba sendiri |
+| 직접 조작하는 실험 | simulasi interaktif |
+| 갱신 {0} / 다른 언어 / 문서 | Diperbarui {0} / Bahasa lain / Dokumen |
+| 반드시 적어 주세요 / 있으면 조사가 훨씬 빨라집니다 (report guide) | Wajib dicantumkan / Jika ada, investigasi jauh lebih cepat |
+| 자료 {0}건, 발행처 {1}곳 | {0} referensi dari {1} penerbit |
+| 공신력 있는 출처 | sumber tepercaya |
 
 ### 7.8 Netcode and game terms
 
@@ -545,6 +553,17 @@ Labels: 누가 겪나 → "Siapa yang mengalami", 누가 → "Siapa", 언제 →
 | 간주한다 / 오인한다 / 감지한다 | menganggap / salah mengira / mendeteksi | |
 | TLS 인증서 / GeoIP | sertifikat TLS / GeoIP | |
 
+### 7.13 Glossary entries (`glossary`)
+
+- The build prints the English name next to every term (`<dt>Term <span class="en">English name</span></dt>`), so never add the English name in parentheses to the Indonesian term, even when they differ ("Rekonsiliasi server", not "Rekonsiliasi server (reconciliation)").
+- Term: sentence case, the same word as in the tables above, no final period. Where Indonesian developers use the English word, the term is the English word ("Tick rate", "Hot row"); it may then equal the English name, which is fine.
+- Definition: like the Korean, the first sentence may be a verbless noun phrase ending with a period ("Kartu jaringan pada server."); the rest are full sentences. Do not start every definition with "Adalah …" or "Merupakan …".
+- Glossary terms are shared keys: cause titles, sim labels and chapter text that use the same Korean word must use the glossary's Indonesian term (section 9).
+
+### 7.14 Sense markers (`@@`)
+
+Some Korean keys end with `@@…` (for example `멈춤@@서버 상태`). The marker only tells you which sense is meant; it never appears on screen. Translate the sense and leave the marker out of the Indonesian text (the check tool reports an error otherwise). Typical split: 멈춤 as the symptom → "Freeze"; 멈춤 as a server state → "berhenti" / "terhenti".
+
 ## 8. Words to watch
 
 - 렉이 생기다/걸리다 → "terjadi lag", "game lag", "mengalami lag". Informal "ngelag" only in aliases and SEO notes.
@@ -612,7 +631,7 @@ Phrases people in Indonesia actually type when a game lags or when they investig
 
 How they are used:
 - Site title: "Buku Putih Lag Game: penyebab lag game online dan siapa yang menanganinya" contains (1) verbatim and states the unique angle (ownership).
-- Meta description opens with the question players type ("Mengapa game online patah-patah, karakter teleport, atau tiba-tiba disconnect?"), then says "penyebab lag game online" once, "MMO", and the two team names.
+- Meta description (`meta`): about 155 characters so Google does not cut it, key phrase first: "Penyebab lag game online (patah-patah, teleport, disconnect) dibedah lapis demi lapis secara interaktif, lengkap dengan tim penanggung jawab dan sumbernya." It carries (1) verbatim plus three symptom names people search. Longer descriptions (text edition, symptom pages, llms.txt) may open with the player's question ("Mengapa game online patah-patah, karakter teleport, atau tiba-tiba disconnect?").
 - Symptom names are the words players search (Patah-patah, Teleport, Rubber banding, Input lag, Freeze, Disconnect); the aliases add tersendat-sendat, FPS drop, ketarik balik, DC, tidak bisa login. Symptom pages: "{Nama} di game online: penyebab dan penanggung jawabnya | Buku Putih Lag Game" lines up with (7), (9), (10), (11).
 - Cause pages: "{Penyebab} ({English name}): penyebab lag game | Buku Putih Lag Game".
 - Keywords meta: penyebab lag, lag game online, ping tinggi, game patah-patah, teleport, rubber banding, input lag, disconnect, server lag, netcode, retransmisi TCP, Tim Pengembang Game, Tim Infrastruktur.
@@ -625,6 +644,7 @@ How they are used:
 - Symptom names exactly as in 7.1; factor names as in 7.2; layer names as in 7.3; team names in title case (7.4).
 - Decimal comma, thousands period, space before units (none before %), en dash in ranges, "detik" for seconds.
 - No "—", no spaced " – ", no "bukan …, melainkan/tetapi …", no "alih-alih".
-- Curly quotes “ ”; no ASCII `"` in attribute strings.
+- Curly quotes “ ”; no ASCII `"` in attribute strings; no `@@…` sense marker in the Indonesian text.
+- `meta` about 155 characters, key search phrase first.
 - No reduplication after numbers; no English plural -s on loanwords.
 - Run `node tools/i18n.cjs check id --warn` and `--conflicts`; number warnings are fine only where a Korean number word became Indonesian words or digits.

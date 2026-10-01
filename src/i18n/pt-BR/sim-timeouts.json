@@ -18,7 +18,7 @@
     {"ctx":"src/sims/timeouts.js:37","ko":"통신사 공유기(CGNAT)","t":""},
     {"ctx":"src/sims/timeouts.js:37","ko":"통신사 공유기","t":""},
     {"ctx":"src/sims/timeouts.js:38","ko":"회사·PC방 방화벽","t":""},
-    {"ctx":"src/sims/timeouts.js:39","ko":"로드밸런서","t":""},
+    {"ctx":"src/sims/timeouts.js:39","ko":"로드밸런서","t":"Load balancer"},
     {"ctx":"src/sims/timeouts.js:40","ko":"게임 서버 무응답 판정","t":""},
     {"ctx":"src/sims/timeouts.js:40","ko":"게임 서버","t":""},
     {"ctx":"src/sims/timeouts.js:41","ko":"TCP keepalive (서버)","t":""},

@@ -561,3 +561,22 @@ How they are used:
 - Symptom pages: `{症状}の原因と担当：症状別に見るゲームのラグ | ゲームラグ白書` so the query 「カクつき 原因」「無限ロード 原因」 matches the start of the title. The alias field feeds the description, so aliases hold the other words players type (カクカク、スタッター、瞬間移動、ラバーバンド、処理落ち、回線落ち…).
 - Cause pages: `{原因名}（{英語名}）：ラグの原因 | ゲームラグ白書`.
 - Do not stuff keywords into prose. Use each phrase where the sentence needs it.
+
+## Decisions added during review
+
+| Korean | Japanese | Note |
+|---|---|---|
+| 기본값 | デフォルト値 | never 既定値 |
+| 재시도 | 再試行 | sim-rush labels リトライストーム / リトライ方式 stay |
+| 느린 클라이언트 | 遅いクライアント | cause title; same in sims |
+| IP 단편화 | フラグメント化 (noun IPフラグメンテーション) | memory fragmentation stays 断片化 |
+| 등장 / 퇴장 알림 | 出現通知 / 消滅通知 | |
+| 먼저 부를 곳 | 最初に呼ぶ担当 | playbook label |
+| 로그인 대기열 (game) | ログイン待機列 | OS backlog is 接続待ちキュー |
+| 혼잡 (network, ECN) | 輻輳 | |
+| 가용 영역 | アベイラビリティーゾーン | AWS Japan spelling |
+| 버스트형 인스턴스 | バースト可能インスタンス | |
+| 가입자 | 契約者 | |
+| 우편함 / 우편 | 郵便受け / 郵便 | in-game mail |
+| 몰이 사냥 | まとめ狩り | |
+| 회고 | ポストモーテム | |

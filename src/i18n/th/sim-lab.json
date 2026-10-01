@@ -78,7 +78,7 @@
     {"ctx":"src/sims/lab.js:490","ko":"서버 패킷만","t":""},
     {"ctx":"src/sims/lab.js:491","ko":"회선 끊김 · 프로토콜","t":""},
     {"ctx":"src/sims/lab.js:492","ko":"주기적 회선 끊김","t":""},
-    {"ctx":"src/sims/lab.js:492, src/sims/lab.js:500, src/sims/lab.js:507","ko":"초마다","t":""},
+    {"ctx":"src/sims/lab.js:492, src/sims/lab.js:500, src/sims/lab.js:507","ko":"{0}초마다","t":""},
     {"ctx":"src/sims/lab.js:492, src/sims/lab.js:500, src/sims/lab.js:507","ko":"끔","t":""},
     {"ctx":"src/sims/lab.js:493","ko":"끊김 길이","t":""},
     {"ctx":"src/sims/lab.js:494","ko":"지금 회선 끊기","t":""},

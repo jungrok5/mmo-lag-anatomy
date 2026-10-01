@@ -28,7 +28,7 @@
     {"ctx":"src/sims/oneslow.js:295","ko":"B의 화면에서 본 이동 속도","t":""},
     {"ctx":"src/sims/oneslow.js:295","ko":"<span class=\"legend\"><span><i style=\"background:var(--s1)\"></i>A</span><span><i style=\"background:var(--s3)\"></i>몬스터</span><span>1 = 정상</span></span>","t":""},
     {"ctx":"src/sims/oneslow.js:297","ko":"A의 회선 (B는 핑 40ms로 고정)","t":""},
-    {"ctx":"src/sims/oneslow.js:298","ko":"핑","t":""},
+    {"ctx":"src/sims/oneslow.js:298","ko":"핑","t":"Ping"},
     {"ctx":"src/sims/oneslow.js:299","ko":"지터","t":"Jitter"},
     {"ctx":"src/sims/oneslow.js:300","ko":"손실","t":"Perda de pacotes"},
     {"ctx":"src/sims/oneslow.js:301","ko":"서버가 입력을 처리하는 방식","t":""},

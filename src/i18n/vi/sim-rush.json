@@ -78,7 +78,7 @@
     {"ctx":"src/sims/rush.js:252","ko":"{0}초당 <b>{1}번</b> 접속을 시도하지만 접속 대기열(backlog)은 {2}개뿐이라 대부분 바로 버려집니다. {3}, 실제로는 초당 <b>{4}명</b>(처리 능력의 {5})만 들어갑니다. {6}","t":"{0}Mỗi giây có <b>{1} lần</b> thử kết nối nhưng hàng đợi kết nối (backlog) chỉ có {2} slot, nên phần lớn bị bỏ ngay. {3}, nên thực tế mỗi giây chỉ có <b>{4} người</b> vào được ({5} năng lực xử lý). {6}"},
     {"ctx":"src/sims/rush.js:254","ko":"{0}접속 진행 중: 초당 {1}명씩 들어가고 <b>{2}명</b>이 남았습니다. 초당 시도 {3}번.","t":"{0}Đang kết nối: mỗi giây {1} người vào, còn lại <b>{2} người</b>. Số lần thử mỗi giây: {3}."},
     {"ctx":"src/sims/rush.js:259","ko":"지금 {0}초 / {1}초","t":"Hiện tại {0} giây / {1} giây"},
-    {"ctx":"src/sims/rush.js:260","ko":"전체의 {0}","t":"{0} tổng số"},
+    {"ctx":"src/sims/rush.js:260","ko":"전체의 {0}","t":"{0} trên tổng số"},
     {"ctx":"src/sims/rush.js:261","ko":"초","t":" giây"},
     {"ctx":"src/sims/rush.js:261, src/sims/rush.js:263, src/sims/rush.js:264","ko":"최소 {0}초","t":"Tối thiểu {0} giây"},
     {"ctx":"src/sims/rush.js:262","ko":"불가능","t":"Không thể"},
