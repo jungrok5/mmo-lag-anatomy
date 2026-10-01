@@ -39,7 +39,7 @@
     {"ctx":"src/sims/gc.js:146","ko":"Full GC는 {0}마다","t":""},
     {"ctx":"src/sims/gc.js:152","ko":"GC가 할당을 못 따라잡음","t":""},
     {"ctx":"src/sims/gc.js:155","ko":"이 중 {0}초는 틱이 25% 느림","t":""},
-    {"ctx":"src/sims/gc.js:159","ko":"초","t":""},
+    {"ctx":"src/sims/gc.js:159","ko":"초","t":" 秒"},
     {"ctx":"src/sims/gc.js:160","ko":"분","t":""},
     {"ctx":"src/sims/gc.js:161","ko":"시간","t":" 小时"},
     {"ctx":"src/sims/gc.js:169","ko":"지금","t":"现在"},

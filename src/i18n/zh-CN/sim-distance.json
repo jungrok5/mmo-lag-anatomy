@@ -21,7 +21,7 @@
     {"ctx":"src/sims/distance.js:22","ko":"미국 서부","t":""},
     {"ctx":"src/sims/distance.js:22","ko":"상파울루","t":""},
     {"ctx":"src/sims/distance.js:24, src/sims/distance.js:80","ko":"유선","t":""},
-    {"ctx":"src/sims/distance.js:24, src/sims/distance.js:80","ko":"와이파이","t":""},
+    {"ctx":"src/sims/distance.js:24, src/sims/distance.js:80","ko":"와이파이","t":"Wi-Fi"},
     {"ctx":"src/sims/distance.js:64","ko":"지도 위의 경로","t":""},
     {"ctx":"src/sims/distance.js:65","ko":"<span class=\"legend\"><span><i class=\"dot\" style=\"background:var(--s1)\"></i>내 위치</span><span><i class=\"dot\" style=\"background:var(--s2)\"></i>서버</span><span><i class=\"dot\" style=\"background:var(--ink)\"></i>패킷</span><span><i class=\"dot\" style=\"border:1.5px solid var(--ink-2);box-sizing:border-box\"></i>빛의 한계</span></span>","t":""},
     {"ctx":"src/sims/distance.js:68","ko":"하루 동안의 예상 핑","t":""},

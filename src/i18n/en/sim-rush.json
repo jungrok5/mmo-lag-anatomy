@@ -55,7 +55,7 @@
     {"ctx":"src/sims/rush.js:142","ko":"대기열 도입","t":"Add a login queue"},
     {"ctx":"src/sims/rush.js:143","ko":"fd 한도 1024 (설정 실수)","t":"fd limit 1024 (misconfiguration)"},
     {"ctx":"src/sims/rush.js:144","ko":"backlog 128 (옛 기본값)","t":"backlog 128 (old default)"},
-    {"ctx":"src/sims/rush.js:150","ko":"분","t":" min"},
+    {"ctx":"src/sims/rush.js:150","ko":"분","t":"m"},
     {"ctx":"src/sims/rush.js:173","ko":"처리 능력 {0}/초","t":"Capacity {0}/s"},
     {"ctx":"src/sims/rush.js:195","ko":"{0}초","t":"{0} s"},
     {"ctx":"src/sims/rush.js:196","ko":"번/초","t":"/s"},

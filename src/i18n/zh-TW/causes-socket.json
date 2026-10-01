@@ -151,7 +151,7 @@
     {"ctx":"causes/sk-linger/s","ko":"서버가 연결을 급히 끊으면 마지막으로 보낸 안내나 저장 완료 신호가 사라집니다.","t":"伺服器倉促切斷連線時，最後送出的通知或存檔完成訊號會消失。"},
     {"ctx":"causes/sk-linger/c/0","ko":"서버가 연결을 강제 종료(RST)로 닫음. SO_LINGER를 0초로 두거나, 받은 데이터를 다 읽지 않고 닫으면 생김","t":"伺服器以強制關閉（RST）結束連線。把 SO_LINGER 設為 0 秒，或沒讀完收到的資料就關閉時會發生"},
     {"ctx":"causes/sk-linger/c/1","ko":"아직 전송 중이던 킥 사유·마지막 데이터가 버려짐","t":"仍在傳送中的踢出原因與最後的資料被丟棄"},
-    {"ctx":"causes/sk-linger/c/2","ko":"이유 없는 “알 수 없는 오류로 연결 종료”","t":"莫名其妙的「因不明錯誤中斷連線」"},
+    {"ctx":"causes/sk-linger/c/2","ko":"이유 없는 “알 수 없는 오류로 연결 종료”","t":"沒來由地出現「因不明錯誤中斷連線」"},
     {"ctx":"causes/sk-linger/act/game","ko":"사유를 보낸 뒤 송신 방향만 먼저 닫고(shutdown), 상대가 닫을 때까지 받은 데이터를 끝까지 읽은 다음 닫기, SO_LINGER 0초 피하기.","t":"送出原因後先只關閉傳送方向（shutdown），把收到的資料一直讀到對方關閉為止再關閉 socket；避免把 SO_LINGER 設為 0 秒。"},
     {"ctx":"causes/sk-linger/sig/g","ko":"RST로 끝난 연결 수","t":"以 RST 結束的連線數"},
     {"ctx":"causes/sk-linger/chk/look","ko":"nstat -az의 TcpExtTCPAbortOnData(보낼 데이터가 남은 채 RST로 닫음, SO_LINGER 0초)·TcpExtTCPAbortOnClose(안 읽은 데이터가 남은 채 닫음) 증가량을 보고, 끊김 순간 서버 쪽 패킷 캡처에서 FIN 대신 RST가 나가는지 봄","t":"看 nstat -az 的 TcpExtTCPAbortOnData（還有資料要送就以 RST 關閉，SO_LINGER 0 秒）、TcpExtTCPAbortOnClose（還有未讀資料就關閉）增加量，並在斷線瞬間的伺服器端封包擷取中，看原本該送 FIN 的地方是否送出了 RST"},

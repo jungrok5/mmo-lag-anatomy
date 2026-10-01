@@ -53,7 +53,7 @@
     {"ctx":"src/sims/tick.js:80","ko":"평균 / 최대","t":"Avg / max"},
     {"ctx":"src/sims/tick.js:81","ko":"실제 틱레이트","t":"Actual tick rate"},
     {"ctx":"src/sims/tick.js:81","ko":"회/초","t":"/s"},
-    {"ctx":"src/sims/tick.js:82, src/sims/tick.js:265","ko":"게임 속도","t":"Game speed"},
+    {"ctx":"src/sims/tick.js:82, src/sims/tick.js:265","ko":"게임 속도","t":"Speed"},
     {"ctx":"src/sims/tick.js:83","ko":"위치 업데이트","t":"Position updates"},
     {"ctx":"src/sims/tick.js:83","ko":"건/초","t":"/s"},
     {"ctx":"src/sims/tick.js:84","ko":"필요 대역폭","t":"Bandwidth needed"},

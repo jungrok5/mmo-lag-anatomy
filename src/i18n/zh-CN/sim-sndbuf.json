@@ -51,7 +51,7 @@
     {"ctx":"src/sims/sndbuf.js:182","ko":"send() 막힘","t":""},
     {"ctx":"src/sims/sndbuf.js:183","ko":"건너뜀","t":""},
     {"ctx":"src/sims/sndbuf.js:184","ko":"밀림 ","t":""},
-    {"ctx":"src/sims/sndbuf.js:184, src/sims/sndbuf.js:201, src/sims/sndbuf.js:281, src/sims/sndbuf.js:304, src/sims/sndbuf.js:323, src/sims/sndbuf.js:416","ko":"초","t":""},
+    {"ctx":"src/sims/sndbuf.js:184, src/sims/sndbuf.js:201, src/sims/sndbuf.js:281, src/sims/sndbuf.js:304, src/sims/sndbuf.js:323, src/sims/sndbuf.js:416","ko":"초","t":" 秒"},
     {"ctx":"src/sims/sndbuf.js:184","ko":"밀림","t":""},
     {"ctx":"src/sims/sndbuf.js:185","ko":"가득","t":""},
     {"ctx":"src/sims/sndbuf.js:185","ko":"버퍼 가득","t":""},

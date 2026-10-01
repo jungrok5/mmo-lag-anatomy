@@ -30,7 +30,7 @@ Object.assign(DATA.secRefs, {
     { t: 'Quantifying the Causes of Path Inflation (SIGCOMM 2003)', u: 'https://conferences.sigcomm.org/sigcomm/2003/papers/p113-spring.pdf', p: 'ACM', n: '통신사 사이 피어링 정책과 도메인 간 라우팅이 경로를 크게 늘림' },
     { t: 'Inferring Persistent Interdomain Congestion (SIGCOMM 2018)', u: 'https://www.caida.org/catalog/papers/2018_inferring_persistent_interdomain_congestion/inferring_persistent_interdomain_congestion.pdf', p: 'ACM', n: '일부 통신사 간 연결 구간은 매일 피크 시간마다 지연과 손실이 오르는 반복 혼잡을 보임' },
     { t: 'RFC 4271: A Border Gateway Protocol 4 (BGP-4)', u: 'https://www.rfc-editor.org/rfc/rfc4271', p: 'IETF', n: '인터넷 경로 정보를 주고받는 BGP, 홀드 타임 권장 기본값 90초' },
-    { t: 'BGP updates in 2024', u: 'https://blog.apnic.net/2025/01/07/bgp-updates-in-2024/', p: 'APNIC', n: '불안정해진 경로가 다시 안정되기까지 하루 평균 25~50초' },
+    { t: 'BGP updates in 2024', u: 'https://blog.apnic.net/2025/01/07/bgp-updates-in-2024/', p: 'APNIC', n: '경로가 바뀐 뒤 라우팅이 다시 안정되기까지 걸리는 시간의 하루 평균이 IPv4 25~35초, IPv6 40~50초' },
     { t: 'Delayed Internet Routing Convergence (SIGCOMM 2000)', u: 'https://conferences.sigcomm.org/sigcomm/2000/conf/paper/sigcomm2000-5-2.pdf', p: 'ACM', n: '경로 장애 뒤 수렴에 수 분까지 걸리고 그동안 손실·지연이 늘어남(2000년 당시 측정)' },
   ],
   'l-dc-net': [
