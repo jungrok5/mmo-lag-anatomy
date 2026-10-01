@@ -222,7 +222,7 @@
     {"ctx":"causes/rt-path/act/infra","ko":"지역·통신사별 재전송률 모니터링, 재접속으로 경로가 바뀌는지 확인, 여러 통신사 회선 확보, 우리 장비의 ECMP·LAG 경로 중 불량 링크 점검, 경로 측정도 게임과 같은 TCP 포트로(mtr --tcp --port. 경로는 주소·포트로 정해지므로 보통 핑은 다른 경로로 가서 멀쩡하게 나오기도 함).","t":"監控各地區、各電信業者的重傳率、確認重新連線後路徑是否改變、準備多家電信業者的線路、檢查我方設備 ECMP 與 LAG 路徑中的不良鏈路、路徑量測也使用與遊戲相同的 TCP port（mtr --tcp --port。路徑依位址與 port 決定，一般 ping 可能走不同的路徑而顯示正常）。"},
     {"ctx":"causes/rt-path/act/ext","ko":"통신사에 같은 TCP 포트로 잰 경로 측정 결과와 재접속 전후 비교를 붙여 불량 경로 보고.","t":"向電信業者回報不良路徑，並附上以相同 TCP port 量測的路徑結果與重新連線前後的比較。"},
     {"ctx":"causes/rt-path/sig/g","ko":"RTT(핑), 지역·통신사별 재전송률","t":"RTT（ping）、各地區／電信業者的重傳率"},
-    {"ctx":"causes/rt-path/chk/look","ko":"bcc tcpretrans -c로 재전송을 연결별로 모아 겪는 유저의 주소·포트를 뽑고, 서버에서 유저 쪽으로, 유저 쪽에서 서버로 게임과 같은 TCP 포트로 mtr(mtr -T -P 포트)을 떠서 비교함. 재접속 전후 결과도 비교함","t":"用 bcc tcpretrans -c 依連線彙整重傳，找出受影響玩家的位址與 port，再以與遊戲相同的 TCP port，分別從伺服器往玩家、從玩家往伺服器跑 mtr（mtr -T -P port）比較。重新連線前後的結果也要比較"},
+    {"ctx":"causes/rt-path/chk/look","ko":"bcc tcpretrans -c로 재전송을 연결별로 모아 겪는 유저의 주소·포트를 뽑고, 서버에서 유저 쪽으로, 유저 쪽에서 서버로 게임과 같은 TCP 포트로 mtr(mtr -T -P PORT)을 떠서 비교함. 재접속 전후 결과도 비교함","t":""},
     {"ctx":"causes/rt-path/chk/yes","ko":"어느 시각을 기점으로 한 지역·통신사의 RTT가 계단처럼 바뀌며 몇 초 손실이 몰리거나, 같은 통신사 안에서도 일부 연결(주소·포트 조합)만 꾸준히 재전송하고 재접속하면 나아짐. 일반 ping은 멀쩡한데 TCP mtr에서만 손실이 보이기도 함","t":"以某個時間點為分界，某一地區或電信業者的 RTT 像階梯一樣改變，並集中出現幾秒的遺失；或是在同一電信業者內，也只有部分連線（位址與 port 的組合）持續重傳，重新連線就變好。有時一般 ping 正常，只有 TCP mtr 看得到遺失"},
     {"ctx":"causes/rt-path/chk/no","ko":"그 통신사의 모든 연결이 저녁 피크에 함께 나빠지면 “병목 대기열 넘침”. 한 유저만 나쁘고 공유기까지 가는 ping부터 손실이면 “무선 구간 손실”","t":"該電信業者的所有連線在晚間尖峰一起變差時是「瓶頸佇列溢位」。只有一名玩家變差、從 ping 分享器就開始遺失時是「無線區段的封包遺失」"},
     {"ctx":"causes/rt-path/ref/0/n","ko":"다중 경로에서는 ping·traceroute 같은 진단 도구의 결과를 믿기 어렵고, 흐름을 해시해 경로를 고정하는 방식을 설명","t":"說明在多路徑環境下，ping、traceroute 這類診斷工具的結果難以採信，以及將流（flow）雜湊後固定路徑的做法"},
@@ -396,5 +396,8 @@
     {"ctx":"causes/rt-syn/ref/8/n","ko":"accept 대기열이 차면 SYN을 버리고 TcpExtListenOverflows·TcpExtListenDrops가 함께 늘어남, TcpExtTCPSynRetrans","t":"accept 佇列滿時會丟棄 SYN，TcpExtListenOverflows 與 TcpExtListenDrops 一起增加；TcpExtTCPSynRetrans"},
     {"ctx":"causes/rt-syn/ref/9/n","ko":"“Possible SYN flooding on port …” 로그 메시지","t":"「Possible SYN flooding on port …」log 訊息"},
     {"ctx":"causes/rt-syn/ref/10/n","ko":"접속 대기 소켓이면 ss의 Recv-Q는 accept를 기다리는 연결 수, Send-Q는 backlog 한도","t":"監聽 socket 在 ss 中的 Recv-Q 為等待 accept 的連線數，Send-Q 為 backlog 上限"}
+  ],
+  "stale": [
+    {"ctx":"causes/rt-path/chk/look","ko":"bcc tcpretrans -c로 재전송을 연결별로 모아 겪는 유저의 주소·포트를 뽑고, 서버에서 유저 쪽으로, 유저 쪽에서 서버로 게임과 같은 TCP 포트로 mtr(mtr -T -P 포트)을 떠서 비교함. 재접속 전후 결과도 비교함","t":"用 bcc tcpretrans -c 依連線彙整重傳，找出受影響玩家的位址與 port，再以與遊戲相同的 TCP port，分別從伺服器往玩家、從玩家往伺服器跑 mtr（mtr -T -P port）比較。重新連線前後的結果也要比較"}
   ]
 }
