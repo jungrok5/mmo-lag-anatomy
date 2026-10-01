@@ -55,7 +55,7 @@
     {"ctx":"src/sims/rush.js:142","ko":"대기열 도입","t":"導入排隊"},
     {"ctx":"src/sims/rush.js:143","ko":"fd 한도 1024 (설정 실수)","t":"fd 上限 1024（設定錯誤）"},
     {"ctx":"src/sims/rush.js:144","ko":"backlog 128 (옛 기본값)","t":"backlog 128（舊預設值）"},
-    {"ctx":"src/sims/rush.js:150","ko":"분","t":" 分"},
+    {"ctx":"src/sims/rush.js:150","ko":"분","t":" 分鐘"},
     {"ctx":"src/sims/rush.js:173","ko":"처리 능력 {0}/초","t":"處理能力 {0}/秒"},
     {"ctx":"src/sims/rush.js:195","ko":"{0}초","t":"{0} 秒"},
     {"ctx":"src/sims/rush.js:196","ko":"번/초","t":"次/秒"},

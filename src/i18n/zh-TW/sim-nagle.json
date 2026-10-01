@@ -34,7 +34,7 @@
     {"ctx":"src/sims/nagle.js:58","ko":"40ms 리눅스","t":"40ms Linux"},
     {"ctx":"src/sims/nagle.js:58","ko":"200ms 예전 윈도우","t":"200ms 舊版 Windows"},
     {"ctx":"src/sims/nagle.js:60","ko":"보낼 응답이 없으면 ACK를 이만큼 미뤘다가 따로 보냅니다.","t":"沒有要送的回應時，ACK 會延後這麼久再單獨送出。"},
-    {"ctx":"src/sims/nagle.js:62","ko":"핑(RTT, 왕복 시간)","t":"Ping（RTT，往返時間）"},
+    {"ctx":"src/sims/nagle.js:62","ko":"핑(RTT, 왕복 시간)","t":"Ping（RTT，來回時間）"},
     {"ctx":"src/sims/nagle.js:62","ko":"20ms ≈ 국내 서버","t":"20ms ≈ 國內伺服器"},
     {"ctx":"src/sims/nagle.js:63","ko":"보기","t":"檢視"},
     {"ctx":"src/sims/nagle.js:64","ko":"재생 속도","t":"播放速度"},
