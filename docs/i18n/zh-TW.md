@@ -524,3 +524,48 @@ How they are used:
 - **Symptom pages**: `遊戲{症狀}的原因：lag 症狀成因與負責團隊 | 遊戲 Lag 白皮書`, which yields real queries such as 遊戲卡頓的原因、遊戲斷線的原因、遊戲瞬移的原因、遊戲輸入延遲的原因.
 - **Keywords** (`build.py`): 遊戲 lag, lag 原因, 遊戲延遲, ping 過高, 跳 ping, 封包遺失, 掉封包, 卡頓, 瞬移, 拉回, 輸入延遲, 斷線, 伺服器 lag, netcode, TCP 重傳, 遊戲開發團隊, 基礎設施團隊.
 - Do not stuff keywords into body text. Player slang (跳 ping、掉封包、很 lag) belongs in aliases, report guidance and SEO strings; explanatory prose uses the terms in §11.
+
+## Decisions added during review
+
+Settled by the reviewers and translators after the first pass. Where a row differs from an earlier section, this row wins.
+
+| Korean | zh-TW (Taiwan) | Note |
+|---|---|---|
+| 왕복 / 왕복 시간 | 往返 / 往返時間（RTT） | Everywhere, titles and sims included. 來回 only for "back and forth" (在 60 與 30 之間來回切換). |
+| NAT 매핑 / 매핑 | NAT mapping / mapping | Not NAT 對應. First mention in a chapter may add （位址與 port 的對應紀錄）. Cause hn-nat = NAT mapping 過期. |
+| 원인의 `c` (왜 → 그러면 → 화면에서는) | no final 。 | Fragment chain like `chk`; two statements inside one field are separated by 。 or ；. Replaces the `c` item in §2 Prose. |
+| 숫자 감각 (표·실험 이름) | 數值參考 | Same as 수치 감각. Not 數字感. |
+| 멈춤 / 멈추다 | 定格 / 停住 | 定格 only as the symptom name. A server, tick, thread or screen that simply stops → 停住; GC or OS pause → 暫停. |
+| 로딩 중 | 載入中 | 로딩 화면 / 로딩바 stay 讀取畫面 / 讀取條; symptom 無限讀取 unchanged. |
+| 06 TCP 재전송 해부 | 06 TCP 重傳剖析 | Chapter name in the nav and in every cross-reference. |
+| 패링 / 가드 | 格擋（parry） / 防禦 | Not 彈反. |
+| 보스 / 월드 보스 / 레이드 보스 | 王 / 世界王 / 團隊副本王 | Not Boss / 頭目. |
+| 버스트형 인스턴스 | 突發型（burstable）執行個體 | Later mentions 突發型執行個體. 버스트 크레딧 stays burst credit（突發額度）. |
+| 인스턴스 (게임의 채널·인스턴스) | 實例（instance） | Cloud 인스턴스 stays 執行個體; dungeon copy 副本實例. |
+| 끊김 수 | 斷線次數 | Not 斷線數. |
+| 먼저 부를 곳 | 優先聯絡 | Playbook steps, owner flow, signal table header. The chip label 먼저 stays 先找. |
+| 먼저 확인할 곳 (진단 도우미) | 優先確認 | |
+| 빌드 (클라이언트 빌드) | 版本 | In playbooks and triage text. 디버그·릴리스 빌드 → debug／release 建置. |
+| (경로) MTU 탐색 | （路徑）MTU 探索 | Also the tcp_mtu_probing toggle. |
+| 텔레포트 (게임 내 이동) | 傳送 | 瞬移 is only the symptom. |
+| 복제 (Unreal) / 복제 (DB) | 複製（replicate） / 複寫 | |
+| HDD 탐색 | 尋軌 | |
+| 전지적 시점 | 上帝視角 | |
+| 앱 | App | |
+| 비유 / 핵심 (태그) | 比喻 / 重點 | |
+| 에스컬레이션 / 티켓 | 升級處理（escalation） / 工單 | |
+| 사후 분석 보고서 | 事後檢討報告 | 사후 분석 stays 事後檢討（postmortem）. |
+| 카나리 배포 / 대조군 / 기능 플래그 | 金絲雀（canary）部署 / 對照組 / 功能開關 | |
+| 트래픽 지문 | 流量特徵 | |
+| 서비스 디스커버리 / 헬스체크 | 服務探索 / 健康檢查 | |
+| 샤드(서버군) / 엣지 | shard（伺服器群） / 邊緣（edge） | |
+| 대역 외 (out-of-band) / BGP 광고 / IP 대역 | 頻外（out-of-band） / BGP 宣告 / IP 網段 | |
+| 경쟁 상태 / 리졸버 / 공용 DNS | 競爭條件 / 解析器（resolver） / 公用 DNS | |
+| 결제사 / 파티장 / 확장팩 | 金流業者 / 隊長 / 資料片 | |
+| 국내 (한국) | 韓國 | When the Korean means Korea, name it. |
+| 팀·담당 joiner (`export.cjs`) | {0}（{1}） | 遊戲開發團隊（伺服器開發）. |
+| 저스트 회피 | 完美閃避 | |
+| 탭 타겟 / 논타겟 | Tab 鎖定 / 非鎖定 | |
+| 방치형 / 컷신 / 정각 이벤트 | 放置型 / 過場動畫 / 整點活動 | |
+| 멀티 클라이언트 제한 / 등장·퇴장 알림 / 기준 스냅샷 | 多開限制 / 出現通知／消失通知 / 基準快照 | |
+| PC방 | 網咖 | |

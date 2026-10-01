@@ -33,7 +33,7 @@
         { t: 'misc/ss.c', u: 'https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/misc/ss.c?h=v6.12.0', p: 'iproute2', n: 'ss -ti는 retrans:지금 재전송 중인 수/누적 재전송 수와 rtt:RTT/RTT 편차(rttvar)를 표시' },
       ] },
     { id: 'rt-queue-drop', t: '병목 대기열 넘침 (혼잡 손실)', en: 'Tail drop at a congested bottleneck',
-      s: '공유기, 통신사 연결 구간, 데이터센터 회선처럼 가장 좁은 곳의 대기열이 가득 차면 새로 오는 패킷을 버립니다.',
+      s: '공유기, 통신사 사이 연결 구간, 데이터센터 회선처럼 가장 좁은 곳의 대기열이 가득 차면 새로 오는 패킷을 버립니다.',
       c: ['영상·다운로드·다른 사용자 트래픽으로 병목 구간이 꽉 참', '대기열이 찬 동안 새로 도착하는 패킷이 연달아 버려짐(tail drop). 버려지지 않은 패킷도 꽉 찬 대기열 끝에서 기다림', '여러 패킷이 한꺼번에 사라져 긴 멈춤 뒤 몰아치기, 저녁 시간에 잦음'],
       sym: ['freeze', 'burst', 'rubber'], fx: ['loss', 'lat'], who: ['home', 'region', 'server'], when: ['peak', 'event'],
       num: '대기열이 넘치는 순간에는 수십 ms 동안 들어오는 패킷의 상당수가 한꺼번에 사라집니다. 연달아 잃고 다시 보낸 것까지 잃기 쉬워 RTO까지 가는 경우가 많습니다.',

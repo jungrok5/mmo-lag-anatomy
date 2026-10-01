@@ -40,7 +40,7 @@
     {"ctx":"src/sims/locks.js:75","ko":"스레드 늘린 이득","t":"Speedup from threads"},
     {"ctx":"src/sims/locks.js:79","ko":"B(우편함)","t":"B (mailbox)"},
     {"ctx":"src/sims/locks.js:79","ko":"A(경매장)","t":"A (auction house)"},
-    {"ctx":"src/sims/locks.js:79","ko":"번","t":" "},
+    {"ctx":"src/sims/locks.js:79","ko":"{0}번@@잠금 이름(3번 잠금)","t":"#{0}"},
     {"ctx":"src/sims/locks.js:124","ko":" 보유","t":" held"},
     {"ctx":"src/sims/locks.js:131","ko":"{0} 잡고 {1} 기다림","t":"Holds {0}, waits for {1}"},
     {"ctx":"src/sims/locks.js:236","ko":"락을 쓰지 않음","t":"No locks in use"},
@@ -74,5 +74,8 @@
     {"ctx":"src/sims/locks.js:376","ko":"락 한 번 잡는 데","t":"per lock acquisition"},
     {"ctx":"src/sims/locks.js:377","ko":"평균 {0}개가 대기 중","t":"{0} waiting on average"},
     {"ctx":"src/sims/locks.js:378","ko":"이상적이면 ×{0}","t":"Ideal: ×{0}"}
+  ],
+  "stale": [
+    {"ctx":"src/sims/locks.js:79","ko":"번","t":" "}
   ]
 }

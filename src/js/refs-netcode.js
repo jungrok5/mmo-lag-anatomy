@@ -21,7 +21,7 @@ Object.assign(DATA.secRefs, {
     { t: 'Deterministic Lockstep', u: 'https://gafferongames.com/post/deterministic_lockstep/', p: 'Gaffer On Games', n: '확인받지 못한 입력을 매 패킷에 중복해 보내면 재전송을 기다리지 않음(최악 2초 분량)' },
     { t: 'Snapshot Interpolation', u: 'https://gafferongames.com/post/snapshot_interpolation/', p: 'Gaffer On Games', n: '받은 즉시 그리면 지터로 끊기고, 보간 버퍼는 지연을 조금 늘리는 대신 매끄럽게 함' },
     { t: 'Understanding Networked Movement in the Character Movement Component for Unreal Engine', u: 'https://dev.epicgames.com/documentation/en-us/unreal-engine/understanding-networked-movement-in-the-character-movement-component-for-unreal-engine', p: 'Epic Games', n: '클라이언트 이동이 연결 문제로 빠지거나 잘못되면 서버가 위치를 보정(고무줄)' },
-    { t: 'Source SDK 2013: player.cpp', u: 'https://raw.githubusercontent.com/ValveSoftware/source-sdk-2013/master/src/game/server/player.cpp', p: 'Valve', n: '틱마다 쌓이는 명령 예산으로 몰려 온 명령을 제한. 너무 엄격하면 정상 유저도 끊김' },
+    { t: 'Source SDK 2013: player.cpp', u: 'https://raw.githubusercontent.com/ValveSoftware/source-sdk-2013/master/src/game/server/player.cpp', p: 'Valve', n: '틱마다 쌓이는 명령 예산으로 몰려 온 명령을 제한. 너무 엄격하면 정상 유저도 뚝뚝 끊김' },
     { t: 'Introducing Time Dilation (TiDi)', u: 'https://www.eveonline.com/news/view/introducing-time-dilation-tidi', p: 'CCP Games', n: '서버 과부하 때 게임 시계를 늦춰(Time Dilation) 모든 것이 느리게 흐르게 하는 설계' },
     { t: 'CommonNetworkParametersExtensions (Unity Transport 2.5)', u: 'https://docs.unity3d.com/Packages/com.unity.transport@2.5/api/Unity.Networking.Transport.CommonNetworkParametersExtensions.html', p: 'Unity', n: '일정 시간 아무것도 받지 못하면 연결을 끊는 비활동 타임아웃' },
   ],
@@ -33,7 +33,7 @@ Object.assign(DATA.secRefs, {
     { t: 'Introducing Time Dilation (TiDi)', u: 'https://www.eveonline.com/news/view/introducing-time-dilation-tidi', p: 'CCP Games', n: '서버가 과부하일 때 게임 시계를 늦추는 Time Dilation(TiDi), 과부하 때 작업이 몇 초씩 밀리는 현상' },
     { t: 'Peeking into VALORANT\'s Netcode', u: 'https://www.riotgames.com/en/news/peeking-valorants-netcode', p: 'Riot Games', n: '버퍼링 시간은 서버 틱레이트와 클라이언트 렌더 프레임에 따라 달라짐' },
     { t: 'Using Gameplay Abilities in Unreal Engine', u: 'https://dev.epicgames.com/documentation/en-us/unreal-engine/using-gameplay-abilities-in-unreal-engine', p: 'Epic Games', n: '예측 실행한 능력을 서버가 뒤집을 수 있음(씹힘·롤백)' },
-    { t: 'Actor Relevancy in Unreal Engine', u: 'https://dev.epicgames.com/documentation/en-us/unreal-engine/actor-relevancy-in-unreal-engine', p: 'Epic Games', n: '서버가 관련 없다고 본 액터는 복제되지 않거나 클라이언트에서 지워짐(안 보임)' },
+    { t: 'Actor Relevancy in Unreal Engine', u: 'https://dev.epicgames.com/documentation/en-us/unreal-engine/actor-relevancy-in-unreal-engine', p: 'Epic Games', n: '서버가 관련 없다고 본 액터는 복제되지 않거나 클라이언트에서 지워짐(안 보임·유령 개체)' },
     { t: 'CommonNetworkParametersExtensions (Unity Transport 2.5)', u: 'https://docs.unity3d.com/Packages/com.unity.transport@2.5/api/Unity.Networking.Transport.CommonNetworkParametersExtensions.html', p: 'Unity', n: '비활동 타임아웃이 지나면 연결을 끊음(접속 끊김)' },
   ],
   'sync': [

@@ -46,11 +46,11 @@
     {"ctx":"src/sims/nagle.js:67","ko":"최대 응답","t":"Max response"},
     {"ctx":"src/sims/nagle.js:67","ko":"최근 20개","t":"Last 20"},
     {"ctx":"src/sims/nagle.js:68","ko":"초당 패킷 수","t":"Packets per second"},
-    {"ctx":"src/sims/nagle.js:68, src/sims/nagle.js:90","ko":"개","t":" "},
+    {"ctx":"src/sims/nagle.js:68","ko":"개","t":" "},
     {"ctx":"src/sims/nagle.js:68","ko":"양방향 합계","t":"Both directions combined"},
     {"ctx":"src/sims/nagle.js:69","ko":"낭비된 대기","t":"Wasted waiting"},
     {"ctx":"src/sims/nagle.js:69","ko":"응답 시간 중 대기 비율","t":"Share of response time spent waiting"},
-    {"ctx":"src/sims/nagle.js:90","ko":" 외 ","t":" + "},
+    {"ctx":"src/sims/nagle.js:90","ko":"{0} 외 {1}개","t":"{0} + {1} more"},
     {"ctx":"src/sims/nagle.js:126","ko":"응답×","t":"Response×"},
     {"ctx":"src/sims/nagle.js:126","ko":"응답","t":"Response"},
     {"ctx":"src/sims/nagle.js:174","ko":"클라이언트","t":"Client"},
@@ -91,5 +91,8 @@
     {"ctx":"src/sims/nagle.js:378","ko":"{0}<b>메시지를 한 번에 쓰면 Nagle에 걸릴 작은 패킷이 생기지 않습니다.</b> 새 메시지를 쓸 때 앞 메시지의 응답(ACK 포함)이 이미 돌아와 있기 때문입니다. 다만 핑이 길거나 메시지를 자주 보내 응답보다 다음 메시지가 먼저 나오면 다시 Nagle에 걸립니다. 그래서 게임은 보통 TCP_NODELAY도 함께 켭니다.","t":"{0}<b>Writing each message in one go leaves no small packet for Nagle to hold.</b> By the time a new message is written, the previous message’s response (with its ACK) is already back. But if ping is long, or messages go out so often that the next one is written before the response arrives, Nagle kicks in again. That’s why games usually turn on TCP_NODELAY as well."},
     {"ctx":"src/sims/nagle.js:380","ko":"{0}<b>지연 ACK를 끄면 서버가 헤더를 받자마자 ACK를 보냅니다.</b> 그래도 본문은 그 ACK가 돌아올 때까지 한 번 왕복({1}) 동안 대기해서 메시지마다 약 +{2}입니다. 핑이 멀수록 손해가 커집니다. 지연 ACK는 상대 운영체제가 정하는 값이라 우리가 확실히 고칠 수 있는 쪽은 TCP_NODELAY입니다.","t":"{0}<b>With delayed ACK off, the server ACKs the header as soon as it arrives.</b> Even so, the body waits one round trip ({1}) for that ACK to come back, adding about {2} to every message. The farther away the server, the bigger the loss. Delayed ACK is set by the other side’s OS, so the part we can reliably fix is TCP_NODELAY."},
     {"ctx":"src/sims/nagle.js:382","ko":"{0}<b>헤더(8바이트)는 바로 나갔지만 본문(40바이트)은 대기 중입니다.</b> Nagle 규칙은 “ACK를 못 받은 데이터가 있으면 작은 패킷은 ACK가 올 때까지 모아 둔다”입니다. 서버는 헤더만으로는 메시지를 처리할 수 없어 응답이 없고, 그래서 ACK를 {1}ms 미룹니다(지연 ACK). 서로 기다리는 사이 메시지마다 약 <b>{2}</b>를 버립니다. 핑은 {3}인데 응답은 {4}입니다. {5}","t":"{0}<b>The header (8 bytes) went out right away, but the body (40 bytes) is waiting.</b> Nagle’s rule is: “While sent data is still unACKed, collect small packets until the ACK arrives.” The server can’t process the message from the header alone, so it has no response to send and holds the ACK for {1} ms (delayed ACK). While the two sides wait on each other, about <b>{2}</b> is lost on every message. Ping is {3}, but responses take {4}. {5}"}
+  ],
+  "stale": [
+    {"ctx":"src/sims/nagle.js:90","ko":" 외 ","t":" + "}
   ]
 }

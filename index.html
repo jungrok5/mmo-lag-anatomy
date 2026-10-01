@@ -846,7 +846,8 @@ dt[id]:target, .pb-steps li:target { background: var(--accent-soft); border-radi
 :root:lang(de) body, :root:lang(ru) body, :root:lang(pt) body, :root:lang(es) body { hyphens: auto; }
 :root:lang(th) body { line-height: 1.8; }
 /* 번역판은 낱말이 길 수 있다(독일어 합성어 등): 좁은 화면에서 넘치지 않게 */
-:root:not(:lang(ko)) body { overflow-wrap: anywhere; }
+:root:not(:lang(ko)) body { overflow-wrap: break-word; }
+:root:not(:lang(ko)) .flag { white-space: nowrap; flex: none; }
 :root:lang(en) body { hyphens: auto; }
 :root:not(:lang(ko)) .own { white-space: normal; max-width: 100%; }
 
@@ -7070,7 +7071,7 @@ window.SIGDRAW = (function () {
         { t: 'misc/ss.c', u: 'https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/tree/misc/ss.c?h=v6.12.0', p: 'iproute2', n: 'ss -ti는 retrans:지금 재전송 중인 수/누적 재전송 수와 rtt:RTT/RTT 편차(rttvar)를 표시' },
       ] },
     { id: 'rt-queue-drop', t: '병목 대기열 넘침 (혼잡 손실)', en: 'Tail drop at a congested bottleneck',
-      s: '공유기, 통신사 연결 구간, 데이터센터 회선처럼 가장 좁은 곳의 대기열이 가득 차면 새로 오는 패킷을 버립니다.',
+      s: '공유기, 통신사 사이 연결 구간, 데이터센터 회선처럼 가장 좁은 곳의 대기열이 가득 차면 새로 오는 패킷을 버립니다.',
       c: ['영상·다운로드·다른 사용자 트래픽으로 병목 구간이 꽉 참', '대기열이 찬 동안 새로 도착하는 패킷이 연달아 버려짐(tail drop). 버려지지 않은 패킷도 꽉 찬 대기열 끝에서 기다림', '여러 패킷이 한꺼번에 사라져 긴 멈춤 뒤 몰아치기, 저녁 시간에 잦음'],
       sym: ['freeze', 'burst', 'rubber'], fx: ['loss', 'lat'], who: ['home', 'region', 'server'], when: ['peak', 'event'],
       num: '대기열이 넘치는 순간에는 수십 ms 동안 들어오는 패킷의 상당수가 한꺼번에 사라집니다. 연달아 잃고 다시 보낸 것까지 잃기 쉬워 RTO까지 가는 경우가 많습니다.',
@@ -7772,7 +7773,7 @@ Object.assign(DATA.secRefs, {
     { t: 'Deterministic Lockstep', u: 'https://gafferongames.com/post/deterministic_lockstep/', p: 'Gaffer On Games', n: '확인받지 못한 입력을 매 패킷에 중복해 보내면 재전송을 기다리지 않음(최악 2초 분량)' },
     { t: 'Snapshot Interpolation', u: 'https://gafferongames.com/post/snapshot_interpolation/', p: 'Gaffer On Games', n: '받은 즉시 그리면 지터로 끊기고, 보간 버퍼는 지연을 조금 늘리는 대신 매끄럽게 함' },
     { t: 'Understanding Networked Movement in the Character Movement Component for Unreal Engine', u: 'https://dev.epicgames.com/documentation/en-us/unreal-engine/understanding-networked-movement-in-the-character-movement-component-for-unreal-engine', p: 'Epic Games', n: '클라이언트 이동이 연결 문제로 빠지거나 잘못되면 서버가 위치를 보정(고무줄)' },
-    { t: 'Source SDK 2013: player.cpp', u: 'https://raw.githubusercontent.com/ValveSoftware/source-sdk-2013/master/src/game/server/player.cpp', p: 'Valve', n: '틱마다 쌓이는 명령 예산으로 몰려 온 명령을 제한. 너무 엄격하면 정상 유저도 끊김' },
+    { t: 'Source SDK 2013: player.cpp', u: 'https://raw.githubusercontent.com/ValveSoftware/source-sdk-2013/master/src/game/server/player.cpp', p: 'Valve', n: '틱마다 쌓이는 명령 예산으로 몰려 온 명령을 제한. 너무 엄격하면 정상 유저도 뚝뚝 끊김' },
     { t: 'Introducing Time Dilation (TiDi)', u: 'https://www.eveonline.com/news/view/introducing-time-dilation-tidi', p: 'CCP Games', n: '서버 과부하 때 게임 시계를 늦춰(Time Dilation) 모든 것이 느리게 흐르게 하는 설계' },
     { t: 'CommonNetworkParametersExtensions (Unity Transport 2.5)', u: 'https://docs.unity3d.com/Packages/com.unity.transport@2.5/api/Unity.Networking.Transport.CommonNetworkParametersExtensions.html', p: 'Unity', n: '일정 시간 아무것도 받지 못하면 연결을 끊는 비활동 타임아웃' },
   ],
@@ -7784,7 +7785,7 @@ Object.assign(DATA.secRefs, {
     { t: 'Introducing Time Dilation (TiDi)', u: 'https://www.eveonline.com/news/view/introducing-time-dilation-tidi', p: 'CCP Games', n: '서버가 과부하일 때 게임 시계를 늦추는 Time Dilation(TiDi), 과부하 때 작업이 몇 초씩 밀리는 현상' },
     { t: 'Peeking into VALORANT\'s Netcode', u: 'https://www.riotgames.com/en/news/peeking-valorants-netcode', p: 'Riot Games', n: '버퍼링 시간은 서버 틱레이트와 클라이언트 렌더 프레임에 따라 달라짐' },
     { t: 'Using Gameplay Abilities in Unreal Engine', u: 'https://dev.epicgames.com/documentation/en-us/unreal-engine/using-gameplay-abilities-in-unreal-engine', p: 'Epic Games', n: '예측 실행한 능력을 서버가 뒤집을 수 있음(씹힘·롤백)' },
-    { t: 'Actor Relevancy in Unreal Engine', u: 'https://dev.epicgames.com/documentation/en-us/unreal-engine/actor-relevancy-in-unreal-engine', p: 'Epic Games', n: '서버가 관련 없다고 본 액터는 복제되지 않거나 클라이언트에서 지워짐(안 보임)' },
+    { t: 'Actor Relevancy in Unreal Engine', u: 'https://dev.epicgames.com/documentation/en-us/unreal-engine/actor-relevancy-in-unreal-engine', p: 'Epic Games', n: '서버가 관련 없다고 본 액터는 복제되지 않거나 클라이언트에서 지워짐(안 보임·유령 개체)' },
     { t: 'CommonNetworkParametersExtensions (Unity Transport 2.5)', u: 'https://docs.unity3d.com/Packages/com.unity.transport@2.5/api/Unity.Networking.Transport.CommonNetworkParametersExtensions.html', p: 'Unity', n: '비활동 타임아웃이 지나면 연결을 끊음(접속 끊김)' },
   ],
   'sync': [
@@ -7986,7 +7987,7 @@ DATA.cases.push(
     u: 'https://www.riotgames.com/en/news/keeping-legacy-software-alive-case-study', p: 'Riot Games',
     what: '2021년 1월 22일 League of Legends EUW 서버가 5시간 조금 넘게 제대로 동작하지 않았다. 로그인한 유저 수와 게임 중인 유저 수 지표가 한꺼번에 끊겼고, 두 차례 재시작 사이에는 로그인은 늘어도 게임은 거의 시작되지 않았다.',
     why: '중요하지 않은 기능을 맡던 DB의 주 서버에 하드웨어 고장이 났고, 그 DB에는 예비 서버로의 자동 전환이 설정되어 있지 않았다. DB마다 커넥션 풀은 나뉘어 있었지만 모든 풀이 같은 스레드 풀을 썼고, 고장 난 DB에 보낸 작업이 끝나지 않고 스레드를 점유해 시스템 전체가 쓸 스레드가 바닥났다. 경보가 쏟아지는 가운데 최근 겪은 악의적인 네트워크 공격과 다른 지역의 하드웨어 작업을 먼저 의심하느라, 고장 난 DB의 경보는 약 1시간 뒤에야 눈에 띄었다. 모든 시스템이 한 JVM에서 도는 구조라, 재시작 뒤 재접속 부하 속에서 GC가 몇 초씩 프로세스를 멈추자 지표 수집에도 큰 공백이 생겼다. 로그인 대기열도 설정한 한도를 지키지 않아 유입이 들쭉날쭉했다.',
-    lesson: '중요하지 않다고 여긴 부가 DB 하나도 스레드 풀 같은 공유 자원을 통해 전체를 멈출 수 있다. 확인 신호는 DB별 대기 중인 요청 수와 스레드 풀 사용률, 그리고 로그인 수에 비해 게임 시작 수가 너무 적은 비율이다. 담당은 게임개발팀(서버: 풀 격리·타임아웃)과 인프라팀(DB: 자동 전환)이다. 경보가 쏟아질 때는 최근에 겪은 문제(공격 등)부터 의심하기 쉬우니, 판정 순서(범위 → 시점 → 계층)대로 하나씩 배제한다. 재시작 뒤에는 로그인 대기열이 설정대로 유입을 제한하는지도 함께 본다.',
+    lesson: '중요하지 않다고 여긴 부가 DB 하나도 스레드 풀 같은 공유 자원을 통해 전체를 멈출 수 있다. 확인 신호는 DB별 대기 중인 요청 수와 스레드 풀 사용률, 그리고 로그인 수에 비해 게임 시작 수가 너무 적은 비율이다. 담당은 게임개발팀(서버: 스레드 풀 격리·타임아웃)과 인프라팀(DB: 자동 전환)이다. 경보가 쏟아질 때는 최근에 겪은 문제(공격 등)부터 의심하기 쉬우니, 판정 순서(범위 → 시점 → 계층)대로 하나씩 배제한다. 재시작 뒤에는 로그인 대기열이 설정대로 유입을 제한하는지도 함께 본다.',
     causes: ['sp-threadpool', 'db-failover', 'in-cascade', 'mem-gc'] },
   { id: 'roblox-2021', t: 'Roblox 73시간 장애: 서비스 디스커버리(Consul) 클러스터의 경합', org: 'Roblox', year: 2021,
     u: 'https://about.roblox.com/newsroom/2022/01/roblox-return-to-service-10-28-10-31-2021', p: 'Roblox',

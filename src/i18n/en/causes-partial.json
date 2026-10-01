@@ -55,7 +55,7 @@
     {"ctx":"causes/pt-isp-validation/chk/look","ko":"서버의 검증 거절·보정·강제 종료 로그에 접속 IP의 통신사(ASN)와 시각을 붙여 통신사·시간대별로 셈. 인프라팀은 같은 시간에 그 통신사 쪽으로 양방향 mtr을 돌려 지터·손실을 봄","t":"Server logs of validation rejections, corrections, and forced disconnects tagged with the ISP (ASN) of the connecting IP and the time, counted by ISP and time of day. The infra team runs bidirectional mtr toward that ISP at the same time to check jitter and loss"},
     {"ctx":"causes/pt-isp-validation/chk/yes","ko":"거절·강제 종료가 특정 통신사에 몰리고 저녁에 늘며, 같은 시간 그 통신사의 지터가 함께 높고, 몇 초 단위로 합친 이동량은 규칙 안에 있음","t":"Rejections and forced disconnects concentrate on one ISP and rise in the evening, that ISP’s jitter is high at the same time, and movement summed over a few seconds stays within the rules"},
     {"ctx":"causes/pt-isp-validation/chk/no","ko":"통신사와 상관없이 특정 계정만 반복되면 실제 치트 가능성. 모든 통신사에서 함께 늘면 서버 틱이 밀려 명령이 몰려 적용되는 서버 쪽 원인(틱 예산 초과)","t":"Only specific accounts repeat regardless of ISP: real cheating possible. Rising across all ISPs together: a server-side cause where lagging server ticks apply commands in bunches (tick overrun)"},
-    {"ctx":"causes/pt-isp-validation/ref/0/n","ko":"틱마다 쌓이는 명령 예산으로 과속을 막되, 더 엄격한 제한은 정상 유저에게도 끊김을 만든다는 개발 주석","t":"A per-tick command budget stops speed hacks; a developer comment says stricter limits cause hitching for legitimate players too"},
+    {"ctx":"causes/pt-isp-validation/ref/0/n","ko":"틱마다 쌓이는 명령 예산으로 과속을 막되, 더 엄격한 제한은 정상 유저에게도 뚝뚝 끊김을 만든다는 개발 주석","t":"A per-tick command budget stops speed hacks; a developer comment says stricter limits cause stutter for legitimate players too"},
     {"ctx":"causes/pt-isp-validation/ref/1/n","ko":"토큰 버킷: 평균 속도와 허용 버스트 크기로 판정","t":"Token bucket: judged by average rate and allowed burst size"},
     {"ctx":"causes/pt-isp-validation/ref/2/n","ko":"클라이언트·서버 타임스탬프 차이가 크면 이동을 버리거나 시간 차이 해소 절차로 처리, 서버 시각으로 계산해 속도 핵 방지","t":"When client and server timestamps differ by too much, the move is discarded or handled by a time discrepancy resolution procedure; computing with server time prevents speed hacks"},
     {"ctx":"causes/pt-raid-member/t","ko":"느린 파티원 한 명과 보스 기믹","t":"One lagging party member and boss mechanics"},
@@ -315,5 +315,8 @@
     {"ctx":"causes/pt-clock-hold/chk/no","ko":"추정 오차가 작은데 늦게 나타나면 연결별 전송 예산·우선순위나 로딩 쪽 원인","t":"Estimate error is small but entities still appear late: points to per-connection send budget and priority, or loading"},
     {"ctx":"causes/pt-clock-hold/ref/0/n","ko":"시간 차이가 hardResetThresholdSec(기본 0.2초)를 넘으면 강제로 맞추고, 평소엔 adjustmentRatio로 조금씩 빠르게·느리게 조정","t":"If the time gap exceeds hardResetThresholdSec (0.2 s by default), the clock is forced into sync; otherwise adjustmentRatio speeds it up or slows it down a little at a time"},
     {"ctx":"causes/pt-clock-hold/ref/1/n","ko":"LocalTime은 서버보다 앞서고 ServerTime은 뒤처짐. 늦게 도착한 메시지는 대기 시간이 음수가 될 수 있음","t":"LocalTime runs ahead of the server and ServerTime runs behind; a message that arrives late can have a negative wait time"}
+  ],
+  "stale": [
+    {"ctx":"causes/pt-isp-validation/ref/0/n","ko":"틱마다 쌓이는 명령 예산으로 과속을 막되, 더 엄격한 제한은 정상 유저에게도 끊김을 만든다는 개발 주석","t":"A per-tick command budget stops speed hacks; a developer comment says stricter limits cause hitching for legitimate players too"}
   ]
 }

@@ -114,7 +114,7 @@
     {"ctx":"secRefs/l-isp/4/n","ko":"통신사 사이 피어링 정책과 도메인 간 라우팅이 경로를 크게 늘림","t":"Peering policies between ISPs and interdomain routing inflate paths significantly"},
     {"ctx":"secRefs/l-isp/5/n","ko":"일부 통신사 간 연결 구간은 매일 피크 시간마다 지연과 손실이 오르는 반복 혼잡을 보임","t":"Some interconnects between ISPs show recurring congestion, with latency and loss rising at peak hours every day"},
     {"ctx":"secRefs/l-isp/6/n","ko":"인터넷 경로 정보를 주고받는 BGP, 홀드 타임 권장 기본값 90초","t":"BGP, which exchanges internet routing information, with a suggested default hold time of 90 seconds"},
-    {"ctx":"secRefs/l-isp/7/n","ko":"불안정해진 경로가 다시 안정되기까지 하루 평균 25~50초","t":"An unstable route takes a daily average of 25–50 seconds to settle again"},
+    {"ctx":"secRefs/l-isp/7/n","ko":"경로가 바뀐 뒤 라우팅이 다시 안정되기까지 걸리는 시간의 하루 평균이 IPv4 25~35초, IPv6 40~50초","t":"After a path change, routing takes a daily average of 25–35 seconds to settle again on IPv4 and 40–50 seconds on IPv6"},
     {"ctx":"secRefs/l-isp/8/n","ko":"경로 장애 뒤 수렴에 수 분까지 걸리고 그동안 손실·지연이 늘어남(2000년 당시 측정)","t":"Convergence after a route failure can take up to several minutes, with higher loss and latency in the meantime (measured in 2000)"},
     {"ctx":"secRefs/l-dc-net/0/n","ko":"데이터센터 네트워크의 종단 간 지연은 1ms 미만이고, 버스트의 70% 이상이 수십 µs 안에 끝나 평균 사용률로는 안 보임","t":"End-to-end latency in data center networks is under 1 ms, and over 70% of bursts end within tens of µs, invisible in average utilization"},
     {"ctx":"secRefs/l-dc-net/1/n","ko":"범용 스위치는 여러 포트가 얕은 버퍼를 나눠 쓰고, 짧은 순간 여러 흐름이 한 포트로 몰리면 버퍼가 넘쳐 손실","t":"Commodity switches share shallow buffers across ports, and when many flows converge on one port for a brief moment, the buffer overflows and packets are lost"},
@@ -280,5 +280,8 @@
     {"ctx":"secRefs/l-infra/6/n","ko":"배포·재시작: lame duck 상태로 새 요청을 돌린 뒤 종료, 재시작 직후 예열","t":"Deploys and restarts: put the server into a lame duck state to send new requests elsewhere before shutting down, and warm up right after a restart"},
     {"ctx":"secRefs/l-infra/7/n","ko":"확장·축소 때 인스턴스를 대기 상태로 두고 준비·정리 작업을 마침(기본 1시간까지)","t":"During scale-out and scale-in, instances are held in a wait state to finish setup and cleanup (up to 1 hour by default)"},
     {"ctx":"secRefs/l-infra/8/n","ko":"구성도 실험의 워치독: 살아 있다는 신호가 끊긴 서비스를 종료하고 자동 재시작","t":"The architecture simulation’s watchdog: stops a service whose heartbeat has stopped and restarts it automatically"}
+  ],
+  "stale": [
+    {"ctx":"secRefs/l-isp/7/n","ko":"불안정해진 경로가 다시 안정되기까지 하루 평균 25~50초","t":"An unstable route takes a daily average of 25–50 seconds to settle again"}
   ]
 }

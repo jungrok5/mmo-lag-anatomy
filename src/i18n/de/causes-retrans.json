@@ -25,7 +25,7 @@
     {"ctx":"causes/rt-wireless/ref/6/n","ko":"RTO 최소값 TCP_RTO_MIN = 200ms","t":""},
     {"ctx":"causes/rt-wireless/ref/7/n","ko":"ss -ti는 retrans:지금 재전송 중인 수/누적 재전송 수와 rtt:RTT/RTT 편차(rttvar)를 표시","t":""},
     {"ctx":"causes/rt-queue-drop/t","ko":"병목 대기열 넘침 (혼잡 손실)","t":""},
-    {"ctx":"causes/rt-queue-drop/s","ko":"공유기, 통신사 연결 구간, 데이터센터 회선처럼 가장 좁은 곳의 대기열이 가득 차면 새로 오는 패킷을 버립니다.","t":""},
+    {"ctx":"causes/rt-queue-drop/s","ko":"공유기, 통신사 사이 연결 구간, 데이터센터 회선처럼 가장 좁은 곳의 대기열이 가득 차면 새로 오는 패킷을 버립니다.","t":""},
     {"ctx":"causes/rt-queue-drop/c/0","ko":"영상·다운로드·다른 사용자 트래픽으로 병목 구간이 꽉 참","t":""},
     {"ctx":"causes/rt-queue-drop/c/1","ko":"대기열이 찬 동안 새로 도착하는 패킷이 연달아 버려짐(tail drop). 버려지지 않은 패킷도 꽉 찬 대기열 끝에서 기다림","t":""},
     {"ctx":"causes/rt-queue-drop/c/2","ko":"여러 패킷이 한꺼번에 사라져 긴 멈춤 뒤 몰아치기, 저녁 시간에 잦음","t":""},
