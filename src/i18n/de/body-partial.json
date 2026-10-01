@@ -40,7 +40,7 @@
     {"ctx":"#partial td","ko":"모두 멈춤","t":""},
     {"ctx":"#partial td","ko":"<b>멈춤</b>. 늦기만 해도 <b>입력 지연</b> (전원에게 번짐)","t":""},
     {"ctx":"#partial td","ko":"<b>블로킹 전송·동기 처리</b><br><span class=\"note\">서버가 그 사람을 기다림</span>","t":""},
-    {"ctx":"#partial td","ko":"멈춤 뒤 몰아치기","t":""},
+    {"ctx":"#partial td","ko":"멈춤 뒤 몰아치기","t":"Freeze, danach Zeitraffer"},
     {"ctx":"#partial td","ko":"그 서버 스레드가 맡은 모두가 느려짐","t":""},
     {"ctx":"#partial td","ko":"<b>슬로우모션·멈춤</b> (그 스레드가 맡은 사람들에게 번짐)","t":""},
     {"ctx":"#partial td","ko":"<b>느린 사람이 호스트</b><br><span class=\"note\">P2P, 리슨 서버</span>","t":""},

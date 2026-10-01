@@ -529,7 +529,7 @@
       },
       ref: [
         { t: 'CFS Bandwidth Control', u: 'https://docs.kernel.org/scheduler/sched-bwc.html', p: 'Linux kernel', n: '주기마다 받은 할당량을 다 쓰면 다음 주기까지 스레드가 멈춤(스로틀링), 기본 주기 100ms, nr_throttled 통계' },
-        { t: 'Control Group v2', u: 'https://docs.kernel.org/admin-guide/cgroup-v2.html', p: 'Linux kernel', n: 'cpu.max는 “할당량 주기” 형식이고 기본값은 “max 100000”(100ms 주기)' },
+        { t: 'Control Group v2', u: 'https://docs.kernel.org/admin-guide/cgroup-v2.html', p: 'Linux kernel', n: 'cpu.max는 “$MAX $PERIOD”(할당량, 주기) 형식이고 기본값은 “max 100000”(100ms 주기)' },
         { t: 'Resource Management for Pods and Containers', u: 'https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/', p: 'Kubernetes', n: '컨테이너의 CPU limit은 커널이 CPU 스로틀링으로 강제하는 하드 한도' },
       ] },
     { id: 'so-cstate', t: '서버 전원 관리(C-state·주파수 조절)로 지연 튐', en: 'CPU power management latency (C-states, frequency scaling)',
