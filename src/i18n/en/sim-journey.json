@@ -39,7 +39,7 @@
     {"ctx":"src/sims/journey.js:66","ko":"통신사 코어망","t":"Carrier core network"},
     {"ctx":"src/sims/journey.js:66","ko":"통신사 가입자망","t":"ISP access network"},
     {"ctx":"src/sims/journey.js:67","ko":"기지국에서 통신사 코어망을 거쳐 인터넷으로 나가는 구간입니다.","t":"The segment from the cell tower through the carrier’s core network out to the internet."},
-    {"ctx":"src/sims/journey.js:67","ko":"집에서 통신사 국사까지 가는 구간입니다. {0}","t":"The segment from your home to the ISP’s local office. {0}"},
+    {"ctx":"src/sims/journey.js:67","ko":"집에서 통신사 국사까지 가는 구간입니다. {0}","t":"The segment from your home to the ISP’s central office. {0}"},
     {"ctx":"src/sims/journey.js:67","ko":"광랜은 빠릅니다.","t":"Fiber is fast."},
     {"ctx":"src/sims/journey.js:67","ko":"케이블 인터넷은 여러 집이 선을 나눠 써서 광랜보다 깁니다.","t":"Cable internet takes longer than fiber because several homes share the line."},
     {"ctx":"src/sims/journey.js:68","ko":"모바일 회선의 기본 지연이라 플레이어가 줄이기 어렵습니다.","t":"This is the baseline delay of a mobile connection, so it’s hard for players to reduce."},

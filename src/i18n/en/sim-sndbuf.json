@@ -66,7 +66,7 @@
     {"ctx":"src/sims/sndbuf.js:204","ko":"ms 일하고 쉼","t":" ms per tick, then idles"},
     {"ctx":"src/sims/sndbuf.js:216","ko":"3초 전","t":"3 s ago"},
     {"ctx":"src/sims/sndbuf.js:217, src/sims/sndbuf.js:304, src/sims/sndbuf.js:323","ko":"지금","t":"Now"},
-    {"ctx":"src/sims/sndbuf.js:225, src/sims/sndbuf.js:233","ko":"클라이언트","t":"Client"},
+    {"ctx":"src/sims/sndbuf.js:225, src/sims/sndbuf.js:233","ko":"클라이언트","t":"Client "},
     {"ctx":"src/sims/sndbuf.js:226","ko":"송신 버퍼","t":"Send buffer"},
     {"ctx":"src/sims/sndbuf.js:226","ko":"송신 버퍼 (","t":"Send buffer ("},
     {"ctx":"src/sims/sndbuf.js:227","ko":"앱 대기열","t":"App queue"},

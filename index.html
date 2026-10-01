@@ -1794,16 +1794,19 @@ dt[id]:target, .pb-steps li:target { background: var(--accent-soft); border-radi
     }
     return k;
   };
+  // 같은 글자가 한 묶음 안에서 두 뜻으로 쓰이면 끝에 “@@설명”을 붙여 열쇠를 나눈다(TR`멈춤@@서버 상태`).
+  // 설명은 번역하는 사람에게만 보이고 화면에는 나오지 않는다
+  const bare = s => s.replace(/@@[^@]*$/, '');
   // 태그 함수 만들기. look(열쇠)이 번역을 돌려주고, 없으면(undefined) 원문을 쓴다
   const tag = look => function (strs) {
     const k = keyOf(strs);
     const t = look(k);
     const n = arguments.length - 1;
     if (t === undefined) {
-      if (!n) return k;
+      if (!n) return bare(k);
       let out = strs[0];
       for (let i = 0; i < n; i++) out += String(arguments[i + 1]) + strs[i + 1];
-      return out;
+      return bare(out);
     }
     if (!n) return t;
     const vals = arguments;
@@ -1930,6 +1933,11 @@ dt[id]:target, .pb-steps li:target { background: var(--accent-soft); border-radi
   };
   K.josa = (w, k) => w + K.pp(w, k);
   K.firstSentence = s => (String(s).match(/^[\s\S]*?[.。！？!?](?=\s|$)/) || [String(s)])[0];
+  K.lang = (window.I18N && window.I18N.lang) || 'ko';
+  // 큰 수 줄여 쓰기(번역판: 16K, 1.6万, 16 Tsd.). 한국어판의 만·억 표기는 실험마다 따로 둔다
+  K.compact = v => (Number.isFinite(v) ? v.toLocaleString(K.locale, { notation: 'compact', maximumFractionDigits: 1 }) : '—');
+  // 소수 자리를 필요한 만큼만(1.5, 2), 천 단위 구분 없이. 소수점 기호는 언어를 따른다
+  K.nr = (v, d = 1) => (Number.isFinite(v) ? v.toLocaleString(K.locale, { maximumFractionDigits: d, useGrouping: false }) : '—');
   K.n = (v, d = 0) => (Number.isFinite(v) ? v.toLocaleString(K.locale, { minimumFractionDigits: d, maximumFractionDigits: d }) : '—');
   K.ms = function (v) {
     if (!Number.isFinite(v)) return '∞';
@@ -8043,7 +8051,7 @@ DATA.playbooks.push(
         d: '제보가 처음 몰린 시각과 그래프가 계단처럼 오른 시각을 찾고, 그 앞뒤로 나간 변경을 빠짐없이 적는다. 클라이언트 패치, 서버 배포, 설정 변경, DB 스키마 변경(DDL)과 재시작, 네트워크·방화벽 작업, 인프라 교체(인스턴스 종류·커널·드라이버)를 함께 본다. 배포 때마다 모니터링 도구의 주석(annotation) 기능으로 모든 그래프에 세로선을 남겨 두면 이 단계가 금방 끝난다. 게임 패치와 인프라 작업이 같은 점검 시간에 나갔으면 둘 다 후보로 남긴다. 먼저 부를 곳: 변경을 낸 게임개발팀과 인프라팀 양쪽.',
         causes: ['in-deploy', 'so-os-update', 'db-ddl-lock', 'db-plan-flip', 'db-cold-cache'] },
       { t: '범위를 나눈다: 빌드·기기·서버·지역',
-        d: '이상이 어느 차원에 몰렸는지 본다. 새 빌드 사용자만 나쁘면 클라이언트, 특정 OS·그래픽카드·기기만 나쁘면 클라이언트 성능이나 드라이버, 특정 서버·채널·존만 나쁘면 서버, 특정 국가·통신사만 나쁘면 네트워크 경로, 모두가 동시에 나쁘면 공용 자원(DB·로드밸런서·게이트웨이)이나 방금 나간 서버 배포를 먼저 의심한다. 클라이언트 텔레메트리에 빌드 번호가 있으면 옛 빌드와 새 빌드의 핑·FPS·프레임 스파이크·끊김 수를 나란히 놓는다. 핑은 그대로인데 FPS만 나빠졌으면 네트워크보다 클라이언트 성능 쪽이다. 먼저 부를 곳: 빌드·기기에 몰리면 게임개발팀(클라이언트), 서버·채널에 몰리면 호스트 지표가 정상일 때 게임개발팀(서버)·비정상일 때 인프라팀(시스템), 국가·통신사에 몰리면 인프라팀(네트워크).',
+        d: '이상이 어느 차원에 몰렸는지 본다. 새 빌드 사용자만 나쁘면 클라이언트, 특정 OS·그래픽카드·기기만 나쁘면 클라이언트 성능이나 드라이버, 특정 서버·채널·존만 나쁘면 서버, 특정 국가·통신사만 나쁘면 네트워크 경로, 모두가 동시에 나쁘면 공용 자원(DB·로드밸런서·게이트웨이)이나 방금 나간 서버 배포를 먼저 의심한다. 클라이언트 텔레메트리에 빌드 번호가 있으면 옛 빌드와 새 빌드의 핑·FPS·프레임 스파이크·접속 끊김 횟수를 나란히 놓는다. 핑은 그대로인데 FPS만 나빠졌으면 네트워크보다 클라이언트 성능 쪽이다. 먼저 부를 곳: 빌드·기기에 몰리면 게임개발팀(클라이언트), 서버·채널에 몰리면 호스트 지표가 정상일 때 게임개발팀(서버)·비정상일 때 인프라팀(시스템), 국가·통신사에 몰리면 인프라팀(네트워크).',
         causes: ['cg-hitch', 'cg-sync-load', 'co-vram', 'cg-crash'] },
       { t: '새 버전과 옛 버전을 같은 시간대에 비교한다',
         d: '배포 전후만 비교하면 요일·시간대·이벤트에 따른 변화가 섞여 판단이 흐려진다. 가능하면 새 버전을 일부 서버(카나리)에 먼저 올리고, 같은 시간대의 옛 버전 서버(대조군)와 틱 시간 p50·p99, 틱 초과 수, CPU, 메모리, 오류율을 나란히 비교한다. 이미 전체에 배포했으면 지난주 같은 요일·같은 시간대와 비교한다. 서버 전체 평균만 보면 일부 서버·존의 문제가 묻히므로 서버·존별로 나눠 본다. 먼저 부를 곳: 게임개발팀(서버).',
@@ -8638,7 +8646,7 @@ K.register('arch', function (root) {
 
   // ---------- 갱신 ----------
   let lastEff = {}, lastCause = {};
-  const word = lv => (lv === 2 ? TR`멈춤` : TR`느려짐`);
+  const word = lv => (lv === 2 ? TR`멈춤@@서버 상태(증상 이름과 다름)` : TR`느려짐@@서버 상태`);
   const fac = lv => (lv === 2 ? 0 : lv === 1 ? 0.3 : 1);
   function depth(id, cause, d = 0) { return cause[id] && d < 10 ? depth(cause[id].from, cause, d + 1) : d; }
 
@@ -8658,7 +8666,7 @@ K.register('arch', function (root) {
       n.badge.setAttribute('class', 'badge');
       if (e) {
         const txt = (cas ? TR`연쇄 ` : '') + word(e);
-        const bw = txt.length * 10.5 + 12, bx = n.x + n.w / 2 - bw - 4, by = n.y - NH / 2 - 9;
+        const bw = (K.lang === 'ko' ? txt.length * 10.5 : [...txt].reduce((w, ch) => w + (ch.charCodeAt(0) >= 0x2e80 ? 10.5 : 6.6), 0)) + 12, bx = n.x + n.w / 2 - bw - 4, by = n.y - NH / 2 - 9;
         n.badge.setAttribute('class', 'badge ' + (e === 2 ? 'bad' : 'warn'));
         S('rect', { x: bx, y: by, width: bw, height: 17, rx: 8.5 }, n.badge);
         S('text', { x: bx + bw / 2, y: by + 9, 'text-anchor': 'middle', 'dominant-baseline': 'middle' }, n.badge).textContent = txt;
@@ -10216,7 +10224,7 @@ K.register('disk', function (root) {
 
   // ---------- 서식 ----------
   const trim = v => (Math.round(v * 10) / 10).toString();
-  const kfmt = v => (v >= 10000 ? trim(v / 10000) + TR`만` : v >= 1000 ? trim(v / 1000) + TR`천` : K.n(v));
+  const kfmt = v => (K.lang !== 'ko' ? (v >= 1000 ? K.compact(v) : K.n(v)) : v >= 10000 ? trim(v / 10000) + TR`만` : v >= 1000 ? trim(v / 1000) + TR`천` : K.n(v));
   function niceStep(v) { const p = Math.pow(10, Math.floor(Math.log10(v))); const m = v / p; return (m <= 1 ? 1 : m <= 2 ? 2 : m <= 5 ? 5 : 10) * p; }
   function dur(s) {
     if (s < 10) return K.n(s, 1) + TR` 초`;
@@ -12924,7 +12932,7 @@ K.register('lab', function (root) {
     ctl.loss = K.slider(g1, { label: TR`패킷 손실`, min: 0, max: 50, step: 1, value: P.loss, unit: '%', onInput: v => set('loss', v) });
     ctl.lossDir = K.choice(g1, { label: TR`손실 방향`, value: P.lossDir, options: [['both', TR`양쪽`], ['up', TR`내 입력만`], ['down', TR`서버 패킷만`]], onChange: v => set('lossDir', v) });
     const g2 = K.group(F.controls, TR`회선 끊김 · 프로토콜`);
-    ctl.outEvery = K.slider(g2, { label: TR`주기적 회선 끊김`, min: 0, max: 15, step: 0.5, value: P.outEvery, fmt: v => (v ? v + TR`초마다` : TR`끔`), onInput: v => { set('outEvery', v); nextOutAt = v > 0 ? t + 800 : Infinity; } });
+    ctl.outEvery = K.slider(g2, { label: TR`주기적 회선 끊김`, min: 0, max: 15, step: 0.5, value: P.outEvery, fmt: v => (v ? TR`${K.nr(v)}초마다` : TR`끔`), onInput: v => { set('outEvery', v); nextOutAt = v > 0 ? t + 800 : Infinity; } });
     ctl.outMs = K.slider(g2, { label: TR`끊김 길이`, min: 200, max: 10000, step: 100, value: P.outMs, fmt: v => K.ms(v), onInput: v => set('outMs', v) });
     K.button(g2, { label: TR`지금 회선 끊기`, kind: 'small', onClick: () => outageNow(P.outMs) });
     ctl.proto = K.choice(g2, { label: TR`프로토콜`, value: P.proto, options: [['udp', TR`UDP (잃으면 그만)`], ['tcp', TR`TCP (재전송·순서 보장)`]], onChange: v => set('proto', v) });
@@ -12932,14 +12940,14 @@ K.register('lab', function (root) {
     const g3 = K.group(F.controls, TR`서버`);
     ctl.tick = K.slider(g3, { label: TR`틱레이트`, min: 2, max: 60, step: 1, value: P.tick, unit: TR`/초`, onInput: v => set('tick', v), hint: TR`서버가 1초에 게임 상태를 몇 번 계산하고 패킷을 보내는지` });
     ctl.load = K.slider(g3, { label: TR`서버 부하 (틱 예산 대비)`, min: 10, max: 300, step: 5, value: P.load, unit: '%', onInput: v => set('load', v), hint: TR`100%를 넘으면 한 틱을 제시간에 못 끝냅니다.` });
-    ctl.stallEvery = K.slider(g3, { label: TR`주기적 서버 멈춤`, min: 0, max: 10, step: 0.5, value: P.stallEvery, fmt: v => (v ? v + TR`초마다` : TR`끔`), onInput: v => { set('stallEvery', v); S.nextStallAt = v > 0 ? t + 800 : Infinity; } });
+    ctl.stallEvery = K.slider(g3, { label: TR`주기적 서버 멈춤`, min: 0, max: 10, step: 0.5, value: P.stallEvery, fmt: v => (v ? TR`${K.nr(v)}초마다` : TR`끔`), onInput: v => { set('stallEvery', v); S.nextStallAt = v > 0 ? t + 800 : Infinity; } });
     ctl.stallMs = K.slider(g3, { label: TR`멈춤 길이`, min: 100, max: 4000, step: 50, value: P.stallMs, fmt: v => K.ms(v), onInput: v => set('stallMs', v) });
     K.button(g3, { label: TR`지금 서버 멈추기`, kind: 'small', onClick: () => stallNow(P.stallMs) });
     ctl.catchup = K.choice(g3, { label: TR`밀린 틱 처리`, value: P.catchup, options: [['catchup', TR`몰아서 따라잡기`], ['skip', TR`건너뛰기`]], onChange: v => set('catchup', v) });
     ctl.validate = K.toggle(g3, { label: TR`엄격한 이동 검증 (스피드핵 방지)`, value: P.validate, onChange: v => set('validate', v), hint: TR`한 틱에 움직일 수 있는 거리를 넘으면 잘라 냅니다.` });
     const g4 = K.group(F.controls, TR`내 PC (클라이언트)`);
     ctl.fps = K.slider(g4, { label: TR`화면 FPS`, min: 5, max: 144, step: 1, value: P.fps, onInput: v => set('fps', v) });
-    ctl.hitchEvery = K.slider(g4, { label: TR`주기적 클라 멈춤`, min: 0, max: 10, step: 0.5, value: P.hitchEvery, fmt: v => (v ? v + TR`초마다` : TR`끔`), onInput: v => { set('hitchEvery', v); C.nextHitchAt = v > 0 ? t + 800 : Infinity; } });
+    ctl.hitchEvery = K.slider(g4, { label: TR`주기적 클라 멈춤`, min: 0, max: 10, step: 0.5, value: P.hitchEvery, fmt: v => (v ? TR`${K.nr(v)}초마다` : TR`끔`), onInput: v => { set('hitchEvery', v); C.nextHitchAt = v > 0 ? t + 800 : Infinity; } });
     ctl.hitchMs = K.slider(g4, { label: TR`클라 멈춤 길이`, min: 50, max: 8000, step: 50, value: P.hitchMs, fmt: v => K.ms(v), onInput: v => set('hitchMs', v) });
     K.button(g4, { label: TR`지금 클라 멈추기`, kind: 'small', onClick: () => hitchNow(P.hitchMs) });
     const g5 = K.group(F.controls, TR`다른 플레이어 표시 방식`);
@@ -13373,6 +13381,7 @@ K.register('ladder', function (root) {
     return TR`약 ` + trim(s / (365.25 * 86400), 1) + TR`년`;
   }
   function fmtCount(n) {
+    if (K.lang !== 'ko') return n >= 1e4 ? TR`${K.compact(n)}번@@횟수(큰 수)` : TR`${K.n(n)}번@@횟수`;
     if (n >= 1e8) return K.n(n / 1e8, 1) + TR`억 번`;
     if (n >= 1e5) return K.n(Math.round(n / 1e4)) + TR`만 번`;
     if (n >= 1e4) return K.n(n / 1e4, 1) + TR`만 번`;

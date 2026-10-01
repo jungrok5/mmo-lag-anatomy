@@ -28,16 +28,19 @@
     }
     return k;
   };
+  // 같은 글자가 한 묶음 안에서 두 뜻으로 쓰이면 끝에 “@@설명”을 붙여 열쇠를 나눈다(TR`멈춤@@서버 상태`).
+  // 설명은 번역하는 사람에게만 보이고 화면에는 나오지 않는다
+  const bare = s => s.replace(/@@[^@]*$/, '');
   // 태그 함수 만들기. look(열쇠)이 번역을 돌려주고, 없으면(undefined) 원문을 쓴다
   const tag = look => function (strs) {
     const k = keyOf(strs);
     const t = look(k);
     const n = arguments.length - 1;
     if (t === undefined) {
-      if (!n) return k;
+      if (!n) return bare(k);
       let out = strs[0];
       for (let i = 0; i < n; i++) out += String(arguments[i + 1]) + strs[i + 1];
-      return out;
+      return bare(out);
     }
     if (!n) return t;
     const vals = arguments;

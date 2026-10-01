@@ -19,7 +19,7 @@
     {"ctx":"src/sims/nic.js:47","ko":"들어오는 패킷","t":"Incoming packets"},
     {"ctx":"src/sims/nic.js:48","ko":"초당 들어오는 패킷(PPS)","t":"Incoming packets per second (PPS)"},
     {"ctx":"src/sims/nic.js:48","ko":"/초","t":"/s"},
-    {"ctx":"src/sims/nic.js:48","ko":"유저 1명이 초당 20~30개를 보냅니다. 150만 pps ≈ 5만~7만 명분이라 게임 서버 한 대보다는 게이트웨이·프록시 한 대가 받는 규모입니다.","t":"One player sends 20–30 per second. 1.5 million pps ≈ 50,000–70,000 players, so this is the load on one gateway or proxy rather than on one game server."},
+    {"ctx":"src/sims/nic.js:48","ko":"유저 1명이 초당 20~30개를 보냅니다. 150만 pps ≈ 5만~7만 명분이라 게임 서버 한 대보다는 게이트웨이·프록시 한 대가 받는 규모입니다.","t":"One player sends 20–30 per second. 1.5 million pps ≈ 50,000–70,000 players: the load one gateway or proxy handles, more than a single game server would see."},
     {"ctx":"src/sims/nic.js:49","ko":"몰림 정도","t":"Burstiness"},
     {"ctx":"src/sims/nic.js:49","ko":"평균은 같아도 짧은 순간에 몰려 들어옵니다(보스 등장, 광역 스킬).","t":"Same average, but packets arrive in short bursts (a boss spawning, AoE skills)."},
     {"ctx":"src/sims/nic.js:50","ko":"클라우드 인스턴스 PPS 한도 (100만 pps)","t":"Cloud instance PPS limit (1M pps)"},

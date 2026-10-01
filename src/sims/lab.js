@@ -489,7 +489,7 @@ K.register('lab', function (root) {
     ctl.loss = K.slider(g1, { label: TR`패킷 손실`, min: 0, max: 50, step: 1, value: P.loss, unit: '%', onInput: v => set('loss', v) });
     ctl.lossDir = K.choice(g1, { label: TR`손실 방향`, value: P.lossDir, options: [['both', TR`양쪽`], ['up', TR`내 입력만`], ['down', TR`서버 패킷만`]], onChange: v => set('lossDir', v) });
     const g2 = K.group(F.controls, TR`회선 끊김 · 프로토콜`);
-    ctl.outEvery = K.slider(g2, { label: TR`주기적 회선 끊김`, min: 0, max: 15, step: 0.5, value: P.outEvery, fmt: v => (v ? v + TR`초마다` : TR`끔`), onInput: v => { set('outEvery', v); nextOutAt = v > 0 ? t + 800 : Infinity; } });
+    ctl.outEvery = K.slider(g2, { label: TR`주기적 회선 끊김`, min: 0, max: 15, step: 0.5, value: P.outEvery, fmt: v => (v ? TR`${K.nr(v)}초마다` : TR`끔`), onInput: v => { set('outEvery', v); nextOutAt = v > 0 ? t + 800 : Infinity; } });
     ctl.outMs = K.slider(g2, { label: TR`끊김 길이`, min: 200, max: 10000, step: 100, value: P.outMs, fmt: v => K.ms(v), onInput: v => set('outMs', v) });
     K.button(g2, { label: TR`지금 회선 끊기`, kind: 'small', onClick: () => outageNow(P.outMs) });
     ctl.proto = K.choice(g2, { label: TR`프로토콜`, value: P.proto, options: [['udp', TR`UDP (잃으면 그만)`], ['tcp', TR`TCP (재전송·순서 보장)`]], onChange: v => set('proto', v) });
@@ -497,14 +497,14 @@ K.register('lab', function (root) {
     const g3 = K.group(F.controls, TR`서버`);
     ctl.tick = K.slider(g3, { label: TR`틱레이트`, min: 2, max: 60, step: 1, value: P.tick, unit: TR`/초`, onInput: v => set('tick', v), hint: TR`서버가 1초에 게임 상태를 몇 번 계산하고 패킷을 보내는지` });
     ctl.load = K.slider(g3, { label: TR`서버 부하 (틱 예산 대비)`, min: 10, max: 300, step: 5, value: P.load, unit: '%', onInput: v => set('load', v), hint: TR`100%를 넘으면 한 틱을 제시간에 못 끝냅니다.` });
-    ctl.stallEvery = K.slider(g3, { label: TR`주기적 서버 멈춤`, min: 0, max: 10, step: 0.5, value: P.stallEvery, fmt: v => (v ? v + TR`초마다` : TR`끔`), onInput: v => { set('stallEvery', v); S.nextStallAt = v > 0 ? t + 800 : Infinity; } });
+    ctl.stallEvery = K.slider(g3, { label: TR`주기적 서버 멈춤`, min: 0, max: 10, step: 0.5, value: P.stallEvery, fmt: v => (v ? TR`${K.nr(v)}초마다` : TR`끔`), onInput: v => { set('stallEvery', v); S.nextStallAt = v > 0 ? t + 800 : Infinity; } });
     ctl.stallMs = K.slider(g3, { label: TR`멈춤 길이`, min: 100, max: 4000, step: 50, value: P.stallMs, fmt: v => K.ms(v), onInput: v => set('stallMs', v) });
     K.button(g3, { label: TR`지금 서버 멈추기`, kind: 'small', onClick: () => stallNow(P.stallMs) });
     ctl.catchup = K.choice(g3, { label: TR`밀린 틱 처리`, value: P.catchup, options: [['catchup', TR`몰아서 따라잡기`], ['skip', TR`건너뛰기`]], onChange: v => set('catchup', v) });
     ctl.validate = K.toggle(g3, { label: TR`엄격한 이동 검증 (스피드핵 방지)`, value: P.validate, onChange: v => set('validate', v), hint: TR`한 틱에 움직일 수 있는 거리를 넘으면 잘라 냅니다.` });
     const g4 = K.group(F.controls, TR`내 PC (클라이언트)`);
     ctl.fps = K.slider(g4, { label: TR`화면 FPS`, min: 5, max: 144, step: 1, value: P.fps, onInput: v => set('fps', v) });
-    ctl.hitchEvery = K.slider(g4, { label: TR`주기적 클라 멈춤`, min: 0, max: 10, step: 0.5, value: P.hitchEvery, fmt: v => (v ? v + TR`초마다` : TR`끔`), onInput: v => { set('hitchEvery', v); C.nextHitchAt = v > 0 ? t + 800 : Infinity; } });
+    ctl.hitchEvery = K.slider(g4, { label: TR`주기적 클라 멈춤`, min: 0, max: 10, step: 0.5, value: P.hitchEvery, fmt: v => (v ? TR`${K.nr(v)}초마다` : TR`끔`), onInput: v => { set('hitchEvery', v); C.nextHitchAt = v > 0 ? t + 800 : Infinity; } });
     ctl.hitchMs = K.slider(g4, { label: TR`클라 멈춤 길이`, min: 50, max: 8000, step: 50, value: P.hitchMs, fmt: v => K.ms(v), onInput: v => set('hitchMs', v) });
     K.button(g4, { label: TR`지금 클라 멈추기`, kind: 'small', onClick: () => hitchNow(P.hitchMs) });
     const g5 = K.group(F.controls, TR`다른 플레이어 표시 방식`);

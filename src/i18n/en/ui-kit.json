@@ -2,7 +2,7 @@
   "lang": "en",
   "group": "ui-kit",
   "entries": [
-    {"ctx":"src/js/kit.js:91","ko":"{0}. {1}","t":""},
+    {"ctx":"src/js/kit.js:91","ko":"{0}. {1}","t":"{0}. {1}"},
     {"ctx":"src/js/kit.js:109, src/js/kit.js:110","ko":" 초","t":" s"},
     {"ctx":"src/js/kit.js:157","ko":"직접 해보기","t":"Try it yourself"},
     {"ctx":"src/js/kit.js:171","ko":"이렇게 해보세요","t":"Things to try"},

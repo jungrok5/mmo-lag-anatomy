@@ -102,6 +102,7 @@ K.register('ladder', function (root) {
     return TR`약 ` + trim(s / (365.25 * 86400), 1) + TR`년`;
   }
   function fmtCount(n) {
+    if (K.lang !== 'ko') return n >= 1e4 ? TR`${K.compact(n)}번@@횟수(큰 수)` : TR`${K.n(n)}번@@횟수`;
     if (n >= 1e8) return K.n(n / 1e8, 1) + TR`억 번`;
     if (n >= 1e5) return K.n(Math.round(n / 1e4)) + TR`만 번`;
     if (n >= 1e4) return K.n(n / 1e4, 1) + TR`만 번`;

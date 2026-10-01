@@ -241,7 +241,7 @@ ${layers.map(l => `<li><a href="#${l.anchor}">${esc(layerName(l))} (${byLayer[l.
 <li><a href="#playbooks">${TR`상황별 절차`}</a></li><li><a href="#cases">${TR`실제 장애 사례`}</a></li>
 <li><a href="#glossary">${TR`용어 사전`}</a></li><li><a href="#refs">${TR`참고 문헌`}</a></li></ul></nav>
 <h2 id="symptoms">${TR`증상별로 찾기`}</h2>
-<p>${TR`렉은 네 가지 요인에서 시작합니다:`} ${K.factors.map(f => `<b>${esc(f.name)}</b>(${html(f.desc)})`).join(' ')}</p>
+<p>${TR`렉은 네 가지 요인에서 시작합니다:`} ${K.factors.map(f => TR`<b>${esc(f.name)}</b>(${html(f.desc)})`).join(' ')}</p>
 <ul>${K.symptoms.map(s => `<li><a href="s/${s.id}.html">${esc(s.name)}</a> (${TR`원인 ${bySym[s.id].length}가지`}): ${html(s.what)}</li>`).join('')}</ul>
 <h2 id="owners">${TR`누가 고치나: 담당 코드`}</h2>
 <table><thead><tr><th>${TR`코드`}</th><th>${TR`팀`}</th><th>${TR`담당`}</th><th>${TR`범위`}</th></tr></thead><tbody>

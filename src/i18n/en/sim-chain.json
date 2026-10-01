@@ -30,7 +30,7 @@
     {"ctx":"src/sims/chain.js:26","ko":"예: 상점 열기 → 목록 → 가격 확인 → 구매 → 인벤토리 갱신","t":"e.g., open shop → list → check price → buy → refresh inventory"},
     {"ctx":"src/sims/chain.js:27","ko":"요청당 서버 처리","t":"Server processing per request"},
     {"ctx":"src/sims/chain.js:29","ko":"확인 후 입력","t":"Confirm, then input"},
-    {"ctx":"src/sims/chain.js:29, src/sims/chain.js:30, src/sims/chain.js:31","ko":"회","t":"times"},
+    {"ctx":"src/sims/chain.js:29, src/sims/chain.js:30, src/sims/chain.js:31","ko":"회","t":"casts"},
     {"ctx":"src/sims/chain.js:31","ko":"선연출","t":"Client-side feedback"},
     {"ctx":"src/sims/chain.js:32","ko":"상점 구매 (순차)","t":"Shop purchase (sequential)"},
     {"ctx":"src/sims/chain.js:63","ko":"확인 후 다음 입력","t":"Confirm, then next input"},

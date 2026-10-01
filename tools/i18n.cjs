@@ -281,8 +281,9 @@ function checkEntry(e, isAttr) {
   if (a !== b) errs.push(`태그가 다름: ${a.slice(0, 160)} ≠ ${b.slice(0, 160)}`);
   for (const tok of ['%SITE%']) if (e.ko.split(tok).length !== e.t.split(tok).length) errs.push(tok + ' 빠짐');
   if (isAttr && /["<>]/.test(e.t)) errs.push('속성 번역에 " < > 를 쓸 수 없음');
+  if (e.t.includes('@@')) errs.push('원문 끝의 @@설명은 번역에 넣지 않음(번역하는 사람에게만 보이는 뜻 구분)');
   if (HAN.test(e.t)) warns.push('번역에 한글이 남음');
-  const na = nums(e.ko).join(','), nb = nums(e.t).join(',');
+  const na = nums(e.ko.replace(/@@[^@]*$/, '')).join(','), nb = nums(e.t).join(',');
   if (na !== nb) warns.push(`숫자가 다름: [${na}] ≠ [${nb}]`);
   if (e.ko.length > 40 && e.t.length < e.ko.length * 0.3) warns.push('번역이 원문보다 지나치게 짧음');
   return { errs, warns };

@@ -387,7 +387,7 @@ K.register('arch', function (root) {
 
   // ---------- 갱신 ----------
   let lastEff = {}, lastCause = {};
-  const word = lv => (lv === 2 ? TR`멈춤` : TR`느려짐`);
+  const word = lv => (lv === 2 ? TR`멈춤@@서버 상태(증상 이름과 다름)` : TR`느려짐@@서버 상태`);
   const fac = lv => (lv === 2 ? 0 : lv === 1 ? 0.3 : 1);
   function depth(id, cause, d = 0) { return cause[id] && d < 10 ? depth(cause[id].from, cause, d + 1) : d; }
 
@@ -407,7 +407,7 @@ K.register('arch', function (root) {
       n.badge.setAttribute('class', 'badge');
       if (e) {
         const txt = (cas ? TR`연쇄 ` : '') + word(e);
-        const bw = txt.length * 10.5 + 12, bx = n.x + n.w / 2 - bw - 4, by = n.y - NH / 2 - 9;
+        const bw = (K.lang === 'ko' ? txt.length * 10.5 : [...txt].reduce((w, ch) => w + (ch.charCodeAt(0) >= 0x2e80 ? 10.5 : 6.6), 0)) + 12, bx = n.x + n.w / 2 - bw - 4, by = n.y - NH / 2 - 9;
         n.badge.setAttribute('class', 'badge ' + (e === 2 ? 'bad' : 'warn'));
         S('rect', { x: bx, y: by, width: bw, height: 17, rx: 8.5 }, n.badge);
         S('text', { x: bx + bw / 2, y: by + 9, 'text-anchor': 'middle', 'dominant-baseline': 'middle' }, n.badge).textContent = txt;

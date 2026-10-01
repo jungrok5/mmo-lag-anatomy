@@ -61,7 +61,7 @@
     {"ctx":"src/sims/frames.js:306","ko":"<br>동기 로딩 {0}","t":"<br>同步載入 {0}"},
     {"ctx":"src/sims/frames.js:307","ko":"<br>V-Sync 기다림 {0}","t":"<br>V-Sync 等待 {0}"},
     {"ctx":"src/sims/frames.js:322","ko":"눈금 = 2m","t":"刻度 = 2m"},
-    {"ctx":"src/sims/frames.js:338","ko":"멈춤 {0}ms","t":"定格 {0}ms"},
+    {"ctx":"src/sims/frames.js:338","ko":"멈춤 {0}ms","t":"停住 {0}ms"},
     {"ctx":"src/sims/frames.js:348","ko":"서버 위치로 당겨짐 {0}m (고무줄)","t":"往伺服器位置拉 {0}m（拉回）"},
     {"ctx":"src/sims/frames.js:348","ko":"순간이동 {0}m","t":"瞬移 {0}m"},
     {"ctx":"src/sims/frames.js:361","ko":"게임 시계가 {0}초 뒤처짐","t":"遊戲時鐘落後 {0} 秒"},

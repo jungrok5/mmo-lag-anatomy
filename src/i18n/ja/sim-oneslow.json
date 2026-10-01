@@ -57,7 +57,7 @@
     {"ctx":"src/sims/oneslow.js:369","ko":"B(정상)의 화면","t":"B（正常）の画面"},
     {"ctx":"src/sims/oneslow.js:371","ko":"<tr><th><span class=\"sr-only\">누구의 화면</span></th>{0}</tr>","t":"<tr><th><span class=\"sr-only\">誰の画面</span></th>{0}</tr>"},
     {"ctx":"src/sims/oneslow.js:371","ko":"몬스터의 모습","t":"モンスターの見え方"},
-    {"ctx":"src/sims/oneslow.js:371","ko":"{0}의 모습","t":""},
+    {"ctx":"src/sims/oneslow.js:371","ko":"{0}의 모습","t":"{0}の見え方"},
     {"ctx":"src/sims/oneslow.js:372","ko":"정상 (턴 대기만큼 늦게)","t":"正常（ターン待ちの分だけ遅れる）"},
     {"ctx":"src/sims/oneslow.js:372","ko":"정상 (예측으로 즉시)","t":"正常（予測で即時）"},
     {"ctx":"src/sims/oneslow.js:382","ko":"즉시","t":"即時"},

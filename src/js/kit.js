@@ -103,6 +103,11 @@
   };
   K.josa = (w, k) => w + K.pp(w, k);
   K.firstSentence = s => (String(s).match(/^[\s\S]*?[.。！？!?](?=\s|$)/) || [String(s)])[0];
+  K.lang = (window.I18N && window.I18N.lang) || 'ko';
+  // 큰 수 줄여 쓰기(번역판: 16K, 1.6万, 16 Tsd.). 한국어판의 만·억 표기는 실험마다 따로 둔다
+  K.compact = v => (Number.isFinite(v) ? v.toLocaleString(K.locale, { notation: 'compact', maximumFractionDigits: 1 }) : '—');
+  // 소수 자리를 필요한 만큼만(1.5, 2), 천 단위 구분 없이. 소수점 기호는 언어를 따른다
+  K.nr = (v, d = 1) => (Number.isFinite(v) ? v.toLocaleString(K.locale, { maximumFractionDigits: d, useGrouping: false }) : '—');
   K.n = (v, d = 0) => (Number.isFinite(v) ? v.toLocaleString(K.locale, { minimumFractionDigits: d, maximumFractionDigits: d }) : '—');
   K.ms = function (v) {
     if (!Number.isFinite(v)) return '∞';

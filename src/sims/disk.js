@@ -202,7 +202,7 @@ K.register('disk', function (root) {
 
   // ---------- 서식 ----------
   const trim = v => (Math.round(v * 10) / 10).toString();
-  const kfmt = v => (v >= 10000 ? trim(v / 10000) + TR`만` : v >= 1000 ? trim(v / 1000) + TR`천` : K.n(v));
+  const kfmt = v => (K.lang !== 'ko' ? (v >= 1000 ? K.compact(v) : K.n(v)) : v >= 10000 ? trim(v / 10000) + TR`만` : v >= 1000 ? trim(v / 1000) + TR`천` : K.n(v));
   function niceStep(v) { const p = Math.pow(10, Math.floor(Math.log10(v))); const m = v / p; return (m <= 1 ? 1 : m <= 2 ? 2 : m <= 5 ? 5 : 10) * p; }
   function dur(s) {
     if (s < 10) return K.n(s, 1) + TR` 초`;
