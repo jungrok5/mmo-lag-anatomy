@@ -569,3 +569,4 @@ Settled by the reviewers and translators after the first pass. Where a row diffe
 | 방치형 / 컷신 / 정각 이벤트 | 放置型 / 過場動畫 / 整點活動 | |
 | 멀티 클라이언트 제한 / 등장·퇴장 알림 / 기준 스냅샷 | 多開限制 / 出現通知／消失通知 / 基準快照 | |
 | PC방 | 網咖 | |
+| 이미 접속 중 | 「帳號已登入」 | |
