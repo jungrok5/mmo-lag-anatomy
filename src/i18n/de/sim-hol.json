@@ -48,7 +48,7 @@
     {"ctx":"src/sims/hol.js:202","ko":"전달","t":"Spiel"},
     {"ctx":"src/sims/hol.js:202","ko":"위치","t":"Pos."},
     {"ctx":"src/sims/hol.js:202","ko":"서버 보냄","t":"Server sendet"},
-    {"ctx":"src/sims/hol.js:202","ko":"내 PC 도착","t":"Ankunft am PC"},
+    {"ctx":"src/sims/hol.js:202","ko":"내 PC 도착","t":"PC empfängt"},
     {"ctx":"src/sims/hol.js:202","ko":"게임에 전달","t":"Spiel erhält"},
     {"ctx":"src/sims/hol.js:202","ko":"캐릭터 위치","t":"Position"},
     {"ctx":"src/sims/hol.js:224, src/sims/hol.js:330","ko":"멈춤 ","t":"Freeze "},

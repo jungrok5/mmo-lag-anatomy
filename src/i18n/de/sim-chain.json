@@ -36,7 +36,7 @@
     {"ctx":"src/sims/chain.js:63","ko":"확인 후 다음 입력","t":"Bestätigung abwarten"},
     {"ctx":"src/sims/chain.js:64","ko":"선입력 허용 시간 (스킬 큐)","t":"Input-Buffering (Queue)"},
     {"ctx":"src/sims/chain.js:65","ko":"선연출 (내 화면 쿨다운)","t":"Clientseitiges Feedback"},
-    {"ctx":"src/sims/chain.js:84","ko":"{0}회","t":"{0} Casts"},
+    {"ctx":"src/sims/chain.js:84","ko":"{0}회","t":"{0}×"},
     {"ctx":"src/sims/chain.js:86","ko":"{0}초","t":"{0} s"},
     {"ctx":"src/sims/chain.js:102","ko":"순차 요청","t":"Anfragen nacheinander"},
     {"ctx":"src/sims/chain.js:102","ko":"한 번에 묶기","t":"Gebündelt"},

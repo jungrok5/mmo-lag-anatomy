@@ -58,7 +58,7 @@
     {"ctx":"src/sims/rush.js:150","ko":"분","t":" min"},
     {"ctx":"src/sims/rush.js:173","ko":"처리 능력 {0}/초","t":"Kapazität {0}/s"},
     {"ctx":"src/sims/rush.js:195","ko":"{0}초","t":"{0} s"},
-    {"ctx":"src/sims/rush.js:196","ko":"번/초","t":"Versuche/s"},
+    {"ctx":"src/sims/rush.js:196","ko":"번/초","t":"pro s"},
     {"ctx":"src/sims/rush.js:205","ko":"전체 {0}명","t":"Gesamt: {0} Spieler"},
     {"ctx":"src/sims/rush.js:208","ko":"동시 접속 한도 {0}명","t":"Verbindungslimit: {0} Spieler"},
     {"ctx":"src/sims/rush.js:228","ko":"<b>{0}초</b><br>시도 {1}번/초<br>성공 {2}명/초<br>{3} {4}","t":"<b>{0} s</b><br>Versuche {1}/s<br>Erfolge {2} Spieler/s<br>{3} {4}"},

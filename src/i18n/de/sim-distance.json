@@ -65,7 +65,7 @@
     {"ctx":"src/sims/distance.js:259","ko":"<br>누르면 이 도시를 서버로","t":"<br>Klicken, um diese Stadt zum Server zu machen"},
     {"ctx":"src/sims/distance.js:275","ko":"시","t":" Uhr"},
     {"ctx":"src/sims/distance.js:275","ko":"왕복 핑 (ms)","t":"Ping (Round Trip, ms)"},
-    {"ctx":"src/sims/distance.js:279","ko":"저녁 피크","t":"Abendliche Stoßzeit"},
+    {"ctx":"src/sims/distance.js:279","ko":"저녁 피크","t":"Stoßzeit"},
     {"ctx":"src/sims/distance.js:293","ko":"지금 ","t":"Jetzt "},
     {"ctx":"src/sims/distance.js:300","ko":"<b>{0}</b><br>최소 {1} · 평균 {2}<br>최악(95%) {3} · 손실 {4}%","t":"<b>{0}</b><br>Min. {1} · Mittel {2}<br>Schlechtester (p95) {3} · Paketverlust {4} %"},
     {"ctx":"src/sims/distance.js:307","ko":"같은 도시 안","t":"Gleiche Stadt"},

@@ -61,7 +61,7 @@
     {"ctx":"src/sims/nagle.js:177","ko":"지연 ACK 끔","t":"Delayed ACK aus"},
     {"ctx":"src/sims/nagle.js:202","ko":"Nagle 대기","t":"Nagle wartet"},
     {"ctx":"src/sims/nagle.js:202","ko":"지연ACK","t":"DelACK"},
-    {"ctx":"src/sims/nagle.js:202","ko":"지연 ACK 대기","t":"Delayed ACK wartet"},
+    {"ctx":"src/sims/nagle.js:202","ko":"지연 ACK 대기","t":"Delayed ACK"},
     {"ctx":"src/sims/nagle.js:211","ko":"지연ACK ","t":"DelACK "},
     {"ctx":"src/sims/nagle.js:226","ko":"응답 ","t":"Antwort "},
     {"ctx":"src/sims/nagle.js:250","ko":" (패킷 2개)","t":" (2 Pakete)"},

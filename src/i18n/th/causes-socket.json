@@ -163,7 +163,7 @@
     {"ctx":"causes/sk-linger/ref/3/n","ko":"TcpExtTCPAbortOnData: SO_LINGER 0초 등으로 보낼 데이터가 남은 채 RST로 닫음, TcpExtTCPAbortOnClose: 안 읽은 데이터가 남은 채 닫아 RST를 보냄","t":"TcpExtTCPAbortOnData: ปิดด้วย RST ขณะที่ยังมีข้อมูลรอส่ง (เช่น SO_LINGER 0 วินาที), TcpExtTCPAbortOnClose: ปิดขณะที่ยังมีข้อมูลที่ยังไม่ได้อ่านจึงส่ง RST"},
     {"ctx":"causes/sk-blocking-io/t","ko":"블로킹 I/O 구조","t":"โครงสร้างแบบ blocking I/O"},
     {"ctx":"causes/sk-blocking-io/s","ko":"소켓 하나를 기다리는 동안 스레드가 다른 일을 못 하는 구조는 사람이 늘수록 전체가 느려집니다.","t":"โครงสร้างที่เธรดทำอย่างอื่นไม่ได้ระหว่างรอซ็อกเก็ตตัวเดียว จะทำให้ทั้งระบบช้าลงเมื่อคนเพิ่มขึ้น"},
-    {"ctx":"causes/sk-blocking-io/c/0","ko":"연결마다 읽기·쓰기를 기다리는 방식","t":"แต่ละการเชื่อมต่อรอการอ่านและเขียนของตัวเอง"},
+    {"ctx":"causes/sk-blocking-io/c/0","ko":"연결마다 읽기·쓰기를 기다리는 방식","t":"ใช้วิธีที่เธรดรอการอ่านและเขียนของแต่ละการเชื่อมต่อ"},
     {"ctx":"causes/sk-blocking-io/c/1","ko":"한 연결의 지연이 같은 스레드의 다른 연결로 번짐","t":"ดีเลย์ของการเชื่อมต่อหนึ่งลามไปยังการเชื่อมต่ออื่นในเธรดเดียวกัน"},
     {"ctx":"causes/sk-blocking-io/c/2","ko":"동접이 늘수록 전체가 슬로우모션·입력 지연","t":"ยิ่งผู้เล่นออนไลน์เพิ่มขึ้น ทุกคนยิ่งเจอสโลว์โมชั่นและอินพุตดีเลย์"},
     {"ctx":"causes/sk-blocking-io/act/game","ko":"epoll·IOCP·io_uring 기반 비동기 I/O로 전환.","t":"เปลี่ยนไปใช้ async I/O ที่ใช้ epoll, IOCP หรือ io_uring"},
