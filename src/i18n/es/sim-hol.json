@@ -39,7 +39,7 @@
     {"ctx":"src/sims/hol.js:54","ko":"UDP 평균 지연","t":""},
     {"ctx":"src/sims/hol.js:188","ko":"보낸 순서대로만 전달","t":""},
     {"ctx":"src/sims/hol.js:188","ko":"도착하는 대로 전달","t":""},
-    {"ctx":"src/sims/hol.js:193","ko":"서버","t":""},
+    {"ctx":"src/sims/hol.js:193","ko":"서버","t":"Servidor"},
     {"ctx":"src/sims/hol.js:193","ko":"서버의 실제 위치","t":""},
     {"ctx":"src/sims/hol.js:193","ko":"내 화면","t":""},
     {"ctx":"src/sims/hol.js:193","ko":"내 화면 속 캐릭터","t":""},

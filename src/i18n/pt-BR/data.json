@@ -173,7 +173,7 @@
     {"ctx":"report/0/items/2","ko":"<b>캐릭터 이름</b>. 특정 캐릭터로만 느린 경우도 있어서, 다른 캐릭터로는 괜찮은지도 함께 적어 주면 좋습니다.","t":"<b>Nome do personagem</b>. Às vezes só um personagem específico fica lento, então vale dizer também se com outro personagem está tudo bem."},
     {"ctx":"report/0/items/3","ko":"<b>누가 겪었나</b>: 나만 / 파티원도 / 주변 모두 / 채팅에서 서버 전체가 난리 / 같은 PC에 띄운 다른 클라이언트는 멀쩡.","t":"<b>Quem foi afetado</b>: só eu / a party também / todo mundo em volta / o chat inteiro reclamando do servidor / outro cliente aberto no mesmo PC está normal."},
     {"ctx":"report/0/items/4","ko":"<b>모양</b>: 이 백서의 증상 이름으로 (뚝뚝 끊김, 순간이동, 고무줄, 몰아치기…).","t":"<b>Como aparece</b>: use os nomes de sintoma deste guia (engasgos, teleporte, rubber banding, avanço rápido…)."},
-    {"ctx":"report/0/items/5","ko":"<b>얼마나 오래, 얼마나 자주</b>: 1초 한 번 / 30초마다 규칙적으로 / 10분째 계속.","t":"<b>Por quanto tempo e com que frequência</b>: uma vez, por 1 s / a cada 30 s, regularmente / há 10 minutos sem parar."},
+    {"ctx":"report/0/items/5","ko":"<b>얼마나 오래, 얼마나 자주</b>: 한 번만 1초쯤 / 30초마다 규칙적으로 / 10분째 계속.","t":""},
     {"ctx":"report/1/title","ko":"있으면 조사가 훨씬 빨라집니다","t":"Se tiver, a investigação fica muito mais rápida"},
     {"ctx":"report/1/items/0","ko":"<b>핑·손실 수치와 FPS</b> (게임 내 넷그래프·성능 표시를 켜 두면 가장 좋음).","t":"<b>Ping, perda de pacotes e FPS</b> (o ideal é deixar ligado o net graph ou o indicador de desempenho do jogo)."},
     {"ctx":"report/1/items/1","ko":"<b>연결 방식</b>: 유선 / 와이파이 / LTE·5G, 통신사 이름, 해외 여부, VPN이나 게임 가속기(경로를 우회시켜 핑을 줄여 준다는 프로그램)를 쓰는지.","t":"<b>Tipo de conexão</b>: cabo / Wi-Fi / LTE ou 5G, nome da operadora, se está no exterior, se usa VPN ou redutor de ping (programa que promete baixar o ping desviando a rota)."},
@@ -227,5 +227,8 @@
     {"ctx":"chkBy/ops","ko":"인프라 도구로 확인(게임 코드 불필요)","t":"Ferramentas de infra (sem precisar do código do jogo)"},
     {"ctx":"chkBy/code","ko":"게임 서버·클라이언트의 로그·지표가 필요","t":"Exige logs e métricas do servidor ou do cliente do jogo"},
     {"ctx":"chkBy/user","ko":"유저 쪽 환경에서 확인","t":"Verificação no ambiente do jogador"}
+  ],
+  "stale": [
+    {"ctx":"report/0/items/5","ko":"<b>얼마나 오래, 얼마나 자주</b>: 1초 한 번 / 30초마다 규칙적으로 / 10분째 계속.","t":"<b>Por quanto tempo e com que frequência</b>: uma vez, por 1 s / a cada 30 s, regularmente / há 10 minutos sem parar."}
   ]
 }

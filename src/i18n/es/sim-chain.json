@@ -31,7 +31,7 @@
     {"ctx":"src/sims/chain.js:27","ko":"요청당 서버 처리","t":""},
     {"ctx":"src/sims/chain.js:29","ko":"확인 후 입력","t":""},
     {"ctx":"src/sims/chain.js:29, src/sims/chain.js:30, src/sims/chain.js:31","ko":"회","t":""},
-    {"ctx":"src/sims/chain.js:31","ko":"선연출","t":""},
+    {"ctx":"src/sims/chain.js:31","ko":"선연출","t":"Feedback anticipado"},
     {"ctx":"src/sims/chain.js:32","ko":"상점 구매 (순차)","t":""},
     {"ctx":"src/sims/chain.js:63","ko":"확인 후 다음 입력","t":""},
     {"ctx":"src/sims/chain.js:64","ko":"선입력 허용 시간 (스킬 큐)","t":""},
