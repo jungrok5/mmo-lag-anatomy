@@ -225,7 +225,7 @@
     {"ctx":"causes/so-ports/sig/g","ko":"TIME_WAIT 소켓 수, 내부 연결 실패 수","t":"TIME_WAITソケット数、内部接続の失敗数"},
     {"ctx":"causes/so-ports/chk/look","ko":"ss -tan state time-wait로 TIME_WAIT 소켓을 상대 주소별로 세고, 게임 서버 로그에서 connect 실패(EADDRNOTAVAIL)를 찾음","t":"ss -tan state time-waitでTIME_WAITソケットを接続先アドレスごとに数え、ゲームサーバーのログからconnectの失敗（EADDRNOTAVAIL）を探す"},
     {"ctx":"causes/so-ports/chk/yes","ko":"같은 상대(DB 등)로 가는 TIME_WAIT가 임시 포트 범위(기본 약 2만 8천 개) 근처에서 평평해지고, connect가 EADDRNOTAVAIL로 실패함","t":"同じ接続先（DBなど）へのTIME_WAITがエフェメラルポートの範囲（デフォルトで約2万8千個）付近で頭打ちになり、connectがEADDRNOTAVAILで失敗している"},
-    {"ctx":"causes/so-ports/chk/no","ko":"TIME_WAIT가 적은데 외부로 나가는 연결만 실패하면 “클라우드 NAT 게이트웨이 연결·포트 한도”","t":"TIME_WAITが少ないのに外部への接続だけが失敗するなら「クラウドNATゲートウェイの接続・ポート上限」"},
+    {"ctx":"causes/so-ports/chk/no","ko":"TIME_WAIT가 적은데 외부로 나가는 연결만 실패하면 “클라우드 NAT 게이트웨이 연결·포트 한도”","t":"TIME_WAITが少ないのに外部への接続だけが失敗するなら「クラウドのNATゲートウェイの接続・ポート上限」"},
     {"ctx":"causes/so-ports/ref/0/n","ko":"ip_local_port_range 기본 32768~60999, tcp_tw_reuse, tcp_fin_timeout은 FIN_WAIT_2 상태 유지 시간","t":"ip_local_port_rangeのデフォルトは32768〜60999、tcp_tw_reuse、tcp_fin_timeoutはFIN_WAIT_2状態を保持する時間"},
     {"ctx":"causes/so-ports/ref/1/n","ko":"TCP_TIMEWAIT_LEN(60*HZ): TIME_WAIT 약 60초는 커널 상수","t":"TCP_TIMEWAIT_LEN(60*HZ)：TIME_WAITの約60秒はカーネルの定数"},
     {"ctx":"causes/so-ports/ref/2/n","ko":"윈도우 동적 포트 기본 49152~65535, 닫힌 연결은 기본 4분 동안 TIME_WAIT로 포트를 잡고 있음","t":"Windowsの動的ポートのデフォルトは49152〜65535、閉じた接続はデフォルトで4分間TIME_WAITとしてポートを保持"},

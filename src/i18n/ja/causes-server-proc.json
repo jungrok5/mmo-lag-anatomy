@@ -220,7 +220,7 @@
     {"ctx":"causes/sp-hot-entity/chk/no","ko":"보스와 상관없이 한곳에 모이기만 해도 똑같이 느려지면 시야 계산이나 브로드캐스트 폭증 쪽","t":"ボスと関係なく1か所に集まるだけで同じように遅くなるなら、視界計算かブロードキャストの急増の側"},
     {"ctx":"causes/sp-hot-entity/ref/0/n","ko":"공격 한 번도 보는 모든 클라이언트에 알려야 해서 n명이 n명에게 알리는 O(n²) 부담이 생기고, 메시지가 많은 드론 공격은 이 부담이 더 빨리 커짐","t":"1回の攻撃でも見ているすべてのクライアントに通知する必要があるため、n人がn人に通知するO(n²)の負荷が生じ、メッセージの多いドローン攻撃ではこの負荷がさらに速く大きくなる"},
     {"ctx":"causes/sp-spawn-burst/t","ko":"밀집 지역 진입 시 스폰 폭주","t":"密集エリア進入時のスポーン集中"},
-    {"ctx":"causes/sp-spawn-burst/s","ko":"사람이 가득한 마을로 텔레포트하면, 서버는 새로 보이게 된 수백 명의 외형·장비·상태를 한꺼번에 보내야 합니다.","t":""},
+    {"ctx":"causes/sp-spawn-burst/s","ko":"사람이 가득한 마을로 텔레포트하면, 서버는 새로 보이게 된 수백 명의 외형·장비·상태를 한꺼번에 보내야 합니다.","t":"人でいっぱいの街にテレポートすると、サーバーは新たに見えるようになった数百人の外見・装備・状態を一度に送らなければなりません。"},
     {"ctx":"causes/sp-spawn-burst/c/0","ko":"텔레포트·접속·채널 이동으로 붐비는 곳에 갑자기 나타남","t":"テレポート・ログイン・チャンネル移動で、混雑した場所に突然現れる"},
     {"ctx":"causes/sp-spawn-burst/c/1","ko":"수백 명분의 전체 정보를 한 번에 만들어 보내고, 내 PC도 한 번에 불러옴","t":"数百人分の全情報を一度に作って送り、自分のPCも一度に読み込む"},
     {"ctx":"causes/sp-spawn-burst/c/2","ko":"도착 직후 잠깐 멈춤, 캐릭터가 늦게 하나씩 나타나고 입력이 늦음","t":"到着直後に一瞬止まる、キャラクターが遅れて1体ずつ現れ、入力の反応が遅い"},
@@ -233,7 +233,7 @@
     {"ctx":"causes/sp-spawn-burst/ref/0/n","ko":"액터 채널을 처음 열 때 초기 위치·회전 같은 정보를 함께 보내고, 연결이 포화되면 남은 액터는 다음 틱으로 미룸","t":"アクターチャネルを最初に開くときに初期位置・回転などの情報も一緒に送り、接続が飽和したら残りのアクターは次のティックに回す"},
     {"ctx":"causes/sp-spawn-burst/ref/1/n","ko":"거리와 시선 방향으로 우선순위를 매겨 가깝고 보이는 액터부터 보냄","t":"距離と視線の向きで優先度を付け、近くて見えるアクターから送る"},
     {"ctx":"causes/sp-entity-buildup/t","ko":"개체 누적 (정리되지 않은 아이템·소환물)","t":"オブジェクトの蓄積（消えずに残るアイテム・召喚物）"},
-    {"ctx":"causes/sp-entity-buildup/s","ko":"사라져야 할 바닥 아이템, 소환물, 끝난 타이머가 정리되지 않고 쌓이면, 서버를 오래 켜 둘수록 매 틱 할 일이 늘어납니다.","t":""},
+    {"ctx":"causes/sp-entity-buildup/s","ko":"사라져야 할 바닥 아이템, 소환물, 끝난 타이머가 정리되지 않고 쌓이면, 서버를 오래 켜 둘수록 매 틱 할 일이 늘어납니다.","t":"消えるはずの地面のアイテム、召喚物、終わったタイマーが片付けられずにたまると、サーバーを長く稼働させるほど毎ティックの処理が増えます。"},
     {"ctx":"causes/sp-entity-buildup/c/0","ko":"바닥 아이템·소환물·만료된 타이머·빈 파티 정보가 제때 지워지지 않음","t":"地面のアイテム・召喚物・期限切れのタイマー・空のパーティ情報が、本来のタイミングで削除されない"},
     {"ctx":"causes/sp-entity-buildup/c/1","ko":"틱마다 순회하는 목록이 날마다 길어짐","t":"ティックごとに走査するリストが日ごとに長くなる"},
     {"ctx":"causes/sp-entity-buildup/c/2","ko":"점검 직후엔 멀쩡하다가 며칠 지나면 그 서버·지역만 점점 굼뜸","t":"メンテ明けは問題ないが、数日たつとそのサーバー・エリアだけ次第に重くなる"},
@@ -264,7 +264,7 @@
     {"ctx":"causes/sp-patch-traffic/ref/2/n","ko":"인터넷 경로 MTU 1,500, GRE 터널을 지나면 1,476","t":"インターネットの経路MTUは1,500、GREトンネルを通ると1,476"},
     {"ctx":"causes/sp-patch-traffic/ref/3/n","ko":"pps_allowance_exceeded·bw_out_allowance_exceeded: 인스턴스의 PPS·송신 대역폭 한도를 넘어 큐에 쌓이거나 버려진 패킷 수","t":"pps_allowance_exceeded・bw_out_allowance_exceeded：インスタンスのPPS・送信帯域幅の上限を超えて、キューにたまったか破棄されたパケットの数"},
     {"ctx":"causes/sp-patch-traffic/ref/4/n","ko":"sar -n DEV의 rxpck/s·txpck/s(초당 패킷)·rxkB/s·txkB/s(초당 KB), sar -n IP의 fragcrt/s(초당 만든 IP 프래그먼트, ipFragCreates)","t":"sar -n DEVのrxpck/s・txpck/s（毎秒のパケット数）・rxkB/s・txkB/s（毎秒のKB）、sar -n IPのfragcrt/s（毎秒作成したIPフラグメント数、ipFragCreates）"},
-    {"ctx":"causes/sp-patch-traffic/ref/5/n","ko":"NetworkPacketsOut(인스턴스가 모든 네트워크 인터페이스로 보낸 패킷 수)·NetworkOut(보낸 바이트 수)","t":"NetworkPacketsOut（インスタンスがすべてのネットワークインターフェイスから送信したパケット数）・NetworkOut（送信したバイト数）"},
+    {"ctx":"causes/sp-patch-traffic/ref/5/n","ko":"NetworkPacketsOut(인스턴스가 모든 네트워크 인터페이스로 보낸 패킷 수)·NetworkOut(보낸 바이트 수)","t":"NetworkPacketsOut（インスタンスがすべてのネットワークインターフェースから送信したパケット数）・NetworkOut（送信したバイト数）"},
     {"ctx":"causes/sp-patch-traffic/ref/6/n","ko":"캡처한 패킷을 길이 구간별로 나눠 개수·평균·최소·최대를 보여 줌","t":"キャプチャしたパケットを長さの区間ごとに分け、件数・平均・最小・最大を表示"}
   ],
   "stale": [

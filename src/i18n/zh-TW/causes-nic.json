@@ -67,7 +67,7 @@
     {"ctx":"causes/nic-saturate/s","ko":"1Gbps·10Gbps 카드의 한계까지 쓰면 송신 대기열이 길어지고 결국 버려집니다.","t":"把 1Gbps、10Gbps 網路卡用到極限時，傳送佇列會變長，最後封包被丟棄。"},
     {"ctx":"causes/nic-saturate/c/0","ko":"브로드캐스트 증가로 전송량이 카드 한계에 도달","t":"廣播增加，使傳輸量達到網路卡的極限。"},
     {"ctx":"causes/nic-saturate/c/1","ko":"송신 대기열이 길어지고 넘치면 폐기","t":"傳送佇列變長，滿了就丟棄。"},
-    {"ctx":"causes/nic-saturate/c/2","ko":"서버 전체 지연·손실(입력 지연·순간이동)","t":"整個伺服器出現延遲與遺失（輸入延遲、瞬移）。"},
+    {"ctx":"causes/nic-saturate/c/2","ko":"서버 전체 지연·손실(입력 지연·순간이동)","t":"整個伺服器出現延遲與封包遺失（輸入延遲、瞬移）。"},
     {"ctx":"causes/nic-saturate/act/game","ko":"전송량 줄이기(관심 영역, 압축, 변경분만).","t":"減少傳輸量（AOI、壓縮、只送變更的部分）。"},
     {"ctx":"causes/nic-saturate/act/infra","ko":"카드 증설(더 빠른 NIC, 클라우드는 더 큰 인스턴스), NIC 사용률 경보.","t":"升級網路卡（更快的 NIC，雲端則換更大的執行個體），設定 NIC 使用率警示。"},
     {"ctx":"causes/nic-saturate/sig/g","ko":"NIC 송신량, 송신 폐기","t":"NIC 傳送量、傳送丟棄"},

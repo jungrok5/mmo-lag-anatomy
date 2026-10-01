@@ -119,7 +119,7 @@
     {"ctx":"causes/nic-reset/sig/g","ko":"서버 송수신 패킷 수","t":"サーバーの送受信パケット数"},
     {"ctx":"causes/nic-reset/chk/look","ko":"dmesg로 커널 로그에서 “NETDEV WATCHDOG … transmit queue N timed out”, 드라이버의 재설정, “Link is Down”·“Link is Up” 기록을 찾고, 그 시각의 서버 송수신 패킷 수를 봄","t":"dmesgでカーネルログから「NETDEV WATCHDOG … transmit queue N timed out」、ドライバーのリセット、「Link is Down」「Link is Up」の記録を探し、その時刻のサーバーの送受信パケット数を確認"},
     {"ctx":"causes/nic-reset/chk/yes","ko":"멈춘 시각에 커널 로그에 송신 큐 타임아웃이나 링크 다운·업 기록이 있고, 그 몇 초 동안 송수신 패킷 수가 0","t":"止まった時刻のカーネルログに送信キューのタイムアウトやリンクのダウン・アップの記録があり、その数秒間は送受信パケット数が0"},
-    {"ctx":"causes/nic-reset/chk/no","ko":"커널 로그가 깨끗하고 스위치 쪽 포트도 멀쩡하면 게임 서버 프로세스의 멈춤(“서버 GC 전체 멈춤”, “데드락”)이나 “네트워크 장비 장애 전환(페일오버)”","t":"カーネルログがきれいで、スイッチ側のポートも正常なら、ゲームサーバープロセスの停止（「サーバーGCによる全停止」「デッドロック」）か「ネットワーク機器のフェイルオーバー」"},
+    {"ctx":"causes/nic-reset/chk/no","ko":"커널 로그가 깨끗하고 스위치 쪽 포트도 멀쩡하면 게임 서버 프로세스의 멈춤(“서버 GC 전체 멈춤”, “데드락”)이나 “네트워크 장비 장애 전환(페일오버)”","t":"カーネルログがきれいで、スイッチ側のポートも正常なら、ゲームサーバープロセスの停止（「サーバーGCの全停止」「デッドロック」）か「ネットワーク機器のフェイルオーバー」"},
     {"ctx":"causes/nic-reset/ref/0/n","ko":"송신 큐가 멈추면 커널 워치독이 “NETDEV WATCHDOG … transmit queue N timed out”을 남기고 드라이버의 재설정 함수를 부름","t":"送信キューが止まると、カーネルのウォッチドッグが「NETDEV WATCHDOG … transmit queue N timed out」を記録し、ドライバーのリセット関数を呼ぶ"},
     {"ctx":"causes/nic-reset/ref/1/n","ko":"ixgbe 드라이버가 송신 멈춤 때 어댑터를 재설정하고, 링크가 끊기면 “NIC Link is Down”을 기록","t":"ixgbeドライバーが送信停止時にアダプターをリセットし、リンクが切れると「NIC Link is Down」を記録"},
     {"ctx":"causes/nic-reset/ref/2/n","ko":"ethtool -K로 오프로드 기능을 하나씩 끄는 옵션","t":"ethtool -Kでオフロード機能を1つずつ無効にするオプション"},
