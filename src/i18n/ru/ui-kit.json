@@ -3,7 +3,7 @@
   "group": "ui-kit",
   "entries": [
     {"ctx":"src/js/kit.js:91","ko":"{0}. {1}","t":"{0}. {1}"},
-    {"ctx":"src/js/kit.js:96","ko":"{0}.","t":""},
+    {"ctx":"src/js/kit.js:96","ko":"{0}.","t":"{0}."},
     {"ctx":"src/js/kit.js:116, src/js/kit.js:117","ko":" 초","t":" с"},
     {"ctx":"src/js/kit.js:164","ko":"직접 해보기","t":"Попробуйте сами"},
     {"ctx":"src/js/kit.js:178","ko":"이렇게 해보세요","t":"Что попробовать"},

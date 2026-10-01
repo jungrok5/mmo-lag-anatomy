@@ -322,6 +322,9 @@ def main():
         return
 
     body = (PACK / "body.html").read_text(encoding="utf-8") if PACK else read("body.html")
+    if LANG["code"] != "ko":
+        # 번역판은 한글 글꼴을 넣지 않으므로(아래 embed_fonts), 맺음말의 글꼴 목록도 실제로 넣는 것만 적는다
+        body = re.sub(r'(<span class="fontlist">)[^<]*(</span>)', r"\1IBM Plex Mono\2", body)
     files = core_js() + sim_files() + APP_JS
     if LANG["code"] != "ko" and not a.fragment:
         out = pathlib.Path(a.out) if a.out else ROOT / "build" / "i18n" / LANG["dir"] / "index.html"

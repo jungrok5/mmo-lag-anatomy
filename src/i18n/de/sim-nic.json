@@ -55,7 +55,7 @@
     {"ctx":"src/sims/nic.js:158","ko":"큐 번호","t":"Queue-Nr."},
     {"ctx":"src/sims/nic.js:176, src/sims/nic.js:196, src/sims/nic.js:213, src/sims/nic.js:219","ko":"지금","t":"Jetzt"},
     {"ctx":"src/sims/nic.js:176, src/sims/nic.js:196","ko":"초","t":" s"},
-    {"ctx":"src/sims/nic.js:184","ko":"패킷/초","t":"Pakete/s"},
+    {"ctx":"src/sims/nic.js:184","ko":"패킷/초","t":"pps"},
     {"ctx":"src/sims/nic.js:213","ko":"<b>{0}</b><br>들어옴 {1}/초<br>처리 {2}/초<br>버림(링 넘침) {3}/초{4}","t":"<b>{0}</b><br>Eingang {1}/s<br>Verarbeitet {2}/s<br>Verworfen (Ring voll) {3}/s{4}"},
     {"ctx":"src/sims/nic.js:213, src/sims/nic.js:219","ko":"초 전","t":" s zuvor"},
     {"ctx":"src/sims/nic.js:213","ko":"<br>한도 초과 버림 {0}/초","t":"<br>Verworfen (Limit) {0}/s"},
