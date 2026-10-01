@@ -49,7 +49,7 @@
     {"ctx":"src/sims/tick.js:75","ko":"월드 보스 + 격자 AOI","t":""},
     {"ctx":"src/sims/tick.js:76","ko":"공성전 (1,500명 한 곳)","t":""},
     {"ctx":"src/sims/tick.js:77","ko":"게임 스레드 DB 호출","t":""},
-    {"ctx":"src/sims/tick.js:80","ko":"틱 처리 시간","t":""},
+    {"ctx":"src/sims/tick.js:80","ko":"틱 처리 시간","t":"เวลาประมวลผลทิก"},
     {"ctx":"src/sims/tick.js:80","ko":"평균 / 최대","t":""},
     {"ctx":"src/sims/tick.js:81","ko":"실제 틱레이트","t":""},
     {"ctx":"src/sims/tick.js:81","ko":"회/초","t":""},
