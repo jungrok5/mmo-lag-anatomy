@@ -58,7 +58,7 @@
     {"ctx":"glossary/g-reliable-udp-kcp/0","ko":"신뢰성 UDP","t":"UDP confiable"},
     {"ctx":"glossary/g-reliable-udp-kcp/2","ko":"UDP 위에 필요한 만큼만 재전송·순서 보장을 직접 구현한 방식.","t":"Retransmisión y entrega en orden implementadas sobre UDP por el propio juego, solo en la medida necesaria."},
     {"ctx":"glossary/g-head-of-line-blocking/0","ko":"HOL 블로킹","t":"Bloqueo HOL"},
-    {"ctx":"glossary/g-head-of-line-blocking/2","ko":"앞의 하나가 막혀 뒤의 모두가 기다리는 현상. TCP 몰아치기의 원인입니다.","t":"Bloqueo de cabeza de línea: el primero de la fila se atasca y todos los de detrás esperan. Es la causa de la cámara rápida en TCP."},
+    {"ctx":"glossary/g-head-of-line-blocking/2","ko":"앞의 하나가 막혀 뒤의 모두가 기다리는 현상. TCP 몰아치기의 원인입니다.","t":"Bloqueo de cabeza de línea: el primero de la cola se atasca y todos los de detrás esperan. Es la causa de la cámara rápida en TCP."},
     {"ctx":"glossary/g-retransmission-timeout/2","ko":"재전송 타이머. TCP가 패킷을 잃었다고 판단하고 다시 보내기까지 기다리는 시간. 리눅스는 핑 + 200ms 이상, 실패할수록 두 배.","t":"Temporizador de retransmisión: lo que espera TCP antes de dar un paquete por perdido y reenviarlo. En Linux, ping + 200 ms como mínimo, y se duplica con cada fallo."},
     {"ctx":"glossary/g-nagle-s-algorithm/0","ko":"Nagle 알고리즘","t":"Algoritmo de Nagle"},
     {"ctx":"glossary/g-nagle-s-algorithm/2","ko":"앞서 보낸 데이터의 확인(ACK)이 올 때까지 작은 데이터를 모아 두었다가 한 번에 보내, 패킷 수를 아끼는 TCP 기능. 게임에서는 대개 꺼야 합니다.","t":"Función de TCP que reduce el número de paquetes: retiene los datos pequeños hasta recibir el acuse (ACK) de lo enviado antes y los manda juntos. En juegos casi siempre hay que desactivarla."},

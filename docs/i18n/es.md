@@ -618,6 +618,7 @@ These Korean strings exist as whole entries both in the phase-1 groups (`data`, 
 | 같은 데이터센터 서버끼리 왕복 | Ida y vuelta entre servidores del mismo centro de datos | sim-ladder |
 | 커널 | Kernel | data, glossary |
 | " 초" (after a number) | " s" | sim-disk |
+| `<b>{0}</b>({1})` (site, factor name + description; appears after the next sync) | `<b>{0}</b> ({1})` | site |
 
 ## 17. Checklist before `fill`
 
