@@ -8569,6 +8569,21 @@ K.register('arch', function (root) {
     g.addEventListener('click', cycle);
     g.addEventListener('keydown', ev => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); cycle(); } });
   });
+  // 번역판: 상자보다 긴 이름은 글자를 줄여 상자 안에 넣는다(왼쪽 상태 아이콘과 겹치지 않게). 한국어판은 그대로
+  let fitted = false;
+  const fitLabels = () => {
+    if (fitted || K.lang === 'ko') return;
+    NODES.forEach(n => n.g.querySelectorAll('.nt, .nt2').forEach(t => {
+      const max = n.w - 32, len = t.getComputedTextLength();
+      if (!len) return;
+      fitted = true;
+      if (len <= max) return;
+      const fs = parseFloat(getComputedStyle(t).fontSize) || 13;
+      t.style.fontSize = Math.max(9, (fs * max) / len) + 'px';
+      if (t.getComputedTextLength() > max) { t.setAttribute('textLength', max); t.setAttribute('lengthAdjust', 'spacingAndGlyphs'); }
+    }));
+  };
+  requestAnimationFrame(fitLabels);
 
   // 흐름 점: 경로를 미리 잘게 나눠 두고 매 프레임 위치만 옮긴다
   EDGES.forEach((e, k) => {
