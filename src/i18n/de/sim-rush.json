@@ -26,7 +26,7 @@
     {"ctx":"src/sims/rush.js:111","ko":"인증 DB 조회·캐릭터 불러오기까지 포함한 처리 능력. 이 실험은 서버가 이 속도로만 접속을 받아 간다고 가정합니다. 접속은 바로 받고 로그인만 따로 대기열에 넣는 서버라면 커널 대기열 대신 서버 안의 대기열이 찹니다.","t":"Kapazität inklusive Abfrage der Authentifizierungs-DB und Laden des Charakters. Das Experiment nimmt an, dass der Server Verbindungen nur in diesem Tempo annimmt. Nimmt ein Server Verbindungen sofort an und stellt nur die Logins in eine eigene Warteschlange, füllt sich die Warteschlange im Server selbst."},
     {"ctx":"src/sims/rush.js:112","ko":"서버 OS 설정","t":"Server-OS-Einstellungen"},
     {"ctx":"src/sims/rush.js:113","ko":"listen backlog (접속 대기열)","t":"listen backlog (Verbindungswarteschlange)"},
-    {"ctx":"src/sims/rush.js:113","ko":"리눅스 커널 상한(somaxconn) 기본값은 5.4부터 4,096, 그 전에는 128입니다. 서버 코드가 listen에 더 작은 값을 주면 그 값이 한도입니다.","t":"Der Standardwert der Kernel-Obergrenze (somaxconn) ist seit Linux 5.4 4.096, davor 128. Übergibt der Servercode an listen einen kleineren Wert, gilt dieser als Grenze."},
+    {"ctx":"src/sims/rush.js:113","ko":"리눅스 커널 상한(somaxconn) 기본값은 5.4부터 4,096, 그 전에는 128입니다. 서버 코드가 listen에 더 작은 값을 주면 그 값이 한도입니다.","t":"Der Standardwert der Kernel-Obergrenze (somaxconn) liegt seit Linux 5.4 bei 4096, davor bei 128. Übergibt der Servercode an listen einen kleineren Wert, gilt dieser als Grenze."},
     {"ctx":"src/sims/rush.js:114","ko":"동시 접속 한도 (파일 디스크립터)","t":"Limit gleichzeitiger Verbindungen (Dateideskriptoren)"},
     {"ctx":"src/sims/rush.js:114","ko":"100만","t":"1 Mio."},
     {"ctx":"src/sims/rush.js:114","ko":"접속 하나에 파일 디스크립터 하나. 1,024는 리눅스에서 서비스 설정을 안 바꾸면 흔히 걸리는 값입니다.","t":"Ein Dateideskriptor pro Verbindung. 1.024 ist der Wert, an den man unter Linux häufig stößt, wenn die Dienstkonfiguration nicht angepasst wurde."},

@@ -39,7 +39,7 @@
     {"ctx":"src/sims/nagle.js:63","ko":"보기","t":"Ansicht"},
     {"ctx":"src/sims/nagle.js:64","ko":"재생 속도","t":"Wiedergabegeschwindigkeit"},
     {"ctx":"src/sims/nagle.js:64","ko":"1/10 느리게","t":"1/10 Tempo"},
-    {"ctx":"src/sims/nagle.js:64","ko":"멈춤","t":"Freeze"},
+    {"ctx":"src/sims/nagle.js:64","ko":"멈춤","t":"Pause"},
     {"ctx":"src/sims/nagle.js:64","ko":"실제로는 이 모든 일이 1초도 안 걸립니다.","t":"In Wirklichkeit dauert das alles keine Sekunde."},
     {"ctx":"src/sims/nagle.js:66","ko":"평균 응답","t":"Mittlere Antwortzeit"},
     {"ctx":"src/sims/nagle.js:66","ko":"최근 메시지 20개","t":"Letzte 20 Nachrichten"},

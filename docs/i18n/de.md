@@ -536,3 +536,43 @@ These Korean strings exist as whole entries both in the phase-1 groups and in ot
 - No "—", no spaced " – ", no "nicht …, sondern …".
 - German quotes „…“; no ASCII `"` in attribute strings.
 - Run `node tools/i18n.cjs check de --warn` and `--conflicts`; number warnings are fine only where a Korean number word became German words or digits.
+
+## 11. Decisions added during review
+
+Settled by the translators and reviewers after the first pass. They override any older variant still found in the files.
+
+| Korean | German | Note |
+|---|---|---|
+| 트래픽 | Traffic | "Datenverkehr" is fine; never bare "Verkehr". Compounds: Traffic-Muster, Traffic-Profil, Backbone-Traffic, Internet-Traffic, Angriffstraffic |
+| 게임 스레드 | Game-Thread | never "Spiel-Thread" (client and server); title sp-sync-call „Synchrone Aufrufe im Game-Thread“ |
+| RTO | das RTO | neuter everywhere |
+| 경로 MTU | Path-MTU | never "Pfad-MTU" |
+| 경로 (network) | Route | Routenmessung, auf der Route; "Pfad" only for several parallel paths (ECMP) |
+| 세션 | Session | Session-Token, Session-ID, Geister-Session; not "Sitzung" (product metric names stay as the product writes them) |
+| 유예 시간, 재연결 유예 시간 | Karenzzeit, Reconnect-Karenzzeit | not "Kulanzzeit" |
+| N초 (after a digit) | N s | also in quotes, labels and table cells ("alle 30–60 s", „in 1,5 s Bodenschlag“); minutes and hours stay written out |
+| 락스텝 턴 | Zug | „im selben Zug“, „Warten auf den Zug“; not "Schritt" |
+| 입력 지연 (setting in lockstep/rollback) | Input-Delay | the symptom stays Input-Lag; not "Eingabeverzögerung" |
+| 1인칭 / 3인칭 / 전지적 시점 | Ego-Perspektive / Third-Person-Perspektive / Gottperspektive | |
+| FPS (genre) | Ego-Shooter | |
+| 플레이아웃 버퍼 / 지터 버퍼 | Playout-Puffer / Jitter-Puffer | |
+| 신뢰성 UDP | zuverlässiges UDP | glossary term „Zuverlässiges UDP“ |
+| kernel and config parameter values (somaxconn, tcp_rto_max_ms, LimitNOFILE, TCP_BASE_MSS, InitialRto) | digits without thousands separator: 4096, 1024, 120000, 3000 ms | quantities in prose keep the separator (1.500 Byte, 65.535 Ports) |
+| rpm | U/min | „7.200 U/min“ |
+| 숫자 감각 (latency ladder table) | Größenordnungen | same as the card label 수치 감각 |
+| 따라잡기 폭주 | Aufholspirale | one word, no hyphen |
+| 먼저 부를 곳 | Zuerst hinzuziehen / Wen zuerst hinzuziehen | not "rufen" |
+| 06장 (nav / in-text link) | „TCP-Retransmissions im Detail“ / „Kapitel 06 zu TCP-Retransmissions“ | |
+| 회고 | Rückblick | postmortem documents in cases |
+| 카나리 / 대조군 | Canary / Kontrollgruppe | |
+| 서버의 무응답 판정 시간 | Heartbeat-Timeout des Servers | |
+| 예고 (boss attack) | Vorwarnung, Vorwarnzeit | |
+| 스킬 큐 / 시전 시간 | Skill-Queue / Cast-Zeit | |
+| 패킷 캡처 | Paketmitschnitt | |
+| traceroute 구간 | Hop | |
+| 광모듈 | Transceiver | |
+| 중간 장비 | Zwischengerät | |
+| 예비 DB / 주 서버 | Standby-DB / Primärserver | |
+| 수십~수백 배 | um einen zwei- bis dreistelligen Faktor | |
+| 고무줄처럼 끌려가다, 서버 위치로 당겨짐 | (an die Serverposition) zurückgesetzt | the symptom name stays Rubberbanding: „wird A zurückgesetzt (Rubberbanding)“ |
+| meta description | „Lag-Ursachen in Onlinespielen: warum es ruckelt, …“ | main search phrase first, at most about 155 characters |

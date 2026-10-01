@@ -76,7 +76,7 @@
     {"ctx":"src/sims/distance.js:320","ko":"{0}과 유럽 사이는 직선 위로 큰 케이블이 거의 없어, 패킷은 동남아·수에즈나 미국을 돌아갑니다. ","t":"Zwischen {0} und Europa verlaufen entlang der Luftlinie kaum große Kabel. Die Pakete nehmen deshalb den Umweg über Südostasien und den Suezkanal oder über die USA. "},
     {"ctx":"src/sims/distance.js:320","ko":"한국·일본","t":"Korea/Japan"},
     {"ctx":"src/sims/distance.js:321","ko":"실제 경로는 {0}배쯤 돌아가고 가입자망·장비까지 더해 평균 <b>{1}</b>입니다.","t":"Die echte Route ist etwa {0}-mal so lang, mit Anschluss und Netzwerkgeräten ergibt sich im Mittel <b>{1}</b>."},
-    {"ctx":"src/sims/distance.js:322","ko":" 해저 케이블이 끊겨 먼 경로로 우회하느라 평소보다 {0}가 늘고 손실도 생겼습니다.","t":" Ein Unterseekabel ist unterbrochen, der Verkehr nimmt eine längere Umweg-Route. Das kostet {0} mehr als sonst, dazu kommt Paketverlust."},
+    {"ctx":"src/sims/distance.js:322","ko":" 해저 케이블이 끊겨 먼 경로로 우회하느라 평소보다 {0}가 늘고 손실도 생겼습니다.","t":" Ein Unterseekabel ist unterbrochen, die Pakete nehmen eine längere Umweg-Route. Das kostet {0} mehr als sonst, dazu kommt Paketverlust."},
     {"ctx":"src/sims/distance.js:324","ko":" 지금 {0}은 저녁 피크라 {1}이 붐빕니다. 100번 중 5번은 <b>{2}</b>까지 튀고 손실도 {3}%라 순간이동·고무줄이 섞입니다.","t":" Um {0} ist abendliche Stoßzeit, {1} sind überlastet. 5 von 100 Pings schießen auf <b>{2}</b> hoch, dazu kommen {3} % Paketverlust. Zwischendurch kommt es zu Teleportieren und Rubberbanding."},
     {"ctx":"src/sims/distance.js:324","ko":"국제 구간","t":"die internationalen Strecken"},
     {"ctx":"src/sims/distance.js:324","ko":"통신사 사이 구간","t":"die Strecken zwischen Providern"},

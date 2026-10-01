@@ -84,7 +84,7 @@
     {"ctx":"#retrans li","ko":"<b>진짜 손실인지</b>: TCPSpuriousRTOs·DSACK이 함께 늘면 늦게 도착한 것을 잃은 줄 안 불필요한 재전송을 먼저 의심합니다.","t":"<b>Echter Verlust?</b> Steigen TCPSpuriousRTOs und DSACKs mit, zuerst unnötige Retransmissions vermuten: Verspätete Pakete wurden für verloren gehalten."},
     {"ctx":"#retrans li","ko":"<b>서버 수신 단계</b>: 같은 시각에 네트워크 카드·softnet·클라우드 한도 카운터가 늘었다면 서버 쪽에서 버린 것입니다.","t":"<b>Empfang auf dem Server</b>: Sind zur selben Zeit Zähler von Netzwerkkarte, softnet oder Cloud-Limits gestiegen, wurde auf der Serverseite verworfen."},
     {"ctx":"#retrans li","ko":"<b>데이터센터 장비</b>: 스위치·방화벽의 드롭·CRC 카운터와 세션 테이블을 봅니다.","t":"<b>Geräte im Rechenzentrum</b>: Drop- und CRC-Zähler von Switches und Firewalls sowie die Session-Tabelle prüfen."},
-    {"ctx":"#retrans li","ko":"<b>바깥 경로</b>: 문제 유저 쪽과 서버 쪽 양방향 mtr로 손실이 시작되는 구간을 찾습니다.","t":"<b>Externer Pfad</b>: Mit mtr in beide Richtungen, von betroffenen Spielern und vom Server aus, den Abschnitt finden, in dem der Verlust beginnt."},
+    {"ctx":"#retrans li","ko":"<b>바깥 경로</b>: 문제 유저 쪽과 서버 쪽 양방향 mtr로 손실이 시작되는 구간을 찾습니다.","t":"<b>Externe Route</b>: Mit mtr in beide Richtungen, von betroffenen Spielern und vom Server aus, den Abschnitt finden, in dem der Verlust beginnt."},
     {"ctx":"#retrans li","ko":"<b>그래도 모르면</b>: 양쪽 끝에서 같은 시각에 패킷을 캡처해 비교합니다.","t":"<b>Immer noch unklar</b>: An beiden Enden zur selben Zeit Pakete mitschneiden und vergleichen."},
     {"ctx":"#retrans p","ko":"제보에 시각(초 단위), 유저의 통신사·지역, 접속 서버, 증상 이름이 있으면 인프라팀이 이 순서를 바로 밟을 수 있습니다.","t":"Enthält eine Meldung die Uhrzeit (sekundengenau), Provider und Region des Spielers, den Server und den Namen des Symptoms, kann das Infrastrukturteam diese Reihenfolge sofort abarbeiten."},
     {"ctx":"#retrans-fix","ko":"해결 방향","t":"Lösungsansätze"},

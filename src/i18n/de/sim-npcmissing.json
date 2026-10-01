@@ -48,7 +48,7 @@
     {"ctx":"src/sims/npcmissing.js:103","ko":"같은 PC·같은 공인 IP일 때만 생기는 충돌이 있습니다. 다른 PC에서 패치가 다른 설치본을 쓰면 버전 차이와 헷갈리니 버전을 맞춰서 봅니다.","t":"Manche Konflikte treten nur bei demselben PC und derselben öffentlichen IP auf. Läuft auf dem anderen PC eine Installation mit anderem Patchstand, verwechselt man das leicht mit einem Versionsunterschied. Deshalb mit gleicher Version prüfen."},
     {"ctx":"src/sims/npcmissing.js:104","ko":"사람이 많은 곳에서, 멀리 있는 NPC만 안 보이나요?","t":"Fehlen nur weit entfernte NPCs, und das an Orten mit vielen Spielern?"},
     {"ctx":"src/sims/npcmissing.js:104","ko":"서버가 연결마다 보낼 양에 한도를 두고 가까운 것부터 보내는 경우입니다.","t":"Der Server begrenzt die Datenmenge pro Verbindung und schickt das Nächstgelegene zuerst."},
-    {"ctx":"src/sims/npcmissing.js:107","ko":"정상 동작일 가능성이 큽니다: 채널·인스턴스·페이즈 차이","t":"Wahrscheinlich normales Verhalten: Unterschied bei Kanal, Instanz oder Phasing"},
+    {"ctx":"src/sims/npcmissing.js:107","ko":"정상 동작일 가능성이 큽니다: 채널·인스턴스·페이즈 차이","t":"Wahrscheinlich normales Verhalten: Unterschiede bei Kanal, Instanz oder Phasing"},
     {"ctx":"src/sims/npcmissing.js:107","ko":"두 캐릭터의 채널 번호, 인스턴스 ID, 해당 퀘스트 진행 단계를 비교합니다.","t":"Kanalnummer, Instanz-ID und Fortschritt der betreffenden Quest bei beiden Charakteren vergleichen."},
     {"ctx":"src/sims/npcmissing.js:108","ko":"서버는 보냈는데 그리지 못했습니다","t":"Der Server hat gesendet, aber der Client konnte nicht darstellen"},
     {"ctx":"src/sims/npcmissing.js:108","ko":"클라이언트 로그의 에셋 로딩 오류, 캐시 폴더 공유 여부, 그래픽 옵션(표시 인원 제한), 두 클라이언트의 버전을 확인합니다.","t":"Asset-Ladefehler im Client-Log, gemeinsam genutzten Cache-Ordner, Grafikoptionen (Begrenzung angezeigter Charaktere) und die Versionen beider Clients prüfen."},
