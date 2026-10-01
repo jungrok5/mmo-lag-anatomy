@@ -87,7 +87,7 @@ K.register('nagle', function (root) {
   }
   function labelOf(parts, bytes) {
     const same = parts.every(p => p === parts[0]);
-    const name = parts.length === 1 ? parts[0] : same ? parts[0] + '×' + parts.length : parts.length <= 3 ? parts.join('+') : parts[0] + TR` 외 ` + (parts.length - 1) + TR`개`;
+    const name = parts.length === 1 ? parts[0] : same ? parts[0] + '×' + parts.length : parts.length <= 3 ? parts.join('+') : TR`${parts[0]} 외 ${parts.length - 1}개`;
     return name + ' ' + bytes + 'B';
   }
   // 보내는 쪽(클라이언트) TCP: Nagle 규칙

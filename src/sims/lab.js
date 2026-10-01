@@ -793,12 +793,13 @@ K.register('lab', function (root) {
       const ownBuf = P.mode === 'interp' ? P.interp : P.mode === 'queue' ? Math.max(P.interp, 60) : 0;
       msg = TR`${K.flag(ping > 150 ? 'bad' : 'warn')}<b>입력 지연</b>: 예측이 꺼져 있어 내 캐릭터가 서버 확인을 기다립니다. 누르고 약 ${K.ms(ping + ownBuf)} 뒤에야 움직이기 시작합니다${ownBuf ? TR`(왕복 ${K.ms(ping)} + 내 캐릭터도 다른 사람처럼 보간 버퍼 ${K.ms(ownBuf)}만큼 늦게 그림)` : ''}. 대부분의 게임은 이동에 예측을 쓰고, 스킬 판정처럼 서버 확인이 꼭 필요한 곳에서만 이 지연이 보입니다.`;
     } else {
-      const pingNote = TR`회선 핑 ${K.ms(P.rtt)}${ping == null ? '' : TR`(게임이 재는 명령→확인 시간 ${K.ms(ping)})`}.`;
+      const pingCore = TR`회선 핑 ${K.ms(P.rtt)}${ping == null ? '' : TR`(게임이 재는 명령→확인 시간 ${K.ms(ping)})`}`;
+      const pingNote = TR`${pingCore}.`;
       const past = P.mode === 'interp' ? TR`보간 덕분에 상대가 매끄럽지만, 실제보다 약 ${K.ms(P.interp + P.rtt / 2)} 과거 모습입니다(위치 오차 ${K.n(remErr, 1)}m).` : '';
       if (ls.rate > 0.05 || P.rtt > 200) {
-        msg = `${K.flag('warn')}<b>${ls.rate > 0.05 ? TR`손실 ` + K.pct(ls.rate, 0) : TR`핑이 높음`}</b>: ${pingNote} ${past} ${ls.rate > 0.05 ? (P.proto === 'tcp' ? TR`TCP가 잃은 패킷을 다시 받느라 그 뒤 패킷까지 늦게 넘겨줍니다.` : TR`잃은 패킷 사이는 ${P.mode === 'interp' ? TR`보간이 이어 그리고` : TR`다음 패킷이 대신하고`}, 잃은 내 입력은 ${P.redundancy ? TR`다음 패킷에 겹쳐 보낸 사본으로 채웁니다` : TR`그대로 사라집니다`}.`) : TR`화면은 매끄러워도 내 행동의 결과(판정·피격)가 그만큼 늦게 옵니다.`}`;
+        msg = TR`${K.flag('warn')}<b>${ls.rate > 0.05 ? TR`손실 ` + K.pct(ls.rate, 0) : TR`핑이 높음`}</b>: ${K.sentences([pingNote, past, ls.rate > 0.05 ? (P.proto === 'tcp' ? TR`TCP가 잃은 패킷을 다시 받느라 그 뒤 패킷까지 늦게 넘겨줍니다.` : TR`잃은 패킷 사이는 ${P.mode === 'interp' ? TR`보간이 이어 그리고` : TR`다음 패킷이 대신하고`}, 잃은 내 입력은 ${P.redundancy ? TR`다음 패킷에 겹쳐 보낸 사본으로 채웁니다` : TR`그대로 사라집니다`}.`) : TR`화면은 매끄러워도 내 행동의 결과(판정·피격)가 그만큼 늦게 옵니다.`])}`;
       } else {
-        msg = TR`${K.flag('good')}<b>안정적</b>: ${pingNote.slice(0, -1)}, 손실 ${K.pct(ls.rate, 1)}. ${past} ${P.predict ? TR`내 캐릭터는 예측으로 즉시 움직입니다.` : ''}`;
+        msg = TR`${K.flag('good')}<b>안정적</b>: ${pingCore}, 손실 ${K.pct(ls.rate, 1)}. ${past} ${P.predict ? TR`내 캐릭터는 예측으로 즉시 움직입니다.` : ''}`;
       }
     }
     F.say(msg);

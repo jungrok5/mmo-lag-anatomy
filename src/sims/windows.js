@@ -247,7 +247,7 @@ K.register('windows', function (root) {
     stRes.set(p.margin < 0 ? TR`못 피함` : TR`피할 수 있음`, p.margin < 0 ? 'bad' : 'good');
     const mp = maxPing(P.judge);
     stMax.set(Number.isFinite(mp) ? (mp < 0 ? TR`0에서도 불가` : K.ms(mp)) : TR`1초 넘게`, mp < 60 ? 'bad' : mp < 150 ? 'warn' : 'good');
-    let msg = genreSay ? genreSay + ' ' : '';
+    let msg = genreSay ? genreSay + K.sp : '';
     if (p.margin < 0) {
       msg = TR`${K.flag('bad')}${msg}예고 ${K.ms(P.W)} 중 네트워크가 ${K.ms(Math.max(0, net))}, 사람 반응이 ${K.ms(P.react)}를 씁니다. <b>${K.ms(-p.margin)} 모자라서 실력과 상관없이 맞습니다</b>. 플레이어는 “분명 피했는데 맞았다”(씹힘·롤백)고 느낍니다.`;
       if (P.judge === 'now') msg += TR` 지연 보상이나 예고 예약으로 네트워크가 쓰는 시간을 줄일 수 있습니다.`;

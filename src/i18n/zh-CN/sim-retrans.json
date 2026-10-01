@@ -58,7 +58,7 @@
     {"ctx":"src/sims/retrans.js:292, src/sims/retrans.js:293, src/sims/retrans.js:294, src/sims/retrans.js:295","ko":"회","t":"次"},
     {"ctx":"src/sims/retrans.js:293","ko":"RTO 타임아웃","t":"RTO 超时"},
     {"ctx":"src/sims/retrans.js:295","ko":"불필요한 재전송","t":"虚假重传"},
-    {"ctx":"src/sims/retrans.js:296","ko":"전달 지연 (99%)","t":"交付延迟（99%）"},
+    {"ctx":"src/sims/retrans.js:296","ko":"전달 지연 (99%)","t":"交付延迟（p99）"},
     {"ctx":"src/sims/retrans.js:297","ko":"대기 중인 패킷","t":"排队中的包"},
     {"ctx":"src/sims/retrans.js:298","ko":"지금 RTO","t":"当前 RTO"},
     {"ctx":"src/sims/retrans.js:301","ko":"깨끗한 회선","t":"干净的线路"},

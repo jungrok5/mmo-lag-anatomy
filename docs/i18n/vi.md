@@ -28,7 +28,7 @@ Why: Vietnamese players and developers write "lag" (never a Vietnamese equivalen
 - **`chk` fields** (`look`, `yes`, `no`) and `act` items are Korean 개조식 (terse, noun endings like ~함, ~임, ~봄). Write terse fragments: no subject pronoun, no "bạn", no "Hãy", no polite particles. Examples:
   - `look`: `Log GC của server và thời điểm người chơi báo lag`
   - `yes`: `thời gian dừng trong log GC trùng với lúc lag, khoảng cách đều`
-  - `no`: `log GC không có lần dừng nào vào lúc lag → xem “Tick budget bị vượt”`
+  - `no`: `log GC không có lần dừng nào vào lúc lag → xem “Vượt tick budget”`
   - Keep a final period only if the Korean has one.
   - These fragments follow the labels **Chỗ cần xem / Đúng nếu / Loại trừ nếu**, so `yes`/`no` must read naturally after "Đúng nếu:" and "Loại trừ nếu:" (start with a lowercase noun phrase or clause).
 - When Korean text quotes another cause card by name in “…”, use that cause's Vietnamese `t` exactly (check `causes-*.json` of that layer; if not translated yet, translate it the way its own group will, and note it in your report).
@@ -454,7 +454,7 @@ How they are used:
 | 로그인 대기열 (게임) | hàng chờ đăng nhập | OS `backlog`/접속 대기열 stays `hàng đợi kết nối` |
 | 포트 / 임시 포트 | cổng / cổng tạm (ephemeral port) | `port` only inside commands, options and quoted messages (`--port`, `ICMP Port Unreachable`) |
 | 게임 서버 | server game | Vietnamese head-first order, like `client game`, `server DB`; not `game server` |
-| 틱 예산 초과 (`sp-tick-overrun`) | Vượt tick budget | cause title and every quote; replaces “Tick budget bị vượt” (also the §2 example) |
+| 틱 예산 초과 (`sp-tick-overrun`) | Vượt tick budget | cause title and every quote; replaces the old passive form “Tick budget bị vượt” (also in the §2 example) |
 | 얕은 버퍼 | bộ đệm nhỏ | |
 | 메시지 (네트워크) | message | `tin nhắn` only for chat and messaging apps; not `thông điệp` |
 | 존 | zone | |

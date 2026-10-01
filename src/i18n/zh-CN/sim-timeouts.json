@@ -32,7 +32,7 @@
     {"ctx":"src/sims/timeouts.js:117","ko":"다시 재생","t":"重新播放"},
     {"ctx":"src/sims/timeouts.js:120","ko":"연결","t":"连接"},
     {"ctx":"src/sims/timeouts.js:121","ko":"프로토콜","t":"协议"},
-    {"ctx":"src/sims/timeouts.js:125","ko":"연결 방식","t":"接入方式"},
+    {"ctx":"src/sims/timeouts.js:125","ko":"연결 방식","t":"连接方式"},
     {"ctx":"src/sims/timeouts.js:125","ko":"유선·와이파이","t":"有线/Wi-Fi"},
     {"ctx":"src/sims/timeouts.js:125","ko":"모바일","t":"移动网络"},
     {"ctx":"src/sims/timeouts.js:125","ko":"실험 값: 가정 공유기 UDP 1분·TCP 1시간, 통신사 공유기(CGNAT) UDP 30초·TCP 10분. 실제 값은 기기·통신사마다 다르고, 측정 연구에서 UDP는 30초~3분이 흔했습니다.","t":"实验取值：家用路由器 UDP 1 分钟、TCP 1 小时；运营商 NAT（CGNAT）UDP 30 秒、TCP 10 分钟。实际值因设备和运营商而异，测量研究中 UDP 常见 30 秒到 3 分钟。"},

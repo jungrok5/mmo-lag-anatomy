@@ -348,15 +348,17 @@ K.register('timeouts', function (root) {
       const kaOn = A.tcp && P.ka, byKa = kaOn && (!P.hb || P.hb > 60);
       const iv = byKa ? 60 : P.hb;
       const safe = m && iv <= m.T / 2;
-      const src = byKa ? TR`운영체제의 TCP keepalive 확인 패킷이 ${fmtT(60)}마다` : TR`하트비트가 ${fmtT(P.hb)}마다`;
-      return TR`${K.flag(safe ? 'good' : 'warn')}${src} 지나가서 모든 장비의 타이머가 가득 차기 전에 0으로 돌아갑니다. 가장 짧은 타임아웃은 <b>${m.name} ${fmtT(m.T)}</b>입니다. ` +
+      const flag = K.flag(safe ? 'good' : 'warn');
+      return (byKa
+        ? TR`${flag}운영체제의 TCP keepalive 확인 패킷이 ${fmtT(60)}마다 지나가서 모든 장비의 타이머가 가득 차기 전에 0으로 돌아갑니다. 가장 짧은 타임아웃은 <b>${m.name} ${fmtT(m.T)}</b>입니다. `
+        : TR`${flag}하트비트가 ${fmtT(P.hb)}마다 지나가서 모든 장비의 타이머가 가득 차기 전에 0으로 돌아갑니다. 가장 짧은 타임아웃은 <b>${m.name} ${fmtT(m.T)}</b>입니다. `) +
         (safe ? TR`간격이 그 절반 이하라 패킷 하나가 늦거나 사라져도 버팁니다.` : TR`간격이 그 절반을 넘어서, 패킷 하나만 늦거나 사라져도 끊길 수 있습니다. ${fmtT(rec)} 이하로 줄이는 편이 안전합니다.`) +
         (byKa ? TR` 다만 keepalive는 운영체제가 보내므로 게임이 멈춰도 계속 나갑니다. 게임이 살아 있는지는 하트비트로 따로 확인해야 합니다.` : '');
     }
     let why;
-    if (bgStop) why = TR`휴대폰이 백그라운드로 가고 10초 뒤 OS가 앱을 멈춰 하트비트가 끊겼습니다. 그 뒤로 유휴 시간이 ${K.josa(fmtT(c.T), 'eul')} 넘자`;
-    else if (!P.hb) why = TR`하트비트가 없어 이 연결에는 ${fmtT(c.T)} 동안 아무 패킷도 지나가지 않았고, 그러자`;
-    else why = TR`하트비트 간격(${fmtT(P.hb)})이 ${c.key === 'srv' ? TR`서버의 무응답 판정` : TR`${c.name}의 타임아웃`}(${fmtT(c.T)})보다 길어서`;
+    if (bgStop) why = TR`휴대폰이 백그라운드로 가고 10초 뒤 OS가 앱을 멈춰 하트비트가 끊겼습니다. 그 뒤로 유휴 시간이 ${K.josa(fmtT(c.T), 'eul')} 넘자@@문장 앞부분. 뒤에 ‘N초에 (장비)가 연결을 지웠습니다’ 또는 ‘서버가 내보냈습니다’가 이어짐`;
+    else if (!P.hb) why = TR`하트비트가 없어 이 연결에는 ${fmtT(c.T)} 동안 아무 패킷도 지나가지 않았고, 그러자@@문장 앞부분. 뒤에 ‘N초에 (장비)가 연결을 지웠습니다’ 또는 ‘서버가 내보냈습니다’가 이어짐`;
+    else why = TR`하트비트 간격(${fmtT(P.hb)})이 ${c.key === 'srv' ? TR`서버의 무응답 판정` : TR`${c.name}의 타임아웃`}(${fmtT(c.T)})보다 길어서@@문장 앞부분. 뒤에 ‘N초에 (장비)가 연결을 지웠습니다’ 또는 ‘서버가 내보냈습니다’가 이어짐`;
     if (c.key === 'srv') {
       return TR`${K.flag('bad')}${why} <b>${fmtT(A.Tc)}</b>에 <b>게임 서버</b>가 플레이어를 응답 없음으로 보고 내보냈습니다. 가만히 있던 플레이어가 다시 움직이면 접속 끊김 화면이 뜹니다. 서버가 직접 끊었으니 유령 접속은 남지 않습니다. ` +
         (bgStop ? TR`백그라운드에서는 하트비트를 보낼 수 없으니, 복귀하면 자동으로 빠르게 재접속하는 흐름을 만들어 두어야 합니다.` : TR`<b>해결:</b> 하트비트를 가장 짧은 타임아웃의 절반 이하, 예를 들어 ${fmtT(rec)}마다 보내세요.`);

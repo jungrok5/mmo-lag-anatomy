@@ -39,7 +39,7 @@
     {"ctx":"src/sims/arch.js:93","ko":"복제 DB","t":"Replica DB"},
     {"ctx":"src/sims/arch.js:93","ko":"(읽기용)","t":"(for reads)"},
     {"ctx":"src/sims/arch.js:98, src/sims/arch.js:283","ko":"게임 서버","t":"Game server"},
-    {"ctx":"src/sims/arch.js:101","ko":"접속","t":"Connect"},
+    {"ctx":"src/sims/arch.js:101","ko":"접속","t":"Join"},
     {"ctx":"src/sims/arch.js:103","ko":"로그인","t":"Login"},
     {"ctx":"src/sims/arch.js:104","ko":"게임 연결","t":"Game connection"},
     {"ctx":"src/sims/arch.js:105","ko":"로그인 확인·결제","t":"Login check/payment"},
