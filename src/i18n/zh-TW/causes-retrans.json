@@ -25,7 +25,7 @@
     {"ctx":"causes/rt-wireless/ref/6/n","ko":"RTO 최소값 TCP_RTO_MIN = 200ms","t":"RTO 最小值 TCP_RTO_MIN = 200ms"},
     {"ctx":"causes/rt-wireless/ref/7/n","ko":"ss -ti는 retrans:지금 재전송 중인 수/누적 재전송 수와 rtt:RTT/RTT 편차(rttvar)를 표시","t":"ss -ti 會顯示 retrans:目前重傳中的數量/累計重傳次數，以及 rtt:RTT/RTT 偏差（rttvar）"},
     {"ctx":"causes/rt-queue-drop/t","ko":"병목 대기열 넘침 (혼잡 손실)","t":"瓶頸佇列溢位（壅塞遺失）"},
-    {"ctx":"causes/rt-queue-drop/s","ko":"공유기, 통신사 연결 구간, 데이터센터 회선처럼 가장 좁은 곳의 대기열이 가득 차면 새로 오는 패킷을 버립니다.","t":"分享器、電信業者的線路區段、資料中心線路這類最窄的地方，佇列一滿就會丟棄新進來的封包。"},
+    {"ctx":"causes/rt-queue-drop/s","ko":"공유기, 통신사 사이 연결 구간, 데이터센터 회선처럼 가장 좁은 곳의 대기열이 가득 차면 새로 오는 패킷을 버립니다.","t":""},
     {"ctx":"causes/rt-queue-drop/c/0","ko":"영상·다운로드·다른 사용자 트래픽으로 병목 구간이 꽉 참","t":"影片、下載與其他使用者的流量把瓶頸區段塞滿"},
     {"ctx":"causes/rt-queue-drop/c/1","ko":"대기열이 찬 동안 새로 도착하는 패킷이 연달아 버려짐(tail drop). 버려지지 않은 패킷도 꽉 찬 대기열 끝에서 기다림","t":"佇列滿的期間，新到的封包接連被丟棄（tail drop）。沒被丟棄的封包也要在塞滿的佇列尾端等待"},
     {"ctx":"causes/rt-queue-drop/c/2","ko":"여러 패킷이 한꺼번에 사라져 긴 멈춤 뒤 몰아치기, 저녁 시간에 잦음","t":"多個封包同時消失，長時間定格後快轉，晚間時段常見"},
@@ -398,6 +398,7 @@
     {"ctx":"causes/rt-syn/ref/10/n","ko":"접속 대기 소켓이면 ss의 Recv-Q는 accept를 기다리는 연결 수, Send-Q는 backlog 한도","t":"監聽 socket 在 ss 中的 Recv-Q 為等待 accept 的連線數，Send-Q 為 backlog 上限"}
   ],
   "stale": [
-    {"ctx":"causes/rt-path/chk/look","ko":"bcc tcpretrans -c로 재전송을 연결별로 모아 겪는 유저의 주소·포트를 뽑고, 서버에서 유저 쪽으로, 유저 쪽에서 서버로 게임과 같은 TCP 포트로 mtr(mtr -T -P 포트)을 떠서 비교함. 재접속 전후 결과도 비교함","t":"用 bcc tcpretrans -c 依連線彙整重傳，找出受影響玩家的位址與 port，再以與遊戲相同的 TCP port，分別從伺服器往玩家、從玩家往伺服器跑 mtr（mtr -T -P port）比較。重新連線前後的結果也要比較"}
+    {"ctx":"causes/rt-path/chk/look","ko":"bcc tcpretrans -c로 재전송을 연결별로 모아 겪는 유저의 주소·포트를 뽑고, 서버에서 유저 쪽으로, 유저 쪽에서 서버로 게임과 같은 TCP 포트로 mtr(mtr -T -P 포트)을 떠서 비교함. 재접속 전후 결과도 비교함","t":"用 bcc tcpretrans -c 依連線彙整重傳，找出受影響玩家的位址與 port，再以與遊戲相同的 TCP port，分別從伺服器往玩家、從玩家往伺服器跑 mtr（mtr -T -P port）比較。重新連線前後的結果也要比較"},
+    {"ctx":"causes/rt-queue-drop/s","ko":"공유기, 통신사 연결 구간, 데이터센터 회선처럼 가장 좁은 곳의 대기열이 가득 차면 새로 오는 패킷을 버립니다.","t":"分享器、電信業者的線路區段、資料中心線路這類最窄的地方，佇列一滿就會丟棄新進來的封包。"}
   ]
 }
