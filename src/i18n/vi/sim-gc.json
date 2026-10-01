@@ -83,7 +83,7 @@
     {"ctx":"src/sims/gc.js:346","ko":"짧은 멈춤","t":"Đứng hình ngắn"},
     {"ctx":"src/sims/gc.js:346","ko":"슬로우모션 직전","t":"Sắp quay chậm"},
     {"ctx":"src/sims/gc.js:346","ko":"매끄러움","t":"Mượt"},
-    {"ctx":"src/sims/gc.js:347","ko":"풀리면 몰아치기 · {0}마다","t":"Hết đứng thì tua nhanh · mỗi {0}"},
+    {"ctx":"src/sims/gc.js:347","ko":"풀리면 몰아치기 · {0}마다","t":"Sau đó tua nhanh · mỗi {0}"},
     {"ctx":"src/sims/gc.js:347","ko":"{0}마다 한 번","t":"Mỗi {0} một lần"},
     {"ctx":"src/sims/gc.js:347","ko":"GC 중 틱이 느려짐","t":"Tick chậm lại khi GC chạy"},
     {"ctx":"src/sims/gc.js:347","ko":"멈춤을 못 느낌","t":"Không cảm thấy dừng"}

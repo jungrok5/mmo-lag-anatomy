@@ -361,6 +361,8 @@ Labels: 누가 겪나 → “Quem é afetado”, 누가 → “Quem”, 언제 �
 | 게임 가속기 | redutor de ping (VPN para jogos) | how Brazilian players call these tools |
 | 안티치트 / 오버레이 | anti-cheat / overlay | |
 | 셰이더 컴파일 / 셰이더 캐시 | compilação de shaders / cache de shaders | |
+| 프레임 생성 / V-Sync / VRAM | geração de frames / V-Sync / VRAM (memória da placa de vídeo) | glossary term “Geração de frames”; never “geração de quadros” |
+| 그래픽카드 / 그래픽 드라이버 | placa de vídeo / driver de vídeo | |
 | 에셋 / 에셋 로딩 / 지연 로딩 | asset / carregamento de assets / lazy loading | |
 | 비신뢰(unreliable) 채널 / 신뢰성 UDP | canal não confiável (unreliable) / UDP confiável | |
 | 게임 시간 / 게임 속도 | tempo do jogo / velocidade do jogo | |
@@ -422,7 +424,7 @@ Labels: 누가 겪나 → “Quem é afetado”, 누가 → “Quem”, 언제 �
 | 순서 보장 / “보낸 순서대로만 넘겨줌” | entrega em ordem / “só entrega os dados na ordem em que foram enviados” | |
 | 보장한다 | garante | |
 | 시퀀스 번호 | número de sequência | |
-| HOL 블로킹 | head-of-line blocking (HOL) | |
+| HOL 블로킹 | head-of-line blocking (HOL) | standalone label or glossary term: “HOL blocking” |
 | thin stream | thin stream | |
 | TLP / 마지막 패킷들의 손실(tail loss) | TLP (tail loss probe) / perda dos últimos pacotes (tail loss) | |
 | 선택적 ACK(SACK) / 중간에 빠진 부분 | ACK seletivo (SACK) / trecho faltando | |
@@ -453,6 +455,7 @@ Labels: 누가 겪나 → “Quem é afetado”, 누가 → “Quem”, 언제 �
 | 무한 루프 / 길찾기 / 직렬화 | loop infinito / pathfinding / serialização | |
 | 커널 / 운영체제 | kernel / sistema operacional (SO) | |
 | 접속 대기열(backlog) | fila de conexões (backlog) | |
+| TIME_WAIT / 포트 조합 | TIME_WAIT / combinação de portas | |
 | 파일 디스크립터(fd) | descritor de arquivo (fd) | |
 | 스케줄러 / 스케줄링 / 스케줄링 대기 / 런큐 | escalonador (scheduler) / escalonamento / esperando CPU / fila de execução (run queue) | CPU를 배정받지 못한다 → não recebe tempo de CPU |
 | 타임 슬라이스 | fatia de tempo (time slice) | |
@@ -464,6 +467,7 @@ Labels: 누가 겪나 → “Quem é afetado”, 누가 → “Quem”, 언제 �
 | 백그라운드 앱 / 백그라운드 창 / 최소화 | app em segundo plano / janela em segundo plano / minimizada | |
 | 타이머 해상도 | resolução do timer | |
 | 가변 주사율 / 주사율 / 화면 찢어짐 | taxa de atualização variável (VRR) / taxa de atualização / tearing | |
+| C-state / 절전 상태가 깊다 | C-state / estado de economia de energia mais profundo | |
 | 시간 동기화(NTP) / 시계 점프 / 벽시계 / 단조 시계 | sincronização de horário (NTP) / salto de relógio / wall clock / monotonic clock | |
 | 임시 포트 고갈 | esgotamento de portas efêmeras | |
 | 가상 머신 / 호스트 | máquina virtual (VM) / host | |
@@ -522,6 +526,18 @@ Labels: 누가 겪나 → “Quem é afetado”, 누가 → “Quem”, 언제 �
 - **Parenthetical glosses** from TERMS.md (“지터(도착 간격의 흔들림)”) → keep as parentheses with a space before.
 - **Hedging** 대개 / 흔히 / 종종 / 가끔 → em geral / com frequência / muitas vezes / de vez em quando.
 - **Onomatopoeia** (멈칫 멈칫, 휙, 파파파팍) → plain description (“para, anda, para”, “de repente”, “tudo de uma vez”). No comic-style sounds.
+
+### 7.1 Words to watch
+
+- 렉이 생기다 / 렉이 걸리다 → “dar lag”, “ficar com lag”, “o jogo está com lag”. Avoid “lagar/laggar” in prose (slang; acceptable only in aliases and SEO phrases).
+- 튕기다 / 튕김 → “cair do jogo”, “desconectar”. 버벅이다 → “engasgar”. 굼뜨다 → “lento”, “pesado” (“o controle fica pesado”). 손맛이 없다 → “controle pesado”, “sem resposta”.
+- 서버가 죽는다 → “o servidor cai” (process crash: “o processo do servidor cai”). 서버가 굳는다 → “o servidor para de responder”. Never “o servidor morre”.
+- 체감 → “sensação”, “o que o jogador sente” (“o lag sentido”). 쾌적하다 → “fluido”, “responsivo”. 대표값 → “valor típico”.
+- 확인형 행동 → “ações que esperam confirmação”. 판정 → “decisão do servidor” (or “registro de acerto” for hits).
+- 원개발사 / 운영사 → “desenvolvedora” / “empresa que opera o jogo” (“publisher” only for game publishers). Never “operadora” for a game operator: “operadora” is the ISP.
+- 공신력 있는 출처 → “fontes confiáveis”. 공인된 기준 → “padrão oficial”.
+- 제보 / 렉 제보 → “report”, “reportar o lag” (verb form preferred). 유저 → “jogador”.
+- False friends: “eventualmente” means “now and then” in Brazil, so avoid it for “finally/eventually”; use “no fim” or “acaba” + gerund (“acaba travando”). Do not use “realizar” for every verb (“fazer”, “executar”). “Atualmente” = currently.
 - **Passive voice**: prefer active or the Brazilian “se” passive sparingly; avoid stacked “é feito/é realizado”.
 - **Gerund**: Brazilian progressive with the gerund is correct and natural (“o servidor está processando”); never “está a processar”.
 - **Korean facts stay Korean**: Korean ISP names, cities, KRW prices and institutions stay as facts (Seul, Tóquio, KT, SK Broadband, LG U+). Do not replace them with Brazilian examples (no Vivo/Claro substitutions).
