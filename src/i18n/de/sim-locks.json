@@ -27,7 +27,7 @@
     {"ctx":"src/sims/locks.js:57","ko":"사고 내 보기","t":"Störung provozieren"},
     {"ctx":"src/sims/locks.js:60","ko":"데드락 일으키기","t":"Deadlock auslösen"},
     {"ctx":"src/sims/locks.js:61","ko":"복구","t":"Wiederherstellen"},
-    {"ctx":"src/sims/locks.js:62","ko":"워치독(감시 타이머): 스레드가 5초 동안 풀려나지 못하면 서버를 강제로 다시 켭니다. 실제 서버는 보통 수십 초를 기다리지만 여기서는 짧게 줄였습니다.","t":"Watchdog (Überwachungs-Timer): Kommt ein Thread 5 s lang nicht frei, startet er den Server zwangsweise neu. Echte Server warten meist einige Dutzend Sekunden, hier ist die Zeit verkürzt."},
+    {"ctx":"src/sims/locks.js:62","ko":"워치독(감시 타이머): 스레드가 5초 동안 풀려나지 못하면 서버를 강제로 다시 켭니다. 실제 서버는 보통 수십 초를 기다리지만 여기서는 짧게 줄였습니다.","t":"Watchdog (Überwachungs-Timer): Kommt ein Thread 5 s lang nicht frei, startet der Watchdog den Server zwangsweise neu. Echte Server warten meist einige Dutzend Sekunden, hier ist die Zeit verkürzt."},
     {"ctx":"src/sims/locks.js:65","ko":"락 거의 없음","t":"Kaum Locks"},
     {"ctx":"src/sims/locks.js:66","ko":"큰 락 하나 (40%)","t":"Ein großer Lock (40 %)"},
     {"ctx":"src/sims/locks.js:67, src/sims/locks.js:307","ko":"잘게 나눈 락","t":"Feingranulare Locks"},
