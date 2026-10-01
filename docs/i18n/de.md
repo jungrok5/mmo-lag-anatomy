@@ -508,7 +508,7 @@ These Korean strings exist as whole entries both in the phase-1 groups and in ot
 
 | Korean key | German | Also appears in |
 |---|---|---|
-| 뚝뚝 끊김 / 순간이동 / 고무줄 / 몰아치기 / 슬로우모션 / 입력 지연 / 멈춤 / 씹힘·롤백 / 접속 끊김 / 접속 불가·무한 로딩 | the symptom names of 6.1 | sim-arch, sim-lab, sim-oneslow, sim-gc, sim-nagle (the playback option "멈춤" is also "Freeze"), sim-sndbuf |
+| 뚝뚝 끊김 / 순간이동 / 고무줄 / 몰아치기 / 슬로우모션 / 입력 지연 / 멈춤 / 씹힘·롤백 / 접속 끊김 / 접속 불가·무한 로딩 | the symptom names of 6.1 | sim-arch, sim-lab, sim-oneslow, sim-gc, sim-nagle (the playback option "멈춤" is a playback speed, „Pause“; each sim has its own dictionary), sim-sndbuf |
 | 지연 / 지터 / 손실 / 패킷 손실 | Latenz / Jitter / Paketverlust / Paketverlust | sim-bloat, sim-distance, sim-oneslow, sim-syncmodels, sim-sndbuf, sim-lab |
 | 클라이언트 / 서버 / 네트워크 | Client / Server / Netzwerk | many sims |
 | 좋음 / 주의 / 나쁨 | Gut / Achtung / Schlecht | sim-bloat, sim-ladder, body-judge, body-retrans |
@@ -576,3 +576,7 @@ Settled by the translators and reviewers after the first pass. They override any
 | 수십~수백 배 | um einen zwei- bis dreistelligen Faktor | |
 | 고무줄처럼 끌려가다, 서버 위치로 당겨짐 | (an die Serverposition) zurückgesetzt | the symptom name stays Rubberbanding: „wird A zurückgesetzt (Rubberbanding)“ |
 | meta description | „Lag-Ursachen in Onlinespielen: warum es ruckelt, …“ | main search phrase first, at most about 155 characters |
+| 사냥터 | Farmgebiet | |
+| 따라잡기 폭주 | Aufholspirale | |
+| MTU 탐색 | MTU-Probing | |
+| 국내 (Korean operator view) | in Korea | „im Inland“ reads as Germany |

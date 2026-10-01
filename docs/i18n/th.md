@@ -35,7 +35,7 @@ The groups `data`, `glossary`, `meta`, `ui-kit` and `site` are already translate
 - **`act` (team action items)**: comma-separated imperative verb phrases, **no final period** (Thai does not end sentences with a period). Example: “ลดการคำนวณที่หนัก, แบ่งงานในทิกไปหลายเธรด, กระจายผู้เล่น (แชนแนล), เก็บเวลาประมวลผลต่อทิกเป็นเมตริก”. `ext` items read as “แนะนำให้ผู้เล่น…” / “แจ้งให้ ISP (หรือผู้ให้บริการคลาวด์)…”.
 - **Cases (`cases.js`)**: the Korean is plain written reporting (했다체). Write neutral narrative Thai. Thai has no tense: use time words (เมื่อ, ในวันที่, หลังจากนั้น) and “แล้ว” where needed; do not stack “ได้…แล้ว” on every verb. Keep company names, product names, dates and times exactly.
 - **UI strings (sims, buttons, legends, status lines)**: short, no period. Captions that explain use normal sentences (still no period).
-- **Card titles (`t`)**: translate into a natural Thai incident name a Thai engineer would use, often with the English term inside (“ทิกเกินงบเวลา”, “Full GC ของเซิร์ฟเวอร์หยุดทั้งระบบ”, “แย่งล็อกบน hot row”). When body, sim or case text refers to a card by name, reuse that card’s Thai `t` from `src/i18n/th/causes-*.json` if it already exists.
+- **Card titles (`t`)**: translate into a natural Thai incident name a Thai engineer would use, often with the English term inside (“ทิกเกินงบเวลา”, “GC ของเซิร์ฟเวอร์หยุดทั้งระบบ”, “แย่งล็อกบน hot row”). When body, sim or case text refers to a card by name, reuse that card’s Thai `t` from `src/i18n/th/causes-*.json` if it already exists.
 
 ## 3. Mechanics
 
@@ -441,7 +441,7 @@ Keep established English terms where Thai engineers use them; gloss once for non
 | 풀 스캔 / 실행 계획 | full table scan / query plan | ฟูลสแกน / แผนการรันคิวรี |
 | 행 / 행 잠금 / 핫 로우 / 잠금 에스컬레이션 | แถว / row lock / hot row / lock escalation | ฮอตโรว์. First mention: “hot row (แถวที่ทุกคนพยายามแก้พร้อมกัน)” |
 | 트랜잭션 / 롤백 / 언두 로그 / MVCC | ทรานแซกชัน / โรลแบ็ค / undo log / MVCC | |
-| 복제 / 복제본 / 주 DB / 복제 지연 | replication / replica / DB หลัก (primary) / replication lag | การทำสำเนาข้อมูลล่าช้า |
+| 복제 / 복제본 / 주 DB / 복제 지연 | replication / replica / DB หลัก (primary) / การทำสำเนาข้อมูลล่าช้า | replication lag only for the measured value (see §14) |
 | 체크포인트 / 로그 플러시 | checkpoint / log flush | เช็กพอยต์ |
 | 장애 전환 | failover | เฟลโอเวอร์ |
 | 캐시 / 캐시 서버 / 콜드 캐시 / 캐시 스탬피드 | แคช / เซิร์ฟเวอร์แคช / cold cache / cache stampede | แคชสแตมปีด |
@@ -516,3 +516,66 @@ How they are used:
 - Structured-data topics (`about`): เกมแลค, ความหน่วงของเครือข่าย, จิตเตอร์, แพ็กเก็ตหาย, netcode, การส่งซ้ำ TCP, ประสิทธิภาพเซิร์ฟเวอร์เกม.
 - Link-preview image (`tools/og.cjs`): “คู่มือ<span>เกมแลค</span>” highlights the search keyword.
 - Never stack keywords; each phrase must read as part of a sentence or a natural title. Player slang (ปิงแกว่ง, เกมเด้ง, โปรแกรมลดปิง) belongs in player-facing text, aliases and SEO fields; engineering prose uses the terms in section 11.
+
+## 14. Decisions added during review
+
+Settled by the translators and reviewers after the first pass. They override any older variant still found in the files or in the sections above.
+
+| Korean | Thai | Note |
+|---|---|---|
+| 서버 GC 전체 멈춤 (mem-gc title) | GC ของเซิร์ฟเวอร์หยุดทั้งระบบ | Replaces the §2 example “Full GC ของ…”; other cards quote this exact title. GC 전체 멈춤 as a general term: GC แบบหยุดทั้งระบบ (stop-the-world) |
+| 멈춤 | ค้าง / หยุด, หยุดชะงัก | ค้าง for the on-screen symptom (`c` fields, symptom mentions, player-facing text); หยุด / หยุดชะงัก for a server-side stop in `s` and engineering prose. A paused video: หยุด |
+| 순간이동 | วาร์ป (symptom) / เทเลพอร์ต (game feature) | |
+| 입력 지연 (lockstep/rollback setting) | input delay | Latin, also local input delay; the symptom stays อินพุตดีเลย์ |
+| 06장 (nav / cross-reference) | เจาะลึกการส่งซ้ำของ TCP / บท 06 เจาะลึกการส่งซ้ำของ TCP | Must match body-shell; the h2 stays as in §6 |
+| 재시도 / TCP 재전송 | การลองใหม่ / การส่งซ้ำ | retry storm stays Latin |
+| 중복 ACK / 지연 ACK | duplicate ACK / delayed ACK | Also in sims; not ACK ซ้ำ / ACK หน่วง. Glossary headword ACK แบบหน่วงเวลา unchanged |
+| 복제 지연 | การทำสำเนาข้อมูลล่าช้า / replication lag | Thai name for the problem (db-replica-lag card, glossary headword, architecture-sim scenario, layer list); Latin only for the measured value (alerts, metric lists, graph axis) |
+| 리전 | รีเจียน | ภูมิภาค only for 지역 as a geographic area (지역 서버 → เซิร์ฟเวอร์ประจำภูมิภาค) |
+| 국내 (Korean operator’s view), 한국 | เกาหลี | “ในเกาหลีปกติดี…”; never เกาหลีใต้. A generic “server in your own country” in sim presets stays เซิร์ฟเวอร์ในประเทศ |
+| 게임팀, 개발팀 | ทีมพัฒนาเกม | not ทีมเกม / ทีมพัฒนา |
+| DB 조회 | ดึงข้อมูล / คิวรี | never ค้นหา |
+| 경매장 | ตลาดประมูล | never โรงประมูล |
+| 던전 | ดันเจี้ยน | not ดันเจียน |
+| 퀘스트 / 빌드 | เควสต์ / บิลด์ | development build, debug build stay Latin |
+| 연결별 | แยกตามการเชื่อมต่อ / ของแต่ละการเชื่อมต่อ | avoid รายการเชื่อมต่อ (reads as “connection list”) |
+| 타임아웃 (standalone) | ไทม์เอาต์ | heartbeat ไทม์เอาต์; idle timeout stays Latin |
+| 먼저 부를 곳 | เรียกใครก่อน | label in playbooks, owners table and signal table |
+| 주의 (table column) | ข้อควรระวัง | the ui-kit badge stays ระวัง |
+| 장애 채널 | ห้องแชต | |
+| 회고 (published postmortem) | บทวิเคราะห์ย้อนหลัง | |
+| 거점, PoP | จุดให้บริการ (PoP) | |
+| 카나리 / 대조군 | canary / กลุ่มควบคุม | |
+| 상태 페이지 | หน้าสถานะ | |
+| 확장팩 / 기믹 / 파티장 | ภาคเสริม / กิมมิค / หัวปาร์ตี้ | |
+| 트래픽 지문 | fingerprint ของทราฟฟิก | |
+| 백본 | แบ็กโบน | |
+| 우회 라우팅 / 중계 서버 | เส้นทางวิ่งอ้อม / เซิร์ฟเวอร์ตัวกลาง (relay) | |
+| 가입자 / 가입자망 | ผู้ใช้บริการ / วิธีเชื่อมต่อ (label), ช่วงจากบ้านถึง ISP (prose) | |
+| 광케이블 | ไฟเบอร์ออปติก | |
+| 스토리지 | สตอเรจ | |
+| 백신 | แอนตี้ไวรัส | |
+| 외장 / 내장 그래픽 | การ์ดจอแยก / กราฟิกออนบอร์ด | |
+| 전용 / 공유 GPU 메모리 | หน่วยความจำ GPU เฉพาะ / ที่ใช้ร่วมกัน | |
+| 저지연 모드 / 클럭 | โหมด low latency / คล็อก | |
+| 공통 쿨다운 / 강화 | คูลดาวน์รวม / ตีบวก | |
+| 기지국 / 전화국 / 광랜 | เสาสัญญาณ / ชุมสาย / เน็ตไฟเบอร์ | |
+| UPS | ระบบป้องกันไฟดับ | |
+| 아이템 복사 | การก๊อปไอเทม (dupe) | |
+| 우편 | จดหมาย, กล่องจดหมาย | |
+| PC방 | ร้านเกม | |
+| 유령 세션 / 무응답 타임아웃 | เซสชันผี / ไทม์เอาต์ไม่ตอบสนอง | |
+| 예고 (boss attack) | สัญญาณเตือน | |
+| 응답 시간 | เวลาตอบสนอง | |
+| 서버 틱 시간 | เวลาต่อทิกของเซิร์ฟเวอร์ | |
+| 패킷 캡처 | packet capture | |
+| 하이퍼바이저 | ไฮเปอร์ไวเซอร์ | |
+| 리스폰 / 소환 / 몰이 / 사냥터 | รีสปอน / ซัมมอน / ลากมอน / จุดฟาร์ม | |
+| 저장 / 주기 저장 | เซฟ / เซฟตามรอบ | |
+| 살아 있는 데이터 (GC) | ข้อมูลที่ยังใช้อยู่ | |
+| 크레딧 잔량 / 포화 | เครดิตคงเหลือ / อิ่มตัว | |
+| 전멸 | ตายยกปาร์ตี้ | |
+| 재접속 유예 시간 | grace period ตอนเชื่อมต่อใหม่ | |
+| 오탐 | false positive | |
+| 구성도 실험 | การทดลองแผนผังสถาปัตยกรรม | |
+| `chk` line with two conditions | second condition starts with “ถ้า” | |

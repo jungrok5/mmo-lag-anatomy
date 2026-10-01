@@ -847,6 +847,8 @@ dt[id]:target, .pb-steps li:target { background: var(--accent-soft); border-radi
 :root:lang(th) body { line-height: 1.8; }
 /* 번역판은 낱말이 길 수 있다(독일어 합성어 등): 좁은 화면에서 넘치지 않게 */
 :root:not(:lang(ko)) body { overflow-wrap: break-word; }
+/* 긴 합성어(독일어·러시아어) 제목은 칸 안에서 끊어지게 한다. 사전이 있으면 하이픈을 넣는다 */
+:root:not(:lang(ko)) :is(h1, h2, h3) { overflow-wrap: anywhere; hyphens: auto; }
 :root:not(:lang(ko)) .flag { white-space: nowrap; flex: none; }
 :root:lang(en) body { hyphens: auto; }
 :root:not(:lang(ko)) .own { white-space: normal; max-width: 100%; }
@@ -1938,7 +1940,12 @@ dt[id]:target, .pb-steps li:target { background: var(--accent-soft); border-radi
   K.firstSentence = s => (String(s).match(/^[\s\S]*?[.。！？!?](?=\s|$)/) || [String(s)])[0];
   K.lang = (window.I18N && window.I18N.lang) || 'ko';
   // 큰 수 줄여 쓰기(번역판: 16K, 1.6万, 16 Tsd.). 한국어판의 만·억 표기는 실험마다 따로 둔다
-  K.compact = v => (Number.isFinite(v) ? v.toLocaleString(K.locale, { notation: 'compact', maximumFractionDigits: 1 }) : '—');
+  // 줄임 표기가 1만 단위부터 없는 언어(독일어는 100만부터 Mio.)는 천 단위를 k 로 줄인다
+  K.compact = function (v) {
+    if (!Number.isFinite(v)) return '—';
+    const s = v.toLocaleString(K.locale, { notation: 'compact', maximumFractionDigits: 1 });
+    return Math.abs(v) >= 1e4 && /^[-−]?[\d.,\s\u00a0\u202f]+$/.test(s) ? K.nr(v / 1000) + 'k' : s;
+  };
   // 소수 자리를 필요한 만큼만(1.5, 2), 천 단위 구분 없이. 소수점 기호는 언어를 따른다
   K.nr = (v, d = 1) => (Number.isFinite(v) ? v.toLocaleString(K.locale, { maximumFractionDigits: d, useGrouping: false }) : '—');
   K.n = (v, d = 0) => (Number.isFinite(v) ? v.toLocaleString(K.locale, { minimumFractionDigits: d, maximumFractionDigits: d }) : '—');
@@ -2327,7 +2334,17 @@ dt[id]:target, .pb-steps li:target { background: var(--accent-soft); border-radi
       for (const t of o.yTicks) K.text(ctx, o.yFmt ? o.yFmt(t) : String(t), box.x - 6, sc.y(t), { align: 'right', size: 10.5, mono: true, color: K.C.muted });
     }
     if (o.xTicks) {
-      for (const t of o.xTicks) K.text(ctx, o.xFmt ? o.xFmt(t) : String(t), sc.x(t), box.y + box.h + 12, { align: 'center', size: 10.5, mono: true, color: K.C.muted });
+      // 글자가 캔버스 밖으로 나가면 안쪽으로 당기고, 앞 눈금 글자와 겹치면 건너뛴다(번역판의 긴 단위)
+      const W = ctx.canvas.width / (ctx.getTransform().a || 1);
+      ctx.font = K.font(10.5, 400, true);
+      let edge = -Infinity;
+      for (const t of o.xTicks) {
+        const str = o.xFmt ? o.xFmt(t) : String(t), half = ctx.measureText(str).width / 2;
+        const xx = Math.max(half + 1, Math.min(sc.x(t), W - half - 1));
+        if (xx - half < edge + 4) continue;
+        K.text(ctx, str, xx, box.y + box.h + 12, { align: 'center', size: 10.5, mono: true, color: K.C.muted });
+        edge = xx + half;
+      }
     }
     ctx.strokeStyle = K.C.line;
     ctx.beginPath(); ctx.moveTo(box.x, Math.round(box.y + box.h) + 0.5); ctx.lineTo(box.x + box.w, Math.round(box.y + box.h) + 0.5); ctx.stroke();

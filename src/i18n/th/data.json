@@ -37,7 +37,7 @@
     {"ctx":"layers/disk/name","ko":"디스크","t":"ดิสก์"},
     {"ctx":"layers/disk/what","ko":"동기 쓰기, IOPS 한도, 버스트 크레딧, 백업","t":"การเขียนแบบ synchronous, ขีดจำกัด IOPS, burst credit, การสำรองข้อมูล"},
     {"ctx":"layers/db/name","ko":"데이터베이스","t":"ฐานข้อมูล"},
-    {"ctx":"layers/db/what","ko":"커넥션 풀, 인덱스, 행 잠금, 복제 지연, 장애 전환","t":"connection pool, อินเด็กซ์, row lock, replication lag, failover"},
+    {"ctx":"layers/db/what","ko":"커넥션 풀, 인덱스, 행 잠금, 복제 지연, 장애 전환","t":"connection pool, อินเด็กซ์, row lock, การทำสำเนาข้อมูลล่าช้า, failover"},
     {"ctx":"layers/infra/name","ko":"서버 구성과 운영","t":"สถาปัตยกรรมเซิร์ฟเวอร์และการดูแลระบบ"},
     {"ctx":"layers/infra/short","ko":"구성·운영","t":"สถาปัตยกรรม/ดูแลระบบ"},
     {"ctx":"layers/infra/what","ko":"게이트웨이, 서버 간 호출 체인, 연쇄 장애, 배포·확장","t":"เกตเวย์, call chain ระหว่างเซิร์ฟเวอร์, cascading failure, การ deploy และการขยายระบบ"},

@@ -135,7 +135,7 @@
     {"ctx":"src/sims/journey.js:184","ko":"표시","t":"การแสดงผล"},
     {"ctx":"src/sims/journey.js:185","ko":"보간 버퍼","t":"interpolation buffer"},
     {"ctx":"src/sims/journey.js:185","ko":"“다른 플레이어” 관점에서만 쓰입니다.","t":"ใช้เฉพาะในมุมมอง “ผู้เล่นคนอื่น”"},
-    {"ctx":"src/sims/journey.js:199","ko":"유선 + 국내 서버","t":"สาย LAN + เซิร์ฟเวอร์ในประเทศ"},
+    {"ctx":"src/sims/journey.js:199","ko":"유선 + 국내 서버","t":"สาย LAN + เซิร์ฟเวอร์ในเกาหลี"},
     {"ctx":"src/sims/journey.js:200","ko":"와이파이 + 가족이 영상 업로드","t":"Wi-Fi + คนในบ้านอัปโหลดวิดีโอ"},
     {"ctx":"src/sims/journey.js:201","ko":"LTE 접속","t":"เชื่อมต่อด้วย LTE"},
     {"ctx":"src/sims/journey.js:202","ko":"미국 서버 접속","t":"เชื่อมต่อเซิร์ฟเวอร์สหรัฐฯ"},
