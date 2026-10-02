@@ -13805,7 +13805,7 @@ K.register('leak', function (root) {
     stMem.set(s >= 2 ? '— / ' + P.ram : `${K.n(S.mem[i], 1)} / ${P.ram}`, s === 3 ? null : s === 2 ? 'bad' : s === 1 ? 'warn' : S.mem[i] > P.ram * 0.9 ? 'warn' : 'good', TR`접속자 ${K.n(S.ppl[i])}명`);
     stTick.set(s >= 2 ? '—' : K.ms(S.tick[i]), s === 3 ? null : s === 2 || S.tick[i] > 50 ? 'bad' : S.tick[i] > 35 ? 'warn' : 'good', TR`예산 50ms`);
     stState.set(stName[s], s === 2 ? 'bad' : s === 1 ? 'warn' : 'good', s === 2 ? TR`전원 접속 끊김` : s === 1 ? TR`디스크를 메모리처럼 씀` : s === 3 ? TR`10분 뒤 다시 열림` : '');
-    stNext.set(risk ? fmtH(risk.dh) + TR` 뒤` : TR`7일 안엔 없음`, risk ? risk.st : 'good', risk ? `${risk.what} · ${clockLabel(risk.at)}` : '');
+    stNext.set(risk ? TR`${fmtH(risk.dh)} 뒤` : TR`7일 안엔 없음`, risk ? risk.st : 'good', risk ? `${risk.what} · ${clockLabel(risk.at)}` : '');
     F.say(explain(i, risk));
   });
 });
@@ -18000,7 +18000,7 @@ K.register('timeouts', function (root) {
     logSig = sig;
     logEl.innerHTML = '';
     ev.forEach(([t, txt, cls]) => logEl.append(K.el('div', { class: t > ph ? 'fut' : '' },
-      K.el('span', { class: 't', text: Number.isFinite(t) ? fmtT(t) : TR`끝까지` }), K.el('span', { class: cls, text: txt }))));
+      K.el('span', { class: 't', text: Number.isFinite(t) ? fmtT(t) : TR`끝까지@@표의 시각 칸(끝날 때까지 없음)` }), K.el('span', { class: cls, text: txt }))));
   }
   function narrate() {
     const c = A.culprit, m = A.minL;
@@ -18299,7 +18299,7 @@ K.register('windows', function (root) {
     stMargin.set(K.ms(p.margin), p.margin < 0 ? 'bad' : p.margin < 100 ? 'warn' : 'good');
     stRes.set(p.margin < 0 ? TR`못 피함` : TR`피할 수 있음`, p.margin < 0 ? 'bad' : 'good');
     const mp = maxPing(P.judge);
-    stMax.set(Number.isFinite(mp) ? (mp < 0 ? TR`0에서도 불가` : K.ms(mp)) : TR`1초 넘게`, mp < 60 ? 'bad' : mp < 150 ? 'warn' : 'good');
+    stMax.set(Number.isFinite(mp) ? (mp < 0 ? TR`0에서도 불가` : K.ms(mp)) : TR`1초 넘게@@값 칸에 홀로 쓰는 말`, mp < 60 ? 'bad' : mp < 150 ? 'warn' : 'good');
     let msg = genreSay ? genreSay + K.sp : '';
     if (p.margin < 0) {
       msg = TR`${K.flag('bad')}${msg}예고 ${K.ms(P.W)} 중 네트워크가 ${K.ms(Math.max(0, net))}, 사람 반응이 ${K.ms(P.react)}를 씁니다. <b>${K.ms(-p.margin)} 모자라서 실력과 상관없이 맞습니다</b>. 플레이어는 “분명 피했는데 맞았다”(씹힘·롤백)고 느낍니다.`;
@@ -18761,7 +18761,7 @@ K.register('windows', function (root) {
         const lead = causes.filter(c => c.layer === l.id && c.own[0] === o.id).length;
         const also = causes.filter(c => c.layer === l.id && c.own.indexOf(o.id) > 0).length;
         if (!lead && !also) return '<td class="empty"></td>';
-        return `<td class="own-${o.team}" style="--a:${(0.12 + 0.6 * lead / maxLead).toFixed(2)}"><button type="button" data-l="${l.id}" data-o="${o.id}" aria-label="${esc(l.short + ' · ' + o.name + TR`: 주 담당 ` + lead + TR`가지, 함께 ` + also + TR`가지`)}">${lead ? `<b>${lead}</b>` : ''}${also ? `<span>+${also}</span>` : ''}</button></td>`;
+        return `<td class="own-${o.team}" style="--a:${(0.12 + 0.6 * lead / maxLead).toFixed(2)}"><button type="button" data-l="${l.id}" data-o="${o.id}" aria-label="${esc(TR`${l.short} · ${o.name}: 주 담당 ${lead}가지, 함께 ${also}가지`)}">${lead ? `<b>${lead}</b>` : ''}${also ? `<span>+${also}</span>` : ''}</button></td>`;
       }).join('')}</tr>`;
     }).join('')}</tbody></table>`;
 

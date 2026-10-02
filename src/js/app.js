@@ -430,7 +430,7 @@
         const lead = causes.filter(c => c.layer === l.id && c.own[0] === o.id).length;
         const also = causes.filter(c => c.layer === l.id && c.own.indexOf(o.id) > 0).length;
         if (!lead && !also) return '<td class="empty"></td>';
-        return `<td class="own-${o.team}" style="--a:${(0.12 + 0.6 * lead / maxLead).toFixed(2)}"><button type="button" data-l="${l.id}" data-o="${o.id}" aria-label="${esc(l.short + ' · ' + o.name + TR`: 주 담당 ` + lead + TR`가지, 함께 ` + also + TR`가지`)}">${lead ? `<b>${lead}</b>` : ''}${also ? `<span>+${also}</span>` : ''}</button></td>`;
+        return `<td class="own-${o.team}" style="--a:${(0.12 + 0.6 * lead / maxLead).toFixed(2)}"><button type="button" data-l="${l.id}" data-o="${o.id}" aria-label="${esc(TR`${l.short} · ${o.name}: 주 담당 ${lead}가지, 함께 ${also}가지`)}">${lead ? `<b>${lead}</b>` : ''}${also ? `<span>+${also}</span>` : ''}</button></td>`;
       }).join('')}</tr>`;
     }).join('')}</tbody></table>`;
 

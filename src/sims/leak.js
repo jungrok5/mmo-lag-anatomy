@@ -308,7 +308,7 @@ K.register('leak', function (root) {
     stMem.set(s >= 2 ? '— / ' + P.ram : `${K.n(S.mem[i], 1)} / ${P.ram}`, s === 3 ? null : s === 2 ? 'bad' : s === 1 ? 'warn' : S.mem[i] > P.ram * 0.9 ? 'warn' : 'good', TR`접속자 ${K.n(S.ppl[i])}명`);
     stTick.set(s >= 2 ? '—' : K.ms(S.tick[i]), s === 3 ? null : s === 2 || S.tick[i] > 50 ? 'bad' : S.tick[i] > 35 ? 'warn' : 'good', TR`예산 50ms`);
     stState.set(stName[s], s === 2 ? 'bad' : s === 1 ? 'warn' : 'good', s === 2 ? TR`전원 접속 끊김` : s === 1 ? TR`디스크를 메모리처럼 씀` : s === 3 ? TR`10분 뒤 다시 열림` : '');
-    stNext.set(risk ? fmtH(risk.dh) + TR` 뒤` : TR`7일 안엔 없음`, risk ? risk.st : 'good', risk ? `${risk.what} · ${clockLabel(risk.at)}` : '');
+    stNext.set(risk ? TR`${fmtH(risk.dh)} 뒤` : TR`7일 안엔 없음`, risk ? risk.st : 'good', risk ? `${risk.what} · ${clockLabel(risk.at)}` : '');
     F.say(explain(i, risk));
   });
 });

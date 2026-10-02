@@ -337,7 +337,7 @@ K.register('timeouts', function (root) {
     logSig = sig;
     logEl.innerHTML = '';
     ev.forEach(([t, txt, cls]) => logEl.append(K.el('div', { class: t > ph ? 'fut' : '' },
-      K.el('span', { class: 't', text: Number.isFinite(t) ? fmtT(t) : TR`끝까지` }), K.el('span', { class: cls, text: txt }))));
+      K.el('span', { class: 't', text: Number.isFinite(t) ? fmtT(t) : TR`끝까지@@표의 시각 칸(끝날 때까지 없음)` }), K.el('span', { class: cls, text: txt }))));
   }
   function narrate() {
     const c = A.culprit, m = A.minL;
