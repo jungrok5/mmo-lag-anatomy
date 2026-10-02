@@ -31,9 +31,10 @@
     {"ctx":"#top p","ko":"게임 렉 백서 · 수치는 일반적인 서비스 환경의 대표값이며, 실제 값은 게임과 인프라마다 다릅니다.","t":"ゲームラグ白書 · 数値は一般的なサービス環境での代表値です。実際の値はゲームやインフラによって異なります。"},
     {"ctx":"#top p","ko":"시뮬레이션은 원리를 보여 주기 위해 단순화한 모델입니다. 실제 장애 분석은 게임개발팀·인프라팀의 모니터링 지표와 함께 보세요.","t":"シミュレーションは原理を示すために単純化したモデルです。実際の障害分析は、ゲーム開発チーム・インフラチームの監視メトリクスと合わせて確認してください。"},
     {"ctx":"#top p","ko":"자바스크립트 없이 읽는 <a href=\"%SITE%text.html\">텍스트 판</a>(원인마다 따로 된 페이지 포함), 전체 내용 마크다운 <a href=\"%SITE%llms-full.txt\">llms-full.txt</a>, AI용 안내 <a href=\"%SITE%llms.txt\">llms.txt</a>.","t":"JavaScriptなしで読める<a href=\"%SITE%text.html\">テキスト版</a>（原因ごとの個別ページを含む）、全内容のMarkdown版<a href=\"%SITE%llms-full.txt\">llms-full.txt</a>、AI向けの案内<a href=\"%SITE%llms.txt\">llms.txt</a>。"},
-    {"ctx":"#top p","ko":"MIT 라이선스로 공개합니다. 글꼴(IBM Plex Sans KR, IBM Plex Mono, Black Han Sans)은 SIL Open Font License 1.1을 따릅니다.","t":"MITライセンスで公開しています。フォント（IBM Plex Sans KR、IBM Plex Mono、Black Han Sans）はSIL Open Font License 1.1に従います。"}
+    {"ctx":"#top p","ko":"MIT 라이선스로 공개합니다. 글꼴(<span class=\"fontlist\">IBM Plex Sans KR, IBM Plex Mono, Black Han Sans</span>)은 SIL Open Font License 1.1을 따릅니다.","t":""}
   ],
   "stale": [
-    {"ctx":"#nav li","ko":"<a href=\"#owners\">게임팀·인프라팀 담당 구분</a>","t":"<a href=\"#owners\">ゲーム開発・インフラの担当分け</a>"}
+    {"ctx":"#nav li","ko":"<a href=\"#owners\">게임팀·인프라팀 담당 구분</a>","t":"<a href=\"#owners\">ゲーム開発・インフラの担当分け</a>"},
+    {"ctx":"#top p","ko":"MIT 라이선스로 공개합니다. 글꼴(IBM Plex Sans KR, IBM Plex Mono, Black Han Sans)은 SIL Open Font License 1.1을 따릅니다.","t":"MITライセンスで公開しています。フォント（IBM Plex Sans KR、IBM Plex Mono、Black Han Sans）はSIL Open Font License 1.1に従います。"}
   ]
 }

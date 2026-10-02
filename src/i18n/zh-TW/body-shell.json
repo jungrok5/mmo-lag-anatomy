@@ -31,6 +31,9 @@
     {"ctx":"#top p","ko":"게임 렉 백서 · 수치는 일반적인 서비스 환경의 대표값이며, 실제 값은 게임과 인프라마다 다릅니다.","t":"遊戲 Lag 白皮書 · 數值是一般服務環境下的代表值，實際數值依遊戲與基礎設施而不同。"},
     {"ctx":"#top p","ko":"시뮬레이션은 원리를 보여 주기 위해 단순화한 모델입니다. 실제 장애 분석은 게임개발팀·인프라팀의 모니터링 지표와 함께 보세요.","t":"模擬是為了呈現原理而簡化的模型。分析實際事故時，請搭配遊戲開發團隊與基礎設施團隊的監控指標一起看。"},
     {"ctx":"#top p","ko":"자바스크립트 없이 읽는 <a href=\"%SITE%text.html\">텍스트 판</a>(원인마다 따로 된 페이지 포함), 전체 내용 마크다운 <a href=\"%SITE%llms-full.txt\">llms-full.txt</a>, AI용 안내 <a href=\"%SITE%llms.txt\">llms.txt</a>.","t":"不需要 JavaScript 也能閱讀的<a href=\"%SITE%text.html\">純文字版</a>（包含每個原因各自的頁面）、完整內容的 Markdown 檔 <a href=\"%SITE%llms-full.txt\">llms-full.txt</a>、給 AI 的說明 <a href=\"%SITE%llms.txt\">llms.txt</a>。"},
+    {"ctx":"#top p","ko":"MIT 라이선스로 공개합니다. 글꼴(<span class=\"fontlist\">IBM Plex Sans KR, IBM Plex Mono, Black Han Sans</span>)은 SIL Open Font License 1.1을 따릅니다.","t":""}
+  ],
+  "stale": [
     {"ctx":"#top p","ko":"MIT 라이선스로 공개합니다. 글꼴(IBM Plex Sans KR, IBM Plex Mono, Black Han Sans)은 SIL Open Font License 1.1을 따릅니다.","t":"以 MIT 授權條款公開。字型（IBM Plex Sans KR、IBM Plex Mono、Black Han Sans）採用 SIL Open Font License 1.1。"}
   ]
 }

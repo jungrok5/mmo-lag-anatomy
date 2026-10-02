@@ -99,7 +99,7 @@
     {"ctx":"causes/so-cpu-quota/chk/yes","ko":"평균 CPU 사용률은 한도보다 낮은데 nr_throttled·throttled_usec가 계속 늘고, 틱이 튄 시각과 겹침","t":"平均CPU使用率は上限より低いのにnr_throttled・throttled_usecが増え続け、ティックが跳ねた時刻と重なる"},
     {"ctx":"causes/so-cpu-quota/chk/no","ko":"nr_throttled가 늘지 않으면 이 원인이 아님. 가상 머신 자체가 밀리면 “CPU 스틸 (가상 머신)”","t":"nr_throttledが増えなければこの原因ではない。仮想マシン自体が待たされているなら「CPUスチール（仮想マシン）」"},
     {"ctx":"causes/so-cpu-quota/ref/0/n","ko":"주기마다 받은 할당량을 다 쓰면 다음 주기까지 스레드가 멈춤(스로틀링), 기본 주기 100ms, nr_throttled 통계","t":"周期ごとに割り当てられたクォータを使い切ると次の周期までスレッドが停止（スロットリング）、デフォルトの周期は100ms、nr_throttledの統計"},
-    {"ctx":"causes/so-cpu-quota/ref/1/n","ko":"cpu.max는 “할당량 주기” 형식이고 기본값은 “max 100000”(100ms 주기)","t":"cpu.maxは「クォータ 周期」の形式で、デフォルト値は「max 100000」（100ms周期）"},
+    {"ctx":"causes/so-cpu-quota/ref/1/n","ko":"cpu.max는 “$MAX $PERIOD”(할당량, 주기) 형식이고 기본값은 “max 100000”(100ms 주기)","t":""},
     {"ctx":"causes/so-cpu-quota/ref/2/n","ko":"컨테이너의 CPU limit은 커널이 CPU 스로틀링으로 강제하는 하드 한도","t":"コンテナのCPU limitは、カーネルがCPUスロットリングで強制するハードリミット"},
     {"ctx":"causes/so-cstate/t","ko":"서버 전원 관리(C-state·주파수 조절)로 지연 튐","t":"サーバーの電源管理（C-state・周波数制御）による遅延スパイク"},
     {"ctx":"causes/so-cstate/s","ko":"쉬는 CPU 코어는 전기를 아끼려고 깊은 절전 상태(C-state)로 들어가고 주파수도 낮춥니다. 패킷이나 타이머가 오면 깨어나고 주파수를 올리는 데 시간이 걸려, 작은 패킷 처리에 지연이 더해집니다.","t":"使われていないCPUコアは、電力を節約するために深い省電力状態（C-state）に入り、周波数も下げます。パケットやタイマーが来ると、復帰して周波数を上げるまでに時間がかかるため、小さなパケットの処理に遅延が加わります。"},
@@ -231,5 +231,8 @@
     {"ctx":"causes/so-ports/ref/2/n","ko":"윈도우 동적 포트 기본 49152~65535, 닫힌 연결은 기본 4분 동안 TIME_WAIT로 포트를 잡고 있음","t":"Windowsの動的ポートのデフォルトは49152〜65535、閉じた接続はデフォルトで4分間TIME_WAITとしてポートを保持"},
     {"ctx":"causes/so-ports/ref/3/n","ko":"상태 필터 state time-wait로 TIME_WAIT 소켓만 골라 봄","t":"状態フィルターstate time-waitで、TIME_WAITソケットだけを絞り込んで表示"},
     {"ctx":"causes/so-ports/ref/4/n","ko":"EADDRNOTAVAIL: 임시 포트 범위의 포트가 모두 쓰이는 중이라 연결을 열지 못함","t":"EADDRNOTAVAIL：エフェメラルポートの範囲のポートがすべて使用中で、接続を開けない"}
+  ],
+  "stale": [
+    {"ctx":"causes/so-cpu-quota/ref/1/n","ko":"cpu.max는 “할당량 주기” 형식이고 기본값은 “max 100000”(100ms 주기)","t":"cpu.maxは「クォータ 周期」の形式で、デフォルト値は「max 100000」（100ms周期）"}
   ]
 }

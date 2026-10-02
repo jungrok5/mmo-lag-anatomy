@@ -84,12 +84,13 @@
     {"ctx":"src/sims/leak.js:310","ko":"전원 접속 끊김","t":"Everyone disconnected"},
     {"ctx":"src/sims/leak.js:310","ko":"디스크를 메모리처럼 씀","t":"Using disk as memory"},
     {"ctx":"src/sims/leak.js:310","ko":"10분 뒤 다시 열림","t":"Back in 10 minutes"},
-    {"ctx":"src/sims/leak.js:311","ko":" 뒤","t":" from now"},
+    {"ctx":"src/sims/leak.js:311","ko":"{0} 뒤","t":""},
     {"ctx":"src/sims/leak.js:311","ko":"7일 안엔 없음","t":"None within 7 days"}
   ],
   "stale": [
     {"ctx":"src/sims/leak.js:271","ko":"{0} 메모리가 RAM {1}GB{2} 채우자 운영체제가 서버 프로세스를 강제로 끝냈습니다(OOM, 메모리 부족 종료). 이 서버의 <b>모든 플레이어</b>가 한꺼번에 <b>접속 끊김</b>을 겪고, 다시 켜지는 10분 동안 <b>접속 불가·무한 로딩</b>입니다. 다시 켜면 메모리가 비워져 멀쩡해 보이지만, 누수는 그대로라 같은 일이 되풀이됩니다.","t":"{0} Memory filled all {1} GB of RAM{2} and the operating system killed the server process (OOM: out of memory). <b>Every player</b> on this server gets a <b>disconnect</b> at the same moment, then hits <b>can’t connect / infinite loading</b> for the 10 minutes the restart takes. After the restart, memory is empty and things look fine, but the leak is still there, so the same thing happens again."},
     {"ctx":"src/sims/leak.js:271","ko":"와 스왑 {0}GB를 모두","t":" plus all {0} GB of swap,"},
-    {"ctx":"src/sims/leak.js:271","ko":"를","t":" "}
+    {"ctx":"src/sims/leak.js:271","ko":"를","t":" "},
+    {"ctx":"src/sims/leak.js:311","ko":" 뒤","t":" from now"}
   ]
 }

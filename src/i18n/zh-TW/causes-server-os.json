@@ -99,7 +99,7 @@
     {"ctx":"causes/so-cpu-quota/chk/yes","ko":"평균 CPU 사용률은 한도보다 낮은데 nr_throttled·throttled_usec가 계속 늘고, 틱이 튄 시각과 겹침","t":"平均 CPU 使用率低於上限，nr_throttled、throttled_usec 卻持續增加，且與 tick 飆高的時間點重疊"},
     {"ctx":"causes/so-cpu-quota/chk/no","ko":"nr_throttled가 늘지 않으면 이 원인이 아님. 가상 머신 자체가 밀리면 “CPU 스틸 (가상 머신)”","t":"nr_throttled 沒有增加就不是這個原因。虛擬機器本身分不到 CPU 時是「CPU steal（虛擬機器）」"},
     {"ctx":"causes/so-cpu-quota/ref/0/n","ko":"주기마다 받은 할당량을 다 쓰면 다음 주기까지 스레드가 멈춤(스로틀링), 기본 주기 100ms, nr_throttled 통계","t":"用完每個週期分到的配額後，執行緒會暫停到下一個週期（節流）；預設週期 100ms；nr_throttled 統計"},
-    {"ctx":"causes/so-cpu-quota/ref/1/n","ko":"cpu.max는 “할당량 주기” 형식이고 기본값은 “max 100000”(100ms 주기)","t":"cpu.max 的格式為「配額 週期」，預設值為「max 100000」（100ms 週期）"},
+    {"ctx":"causes/so-cpu-quota/ref/1/n","ko":"cpu.max는 “$MAX $PERIOD”(할당량, 주기) 형식이고 기본값은 “max 100000”(100ms 주기)","t":""},
     {"ctx":"causes/so-cpu-quota/ref/2/n","ko":"컨테이너의 CPU limit은 커널이 CPU 스로틀링으로 강제하는 하드 한도","t":"容器的 CPU limit 是 kernel 以 CPU 節流強制執行的硬性上限"},
     {"ctx":"causes/so-cstate/t","ko":"서버 전원 관리(C-state·주파수 조절)로 지연 튐","t":"伺服器電源管理（C-state、頻率調整）造成延遲飆高"},
     {"ctx":"causes/so-cstate/s","ko":"쉬는 CPU 코어는 전기를 아끼려고 깊은 절전 상태(C-state)로 들어가고 주파수도 낮춥니다. 패킷이나 타이머가 오면 깨어나고 주파수를 올리는 데 시간이 걸려, 작은 패킷 처리에 지연이 더해집니다.","t":"閒置的 CPU 核心為了省電，會進入深層省電狀態（C-state）並降低頻率。封包或計時器到來時，喚醒核心並拉高頻率需要時間，處理小封包時就會多出延遲。"},
@@ -231,5 +231,8 @@
     {"ctx":"causes/so-ports/ref/2/n","ko":"윈도우 동적 포트 기본 49152~65535, 닫힌 연결은 기본 4분 동안 TIME_WAIT로 포트를 잡고 있음","t":"Windows 動態 port 預設為 49152～65535，已關閉的連線預設會以 TIME_WAIT 占用 port 4 分鐘"},
     {"ctx":"causes/so-ports/ref/3/n","ko":"상태 필터 state time-wait로 TIME_WAIT 소켓만 골라 봄","t":"以狀態篩選 state time-wait 只列出 TIME_WAIT socket"},
     {"ctx":"causes/so-ports/ref/4/n","ko":"EADDRNOTAVAIL: 임시 포트 범위의 포트가 모두 쓰이는 중이라 연결을 열지 못함","t":"EADDRNOTAVAIL：臨時 port 範圍內的 port 全都在使用中，無法開啟連線"}
+  ],
+  "stale": [
+    {"ctx":"causes/so-cpu-quota/ref/1/n","ko":"cpu.max는 “할당량 주기” 형식이고 기본값은 “max 100000”(100ms 주기)","t":"cpu.max 的格式為「配額 週期」，預設值為「max 100000」（100ms 週期）"}
   ]
 }

@@ -108,7 +108,7 @@
     {"ctx":"src/js/app.js:393","ko":" <span class=\"note\">· 그래프 모양: <a href=\"#sig-{0}\">{1}</a></span>","t":" <span class=\"note\">· Dạng đồ thị: <a href=\"#sig-{0}\">{1}</a></span>"},
     {"ctx":"src/js/app.js:395","ko":"<p class=\"note\">그 밖에 {0}가지 원인이 일부 조건과 맞습니다.</p>","t":"<p class=\"note\">Ngoài ra còn {0} nguyên nhân khớp với một phần điều kiện.</p>"},
     {"ctx":"src/js/app.js:412","ko":"게임개발팀이 주 담당","t":"Đội phát triển game phụ trách chính"},
-    {"ctx":"src/js/app.js:412, src/js/app.js:413, src/js/app.js:414, src/js/app.js:415, src/js/app.js:433","ko":"가지","t":" nguyên nhân"},
+    {"ctx":"src/js/app.js:412, src/js/app.js:413, src/js/app.js:414, src/js/app.js:415","ko":"가지","t":" nguyên nhân"},
     {"ctx":"src/js/app.js:413","ko":"인프라팀이 주 담당","t":"Đội hạ tầng phụ trách chính"},
     {"ctx":"src/js/app.js:414","ko":"외부가 주 담당","t":"Bên ngoài phụ trách chính"},
     {"ctx":"src/js/app.js:415","ko":"두 팀 모두 할 일이 있음","t":"Cả hai đội đều có việc"},
@@ -116,8 +116,7 @@
     {"ctx":"src/js/app.js:421","ko":"유저 환경·통신사·클라우드","t":"Môi trường người chơi, nhà mạng, cloud"},
     {"ctx":"src/js/app.js:422","ko":"두 팀이 할 일을 나눠 맡는 경우","t":"Hai đội chia nhau xử lý"},
     {"ctx":"src/js/app.js:428, src/js/app.js:681","ko":"층·주제","t":"Tầng·chủ đề"},
-    {"ctx":"src/js/app.js:433","ko":": 주 담당 ","t":": phụ trách chính "},
-    {"ctx":"src/js/app.js:433","ko":"가지, 함께 ","t":" nguyên nhân, phối hợp "},
+    {"ctx":"src/js/app.js:433","ko":"{0} · {1}: 주 담당 {2}가지, 함께 {3}가지","t":""},
     {"ctx":"src/js/app.js:438","ko":"팀","t":"Đội"},
     {"ctx":"src/js/app.js:439","ko":"범위","t":"Phạm vi"},
     {"ctx":"src/js/app.js:439","ko":"주 담당만","t":"Chỉ phụ trách chính"},
@@ -168,5 +167,9 @@
     {"ctx":"src/js/app.js:696","ko":"증상 사전 · 한눈에 보기","t":"Từ điển triệu chứng · Tổng quan"},
     {"ctx":"src/js/app.js:696","ko":"어느 층이 어떤 증상을 만드나","t":"Tầng nào gây ra triệu chứng nào"},
     {"ctx":"src/js/app.js:697","ko":"가로는 증상, 세로는 층과 주제입니다. 숫자는 그 층에서 그 증상을 만드는 원인의 수이고, 진할수록 많습니다. 같은 증상이라도 여러 층에서 생길 수 있다는 것이 한눈에 보입니다.","t":"Cột là triệu chứng, hàng là tầng và chủ đề. Mỗi con số là số nguyên nhân ở tầng đó gây ra triệu chứng đó; ô càng đậm thì càng nhiều. Nhìn bảng là thấy ngay cùng một triệu chứng có thể sinh ra từ nhiều tầng."}
+  ],
+  "stale": [
+    {"ctx":"src/js/app.js:433","ko":": 주 담당 ","t":": phụ trách chính "},
+    {"ctx":"src/js/app.js:433","ko":"가지, 함께 ","t":" nguyên nhân, phối hợp "}
   ]
 }

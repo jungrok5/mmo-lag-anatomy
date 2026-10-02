@@ -84,12 +84,13 @@
     {"ctx":"src/sims/leak.js:310","ko":"전원 접속 끊김","t":"Tất cả mất kết nối"},
     {"ctx":"src/sims/leak.js:310","ko":"디스크를 메모리처럼 씀","t":"Dùng ổ đĩa làm bộ nhớ"},
     {"ctx":"src/sims/leak.js:310","ko":"10분 뒤 다시 열림","t":"Mở lại sau 10 phút"},
-    {"ctx":"src/sims/leak.js:311","ko":" 뒤","t":" nữa"},
+    {"ctx":"src/sims/leak.js:311","ko":"{0} 뒤","t":""},
     {"ctx":"src/sims/leak.js:311","ko":"7일 안엔 없음","t":"Không có trong 7 ngày tới"}
   ],
   "stale": [
     {"ctx":"src/sims/leak.js:271","ko":"{0} 메모리가 RAM {1}GB{2} 채우자 운영체제가 서버 프로세스를 강제로 끝냈습니다(OOM, 메모리 부족 종료). 이 서버의 <b>모든 플레이어</b>가 한꺼번에 <b>접속 끊김</b>을 겪고, 다시 켜지는 10분 동안 <b>접속 불가·무한 로딩</b>입니다. 다시 켜면 메모리가 비워져 멀쩡해 보이지만, 누수는 그대로라 같은 일이 되풀이됩니다.","t":"{0} Khi bộ nhớ lấp đầy RAM {1} GB{2} thì hệ điều hành buộc dừng tiến trình server (OOM, hết bộ nhớ). <b>Mọi người chơi</b> trên server này cùng lúc bị <b>mất kết nối</b>, rồi <b>không vào được·kẹt loading</b> trong 10 phút chờ server bật lại. Bật lại xong, bộ nhớ trống nên trông như bình thường, nhưng rò rỉ vẫn còn nên chuyện này sẽ lặp lại."},
     {"ctx":"src/sims/leak.js:271","ko":"와 스왑 {0}GB를 모두","t":" và toàn bộ {0} GB swap"},
-    {"ctx":"src/sims/leak.js:271","ko":"를","t":" "}
+    {"ctx":"src/sims/leak.js:271","ko":"를","t":" "},
+    {"ctx":"src/sims/leak.js:311","ko":" 뒤","t":" nữa"}
   ]
 }
