@@ -49,7 +49,7 @@
     {"ctx":"src/sims/bloat.js:84","ko":"대기열 채움","t":"Заполнение очереди"},
     {"ctx":"src/sims/bloat.js:238","ko":"대기열 {0} KB = {1}","t":"Очередь {0} KB = {1}"},
     {"ctx":"src/sims/bloat.js:239","ko":"앞의 패킷이 다 나가야 뒤의 패킷이 출발합니다","t":"Пакет ждёт, пока уйдут все впереди"},
-    {"ctx":"src/sims/bloat.js:243","ko":"내 PC","t":"Мой ПК"},
+    {"ctx":"src/sims/bloat.js:243","ko":"내 PC","t":"ПК"},
     {"ctx":"src/sims/bloat.js:257","ko":"재전송","t":"Повторы"},
     {"ctx":"src/sims/bloat.js:257","ko":"와이파이 재전송","t":"Повторы Wi-Fi"},
     {"ctx":"src/sims/bloat.js:268","ko":"다른 트래픽 대기열 (5ms 안팎)","t":"Очередь прочего трафика (около 5 ms)"},

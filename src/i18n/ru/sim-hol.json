@@ -52,7 +52,7 @@
     {"ctx":"src/sims/hol.js:202","ko":"게임에 전달","t":"Выдано игре"},
     {"ctx":"src/sims/hol.js:202","ko":"캐릭터 위치","t":"Позиция"},
     {"ctx":"src/sims/hol.js:224, src/sims/hol.js:330","ko":"멈춤 ","t":"Фриз "},
-    {"ctx":"src/sims/hol.js:250, src/sims/hol.js:251","ko":"개 대기","t":" в ожидании"},
+    {"ctx":"src/sims/hol.js:250, src/sims/hol.js:251","ko":"개 대기","t":" ждут"},
     {"ctx":"src/sims/hol.js:259","ko":"개 대기 중","t":" в очереди"},
     {"ctx":"src/sims/hol.js:331","ko":"몰아치기 ×","t":"Перемотка ×"},
     {"ctx":"src/sims/hol.js:332","ko":"개 건너뜀","t":" шт. пропущено"},
