@@ -90,7 +90,7 @@
     {"ctx":"src/js/app.js:330","ko":"3. 어떤 모양인가요? (여러 개 선택)","t":"3. Como aparece? (marque quantas quiser)"},
     {"ctx":"src/js/app.js:342","ko":"선택 모두 지우기","t":"Limpar seleção"},
     {"ctx":"src/js/app.js:350","ko":"가능성 높은 원인","t":"Causas mais prováveis"},
-    {"ctx":"src/js/app.js:350","ko":"누가·언제·모양이 대표 특징과 맞을수록 높음","t":"Sobe no ranking quanto mais quem, quando e como aparece batem com os traços principais da causa"},
+    {"ctx":"src/js/app.js:350","ko":"누가·언제·모양이 대표 특징과 맞을수록 높음","t":"Quanto mais “quem”, “quando” e “como aparece” batem com os traços típicos da causa, mais alto ela fica"},
     {"ctx":"src/js/app.js:353","ko":"나만 겪는다면 먼저 <b>내 쪽 세 층</b>(게임, PC·폰, 집 네트워크)을 봅니다. 유선으로 바꾸거나, 다른 게임·영상 통화도 느린지 확인해 보세요. 회선 핑(게임 밖에서 잰 핑)은 멀쩡한데 뚝뚝 끊기면 내 PC의 프레임 문제일 가능성이 큽니다.","t":"Se só você é afetado, comece pelas <b>três camadas do seu lado</b> (o jogo, o PC ou celular e a rede doméstica). Teste com cabo e veja se outros jogos e chamadas de vídeo também ficam lentos. Se o ping da conexão (medido fora do jogo) está normal, mas o jogo tem engasgos, o mais provável é um problema de frames no seu PC."},
     {"ctx":"src/js/app.js:354","ko":"같은 집 사람들이 함께 겪는다면 <b>공유기와 집 회선</b>이 1순위입니다. 누가 큰 파일을 올리거나 받고 있지 않은지, 공유기를 재부팅하면 나아지는지 보세요.","t":"Se as pessoas da mesma casa sentem juntas, o <b>roteador e a conexão de casa</b> são os primeiros suspeitos. Veja se alguém está fazendo upload ou download de arquivos grandes e se reiniciar o roteador ajuda."},
     {"ctx":"src/js/app.js:355","ko":"특정 지역·통신사만 겪는다면 <b>인터넷 회선 층</b>(경로, 피어링, 해외 구간)입니다. 게임 서버는 멀쩡할 가능성이 높습니다. 통신사별 핑·손실 통계를 인프라팀에 요청하세요.","t":"Se só uma região ou operadora é afetada, é a <b>camada da conexão de internet</b> (rotas, peering, trechos internacionais). O servidor do jogo provavelmente está normal. Peça à equipe de infraestrutura as estatísticas de ping e perda de pacotes por operadora."},
@@ -136,7 +136,7 @@
     {"ctx":"src/js/app.js:495","ko":"기타","t":"Outros"},
     {"ctx":"src/js/app.js:502","ko":" (장)","t":" (capítulo)"},
     {"ctx":"src/js/app.js:504","ko":"<p class=\"note\">아직 등록된 출처가 없습니다.</p>","t":"<p class=\"note\">Ainda não há fontes cadastradas.</p>"},
-    {"ctx":"src/js/app.js:508","ko":"<p class=\"note\">자료 {0}건, 발행처 {1}곳</p>","t":"<p class=\"note\">{0} fontes de {1} publicadores</p>"},
+    {"ctx":"src/js/app.js:508","ko":"<p class=\"note\">자료 {0}건, 발행처 {1}곳</p>","t":"<p class=\"note\">{0} referências de {1} organizações</p>"},
     {"ctx":"src/js/app.js:509","ko":"인용 {0}곳","t":"Citado por: {0}"},
     {"ctx":"src/js/app.js:584","ko":"복사됨","t":"Copiado"},
     {"ctx":"src/js/app.js:584","ko":"주소창에서 복사하세요","t":"Copie da barra de endereço"},
@@ -165,7 +165,7 @@
     {"ctx":"src/js/app.js:684","ko":"합계","t":"Total"},
     {"ctx":"src/js/app.js:686","ko":"<p class=\"note\">칸을 누르면 그 층에서 그 증상을 만드는 원인이 여기에 나옵니다.</p>","t":"<p class=\"note\">Clique em uma célula para ver aqui as causas que geram aquele sintoma naquela camada.</p>"},
     {"ctx":"src/js/app.js:696","ko":"증상 사전 · 한눈에 보기","t":"Catálogo de sintomas · Visão geral"},
-    {"ctx":"src/js/app.js:696","ko":"어느 층이 어떤 증상을 만드나","t":"Que camada gera que sintoma"},
+    {"ctx":"src/js/app.js:696","ko":"어느 층이 어떤 증상을 만드나","t":"Qual camada gera qual sintoma"},
     {"ctx":"src/js/app.js:697","ko":"가로는 증상, 세로는 층과 주제입니다. 숫자는 그 층에서 그 증상을 만드는 원인의 수이고, 진할수록 많습니다. 같은 증상이라도 여러 층에서 생길 수 있다는 것이 한눈에 보입니다.","t":"Nas colunas, os sintomas; nas linhas, as camadas e os temas. Cada número é a quantidade de causas daquela camada que geram aquele sintoma, e quanto mais escura a célula, mais causas. Dá para ver de relance que o mesmo sintoma pode vir de várias camadas."}
   ]
 }

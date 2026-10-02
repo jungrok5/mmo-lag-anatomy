@@ -162,7 +162,7 @@
     {"ctx":"src/sims/journey.js:357","ko":"남의 움직임 기준","t":"Pelo movimento dos outros"},
     {"ctx":"src/sims/journey.js:357","ko":"내 입력 기준","t":"Pelo seu input"},
     {"ctx":"src/sims/journey.js:363","ko":"플레이어는 누르자마자 스킬이 나가는 것처럼 느낍니다.","t":"O jogador sente como se a skill saísse no instante em que aperta o botão."},
-    {"ctx":"src/sims/journey.js:364","ko":"플레이어는 버튼을 누르고 조금 늦게 반응하는 입력 지연을 느낍니다. 회피 타이밍이 조금씩 밀립니다.","t":"O jogador sente input lag: o botão responde um pouco atrasado. O timing da esquiva fica um pouco atrasado."},
+    {"ctx":"src/sims/journey.js:364","ko":"플레이어는 버튼을 누르고 조금 늦게 반응하는 입력 지연을 느낍니다. 회피 타이밍이 조금씩 밀립니다.","t":"O jogador sente input lag: o botão responde com um pequeno atraso, e as esquivas saem um pouco fora do tempo."},
     {"ctx":"src/sims/journey.js:365","ko":"입력 지연이 커서 스킬과 회피가 한참 늦게 나갑니다. 연타하면 씹힘·롤백처럼 보이고, 판정에서 계속 불리해집니다.","t":"O input lag é grande, e skills e esquivas saem bem atrasadas. Ao apertar várias vezes seguidas, parece ação perdida ou rollback, e você fica sempre em desvantagem nas decisões do servidor."},
     {"ctx":"src/sims/journey.js:367","ko":"다른 플레이어는 실제보다 약 {0}ms 전의 모습으로 보입니다. ","t":"Os outros jogadores aparecem como estavam cerca de {0} ms atrás. "},
     {"ctx":"src/sims/journey.js:367","ko":"대부분의 전투에서 티가 나지 않습니다.","t":"Na maioria dos combates, isso não se nota."},
