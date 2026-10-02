@@ -194,7 +194,7 @@
     {"ctx":"causes/in-cert/chk/no","ko":"인증서 목록과 만료일이 정상인데 일부 유저만 실패하면 그 유저 기기의 날짜·시간이나 오래된 OS의 루트 인증서 목록을 봄","t":"证书列表和到期日正常却只有部分玩家失败，看这些玩家设备的日期时间，或旧版 OS 的根证书列表"},
     {"ctx":"causes/in-cert/ref/0/n","ko":"인증서 유효 기간은 notBefore부터 notAfter까지, 경로 검증은 체인의 인증서마다 현재 시각이 유효 기간 안인지 확인(검증하는 쪽의 시계가 틀리면 실패)","t":"证书有效期从 notBefore 到 notAfter；路径校验会逐一确认链上每张证书在当前时刻是否处于有效期内（校验方时钟不对就会失败）"},
     {"ctx":"causes/in-cert/ref/1/n","ko":"기본 인증서 유효 기간 90일, 60일마다 갱신 권장","t":"默认证书有效期 90 天，建议每 60 天续期"},
-    {"ctx":"causes/in-cert/ref/2/n","ko":"기본 유효 기간을 2027년 2월 64일, 2028년 2월 45일로 단축, 60일 고정 간격 갱신으로는 부족해져 유효 기간의 약 3분의 2 시점 갱신 권장","t":"默认有效期在 2027 年 2 月缩短为 64 天、2028 年 2 月缩短为 45 天，固定 60 天间隔续期将不够用，建议在有效期约三分之二时续期"},
+    {"ctx":"causes/in-cert/ref/2/n","ko":"기본 유효 기간을 2027년 2월부터 64일, 2028년 2월부터 45일로 단축, 60일 고정 간격 갱신으로는 부족해져 유효 기간의 약 3분의 2 시점 갱신 권장","t":"默认有效期在 2027 年 2 月缩短为 64 天、2028 年 2 月缩短为 45 天，固定 60 天间隔续期将不够用，建议在有效期约三分之二时续期"},
     {"ctx":"causes/in-cert/ref/3/n","ko":"만료 45일 전에 AWS 서비스에서 사용 중인지와 검증용 CNAME 레코드가 있는지 확인해 자동 갱신, 검증하지 못하면 만료 30·15·7·3·1일 전에 알림","t":"到期前 45 天确认证书是否正在 AWS 服务中使用、验证用 CNAME 记录是否存在，然后自动续期；无法验证时在到期前 30、15、7、3、1 天发出通知"},
     {"ctx":"causes/in-cert/ref/4/n","ko":"가져온(import) 인증서와 이미 만료된 인증서는 자동 갱신 대상이 아님","t":"导入（import）的证书和已过期的证书不在自动续期范围内"},
     {"ctx":"causes/in-cert/ref/5/n","ko":"DaysToExpiry: 인증서 만료까지 남은 일수, 만료 전까지 하루 두 번 게시","t":"DaysToExpiry：距离证书到期的剩余天数，到期前每天发布两次"},
@@ -221,6 +221,7 @@
     {"ctx":"causes/in-login-queue/ref/1/n","ko":"넘치는 요청을 일찍 거절해 처리할 수 있는 요청을 계속 처리하는 부하 차단","t":"尽早拒绝超出的请求，以持续处理能处理的请求（减载，load shedding）"}
   ],
   "stale": [
-    {"ctx":"causes/in-cert/chk/look","ko":"openssl s_client -connect 주소:443 -showcerts로 서버가 실제로 보내는 인증서 목록을 보고, 각 인증서의 만료일(notAfter)을 openssl x509 -noout -enddate로 확인. 로드밸런서에서 TLS를 끝낸다면 TLS 협상 오류 수(AWS ALB·NLB는 ClientTLSNegotiationErrorCount)와 로그인 성공 수","t":"用 openssl s_client -connect 地址:443 -showcerts 查看服务器实际发送的证书列表，用 openssl x509 -noout -enddate 确认各证书的到期日（notAfter）。在负载均衡器上终止 TLS 时，看 TLS 协商错误数（AWS ALB、NLB 为 ClientTLSNegotiationErrorCount）和登录成功数"}
+    {"ctx":"causes/in-cert/chk/look","ko":"openssl s_client -connect 주소:443 -showcerts로 서버가 실제로 보내는 인증서 목록을 보고, 각 인증서의 만료일(notAfter)을 openssl x509 -noout -enddate로 확인. 로드밸런서에서 TLS를 끝낸다면 TLS 협상 오류 수(AWS ALB·NLB는 ClientTLSNegotiationErrorCount)와 로그인 성공 수","t":"用 openssl s_client -connect 地址:443 -showcerts 查看服务器实际发送的证书列表，用 openssl x509 -noout -enddate 确认各证书的到期日（notAfter）。在负载均衡器上终止 TLS 时，看 TLS 协商错误数（AWS ALB、NLB 为 ClientTLSNegotiationErrorCount）和登录成功数"},
+    {"ctx":"causes/in-cert/ref/2/n","ko":"기본 유효 기간을 2027년 2월 64일, 2028년 2월 45일로 단축, 60일 고정 간격 갱신으로는 부족해져 유효 기간의 약 3분의 2 시점 갱신 권장","t":"默认有效期在 2027 年 2 月缩短为 64 天、2028 年 2 月缩短为 45 天，固定 60 天间隔续期将不够用，建议在有效期约三分之二时续期"}
   ]
 }

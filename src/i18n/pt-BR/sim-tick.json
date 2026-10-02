@@ -73,7 +73,7 @@
     {"ctx":"src/sims/tick.js:282","ko":"틱 간격","t":""},
     {"ctx":"src/sims/tick.js:291","ko":"2초 전","t":""},
     {"ctx":"src/sims/tick.js:292","ko":"지금","t":""},
-    {"ctx":"src/sims/tick.js:295","ko":"플레이어","t":""},
+    {"ctx":"src/sims/tick.js:295","ko":"플레이어","t":"Jogador"},
     {"ctx":"src/sims/tick.js:305","ko":"억","t":""},
     {"ctx":"src/sims/tick.js:305","ko":"만","t":""},
     {"ctx":"src/sims/tick.js:313","ko":"게임 스레드가 하나라서 이 서버(채널)에 있는 <b>모든 플레이어</b>가 함께 {0}.","t":""},

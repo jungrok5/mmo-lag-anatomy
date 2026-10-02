@@ -86,11 +86,12 @@
     {"ctx":"src/sims/windows.js:247","ko":"못 피함","t":"Kein Ausweichen"},
     {"ctx":"src/sims/windows.js:247","ko":"피할 수 있음","t":"Ausweichen möglich"},
     {"ctx":"src/sims/windows.js:249","ko":"0에서도 불가","t":"Selbst bei 0 unmöglich"},
-    {"ctx":"src/sims/windows.js:249, src/sims/windows.js:257","ko":"1초 넘게","t":"über 1 s"},
+    {"ctx":"src/sims/windows.js:249","ko":"1초 넘게@@값 칸에 홀로 쓰는 말","t":""},
     {"ctx":"src/sims/windows.js:252","ko":"{0}{1}예고 {2} 중 네트워크가 {3}, 사람 반응이 {4}를 씁니다. <b>{5} 모자라서 실력과 상관없이 맞습니다</b>. 플레이어는 “분명 피했는데 맞았다”(씹힘·롤백)고 느낍니다.","t":"{0}{1}Von {2} Vorwarnung verbraucht das Netzwerk {3} und die menschliche Reaktion {4}. <b>Es fehlen {5}, deshalb trifft der Angriff unabhängig vom Können</b>. Der Spieler hat das Gefühl: „Ich bin doch ausgewichen und wurde trotzdem getroffen“ (Verschluckte Aktion / Rollback)."},
     {"ctx":"src/sims/windows.js:253","ko":" 지연 보상이나 예고 예약으로 네트워크가 쓰는 시간을 줄일 수 있습니다.","t":" Lag-Compensation oder zeitgeplante Vorwarnungen verkürzen die Zeit, die das Netzwerk verbraucht."},
     {"ctx":"src/sims/windows.js:255","ko":"{0}{1}아슬아슬합니다. 여유가 {2}뿐이라 핑이 조금만 튀어도 억울한 피격이 생깁니다.","t":"{0}{1}Das ist knapp. Bei nur {2} Spielraum führt schon ein kleiner Ping-Spike zu unfairen Treffern."},
     {"ctx":"src/sims/windows.js:257","ko":"{0}{1}여유가 {2} 남습니다. 이 게임은 핑 {3}까지 버팁니다.","t":"{0}{1}Es bleiben {2} Spielraum. Dieses Spiel verkraftet einen Ping bis {3}."},
+    {"ctx":"src/sims/windows.js:257","ko":"1초 넘게","t":"über 1 s"},
     {"ctx":"src/sims/windows.js:259","ko":" 클라이언트 판정은 내 화면만 보면 공정하지만, 조작된 클라이언트의 판정도 그대로 인정한다는 대가가 있습니다.","t":" Die clientseitige Trefferabfrage ist aus Sicht des eigenen Bildschirms fair, hat aber ihren Preis: Auch die Entscheidungen eines manipulierten Clients werden ungeprüft anerkannt."},
     {"ctx":"src/sims/windows.js:260","ko":" 지연 보상은 내가 본 시점으로 판정해 주지만, 다른 사람 화면에서는 “맞은 것 같은데 안 맞음”으로 보일 수 있습니다.","t":" Die Lag-Compensation entscheidet nach dem Zeitpunkt, den man selbst gesehen hat. Auf den Bildschirmen anderer kann das aber so aussehen: „Das hätte treffen müssen, hat es aber nicht.“"},
     {"ctx":"src/sims/windows.js:261","ko":" 롤백은 내 입력을 누른 프레임 그대로 인정하지만, 상대 동작을 늦게 본 {0}는 돌려받지 못합니다. 그만큼 동작 앞부분이 잘려 보입니다.","t":" Rollback erkennt die eigene Eingabe genau in dem Frame an, in dem sie gedrückt wurde. Die {0}, um die man die Bewegung des Gegners zu spät gesehen hat, bekommt man aber nicht zurück. Um diese Zeit wirkt der Anfang der Bewegung abgeschnitten."}

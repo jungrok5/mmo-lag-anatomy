@@ -83,7 +83,7 @@
     {"ctx":"src/sims/retrans.js:420","ko":"전달 없음","t":""},
     {"ctx":"src/sims/retrans.js:420","ko":"아직 못 받은 맨 앞 패킷 포함","t":""},
     {"ctx":"src/sims/retrans.js:420","ko":"평소 {0}","t":""},
-    {"ctx":"src/sims/retrans.js:421","ko":"없음","t":""},
+    {"ctx":"src/sims/retrans.js:421","ko":"없음","t":"Nenhum"},
     {"ctx":"src/sims/retrans.js:421","ko":"맨 앞 하나를 기다리느라 뒤도 전부 대기","t":""},
     {"ctx":"src/sims/retrans.js:421","ko":"순서대로 바로 전달","t":""},
     {"ctx":"src/sims/retrans.js:422","ko":"상한 120초에 닿음","t":""},

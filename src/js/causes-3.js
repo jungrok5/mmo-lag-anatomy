@@ -1386,7 +1386,7 @@
       ref: [
         { t: 'RFC 5280: Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile', u: 'https://www.rfc-editor.org/rfc/rfc5280', p: 'IETF', n: '인증서 유효 기간은 notBefore부터 notAfter까지, 경로 검증은 체인의 인증서마다 현재 시각이 유효 기간 안인지 확인(검증하는 쪽의 시계가 틀리면 실패)' },
         { t: 'FAQ', u: 'https://letsencrypt.org/docs/faq/', p: 'Let\'s Encrypt', n: '기본 인증서 유효 기간 90일, 60일마다 갱신 권장' },
-        { t: 'Decreasing Certificate Lifetimes to 45 Days', u: 'https://letsencrypt.org/2025/12/02/from-90-to-45', p: 'Let\'s Encrypt', n: '기본 유효 기간을 2027년 2월 64일, 2028년 2월 45일로 단축, 60일 고정 간격 갱신으로는 부족해져 유효 기간의 약 3분의 2 시점 갱신 권장' },
+        { t: 'Decreasing Certificate Lifetimes to 45 Days', u: 'https://letsencrypt.org/2025/12/02/from-90-to-45', p: 'Let\'s Encrypt', n: '기본 유효 기간을 2027년 2월부터 64일, 2028년 2월부터 45일로 단축, 60일 고정 간격 갱신으로는 부족해져 유효 기간의 약 3분의 2 시점 갱신 권장' },
         { t: 'Renewal for domains validated by DNS', u: 'https://docs.aws.amazon.com/acm/latest/userguide/dns-renewal-validation.html', p: 'AWS', n: '만료 45일 전에 AWS 서비스에서 사용 중인지와 검증용 CNAME 레코드가 있는지 확인해 자동 갱신, 검증하지 못하면 만료 30·15·7·3·1일 전에 알림' },
         { t: 'Managed certificate renewal in AWS Certificate Manager', u: 'https://docs.aws.amazon.com/acm/latest/userguide/managed-renewal.html', p: 'AWS', n: '가져온(import) 인증서와 이미 만료된 인증서는 자동 갱신 대상이 아님' },
         { t: 'Supported CloudWatch metrics', u: 'https://docs.aws.amazon.com/acm/latest/userguide/cloudwatch-metrics.html', p: 'AWS', n: 'DaysToExpiry: 인증서 만료까지 남은 일수, 만료 전까지 하루 두 번 게시' },

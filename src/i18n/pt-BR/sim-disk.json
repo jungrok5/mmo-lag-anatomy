@@ -38,7 +38,7 @@
     {"ctx":"src/sims/disk.js:75","ko":"백업 작업 동시 실행","t":""},
     {"ctx":"src/sims/disk.js:75","ko":"백업이 디스크 처리 능력의 70%를 가져갑니다.","t":""},
     {"ctx":"src/sims/disk.js:76","ko":"버스트 크레딧 다시 채우기","t":""},
-    {"ctx":"src/sims/disk.js:77","ko":"게임 서버","t":""},
+    {"ctx":"src/sims/disk.js:77","ko":"게임 서버","t":"Servidores de jogo"},
     {"ctx":"src/sims/disk.js:79","ko":"쓰는 방식","t":""},
     {"ctx":"src/sims/disk.js:80","ko":"게임 스레드에서 직접 (동기)","t":""},
     {"ctx":"src/sims/disk.js:80","ko":"별도 스레드로 넘김 (비동기)","t":""},
