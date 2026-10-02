@@ -761,5 +761,6 @@ dt[id]:target, .pb-steps li:target { background: var(--accent-soft); border-radi
 /* 긴 합성어(독일어·러시아어) 제목은 칸 안에서 끊어지게 한다. 사전이 있으면 하이픈을 넣는다 */
 :root:not(:lang(ko)) :is(h1, h2, h3) { overflow-wrap: anywhere; hyphens: auto; }
 :root:not(:lang(ko)) .flag { white-space: nowrap; flex: none; }
+:root:not(:lang(ko)) .analogy .tag { white-space: normal; }
 :root:lang(en) body { hyphens: auto; }
 :root:not(:lang(ko)) .own { white-space: normal; max-width: 100%; }

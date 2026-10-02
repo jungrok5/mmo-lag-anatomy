@@ -666,3 +666,5 @@ The owner descriptions (`owners/*/desc`) are also reused verbatim in `body-owner
 | 카나리 / 대조군 / 트래픽 지문 / 주석 | канарейка / контрольная группа / профиль трафика / аннотации | |
 | 대역 외 접속 / 경쟁 상태 / 리스 / 혼잡 붕괴 | внеполосный (out-of-band) доступ / состояние гонки / аренда (lease) / коллапс от перегрузки | |
 | 상태 페이지 | статусная страница | |
+| 통신사 공유기 (CGNAT) | NAT провайдера (CGNAT) | not «роутер провайдера» (reads as the home router the ISP supplies) |
+| 로드밸런서 (tight canvas labels) | балансер / LB | full form «балансировщик нагрузки» in prose |
