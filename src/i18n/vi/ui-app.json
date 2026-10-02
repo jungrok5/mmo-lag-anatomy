@@ -116,7 +116,7 @@
     {"ctx":"src/js/app.js:421","ko":"유저 환경·통신사·클라우드","t":"Môi trường người chơi, nhà mạng, cloud"},
     {"ctx":"src/js/app.js:422","ko":"두 팀이 할 일을 나눠 맡는 경우","t":"Hai đội chia nhau xử lý"},
     {"ctx":"src/js/app.js:428, src/js/app.js:681","ko":"층·주제","t":"Tầng·chủ đề"},
-    {"ctx":"src/js/app.js:433","ko":"{0} · {1}: 주 담당 {2}가지, 함께 {3}가지","t":""},
+    {"ctx":"src/js/app.js:433","ko":"{0} · {1}: 주 담당 {2}가지, 함께 {3}가지","t":"{0} · {1}: phụ trách chính {2} nguyên nhân, phối hợp {3} nguyên nhân"},
     {"ctx":"src/js/app.js:438","ko":"팀","t":"Đội"},
     {"ctx":"src/js/app.js:439","ko":"범위","t":"Phạm vi"},
     {"ctx":"src/js/app.js:439","ko":"주 담당만","t":"Chỉ phụ trách chính"},

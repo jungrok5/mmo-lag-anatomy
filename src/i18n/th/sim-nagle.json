@@ -35,7 +35,7 @@
     {"ctx":"src/sims/nagle.js:58","ko":"200ms 예전 윈도우","t":"200 ms Windows รุ่นเก่า"},
     {"ctx":"src/sims/nagle.js:60","ko":"보낼 응답이 없으면 ACK를 이만큼 미뤘다가 따로 보냅니다.","t":"ถ้าไม่มีคำตอบให้ส่ง จะหน่วง ACK ไว้เท่านี้แล้วส่งแยก"},
     {"ctx":"src/sims/nagle.js:62","ko":"핑(RTT, 왕복 시간)","t":"ปิง (RTT, เวลาไปกลับ)"},
-    {"ctx":"src/sims/nagle.js:62","ko":"20ms ≈ 국내 서버","t":"20 ms ≈ เซิร์ฟเวอร์ในเกาหลี"},
+    {"ctx":"src/sims/nagle.js:62","ko":"20ms ≈ 국내 서버","t":"20 ms ≈ เซิร์ฟเวอร์ในประเทศ"},
     {"ctx":"src/sims/nagle.js:63","ko":"보기","t":"การแสดงผล"},
     {"ctx":"src/sims/nagle.js:64","ko":"재생 속도","t":"ความเร็วการเล่น"},
     {"ctx":"src/sims/nagle.js:64","ko":"1/10 느리게","t":"ความเร็ว 1/10"},

@@ -84,7 +84,7 @@
     {"ctx":"src/sims/leak.js:310","ko":"전원 접속 끊김","t":"所有人掉线"},
     {"ctx":"src/sims/leak.js:310","ko":"디스크를 메모리처럼 씀","t":"把磁盘当内存用"},
     {"ctx":"src/sims/leak.js:310","ko":"10분 뒤 다시 열림","t":"10 分钟后重新开放"},
-    {"ctx":"src/sims/leak.js:311","ko":"{0} 뒤","t":""},
+    {"ctx":"src/sims/leak.js:311","ko":"{0} 뒤","t":"{0}后"},
     {"ctx":"src/sims/leak.js:311","ko":"7일 안엔 없음","t":"7 天内无"}
   ],
   "stale": [

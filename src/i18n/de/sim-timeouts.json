@@ -108,7 +108,7 @@
     {"ctx":"src/sims/timeouts.js:328","ko":"서버가 끊김을 감지하고 캐릭터를 정리","t":"Server erkennt die Trennung und räumt den Charakter auf"},
     {"ctx":"src/sims/timeouts.js:328","ko":"서버는 끝까지 모름. 캐릭터가 남아 있음","t":"Server erfährt es nie. Der Charakter bleibt stehen"},
     {"ctx":"src/sims/timeouts.js:329","ko":"10분 동안 아무도 끊지 않음","t":"10 Minuten lang trennt niemand die Verbindung"},
-    {"ctx":"src/sims/timeouts.js:340","ko":"끝까지@@표의 시각 칸(끝날 때까지 없음)","t":""},
+    {"ctx":"src/sims/timeouts.js:340","ko":"끝까지@@표의 시각 칸(끝날 때까지 없음)","t":"nie"},
     {"ctx":"src/sims/timeouts.js:353","ko":"{0}운영체제의 TCP keepalive 확인 패킷이 {1}마다 지나가서 모든 장비의 타이머가 가득 차기 전에 0으로 돌아갑니다. 가장 짧은 타임아웃은 <b>{2} {3}</b>입니다. ","t":"{0}Die TCP-Keepalive-Probes des Betriebssystems laufen alle {1} durch, deshalb springen die Timer aller Geräte auf 0 zurück, bevor sie voll sind. Das kürzeste Timeout: <b>{2}, {3}</b>. "},
     {"ctx":"src/sims/timeouts.js:354","ko":"{0}하트비트가 {1}마다 지나가서 모든 장비의 타이머가 가득 차기 전에 0으로 돌아갑니다. 가장 짧은 타임아웃은 <b>{2} {3}</b>입니다. ","t":"{0}Alle {1} läuft ein Heartbeat durch, deshalb springen die Timer aller Geräte auf 0 zurück, bevor sie voll sind. Das kürzeste Timeout: <b>{2}, {3}</b>. "},
     {"ctx":"src/sims/timeouts.js:355","ko":"간격이 그 절반 이하라 패킷 하나가 늦거나 사라져도 버팁니다.","t":"Das Intervall beträgt höchstens die Hälfte davon, daher hält die Verbindung auch, wenn ein Paket verspätet ist oder verloren geht."},

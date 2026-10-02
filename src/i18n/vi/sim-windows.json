@@ -86,7 +86,7 @@
     {"ctx":"src/sims/windows.js:247","ko":"못 피함","t":"Không né được"},
     {"ctx":"src/sims/windows.js:247","ko":"피할 수 있음","t":"Né được"},
     {"ctx":"src/sims/windows.js:249","ko":"0에서도 불가","t":"Ping 0 cũng không né được"},
-    {"ctx":"src/sims/windows.js:249","ko":"1초 넘게@@값 칸에 홀로 쓰는 말","t":""},
+    {"ctx":"src/sims/windows.js:249","ko":"1초 넘게@@값 칸에 홀로 쓰는 말","t":"Hơn 1 giây"},
     {"ctx":"src/sims/windows.js:252","ko":"{0}{1}예고 {2} 중 네트워크가 {3}, 사람 반응이 {4}를 씁니다. <b>{5} 모자라서 실력과 상관없이 맞습니다</b>. 플레이어는 “분명 피했는데 맞았다”(씹힘·롤백)고 느낍니다.","t":"{0}{1}Trong {2} cảnh báo, mạng chiếm {3}, con người phản ứng mất {4}. <b>Thiếu {5} nên giỏi đến đâu cũng bị trúng</b>. Người chơi sẽ cảm thấy “rõ ràng đã né mà vẫn trúng” (nuốt thao tác·rollback)."},
     {"ctx":"src/sims/windows.js:253","ko":" 지연 보상이나 예고 예약으로 네트워크가 쓰는 시간을 줄일 수 있습니다.","t":" Bù trễ hoặc hẹn trước cảnh báo có thể giảm thời gian mạng chiếm."},
     {"ctx":"src/sims/windows.js:255","ko":"{0}{1}아슬아슬합니다. 여유가 {2}뿐이라 핑이 조금만 튀어도 억울한 피격이 생깁니다.","t":"{0}{1}Rất sát nút. Chỉ dư {2} nên ping nhảy một chút là bị trúng oan."},
