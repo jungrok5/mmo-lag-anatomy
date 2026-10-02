@@ -49,7 +49,7 @@
     {"ctx":"src/sims/locks.js:238","ko":"락 8개 중 {0}개 사용 중 · 대기 {1}개","t":"Locks em uso: {0} de 8 · esperando: {1}"},
     {"ctx":"src/sims/locks.js:239","ko":"경매장 락: ","t":"Lock da casa de leilões: "},
     {"ctx":"src/sims/locks.js:242","ko":"스레드 {0}","t":"Thread {0}"},
-    {"ctx":"src/sims/locks.js:262","ko":"{0}ms 전","t":"há {0} ms"},
+    {"ctx":"src/sims/locks.js:262","ko":"{0}ms 전","t":"{0} ms atrás"},
     {"ctx":"src/sims/locks.js:263, src/sims/locks.js:321","ko":"지금","t":"Agora"},
     {"ctx":"src/sims/locks.js:267","ko":"워치독 {0}초","t":"Watchdog {0} s"},
     {"ctx":"src/sims/locks.js:278","ko":"서버 재시작","t":"Reinício do servidor"},
