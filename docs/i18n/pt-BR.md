@@ -648,3 +648,35 @@ Translators of later phases: add a row here when you fix a term that is not cove
 
 | Korean | pt-BR | Note |
 |---|---|---|
+
+## Decisions added during review
+
+| Korean | Brazilian Portuguese | Note |
+|---|---|---|
+| 숫자 감각 (latency table, sim `ladder`) | Números de latência | kept apart from 수치 감각 = Números de referência (card label); ui-app, sim-ladder, body-l-memory, refs |
+| 멈춤 (server, GC, TCP, VM stop) | pausa / parado | “Travamento” only for the on-screen symptom; sim-nagle 멈춤 = Pausa |
+| 접속 끊김 (connection state in sim-sndbuf) | Desconectado | the symptom stays “Desconexão” |
+| 텔레포트 (game feature) | teletransporte | the symptom stays “Teleporte” |
+| 락스텝 입력 지연 (setting) | atraso de input | the symptom stays “Input lag” |
+| p99 / 가장 느린 1% | pior 1% (p99) | “100번 중 가장 느린 1번” → “a medição mais lenta de cada 100” |
+| 약 / 쯤 / 안팎 with times | cerca de, mais ou menos, por volta de | never drop the hedge |
+| 국내 (Korean operator’s view) | na Coreia | |
+| 누구에게 번지나 | Até onde se espalha | body-partial kicker |
+| 비유 / 핵심 / 먼저 (tags, chip) | Analogia / Ponto-chave / Primeiro | |
+| 무응답 판정 / 유령 접속 / 재연결 유예 시간 | timeout de cliente sem resposta / sessão fantasma / tempo de tolerância para reconexão | |
+| 접속 대기열 시스템 / PC방 | fila de login / lan house | |
+| 판정 기준 / 클라이언트 판정 / 대상 지정 | registro de acerto / decisão no cliente / seleção de alvo | |
+| 스킬 큐 / 보스 기믹 / 몰이 사냥 / 소환물 | fila de skills / mecânica / pull em massa / invocações | |
+| 필드 / 경매장 / 거래소 / 우편 / 귓속말 / 강화 | mapa / casa de leilões / mercado / correio / mensagens privadas / aprimoramento | |
+| 저장 (game) / 재접속 폭주 / 출석 기록 | salvamento / avalanche de reconexões / registro de check-in diário | |
+| 따라잡기 / 따라잡기 폭주 | recuperação do atraso / espiral de recuperação | fixed timestep: espiral de recuperação do timestep fixo |
+| 1% 최저 FPS / 렌더 대기열 / 저지연 모드 | FPS 1% low / fila de renderização / modo de baixa latência | |
+| 예비 DB / 예열 / 콜드 캐시 | BD reserva (standby) / aquecimento / cache frio | |
+| 큰 락 / 잘게 나눈 락 | lock global / locks granulares | |
+| MTU 탐색 / PMTUD / MSS 조정 / 크기 초과 알림 | sondagem de MTU / descoberta do MTU do caminho / MSS clamping / avisos de pacote grande demais (ICMP) | sondagem ≠ descoberta |
+| 구간 (mtr hop) | salto (hop) | |
+| 회고 / 트래픽 지문 / 카나리·대조군 | retrospectiva / perfil do tráfego / canário, grupo de controle | |
+| 인터넷 거점 / IX / 엣지 호스트 / 대역 외 접속 | pontos de interconexão da internet / IX (ponto de troca de tráfego) / hosts de borda / acesso fora de banda (out-of-band) | |
+| 경쟁 상태 / 혼잡 붕괴 | condição de corrida / colapso por congestionamento | |
+| 표준 문서 (RFC) | padrões técnicos (RFCs) | site, body-refs |
+| sim-arch 서버 상태 정상 / 느려짐 / 멈춤 (장애) | Normal / Com lentidão / Sem resposta (falha) | lowercase inside sentences |

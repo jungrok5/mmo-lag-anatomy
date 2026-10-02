@@ -61,13 +61,13 @@
     {"ctx":"src/sims/distance.js:240","ko":" · 패킷은 20배 느리게 표시","t":" · paket ditampilkan 20× lebih lambat"},
     {"ctx":"src/sims/distance.js:242","ko":"도시를 누르면 서버가 바뀝니다","t":"Klik kota untuk mengganti server"},
     {"ctx":"src/sims/distance.js:259","ko":"<b>{0}</b> · 내 위치","t":"<b>{0}</b> · lokasi Anda"},
-    {"ctx":"src/sims/distance.js:259","ko":"<b>{0}</b> · 내 위치에서 {1}km<br>빛의 한계 왕복 {2}{3}","t":"<b>{0}</b> · {1} km dari lokasi Anda<br>batas cahaya pulang-pergi {2}{3}"},
-    {"ctx":"src/sims/distance.js:259","ko":"<br>누르면 이 도시를 서버로","t":"<br>klik untuk menjadikan kota ini server"},
+    {"ctx":"src/sims/distance.js:259","ko":"<b>{0}</b> · 내 위치에서 {1}km<br>빛의 한계 왕복 {2}{3}","t":"<b>{0}</b> · {1} km dari lokasi Anda<br>Batas cahaya pulang-pergi {2}{3}"},
+    {"ctx":"src/sims/distance.js:259","ko":"<br>누르면 이 도시를 서버로","t":"<br>Klik untuk menjadikan kota ini server"},
     {"ctx":"src/sims/distance.js:275","ko":"시","t":".00"},
     {"ctx":"src/sims/distance.js:275","ko":"왕복 핑 (ms)","t":"Ping pulang-pergi (ms)"},
     {"ctx":"src/sims/distance.js:279","ko":"저녁 피크","t":"Jam sibuk malam"},
     {"ctx":"src/sims/distance.js:293","ko":"지금 ","t":"Sekarang "},
-    {"ctx":"src/sims/distance.js:300","ko":"<b>{0}</b><br>최소 {1} · 평균 {2}<br>최악(95%) {3} · 손실 {4}%","t":"<b>{0}</b><br>min. {1} · rata-rata {2}<br>terburuk (95%) {3} · packet loss {4}%"},
+    {"ctx":"src/sims/distance.js:300","ko":"<b>{0}</b><br>최소 {1} · 평균 {2}<br>최악(95%) {3} · 손실 {4}%","t":"<b>{0}</b><br>Min. {1} · rata-rata {2}<br>Terburuk (95%) {3} · packet loss {4}%"},
     {"ctx":"src/sims/distance.js:307","ko":"같은 도시 안","t":"Dalam satu kota"},
     {"ctx":"src/sims/distance.js:308","ko":"광케이블 직선 왕복","t":"Pulang-pergi garis lurus di serat optik"},
     {"ctx":"src/sims/distance.js:311","ko":"{0} 평균","t":"Rata-rata {0}"},
@@ -82,7 +82,7 @@
     {"ctx":"src/sims/distance.js:324","ko":"통신사 사이 구간","t":"jalur antar-ISP"},
     {"ctx":"src/sims/distance.js:325","ko":" 액션 전투에도 충분히 빠릅니다.","t":" Cukup cepat bahkan untuk pertempuran aksi."},
     {"ctx":"src/sims/distance.js:326","ko":" 스킬 반응이 조금 늦게 느껴지는 입력 지연이 있고, 가까운 서버의 플레이어보다 판정에서 불리합니다.","t":" Ada input lag yang membuat respons skill terasa sedikit terlambat, dan Anda lebih dirugikan dalam hit registration dibanding pemain yang dekat dengan server."},
-    {"ctx":"src/sims/distance.js:327","ko":" 입력 지연이 커서 회피·타이밍 판정에서 크게 불리합니다.","t":" Input lag besar sehingga Anda sangat dirugikan saat menghindar dan pada timing window."},
+    {"ctx":"src/sims/distance.js:327","ko":" 입력 지연이 커서 회피·타이밍 판정에서 크게 불리합니다.","t":" Input lag besar sehingga Anda sangat dirugikan saat server menilai gerakan menghindar dan timing."},
     {"ctx":"src/sims/distance.js:328","ko":" 서버 성능을 아무리 올려도 이 거리는 줄일 수 없습니다. 그래서 게임사는 지역마다 서버(리전)를 따로 둡니다.","t":" Sekuat apa pun server ditingkatkan, jarak ini tidak bisa diperpendek. Karena itu perusahaan game menyediakan server terpisah (region) untuk tiap wilayah."}
   ]
 }

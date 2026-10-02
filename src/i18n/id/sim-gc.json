@@ -60,7 +60,7 @@
     {"ctx":"src/sims/gc.js:289","ko":"{0}초 전 · 사용 <b>{1}GB</b> / {2}GB","t":"{0} detik lalu · terpakai <b>{1} GB</b> / {2} GB"},
     {"ctx":"src/sims/gc.js:290","ko":"<br>{0}: <b>{1}</b> 멈춤<br>{2}GB → {3}GB","t":"<br>{0}: jeda <b>{1}</b><br>{2} GB → {3} GB"},
     {"ctx":"src/sims/gc.js:301","ko":"{0}초 전 · 틱 <b>{1}</b>","t":"{0} detik lalu · tick <b>{1}</b>"},
-    {"ctx":"src/sims/gc.js:302","ko":"<br>이 중 GC 멈춤 <b>{0}</b>","t":"<br>termasuk jeda GC <b>{0}</b>"},
+    {"ctx":"src/sims/gc.js:302","ko":"<br>이 중 GC 멈춤 <b>{0}</b>","t":"<br>Termasuk jeda GC <b>{0}</b>"},
     {"ctx":"src/sims/gc.js:303","ko":"<br>밀린 틱 {0}개를 뒤이어 몰아서 처리","t":"<br>{0} tick tertunda diproses sekaligus sesudahnya"},
     {"ctx":"src/sims/gc.js:304","ko":"<br>동시 GC 중이라 틱이 25% 느림","t":"<br>Tick 25% lebih lambat karena GC konkuren sedang berjalan"},
     {"ctx":"src/sims/gc.js:311","ko":"고치는 법: 할당 줄이기(자주 만드는 객체를 버리지 않고 다시 쓰는 <b>오브젝트 풀</b>), 살아 있는 데이터 줄이기, GC 종류 바꾸기.","t":"Cara memperbaiki: kurangi alokasi (<b>object pool</b>, yaitu memakai ulang objek yang sering dibuat tanpa membuangnya), kurangi data hidup, ganti jenis GC."},
