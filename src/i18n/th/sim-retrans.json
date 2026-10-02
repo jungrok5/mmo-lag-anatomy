@@ -69,7 +69,7 @@
     {"ctx":"src/sims/retrans.js:307","ko":"업로드 포화 (ACK 지연·손실)","t":"อัปโหลดเต็ม (ACK ช้า/หาย)"},
     {"ctx":"src/sims/retrans.js:308","ko":"대책 모두 켜기","t":"เปิดทุกมาตรการ"},
     {"ctx":"src/sims/retrans.js:309","ko":"상황","t":"สถานการณ์"},
-    {"ctx":"src/sims/retrans.js:330","ko":"서버","t":"เซิร์ฟเวอร์"},
+    {"ctx":"src/sims/retrans.js:330","ko":"서버","t":"เซิร์ฟ"},
     {"ctx":"src/sims/retrans.js:331","ko":"내 PC","t":"PC เรา"},
     {"ctx":"src/sims/retrans.js:332","ko":"지금","t":"ตอนนี้"},
     {"ctx":"src/sims/retrans.js:332","ko":"-{0}초","t":"-{0} วินาที"},
