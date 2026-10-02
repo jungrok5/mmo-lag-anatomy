@@ -66,13 +66,14 @@
     {"ctx":"src/sims/sndbuf.js:204","ko":"ms 일하고 쉼","t":" ms por tick e fica ociosa"},
     {"ctx":"src/sims/sndbuf.js:216","ko":"3초 전","t":"3 s atrás"},
     {"ctx":"src/sims/sndbuf.js:217, src/sims/sndbuf.js:304, src/sims/sndbuf.js:323","ko":"지금","t":"Agora"},
-    {"ctx":"src/sims/sndbuf.js:225, src/sims/sndbuf.js:233","ko":"클라이언트","t":"Cliente "},
+    {"ctx":"src/sims/sndbuf.js:225","ko":"클라이언트","t":"Cliente "},
     {"ctx":"src/sims/sndbuf.js:226","ko":"송신 버퍼","t":"Buffer de envio"},
     {"ctx":"src/sims/sndbuf.js:226","ko":"송신 버퍼 (","t":"Buffer de envio ("},
     {"ctx":"src/sims/sndbuf.js:227","ko":"앱 대기열","t":"Fila do app"},
     {"ctx":"src/sims/sndbuf.js:228","ko":"지연","t":"Atraso"},
     {"ctx":"src/sims/sndbuf.js:229","ko":"상태","t":"Estado"},
-    {"ctx":"src/sims/sndbuf.js:233","ko":"클라이언트 ","t":"Cliente "},
+    {"ctx":"src/sims/sndbuf.js:233","ko":"클라이언트{0}@@좁은 화면(띄어쓰기 없이 짧게)","t":""},
+    {"ctx":"src/sims/sndbuf.js:233","ko":"클라이언트 {0}","t":""},
     {"ctx":"src/sims/sndbuf.js:236","ko":"느림","t":"Lento"},
     {"ctx":"src/sims/sndbuf.js:236","ko":"느린 회선","t":"Conexão lenta"},
     {"ctx":"src/sims/sndbuf.js:245","ko":"없음 (스레드가 대기)","t":"Nenhuma (a thread espera)"},
@@ -105,5 +106,8 @@
     {"ctx":"src/sims/sndbuf.js:411","ko":"{0}클라이언트 {1}에게 못 보낸 데이터가 서버 메모리에 쌓이는 중입니다({2}KB). {3}초 안에 따라잡지 못하면 연결을 끊습니다. 그동안 그 클라이언트의 화면은 점점 늦어집니다({4}). 다른 클라이언트와 서버 틱은 멀쩡합니다.","t":"{0}Os dados que não saíram para o cliente {1} estão se acumulando na memória do servidor ({2} KB). Se ele não alcançar em {3} s, a conexão cai. Enquanto isso, a tela desse cliente atrasa cada vez mais ({4}). Os outros clientes e o tick do servidor estão normais."},
     {"ctx":"src/sims/sndbuf.js:412","ko":"{0}클라이언트 {1}의 송신 버퍼가 차오르는 중입니다. 가득 찬 뒤 5초 넘게 밀리면 서버가 연결을 끊습니다.","t":"{0}O buffer de envio do cliente {1} está enchendo. Depois de cheio, se o atraso passar de 5 segundos, o servidor derruba a conexão."},
     {"ctx":"src/sims/sndbuf.js:416","ko":"{0}<b>느린 클라이언트에게 못 보낸 데이터를 버리지도 끊지도 않고 서버 메모리에 계속 쌓습니다.</b> 화면의 클라이언트 8개는 샘플이고 실제로는 같은 비율로 2,000명이 접속해 있다고 치면, 메모리가 초당 {1}MB씩 늘어납니다. 한도까지 약 {2}. 느린 클라이언트의 화면은 {3} 뒤처져 있고 계속 늘어납니다. 다른 클라이언트는 아직 멀쩡하지만, 한도를 넘는 순간 모두의 접속이 끊깁니다.","t":"{0}<b>Os dados que não chegam aos clientes lentos continuam se acumulando na memória do servidor, sem descarte e sem kick.</b> Se os 8 clientes da tela forem uma amostra de 2.000 jogadores conectados na mesma proporção, a memória cresce {1} MB por segundo. Faltam cerca de {2} até o limite. A tela dos clientes lentos está {3} atrasada, e o atraso continua crescendo. Os outros clientes ainda estão normais, mas, no momento em que a memória passar do limite, todos são desconectados."}
+  ],
+  "stale": [
+    {"ctx":"src/sims/sndbuf.js:233","ko":"클라이언트 ","t":"Cliente "}
   ]
 }
