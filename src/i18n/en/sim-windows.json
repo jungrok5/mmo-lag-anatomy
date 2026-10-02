@@ -86,7 +86,7 @@
     {"ctx":"src/sims/windows.js:247","ko":"못 피함","t":"Can’t dodge"},
     {"ctx":"src/sims/windows.js:247","ko":"피할 수 있음","t":"Dodgeable"},
     {"ctx":"src/sims/windows.js:249","ko":"0에서도 불가","t":"Not even at 0"},
-    {"ctx":"src/sims/windows.js:249","ko":"1초 넘게@@값 칸에 홀로 쓰는 말","t":""},
+    {"ctx":"src/sims/windows.js:249","ko":"1초 넘게@@값 칸에 홀로 쓰는 말","t":"Over 1 s"},
     {"ctx":"src/sims/windows.js:252","ko":"{0}{1}예고 {2} 중 네트워크가 {3}, 사람 반응이 {4}를 씁니다. <b>{5} 모자라서 실력과 상관없이 맞습니다</b>. 플레이어는 “분명 피했는데 맞았다”(씹힘·롤백)고 느낍니다.","t":"{0}{1}Of the {2} telegraph, the network uses {3} and human reaction uses {4}. <b>You’re {5} short, so you get hit no matter how good you are</b>. The player feels “I definitely dodged, but it hit me” (dropped action / rollback)."},
     {"ctx":"src/sims/windows.js:253","ko":" 지연 보상이나 예고 예약으로 네트워크가 쓰는 시간을 줄일 수 있습니다.","t":" Lag compensation or scheduled telegraphs can cut the time the network takes."},
     {"ctx":"src/sims/windows.js:255","ko":"{0}{1}아슬아슬합니다. 여유가 {2}뿐이라 핑이 조금만 튀어도 억울한 피격이 생깁니다.","t":"{0}{1}It’s tight. With only {2} of margin, even a small ping spike causes unfair hits."},
