@@ -73,7 +73,7 @@
     {"ctx":"src/sims/bloat.js:378","ko":"올릴 다른 트래픽이 없어 게임 패킷이 대기하지 않고 바로 나갑니다.","t":"Tidak ada traffic lain yang diunggah, jadi paket game langsung keluar tanpa menunggu."},
     {"ctx":"src/sims/bloat.js:380","ko":"2.5초마다 간섭이 0.3초씩 전파를 막아 그 순간의 패킷이 재전송을 거듭하다 사라집니다(손실 {0}%). 화면에서는 주기적인 멈춤 뒤에 순간이동·고무줄로 보입니다.","t":"Setiap 2,5 detik, interferensi memblokir sinyal selama 0,3 detik, sehingga paket yang dikirim saat itu dikirim ulang berkali-kali lalu hilang (packet loss {0}%). Di layar, ini terlihat sebagai freeze berkala yang diikuti teleport atau rubber banding."},
     {"ctx":"src/sims/bloat.js:381","ko":"와이파이 신호가 약해 패킷마다 평균 {0}번 다시 보냅니다. 도착 시간이 들쭉날쭉해져(지터 {1}) 캐릭터가 뚝뚝 끊기{2}. 공유기 가까이 가거나 랜선을 쓰면 사라집니다.","t":"Sinyal Wi-Fi lemah, sehingga setiap paket dikirim ulang rata-rata {0} kali. Waktu kedatangan menjadi tidak beraturan (jitter {1}){2}. Mendekat ke router atau memakai kabel LAN akan menghilangkannya."},
-    {"ctx":"src/sims/bloat.js:381","ko":"고, 8번 모두 실패한 패킷은 사라져(손실 {0}%) 순간이동·고무줄이 생깁니다","t":", sehingga karakter terlihat patah-patah. Paket yang gagal di kedelapan percobaan hilang (packet loss {0}%) sehingga terjadi teleport dan rubber banding"},
+    {"ctx":"src/sims/bloat.js:381","ko":"고, 8번 모두 실패한 패킷은 사라져(손실 {0}%) 순간이동·고무줄이 생깁니다","t":", sehingga karakter terlihat patah-patah. Paket yang gagal dalam 8 kali percobaan hilang (packet loss {0}%) sehingga terjadi teleport dan rubber banding"},
     {"ctx":"src/sims/bloat.js:381","ko":"는 모습으로 보입니다","t":", sehingga karakter terlihat patah-patah"}
   ]
 }

@@ -144,7 +144,7 @@
     {"ctx":"src/sims/arch.js:217","ko":"로그를 쓸 때마다 기다리느라 틱이 늦어집니다(동기 호출)","t":"Tick terlambat karena menunggu setiap kali menulis log (pemanggilan sinkron)"},
     {"ctx":"src/sims/arch.js:218","ko":"조회할 때마다 느린 캐시를 기다리느라 틱이 늦어집니다(동기 호출)","t":"Tick terlambat karena menunggu cache yang lambat setiap kali membaca (pemanggilan sinkron)"},
     {"ctx":"src/sims/arch.js:239","ko":"로그 수집 서버","t":"server pengumpul log"},
-    {"ctx":"src/sims/arch.js:239","ko":"캐시","t":"Cache"},
+    {"ctx":"src/sims/arch.js:239","ko":"캐시","t":"cache"},
     {"ctx":"src/sims/arch.js:243","ko":"전원 (모든 필드·던전)","t":"Semua pemain (semua field dan dungeon)"},
     {"ctx":"src/sims/arch.js:243","ko":"{0}에 있는 사람","t":"Pemain di {0}"},
     {"ctx":"src/sims/arch.js:243","ko":"일부 필드","t":"Sebagian field"},
