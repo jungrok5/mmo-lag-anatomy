@@ -38,7 +38,7 @@
     {"ctx":"causes/nic-coalesce/c/0","ko":"NIC가 일정 시간·개수만큼 모았다가 알림","t":"A NIC junta pacotes por um certo tempo ou quantidade antes de gerar a interrupção"},
     {"ctx":"causes/nic-coalesce/c/1","ko":"모으는 동안 패킷이 대기","t":"Os pacotes esperam enquanto o lote se forma"},
     {"ctx":"causes/nic-coalesce/c/2","ko":"미세한 지연 증가. 보통은 작지만 과하면 ms 단위","t":"Leve aumento de latência. Normalmente pequeno, mas na casa dos ms se exagerado"},
-    {"ctx":"causes/nic-coalesce/num","ko":"보통 수십~수백 µs. 게임에는 대개 무시할 수준이지만 설정이 과하면 ms로 커집니다.","t":"Normalmente dezenas a centenas de µs. Para a maioria dos jogos isso é desprezível, mas uma configuração exagerada pode chegar à casa dos ms."},
+    {"ctx":"causes/nic-coalesce/num","ko":"보통 수십~수백 µs. 게임에는 대개 무시할 수준이지만 설정이 과하면 ms로 커집니다.","t":"Normalmente de dezenas a centenas de µs. Em jogos, em geral isso é desprezível, mas uma configuração exagerada pode chegar à casa dos ms."},
     {"ctx":"causes/nic-coalesce/act/infra","ko":"적응형 병합, 게임 서버에 맞는 값으로 조정(ethtool -C).","t":"Usar coalescência adaptativa, ajustar os valores para servidores de jogo (ethtool -C)."},
     {"ctx":"causes/nic-coalesce/sig/g, causes/nic-offload/sig/g","ko":"같은 데이터센터 안 왕복 시간","t":"Tempo de ida e volta dentro do mesmo data center"},
     {"ctx":"causes/nic-coalesce/chk/look","ko":"ethtool -c로 현재 병합 설정(adaptive-rx, rx-usecs, rx-frames)을 보고, 같은 데이터센터의 다른 서버와 ping 왕복 시간을 설정을 바꾸기 전후로 비교","t":"Ver a configuração atual de coalescência (adaptive-rx, rx-usecs, rx-frames) com ethtool -c e comparar o tempo de ida e volta do ping até outro servidor do mesmo data center antes e depois de mudar a configuração"},
