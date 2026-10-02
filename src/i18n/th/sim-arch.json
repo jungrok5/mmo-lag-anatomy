@@ -51,7 +51,7 @@
     {"ctx":"src/sims/arch.js:112","ko":"목록 조회","t":"ดึงรายการ"},
     {"ctx":"src/sims/arch.js:113","ko":"복제","t":"replication"},
     {"ctx":"src/sims/arch.js:115","ko":"위치·전투","t":"ตำแหน่ง/ต่อสู้"},
-    {"ctx":"src/sims/arch.js:115","ko":"메시지·기능","t":"ข้อความ/ฟีเจอร์"},
+    {"ctx":"src/sims/arch.js:115","ko":"메시지·기능","t":"แชต/ฟีเจอร์"},
     {"ctx":"src/sims/arch.js:118, src/sims/arch.js:119, src/sims/arch.js:132, src/sims/arch.js:136, src/sims/arch.js:179, src/sims/arch.js:244","ko":"뚝뚝 끊김","t":"กระตุก"},
     {"ctx":"src/sims/arch.js:118, src/sims/arch.js:119, src/sims/arch.js:127, src/sims/arch.js:132, src/sims/arch.js:136","ko":"순간이동","t":"วาร์ป"},
     {"ctx":"src/sims/arch.js:118, src/sims/arch.js:119, src/sims/arch.js:127, src/sims/arch.js:132, src/sims/arch.js:152","ko":"고무줄","t":"ดีดกลับ"},

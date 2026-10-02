@@ -146,7 +146,7 @@ Labels are capitalized; in running text use lowercase and inflect normally. Do n
 | burst | 몰아치기 | **Перемотка** | ускоренная перемотка, всё разом, урон прилетает пачкой | перемотки, перемотку, перемоткой; «ускоренная перемотка» allowed as the expanded form |
 | slowmo | 슬로우모션 | **Слоумо** | мир замедлился, всё тормозит | indeclinable («уходит в слоумо») |
 | delay | 입력 지연 | **Задержка ввода** | инпут-лаг, запоздалый отклик, ватное управление | задержки ввода, задержку ввода |
-| freeze | 멈춤 | **Фриз** | всё замерло, стоп-кадр, «не отвечает» | фриза, фризом, фризы. The same Korean string is also a playback option in `sim-nagle` («Фриз» works there). A GC stop is still «пауза GC» |
+| freeze | 멈춤 | **Фриз** | всё замерло, стоп-кадр, «не отвечает» | фриза, фризом, фризы. In `sim-nagle` the same Korean string is a playback speed option, translated «Пауза» (each sim has its own dictionary). A GC stop is still «пауза GC» |
 | dropped | 씹힘·롤백 | **Съеденные действия / роллбэк** | умение не прожалось, предмет вернулся назад, обмен сорвался | in prose split it: «действие „съело“», «съеденное умение», «роллбэк сохранения» |
 | disconnect | 접속 끊김 | **Дисконнект** | выкидывает из игры, обрыв соединения, «Соединение с сервером потеряно» | дисконнекта, дисконнекты; players' verb «выкидывает из игры» |
 | noconnect | 접속 불가·무한 로딩 | **Ошибка входа / бесконечная загрузка** | не заходит в игру, загрузка не заканчивается | inflect parts: «ошибки входа», «бесконечную загрузку» |
@@ -539,7 +539,7 @@ Korean strings that appear both in the groups translated so far and in other gro
 | 몰아치기 | Перемотка | sim-arch, sim-lab, sim-oneslow |
 | 슬로우모션 | Слоумо | sim-arch, sim-lab |
 | 입력 지연 | Задержка ввода | sim-arch, sim-lab |
-| 멈춤 | Фриз | sim-arch, sim-gc, sim-lab, sim-nagle, sim-oneslow |
+| 멈춤 | Фриз (sim-nagle playback option: Пауза) | sim-arch, sim-gc, sim-lab, sim-nagle, sim-oneslow |
 | 씹힘·롤백 | Съеденные действия / роллбэк | sim-arch |
 | 접속 끊김 | Дисконнект | sim-arch, sim-lab, sim-sndbuf |
 | 접속 불가·무한 로딩 | Ошибка входа / бесконечная загрузка | sim-arch |
