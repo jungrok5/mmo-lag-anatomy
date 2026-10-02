@@ -181,7 +181,7 @@ K.register('sndbuf', function (root) {
     if (c.st === 'kicked') return ['bad', narrow ? TR`킥` : TR`끊김 (킥)`];
     if (sv.st === 'blocked' && sv.idx === c.i) return ['bad', narrow ? TR`막힘` : TR`send() 막힘`];
     if (P.pol === 'latest' && t - c.skipT < 400) return ['warn', TR`건너뜀`];
-    if (c.aq.length) return ['warn', P.pol === 'kick' && c.since != null ? TR`밀림 ` + K.n(Math.max(0, 5 - (t - c.since) / 1000), 0) + TR`초` : TR`밀림`];
+    if (c.aq.length) return ['warn', P.pol === 'kick' && c.since != null ? TR`밀림 ${K.n(Math.max(0, 5 - (t - c.since) / 1000), 0)}초@@킥까지 남은 초(카운트다운)` : TR`밀림`];
     if (c.kf >= P.buf - P.rate / 20) return ['warn', narrow ? TR`가득` : TR`버퍼 가득`];
     if (c.ema > 150) return ['warn', TR`늦음`];
     return ['good', TR`정상`];

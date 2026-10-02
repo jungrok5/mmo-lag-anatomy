@@ -584,7 +584,7 @@ These Korean strings exist as whole entries both in the phase-1 groups and in ot
 
 | Korean key | Indonesian | Also appears in |
 |---|---|---|
-| 뚝뚝 끊김 / 순간이동 / 고무줄 / 몰아치기 / 슬로우모션 / 입력 지연 / 멈춤 / 씹힘·롤백 / 접속 끊김 / 접속 불가·무한 로딩 | the symptom names of 7.1 (the playback option 멈춤 in sim-nagle is also "Freeze") | sim-arch, sim-lab, sim-oneslow, sim-gc, sim-nagle, sim-sndbuf |
+| 뚝뚝 끊김 / 순간이동 / 고무줄 / 몰아치기 / 슬로우모션 / 입력 지연 / 멈춤 / 씹힘·롤백 / 접속 끊김 / 접속 불가·무한 로딩 | the symptom names of 7.1 (the playback option 멈춤 in sim-nagle is a playback speed, "Jeda"; each sim has its own dictionary) | sim-arch, sim-lab, sim-oneslow, sim-gc, sim-nagle, sim-sndbuf |
 | 지연 / 지터 / 손실 / 패킷 손실 | Latensi / Jitter / Packet loss / Packet loss | sim-sndbuf, sim-bloat, sim-distance, sim-oneslow, sim-syncmodels, sim-lab |
 | 클라이언트 / 서버 / 네트워크 | Klien / Server / Jaringan | many sims |
 | 좋음 / 주의 / 나쁨 | Baik / Waspada / Buruk | sim-bloat, sim-ladder, body-judge, body-retrans |

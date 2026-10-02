@@ -598,7 +598,7 @@ These Korean strings exist as whole entries both in the phase-1 groups (`data`, 
 
 | Korean key | Spanish | Also appears in |
 |---|---|---|
-| 뚝뚝 끊김 / 순간이동 / 고무줄 / 몰아치기 / 슬로우모션 / 입력 지연 / 멈춤 / 씹힘·롤백 / 접속 끊김 / 접속 불가·무한 로딩 | the symptom names of section 5 | sim-arch, sim-lab, sim-oneslow, sim-gc, sim-nagle (the playback option “멈춤” is also “Congelamiento”), sim-sndbuf |
+| 뚝뚝 끊김 / 순간이동 / 고무줄 / 몰아치기 / 슬로우모션 / 입력 지연 / 멈춤 / 씹힘·롤백 / 접속 끊김 / 접속 불가·무한 로딩 | the symptom names of section 5 | sim-arch, sim-lab, sim-oneslow, sim-gc, sim-nagle (the playback option “멈춤” is a playback speed, “Pausa”; each sim has its own dictionary), sim-sndbuf |
 | 지연 / 지터 / 손실 / 패킷 손실 | Latencia / Jitter / Pérdida de paquetes / Pérdida de paquetes | sim-bloat, sim-distance, sim-oneslow, sim-syncmodels, sim-sndbuf, sim-lab, site |
 | 클라이언트 / 서버 / 네트워크 / 디스크 | Cliente / Servidor / Red / Disco | many sims, body-l-disk |
 | 좋음 / 주의 / 나쁨 | Bueno / Atención / Malo | sim-bloat, sim-ladder, body-judge. Exception: in the `#retrans` table header, 주의 means “caveats” and may be “Precauciones” |
