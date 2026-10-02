@@ -671,7 +671,7 @@ Translators of later phases: add a row here when you fix a term that is not cove
 | 저장 (game) / 재접속 폭주 / 출석 기록 | salvamento / avalanche de reconexões / registro de check-in diário | |
 | 따라잡기 / 따라잡기 폭주 | recuperação do atraso / espiral de recuperação | fixed timestep: espiral de recuperação do timestep fixo |
 | 1% 최저 FPS / 렌더 대기열 / 저지연 모드 | FPS 1% low / fila de renderização / modo de baixa latência | |
-| 예비 DB / 예열 / 콜드 캐시 | BD reserva (standby) / aquecimento / cache frio | |
+| 예비 DB / 예열 / 콜드 캐시 | BD reserva / aquecimento / cache frio | use “BD reserva” everywhere (not “standby”) |
 | 큰 락 / 잘게 나눈 락 | lock global / locks granulares | |
 | MTU 탐색 / PMTUD / MSS 조정 / 크기 초과 알림 | sondagem de MTU / descoberta do MTU do caminho / MSS clamping / avisos de pacote grande demais (ICMP) | sondagem ≠ descoberta |
 | 구간 (mtr hop) | salto (hop) | |
@@ -680,3 +680,5 @@ Translators of later phases: add a row here when you fix a term that is not cove
 | 경쟁 상태 / 혼잡 붕괴 | condição de corrida / colapso por congestionamento | |
 | 표준 문서 (RFC) | padrões técnicos (RFCs) | site, body-refs |
 | sim-arch 서버 상태 정상 / 느려짐 / 멈춤 (장애) | Normal / Com lentidão / Sem resposta (falha) | lowercase inside sentences |
+| 유니티 / 언리얼 / 애저 / 소스 엔진 | o Unity / o Unreal / o Azure / a Source Engine | article genders |
+| 99.99% 지연 / 한 자릿수 ms 지연 | latência no percentil 99,99 / latência de milissegundos de um dígito | |

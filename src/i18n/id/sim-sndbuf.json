@@ -19,7 +19,7 @@
     {"ctx":"src/sims/sndbuf.js:40","ko":"클라이언트 화면 지연 (최근 20초)","t":"Latensi layar klien (20 detik terakhir)"},
     {"ctx":"src/sims/sndbuf.js:41","ko":"<span class=\"legend\"><span><i style=\"background:var(--s1)\"></i>정상 클라이언트 평균</span><span><i style=\"background:var(--s2)\"></i>느린 클라이언트 평균</span></span>","t":"<span class=\"legend\"><span><i style=\"background:var(--s1)\"></i>Rata-rata klien normal</span><span><i style=\"background:var(--s2)\"></i>Rata-rata klien lambat</span></span>"},
     {"ctx":"src/sims/sndbuf.js:45","ko":"서버 메모리 (최근 20초)","t":"Memori server (20 detik terakhir)"},
-    {"ctx":"src/sims/sndbuf.js:45","ko":"동시 접속 2,000명 기준","t":"Diskalakan ke 2.000 pemain online bersamaan"},
+    {"ctx":"src/sims/sndbuf.js:45","ko":"동시 접속 2,000명 기준","t":"Asumsi 2.000 pemain online bersamaan"},
     {"ctx":"src/sims/sndbuf.js:48","ko":"서버","t":"Server"},
     {"ctx":"src/sims/sndbuf.js:49","ko":"보낼 양 (주변 캐릭터 수)","t":"Laju kirim (karakter di sekitar)"},
     {"ctx":"src/sims/sndbuf.js:49","ko":"클라이언트 하나에 1초 동안 보내는 양. 주변 캐릭터가 많을수록 커집니다.","t":"Jumlah data yang dikirim ke satu klien per detik. Makin banyak karakter di sekitar, makin besar."},

@@ -162,7 +162,7 @@
     {"ctx":"glossary/g-checkpoint/0","ko":"체크포인트","t":"Checkpoint"},
     {"ctx":"glossary/g-checkpoint/2","ko":"DB가 메모리에 모아 둔 변경분을 주기적으로 디스크에 몰아 쓰는 일. 그 순간 저장·조회가 잠깐 느려질 수 있습니다.","t":"Gravação periódica no disco, de uma vez, das alterações que o banco acumulou na memória. Nesse momento, gravações e consultas podem ficar lentas por um instante."},
     {"ctx":"glossary/g-failover/0","ko":"장애 전환","t":"Failover"},
-    {"ctx":"glossary/g-failover/2","ko":"주 서버나 DB가 죽었을 때 예비 쪽으로 넘어가는 일. 넘어가는 동안 잠깐 저장이 안 되고, 복제가 늦었다면 마지막 데이터가 사라질 수 있습니다.","t":"Passagem para o servidor ou banco reserva quando o principal cai. Durante a troca, não dá para gravar por um instante, e se a replicação estava atrasada, os últimos dados podem se perder."},
+    {"ctx":"glossary/g-failover/2","ko":"주 서버나 DB가 죽었을 때 예비 쪽으로 넘어가는 일. 넘어가는 동안 잠깐 저장이 안 되고, 복제가 늦었다면 마지막 데이터가 사라질 수 있습니다.","t":"Passagem para o servidor ou o BD reserva quando o principal cai. Durante a troca, não dá para gravar por um instante, e se a replicação estava atrasada, os últimos dados podem se perder."},
     {"ctx":"glossary/g-multi-version-concurrency-control/2","ko":"DB가 읽는 사람과 고치는 사람이 서로 막지 않도록 옛 버전을 잠시 보관하는 방식. 오래 열린 트랜잭션이 있으면 옛 버전이 쌓여 느려집니다.","t":"Modelo em que o banco guarda versões antigas por um tempo para que quem lê e quem altera não bloqueiem um ao outro. Se houver uma transação aberta há muito tempo, as versões antigas se acumulam e o banco fica lento."},
     {"ctx":"glossary/g-cache-stampede/0","ko":"캐시 스탬피드","t":"Cache stampede"},
     {"ctx":"glossary/g-cache-stampede/2","ko":"캐시가 한꺼번에 비어 요청이 원본(DB)으로 몰리는 현상.","t":"Quando o cache se esvazia de uma vez e todos os pedidos vão para a origem (o banco de dados)."},

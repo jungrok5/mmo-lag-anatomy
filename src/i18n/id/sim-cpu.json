@@ -80,7 +80,7 @@
     {"ctx":"src/sims/cpu.js:295","ko":"메인 스레드 실행 중 ({0})","t":"Main thread sedang berjalan ({0})"},
     {"ctx":"src/sims/cpu.js:295","ko":"메인 스레드가 코어를 기다리는 중 <b>{0}</b>","t":"Main thread menunggu core <b>{0}</b>"},
     {"ctx":"src/sims/cpu.js:300","ko":"코어 {0}: 쉬는 중","t":"Core {0}: menganggur"},
-    {"ctx":"src/sims/cpu.js:302","ko":"코어 {0}: <b>{1}</b><br>이어서 {2} 실행","t":"Core {0}: <b>{1}</b><br>berjalan terus selama {2}"},
+    {"ctx":"src/sims/cpu.js:302","ko":"코어 {0}: <b>{1}</b><br>이어서 {2} 실행","t":"Core {0}: <b>{1}</b><br>Berjalan terus selama {2}"},
     {"ctx":"src/sims/cpu.js:302","ko":"게임 ","t":"Game: "},
     {"ctx":"src/sims/cpu.js:310","ko":"{0}CPU는 한가합니다(사용률 {1}). 그런데 게임이 16.7ms 뒤에 깨어나도록 예약하고 잠들어도 윈도우 기본 타이머는 15.6ms 단위로만 깨웁니다. 어떤 프레임은 늦게 시작하고 어떤 프레임은 곧바로 이어 시작해 프레임 간격이 들쭉날쭉합니다. 화면 갱신의 <b>{2}</b>를 놓쳐 <b>뚝뚝 끊김</b>으로 보입니다. 게임이 타이머를 1ms로 바꾸면 사라집니다.","t":"{0}CPU sedang tidak sibuk (utilisasi {1}). Namun, meski game menjadwalkan diri untuk bangun 16,7 ms kemudian lalu tidur, timer default Windows hanya membangunkannya dalam kelipatan 15,6 ms. Ada frame yang mulai terlambat dan ada yang langsung menyusul, sehingga interval frame tidak beraturan. <b>{2}</b> dari refresh layar terlewat sehingga terlihat <b>patah-patah</b>. Masalah ini hilang jika game mengubah timer menjadi 1 ms."},
     {"ctx":"src/sims/cpu.js:314","ko":" 폰은 몇 분만 게임해도 뜨거워져 스스로 속도를 낮춥니다(발열 스로틀링). 처음엔 멀쩡하다가 점점 뚝뚝 끊기는 이유입니다.","t":" Ponsel menjadi panas setelah beberapa menit bermain game dan menurunkan kecepatannya sendiri (thermal throttling). Inilah sebabnya game awalnya lancar lalu makin lama makin patah-patah."},
