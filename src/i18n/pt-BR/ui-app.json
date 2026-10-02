@@ -2,7 +2,7 @@
   "lang": "pt-BR",
   "group": "ui-app",
   "entries": [
-    {"ctx":"src/js/app.js:16","ko":"렉 실험실","t":""},
+    {"ctx":"src/js/app.js:16","ko":"렉 실험실","t":"Laboratório de lag"},
     {"ctx":"src/js/app.js:16","ko":"대기열 실험","t":""},
     {"ctx":"src/js/app.js:16","ko":"지연 분해","t":""},
     {"ctx":"src/js/app.js:16","ko":"프레임 실험","t":""},
@@ -79,7 +79,7 @@
     {"ctx":"src/js/app.js:215","ko":"<button type=\"button\" class=\"btn small primary\" data-lab=\"{0}\">실험실에서 재현하기</button>","t":""},
     {"ctx":"src/js/app.js:216","ko":"진단 도우미로","t":""},
     {"ctx":"src/js/app.js:264","ko":"접속 중…","t":""},
-    {"ctx":"src/js/app.js:280","ko":"서버와의 연결이 끊어졌습니다","t":""},
+    {"ctx":"src/js/app.js:280","ko":"서버와의 연결이 끊어졌습니다","t":"A conexão com o servidor foi perdida"},
     {"ctx":"src/js/app.js:286","ko":"서버엔 있는데 내 화면엔 없음","t":""},
     {"ctx":"src/js/app.js:290","ko":"패킷 없음…","t":""},
     {"ctx":"src/js/app.js:292","ko":"눌렀는데…","t":""},

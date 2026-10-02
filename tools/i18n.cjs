@@ -232,11 +232,13 @@ function sync(lang, units = allUnits()) {
     old[g] = readGroup(lang, g);
     for (const e of [...old[g].stale, ...old[g].entries]) if (e.t) known.set(e.ko, e.t);
   }
+  // 다른 묶음의 번역은 문장일 때만 빌려 온다. 짧은 낱말(시간, 번, 멈춤…)은 실험마다 뜻이 달라 옮기면 틀린다
+  const borrow = ko => (ko.length >= 12 || /\s/.test(ko.trim())) ? known.get(ko) : undefined;
   let changed = 0;
   for (const [group, map] of units) {
     const prev = old[group] || { lang: lang.code, group, entries: [], stale: [] };
     const same = new Map(prev.entries.map(e => [e.ko, e.t]));
-    const entries = [...map.values()].map(u => ({ ctx: u.ctx, ko: u.ko, t: same.get(u.ko) || known.get(u.ko) || '' }));
+    const entries = [...map.values()].map(u => ({ ctx: u.ctx, ko: u.ko, t: same.get(u.ko) || borrow(u.ko) || '' }));
     const now = new Set(entries.map(e => e.ko));
     // 원문이 바뀌거나 사라진 항목의 옛 번역은 stale에 남겨 고칠 때 참고한다
     const stale = [...prev.stale, ...prev.entries.filter(e => e.t && !now.has(e.ko))].filter((e, i, a) => !now.has(e.ko) && a.findIndex(x => x.ko === e.ko) === i);

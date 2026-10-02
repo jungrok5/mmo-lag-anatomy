@@ -877,7 +877,7 @@
         by: 'ops',
       },
       ref: [
-        { t: 'ITU-T G.114: One-way transmission time', u: 'https://www.itu.int/rec/T-REC-G.114-200305-I/en', p: 'ITU', n: '광케이블 전송 지연 계획값 5µs/km(초속 약 20만 km, 1,000km 왕복 10ms)' },
+        { t: 'ITU-T G.114: One-way transmission time', u: 'https://www.itu.int/rec/T-REC-G.114-200305-I/en', p: 'ITU', n: '광케이블 전파 지연 계획값 5µs/km(초속 약 20만 km, 1,000km 왕복 10ms)' },
         { t: 'Azure network round-trip latency statistics', u: 'https://learn.microsoft.com/en-us/azure/networking/azure-network-latency', p: 'Microsoft Azure', n: '서울(Korea Central) 기준 실측 왕복 중앙값: 도쿄 30ms, 싱가포르 68ms, 미국 서부 124~136ms, 유럽 234~244ms' },
         { t: 'AAE-1 & SMW5 cable cuts impact millions of users across multiple countries', u: 'https://blog.cloudflare.com/aae-1-smw5-cable-cuts/', p: 'Cloudflare', n: '유럽–아시아 사이 트래픽은 대개 이집트(수에즈)를 지나는 해저 케이블로 감' },
         { t: 'Probe Selection (RIPE Atlas REST API)', u: 'https://atlas.ripe.net/docs/apis/rest-api-manual/measurements/creating-measurements/probe-selection/', p: 'RIPE NCC', n: 'RIPE Atlas 측정의 프로브를 국가·지역·ASN·주소 대역으로 골라 ping·traceroute를 실행' },
@@ -900,7 +900,7 @@
       },
       ref: [
         { t: 'ITU-T G.114: One-way transmission time', u: 'https://www.itu.int/rec/T-REC-G.114-200305-I/en', p: 'ITU', n: '위성 구간의 한 방향 전파 지연 계획값: 고도 400km 12ms, 14,000km 110ms, 36,000km(정지궤도) 260ms' },
-        { t: 'Improving Starlink’s Latency', u: 'https://starlink.com/public-files/StarlinkLatency.pdf', p: 'Starlink', n: '미국 피크 시간 중앙값 48.5ms→33ms, 상위 1%(p99) 150ms 초과→65ms 미만(2024년), 위성 한 구간 전파 1.8~3.6ms, 레이저 링크로 돌면 지연이 더해지고 지상국에서 인터넷 접속 지점(PoP)까지의 거리도 지연 요인' },
+        { t: 'Improving Starlink’s Latency', u: 'https://starlink.com/public-files/StarlinkLatency.pdf', p: 'Starlink', n: '미국 피크 시간 중앙값 48.5ms→33ms, 가장 느린 1%(p99) 150ms 초과→65ms 미만(2024년), 위성 한 구간 전파 1.8~3.6ms, 레이저 링크로 돌면 지연이 더해지고 지상국에서 인터넷 접속 지점(PoP)까지의 거리도 지연 요인' },
         { t: 'A Multifaceted Look at Starlink Performance (WWW 2024)', u: 'https://www.nitindermohan.com/documents/2024/pubs/starlinkWWW2024.pdf', p: 'ACM', n: 'Starlink는 15초마다 전 세계에서 같은 시각에 경로를 다시 배정하며 그 경계에서 지연·처리량이 흔들리고 1초 미만의 짧은 끊김이 생김(위성 간 전환 때문은 아님), 단말↔위성↔지상국 구간 지연 약 40ms' },
         { t: 'Mile High WiFi: A First Look at In-Flight Internet Connectivity (WWW 2018)', u: 'https://aqualab.cs.northwestern.edu/publication/2018/jrula-www18/', p: 'ACM', n: '기내 인터넷 45시간 측정: 왕복 지연 평균 지상 기지국 방식 200ms, 위성 방식 750ms, 위성 방식의 손실률 중앙값 7%' },
         { t: 'Probe Selection (RIPE Atlas REST API)', u: 'https://atlas.ripe.net/docs/apis/rest-api-manual/measurements/creating-measurements/probe-selection/', p: 'RIPE NCC', n: 'RIPE Atlas 측정의 프로브를 국가·지역·ASN·주소 대역으로 골라 ping·traceroute를 실행' },

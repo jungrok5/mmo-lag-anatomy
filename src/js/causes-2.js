@@ -100,7 +100,7 @@
         by: 'ops',
       },
       ref: [
-        { t: 'NAT gateway basics', u: 'https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-basics.html', p: 'AWS', n: 'IPv4 주소 하나당 같은 목적지(목적지 IP·포트·프로토콜)로 동시 연결 5만 5천 개, IP를 8개까지 붙여 늘림(공인 NAT 게이트웨이의 탄력적 IP는 기본 2개, 할당량 상향 요청으로 늘림), 대역폭 5→100Gbps·초당 100만→1,000만 패킷을 넘으면 폐기' },
+        { t: 'NAT gateway basics', u: 'https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-basics.html', p: 'AWS', n: 'IPv4 주소 하나당 같은 목적지(목적지 IP·포트·프로토콜)로 동시 연결 5만 5천 개, IP를 8개까지 붙여 늘림(공인 NAT 게이트웨이의 탄력적 IP는 기본 2개, 할당량 상향 요청으로 늘림), 대역폭은 5Gbps에서 100Gbps까지, 처리량은 초당 100만에서 1,000만 패킷까지 자동으로 늘고 그 한도를 넘으면 패킷을 버림' },
         { t: 'NAT gateway metrics and dimensions', u: 'https://docs.aws.amazon.com/vpc/latest/userguide/metrics-dimensions-nat-gateway.html', p: 'AWS', n: 'ErrorPortAllocation: 원본 포트를 할당하지 못한 횟수(0보다 크면 동시 연결 과다), ActiveConnectionCount, IdleTimeoutCount(350초 유휴로 정리된 연결), PacketsDropCount' },
         { t: 'Troubleshoot NAT gateways', u: 'https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-troubleshooting.html', p: 'AWS', n: '350초 유휴면 연결이 만료되고 이어서 보내면 RST를 돌려줌, 350초보다 짧은 keepalive 권장, 연결 한도에 닿으면 가용 영역별 게이트웨이·IP 추가·연결 수 줄이기' },
         { t: 'Source Network Address Translation (SNAT) with Azure NAT Gateway', u: 'https://learn.microsoft.com/en-us/azure/nat-gateway/nat-gateway-snat', p: 'Microsoft Azure', n: '공인 IP 하나당 SNAT 포트 64,512개(IP 최대 16개), 같은 목적지로 가는 연결마다 다른 포트가 필요, 닫힌 포트는 같은 목적지에 다시 쓰기 전 쿨다운' },
