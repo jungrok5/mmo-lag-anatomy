@@ -52,7 +52,7 @@
     {"ctx":"causes/cg-sync-load/ref/4/n","ko":"r.PSOPrecache.Validation을 켜면 stat PSOPrecache로 놓친 PSO 통계를 보고 로그에 “PSO PRECACHING MISS”를 남김, 런타임 PSO 생성이 기본 20ms를 넘으면 히치로 셈","t":"開啟 r.PSOPrecache.Validation 後，可用 stat PSOPrecache 查看漏掉的 PSO 統計，並在 log 留下「PSO PRECACHING MISS」；執行階段建立 PSO 超過預設的 20ms 就計為一次 hitch"},
     {"ctx":"causes/cg-asset-stream/t","ko":"저장장치가 느려 에셋 스트리밍이 밀림","t":"儲存裝置太慢，資源串流跟不上"},
     {"ctx":"causes/cg-asset-stream/s","ko":"HDD처럼 느린 저장장치에서는 오픈월드의 텍스처·모델을 읽는 속도가 이동을 따라가지 못해, 개체가 늦게 뜨거나 게임이 읽기를 기다리며 끊깁니다.","t":"在 HDD 這類較慢的儲存裝置上，讀取開放世界貼圖與模型的速度跟不上移動，物件會晚出現，或遊戲為了等待讀取而卡頓。"},
-    {"ctx":"causes/cg-asset-stream/c/0","ko":"탈것·텔레포트로 빠르게 이동하거나 사람 많은 곳에 들어가 새 텍스처·모델이 한꺼번에 필요해짐","t":""},
+    {"ctx":"causes/cg-asset-stream/c/0","ko":"탈것·텔레포트로 빠르게 이동하거나 사람 많은 곳에 들어가 새 텍스처·모델이 한꺼번에 필요해짐","t":"騎坐騎、傳送等快速移動，或進入人多的地方，一次需要大量新的貼圖與模型"},
     {"ctx":"causes/cg-asset-stream/c/1","ko":"HDD 같은 느린 저장장치가 필요한 속도로 읽지 못해 읽기 요청이 쌓이고, 일부 로딩은 메인 스레드가 끝날 때까지 기다림","t":"HDD 等較慢的儲存裝置無法以需要的速度讀取，讀取請求越積越多，部分載入還要主執行緒等到完成為止"},
     {"ctx":"causes/cg-asset-stream/c/2","ko":"텍스처가 한동안 흐릿하고 건물·캐릭터가 늦게 나타나며, 읽기를 기다리는 순간 뚝뚝 끊김·멈춤","t":"貼圖有一段時間是模糊的，建築與角色晚出現；等待讀取的瞬間出現卡頓、定格"},
     {"ctx":"causes/cg-asset-stream/num","ko":"마이크로소프트 설명으로 예전 하드디스크는 1초에 수십 MB, NVMe SSD는 1초에 수 GB를 읽고, 이전 세대 게임은 스트리밍에 1초에 50MB 안팎을 썼습니다. SSD 속도를 전제로 이보다 훨씬 많이 읽는 게임을 HDD에서 돌리면 읽기가 이동을 따라가지 못하기 쉽습니다.","t":"根據 Microsoft 的說明，舊式硬碟每秒可讀取數十 MB，NVMe SSD 每秒可讀取數 GB，而上一世代的遊戲串流每秒大約使用 50MB。以 SSD 速度為前提、讀取量遠多於此的遊戲放在 HDD 上執行，讀取很容易跟不上移動。"},
