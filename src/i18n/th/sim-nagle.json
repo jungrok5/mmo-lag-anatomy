@@ -60,7 +60,7 @@
     {"ctx":"src/sims/nagle.js:177","ko":"지연 ACK ","t":"delayed ACK "},
     {"ctx":"src/sims/nagle.js:177","ko":"지연 ACK 끔","t":"ปิด delayed ACK"},
     {"ctx":"src/sims/nagle.js:202","ko":"Nagle 대기","t":"รอ Nagle"},
-    {"ctx":"src/sims/nagle.js:202","ko":"지연ACK","t":"delayed ACK"},
+    {"ctx":"src/sims/nagle.js:202","ko":"지연ACK","t":"หน่วง"},
     {"ctx":"src/sims/nagle.js:202","ko":"지연 ACK 대기","t":"รอ delayed ACK"},
     {"ctx":"src/sims/nagle.js:211","ko":"지연ACK ","t":"delayed ACK "},
     {"ctx":"src/sims/nagle.js:226","ko":"응답 ","t":"คำตอบ "},

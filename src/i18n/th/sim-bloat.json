@@ -49,7 +49,7 @@
     {"ctx":"src/sims/bloat.js:84","ko":"대기열 채움","t":"ระดับคิว"},
     {"ctx":"src/sims/bloat.js:238","ko":"대기열 {0} KB = {1}","t":"คิว {0} KB = {1}"},
     {"ctx":"src/sims/bloat.js:239","ko":"앞의 패킷이 다 나가야 뒤의 패킷이 출발합니다","t":"แพ็กเก็ตข้างหน้าต้องออกไปให้หมดก่อน แพ็กเก็ตข้างหลังจึงจะออกได้"},
-    {"ctx":"src/sims/bloat.js:243","ko":"내 PC","t":"PC ของเรา"},
+    {"ctx":"src/sims/bloat.js:243","ko":"내 PC","t":"PC เรา"},
     {"ctx":"src/sims/bloat.js:257","ko":"재전송","t":"ส่งซ้ำ"},
     {"ctx":"src/sims/bloat.js:257","ko":"와이파이 재전송","t":"ส่งซ้ำบน Wi-Fi"},
     {"ctx":"src/sims/bloat.js:268","ko":"다른 트래픽 대기열 (5ms 안팎)","t":"คิวทราฟฟิกอื่น (ราว 5 ms)"},
