@@ -148,7 +148,7 @@
     {"ctx":"src/js/app.js:619","ko":"인프라 도구","t":"Ferramentas de infra"},
     {"ctx":"src/js/app.js:619","ko":"게임 로그·지표","t":"Logs/métricas do jogo"},
     {"ctx":"src/js/app.js:619","ko":"유저 쪽","t":"Lado do jogador"},
-    {"ctx":"src/js/app.js:631","ko":"지금 가진 확인 수단","t":"Como você consegue verificar hoje"},
+    {"ctx":"src/js/app.js:631","ko":"지금 가진 확인 수단","t":"Meios de verificação que você tem hoje"},
     {"ctx":"src/js/app.js:642","ko":"<span><i class=\"cv-{0}\"></i>{1} {2}가지 ({3}%)</span>","t":"<span><i class=\"cv-{0}\"></i>{1}: {2} causas ({3}%)</span>"},
     {"ctx":"src/js/app.js:649","ko":"<p class=\"sim-say\">{0}고른 수단으로 확인할 수 있는 원인은 <b>{1}가지</b>(전체 {2}가지의 {3}%)입니다.{4}</p>\n        {5}","t":"<p class=\"sim-say\">{0}Causas que dá para confirmar com os meios escolhidos: <b>{1}</b> ({3}% do total de {2}).{4}</p>\n        {5}"},
     {"ctx":"src/js/app.js:649","ko":" 나머지 <b>{0}가지</b>는 다른 수단으로 확인하는 편이 쉽습니다.{1}","t":" As outras <b>{0}</b> são mais fáceis de confirmar por outros meios.{1}"},

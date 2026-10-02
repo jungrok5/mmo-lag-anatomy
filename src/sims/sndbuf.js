@@ -230,7 +230,7 @@ K.register('sndbuf', function (root) {
     for (const c of cl) {
       const y = top + c.i * RH + RH / 2, slow = isSlow(c);
       if (slow) { ctx.fillStyle = K.alpha(C.s2, 0.1); ctx.fillRect(4, y - RH / 2 + 1, w - 8, RH - 2); }
-      const nm = (narrow ? TR`클라이언트` : TR`클라이언트 `) + (c.i + 1);
+      const nm = narrow ? TR`클라이언트${c.i + 1}@@좁은 화면(띄어쓰기 없이 짧게)` : TR`클라이언트 ${c.i + 1}`;
       K.text(ctx, nm, 10, y, { size: 12, weight: slow ? 700 : 400, color: C.ink });
       if (slow) {
         const lab = narrow ? TR`느림` : TR`느린 회선`, bx = 10 + ctx.measureText(nm).width + 5;

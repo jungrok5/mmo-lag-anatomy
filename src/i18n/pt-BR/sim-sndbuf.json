@@ -70,7 +70,7 @@
     {"ctx":"src/sims/sndbuf.js:226","ko":"송신 버퍼","t":"Buffer de envio"},
     {"ctx":"src/sims/sndbuf.js:226","ko":"송신 버퍼 (","t":"Buffer de envio ("},
     {"ctx":"src/sims/sndbuf.js:227","ko":"앱 대기열","t":"Fila do app"},
-    {"ctx":"src/sims/sndbuf.js:228","ko":"지연","t":"Latência"},
+    {"ctx":"src/sims/sndbuf.js:228","ko":"지연","t":"Atraso"},
     {"ctx":"src/sims/sndbuf.js:229","ko":"상태","t":"Estado"},
     {"ctx":"src/sims/sndbuf.js:233","ko":"클라이언트 ","t":"Cliente "},
     {"ctx":"src/sims/sndbuf.js:236","ko":"느림","t":"Lento"},

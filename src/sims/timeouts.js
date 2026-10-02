@@ -188,7 +188,10 @@ K.register('timeouts', function (root) {
     const labels = [];               // 이름표는 흐림·재생선 위에 마지막으로 그린다
     const label = (row, name, sub) => labels.push(() => {
       if (G.wide) {
-        K.text(ctx, name, 10, row.y + row.h / 2 - (sub ? 7 : 0), { size: 12, weight: 600, color: C.ink2 });
+        // 번역판 이름이 왼쪽 칸(148px)을 넘으면 글자를 줄인다
+        ctx.font = K.font(12, 600);
+        const fs = Math.max(9.5, Math.min(12, 12 * (G.px0 - 16) / ctx.measureText(name).width));
+        K.text(ctx, name, 10, row.y + row.h / 2 - (sub ? 7 : 0), { size: fs, weight: 600, color: C.ink2 });
         if (sub) K.text(ctx, sub, 10, row.y + row.h / 2 + 8, { size: 10.5, mono: true, color: C.muted });
       } else {
         const t = name + (sub ? ' · ' + sub : '');
