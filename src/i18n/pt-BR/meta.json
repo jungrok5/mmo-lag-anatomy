@@ -2,6 +2,6 @@
   "lang": "pt-BR",
   "group": "meta",
   "entries": [
-    {"ctx":" meta@content","ko":"온라인 게임에서 화면이 끊기고, 순간이동하고, 접속이 끊기는 원인을 내 화면부터 서버 데이터베이스까지 층별로 해부하고 직접 조작하며 이해하는 백서. MMO 사례를 중심으로, 원인마다 담당 팀(게임개발팀·인프라팀)과 공신력 있는 출처를 담았습니다.","t":"O que faz a imagem engasgar, os personagens teleportarem e a conexão cair em jogos online? Este guia destrincha as causas do lag camada por camada, da sua tela até o banco de dados do servidor, com simulações interativas. Com foco em MMO, cada causa traz a equipe responsável (desenvolvimento ou infraestrutura) e fontes confiáveis."}
+    {"ctx":" meta@content","ko":"온라인 게임에서 화면이 끊기고, 순간이동하고, 접속이 끊기는 원인을 내 화면부터 서버 데이터베이스까지 층별로 해부하고 직접 조작하며 이해하는 백서. MMO 사례를 중심으로, 원인마다 담당 팀(게임개발팀·인프라팀)과 공신력 있는 출처를 담았습니다.","t":"O que causa lag em jogos online? Engasgos, teleporte e desconexão explicados camada por camada, da sua tela ao banco de dados, e quem resolve. Foco em MMO."}
   ]
 }
