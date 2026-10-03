@@ -4,7 +4,7 @@
   "entries": [
     {"ctx":"#judge div","ko":"<span class=\"idx\">T2</span>도구","t":"<span class=\"idx\">T2</span>Herramientas"},
     {"ctx":"#judge h2","ko":"관측으로 판정하기","t":"Diagnosticar con datos de monitoreo"},
-    {"ctx":"#judge p","ko":"제보나 경보가 오면 <b>범위 → 시점 → 계층</b> 순서로 좁힙니다. 이상이 어디에 몰렸는지가 담당을 가장 크게 가르고, 무엇과 겹쳤는지가 원인을 좁히며, 어느 계층의 지표가 비정상인지로 확인합니다. 원인 카드마다 있는 “그래프에서는”과 “확인 방법”을 함께 쓰면, 그래프 모양으로 후보를 고르고 확인할 곳을 바로 찾을 수 있습니다.","t":"Cuando llega un reporte o una alerta, se acota en este orden: <b>alcance → momento → capa</b>. Dónde se concentra la anomalía es lo que más decide el responsable, con qué coincide en el tiempo acota la causa, y qué capa tiene métricas anómalas lo confirma. Si se usan juntos “En el gráfico” y “Cómo verificarlo”, que aparecen en cada ficha de causa, se pueden elegir candidatos por la forma del gráfico y encontrar enseguida dónde mirar."},
+    {"ctx":"#judge p","ko":"제보나 경보가 오면 <b>범위 → 시점 → 계층</b> 순서로 좁힙니다. 이상이 어디에 몰렸는지가 담당을 가장 크게 가르고, 무엇과 겹쳤는지가 원인을 좁히며, 어느 계층의 지표가 비정상인지로 확인합니다. 원인 카드마다 있는 “그래프에서는”과 “확인 방법”을 함께 쓰면, 그래프 모양으로 후보를 고르고 확인할 곳을 바로 찾을 수 있습니다.","t":"Cuando llega un reporte o una alerta, se acota en este orden: <b>alcance → momento → capa</b>. Dónde se concentra la anomalía es lo que más pesa para decidir el responsable; con qué coincide en el tiempo acota la causa; y la capa cuyas métricas son anómalas lo confirma. Si se usan juntos “En el gráfico” y “Cómo verificarlo”, que aparecen en cada ficha de causa, se pueden elegir candidatos por la forma del gráfico y encontrar enseguida dónde mirar."},
     {"ctx":"#judge-flow","ko":"판정 흐름","t":"Flujo de diagnóstico"},
     {"ctx":"#judge div","ko":"1 범위","t":"1 Alcance"},
     {"ctx":"#judge p","ko":"이상이 어디에 몰렸나","t":"¿Dónde se concentra la anomalía?"},
