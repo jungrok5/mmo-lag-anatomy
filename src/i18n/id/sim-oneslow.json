@@ -2,8 +2,8 @@
   "lang": "id",
   "group": "sim-oneslow",
   "entries": [
-    {"ctx":"src/sims/oneslow.js:6","ko":"영향 범위 · 한 명만 느릴 때","t":"Siapa yang terdampak · Saat hanya satu pemain yang lambat"},
-    {"ctx":"src/sims/oneslow.js:7","ko":"느린 한 사람이 다른 사람의 화면과 게임에 주는 영향","t":""},
+    {"ctx":"src/sims/oneslow.js:6","ko":"영향 범위 · 한 명만 느릴 때","t":"Cakupan dampak · Saat hanya satu pemain yang lambat"},
+    {"ctx":"src/sims/oneslow.js:7","ko":"느린 한 사람이 다른 사람의 화면과 게임에 주는 영향","t":"Dampak satu pemain yang lambat terhadap layar dan game pemain lain"},
     {"ctx":"src/sims/oneslow.js:8","ko":"같은 서버에 A와 B가 있습니다. A만 회선이 나쁩니다. 세 화면(서버, A의 화면, B의 화면)을 나란히 놓고 서버가 입력을 처리하는 방식을 바꿔 보세요. 대부분의 방식에서 렉은 A에게만 나타나고 B는 “A가 이상하게 움직이는 것”만 봅니다. 어떤 방식에서는 A 한 사람 때문에 모두가 멈춥니다.","t":"A dan B berada di server yang sama. Hanya koneksi A yang buruk. Dengan tiga layar berdampingan (server, layar A, layar B), ubah cara server memproses input. Pada sebagian besar cara, lag hanya muncul pada A, dan B hanya melihat “A bergerak dengan aneh”. Namun pada cara tertentu, satu pemain A saja membuat semua pemain berhenti."},
     {"ctx":"src/sims/oneslow.js:11","ko":"<b>틱마다 모아서</b> 방식에서 B의 화면을 보세요. A(파랑)는 멈칫했다가 한 번에 여러 걸음을 가지만 몬스터와 B 자신은 멀쩡합니다. 아래 표에서 “B의 화면 → A의 모습”만 빨갛습니다. 지터와 손실을 0으로 내리면 핑이 높아도 A는 매끄럽게 보입니다. 핑보다 지터와 손실이 남의 눈에 렉으로 보이게 합니다.","t":"Pada mode <b>Kumpulkan per tick</b>, perhatikan layar B. A (biru) tersendat sesaat lalu maju beberapa langkah sekaligus, sedangkan monster dan B sendiri normal. Di tabel bawah, hanya “Layar B → Tampilan A” yang merah. Jika jitter dan packet loss diturunkan ke 0, A terlihat mulus meskipun ping-nya tinggi. Jitter dan packet loss lebih berpengaruh daripada ping dalam membuat seorang pemain terlihat lag di mata orang lain."},
     {"ctx":"src/sims/oneslow.js:12","ko":"<b>도착 즉시</b>로 바꾸면 서버가 A의 입력을 도착한 시각대로 알립니다. 이동은 조금 덜 튀지만 빨라졌다 느려졌다 하고 스킬처럼 한 번에 끝나는 행동은 몰려 온 만큼 한순간에 실행됩니다.","t":"Jika diubah ke <b>Langsung saat tiba</b>, server menyiarkan input A sesuai waktu tibanya. Gerakan sedikit kurang melompat, tetapi kadang cepat kadang lambat, dan aksi yang langsung selesai seperti skill dijalankan sekaligus, sebanyak input yang datang menumpuk."},

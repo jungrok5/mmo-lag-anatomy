@@ -3,7 +3,7 @@
   "group": "sim-leak",
   "entries": [
     {"ctx":"src/sims/leak.js:6","ko":"레이어 10 · 메모리","t":"Camada 10 · Memória"},
-    {"ctx":"src/sims/leak.js:7","ko":"메모리 누수로 점검 뒤 날이 갈수록 느려지는 서버","t":""},
+    {"ctx":"src/sims/leak.js:7","ko":"메모리 누수로 점검 뒤 날이 갈수록 느려지는 서버","t":"Servidor que fica mais lento a cada dia após a manutenção por causa de um vazamento de memória"},
     {"ctx":"src/sims/leak.js:8","ko":"서버가 다 쓴 메모리를 해제하지 않아 사용량이 조금씩 늘어나는 버그를 메모리 누수라고 합니다. 한 시간에 수백 MB씩이라 첫날은 티가 안 납니다. 며칠 쌓인 뒤 접속자가 가장 많은 저녁이 오면 RAM을 넘고 그때부터 서버가 디스크를 메모리처럼 쓰며 급격히 느려집니다. 재생해서 사흘을 빨리 감아 보세요.","t":"Vazamento de memória é o bug em que o servidor não libera a memória que já usou, e o uso vai crescendo aos poucos. São centenas de MB por hora, então no primeiro dia ninguém percebe. Depois de alguns dias acumulando, chega a noite com mais jogadores online e o uso passa da RAM. A partir daí o servidor usa o disco como memória e fica muito mais lento. Dê play e avance três dias em velocidade acelerada."},
     {"ctx":"src/sims/leak.js:10","ko":"그대로 재생해 보세요. <b>3일차 저녁</b>에 메모리 선이 RAM 선을 넘는 순간, 아래 틱 그래프가 치솟습니다.","t":"Só dê play. Na <b>noite do 3º dia</b>, no momento em que a linha da memória passa a linha da RAM, o gráfico de tick abaixo dispara."},
     {"ctx":"src/sims/leak.js:11","ko":"<b>정기 점검</b>을 “24시간”으로 바꿔 보세요. 매일 다시 켜니 누수는 그대로인데도 문제가 사라진 것처럼 보입니다.","t":"Mude <b>Manutenção periódica</b> para “A cada 24 horas”. Como o servidor é reiniciado todo dia, o problema parece ter sumido. Só que o vazamento continua lá."},

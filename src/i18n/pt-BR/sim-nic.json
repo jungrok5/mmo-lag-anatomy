@@ -3,7 +3,7 @@
   "group": "sim-nic",
   "entries": [
     {"ctx":"src/sims/nic.js:6","ko":"레이어 6 · 서버 NIC","t":"Camada 6 · Placa de rede do servidor"},
-    {"ctx":"src/sims/nic.js:7","ko":"서버 네트워크 카드가 패킷을 버리는 조건","t":"O momento em que a placa de rede do servidor descarta pacotes"},
+    {"ctx":"src/sims/nic.js:7","ko":"서버 네트워크 카드가 패킷을 버리는 조건","t":"Quando a placa de rede do servidor descarta pacotes"},
     {"ctx":"src/sims/nic.js:8","ko":"네트워크 카드(NIC)는 받은 패킷을 링 버퍼(수신 슬롯 묶음)에 넣고 인터럽트로 CPU에 알립니다. RSS는 패킷을 여러 수신 큐로 나눠 여러 CPU 코어가 처리하게 하는 기능입니다. 코어가 꺼내는 속도보다 빨리 쌓이면 슬롯이 다 차고 그 뒤에 온 패킷은 버려집니다. 네트워크 카드 통계의 숫자만 올라갈 뿐 게임 서버 로그에는 아무 기록도 남지 않습니다.","t":"A placa de rede (NIC) coloca os pacotes recebidos em um ring buffer (um conjunto de slots de recepção) e avisa a CPU com uma interrupção. O RSS divide os pacotes entre várias filas de recepção para que vários núcleos de CPU os processem. Se os pacotes chegam mais rápido do que os núcleos conseguem retirá-los, os slots enchem e os pacotes que chegam depois são descartados. Só um contador nas estatísticas da placa de rede sobe; os logs do servidor do jogo não registram nada."},
     {"ctx":"src/sims/nic.js:10","ko":"<b>월드 보스 (150만 pps, RSS 1개)</b>를 누르세요(게이트웨이 규모의 극단적인 예). 코어 하나가 100%에 붙고 링 버퍼가 넘쳐 초당 수십만 개가 버려집니다.","t":"Clique em <b>World boss (1,5 milhão de pps, 1 fila RSS)</b> (um exemplo extremo, na escala de um gateway). Um núcleo fica cravado em 100%, o ring buffer transborda e centenas de milhares de pacotes por segundo são descartados."},
     {"ctx":"src/sims/nic.js:11","ko":"이어서 <b>RSS 큐 수</b>를 8로 올려 보세요. 같은 양을 코어 8개가 나눠 받아 버림이 0이 됩니다.","t":"Em seguida, aumente <b>Filas RSS</b> para 8. Os 8 núcleos dividem a mesma carga e os descartes caem para 0."},

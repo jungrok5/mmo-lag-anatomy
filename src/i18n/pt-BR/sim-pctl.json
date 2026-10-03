@@ -3,7 +3,7 @@
   "group": "sim-pctl",
   "entries": [
     {"ctx":"src/sims/pctl.js:6","ko":"관측으로 판정하기 · 숫자 읽는 법","t":"Diagnóstico pelo monitoramento · Como ler os números"},
-    {"ctx":"src/sims/pctl.js:7","ko":"평균은 정상인데 렉이 나는 이유: 백분위 읽기","t":""},
+    {"ctx":"src/sims/pctl.js:7","ko":"평균은 정상인데 렉이 나는 이유: 백분위 읽기","t":"Por que há lag mesmo com a média normal: como ler percentis"},
     {"ctx":"src/sims/pctl.js:8","ko":"1초에 20번 잰 지연 값을 1분 동안 모았습니다. 서버 틱 시간이나 유저의 핑이라고 생각하면 됩니다. 가끔 튀는 값은 평균과 긴 간격의 평균 그래프에서는 거의 보이지 않지만 p99와 최댓값에는 그대로 드러납니다.","t":"Aqui está 1 minuto de medições de latência, feitas 20 vezes por segundo. Pense nelas como o tempo de tick do servidor ou o ping de um jogador. Os picos ocasionais quase não aparecem na média nem em gráficos com médias de intervalos longos, mas aparecem inteiros no p99 e no valor máximo."},
     {"ctx":"src/sims/pctl.js:10","ko":"<b>튀는 비율</b>을 1%에 두고 평균과 p99를 비교해 보세요. 평균은 평소와 비슷한데 p99는 튄 값 근처입니다.","t":"Deixe <b>Taxa de picos</b> em 1% e compare a média com o p99. A média fica parecida com o normal, mas o p99 fica perto dos valores de pico."},
     {"ctx":"src/sims/pctl.js:11","ko":"<b>집계 간격</b>을 60초로 바꿔 보세요. 굵은 평균선이 평평해져서 그래프만 보면 아무 일도 없어 보입니다.","t":"Mude <b>Intervalo de agregação</b> para 60 segundos. A linha grossa da média fica plana e, olhando só o gráfico, parece que nada aconteceu."},

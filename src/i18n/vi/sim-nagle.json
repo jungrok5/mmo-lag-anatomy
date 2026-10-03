@@ -3,7 +3,7 @@
   "group": "sim-nagle",
   "entries": [
     {"ctx":"src/sims/nagle.js:7","ko":"소켓과 프로토콜 · 소켓 옵션","t":"Socket và giao thức · Tùy chọn socket"},
-    {"ctx":"src/sims/nagle.js:8","ko":"작은 패킷을 모아 보내는 Nagle 알고리즘의 40~200ms 지연","t":"Gom gói nhỏ để gửi một lượt, lại mất trắng 40–200 ms"},
+    {"ctx":"src/sims/nagle.js:8","ko":"작은 패킷을 모아 보내는 Nagle 알고리즘의 40~200ms 지연","t":"Độ trễ 40–200 ms của thuật toán Nagle khi gom gói nhỏ để gửi"},
     {"ctx":"src/sims/nagle.js:9","ko":"TCP에는 “작은 패킷은 모았다가 한 번에 보내자”는 <b>Nagle 규칙</b>과, “ACK(수신 확인)는 조금 미뤘다가 응답에 실어 보내자”는 <b>지연 ACK</b>가 기본으로 켜져 있습니다. 둘 다 패킷 수를 아끼려는 규칙입니다. 그런데 게임 메시지를 헤더와 본문으로 나눠 쓰면, 두 규칙이 서로를 기다리느라 메시지마다 수십~수백 ms를 버립니다.","t":"TCP bật sẵn hai quy tắc. <b>Quy tắc Nagle</b>: “gom các gói nhỏ lại rồi gửi một lượt”. <b>Delayed ACK</b>: “hoãn ACK (xác nhận đã nhận) một chút để gửi kèm phản hồi”. Cả hai đều nhằm tiết kiệm số gói tin. Nhưng nếu game ghi mỗi message thành hai phần header và body, hai quy tắc này chờ lẫn nhau và mỗi message mất trắng vài chục đến vài trăm ms."},
     {"ctx":"src/sims/nagle.js:11","ko":"처음 화면(리눅스 기본값 + 나눠 쓰기)에서 오른쪽 막대를 보세요. 핑은 20ms인데 응답은 80ms 넘게 걸립니다.","t":"Ở thiết lập ban đầu (mặc định của Linux + ghi tách), hãy xem các thanh bên phải. Ping chỉ 20 ms mà phản hồi mất hơn 80 ms."},
     {"ctx":"src/sims/nagle.js:12","ko":"<b>지연 ACK</b>를 200ms(예전 윈도우)로 바꿔 보세요. 메시지마다 200ms 넘게 늦어집니다. 받는 쪽이 예전 윈도우일 때 생기는 입력 지연입니다. 서버가 Nagle을 켠 채 보내고 예전 윈도우 PC가 받는 반대 방향에서도 똑같이 생깁니다.","t":"Đổi <b>Delayed ACK</b> sang 200 ms (Windows đời cũ). Mỗi message trễ hơn 200 ms. Đây là trễ thao tác xảy ra khi bên nhận chạy Windows đời cũ. Chiều ngược lại cũng y như vậy: server gửi khi Nagle đang bật và PC Windows đời cũ là bên nhận."},

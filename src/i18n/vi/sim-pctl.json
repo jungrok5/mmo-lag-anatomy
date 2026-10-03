@@ -3,7 +3,7 @@
   "group": "sim-pctl",
   "entries": [
     {"ctx":"src/sims/pctl.js:6","ko":"관측으로 판정하기 · 숫자 읽는 법","t":"Chẩn đoán từ dữ liệu quan sát · Cách đọc con số"},
-    {"ctx":"src/sims/pctl.js:7","ko":"평균은 정상인데 렉이 나는 이유: 백분위 읽기","t":""},
+    {"ctx":"src/sims/pctl.js:7","ko":"평균은 정상인데 렉이 나는 이유: 백분위 읽기","t":"Lý do vẫn lag dù trung bình ở mức bình thường: đọc phân vị"},
     {"ctx":"src/sims/pctl.js:8","ko":"1초에 20번 잰 지연 값을 1분 동안 모았습니다. 서버 틱 시간이나 유저의 핑이라고 생각하면 됩니다. 가끔 튀는 값은 평균과 긴 간격의 평균 그래프에서는 거의 보이지 않지만 p99와 최댓값에는 그대로 드러납니다.","t":"Độ trễ được đo 20 lần trong 1 giây, gom trong 1 phút. Có thể hình dung đó là thời gian tick của server hoặc ping của người chơi. Những giá trị thỉnh thoảng vọt lên gần như không thấy trên số trung bình và trên đồ thị trung bình theo khoảng dài, nhưng lộ rõ nguyên vẹn ở p99 và giá trị lớn nhất."},
     {"ctx":"src/sims/pctl.js:10","ko":"<b>튀는 비율</b>을 1%에 두고 평균과 p99를 비교해 보세요. 평균은 평소와 비슷한데 p99는 튄 값 근처입니다.","t":"Để <b>Tỷ lệ vọt lên</b> ở 1% rồi so sánh trung bình với p99. Trung bình gần như mức bình thường, còn p99 thì sát các giá trị vọt lên."},
     {"ctx":"src/sims/pctl.js:11","ko":"<b>집계 간격</b>을 60초로 바꿔 보세요. 굵은 평균선이 평평해져서 그래프만 보면 아무 일도 없어 보입니다.","t":"Đổi <b>Khoảng gộp dữ liệu</b> sang 60 giây. Đường trung bình đậm trở nên phẳng, chỉ nhìn đồ thị thì tưởng như không có chuyện gì."},

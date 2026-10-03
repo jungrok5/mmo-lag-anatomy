@@ -3,7 +3,7 @@
   "group": "sim-journey",
   "entries": [
     {"ctx":"src/sims/journey.js:6","ko":"전체 구간 · 지연 분해","t":"Recorrido completo · Desglose de la latencia"},
-    {"ctx":"src/sims/journey.js:7","ko":"클릭에서 화면 표시까지 구간별 지연","t":"Del clic a la pantalla: dónde se acumula la latencia"},
+    {"ctx":"src/sims/journey.js:7","ko":"클릭에서 화면 표시까지 구간별 지연","t":"Latencia por tramo, del clic a la pantalla"},
     {"ctx":"src/sims/journey.js:8","ko":"스킬 버튼을 누른 순간부터 결과가 화면에 뜨기까지, 신호는 내 PC와 집 공유기, 통신사, 인터넷, 서버와 DB를 차례로 지나갑니다. 구간마다 몇 ms씩 쌓인 합이 플레이어가 느끼는 지연입니다. 조건을 바꾸며 어느 구간이 가장 크게 자라는지 보세요.","t":"Desde que presionas el botón de una habilidad hasta que el resultado aparece en pantalla, la señal pasa por tu PC, el router de casa, el ISP, internet, el servidor y la BD, uno tras otro. La suma de los pocos ms que se acumulan en cada tramo es la latencia que siente el jugador. Cambia las condiciones y mira qué tramo crece más."},
     {"ctx":"src/sims/journey.js:10","ko":"<b>서버 위치</b>를 “미국 서부”로 바꿔 보세요. 인터넷 구간이 막대의 절반 이상을 차지합니다.","t":"Cambia la <b>Ubicación del servidor</b> a “Costa oeste de EE. UU.”. El tramo de internet ocupa más de la mitad de la barra."},
     {"ctx":"src/sims/journey.js:11","ko":"<b>같은 집 다른 트래픽</b>을 60%에서 100%로 올려 보세요. 60%에서는 대기열이 금방 빠지지만 영상 업로드처럼 회선을 꽉 채우면 공유기 대기열 하나가 부산까지 가는 거리보다 수십 배 큰 지연을 만듭니다.","t":"Sube <b>Otro tráfico en casa</b> de 60% a 100%. Al 60% la cola se vacía enseguida, pero si se llena la conexión por completo, como al subir un video, la cola del router por sí sola genera decenas de veces más latencia que todo el trayecto hasta Busan."},

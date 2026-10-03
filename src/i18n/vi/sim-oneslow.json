@@ -2,8 +2,8 @@
   "lang": "vi",
   "group": "sim-oneslow",
   "entries": [
-    {"ctx":"src/sims/oneslow.js:6","ko":"영향 범위 · 한 명만 느릴 때","t":"Ảnh hưởng lan đến ai · Khi chỉ một người chậm"},
-    {"ctx":"src/sims/oneslow.js:7","ko":"느린 한 사람이 다른 사람의 화면과 게임에 주는 영향","t":""},
+    {"ctx":"src/sims/oneslow.js:6","ko":"영향 범위 · 한 명만 느릴 때","t":"Phạm vi ảnh hưởng · Khi chỉ một người chậm"},
+    {"ctx":"src/sims/oneslow.js:7","ko":"느린 한 사람이 다른 사람의 화면과 게임에 주는 영향","t":"Ảnh hưởng của một người chậm đến màn hình và game của người khác"},
     {"ctx":"src/sims/oneslow.js:8","ko":"같은 서버에 A와 B가 있습니다. A만 회선이 나쁩니다. 세 화면(서버, A의 화면, B의 화면)을 나란히 놓고 서버가 입력을 처리하는 방식을 바꿔 보세요. 대부분의 방식에서 렉은 A에게만 나타나고 B는 “A가 이상하게 움직이는 것”만 봅니다. 어떤 방식에서는 A 한 사람 때문에 모두가 멈춥니다.","t":"A và B ở cùng một server. Chỉ A có đường truyền kém. Hãy đặt ba màn hình (server, màn hình của A, màn hình của B) cạnh nhau và đổi cách server xử lý input. Với phần lớn cách xử lý, lag chỉ xuất hiện ở A, còn B chỉ thấy “A di chuyển lạ”. Nhưng có một cách mà chỉ vì một mình A, tất cả mọi người đều đứng hình."},
     {"ctx":"src/sims/oneslow.js:11","ko":"<b>틱마다 모아서</b> 방식에서 B의 화면을 보세요. A(파랑)는 멈칫했다가 한 번에 여러 걸음을 가지만 몬스터와 B 자신은 멀쩡합니다. 아래 표에서 “B의 화면 → A의 모습”만 빨갛습니다. 지터와 손실을 0으로 내리면 핑이 높아도 A는 매끄럽게 보입니다. 핑보다 지터와 손실이 남의 눈에 렉으로 보이게 합니다.","t":"Ở chế độ <b>Gom theo tick</b>, hãy xem màn hình của B. A (xanh dương) khựng lại rồi đi mấy bước một lúc, nhưng quái và chính B vẫn bình thường. Trong bảng bên dưới, chỉ ô giao giữa hàng “Màn hình của B” và cột “A trên màn hình” có màu đỏ. Hạ jitter và mất gói về 0 thì dù ping cao, A vẫn trông mượt. Thứ làm một người trông như bị lag trong mắt người khác là jitter và mất gói, hơn là ping."},
     {"ctx":"src/sims/oneslow.js:12","ko":"<b>도착 즉시</b>로 바꾸면 서버가 A의 입력을 도착한 시각대로 알립니다. 이동은 조금 덜 튀지만 빨라졌다 느려졌다 하고 스킬처럼 한 번에 끝나는 행동은 몰려 온 만큼 한순간에 실행됩니다.","t":"Chuyển sang <b>Xử lý ngay khi đến</b> thì server báo input của A theo đúng thời điểm nhận được. Di chuyển bớt nhảy cóc hơn một chút nhưng lúc nhanh lúc chậm, còn những hành động kết thúc trong một lần như skill thì dồn đến bao nhiêu sẽ được thực hiện trong cùng một khoảnh khắc bấy nhiêu."},

@@ -3,7 +3,7 @@
   "group": "sim-chain",
   "entries": [
     {"ctx":"src/sims/chain.js:5","ko":"동기화 방식 · 연속 행동","t":"Model sinkronisasi · Aksi berantai"},
-    {"ctx":"src/sims/chain.js:6","ko":"서버 왕복을 기다리는 횟수만큼 늘어나는 지연","t":""},
+    {"ctx":"src/sims/chain.js:6","ko":"서버 왕복을 기다리는 횟수만큼 늘어나는 지연","t":"Latensi yang bertambah sesuai jumlah pulang-pergi ke server yang harus ditunggu"},
     {"ctx":"src/sims/chain.js:7","ko":"스킬 하나, 버튼 하나만 누를 때는 핑 150ms가 크게 느껴지지 않지만 행동이 이어질 때마다 서버 확인을 기다리면 그 150ms가 계속 쌓입니다. 같은 핑에서 스킬 연계와 상점 구매가 설계에 따라 얼마나 달라지는지 비교합니다.","t":"Pada satu skill atau satu tombol, ping 150 ms hampir tidak terasa. Namun, jika setiap aksi dalam satu rangkaian menunggu konfirmasi server, 150 ms itu terus menumpuk. Dengan ping yang sama, bandingkan seberapa berbeda kombo skill dan pembelian di toko tergantung desainnya."},
     {"ctx":"src/sims/chain.js:9","ko":"<b>핑</b>을 0 → 300ms로 올려 보세요. 맨 위 줄(확인 후 다음 입력)만 10초 동안 쓰는 스킬 수가 눈에 띄게 줄어듭니다.","t":"Naikkan <b>Ping</b> dari 0 ke 300 ms. Hanya baris paling atas (konfirmasi lalu input) yang jumlah skill-nya dalam 10 detik berkurang secara nyata."},
     {"ctx":"src/sims/chain.js:10","ko":"<b>선입력 허용 시간</b>을 0으로 줄여 보세요. 가운데 줄도 맨 위 줄과 똑같아집니다. 선입력 허용 시간이 핑보다 짧아도 효과가 줄어듭니다.","t":"Turunkan <b>Batas waktu input buffering</b> ke 0. Baris tengah menjadi sama persis dengan baris atas. Jika batas waktu input buffering lebih pendek dari ping, efeknya juga berkurang."},

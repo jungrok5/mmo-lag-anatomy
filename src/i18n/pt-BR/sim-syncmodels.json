@@ -3,7 +3,7 @@
   "group": "sim-syncmodels",
   "entries": [
     {"ctx":"src/sims/syncmodels.js:5","ko":"동기화 방식 · 비교","t":"Modelos de sincronização · Comparação"},
-    {"ctx":"src/sims/syncmodels.js:6","ko":"동기화 방식 다섯 가지의 반응 비교","t":""},
+    {"ctx":"src/sims/syncmodels.js:6","ko":"동기화 방식 다섯 가지의 반응 비교","t":"Comparação da resposta de cinco modelos de sincronização"},
     {"ctx":"src/sims/syncmodels.js:7","ko":"같은 회선에서 같은 버튼을 눌렀을 때 방식마다 내 화면이 언제 반응하고 서버나 상대는 언제 아는지 나란히 봅니다. 핑을 올려 보세요. 어떤 방식은 반응이 핑만큼 늦어지고 어떤 방식은 핑과 상관없이 바로 반응하는 대신 다른 대가를 치릅니다.","t":"Com a mesma conexão e o mesmo botão, compare lado a lado, modelo por modelo, quando a sua tela responde e quando o servidor ou o outro jogador fica sabendo. Aumente o ping. Em alguns modelos, a resposta atrasa o mesmo tanto que o ping; outros respondem na hora, seja qual for o ping, mas pagam um preço diferente."},
     {"ctx":"src/sims/syncmodels.js:10","ko":"<b>핑</b>을 30 → 150 → 300ms로 올리며 각 줄의 ▼(누름)와 ●(내 화면 반응) 사이 거리를 비교하세요. 요청-응답은 핑만큼 거리가 늘어납니다. 300ms에서는 상대 입력이 닿는 데 입력 지연보다 오래 걸려 락스텝도 가끔 멈춥니다.","t":"Aumente o <b>Ping</b> de 30 para 150 e depois para 300 ms e compare, em cada linha, a distância entre ▼ (apertou) e ● (sua tela respondeu). Na requisição-resposta, a distância cresce junto com o ping. Com 300 ms, o input do outro jogador leva mais tempo para chegar do que o atraso de input, e o lockstep também para de vez em quando."},
     {"ctx":"src/sims/syncmodels.js:11","ko":"<b>다음 행동은 서버가 거절</b>을 누르세요. 요청-응답은 늦게 “불가” 안내만, 예측은 먼저 보여 줬다가 취소(고무줄), 클라이언트 권위는 검증 없이 통과합니다.","t":"Clique em <b>Servidor rejeita a próxima ação</b>. A requisição-resposta só mostra um aviso atrasado de “não permitido”, a predição mostra a ação primeiro e depois cancela (rubber banding), e a autoridade do cliente deixa passar sem verificar."},

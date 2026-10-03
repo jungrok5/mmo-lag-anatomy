@@ -3,7 +3,7 @@
   "group": "sim-queue",
   "entries": [
     {"ctx":"src/sims/queue.js:6","ko":"기본 원리 · 대기열","t":"Princípio básico · Filas"},
-    {"ctx":"src/sims/queue.js:7","ko":"이용률이 높아질수록 급격히 길어지는 대기열","t":""},
+    {"ctx":"src/sims/queue.js:7","ko":"이용률이 높아질수록 급격히 길어지는 대기열","t":"A fila que cresce bruscamente quando a utilização aumenta"},
     {"ctx":"src/sims/queue.js:8","ko":"패킷·쿼리·디스크 요청·CPU 작업은 모두 워커(요청을 처리하는 주체) 앞 대기열에 쌓입니다. 요청이 오는 속도를 올려 보세요. 워커가 하나면 70%쯤 바쁠 때까지는 대기가 처리 시간의 2배 남짓이지만 90%면 9배, 95%면 19배로 급격히 솟습니다. 렉은 대부분 어딘가의 대기열이 이 곡선의 오른쪽 끝에 올라탔을 때 생깁니다.","t":"Pacotes, queries, requisições de disco e tarefas de CPU se acumulam na fila diante de um worker (quem processa as requisições). Aumente a velocidade com que as requisições chegam. Com um worker só, até ele ficar uns 70% ocupado a espera fica em pouco mais de 2 vezes o tempo de processamento, mas com 90% ela dispara para 9 vezes e com 95% para 19 vezes. A maior parte do lag é algo, em algum lugar, chegando à ponta direita desta curva."},
     {"ctx":"src/sims/queue.js:10","ko":"<b>도착 속도</b>를 천천히 올리며 오른쪽 곡선 위의 점이 어디서 급하게 꺾이는지 보세요.","t":"Aumente devagar a <b>Taxa de chegada</b> e veja em que ponto a curva à direita dobra para cima."},
     {"ctx":"src/sims/queue.js:11","ko":"<b>이용률 95%</b> 근처에서 도착 속도를 아주 조금만 더 올려 보세요. 대기가 몇 배로 늘어납니다.","t":"Perto de <b>95% de utilização</b>, aumente a taxa de chegada só mais um pouquinho. A espera se multiplica."},

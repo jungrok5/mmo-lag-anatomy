@@ -3,7 +3,7 @@
   "group": "sim-dbpool",
   "entries": [
     {"ctx":"src/sims/dbpool.js:6","ko":"레이어 12 · 데이터베이스","t":"Lapisan 12 · Database"},
-    {"ctx":"src/sims/dbpool.js:7","ko":"DB 대기열: 커넥션 풀·인덱스·핫 로우 잠금","t":"Antrean juga terbentuk di depan DB: connection pool, indeks, dan lock hot row"},
+    {"ctx":"src/sims/dbpool.js:7","ko":"DB 대기열: 커넥션 풀·인덱스·핫 로우 잠금","t":"Antrean DB: connection pool, indeks, dan lock hot row"},
     {"ctx":"src/sims/dbpool.js:8","ko":"게임 서버는 DB와 미리 열어 둔 연결(커넥션) 몇 개로만 통신합니다. 커넥션이 모두 사용 중이면 요청은 대기열에서 기다리고 쿼리가 느리거나 핫 로우(모두가 동시에 고치려는 행)가 생기면 커넥션이 오래 묶입니다. 대기 시간이 타임아웃보다 길어지면 요청은 실패합니다.","t":"Server game berkomunikasi dengan DB hanya lewat beberapa koneksi yang sudah dibuka sebelumnya. Jika semua koneksi sedang dipakai, request menunggu di antrean. Jika query lambat atau muncul hot row (satu baris yang ingin diubah banyak permintaan sekaligus), koneksi tertahan lama. Jika waktu tunggu melebihi timeout, request gagal."},
     {"ctx":"src/sims/dbpool.js:10","ko":"<b>인덱스 빠진 쿼리 배포</b>를 눌러 보세요. 쿼리 하나가 2ms에서 150ms가 되자 커넥션 32개가 순식간에 차고 5초 뒤부터 실패가 쏟아집니다.","t":"Klik <b>Deploy query tanpa indeks</b>. Begitu satu query naik dari 2 ms menjadi 150 ms, 32 koneksi langsung penuh, dan mulai 5 detik kemudian kegagalan berdatangan."},
     {"ctx":"src/sims/dbpool.js:11","ko":"<b>경매장 인기템 (핫 로우)</b>를 눌러 보세요. DB CPU는 한가한데 줄무늬 칸(행 잠금 기다림)이 커넥션을 차지해 평범한 요청까지 막힙니다.","t":"Klik <b>Item laris di balai lelang (hot row)</b>. CPU DB tidak sibuk, tetapi kotak bergaris (menunggu row lock) memenuhi koneksi sehingga request biasa pun tertahan."},
