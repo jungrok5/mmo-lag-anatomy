@@ -123,7 +123,7 @@
     {"ctx":"causes/db-cold-cache/c/0","ko":"점검으로 DB 재시작","t":"DB dimulai ulang karena maintenance"},
     {"ctx":"causes/db-cold-cache/c/1","ko":"자주 쓰던 데이터가 메모리에 없어 디스크에서 읽음","t":"Data yang sering dipakai tidak ada di memori sehingga dibaca dari disk"},
     {"ctx":"causes/db-cold-cache/c/2","ko":"점검 직후 한동안 로그인·로딩이 느림","t":"Login dan loading lambat untuk sementara tepat setelah maintenance"},
-    {"ctx":"causes/db-cold-cache/act/game","ko":"점진적 오픈(접속 대기열로 로그인 인원을 단계적으로 늘리기).","t":"Buka server secara bertahap (gunakan antrean login untuk menambah jumlah pemain yang login sedikit demi sedikit)."},
+    {"ctx":"causes/db-cold-cache/act/game","ko":"점진적 오픈(로그인 대기열로 로그인 인원을 단계적으로 늘리기).","t":""},
     {"ctx":"causes/db-cold-cache/act/infra","ko":"재시작 후 캐시 예열(워밍, 버퍼 풀 저장·복원 설정 확인), 스냅샷으로 되살린 DB는 디스크도 미리 읽기.","t":"Lakukan warm-up cache setelah restart (periksa pengaturan simpan dan pulihkan buffer pool), untuk DB yang dipulihkan dari snapshot baca juga disknya lebih dulu."},
     {"ctx":"causes/db-cold-cache/more","ko":"MySQL은 꺼질 때 버퍼 풀의 페이지 목록을 저장했다가 켜질 때 백그라운드에서 다시 읽어 오지만, 다 채우기까지는 시간이 걸립니다. 클라우드에서 DB를 스냅샷(디스크 사본)으로 되살렸다면 디스크 자체도 처음 읽는 블록마다 느려서 더 오래 갑니다.","t":"MySQL menyimpan daftar page di buffer pool saat dimatikan, lalu membacanya kembali di latar belakang saat dinyalakan, tetapi butuh waktu sampai buffer pool terisi penuh. Jika DB di cloud dipulihkan dari snapshot (salinan disk), disk itu sendiri juga lambat pada setiap blok yang pertama kali dibaca, sehingga masa lambat ini berlangsung lebih lama."},
     {"ctx":"causes/db-cold-cache/sig/g","ko":"디스크 읽기, 버퍼 캐시 적중률","t":"Pembacaan disk, hit rate buffer cache"},
@@ -140,7 +140,7 @@
     {"ctx":"causes/db-login-storm/c/0","ko":"캐릭터 로딩 때 아이템·스킬·퀘스트를 따로따로 조회","t":"Saat memuat karakter, item, skill, dan quest diambil dengan query terpisah satu per satu"},
     {"ctx":"causes/db-login-storm/c/1","ko":"점검 직후 동시 로그인으로 쿼리 폭증","t":"Tepat setelah maintenance, login bersamaan membuat jumlah query melonjak"},
     {"ctx":"causes/db-login-storm/c/2","ko":"로그인 무한 로딩, 게임 중인 사람의 저장까지 밀림","t":"Loading tanpa henti saat login, penyimpanan pemain yang sedang bermain pun ikut tertunda"},
-    {"ctx":"causes/db-login-storm/act/game","ko":"한 번에 묶어서 조회, 접속 대기열, 캐시, ORM 지연 로딩이 만드는 조회 수 점검.","t":"Gabungkan query agar data diambil sekaligus, gunakan antrean login dan cache, periksa jumlah query yang dihasilkan lazy loading ORM."},
+    {"ctx":"causes/db-login-storm/act/game","ko":"한 번에 묶어서 조회, 로그인 대기열, 캐시, ORM 지연 로딩이 만드는 조회 수 점검.","t":""},
     {"ctx":"causes/db-login-storm/act/infra","ko":"호출 횟수가 많은 쿼리 순위를 뽑아 공유, 점검 직후 로그인 시간대의 쿼리 수·커넥션 수 모니터링.","t":"Buat peringkat query dengan jumlah pemanggilan terbanyak lalu bagikan, pantau jumlah query dan koneksi pada jam login tepat setelah maintenance."},
     {"ctx":"causes/db-login-storm/more","ko":"ORM(DB 조회를 대신 만들어 주는 라이브러리)의 지연 로딩이 개발자도 모르는 사이 이런 조회를 만듭니다. 개발 서버에서는 캐릭터 몇 개라 티가 안 나고, 라이브의 동시 로그인에서 처음 드러납니다.","t":"Lazy loading pada ORM (library yang membuatkan query DB secara otomatis) menghasilkan query seperti ini tanpa disadari pengembang. Di server development hanya ada beberapa karakter sehingga tidak terasa, dan masalahnya baru muncul saat login bersamaan di server live."},
     {"ctx":"causes/db-login-storm/sig/g","ko":"DB 초당 쿼리 수, 로그인 수","t":"Jumlah query DB per detik, jumlah login"},
@@ -295,5 +295,9 @@
     {"ctx":"causes/db-ddl-lock/ref/5/n","ko":"메타데이터 잠금을 기다리는 세션(waiting_query)과 막고 있는 세션(blocking_pid)","t":"Sesi yang menunggu metadata lock (waiting_query) dan sesi yang memblokir (blocking_pid)"},
     {"ctx":"causes/db-ddl-lock/ref/6/n","ko":"granted가 false면 잠금을 기다리는 중, mode에 AccessExclusiveLock 같은 잠금 종류","t":"granted bernilai false berarti sedang menunggu lock; mode berisi jenis lock seperti AccessExclusiveLock"},
     {"ctx":"causes/db-ddl-lock/ref/7/n","ko":"pg_blocking_pids(): 지정한 세션이 잠금을 못 얻게 막고 있는 세션 목록","t":"pg_blocking_pids(): daftar sesi yang menghalangi sesi tertentu mendapatkan lock"}
+  ],
+  "stale": [
+    {"ctx":"causes/db-cold-cache/act/game","ko":"점진적 오픈(접속 대기열로 로그인 인원을 단계적으로 늘리기).","t":"Buka server secara bertahap (gunakan antrean login untuk menambah jumlah pemain yang login sedikit demi sedikit)."},
+    {"ctx":"causes/db-login-storm/act/game","ko":"한 번에 묶어서 조회, 접속 대기열, 캐시, ORM 지연 로딩이 만드는 조회 수 점검.","t":"Gabungkan query agar data diambil sekaligus, gunakan antrean login dan cache, periksa jumlah query yang dihasilkan lazy loading ORM."}
   ]
 }
