@@ -47,7 +47,7 @@
     {"ctx":"src/sims/dbpool.js:61","ko":"평소","t":"Normal"},
     {"ctx":"src/sims/dbpool.js:62","ko":"인덱스 빠진 쿼리 배포","t":"Despliegue de una consulta sin índice"},
     {"ctx":"src/sims/dbpool.js:63","ko":"경매장 인기템 (핫 로우)","t":"Objeto popular en subasta (fila caliente)"},
-    {"ctx":"src/sims/dbpool.js:64","ko":"점검 직후 로그인 폭주 (3,000/s)","t":"Avalancha de inicios de sesión tras el mantenimiento (3,000/s)"},
+    {"ctx":"src/sims/dbpool.js:64","ko":"점검 직후 로그인 폭주 (3,000/s)","t":"Avalancha de inicios de sesión (3,000/s)"},
     {"ctx":"src/sims/dbpool.js:65","ko":"풀이 너무 작음 (4개)","t":"Pool demasiado pequeño (4)"},
     {"ctx":"src/sims/dbpool.js:75","ko":"평균 응답","t":"Respuesta media"},
     {"ctx":"src/sims/dbpool.js:75","ko":"최근 2초","t":"Últimos 2 s"},

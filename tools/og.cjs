@@ -48,9 +48,10 @@ svg{position:absolute;right:80px;top:96px}
     await p.evaluate(() => document.fonts.ready);
     // 긴 제목(번역판)은 한 화면에 들어갈 때까지 글자를 줄인다
     await p.evaluate(() => {
-      const h1 = document.querySelector('h1'), para = document.querySelector('p');
+      const h1 = document.querySelector('h1'), para = document.querySelector('p'), row = document.querySelector('.row');
+      const tight = () => document.body.scrollHeight > 630 || row.getBoundingClientRect().top - para.getBoundingClientRect().bottom < 20;
       let size = 150, ps = 33;
-      while (document.body.scrollHeight > 630 && size > 64) { size -= 6; h1.style.fontSize = size + 'px'; if (size < 110 && ps > 26) { ps -= 1; para.style.fontSize = ps + 'px'; } }
+      while (tight() && size > 64) { size -= 6; h1.style.fontSize = size + 'px'; if (size < 110 && ps > 26) { ps -= 1; para.style.fontSize = ps + 'px'; } }
     });
     const out = path.join(ROOT, 'src/site', L.code === 'ko' ? 'og.png' : `og-${L.dir}.png`);
     await p.screenshot({ path: out });
