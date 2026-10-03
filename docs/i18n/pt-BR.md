@@ -172,14 +172,14 @@ Chapter titles (body `h2`/`h3`) for consistent cross-references. Headings that r
 
 | Korean | pt-BR |
 |---|---|
-| 렉은 네 가지 요인으로 만들어진다 | O lag nasce de quatro fatores |
-| 패킷의 이동 경로: 내 손가락에서 서버의 DB까지 | O caminho do pacote: do seu dedo ao banco de dados do servidor |
+| 렉을 만드는 네 가지 요인 | Os quatro fatores que causam lag |
+| 패킷의 이동 경로: 입력에서 서버 DB까지 | O caminho do pacote: do comando ao banco de dados do servidor |
 | 렉 실험실 | Laboratório de lag |
 | 증상 사전 | Catálogo de sintomas |
-| 같은 핑, 다른 체감: 동기화 방식 | Mesmo ping, sensação diferente: modelos de sincronização |
+| 동기화 방식과 체감 | Modelos de sincronização e o lag sentido |
 | 한 명만 느릴 때, 한쪽만 이상할 때 | Quando só um jogador tem lag ou só um lado fica estranho |
-| TCP 재전송: 왜 생기고, 왜 이렇게 느려지나 | Retransmissão TCP: por que acontece e por que atrasa tanto |
-| 게임개발팀이 고칠 것, 인프라팀이 고칠 것 | O que a equipe de desenvolvimento corrige, o que a equipe de infraestrutura corrige |
+| TCP 재전송: 생기는 원인과 지연이 커지는 이유 | Retransmissão TCP: por que acontece e por que a latência aumenta |
+| 게임개발팀과 인프라팀의 담당 | Responsabilidades da equipe de desenvolvimento e da equipe de infraestrutura |
 | 클라이언트 OS와 기기 | SO e dispositivo do cliente |
 | 집 네트워크: 와이파이·공유기·모바일망 | Rede doméstica: Wi-Fi, roteador e rede móvel |
 | 인터넷 회선: 통신사망과 장거리 구간 | Conexão de internet: redes das operadoras e trechos de longa distância |
@@ -196,7 +196,7 @@ Chapter titles (body `h2`/`h3`) for consistent cross-references. Headings that r
 | 상황별 절차 | Procedimentos por situação |
 | 실제 장애 사례 | Incidentes reais |
 | 패치 이후 렉 / 해외 국가 추가 | Lag depois de um patch / Lançamento em um novo país |
-| 렉 제보 잘하는 법 | Como reportar lag do jeito certo |
+| 렉 제보 가이드 | Guia para reportar lag |
 | 용어 사전 | Glossário |
 | 참고 문헌 / 장별 출처 | Referências / Fontes por capítulo |
 | 목차 | Sumário |
@@ -225,7 +225,7 @@ Chapter titles (body `h2`/`h3`) for consistent cross-references. Headings that r
 | 함께 | Também envolvidos | label |
 | {팀} 할 일 | O que fazer ({0}) | “O que fazer (Equipe de desenvolvimento)” |
 | 담당 코드 | código de responsável | table header 코드 → Código |
-| 누가 고치나 | Quem resolve | |
+| 담당 구분 | Divisão de responsabilidades | |
 | 에스컬레이션 | escalonamento para outra equipe / acionar | avoid bare “escalonamento” (taken by CPU scheduling) |
 | 안내 (to players) / 요청 (to providers) / 우회 | orientar os jogadores / solicitar ao provedor / contornar (workaround) | |
 | team·owner joiner `{0}·{1}` | `{1} ({0})` | “Desenvolvimento do servidor (Equipe de desenvolvimento)” |
@@ -661,7 +661,7 @@ Translators of later phases: add a row here when you fix a term that is not cove
 | p99 / 가장 느린 1% | pior 1% (p99) | “100번 중 가장 느린 1번” → “a medição mais lenta de cada 100” |
 | 약 / 쯤 / 안팎 with times | cerca de, mais ou menos, por volta de | never drop the hedge |
 | 국내 (Korean operator’s view) | na Coreia | |
-| 누구에게 번지나 | Até onde se espalha | body-partial kicker |
+| 영향 범위 | Escopo do impacto | body-partial kicker |
 | 비유 / 핵심 / 먼저 (tags, chip) | Analogia / Ponto-chave / Primeiro | |
 | 무응답 판정 / 유령 접속 / 재연결 유예 시간 | timeout de cliente sem resposta / sessão fantasma / tempo de tolerância para reconexão | |
 | 접속 대기열 시스템 / PC방 | fila de login / lan house | |

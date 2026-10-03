@@ -285,6 +285,11 @@ def scripts(files):
     return "\n".join(parts)
 
 
+# 밝게·어둡게를 고른 값(localStorage의 lag-theme)을 처음 그리기 전에 적용해 화면이 깜빡이지 않게 한다. app.js·site.cjs와 같은 열쇠
+THEME_EARLY = ("<script>try{var t=localStorage.getItem('lag-theme');"
+               "if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>")
+
+
 def assemble(body, js_files, fragment, embed_fonts=False):
     head = (PACK / "head.html").read_text(encoding="utf-8") if PACK else read("head.html")
     full = embed_fonts  # 완성본(index.html)에만 긴 제목과 검색엔진용 정보를 넣는다
@@ -306,7 +311,7 @@ def assemble(body, js_files, fragment, embed_fonts=False):
         f"<!doctype html>\n{notice()}\n<html lang=\"{LANG['code']}\">\n<head>\n"
         '<meta charset="utf-8">\n'
         '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
-        f"{inner_head}\n</head>\n<body>\n{body}\n{tail}\n</body>\n</html>\n"
+        f"{THEME_EARLY}\n{inner_head}\n</head>\n<body>\n{body}\n{tail}\n</body>\n</html>\n"
     )
 
 

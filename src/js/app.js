@@ -57,16 +57,35 @@
   const fxTag = id => `<span class="fx">${K.fxIcon(id)}${FX[id].name}</span>`;
 
   /* ---------------- 테마 ---------------- */
+  // 목차 아래의 시스템·밝게·어둡게 단추와, 늘 보이는 전환 단추(목차 맨 위, 좁은 화면은 상단 막대)가 같은 값을 쓴다.
+  // 저장한 값은 build.py가 <head>에서 먼저 적용해 처음 그릴 때 깜빡이지 않는다
+  const darkMQ = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+  const isDark = () => { const t = document.documentElement.getAttribute('data-theme'); return t ? t === 'dark' : !!(darkMQ && darkMQ.matches); };
+  const SUN = '<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="3"/><path d="M8 1.5v1.6M8 12.9v1.6M1.5 8h1.6M12.9 8h1.6M3.4 3.4l1.1 1.1M11.5 11.5l1.1 1.1M3.4 12.6l1.1-1.1M11.5 4.5l1.1-1.1"/></svg>';
+  const MOON = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13.6 9.8A5.8 5.8 0 0 1 6.2 2.4a5.8 5.8 0 1 0 7.4 7.4z"/></svg>';
+  function paintToggles() {
+    const dark = isDark(), label = dark ? TR`밝은 화면으로 보기` : TR`어두운 화면으로 보기`;
+    $$('.theme-toggle').forEach(b => { b.innerHTML = dark ? SUN : MOON; b.setAttribute('aria-label', label); b.title = label; b.setAttribute('aria-pressed', dark ? 'true' : 'false'); });
+  }
   function setTheme(t) {
     if (t === 'system') document.documentElement.removeAttribute('data-theme');
     else document.documentElement.setAttribute('data-theme', t);
     $$('[data-theme-set]').forEach(b => b.setAttribute('aria-pressed', b.dataset.themeSet === t ? 'true' : 'false'));
     try { localStorage.setItem('lag-theme', t); } catch (e) { /* 저장 불가 환경 */ }
+    paintToggles();
+  }
+  for (const host of [$('.topbar'), $('#nav')]) {
+    if (!host) continue;
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'theme-toggle';
+    b.addEventListener('click', e => { e.stopPropagation(); setTheme(isDark() ? 'light' : 'dark'); });
+    host.appendChild(b);
   }
   let savedTheme = 'system';
   try { savedTheme = localStorage.getItem('lag-theme') || 'system'; } catch (e) { /* 무시 */ }
   setTheme(savedTheme);
   $$('[data-theme-set]').forEach(b => b.addEventListener('click', () => setTheme(b.dataset.themeSet)));
+  if (darkMQ && darkMQ.addEventListener) darkMQ.addEventListener('change', paintToggles);
 
   /* ---------------- 히어로: 네 가지 요인 ---------------- */
   const thesis = $('#thesis');

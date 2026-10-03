@@ -196,14 +196,14 @@ Chapter titles (body `h2`); chapter headings that reuse layer names must match t
 
 | Korean | Indonesian |
 |---|---|
-| 렉은 네 가지 요인으로 만들어진다 | Lag berasal dari empat faktor |
-| 패킷의 이동 경로: 내 손가락에서 서버의 DB까지 | Perjalanan paket: dari jari Anda sampai DB server |
+| 렉을 만드는 네 가지 요인 | Empat faktor penyebab lag |
+| 패킷의 이동 경로: 입력에서 서버 DB까지 | Perjalanan paket: dari input sampai DB server |
 | 렉 실험실 | Lab lag |
 | 증상 사전 | Kamus gejala |
-| 같은 핑, 다른 체감: 동기화 방식 | Ping sama, rasa berbeda: model sinkronisasi |
+| 동기화 방식과 체감 | Model sinkronisasi dan rasa bermain |
 | 한 명만 느릴 때, 한쪽만 이상할 때 | Saat hanya satu pemain yang lag, saat hanya satu sisi yang aneh |
-| TCP 재전송: 왜 생기고, 왜 이렇게 느려지나 | Retransmisi TCP: mengapa terjadi dan mengapa begitu lambat |
-| 게임개발팀이 고칠 것, 인프라팀이 고칠 것 | Bagian Tim Pengembang Game, bagian Tim Infrastruktur |
+| TCP 재전송: 생기는 원인과 지연이 커지는 이유 | Retransmisi TCP: penyebab terjadinya dan alasan latensi meningkat |
+| 게임개발팀과 인프라팀의 담당 | Tanggung jawab Tim Pengembang Game dan Tim Infrastruktur |
 | 클라이언트 OS와 기기 | OS dan perangkat klien |
 | 집 네트워크: 와이파이·공유기·모바일망 | Jaringan rumah: Wi-Fi, router, jaringan seluler |
 | 인터넷 회선: 통신사망과 장거리 구간 | Jalur internet: jaringan ISP dan jalur jarak jauh |
@@ -220,7 +220,7 @@ Chapter titles (body `h2`); chapter headings that reuse layer names must match t
 | 사례와 절차 / 상황별 절차 | Kasus dan prosedur / Prosedur per situasi |
 | 실제 장애 사례 | Kasus insiden nyata |
 | 패치 이후 렉 / 해외 국가 추가 | Lag setelah patch / Membuka layanan di negara baru |
-| 렉 제보 잘하는 법 | Cara melaporkan lag dengan baik |
+| 렉 제보 가이드 | Panduan melaporkan lag |
 | 용어 사전 | Glosarium |
 | 참고 문헌 | Daftar pustaka |
 | 목차 | Daftar isi |
@@ -249,7 +249,7 @@ The three team names are treated as unit names and written in **title case every
 | {팀} 할 일 / 게임개발팀이 할 일 | Tugas {Tim} / Tugas Tim Pengembang Game | |
 | 유저 안내·외부 요청 | Panduan pemain dan permintaan eksternal | |
 | 팀별 대응 / 대응 | Penanganan per tim / Penanganan | |
-| 누가 고치나 | Siapa yang memperbaiki | |
+| 담당 구분 | Pembagian tanggung jawab | |
 | 먼저 부를 곳 | Pihak yang dihubungi pertama | |
 | 넘길 때 챙길 정보 | Informasi yang disertakan saat serah terima | |
 | 에스컬레이션 | eskalasi | |

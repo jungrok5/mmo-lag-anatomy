@@ -54,8 +54,14 @@ const FONT = {
   'zh-TW': '"PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif',
   th: '"Noto Sans Thai","Leelawadee UI",Thonburi,Tahoma,sans-serif',
 };
-const css = L => `:root{--bg:#fff;--ink:#0f1822;--ink2:#445162;--line:#d7dde4;--soft:#f3f5f8;--accent:#2340c8;color-scheme:light dark}
-@media (prefers-color-scheme:dark){:root{--bg:#0b1016;--ink:#e5ebf1;--ink2:#a6b2bf;--line:#26313d;--soft:#151e28;--accent:#8ea0ff}}
+// 밝게·어둡게: 기기 설정을 따르고, 단추로 고르면 원본 페이지와 같은 열쇠(localStorage의 lag-theme)에 저장한다
+const DARK = '--bg:#0b1016;--ink:#e5ebf1;--ink2:#a6b2bf;--line:#26313d;--soft:#151e28;--accent:#8ea0ff;color-scheme:dark';
+const css = L => `:root{--bg:#fff;--ink:#0f1822;--ink2:#445162;--line:#d7dde4;--soft:#f3f5f8;--accent:#2340c8;color-scheme:light}
+:root[data-theme=dark]{${DARK}}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){${DARK}}}
+.top{display:flex;align-items:flex-start;gap:12px}.top .langs{flex:1;min-width:0}
+.theme-toggle{margin-left:auto;display:inline-grid;place-items:center;width:32px;height:32px;padding:0;flex:none;border:1px solid var(--line);border-radius:999px;background:var(--bg);color:var(--ink2);cursor:pointer}
+.theme-toggle[hidden]{display:none}.theme-toggle:hover{color:var(--ink);border-color:var(--ink2)}.theme-toggle svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
 body{margin:0 auto;max-width:860px;padding:20px 16px 64px;background:var(--bg);color:var(--ink);font:16px/1.75 ${FONT[L.code] || 'system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif'};${L.code === 'ko' ? 'word-break:keep-all;' : ''}overflow-wrap:anywhere}
 a{color:var(--accent)}h1{font-size:28px;line-height:1.35;margin:.4em 0}h2{margin-top:40px;padding-top:10px;border-top:2px solid var(--line);font-size:21px}h3{margin-top:26px;font-size:18px}
 .en{font-weight:400;color:var(--ink2);font-size:.62em}.open{margin:.2em 0 1em;font-weight:600}.crumb,.meta,.n{color:var(--ink2);font-size:14px}
@@ -70,6 +76,16 @@ nav.toc ul{columns:2;gap:24px}@media (max-width:560px){nav.toc ul{columns:1}}
 footer{margin-top:48px;border-top:1px solid var(--line);padding-top:12px}
 .sg{width:120px;height:36px;vertical-align:middle;margin-right:8px}.sg path{fill:none;stroke-linejoin:round;stroke-linecap:round}.sg-main{stroke:var(--accent);stroke-width:2}.sg-sub{stroke:var(--ink2);stroke-width:1.5;stroke-dasharray:3 3}.sg-solid{stroke-dasharray:none;stroke-width:1.2}.sg-ref{stroke:var(--line);stroke-width:1.5;stroke-dasharray:2 3}
 ol.steps li{margin-bottom:10px}`;
+
+// 전환 단추: 스크립트가 돌 때만 보인다(스크립트 없이 읽는 수집기에는 단추가 없다)
+const SUN = '<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="3"/><path d="M8 1.5v1.6M8 12.9v1.6M1.5 8h1.6M12.9 8h1.6M3.4 3.4l1.1 1.1M11.5 11.5l1.1 1.1M3.4 12.6l1.1-1.1M11.5 4.5l1.1-1.1"/></svg>';
+const MOON = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13.6 9.8A5.8 5.8 0 0 1 6.2 2.4a5.8 5.8 0 1 0 7.4 7.4z"/></svg>';
+const themeScript = () => `<script>(function(){var d=document.documentElement,b=document.querySelector('.theme-toggle'),m=window.matchMedia?matchMedia('(prefers-color-scheme: dark)'):null;if(!b)return;
+var S=${JSON.stringify(SUN)},M=${JSON.stringify(MOON)},LL=${JSON.stringify(TR`밝은 화면으로 보기`)},LD=${JSON.stringify(TR`어두운 화면으로 보기`)};
+function dark(){var t=d.getAttribute('data-theme');return t?t==='dark':!!(m&&m.matches)}
+function paint(){var k=dark();b.innerHTML=k?S:M;b.setAttribute('aria-label',k?LL:LD);b.title=k?LL:LD;b.setAttribute('aria-pressed',k?'true':'false')}
+b.addEventListener('click',function(){var t=dark()?'light':'dark';d.setAttribute('data-theme',t);try{localStorage.setItem('lag-theme',t)}catch(e){}paint()});
+if(m&&m.addEventListener)m.addEventListener('change',paint);b.hidden=false;paint()})()</script>`;
 
 // 같은 페이지의 언어판 주소: 검색엔진용 hreflang, 사람이 누르는 언어 링크
 const alternates = rel => [
@@ -125,6 +141,7 @@ function buildLang(L) {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>try{var t=localStorage.getItem('lag-theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
@@ -143,9 +160,10 @@ ${ld({ '@context': 'https://schema.org', '@graph': [website, ...graph] })}
 <style>${css(L)}</style>
 </head>
 <body>
-${LANGS.length > 1 ? langLinks(rel) : ''}
+<div class="top">${LANGS.length > 1 ? langLinks(rel) : ''}<button type="button" class="theme-toggle" hidden></button></div>
 ${body}
 <footer><p class="meta">${esc(NAME)} · ${TR`갱신 ${today}`} · ${TR`만든 사람: 오정록`} (<a href="${resumeOf(L)}">${TR`이력서`}</a>) · ${TR`MIT 라이선스`} · <a href="${up}text.html">${TR`전체 텍스트 판`}</a> · <a href="${up || './'}">${TR`그림과 실험이 있는 원본`}</a>${REPO ? ` · <a href="${REPO}">GitHub</a>` : ''}<br>${TR`수치는 일반적인 서비스 환경의 대표값이며 실제 값은 게임과 인프라마다 다릅니다.`}</p></footer>
+${themeScript()}
 </body>
 </html>
 `;

@@ -247,11 +247,11 @@ Chapter names (use them when the text refers to a chapter as 「…」一章 or 
 
 | Korean | zh-TW |
 |---|---|
-| 렉의 네 가지 요인 / 렉은 네 가지 요인으로 만들어진다 | lag 的四個因素 / Lag 由四個因素構成 |
+| 렉의 네 가지 요인 / 렉을 만드는 네 가지 요인 | lag 的四個因素 / 造成 lag 的四個因素 |
 | 패킷의 이동 경로 | 封包的傳輸路徑 |
 | 렉 실험실 | Lag 實驗室 |
 | 증상 사전 | 症狀辭典 |
-| 동기화 방식 / 같은 핑, 다른 체감: 동기화 방식 | 同步方式 / 同樣的 ping，不同的體感：同步方式 |
+| 동기화 방식 / 동기화 방식과 체감 | 同步方式 / 同步方式與體感 |
 | 한 명만 느릴 때, 한쪽만 이상할 때 | 只有一個人慢、只有一邊怪的時候 |
 | TCP 재전송 | TCP 重傳 |
 | 게임개발팀·인프라팀 담당 구분 | 遊戲開發團隊與基礎設施團隊的權責劃分 |
@@ -259,7 +259,7 @@ Chapter names (use them when the text refers to a chapter as 「…」一章 or 
 | 관측으로 판정하기 | 用觀測資料判定 |
 | 범위 → 시점 → 계층 | 範圍 → 時間點 → 層級 |
 | 판정 신호표 | 判定訊號表 |
-| 렉 제보 잘하는 법 | 如何有效回報 lag |
+| 렉 제보 가이드 | Lag 回報指南 |
 | 용어 사전 | 名詞解釋 |
 | 이 층에서 렉을 만드는 원인 | 這一層造成 lag 的原因 |
 | 패치 이후 렉 / 해외 국가 추가 | 更新後 lag / 新增海外國家 |
@@ -537,7 +537,7 @@ Settled by the reviewers and translators after the first pass. Where a row diffe
 | 숫자 감각 (표·실험 이름) | 數值參考 | Same as 수치 감각. Not 數字感. |
 | 멈춤 / 멈추다 | 定格 / 停住 | 定格 only as the symptom name. A server, tick, thread or screen that simply stops → 停住; GC or OS pause → 暫停. |
 | 로딩 중 | 載入中 | 로딩 화면 / 로딩바 stay 讀取畫面 / 讀取條; symptom 無限讀取 unchanged. |
-| 06 TCP 재전송 해부 | 06 TCP 重傳剖析 | Chapter name in the nav and in every cross-reference. |
+| 06 TCP 재전송 | 06 TCP 重傳 | Chapter name in the nav and in every cross-reference. |
 | 패링 / 가드 | 格擋（parry） / 防禦 | Not 彈反. |
 | 보스 / 월드 보스 / 레이드 보스 | 王 / 世界王 / 團隊副本王 | Not Boss / 頭目. |
 | 버스트형 인스턴스 | 突發型（burstable）執行個體 | Later mentions 突發型執行個體. 버스트 크레딧 stays burst credit（突發額度）. |

@@ -179,7 +179,7 @@ Non-symptom look-alikes: 멈칫 (a brief hitch, not the symptom) → 顿一下 /
 | {팀} 할 일 | {团队}要做的事 | `研发团队要做的事`. |
 | 담당 코드 | 负责方代号 | The owner IDs `cli`, `srv`, `net`, `sys`, `dba`, `ext` stay in Latin. |
 | `{0}·{1}` (team·owner join in exports) | `{0}·{1}` | Renders 研发团队·服务器开发. Here `·` is a hierarchy mark, the one place it stays. |
-| 누가 고치나 | 谁来修 | |
+| 담당 구분 | 分工 | |
 | 경계가 애매할 때 | 边界不清时 | |
 | 넘길 때 챙길 정보 | 转交时要附上的信息 | |
 | 완화 / 우회 | 缓解 / 绕行 | |
@@ -258,14 +258,14 @@ Card labels: 누가 겪나 → 谁会遇到, 언제 → 何时出现.
 
 | Korean | zh-CN |
 |---|---|
-| 렉은 네 가지 요인으로 만들어진다 | 卡顿由四个因素造成 |
-| 패킷의 이동 경로: 내 손가락에서 서버의 DB까지 | 数据包的传输路径：从我的手指到服务器的数据库 |
+| 렉을 만드는 네 가지 요인 | 造成卡顿的四个因素 |
+| 패킷의 이동 경로: 입력에서 서버 DB까지 | 数据包的传输路径：从输入到服务器数据库 |
 | 렉 실험실 | 卡顿实验室 |
 | 증상 사전 | 症状词典 |
-| 같은 핑, 다른 체감: 동기화 방식 | 同样的 ping，不同的体感：同步方式 |
+| 동기화 방식과 체감 | 同步方式与体感 |
 | 한 명만 느릴 때, 한쪽만 이상할 때 | 只有一个人卡、只有一边异常时 |
-| TCP 재전송: 왜 생기고, 왜 이렇게 느려지나 | TCP 重传：为什么会发生，为什么这么慢 |
-| 게임개발팀이 고칠 것, 인프라팀이 고칠 것 | 研发团队修什么，运维团队修什么 |
+| TCP 재전송: 생기는 원인과 지연이 커지는 이유 | TCP 重传：成因与延迟变大的原因 |
+| 게임개발팀과 인프라팀의 담당 | 研发团队与运维团队的职责 |
 | 집 네트워크: 와이파이·공유기·모바일망 | 家庭网络：Wi-Fi、路由器、移动网络 |
 | 인터넷 회선: 통신사망과 장거리 구간 | 公网链路：运营商网络与长途链路 |
 | 서버 네트워크 카드(NIC) | 服务器网卡（NIC） |
@@ -279,7 +279,7 @@ Card labels: 누가 겪나 → 谁会遇到, 언제 → 何时出现.
 | 숫자 읽는 법 | 数字怎么看 |
 | 사례와 절차 | 案例与流程 |
 | 패치 이후 렉 / 해외 국가 추가 | 版本更新后卡顿 / 新增海外国家/地区 |
-| 렉 제보 잘하는 법 | 如何有效反馈卡顿 |
+| 렉 제보 가이드 | 卡顿反馈指南 |
 
 ### 4.9 Sync methods (동기화 방식)
 
@@ -516,7 +516,7 @@ How they are used:
 | Korean | Simplified Chinese | Note |
 |---|---|---|
 | 숫자 감각 (the times table, ladder sim name) | 延迟数量级 | One name in body, ui-app, sim-ladder and refs; not 数量级直觉 |
-| TCP 재전송 해부 (ch. 06 short name) | TCP 重传剖析 | Nav and in-text links (`06 TCP 重传剖析`); the h2 stays TCP 重传：为什么会发生，为什么这么慢 |
+| TCP 재전송 (ch. 06 short name) | TCP 重传 | Nav and in-text links (`06 TCP 重传`); the h2 is TCP 重传：成因与延迟变大的原因 |
 | 같은 PC의 두 클라이언트 | 同一台电脑上的两个客户端 | Body heading, ui-app, sim-npcmissing |
 | 연결 방식 (report form, sims) | 连接方式 | Not 接入方式 |
 | 존 (MMO zone) | 场景 | 존 이동 → 场景切换; 존별 → 各场景; 맵 stays 地图 |

@@ -202,7 +202,7 @@ Notes:
 | 게임개발팀이 할 일 / 인프라팀이 할 일 | Tareas del equipo de desarrollo / Tareas del equipo de infraestructura | Whole strings, so the article is safe |
 | 유저 안내·외부 요청 | Indicaciones al jugador y solicitudes externas | |
 | 팀별 대응 / 대응 | Acciones por equipo / Acciones | |
-| 누가 고치나 | Quién lo arregla | |
+| 담당 구분 | Reparto de responsabilidades | |
 | 넘길 때 챙길 정보 | Qué incluir al escalar | |
 | 먼저 부를 곳 | A quién llamar primero: | |
 | 인프라팀(시스템) | equipo de infraestructura (servidores/SO) | |
@@ -290,14 +290,14 @@ Chapter titles (body `h2`), for consistent cross-references:
 
 | Korean | Spanish |
 |---|---|
-| 렉은 네 가지 요인으로 만들어진다 | El lag nace de cuatro factores |
-| 패킷의 이동 경로: 내 손가락에서 서버의 DB까지 | El recorrido del paquete: de tu dedo a la base de datos del servidor |
+| 렉을 만드는 네 가지 요인 | Los cuatro factores que causan el lag |
+| 패킷의 이동 경로: 입력에서 서버 DB까지 | El recorrido del paquete: del input a la base de datos del servidor |
 | 렉 실험실 | Laboratorio de lag |
 | 증상 사전 | Guía de síntomas |
-| 같은 핑, 다른 체감: 동기화 방식 | Mismo ping, distinta sensación: modelos de netcode |
+| 동기화 방식과 체감 | Modelos de netcode y sensación de juego |
 | 한 명만 느릴 때, 한쪽만 이상할 때 | Cuando solo va lento un jugador o falla un solo cliente |
-| TCP 재전송: 왜 생기고, 왜 이렇게 느려지나 | Retransmisión TCP: por qué ocurre y por qué cuesta tanto |
-| 게임개발팀이 고칠 것, 인프라팀이 고칠 것 | Qué arregla el equipo de desarrollo y qué arregla el de infraestructura |
+| TCP 재전송: 생기는 원인과 지연이 커지는 이유 | Retransmisión TCP: por qué ocurre y por qué aumenta la latencia |
+| 게임개발팀과 인프라팀의 담당 | Responsabilidades del equipo de desarrollo y del equipo de infraestructura |
 | 클라이언트 OS와 기기 | SO y dispositivo del cliente |
 | 집 네트워크: 와이파이·공유기·모바일망 | Red doméstica: Wi-Fi, router y red móvil |
 | 인터넷 회선: 통신사망과 장거리 구간 | Ruta por internet: redes de los ISP y tramos de larga distancia |
@@ -312,7 +312,7 @@ Chapter titles (body `h2`), for consistent cross-references:
 | 숫자 읽는 법 | Cómo leer las cifras |
 | 사례와 절차 / 상황별 절차 | Casos y procedimientos / Procedimientos por situación |
 | 패치 이후 렉 / 해외 국가 추가 | Lag tras un parche / Lanzamiento en un nuevo país |
-| 렉 제보 잘하는 법 | Cómo reportar bien el lag |
+| 렉 제보 가이드 | Guía para reportar el lag |
 | 용어 사전 | Glosario |
 | 증상별로 찾기 / 증상별 원인 | Buscar por síntoma / Causas por síntoma |
 | 이 층에서 렉을 만드는 원인 | Causas de lag en esta capa |
@@ -670,7 +670,7 @@ Settled by the translators and the reviewers after the first pass. They extend s
 | 먼저 (owners table) | Primero | |
 | 주의 (#retrans settings table header) | Precauciones | Exception to “Atención” |
 | 시간 (time table header) | Tiempo | |
-| 누구에게 번지나 (#partial label) | Hasta dónde se extiende | |
+| 영향 범위 (#partial label) | Alcance del impacto | |
 | 도구 (T1–T6 labels) | Herramientas | |
 | 용어 검색 안내 | “Escribe en el buscador en español o en inglés” | |
 | PC방 | cibercafé | |

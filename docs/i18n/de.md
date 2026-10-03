@@ -145,14 +145,14 @@ Chapter headings that reuse these names must match exactly. Other chapter titles
 
 | Korean | German |
 |---|---|
-| 렉은 네 가지 요인으로 만들어진다 | Lag entsteht aus vier Faktoren |
-| 패킷의 이동 경로: 내 손가락에서 서버의 DB까지 | Der Weg eines Pakets: vom Finger bis zur Serverdatenbank |
+| 렉을 만드는 네 가지 요인 | Die vier Faktoren, die Lag verursachen |
+| 패킷의 이동 경로: 입력에서 서버 DB까지 | Der Weg eines Pakets: von der Eingabe bis zur Serverdatenbank |
 | 렉 실험실 | Lag-Labor |
 | 증상 사전 | Symptomkatalog |
-| 같은 핑, 다른 체감: 동기화 방식 | Gleicher Ping, anderes Spielgefühl: Synchronisationsmodelle |
+| 동기화 방식과 체감 | Synchronisationsmodelle und Spielgefühl |
 | 한 명만 느릴 때, 한쪽만 이상할 때 | Wenn nur einer laggt oder nur eine Seite betroffen ist |
-| TCP 재전송: 왜 생기고, 왜 이렇게 느려지나 | TCP-Retransmissions: Woher sie kommen und warum sie so bremsen |
-| 게임개발팀이 고칠 것, 인프라팀이 고칠 것 | Was das Entwicklungsteam behebt, was das Infrastrukturteam behebt |
+| TCP 재전송: 생기는 원인과 지연이 커지는 이유 | TCP-Retransmissions: wie sie entstehen und warum die Verzögerung steigt |
+| 게임개발팀과 인프라팀의 담당 | Zuständigkeiten von Entwicklungsteam und Infrastrukturteam |
 | 진단 도우미 | Diagnosehilfe |
 | 관측으로 판정하기 | Diagnose anhand von Messdaten |
 | 범위 → 시점 → 계층 (judge flow, in sentences) | Betroffenenkreis → Zeitpunkt → Schicht |
@@ -161,7 +161,7 @@ Chapter headings that reuse these names must match exactly. Other chapter titles
 | 사례와 절차 | Fallbeispiele und Playbooks |
 | 상황별 절차 | Playbooks für typische Situationen |
 | 실제 장애 사례 | Reale Störungsfälle |
-| 렉 제보 잘하는 법 | Lag richtig melden |
+| 렉 제보 가이드 | Leitfaden für Lag-Meldungen |
 | 용어 사전 | Glossar |
 | 참고 문헌 | Quellenverzeichnis |
 | 목차 | Inhalt |
@@ -184,7 +184,7 @@ Chapter headings that reuse these names must match exactly. Other chapter titles
 | 함께 | Beteiligt | label, no colon |
 | {팀} 할 일 | Aufgaben {Team} | e.g. "Aufgaben Entwicklungsteam" |
 | 담당 코드 | Zuständigkeitskürzel | table header 코드 → Kürzel |
-| 누가 고치나 | Wer behebt es | |
+| 담당 구분 | Abgrenzung der Zuständigkeiten | |
 | 에스컬레이션 | Eskalation | |
 | 안내 (to users) / 요청 (to providers) / 우회 | Hinweis an Spieler / Anfrage an Anbieter / Workaround | |
 | team·owner joiner `{0}·{1}` | `{1} ({0})` | "Server-Entwicklung (Entwicklungsteam)" |

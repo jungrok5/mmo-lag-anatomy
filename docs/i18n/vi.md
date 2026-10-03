@@ -206,20 +206,20 @@ Card labels: `누가 (겪나)` Ai gặp (phải) · `언제` Khi nào.
 
 | Korean | Vietnamese |
 |---|---|
-| 렉은 네 가지 요인으로 만들어진다 | Lag sinh ra từ bốn yếu tố |
-| 패킷의 이동 경로: 내 손가락에서 서버의 DB까지 | Hành trình của gói tin: từ ngón tay bạn đến DB của server |
+| 렉을 만드는 네 가지 요인 | Bốn yếu tố gây ra lag |
+| 패킷의 이동 경로: 입력에서 서버 DB까지 | Hành trình của gói tin: từ thao tác của người chơi đến DB của server |
 | 렉 실험실 | Phòng thí nghiệm lag |
 | 증상 사전 | Từ điển triệu chứng |
-| 같은 핑, 다른 체감: 동기화 방식 | Cùng ping, khác cảm giác: cơ chế đồng bộ |
+| 동기화 방식과 체감 | Cơ chế đồng bộ và cảm giác chơi |
 | 한 명만 느릴 때, 한쪽만 이상할 때 | Khi chỉ một người chậm, khi chỉ một bên bất thường |
-| TCP 재전송: 왜 생기고, 왜 이렇게 느려지나 | Truyền lại TCP: vì sao xảy ra và vì sao chậm đến vậy |
-| 게임개발팀이 고칠 것, 인프라팀이 고칠 것 | Việc của đội phát triển game, việc của đội hạ tầng |
+| TCP 재전송: 생기는 원인과 지연이 커지는 이유 | Truyền lại TCP: nguyên nhân phát sinh và lý do độ trễ tăng lên |
+| 게임개발팀과 인프라팀의 담당 | Phạm vi phụ trách của đội phát triển game và đội hạ tầng |
 | 진단 도우미 | Công cụ chẩn đoán |
 | 관측으로 판정하기 | Chẩn đoán từ dữ liệu quan sát |
 | 범위 → 시점 → 계층 | Phạm vi → Thời điểm → Tầng |
 | 사례와 절차 / 상황별 절차 | Sự cố thực tế và quy trình / Quy trình theo tình huống |
 | 패치 이후 렉 / 해외 국가 추가 | Lag sau bản cập nhật / Mở thêm quốc gia ở nước ngoài |
-| 렉 제보 잘하는 법 | Cách báo lag hiệu quả |
+| 렉 제보 가이드 | Hướng dẫn báo lag |
 | 용어 사전 / 참고 문헌 | Thuật ngữ / Tài liệu tham khảo |
 | 직접 해보기 / 이렇게 해보세요 / 상황 불러오기 | Tự tay thử / Hãy thử như sau / Chọn tình huống |
 

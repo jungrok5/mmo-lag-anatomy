@@ -145,7 +145,7 @@ Notes:
 | 게임개발팀이 할 일 / 인프라팀이 할 일 | Game team action items / Infra team action items | |
 | 유저 안내·외부 요청 | Player guidance and external requests | |
 | 팀별 대응 / 대응 | Actions by team / Actions | |
-| 누가 고치나 | Who fixes it | |
+| 담당 구분 | Ownership | |
 | 넘길 때 챙길 정보 | What to include in a handoff | |
 
 ## 8. Who / when values (triage filters)
@@ -230,14 +230,14 @@ Chapter titles (body `h2`), for consistent cross-references:
 
 | Korean | English |
 |---|---|
-| 렉은 네 가지 요인으로 만들어진다 | Lag comes from four factors |
-| 패킷의 이동 경로: 내 손가락에서 서버의 DB까지 | The packet’s path: from your finger to the server’s database |
+| 렉을 만드는 네 가지 요인 | The four factors that cause lag |
+| 패킷의 이동 경로: 입력에서 서버 DB까지 | The packet’s path: from input to the server database |
 | 렉 실험실 | Lag lab |
 | 증상 사전 | Symptom guide |
-| 같은 핑, 다른 체감: 동기화 방식 | Same ping, different feel: netcode models |
+| 동기화 방식과 체감 | Netcode models and feel |
 | 한 명만 느릴 때, 한쪽만 이상할 때 | When only one player or one client is affected |
-| TCP 재전송: 왜 생기고, 왜 이렇게 느려지나 | TCP retransmission: why it happens and why it hurts so much |
-| 게임개발팀이 고칠 것, 인프라팀이 고칠 것 | What the game team fixes, what the infra team fixes |
+| TCP 재전송: 생기는 원인과 지연이 커지는 이유 | TCP retransmission: causes and why the delay grows |
+| 게임개발팀과 인프라팀의 담당 | Responsibilities of the game team and the infra team |
 | 인터넷 회선: 통신사망과 장거리 구간 | Internet path: ISP networks and long-haul links |
 | 진단 도우미 | Triage helper |
 | 관측으로 판정하기 | Diagnosing from monitoring data |
@@ -246,7 +246,7 @@ Chapter titles (body `h2`), for consistent cross-references:
 | 숫자 읽는 법 | Reading the numbers |
 | 사례와 절차 / 상황별 절차 | Incidents and playbooks / Playbooks |
 | 패치 이후 렉 / 해외 국가 추가 | Lag after a patch / Launching in a new country |
-| 렉 제보 잘하는 법 | How to write a good lag report |
+| 렉 제보 가이드 | Lag reporting guide |
 | 용어 사전 | Glossary |
 | 증상별로 찾기 / 증상별 원인 | Browse by symptom / Causes by symptom |
 | 이 층에서 렉을 만드는 원인 | Causes of lag at this layer |
