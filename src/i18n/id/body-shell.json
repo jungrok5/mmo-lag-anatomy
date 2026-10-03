@@ -11,7 +11,7 @@
     {"ctx":"#nav li","ko":"<a href=\"#lab\">렉 실험실</a>","t":"<a href=\"#lab\">Lab lag</a>"},
     {"ctx":"#nav li","ko":"<a href=\"#symptoms\">증상 사전</a>","t":"<a href=\"#symptoms\">Kamus gejala</a>"},
     {"ctx":"#nav li","ko":"<a href=\"#sync\">동기화 방식과 체감</a>","t":"<a href=\"#sync\">Model sinkronisasi dan rasa bermain</a>"},
-    {"ctx":"#nav li","ko":"<a href=\"#partial\">한 명만·한쪽만 이상할 때</a>","t":"<a href=\"#partial\">Saat hanya satu pemain atau satu klien bermasalah</a>"},
+    {"ctx":"#nav li","ko":"<a href=\"#partial\">한 명만·한쪽만 이상할 때</a>","t":"<a href=\"#partial\">Saat hanya satu pemain atau satu sisi yang aneh</a>"},
     {"ctx":"#nav li","ko":"<a href=\"#retrans\">TCP 재전송 해부</a>","t":"<a href=\"#retrans\">Membedah retransmisi TCP</a>"},
     {"ctx":"#nav li","ko":"<a href=\"#owners\">게임개발팀·인프라팀 담당 구분</a>","t":"<a href=\"#owners\">Pembagian tugas Tim Pengembang Game dan Tim Infrastruktur</a>"},
     {"ctx":"#nav div","ko":"레이어 (패킷이 지나가는 순서)","t":"Lapisan (sesuai urutan yang dilalui paket)"},

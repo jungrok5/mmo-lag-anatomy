@@ -4,6 +4,6 @@
   "entries": [
     {"ctx":"#lab div","ko":"<span class=\"idx\">02</span>직접 해보기","t":"<span class=\"idx\">02</span>Coba sendiri"},
     {"ctx":"#lab h2","ko":"렉 실험실","t":"Lab lag"},
-    {"ctx":"#lab p","ko":"서버 한 대, 회선 하나, 내 PC 하나로 이루어진 작은 시뮬레이션입니다. 조건을 하나씩 망가뜨리며 뚝뚝 끊김, 순간이동, 고무줄, 몰아치기, 슬로우모션, 입력 지연, 멈춤, 접속 끊김이 각각 어떻게 만들어지는지 보세요. 패킷 타임라인은 패킷이 언제 보내지고 언제 도착했는지를 선으로 보여 줍니다. 선이 기울수록 오래 걸린 것이고, ×는 사라진 패킷입니다.","t":"Ini simulasi kecil yang terdiri dari satu server, satu koneksi, dan satu PC Anda. Rusak kondisinya satu per satu, lalu lihat bagaimana patah-patah, teleport, rubber banding, fast forward, slow motion, input lag, freeze, dan disconnect masing-masing terbentuk. Timeline paket menunjukkan dengan garis kapan setiap paket dikirim dan kapan paket itu tiba. Makin miring garisnya, makin lama perjalanannya, dan tanda × adalah paket yang hilang."}
+    {"ctx":"#lab p","ko":"서버 한 대, 회선 하나, 내 PC 하나로 이루어진 작은 시뮬레이션입니다. 조건을 하나씩 망가뜨리며 뚝뚝 끊김, 순간이동, 고무줄, 몰아치기, 슬로우모션, 입력 지연, 멈춤, 접속 끊김이 각각 어떻게 만들어지는지 보세요. 패킷 타임라인은 패킷이 언제 보내지고 언제 도착했는지를 선으로 보여 줍니다. 선이 기울수록 오래 걸린 것이고, ×는 사라진 패킷입니다.","t":"Ini simulasi kecil yang terdiri dari satu server, satu koneksi, dan PC Anda. Rusak kondisinya satu per satu, lalu lihat bagaimana patah-patah, teleport, rubber banding, fast forward, slow motion, input lag, freeze, dan disconnect masing-masing terbentuk. Timeline paket menunjukkan dengan garis kapan setiap paket dikirim dan kapan paket itu tiba. Makin miring garisnya, makin lama perjalanannya, dan tanda × adalah paket yang hilang."}
   ]
 }
