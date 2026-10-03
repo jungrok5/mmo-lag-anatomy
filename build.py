@@ -33,6 +33,7 @@ def read(rel):
 PKG = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))
 SITE = PKG["homepage"].rstrip("/") + "/"
 AUTHOR = PKG["author"]  # {"name", "url"}: 꼬리말의 이력서 링크(%RESUME%)와 구조화 데이터의 author
+AUTHOR_ID = AUTHOR["url"] + "#person"
 
 # ---------- 언어 ----------
 # 한국어가 원문이고 사이트 맨 위(/)에 있다. 번역판은 /<dir>/ 에 있다(src/i18n/langs.json).
@@ -106,7 +107,8 @@ def resume(l=None):
 
 
 def author():
-    p = {"@type": "Person", "name": tr("오정록"), "url": resume(),
+    # @id는 이력서의 Person과 같은 값: 검색엔진·AI가 백서 저자와 이력서 주인을 한 사람으로 묶는다
+    p = {"@type": "Person", "@id": AUTHOR_ID, "name": tr("오정록"), "url": resume(),
          "sameAs": ["https://github.com/jungrok5", "https://www.linkedin.com/in/jungrok5"]}
     if LANG["code"] == "ko":
         p["alternateName"] = AUTHOR["name"]

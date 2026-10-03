@@ -43,7 +43,8 @@ const ld = o => `<script type="application/ld+json">${JSON.stringify(o).replace(
 // 만든 사람: 이력서는 package.json의 author.url. 번역판은 영문 이력서(/en/)로 잇는다
 const RESUME = (PKG.author && PKG.author.url) || 'https://jungrok5.github.io/resume/';
 const resumeOf = L => L.code === 'ko' ? RESUME : RESUME + 'en/';
-const whoOf = L => Object.assign({ '@type': 'Person', name: TR`오정록`, url: resumeOf(L), sameAs: ['https://github.com/jungrok5', 'https://www.linkedin.com/in/jungrok5'] }, L.code === 'ko' && PKG.author ? { alternateName: PKG.author.name } : {});
+// @id는 이력서의 Person과 같은 값이라 백서 저자와 이력서 주인이 한 사람으로 묶인다
+const whoOf = L => Object.assign({ '@type': 'Person', '@id': RESUME + '#person', name: TR`오정록`, url: resumeOf(L), sameAs: ['https://github.com/jungrok5', 'https://www.linkedin.com/in/jungrok5'] }, L.code === 'ko' && PKG.author ? { alternateName: PKG.author.name } : {});
 const crumbs = list => ({ '@type': 'BreadcrumbList', itemListElement: list.map(([name, url], i) => ({ '@type': 'ListItem', position: i + 1, name, item: url })) });
 
 // 언어별 본문 글꼴(style.css의 :lang과 같은 값). 한국어는 단어 중간에서 줄을 바꾸지 않게 keep-all
