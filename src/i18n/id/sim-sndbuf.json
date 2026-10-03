@@ -50,8 +50,7 @@
     {"ctx":"src/sims/sndbuf.js:182","ko":"막힘","t":"Tertahan"},
     {"ctx":"src/sims/sndbuf.js:182","ko":"send() 막힘","t":"Tertahan di send()"},
     {"ctx":"src/sims/sndbuf.js:183","ko":"건너뜀","t":"Dilewati"},
-    {"ctx":"src/sims/sndbuf.js:184","ko":"밀림 ","t":"Kick "},
-    {"ctx":"src/sims/sndbuf.js:184, src/sims/sndbuf.js:201, src/sims/sndbuf.js:281, src/sims/sndbuf.js:304, src/sims/sndbuf.js:323, src/sims/sndbuf.js:416","ko":"초","t":" dtk"},
+    {"ctx":"src/sims/sndbuf.js:184","ko":"밀림 {0}초@@킥까지 남은 초(카운트다운)","t":""},
     {"ctx":"src/sims/sndbuf.js:184","ko":"밀림","t":"Tertinggal"},
     {"ctx":"src/sims/sndbuf.js:185","ko":"가득","t":"Penuh"},
     {"ctx":"src/sims/sndbuf.js:185","ko":"버퍼 가득","t":"Buffer penuh"},
@@ -60,6 +59,7 @@
     {"ctx":"src/sims/sndbuf.js:199","ko":"서버 스레드","t":"Thread server"},
     {"ctx":"src/sims/sndbuf.js:199","ko":"서버 스레드 (하나뿐)","t":"Thread server (hanya satu)"},
     {"ctx":"src/sims/sndbuf.js:201","ko":"서버 다운 · 재시작까지 ","t":"Server down · mulai ulang dalam "},
+    {"ctx":"src/sims/sndbuf.js:201, src/sims/sndbuf.js:281, src/sims/sndbuf.js:304, src/sims/sndbuf.js:323, src/sims/sndbuf.js:416","ko":"초","t":" dtk"},
     {"ctx":"src/sims/sndbuf.js:202","ko":"send() 대기 중 → 클라이언트 ","t":"Menunggu send() → Klien "},
     {"ctx":"src/sims/sndbuf.js:203","ko":"틱이 밀리는 중","t":"Tick mulai tertinggal"},
     {"ctx":"src/sims/sndbuf.js:204","ko":"틱마다 ","t":"Kerja "},
@@ -106,5 +106,8 @@
     {"ctx":"src/sims/sndbuf.js:411","ko":"{0}클라이언트 {1}에게 못 보낸 데이터가 서버 메모리에 쌓이는 중입니다({2}KB). {3}초 안에 따라잡지 못하면 연결을 끊습니다. 그동안 그 클라이언트의 화면은 점점 늦어집니다({4}). 다른 클라이언트와 서버 틱은 멀쩡합니다.","t":"{0}Data yang tidak terkirim ke Klien {1} sedang menumpuk di memori server ({2} KB). Jika klien tidak bisa mengejar dalam {3} detik, koneksinya diputus. Sementara itu, layar klien itu makin tertinggal ({4}). Klien lain dan tick server tetap normal."},
     {"ctx":"src/sims/sndbuf.js:412","ko":"{0}클라이언트 {1}의 송신 버퍼가 차오르는 중입니다. 가득 찬 뒤 5초 넘게 밀리면 서버가 연결을 끊습니다.","t":"{0}Buffer kirim Klien {1} sedang terisi. Jika klien tetap tertinggal lebih dari 5 detik setelah buffer penuh, server memutus koneksinya."},
     {"ctx":"src/sims/sndbuf.js:416","ko":"{0}<b>느린 클라이언트에게 못 보낸 데이터를 버리지도 끊지도 않고 서버 메모리에 계속 쌓습니다.</b> 화면의 클라이언트 8개는 샘플이고 실제로는 같은 비율로 2,000명이 접속해 있다고 치면, 메모리가 초당 {1}MB씩 늘어납니다. 한도까지 약 {2}. 느린 클라이언트의 화면은 {3} 뒤처져 있고 계속 늘어납니다. 다른 클라이언트는 아직 멀쩡하지만, 한도를 넘는 순간 모두의 접속이 끊깁니다.","t":"{0}<b>Data yang tidak terkirim ke klien lambat tidak dibuang dan koneksinya tidak diputus. Data itu terus ditumpuk di memori server.</b> Jika 8 klien di layar adalah sampel dari 2.000 pemain online dengan proporsi yang sama, memori bertambah {1} MB per detik. Batas tercapai dalam sekitar {2}. Layar klien lambat tertinggal {3} dan terus bertambah. Klien lain masih normal, tetapi begitu memori melewati batas, semua klien disconnect."}
+  ],
+  "stale": [
+    {"ctx":"src/sims/sndbuf.js:184","ko":"밀림 ","t":"Kick "}
   ]
 }

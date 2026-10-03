@@ -57,7 +57,7 @@
     {"ctx":"src/sims/nic.js:176, src/sims/nic.js:196","ko":"초","t":""},
     {"ctx":"src/sims/nic.js:184","ko":"패킷/초","t":""},
     {"ctx":"src/sims/nic.js:213","ko":"<b>{0}</b><br>들어옴 {1}/초<br>처리 {2}/초<br>버림(링 넘침) {3}/초{4}","t":""},
-    {"ctx":"src/sims/nic.js:213, src/sims/nic.js:219","ko":"초 전","t":""},
+    {"ctx":"src/sims/nic.js:213, src/sims/nic.js:219","ko":"초 전","t":" s atrás"},
     {"ctx":"src/sims/nic.js:213","ko":"<br>한도 초과 버림 {0}/초","t":""},
     {"ctx":"src/sims/nic.js:219","ko":"<b>{0}</b><br>평균 추가 지연 {1}","t":""},
     {"ctx":"src/sims/nic.js:229","ko":"평소 (20만 pps)","t":""},

@@ -1,5 +1,5 @@
 // 배포용 사이트 폴더 만들기: 검색엔진과 AI(ChatGPT·Claude 등)가 읽고 인용하기 좋은 정적 파일을 함께 만든다.
-//   python3 build.py && node tools/site.cjs [출력 폴더] [--langs ko,en]   (기본 build/site, 번역 파일이 있는 언어 모두)
+//   python3 build.py && node tools/site.cjs [출력 폴더] [--langs ko,en]   (기본 build/site, 번역 파일이 있는 언어 모두, draft 언어는 --langs 로 이름을 줄 때만)
 // AI 수집기 상당수는 자바스크립트를 실행하지 않으므로, 자바스크립트가 그리는 내용을 HTML에도 넣는다.
 // 언어마다(한국어는 맨 위, 번역판은 <dir>/ 아래, src/i18n/langs.json):
 //   index.html      빌드한 완성본 + 원인 카드·증상·용어의 정적 사본(자바스크립트가 돌면 원래 화면으로 바뀜)
@@ -26,7 +26,9 @@ const I = require('./i18n.cjs');
 globalThis.I18N = { lang: 'ko', dict: {} };
 require('../src/js/i18n.js');
 const want = li >= 0 ? args[li + 1].split(',') : null;
-const LANGS = I.LANGS.filter(l => (l.code === 'ko' || fs.existsSync(path.join(ROOT, 'src/i18n', l.code))) && (!want || want.includes(l.code) || want.includes(l.dir)));
+// 작업 중(draft) 언어는 이름을 직접 줄 때만 만든다
+const named = l => want && (want.includes(l.code) || want.includes(l.dir));
+const LANGS = I.LANGS.filter(l => (l.code === 'ko' || fs.existsSync(path.join(ROOT, 'src/i18n', l.code))) && (named(l) || (!want && !l.draft)));
 const baseOf = l => SITE + (l.dir ? l.dir + '/' : '');
 const XDEFAULT = LANGS.find(l => l.xdefault) || LANGS[0];
 const today = new Date().toISOString().slice(0, 10);

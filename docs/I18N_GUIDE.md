@@ -6,6 +6,8 @@
 
 `src/i18n/langs.json`. 한국어는 사이트 맨 위(`/`), 번역판은 `/<dir>/`(예: `/en/`, `/zh-tw/`)에 있다. 원인 ID, 장·절 ID, 사례·절차 ID는 모든 언어에서 같다. 그래서 `#c-mem-gc` 같은 주소 끝은 언어를 바꿔도 그대로 쓸 수 있다.
 
+번역과 검수가 끝나지 않은 언어는 `langs.json`에 `"draft": true`를 둔다. 그 언어는 언어 메뉴, hreflang, 배포본(`npm run site`)에서 빠지고, `python3 build.py --lang <코드>`나 `node tools/site.cjs --langs ko,<코드>`처럼 이름을 직접 줄 때만 만들어진다. 검수까지 마치면 `draft`를 지운다.
+
 | code | 언어 | 대상 |
 |---|---|---|
 | en | English | 미국 영어 |

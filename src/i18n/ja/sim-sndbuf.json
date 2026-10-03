@@ -50,8 +50,7 @@
     {"ctx":"src/sims/sndbuf.js:182","ko":"막힘","t":"ブロック"},
     {"ctx":"src/sims/sndbuf.js:182","ko":"send() 막힘","t":"send()でブロック"},
     {"ctx":"src/sims/sndbuf.js:183","ko":"건너뜀","t":"スキップ"},
-    {"ctx":"src/sims/sndbuf.js:184","ko":"밀림 ","t":"滞留 残り"},
-    {"ctx":"src/sims/sndbuf.js:184, src/sims/sndbuf.js:201, src/sims/sndbuf.js:281, src/sims/sndbuf.js:304, src/sims/sndbuf.js:323, src/sims/sndbuf.js:416","ko":"초","t":"秒"},
+    {"ctx":"src/sims/sndbuf.js:184","ko":"밀림 {0}초@@킥까지 남은 초(카운트다운)","t":"滞留 残り{0}秒"},
     {"ctx":"src/sims/sndbuf.js:184","ko":"밀림","t":"滞留"},
     {"ctx":"src/sims/sndbuf.js:185","ko":"가득","t":"満杯"},
     {"ctx":"src/sims/sndbuf.js:185","ko":"버퍼 가득","t":"バッファ満杯"},
@@ -60,19 +59,21 @@
     {"ctx":"src/sims/sndbuf.js:199","ko":"서버 스레드","t":"サーバースレッド"},
     {"ctx":"src/sims/sndbuf.js:199","ko":"서버 스레드 (하나뿐)","t":"サーバースレッド（1つだけ）"},
     {"ctx":"src/sims/sndbuf.js:201","ko":"서버 다운 · 재시작까지 ","t":"サーバーダウン · 再起動まで"},
+    {"ctx":"src/sims/sndbuf.js:201, src/sims/sndbuf.js:281, src/sims/sndbuf.js:304, src/sims/sndbuf.js:323, src/sims/sndbuf.js:416","ko":"초","t":"秒"},
     {"ctx":"src/sims/sndbuf.js:202","ko":"send() 대기 중 → 클라이언트 ","t":"send()待ち → クライアント"},
     {"ctx":"src/sims/sndbuf.js:203","ko":"틱이 밀리는 중","t":"ティックが遅れている"},
     {"ctx":"src/sims/sndbuf.js:204","ko":"틱마다 ","t":"ティックごとに"},
     {"ctx":"src/sims/sndbuf.js:204","ko":"ms 일하고 쉼","t":"ms処理して残りはアイドル"},
     {"ctx":"src/sims/sndbuf.js:216","ko":"3초 전","t":"3秒前"},
     {"ctx":"src/sims/sndbuf.js:217, src/sims/sndbuf.js:304, src/sims/sndbuf.js:323","ko":"지금","t":"現在"},
-    {"ctx":"src/sims/sndbuf.js:225, src/sims/sndbuf.js:233","ko":"클라이언트","t":"端末"},
+    {"ctx":"src/sims/sndbuf.js:225","ko":"클라이언트","t":"端末"},
     {"ctx":"src/sims/sndbuf.js:226","ko":"송신 버퍼","t":"送信バッファ"},
     {"ctx":"src/sims/sndbuf.js:226","ko":"송신 버퍼 (","t":"送信バッファ("},
     {"ctx":"src/sims/sndbuf.js:227","ko":"앱 대기열","t":"アプリ側キュー"},
     {"ctx":"src/sims/sndbuf.js:228","ko":"지연","t":"遅延"},
     {"ctx":"src/sims/sndbuf.js:229","ko":"상태","t":"状態"},
-    {"ctx":"src/sims/sndbuf.js:233","ko":"클라이언트 ","t":"クライアント"},
+    {"ctx":"src/sims/sndbuf.js:233","ko":"클라이언트{0}@@좁은 화면(띄어쓰기 없이 짧게)","t":"端末{0}"},
+    {"ctx":"src/sims/sndbuf.js:233","ko":"클라이언트 {0}","t":"クライアント{0}"},
     {"ctx":"src/sims/sndbuf.js:236","ko":"느림","t":"低速"},
     {"ctx":"src/sims/sndbuf.js:236","ko":"느린 회선","t":"低速回線"},
     {"ctx":"src/sims/sndbuf.js:245","ko":"없음 (스레드가 대기)","t":"なし（スレッドが待機）"},
@@ -105,5 +106,9 @@
     {"ctx":"src/sims/sndbuf.js:411","ko":"{0}클라이언트 {1}에게 못 보낸 데이터가 서버 메모리에 쌓이는 중입니다({2}KB). {3}초 안에 따라잡지 못하면 연결을 끊습니다. 그동안 그 클라이언트의 화면은 점점 늦어집니다({4}). 다른 클라이언트와 서버 틱은 멀쩡합니다.","t":"{0}クライアント{1}に送れなかったデータが、サーバーのメモリにたまっています（{2}KB）。{3}秒以内に追いつかなければ切断します。その間、そのクライアントの画面はどんどん遅れていきます（{4}）。他のクライアントとサーバーのティックは正常です。"},
     {"ctx":"src/sims/sndbuf.js:412","ko":"{0}클라이언트 {1}의 송신 버퍼가 차오르는 중입니다. 가득 찬 뒤 5초 넘게 밀리면 서버가 연결을 끊습니다.","t":"{0}クライアント{1}の送信バッファが埋まりつつあります。満杯になってから5秒を超えて滞留すると、サーバーが切断します。"},
     {"ctx":"src/sims/sndbuf.js:416","ko":"{0}<b>느린 클라이언트에게 못 보낸 데이터를 버리지도 끊지도 않고 서버 메모리에 계속 쌓습니다.</b> 화면의 클라이언트 8개는 샘플이고 실제로는 같은 비율로 2,000명이 접속해 있다고 치면, 메모리가 초당 {1}MB씩 늘어납니다. 한도까지 약 {2}. 느린 클라이언트의 화면은 {3} 뒤처져 있고 계속 늘어납니다. 다른 클라이언트는 아직 멀쩡하지만, 한도를 넘는 순간 모두의 접속이 끊깁니다.","t":"{0}<b>遅いクライアントに送れなかったデータを、破棄も切断もせずにサーバーのメモリにため続けます。</b>画面のクライアント8台はサンプルで、実際には同じ比率で2,000人が接続しているとすると、メモリは毎秒{1}MBずつ増えます。上限まで約{2}。遅いクライアントの画面は{3}遅れていて、遅れはさらに広がります。他のクライアントはまだ正常ですが、上限を超えた瞬間に全員が切断されます。"}
+  ],
+  "stale": [
+    {"ctx":"src/sims/sndbuf.js:184","ko":"밀림 ","t":"滞留 残り"},
+    {"ctx":"src/sims/sndbuf.js:233","ko":"클라이언트 ","t":"クライアント"}
   ]
 }

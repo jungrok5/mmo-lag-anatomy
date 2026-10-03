@@ -40,8 +40,8 @@ STR = {}  # build.py 문자열의 번역(tools/i18n.cjs pack 의 strings.json)
 
 
 def available_langs():
-    """번역 파일이 있는 언어만 링크하고 빌드한다(한국어는 늘)."""
-    return [l for l in LANGS if l["code"] == "ko" or (SRC / "i18n" / l["code"]).is_dir()]
+    """번역 파일이 있고 아직 작업 중(draft)이 아닌 언어만 링크하고 빌드한다(한국어는 늘)."""
+    return [l for l in LANGS if l["code"] == "ko" or ((SRC / "i18n" / l["code"]).is_dir() and not l.get("draft"))]
 
 
 def lang_of(code):

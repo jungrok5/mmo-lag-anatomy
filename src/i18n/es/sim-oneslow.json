@@ -40,7 +40,7 @@
     {"ctx":"src/sims/oneslow.js:304","ko":"그 밖에","t":""},
     {"ctx":"src/sims/oneslow.js:305","ko":"엄격한 이동 검증 (틱마다 이동 거리 검사)","t":""},
     {"ctx":"src/sims/oneslow.js:306","ko":"다른 사람 보간 버퍼","t":""},
-    {"ctx":"src/sims/oneslow.js:308","ko":"모두 정상","t":""},
+    {"ctx":"src/sims/oneslow.js:308","ko":"모두 정상","t":"Todo normal"},
     {"ctx":"src/sims/oneslow.js:309","ko":"A만 느림 (틱 배치)","t":""},
     {"ctx":"src/sims/oneslow.js:310","ko":"도착 즉시 처리 서버","t":""},
     {"ctx":"src/sims/oneslow.js:311","ko":"입력 버퍼 서버","t":""},

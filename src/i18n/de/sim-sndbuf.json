@@ -50,8 +50,7 @@
     {"ctx":"src/sims/sndbuf.js:182","ko":"막힘","t":"Hängt"},
     {"ctx":"src/sims/sndbuf.js:182","ko":"send() 막힘","t":"send() hängt"},
     {"ctx":"src/sims/sndbuf.js:183","ko":"건너뜀","t":"Lücken"},
-    {"ctx":"src/sims/sndbuf.js:184","ko":"밀림 ","t":"Kick "},
-    {"ctx":"src/sims/sndbuf.js:184, src/sims/sndbuf.js:201, src/sims/sndbuf.js:281, src/sims/sndbuf.js:304, src/sims/sndbuf.js:323, src/sims/sndbuf.js:416","ko":"초","t":" s"},
+    {"ctx":"src/sims/sndbuf.js:184","ko":"밀림 {0}초@@킥까지 남은 초(카운트다운)","t":"Kick in {0} s"},
     {"ctx":"src/sims/sndbuf.js:184","ko":"밀림","t":"Stau"},
     {"ctx":"src/sims/sndbuf.js:185","ko":"가득","t":"Voll"},
     {"ctx":"src/sims/sndbuf.js:185","ko":"버퍼 가득","t":"Puffer voll"},
@@ -60,19 +59,21 @@
     {"ctx":"src/sims/sndbuf.js:199","ko":"서버 스레드","t":"Server-Thread"},
     {"ctx":"src/sims/sndbuf.js:199","ko":"서버 스레드 (하나뿐)","t":"Server-Thread (nur einer)"},
     {"ctx":"src/sims/sndbuf.js:201","ko":"서버 다운 · 재시작까지 ","t":"Server down · Neustart in "},
+    {"ctx":"src/sims/sndbuf.js:201, src/sims/sndbuf.js:281, src/sims/sndbuf.js:304, src/sims/sndbuf.js:323, src/sims/sndbuf.js:416","ko":"초","t":" s"},
     {"ctx":"src/sims/sndbuf.js:202","ko":"send() 대기 중 → 클라이언트 ","t":"Wartet in send() → Client "},
     {"ctx":"src/sims/sndbuf.js:203","ko":"틱이 밀리는 중","t":"Ticks geraten in Rückstand"},
     {"ctx":"src/sims/sndbuf.js:204","ko":"틱마다 ","t":"Pro Tick "},
     {"ctx":"src/sims/sndbuf.js:204","ko":"ms 일하고 쉼","t":" ms Arbeit, dann Leerlauf"},
     {"ctx":"src/sims/sndbuf.js:216","ko":"3초 전","t":"vor 3 s"},
     {"ctx":"src/sims/sndbuf.js:217, src/sims/sndbuf.js:304, src/sims/sndbuf.js:323","ko":"지금","t":"Jetzt"},
-    {"ctx":"src/sims/sndbuf.js:225, src/sims/sndbuf.js:233","ko":"클라이언트","t":"Client"},
+    {"ctx":"src/sims/sndbuf.js:225","ko":"클라이언트","t":"Client"},
     {"ctx":"src/sims/sndbuf.js:226","ko":"송신 버퍼","t":"Sendepuffer"},
     {"ctx":"src/sims/sndbuf.js:226","ko":"송신 버퍼 (","t":"Sendepuffer ("},
     {"ctx":"src/sims/sndbuf.js:227","ko":"앱 대기열","t":"App-Warteschlange"},
     {"ctx":"src/sims/sndbuf.js:228","ko":"지연","t":"Latenz"},
     {"ctx":"src/sims/sndbuf.js:229","ko":"상태","t":"Status"},
-    {"ctx":"src/sims/sndbuf.js:233","ko":"클라이언트 ","t":"Client "},
+    {"ctx":"src/sims/sndbuf.js:233","ko":"클라이언트{0}@@좁은 화면(띄어쓰기 없이 짧게)","t":"Client {0}"},
+    {"ctx":"src/sims/sndbuf.js:233","ko":"클라이언트 {0}","t":"Client {0}"},
     {"ctx":"src/sims/sndbuf.js:236","ko":"느림","t":"!"},
     {"ctx":"src/sims/sndbuf.js:236","ko":"느린 회선","t":"Langsam"},
     {"ctx":"src/sims/sndbuf.js:245","ko":"없음 (스레드가 대기)","t":"Keine (Thread wartet)"},
@@ -105,5 +106,9 @@
     {"ctx":"src/sims/sndbuf.js:411","ko":"{0}클라이언트 {1}에게 못 보낸 데이터가 서버 메모리에 쌓이는 중입니다({2}KB). {3}초 안에 따라잡지 못하면 연결을 끊습니다. 그동안 그 클라이언트의 화면은 점점 늦어집니다({4}). 다른 클라이언트와 서버 틱은 멀쩡합니다.","t":"{0}Daten, die nicht an Client {1} gesendet werden konnten, stauen sich im Serverspeicher ({2} KB). Holt der Client nicht innerhalb von {3} s auf, wird die Verbindung getrennt. Bis dahin hinkt das Bild dieses Clients immer weiter hinterher ({4}). Die anderen Clients und der Server-Tick laufen normal."},
     {"ctx":"src/sims/sndbuf.js:412","ko":"{0}클라이언트 {1}의 송신 버퍼가 차오르는 중입니다. 가득 찬 뒤 5초 넘게 밀리면 서버가 연결을 끊습니다.","t":"{0}Der Sendepuffer von Client {1} füllt sich. Ist er voll und dauert der Rückstand länger als 5 s, trennt der Server die Verbindung."},
     {"ctx":"src/sims/sndbuf.js:416","ko":"{0}<b>느린 클라이언트에게 못 보낸 데이터를 버리지도 끊지도 않고 서버 메모리에 계속 쌓습니다.</b> 화면의 클라이언트 8개는 샘플이고 실제로는 같은 비율로 2,000명이 접속해 있다고 치면, 메모리가 초당 {1}MB씩 늘어납니다. 한도까지 약 {2}. 느린 클라이언트의 화면은 {3} 뒤처져 있고 계속 늘어납니다. 다른 클라이언트는 아직 멀쩡하지만, 한도를 넘는 순간 모두의 접속이 끊깁니다.","t":"{0}<b>Was die langsamen Clients nicht erreicht, staut sich immer weiter im Serverspeicher. Nichts wird verworfen, niemand wird getrennt.</b> Nimmt man die 8 Clients auf dem Bildschirm als Stichprobe von 2.000 verbundenen Spielern im gleichen Verhältnis, wächst der Speicher um {1} MB pro Sekunde. Bis zum Limit bleiben noch etwa {2}. Das Bild der langsamen Clients hinkt {3} hinterher, Tendenz steigend. Die anderen Clients laufen noch normal, aber sobald das Limit überschritten ist, brechen alle Verbindungen ab."}
+  ],
+  "stale": [
+    {"ctx":"src/sims/sndbuf.js:184","ko":"밀림 ","t":"Kick "},
+    {"ctx":"src/sims/sndbuf.js:233","ko":"클라이언트 ","t":"Client "}
   ]
 }

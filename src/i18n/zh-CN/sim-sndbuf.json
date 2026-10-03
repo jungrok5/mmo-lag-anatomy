@@ -50,8 +50,7 @@
     {"ctx":"src/sims/sndbuf.js:182","ko":"막힘","t":"阻塞"},
     {"ctx":"src/sims/sndbuf.js:182","ko":"send() 막힘","t":"send() 阻塞"},
     {"ctx":"src/sims/sndbuf.js:183","ko":"건너뜀","t":"跳过"},
-    {"ctx":"src/sims/sndbuf.js:184","ko":"밀림 ","t":"踢出倒计时 "},
-    {"ctx":"src/sims/sndbuf.js:184, src/sims/sndbuf.js:201, src/sims/sndbuf.js:281, src/sims/sndbuf.js:304, src/sims/sndbuf.js:323, src/sims/sndbuf.js:416","ko":"초","t":" 秒"},
+    {"ctx":"src/sims/sndbuf.js:184","ko":"밀림 {0}초@@킥까지 남은 초(카운트다운)","t":"踢出倒计时 {0} 秒"},
     {"ctx":"src/sims/sndbuf.js:184","ko":"밀림","t":"积压"},
     {"ctx":"src/sims/sndbuf.js:185","ko":"가득","t":"满"},
     {"ctx":"src/sims/sndbuf.js:185","ko":"버퍼 가득","t":"缓冲区满"},
@@ -60,19 +59,21 @@
     {"ctx":"src/sims/sndbuf.js:199","ko":"서버 스레드","t":"服务器线程"},
     {"ctx":"src/sims/sndbuf.js:199","ko":"서버 스레드 (하나뿐)","t":"服务器线程（仅一个）"},
     {"ctx":"src/sims/sndbuf.js:201","ko":"서버 다운 · 재시작까지 ","t":"服务器宕机 · 重启倒计时 "},
+    {"ctx":"src/sims/sndbuf.js:201, src/sims/sndbuf.js:281, src/sims/sndbuf.js:304, src/sims/sndbuf.js:323, src/sims/sndbuf.js:416","ko":"초","t":" 秒"},
     {"ctx":"src/sims/sndbuf.js:202","ko":"send() 대기 중 → 클라이언트 ","t":"send() 阻塞中 → 客户端 "},
     {"ctx":"src/sims/sndbuf.js:203","ko":"틱이 밀리는 중","t":"tick 积压中"},
     {"ctx":"src/sims/sndbuf.js:204","ko":"틱마다 ","t":"每个 tick 工作 "},
     {"ctx":"src/sims/sndbuf.js:204","ko":"ms 일하고 쉼","t":" ms，其余时间空闲"},
     {"ctx":"src/sims/sndbuf.js:216","ko":"3초 전","t":"3 秒前"},
     {"ctx":"src/sims/sndbuf.js:217, src/sims/sndbuf.js:304, src/sims/sndbuf.js:323","ko":"지금","t":"现在"},
-    {"ctx":"src/sims/sndbuf.js:225, src/sims/sndbuf.js:233","ko":"클라이언트","t":"客户端"},
+    {"ctx":"src/sims/sndbuf.js:225","ko":"클라이언트","t":"客户端"},
     {"ctx":"src/sims/sndbuf.js:226","ko":"송신 버퍼","t":"发送缓冲区"},
     {"ctx":"src/sims/sndbuf.js:226","ko":"송신 버퍼 (","t":"发送缓冲区 ("},
     {"ctx":"src/sims/sndbuf.js:227","ko":"앱 대기열","t":"应用层队列"},
     {"ctx":"src/sims/sndbuf.js:228","ko":"지연","t":"延迟"},
     {"ctx":"src/sims/sndbuf.js:229","ko":"상태","t":"状态"},
-    {"ctx":"src/sims/sndbuf.js:233","ko":"클라이언트 ","t":"客户端 "},
+    {"ctx":"src/sims/sndbuf.js:233","ko":"클라이언트{0}@@좁은 화면(띄어쓰기 없이 짧게)","t":"客户端{0}"},
+    {"ctx":"src/sims/sndbuf.js:233","ko":"클라이언트 {0}","t":"客户端 {0}"},
     {"ctx":"src/sims/sndbuf.js:236","ko":"느림","t":"慢"},
     {"ctx":"src/sims/sndbuf.js:236","ko":"느린 회선","t":"慢线路"},
     {"ctx":"src/sims/sndbuf.js:245","ko":"없음 (스레드가 대기)","t":"无（线程等待）"},
@@ -105,5 +106,9 @@
     {"ctx":"src/sims/sndbuf.js:411","ko":"{0}클라이언트 {1}에게 못 보낸 데이터가 서버 메모리에 쌓이는 중입니다({2}KB). {3}초 안에 따라잡지 못하면 연결을 끊습니다. 그동안 그 클라이언트의 화면은 점점 늦어집니다({4}). 다른 클라이언트와 서버 틱은 멀쩡합니다.","t":"{0}发给客户端 {1} 的数据发不出去，正在服务器内存里堆积（{2} KB）。{3} 秒内追不上就会断开连接。这段时间这个客户端的画面越来越滞后（{4}）。其他客户端和服务器 tick 一切正常。"},
     {"ctx":"src/sims/sndbuf.js:412","ko":"{0}클라이언트 {1}의 송신 버퍼가 차오르는 중입니다. 가득 찬 뒤 5초 넘게 밀리면 서버가 연결을 끊습니다.","t":"{0}客户端 {1} 的发送缓冲区正在填满。满了之后积压超过 5 秒，服务器就会断开连接。"},
     {"ctx":"src/sims/sndbuf.js:416","ko":"{0}<b>느린 클라이언트에게 못 보낸 데이터를 버리지도 끊지도 않고 서버 메모리에 계속 쌓습니다.</b> 화면의 클라이언트 8개는 샘플이고 실제로는 같은 비율로 2,000명이 접속해 있다고 치면, 메모리가 초당 {1}MB씩 늘어납니다. 한도까지 약 {2}. 느린 클라이언트의 화면은 {3} 뒤처져 있고 계속 늘어납니다. 다른 클라이언트는 아직 멀쩡하지만, 한도를 넘는 순간 모두의 접속이 끊깁니다.","t":"{0}<b>发给慢客户端却发不出去的数据，既不丢弃也不断开连接，一直堆在服务器内存里。</b>假设画面上的 8 个客户端只是样本，实际按同样比例有 2,000 人在线，内存每秒增加 {1} MB。距上限约 {2}。慢客户端的画面已落后 {3}，而且还在继续拉大。其他客户端暂时正常，但一超过上限，所有人都会掉线。"}
+  ],
+  "stale": [
+    {"ctx":"src/sims/sndbuf.js:184","ko":"밀림 ","t":"踢出倒计时 "},
+    {"ctx":"src/sims/sndbuf.js:233","ko":"클라이언트 ","t":"客户端 "}
   ]
 }

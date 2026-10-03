@@ -136,7 +136,7 @@
     {"ctx":"src/sims/lab.js:641","ko":"회선 끊김","t":""},
     {"ctx":"src/sims/lab.js:643","ko":"클라 멈춤","t":""},
     {"ctx":"src/sims/lab.js:644","ko":"연결 없음","t":""},
-    {"ctx":"src/sims/lab.js:649","ko":"내 PC","t":""},
+    {"ctx":"src/sims/lab.js:649","ko":"내 PC","t":"Tu PC"},
     {"ctx":"src/sims/lab.js:653","ko":"지금","t":""},
     {"ctx":"src/sims/lab.js:653","ko":"-{0}초","t":""},
     {"ctx":"src/sims/lab.js:747","ko":"끊김","t":""},

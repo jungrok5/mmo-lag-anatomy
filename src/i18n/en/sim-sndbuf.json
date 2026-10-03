@@ -50,8 +50,7 @@
     {"ctx":"src/sims/sndbuf.js:182","ko":"막힘","t":"Blocked"},
     {"ctx":"src/sims/sndbuf.js:182","ko":"send() 막힘","t":"Blocked in send()"},
     {"ctx":"src/sims/sndbuf.js:183","ko":"건너뜀","t":"Skipped"},
-    {"ctx":"src/sims/sndbuf.js:184","ko":"밀림 ","t":"Kick in "},
-    {"ctx":"src/sims/sndbuf.js:184, src/sims/sndbuf.js:201, src/sims/sndbuf.js:281, src/sims/sndbuf.js:304, src/sims/sndbuf.js:323, src/sims/sndbuf.js:416","ko":"초","t":" s"},
+    {"ctx":"src/sims/sndbuf.js:184","ko":"밀림 {0}초@@킥까지 남은 초(카운트다운)","t":"Kick in {0} s"},
     {"ctx":"src/sims/sndbuf.js:184","ko":"밀림","t":"Backed up"},
     {"ctx":"src/sims/sndbuf.js:185","ko":"가득","t":"Full"},
     {"ctx":"src/sims/sndbuf.js:185","ko":"버퍼 가득","t":"Buffer full"},
@@ -60,19 +59,21 @@
     {"ctx":"src/sims/sndbuf.js:199","ko":"서버 스레드","t":"Server thread"},
     {"ctx":"src/sims/sndbuf.js:199","ko":"서버 스레드 (하나뿐)","t":"Server thread (only one)"},
     {"ctx":"src/sims/sndbuf.js:201","ko":"서버 다운 · 재시작까지 ","t":"Server down · restart in "},
+    {"ctx":"src/sims/sndbuf.js:201, src/sims/sndbuf.js:281, src/sims/sndbuf.js:304, src/sims/sndbuf.js:323, src/sims/sndbuf.js:416","ko":"초","t":" s"},
     {"ctx":"src/sims/sndbuf.js:202","ko":"send() 대기 중 → 클라이언트 ","t":"Waiting in send() → Client "},
     {"ctx":"src/sims/sndbuf.js:203","ko":"틱이 밀리는 중","t":"Ticks falling behind"},
     {"ctx":"src/sims/sndbuf.js:204","ko":"틱마다 ","t":"Works "},
     {"ctx":"src/sims/sndbuf.js:204","ko":"ms 일하고 쉼","t":" ms per tick, then idles"},
     {"ctx":"src/sims/sndbuf.js:216","ko":"3초 전","t":"3 s ago"},
     {"ctx":"src/sims/sndbuf.js:217, src/sims/sndbuf.js:304, src/sims/sndbuf.js:323","ko":"지금","t":"Now"},
-    {"ctx":"src/sims/sndbuf.js:225, src/sims/sndbuf.js:233","ko":"클라이언트","t":"Client "},
+    {"ctx":"src/sims/sndbuf.js:225","ko":"클라이언트","t":"Client"},
     {"ctx":"src/sims/sndbuf.js:226","ko":"송신 버퍼","t":"Send buffer"},
     {"ctx":"src/sims/sndbuf.js:226","ko":"송신 버퍼 (","t":"Send buffer ("},
     {"ctx":"src/sims/sndbuf.js:227","ko":"앱 대기열","t":"App queue"},
     {"ctx":"src/sims/sndbuf.js:228","ko":"지연","t":"Delay"},
     {"ctx":"src/sims/sndbuf.js:229","ko":"상태","t":"Status"},
-    {"ctx":"src/sims/sndbuf.js:233","ko":"클라이언트 ","t":"Client "},
+    {"ctx":"src/sims/sndbuf.js:233","ko":"클라이언트{0}@@좁은 화면(띄어쓰기 없이 짧게)","t":"Client {0}"},
+    {"ctx":"src/sims/sndbuf.js:233","ko":"클라이언트 {0}","t":"Client {0}"},
     {"ctx":"src/sims/sndbuf.js:236","ko":"느림","t":"Slow"},
     {"ctx":"src/sims/sndbuf.js:236","ko":"느린 회선","t":"Slow link"},
     {"ctx":"src/sims/sndbuf.js:245","ko":"없음 (스레드가 대기)","t":"None (thread waits)"},
@@ -105,5 +106,9 @@
     {"ctx":"src/sims/sndbuf.js:411","ko":"{0}클라이언트 {1}에게 못 보낸 데이터가 서버 메모리에 쌓이는 중입니다({2}KB). {3}초 안에 따라잡지 못하면 연결을 끊습니다. 그동안 그 클라이언트의 화면은 점점 늦어집니다({4}). 다른 클라이언트와 서버 틱은 멀쩡합니다.","t":"{0}Data that couldn’t be sent to Client {1} is piling up in server memory ({2} KB). If the client doesn’t catch up within {3} s, the connection is cut. Meanwhile that client’s screen falls further and further behind ({4}). The other clients and the server tick are fine."},
     {"ctx":"src/sims/sndbuf.js:412","ko":"{0}클라이언트 {1}의 송신 버퍼가 차오르는 중입니다. 가득 찬 뒤 5초 넘게 밀리면 서버가 연결을 끊습니다.","t":"{0}The send buffer for Client {1} is filling up. Once it’s full, if the client stays behind for more than 5 seconds, the server cuts the connection."},
     {"ctx":"src/sims/sndbuf.js:416","ko":"{0}<b>느린 클라이언트에게 못 보낸 데이터를 버리지도 끊지도 않고 서버 메모리에 계속 쌓습니다.</b> 화면의 클라이언트 8개는 샘플이고 실제로는 같은 비율로 2,000명이 접속해 있다고 치면, 메모리가 초당 {1}MB씩 늘어납니다. 한도까지 약 {2}. 느린 클라이언트의 화면은 {3} 뒤처져 있고 계속 늘어납니다. 다른 클라이언트는 아직 멀쩡하지만, 한도를 넘는 순간 모두의 접속이 끊깁니다.","t":"{0}<b>Data that can’t reach the slow clients keeps piling up in server memory, with no dropping and no kicking.</b> If the 8 clients on screen are a sample of 2,000 connected players in the same proportions, memory grows by {1} MB per second. About {2} until the limit. The slow clients’ screens are {3} behind and falling further. The other clients are still fine, but the moment memory passes the limit, everyone is disconnected."}
+  ],
+  "stale": [
+    {"ctx":"src/sims/sndbuf.js:184","ko":"밀림 ","t":"Kick in "},
+    {"ctx":"src/sims/sndbuf.js:233","ko":"클라이언트 ","t":"Client "}
   ]
 }

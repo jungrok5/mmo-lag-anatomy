@@ -50,8 +50,7 @@
     {"ctx":"src/sims/sndbuf.js:182","ko":"막힘","t":"Bloqueado"},
     {"ctx":"src/sims/sndbuf.js:182","ko":"send() 막힘","t":"send() bloqueado"},
     {"ctx":"src/sims/sndbuf.js:183","ko":"건너뜀","t":"Pulado"},
-    {"ctx":"src/sims/sndbuf.js:184","ko":"밀림 ","t":"Kick em "},
-    {"ctx":"src/sims/sndbuf.js:184, src/sims/sndbuf.js:201, src/sims/sndbuf.js:281, src/sims/sndbuf.js:304, src/sims/sndbuf.js:323, src/sims/sndbuf.js:416","ko":"초","t":" s"},
+    {"ctx":"src/sims/sndbuf.js:184","ko":"밀림 {0}초@@킥까지 남은 초(카운트다운)","t":"Kick em {0} s"},
     {"ctx":"src/sims/sndbuf.js:184","ko":"밀림","t":"Acumulando"},
     {"ctx":"src/sims/sndbuf.js:185","ko":"가득","t":"Cheio"},
     {"ctx":"src/sims/sndbuf.js:185","ko":"버퍼 가득","t":"Buffer cheio"},
@@ -60,6 +59,7 @@
     {"ctx":"src/sims/sndbuf.js:199","ko":"서버 스레드","t":"Thread do servidor"},
     {"ctx":"src/sims/sndbuf.js:199","ko":"서버 스레드 (하나뿐)","t":"Thread do servidor (só uma)"},
     {"ctx":"src/sims/sndbuf.js:201","ko":"서버 다운 · 재시작까지 ","t":"Servidor fora do ar · reinício em "},
+    {"ctx":"src/sims/sndbuf.js:201, src/sims/sndbuf.js:281, src/sims/sndbuf.js:304, src/sims/sndbuf.js:323, src/sims/sndbuf.js:416","ko":"초","t":" s"},
     {"ctx":"src/sims/sndbuf.js:202","ko":"send() 대기 중 → 클라이언트 ","t":"Esperando no send() → cliente "},
     {"ctx":"src/sims/sndbuf.js:203","ko":"틱이 밀리는 중","t":"Ticks atrasando"},
     {"ctx":"src/sims/sndbuf.js:204","ko":"틱마다 ","t":"Trabalha "},
@@ -108,6 +108,7 @@
     {"ctx":"src/sims/sndbuf.js:416","ko":"{0}<b>느린 클라이언트에게 못 보낸 데이터를 버리지도 끊지도 않고 서버 메모리에 계속 쌓습니다.</b> 화면의 클라이언트 8개는 샘플이고 실제로는 같은 비율로 2,000명이 접속해 있다고 치면, 메모리가 초당 {1}MB씩 늘어납니다. 한도까지 약 {2}. 느린 클라이언트의 화면은 {3} 뒤처져 있고 계속 늘어납니다. 다른 클라이언트는 아직 멀쩡하지만, 한도를 넘는 순간 모두의 접속이 끊깁니다.","t":"{0}<b>Os dados que não chegam aos clientes lentos continuam se acumulando na memória do servidor, sem descarte e sem kick.</b> Se os 8 clientes da tela forem uma amostra de 2.000 jogadores conectados na mesma proporção, a memória cresce {1} MB por segundo. Faltam cerca de {2} até o limite. A tela dos clientes lentos está {3} atrasada, e o atraso continua crescendo. Os outros clientes ainda estão normais, mas, no momento em que a memória passar do limite, todos são desconectados."}
   ],
   "stale": [
-    {"ctx":"src/sims/sndbuf.js:233","ko":"클라이언트 ","t":"Cliente "}
+    {"ctx":"src/sims/sndbuf.js:233","ko":"클라이언트 ","t":"Cliente "},
+    {"ctx":"src/sims/sndbuf.js:184","ko":"밀림 ","t":"Kick em "}
   ]
 }

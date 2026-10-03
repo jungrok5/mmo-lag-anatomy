@@ -70,7 +70,7 @@
     {"ctx":"src/sims/retrans.js:308","ko":"대책 모두 켜기","t":""},
     {"ctx":"src/sims/retrans.js:309","ko":"상황","t":""},
     {"ctx":"src/sims/retrans.js:330","ko":"서버","t":"Servidor"},
-    {"ctx":"src/sims/retrans.js:331","ko":"내 PC","t":""},
+    {"ctx":"src/sims/retrans.js:331","ko":"내 PC","t":"Tu PC"},
     {"ctx":"src/sims/retrans.js:332","ko":"지금","t":""},
     {"ctx":"src/sims/retrans.js:332","ko":"-{0}초","t":""},
     {"ctx":"src/sims/retrans.js:334","ko":"빠른","t":""},

@@ -9,6 +9,6 @@
   { "code": "vi", "dir": "vi", "hreflang": "vi", "locale": "vi-VN", "og": "vi_VN", "name": "Tiếng Việt", "en": "Vietnamese" },
   { "code": "ru", "dir": "ru", "hreflang": "ru", "locale": "ru-RU", "og": "ru_RU", "name": "Русский", "en": "Russian" },
   { "code": "pt-BR", "dir": "pt-br", "hreflang": "pt-BR", "locale": "pt-BR", "og": "pt_BR", "name": "Português (Brasil)", "en": "Portuguese (Brazil)" },
-  { "code": "es", "dir": "es", "hreflang": "es", "locale": "es-419", "og": "es_LA", "name": "Español", "en": "Spanish" },
-  { "code": "id", "dir": "id", "hreflang": "id", "locale": "id-ID", "og": "id_ID", "name": "Bahasa Indonesia", "en": "Indonesian" }
+  { "code": "es", "dir": "es", "hreflang": "es", "locale": "es-419", "og": "es_LA", "name": "Español", "en": "Spanish", "draft": true },
+  { "code": "id", "dir": "id", "hreflang": "id", "locale": "id-ID", "og": "id_ID", "name": "Bahasa Indonesia", "en": "Indonesian", "draft": true }
 ]

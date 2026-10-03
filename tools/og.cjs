@@ -8,7 +8,7 @@ const ROOT = path.resolve(__dirname, '..');
 globalThis.I18N = { lang: 'ko', dict: {} };
 require('../src/js/i18n.js');
 const want = process.argv.slice(2);
-const LANGS = I.LANGS.filter(l => (l.code === 'ko' || fs.existsSync(path.join(ROOT, 'src/i18n', l.code))) && (!want.length || want.includes(l.code) || want.includes(l.dir)));
+const LANGS = I.LANGS.filter(l => (l.code === 'ko' || fs.existsSync(path.join(ROOT, 'src/i18n', l.code))) && (want.length ? want.includes(l.code) || want.includes(l.dir) : !l.draft));
 const n = I.loadData().causes.length;
 const font = (name, file, w) => `@font-face{font-family:"${name}";font-weight:${w};src:url(data:font/woff2;base64,${fs.readFileSync(path.join(ROOT, 'src/fonts', file)).toString('base64')}) format("woff2")}`;
 // 번역판 글꼴: 라틴·키릴·베트남 문자는 Noto Sans, 나머지는 그 문자의 Noto

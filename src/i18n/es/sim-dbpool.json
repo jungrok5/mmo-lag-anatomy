@@ -71,7 +71,7 @@
     {"ctx":"src/sims/dbpool.js:258","ko":"10초","t":""},
     {"ctx":"src/sims/dbpool.js:269","ko":"응답 시간 (ms, 눈금마다 10배)","t":""},
     {"ctx":"src/sims/dbpool.js:285","ko":"지금","t":""},
-    {"ctx":"src/sims/dbpool.js:285, src/sims/dbpool.js:301","ko":"초 전","t":""},
+    {"ctx":"src/sims/dbpool.js:285, src/sims/dbpool.js:301","ko":"초 전","t":" s atrás"},
     {"ctx":"src/sims/dbpool.js:285","ko":"초당 실패 (건)","t":""},
     {"ctx":"src/sims/dbpool.js:295","ko":"실패 없음","t":""},
     {"ctx":"src/sims/dbpool.js:301","ko":"{0} 1초 동안<br>중간값 <b>{1}</b> · 99% <b>{2}</b><br>성공 {3}건 · 실패 <b>{4}</b>건 · 풀 사용 {5}","t":""},
