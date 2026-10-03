@@ -157,19 +157,17 @@ FONTS = [
     ("IBM Plex Mono", 400, "IBMPlexMono-Regular.woff2"),
     ("IBM Plex Mono", 500, "IBMPlexMono-Medium.woff2"),
     ("IBM Plex Mono", 600, "IBMPlexMono-SemiBold.woff2"),
-    ("Black Han Sans", 400, "BlackHanSans-Regular.woff2"),
 ]
 FONTS_LINK = (
     '<link rel="preconnect" href="https://fonts.googleapis.com">\n'
     '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
-    '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&amp;'
+    '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?'
     'family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans+KR:wght@400;500;600;700&amp;display=swap">'
 )
 
 
 FONTS_LICENSE = (
     "글꼴: IBM Plex Sans KR, IBM Plex Mono (Copyright © 2017 IBM Corp. with Reserved Font Name \"Plex\"), "
-    "Black Han Sans (Copyright 2015 The Black Han Sans Project Authors). "
     "SIL Open Font License 1.1 (https://openfontlicense.org), 전문은 저장소의 src/fonts/OFL-*.txt"
 )
 FONTS_NOTICE = f"/* {FONTS_LICENSE} */"

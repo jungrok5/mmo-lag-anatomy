@@ -154,7 +154,7 @@
     {"ctx":"build.py:110","ko":"게임 서버 성능","t":"game server performance"},
     {"ctx":"build.py:111","ko":"렉 원인, 게임 렉, 핑, 끊김, 순간이동, 고무줄, 입력 지연, 접속 끊김, 서버 렉, 넷코드, TCP 재전송, 게임개발팀, 인프라팀","t":"game lag causes, online game lag, high ping, lag spikes, stutter, teleporting, rubber-banding, input lag, disconnects, server lag, netcode, TCP retransmission, packet loss, game server troubleshooting"},
     {"ctx":"build.py:132","ko":"{0} 전체 내용(마크다운)","t":"{0}: full content (Markdown)"},
-    {"ctx":"build.py:260","ko":"언어 선택","t":"Choose language"}
+    {"ctx":"build.py:258","ko":"언어 선택","t":"Choose language"}
   ],
   "stale": [
     {"ctx":"tools/site.cjs:175","ko":"원인·증상·담당 팀·수치·출처를 정리한 게임 렉 백서 항목.","t":"A Game Lag White Paper entry covering the cause, symptoms, owning team, numbers, and sources."},

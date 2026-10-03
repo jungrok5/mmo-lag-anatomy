@@ -31,9 +31,10 @@
     {"ctx":"#top p","ko":"게임 렉 백서 · 수치는 일반적인 서비스 환경의 대표값이며, 실제 값은 게임과 인프라마다 다릅니다.","t":"Sách trắng lag game · Các con số là giá trị tiêu biểu của môi trường vận hành thông thường. Giá trị thực tế khác nhau tùy game và hạ tầng."},
     {"ctx":"#top p","ko":"시뮬레이션은 원리를 보여 주기 위해 단순화한 모델입니다. 실제 장애 분석은 게임개발팀·인프라팀의 모니터링 지표와 함께 보세요.","t":"Các mô phỏng là mô hình đã đơn giản hóa để minh họa nguyên lý. Khi phân tích sự cố thực tế, hãy xem kèm các chỉ số giám sát của đội phát triển game và đội hạ tầng."},
     {"ctx":"#top p","ko":"자바스크립트 없이 읽는 <a href=\"%SITE%text.html\">텍스트 판</a>(원인마다 따로 된 페이지 포함), 전체 내용 마크다운 <a href=\"%SITE%llms-full.txt\">llms-full.txt</a>, AI용 안내 <a href=\"%SITE%llms.txt\">llms.txt</a>.","t":"<a href=\"%SITE%text.html\">Phiên bản văn bản</a> đọc được không cần JavaScript (có trang riêng cho từng nguyên nhân), toàn bộ nội dung dạng Markdown <a href=\"%SITE%llms-full.txt\">llms-full.txt</a>, hướng dẫn dành cho AI <a href=\"%SITE%llms.txt\">llms.txt</a>."},
-    {"ctx":"#top p","ko":"MIT 라이선스로 공개합니다. 글꼴(<span class=\"fontlist\">IBM Plex Sans KR, IBM Plex Mono, Black Han Sans</span>)은 SIL Open Font License 1.1을 따릅니다.","t":"Phát hành theo giấy phép MIT. Các font chữ (<span class=\"fontlist\">IBM Plex Sans KR, IBM Plex Mono, Black Han Sans</span>) dùng giấy phép SIL Open Font License 1.1."}
+    {"ctx":"#top p","ko":"MIT 라이선스로 공개합니다. 글꼴(<span class=\"fontlist\">IBM Plex Sans KR, IBM Plex Mono</span>)은 SIL Open Font License 1.1을 따릅니다.","t":"Phát hành theo giấy phép MIT. Các font chữ (<span class=\"fontlist\">IBM Plex Sans KR, IBM Plex Mono</span>) dùng giấy phép SIL Open Font License 1.1."}
   ],
   "stale": [
-    {"ctx":"#top p","ko":"MIT 라이선스로 공개합니다. 글꼴(IBM Plex Sans KR, IBM Plex Mono, Black Han Sans)은 SIL Open Font License 1.1을 따릅니다.","t":"Phát hành theo giấy phép MIT. Các font chữ (IBM Plex Sans KR, IBM Plex Mono, Black Han Sans) dùng giấy phép SIL Open Font License 1.1."}
+    {"ctx":"#top p","ko":"MIT 라이선스로 공개합니다. 글꼴(IBM Plex Sans KR, IBM Plex Mono, Black Han Sans)은 SIL Open Font License 1.1을 따릅니다.","t":"Phát hành theo giấy phép MIT. Các font chữ (IBM Plex Sans KR, IBM Plex Mono, Black Han Sans) dùng giấy phép SIL Open Font License 1.1."},
+    {"ctx":"#top p","ko":"MIT 라이선스로 공개합니다. 글꼴(<span class=\"fontlist\">IBM Plex Sans KR, IBM Plex Mono, Black Han Sans</span>)은 SIL Open Font License 1.1을 따릅니다.","t":"Phát hành theo giấy phép MIT. Các font chữ (<span class=\"fontlist\">IBM Plex Sans KR, IBM Plex Mono, Black Han Sans</span>) dùng giấy phép SIL Open Font License 1.1."}
   ]
 }

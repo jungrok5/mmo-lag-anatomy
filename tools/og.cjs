@@ -14,12 +14,12 @@ const font = (name, file, w) => `@font-face{font-family:"${name}";font-weight:${
 // 번역판 글꼴: 라틴·키릴·베트남 문자는 Noto Sans, 나머지는 그 문자의 Noto
 const NOTO = { ja: 'Noto+Sans+JP', 'zh-CN': 'Noto+Sans+SC', 'zh-TW': 'Noto+Sans+TC', th: 'Noto+Sans+Thai' };
 const fontHead = L => L.code === 'ko'
-  ? `<style>${font('Black Han Sans', 'BlackHanSans-Regular.woff2', 400)}${font('IBM Plex Sans KR', 'IBMPlexSansKR-Medium.woff2', 500)}${font('IBM Plex Sans KR', 'IBMPlexSansKR-Bold.woff2', 700)}</style>`
+  ? `<style>${font('IBM Plex Sans KR', 'IBMPlexSansKR-Medium.woff2', 500)}${font('IBM Plex Sans KR', 'IBMPlexSansKR-Bold.woff2', 700)}</style>`
   : `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@500;700;900${NOTO[L.code] ? `&family=${NOTO[L.code]}:wght@500;700;900` : ''}&display=block">`;
 const family = L => (L.code === 'ko' ? '"IBM Plex Sans KR"' : `${NOTO[L.code] ? `"${NOTO[L.code].replace(/\+/g, ' ')}",` : ''}"Noto Sans"`) + ',sans-serif';
 
 function page(L) {
-  const display = L.code === 'ko' ? 'font-family:"Black Han Sans";font-weight:400' : `font-family:${family(L)};font-weight:900`;
+  const display = L.code === 'ko' ? 'font-family:"IBM Plex Sans KR";font-weight:700;letter-spacing:-0.035em' : `font-family:${family(L)};font-weight:900`;
   return `<!doctype html><html lang="${L.code}"><head><meta charset="utf-8">${fontHead(L)}<style>
 *{margin:0;box-sizing:border-box}
 body{${L.code === 'ko' ? 'word-break:keep-all;' : ''}width:1200px;height:630px;overflow:hidden;background:#eceff3;color:#0f1822;font-family:${family(L)};padding:72px 80px;display:flex;flex-direction:column;justify-content:space-between}

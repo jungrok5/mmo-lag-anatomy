@@ -36,7 +36,8 @@
   --s8: #e34948;
 
   --font-body: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", system-ui, sans-serif;
-  --font-display: "Black Han Sans", "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --font-display: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+  --display-weight: 700;
   --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, "IBM Plex Sans KR", monospace;
 
   --nav-w: 252px;
@@ -138,7 +139,7 @@ button { font: inherit; color: inherit; }
   font-size: 13.5px;
 }
 .nav-brand { display: flex; align-items: baseline; gap: 8px; margin-bottom: 18px; text-decoration: none; color: var(--ink); }
-.nav-brand b { font-family: var(--font-display); font-weight: var(--display-weight, 400); font-size: 22px; letter-spacing: 0.01em; }
+.nav-brand b { font-family: var(--font-display); font-weight: var(--display-weight, 700); font-size: 20px; letter-spacing: -0.02em; }
 .nav-brand span { color: var(--muted); font-size: 12px; }
 .nav-group { margin-top: 18px; }
 .nav-group-title { font-size: 11px; letter-spacing: 0.04em; color: var(--muted); font-weight: 600; margin: 0 0 6px 2px; }
@@ -176,7 +177,7 @@ button { font: inherit; color: inherit; }
     backdrop-filter: blur(8px);
     border-bottom: 1px solid var(--line);
   }
-  .topbar b { font-family: var(--font-display); font-weight: var(--display-weight, 400); font-size: 18px; }
+  .topbar b { font-family: var(--font-display); font-weight: var(--display-weight, 700); font-size: 17px; letter-spacing: -0.02em; }
   .topbar .where { margin-left: auto; font-size: 12.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 }
 @media (prefers-reduced-motion: reduce) { .nav { transition: none; } }
@@ -201,8 +202,8 @@ button { font: inherit; color: inherit; }
 .hero { padding-block: 48px 28px; display: grid; gap: 28px; }
 .hero-top { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 36px; align-items: end; }
 .hero h1 {
-  font-family: var(--font-display); font-weight: var(--display-weight, 400);
-  font-size: clamp(52px, 8.4vw, 104px); line-height: 0.98; letter-spacing: -0.01em;
+  font-family: var(--font-display); font-weight: var(--display-weight, 700);
+  font-size: clamp(48px, 7.6vw, 92px); line-height: 1.06; letter-spacing: -0.035em;
   margin-top: 10px;
 }
 .hero h1 .ping { color: var(--accent); }
@@ -224,7 +225,7 @@ button { font: inherit; color: inherit; }
 .ch-head { display: grid; gap: 10px; margin-bottom: 26px; }
 .ch-kicker { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 12.5px; color: var(--muted); letter-spacing: 0.02em; font-weight: 600; }
 .ch-kicker .idx { font-family: var(--font-mono); color: var(--accent); letter-spacing: 0; }
-.ch-head h2 { font-family: var(--font-display); font-weight: var(--display-weight, 400); font-size: clamp(32px, 4.4vw, 48px); letter-spacing: -0.005em; line-height: 1.12; }
+.ch-head h2 { font-family: var(--font-display); font-weight: var(--display-weight, 700); font-size: clamp(30px, 4vw, 44px); letter-spacing: -0.03em; line-height: 1.18; }
 .ch-head .lede { font-size: 17.5px; color: var(--ink-2); max-width: var(--prose); line-height: 1.7; }
 .prose { max-width: var(--prose); display: grid; gap: 14px; }
 .prose p { color: var(--ink); }

@@ -154,7 +154,7 @@
     {"ctx":"build.py:110","ko":"게임 서버 성능","t":"Hiệu năng server game"},
     {"ctx":"build.py:111","ko":"렉 원인, 게임 렉, 핑, 끊김, 순간이동, 고무줄, 입력 지연, 접속 끊김, 서버 렉, 넷코드, TCP 재전송, 게임개발팀, 인프라팀","t":"nguyên nhân lag, lag game, game bị lag, ping cao, giật lag, giật khựng, dịch chuyển tức thời, kéo ngược, trễ thao tác, mất kết nối, lag server, netcode, truyền lại TCP, đội phát triển game, đội hạ tầng"},
     {"ctx":"build.py:132","ko":"{0} 전체 내용(마크다운)","t":"{0}: toàn bộ nội dung (Markdown)"},
-    {"ctx":"build.py:260","ko":"언어 선택","t":"Chọn ngôn ngữ"}
+    {"ctx":"build.py:258","ko":"언어 선택","t":"Chọn ngôn ngữ"}
   ],
   "stale": [
     {"ctx":"tools/site.cjs:175","ko":"원인·증상·담당 팀·수치·출처를 정리한 게임 렉 백서 항목.","t":"Mục trong Sách trắng lag game, tổng hợp nguyên nhân, triệu chứng, đội phụ trách, con số và nguồn tham khảo."},

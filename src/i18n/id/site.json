@@ -154,6 +154,6 @@
     {"ctx":"build.py:110","ko":"게임 서버 성능","t":"Performa server game"},
     {"ctx":"build.py:111","ko":"렉 원인, 게임 렉, 핑, 끊김, 순간이동, 고무줄, 입력 지연, 접속 끊김, 서버 렉, 넷코드, TCP 재전송, 게임개발팀, 인프라팀","t":"penyebab lag, lag game online, ping tinggi, game patah-patah, teleport, rubber banding, input lag, disconnect, server lag, netcode, retransmisi TCP, Tim Pengembang Game, Tim Infrastruktur"},
     {"ctx":"build.py:132","ko":"{0} 전체 내용(마크다운)","t":"Isi lengkap {0} (Markdown)"},
-    {"ctx":"build.py:260","ko":"언어 선택","t":"Pilih bahasa"}
+    {"ctx":"build.py:258","ko":"언어 선택","t":"Pilih bahasa"}
   ]
 }
