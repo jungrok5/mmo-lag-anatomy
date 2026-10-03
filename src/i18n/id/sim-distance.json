@@ -82,7 +82,7 @@
     {"ctx":"src/sims/distance.js:324","ko":"통신사 사이 구간","t":"jalur antar-ISP"},
     {"ctx":"src/sims/distance.js:325","ko":" 액션 전투에도 충분히 빠릅니다.","t":" Cukup cepat bahkan untuk pertempuran aksi."},
     {"ctx":"src/sims/distance.js:326","ko":" 스킬 반응이 조금 늦게 느껴지는 입력 지연이 있고, 가까운 서버의 플레이어보다 판정에서 불리합니다.","t":" Ada input lag yang membuat respons skill terasa sedikit terlambat, dan Anda lebih dirugikan dalam hit registration dibanding pemain yang dekat dengan server."},
-    {"ctx":"src/sims/distance.js:327","ko":" 입력 지연이 커서 회피·타이밍 판정에서 크게 불리합니다.","t":" Input lag besar sehingga Anda sangat dirugikan saat server menilai gerakan menghindar dan timing."},
+    {"ctx":"src/sims/distance.js:327","ko":" 입력 지연이 커서 회피·타이밍 판정에서 크게 불리합니다.","t":" Input lag besar sehingga Anda sangat dirugikan dalam keputusan server untuk gerakan menghindar dan timing."},
     {"ctx":"src/sims/distance.js:328","ko":" 서버 성능을 아무리 올려도 이 거리는 줄일 수 없습니다. 그래서 게임사는 지역마다 서버(리전)를 따로 둡니다.","t":" Sekuat apa pun server ditingkatkan, jarak ini tidak bisa diperpendek. Karena itu perusahaan game menyediakan server terpisah (region) untuk tiap wilayah."}
   ]
 }

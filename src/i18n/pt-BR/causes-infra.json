@@ -153,7 +153,7 @@
     {"ctx":"causes/in-external/sig/g","ko":"외부 호출 응답 시간·오류율, 로그인 성공 수","t":"Tempo de resposta e taxa de erros das chamadas externas, logins bem-sucedidos"},
     {"ctx":"causes/in-external/chk/look","ko":"플랫폼 로그인·결제·본인 인증 같은 외부 호출별 응답 시간·오류율·타임아웃 수와 사업자의 상태 페이지","t":"Tempo de resposta, taxa de erros e número de timeouts de cada chamada externa (login da plataforma, pagamento, verificação de identidade) e a página de status do provedor"},
     {"ctx":"causes/in-external/chk/yes","ko":"로그인·결제 실패가 몰린 시각부터 특정 외부 호출의 오류·타임아웃만 한 단계 올라 머물고, 사업자 상태 페이지에 같은 시각의 장애가 있음","t":"A partir do horário em que as falhas de login e pagamento se concentram, só os erros e timeouts de uma chamada externa sobem um degrau e ficam lá, e a página de status do provedor mostra falha no mesmo horário"},
-    {"ctx":"causes/in-external/chk/no","ko":"외부 호출은 정상인데 로그인이 막히면 로그인 서버 자체(스레드 풀 고갈, DB)나 접속 대기열 쪽","t":"Chamadas externas normais, mas login bloqueado: aponta para o próprio servidor de login (esgotamento do pool de threads, BD) ou para a fila de login"},
+    {"ctx":"causes/in-external/chk/no","ko":"외부 호출은 정상인데 로그인이 막히면 로그인 서버 자체(스레드 풀 고갈, DB)나 운영체제의 접속 대기열(backlog) 쪽","t":"Chamadas externas normais, mas login bloqueado: aponta para o próprio servidor de login (esgotamento do pool de threads, BD) ou para a fila de conexões do sistema operacional (backlog)"},
     {"ctx":"causes/in-external/ref/0/n","ko":"Amazon Builders' Library. 응답을 기다리는 동안 스레드·연결 같은 자원을 점유하므로 타임아웃을 두고, 부작용이 있는 API는 멱등성이 보장될 때만 재시도","t":"Amazon Builders' Library. Enquanto espera a resposta, a chamada ocupa recursos como threads e conexões, por isso usar timeout e só fazer retry de APIs com efeitos colaterais quando a idempotência estiver garantida"},
     {"ctx":"causes/in-external/ref/1/n","ko":"실패할 가능성이 큰 호출은 타임아웃까지 기다리지 않고 바로 거부해 응답 시간을 지킴","t":"Chamadas com alta chance de falhar são recusadas na hora, sem esperar o timeout, para manter o tempo de resposta"},
     {"ctx":"causes/in-external/ref/2/n","ko":"AWS Well-Architected. 의존 서비스가 장애여도 약간 오래된 데이터로라도 핵심 기능을 유지(인증 결과 캐시의 근거)","t":"AWS Well-Architected. Mesmo com um serviço dependente fora do ar, manter as funções essenciais, ainda que com dados um pouco desatualizados (base para o cache do resultado da autenticação)"},
@@ -219,5 +219,8 @@
     {"ctx":"causes/in-login-queue/chk/no","ko":"대기열은 짧은데 로그인이 느리면 DB(db-login-storm)나 운영체제의 접속 대기열(so-backlog) 쪽","t":"Fila curta, mas login lento: aponta para o BD (db-login-storm) ou para a fila de conexões do sistema operacional (so-backlog)"},
     {"ctx":"causes/in-login-queue/ref/0/n","ko":"논리 데이터센터마다 대기 인원이 17,000명을 넘으면 로그인 서버가 다운되지 않게 새 대기를 거절(Error 2002), 대기 중 끊기면 로비 서버가 수십 초~1분 기다려 그 안에 다시 붙으면 대기열 중간부터, 넘기면 맨 뒤로","t":"Quando a fila passava de 17.000 pessoas em um data center lógico, novas entradas eram recusadas para o servidor de login não cair (Error 2002); quem caía durante a espera tinha de dezenas de segundos a 1 minuto de tolerância do servidor de lobby para voltar ao meio da fila, e depois disso voltava para o fim"},
     {"ctx":"causes/in-login-queue/ref/1/n","ko":"넘치는 요청을 일찍 거절해 처리할 수 있는 요청을 계속 처리하는 부하 차단","t":"Load shedding: recusar cedo as requisições excedentes para continuar processando as que dá para processar"}
+  ],
+  "stale": [
+    {"ctx":"causes/in-external/chk/no","ko":"외부 호출은 정상인데 로그인이 막히면 로그인 서버 자체(스레드 풀 고갈, DB)나 접속 대기열 쪽","t":"Chamadas externas normais, mas login bloqueado: aponta para o próprio servidor de login (esgotamento do pool de threads, BD) ou para a fila de login"}
   ]
 }

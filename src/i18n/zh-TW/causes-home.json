@@ -123,7 +123,7 @@
     {"ctx":"causes/hn-5g-flip/c/1","ko":"폰이 5G와 LTE 사이를 수시로 전환하며 그때마다 짧은 공백이 생김","t":"手機隨時在 5G 與 LTE 之間切換，每次都會出現短暫空白"},
     {"ctx":"causes/hn-5g-flip/c/2","ko":"가만히 있어도 규칙 없이 핑이 튀고, 가끔 멈춤·순간이동","t":"即使靜止不動，ping 也會不規則地飆高，偶爾定格、瞬移"},
     {"ctx":"causes/hn-5g-flip/num","ko":"전환 한 번에 수십~수백 ms. 국내 5G는 대부분 LTE와 함께 묶어 쓰는 방식(NSA)이라 5G 쪽만 붙었다 떨어졌다 하기 쉽습니다.","t":"每次切換數十～數百 ms。韓國的 5G 大多採用與 LTE 搭配使用的方式（NSA），因此很容易只有 5G 這一側時連時斷。"},
-    {"ctx":"causes/hn-5g-flip/act/game","ko":"지터가 늘면 보간 버퍼 길이를 자동으로 늘리기, 끊김 로그에 망 종류(5G·LTE) 변화를 함께 남겨 원인 구분.","t":"抖動增加時自動加長內插緩衝，在斷線 log 中一併記錄網路類型（5G、LTE）的變化以區分原因。"},
+    {"ctx":"causes/hn-5g-flip/act/game","ko":"지터가 늘면 보간 버퍼 길이를 자동으로 늘리기, 렉이 생긴 때의 로그에 망 종류(5G·LTE) 변화를 함께 남겨 원인 구분.","t":"抖動增加時自動加長內插緩衝，在出現延遲時的 log 中一併記錄網路類型（5G、LTE）的變化以區分原因。"},
     {"ctx":"causes/hn-5g-flip/act/ext","ko":"유저에게 설정에서 LTE 우선 모드로 바꿔 비교해 보도록 안내, 와이파이 사용 권장.","t":"引導玩家在設定中改成 LTE 優先模式比較看看，並建議使用 Wi-Fi。"},
     {"ctx":"causes/hn-5g-flip/sig/g","ko":"RTT, 망 종류(5G·LTE) 변화","t":"RTT、網路類型（5G、LTE）變化"},
     {"ctx":"causes/hn-5g-flip/chk/look","ko":"폰 설정을 LTE 우선으로 바꿔 같은 자리에서 비교. 클라이언트가 안드로이드 TelephonyDisplayInfo의 망 표시(OVERRIDE_NETWORK_TYPE_NR_NSA 등) 변화를 RTT와 함께 기록하면 더 확실함","t":"把手機設定改成 LTE 優先，在同一個位置比較。用戶端把 Android TelephonyDisplayInfo 的網路類型顯示（OVERRIDE_NETWORK_TYPE_NR_NSA 等）變化與 RTT 一起記錄會更確實"},
@@ -145,5 +145,8 @@
     {"ctx":"causes/hn-captive/chk/no","ko":"어느 망에서도 실패하면 계정·서버·“DNS 장애·지연” 쪽. 특정 국가·통신사 전체에서 실패하면 “국가·통신사 단위 UDP 제한·패킷 검사”","t":"任何網路都失敗時，問題在帳號、伺服器或「DNS 故障與延遲」。特定國家或電信業者整體都失敗時，是「國家／電信業者層級的 UDP 限制與封包檢測」"},
     {"ctx":"causes/hn-captive/ref/0/n","ko":"캡티브 포털: 약관 동의·인증 같은 요구 조건을 채울 때까지 접속이 제한되는 네트워크","t":"captive portal（認證入口網頁）：在滿足同意使用條款、認證等條件之前，連線都會受到限制的網路"},
     {"ctx":"causes/hn-captive/ref/1/n","ko":"측정 연구상 네트워크의 3~5%는 UDP를 모두 막으므로, UDP 기반 앱은 TCP(TLS) 대체 경로를 준비해야 함","t":"根據量測研究，3～5% 的網路會封鎖所有 UDP，因此以 UDP 為基礎的 App 必須準備 TCP（TLS）替代路徑"}
+  ],
+  "stale": [
+    {"ctx":"causes/hn-5g-flip/act/game","ko":"지터가 늘면 보간 버퍼 길이를 자동으로 늘리기, 끊김 로그에 망 종류(5G·LTE) 변화를 함께 남겨 원인 구분.","t":"抖動增加時自動加長內插緩衝，在斷線 log 中一併記錄網路類型（5G、LTE）的變化以區分原因。"}
   ]
 }

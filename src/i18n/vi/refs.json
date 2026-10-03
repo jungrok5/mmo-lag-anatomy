@@ -219,7 +219,7 @@
     {"ctx":"secRefs/retrans/30/n","ko":"RACK과 tcp_recovery 도입(리눅스 4.4), 처음에는 기존 방식의 보조로 동작","t":"Đưa RACK và tcp_recovery vào (Linux 4.4), ban đầu hoạt động như cơ chế phụ trợ cho cách cũ"},
     {"ctx":"secRefs/retrans/31/n","ko":"RACK을 기본 손실 감지로 바꿈(2018년, 리눅스 4.18)","t":"Chuyển RACK thành cơ chế phát hiện mất gói mặc định (năm 2018, Linux 4.18)"},
     {"ctx":"secRefs/retrans/32/n","ko":"RFC6675 손실 복구 코드 삭제(리눅스 6.17), RACK-TLP가 2018년부터 기본이었다는 설명","t":"Xóa code phục hồi mất gói theo RFC6675 (Linux 6.17), kèm giải thích rằng RACK-TLP đã là mặc định từ năm 2018"},
-    {"ctx":"secRefs/retrans/33/n","ko":"SYN RTO의 처음 4번 백오프를 두 배로 늘리지 않음(1, 1, 1, 1, 1, 2, 4초 …, 리눅스 6.5)","t":"Không tăng gấp đôi backoff trong 4 lần đầu của RTO SYN (1, 1, 1, 1, 1, 2, 4 giây …, Linux 6.5)"},
+    {"ctx":"secRefs/retrans/33/n","ko":"SYN RTO의 처음 4번 백오프를 두 배로 늘리지 않음(첫 RTO 1초 뒤 네 번 더 1초씩, 그다음부터 2, 4초 …, 리눅스 6.5)","t":"Không tăng gấp đôi backoff trong 4 lần đầu của RTO SYN (sau RTO đầu tiên 1 giây là thêm 4 lần chờ 1 giây, rồi mới đến 2, 4 giây …, Linux 6.5)"},
     {"ctx":"secRefs/retrans/34/n","ko":"서버 전체 RTO 최소값 tcp_rto_min_us(리눅스 6.11)","t":"RTO tối thiểu cho toàn server tcp_rto_min_us (Linux 6.11)"},
     {"ctx":"secRefs/retrans/35/n","ko":"TCP_RTO_MAX_MS 소켓 옵션, 1~120초(리눅스 6.15)","t":"Tùy chọn socket TCP_RTO_MAX_MS, 1–120 giây (Linux 6.15)"},
     {"ctx":"secRefs/retrans/36/n","ko":"연결마다 RTO 최소값을 정하는 TCP_RTO_MIN_US 소켓 옵션(리눅스 6.15)","t":"Tùy chọn socket TCP_RTO_MIN_US để đặt RTO tối thiểu cho từng kết nối (Linux 6.15)"},
@@ -284,6 +284,7 @@
   "stale": [
     {"ctx":"secRefs/l-isp/7/n","ko":"불안정해진 경로가 다시 안정되기까지 하루 평균 25~50초","t":"Thời gian để tuyến đường mất ổn định ổn định trở lại, tính trung bình theo ngày, là 25–50 giây"},
     {"ctx":"secRefs/lab/5/n","ko":"틱마다 쌓이는 명령 예산으로 몰려 온 명령을 제한. 너무 엄격하면 정상 유저도 끊김","t":"Giới hạn các lệnh dồn tới bằng ngân sách lệnh tích lũy theo từng tick. Quá chặt thì cả người chơi bình thường cũng bị giật"},
-    {"ctx":"secRefs/symptoms/7/n","ko":"서버가 관련 없다고 본 액터는 복제되지 않거나 클라이언트에서 지워짐(안 보임)","t":"Actor mà server coi là không liên quan sẽ không được replicate hoặc bị xóa ở client (không hiển thị)"}
+    {"ctx":"secRefs/symptoms/7/n","ko":"서버가 관련 없다고 본 액터는 복제되지 않거나 클라이언트에서 지워짐(안 보임)","t":"Actor mà server coi là không liên quan sẽ không được replicate hoặc bị xóa ở client (không hiển thị)"},
+    {"ctx":"secRefs/retrans/33/n","ko":"SYN RTO의 처음 4번 백오프를 두 배로 늘리지 않음(1, 1, 1, 1, 1, 2, 4초 …, 리눅스 6.5)","t":"Không tăng gấp đôi backoff trong 4 lần đầu của RTO SYN (1, 1, 1, 1, 1, 2, 4 giây …, Linux 6.5)"}
   ]
 }

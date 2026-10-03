@@ -645,7 +645,7 @@ K.register('lab', function (root) {
     // 레일
     ctx.strokeStyle = Cc.line; ctx.lineWidth = 1;
     [yS, yC].forEach(y => { ctx.beginPath(); ctx.moveTo(L, y + 0.5); ctx.lineTo(R, y + 0.5); ctx.stroke(); });
-    K.text(ctx, TR`서버`, L - 8, yS, { align: 'right', size: 11, weight: 600, color: Cc.ink2 });
+    K.text(ctx, TR`서버@@타임라인 줄 이름(좁은 칸, 짧게)`, L - 8, yS, { align: 'right', size: 11, weight: 600, color: Cc.ink2 });
     K.text(ctx, TR`내 PC`, L - 8, yC, { align: 'right', size: 11, weight: 600, color: Cc.ink2 });
     // 시간 눈금
     for (let s = 0; s <= 3; s++) {

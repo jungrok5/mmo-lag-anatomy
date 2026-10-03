@@ -8,7 +8,7 @@
     {"ctx":"src/sims/frames.js:10","ko":"<b>GC 스파이크</b>를 누르고 아래 달리는 캐릭터를 지켜보세요. 몇 초마다 멈췄다가 앞으로 툭 튀어 나갑니다(순간이동). 위 차트에는 빨간 막대가 솟습니다.","t":"Click <b>GC spike</b> and watch the running character below. Every few seconds it stops and then jumps forward (teleporting). Red bars shoot up on the chart above."},
     {"ctx":"src/sims/frames.js:11","ko":"그 상태에서 <b>점진적 GC</b>를 켜 보세요. 큰 멈춤 한 번을 3ms(유니티 기본값)짜리 작은 단위 여러 번으로 나눠 처리합니다. 가비지 생성을 500KB로 올리면 수집 속도가 못 따라가 다시 큰 멈춤이 나옵니다.","t":"In that state, turn on <b>Incremental GC</b>. One big pause gets split into many small 3 ms slices (the Unity default). Raise garbage creation to 500 KB and collection can’t keep up, so the big pauses come back."},
     {"ctx":"src/sims/frames.js:12","ko":"<b>V-Sync 경계 (17ms)</b>를 누르세요. 일이 16.7ms를 1ms 넘겼을 뿐인데 한 프레임에 33.3ms가 걸립니다. FPS가 60과 30 사이를 오가며 움직임이 들쭉날쭉해집니다.","t":"Click <b>V-Sync edge (17 ms)</b>. The work is only 1 ms over 16.7 ms, yet a frame takes 33.3 ms. FPS bounces between 60 and 30, and movement becomes uneven."},
-    {"ctx":"src/sims/frames.js:13","ko":"<b>새 지역 로딩</b>을 켠 채 <b>밀린 시간 처리</b>를 하나씩 바꿔 보세요. 한 번에 점프하면 순간이동, 고정 스텝으로 따라잡으면 긴 프레임이 줄줄이(뚝뚝 끊김), 상한을 두면 넘친 시간이 버려져 슬로우모션이 됩니다.","t":"With <b>New area loading</b> on, step through the options for <b>Catching up on lost time</b>. Jumping all at once gives teleporting; fixed-step catch-up gives a string of long frames (stutter); a cap discards the overflow time, giving slow motion."},
+    {"ctx":"src/sims/frames.js:13","ko":"<b>새 지역 진입 시 동기 로딩</b>을 켠 채 <b>밀린 시간 처리</b>를 하나씩 바꿔 보세요. 한 번에 점프하면 순간이동, 고정 스텝으로 따라잡으면 긴 프레임이 줄줄이(뚝뚝 끊김), 상한을 두면 넘친 시간이 버려져 슬로우모션이 됩니다.","t":"With <b>Synchronous loading on entering a new area</b> on, step through the options for <b>Catching up on lost time</b>. Jumping all at once gives teleporting; fixed-step catch-up gives a string of long frames (stutter); a cap discards the overflow time, giving slow motion."},
     {"ctx":"src/sims/frames.js:24","ko":"로딩","t":"Load"},
     {"ctx":"src/sims/frames.js:24","ko":"따라잡기","t":"Catch-up"},
     {"ctx":"src/sims/frames.js:30","ko":"프레임 시간","t":"Frame time"},
@@ -83,5 +83,8 @@
     {"ctx":"src/sims/frames.js:401","ko":"{0}가비지가 <b>{1}MB</b> 쌓였습니다. {2}MB가 되면 한꺼번에 수집하느라 게임이 잠깐 멈춥니다. 지금은 한 프레임 작업이 {3}라 매끄럽습니다.","t":"{0}<b>{1} MB</b> of garbage has built up. At {2} MB, the game pauses briefly to collect it all at once. Right now each frame takes {3} of work, so it runs smoothly."},
     {"ctx":"src/sims/frames.js:402","ko":"{0}한 프레임 작업이 평균 <b>{1}</b>로 16.7ms 안에 넉넉히 끝납니다. 캐릭터가 매끄럽게 달리고, 누른 키는 {2} 뒤에 화면에 나타납니다.","t":"{0}Each frame takes <b>{1}</b> of work on average, finishing well within 16.7 ms. The character runs smoothly, and a key press shows up on screen after {2}."},
     {"ctx":"src/sims/frames.js:411","ko":"꺼짐","t":"Off"}
+  ],
+  "stale": [
+    {"ctx":"src/sims/frames.js:13","ko":"<b>새 지역 로딩</b>을 켠 채 <b>밀린 시간 처리</b>를 하나씩 바꿔 보세요. 한 번에 점프하면 순간이동, 고정 스텝으로 따라잡으면 긴 프레임이 줄줄이(뚝뚝 끊김), 상한을 두면 넘친 시간이 버려져 슬로우모션이 됩니다.","t":"With <b>New area loading</b> on, step through the options for <b>Catching up on lost time</b>. Jumping all at once gives teleporting; fixed-step catch-up gives a string of long frames (stutter); a cap discards the overflow time, giving slow motion."}
   ]
 }

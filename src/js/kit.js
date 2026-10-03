@@ -498,7 +498,12 @@
       }
     }
     if (o.yTicks) {
-      for (const t of o.yTicks) K.text(ctx, o.yFmt ? o.yFmt(t) : String(t), box.x - 6, sc.y(t), { align: 'right', size: 10.5, mono: true, color: K.C.muted });
+      // 번역판의 긴 숫자(100 mil 등)가 왼쪽 여백을 넘으면 글자를 줄인다
+      const ys = o.yTicks.map(t => (o.yFmt ? o.yFmt(t) : String(t)));
+      ctx.font = K.font(10.5, 400, true);
+      const wMax = Math.max(0, ...ys.map(s => ctx.measureText(s).width));
+      const fs = wMax > box.x - 8 ? Math.max(8, 10.5 * (box.x - 8) / wMax) : 10.5;
+      o.yTicks.forEach((t, i) => K.text(ctx, ys[i], box.x - 6, sc.y(t), { align: 'right', size: fs, mono: true, color: K.C.muted }));
     }
     if (o.xTicks) {
       // 글자가 캔버스 밖으로 나가면 안쪽으로 당기고, 앞 눈금 글자와 겹치면 건너뛴다(번역판의 긴 단위)

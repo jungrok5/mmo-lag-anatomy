@@ -153,7 +153,7 @@
     {"ctx":"causes/in-external/sig/g","ko":"외부 호출 응답 시간·오류율, 로그인 성공 수","t":"外部调用响应时间、错误率，登录成功数"},
     {"ctx":"causes/in-external/chk/look","ko":"플랫폼 로그인·결제·본인 인증 같은 외부 호출별 응답 시간·오류율·타임아웃 수와 사업자의 상태 페이지","t":"平台登录、支付、实名认证等各外部调用的响应时间、错误率、超时次数，以及服务商的状态页"},
     {"ctx":"causes/in-external/chk/yes","ko":"로그인·결제 실패가 몰린 시각부터 특정 외부 호출의 오류·타임아웃만 한 단계 올라 머물고, 사업자 상태 페이지에 같은 시각의 장애가 있음","t":"从登录、支付失败集中出现的时刻起，只有某个外部调用的错误、超时上了一个台阶并停在那里，服务商状态页上同一时刻有故障"},
-    {"ctx":"causes/in-external/chk/no","ko":"외부 호출은 정상인데 로그인이 막히면 로그인 서버 자체(스레드 풀 고갈, DB)나 접속 대기열 쪽","t":"外部调用正常却登录不了，看登录服务器本身（线程池耗尽、DB）或连接队列（backlog）"},
+    {"ctx":"causes/in-external/chk/no","ko":"외부 호출은 정상인데 로그인이 막히면 로그인 서버 자체(스레드 풀 고갈, DB)나 운영체제의 접속 대기열(backlog) 쪽","t":"外部调用正常却登录不了，看登录服务器本身（线程池耗尽、DB）或操作系统的连接队列（backlog）"},
     {"ctx":"causes/in-external/ref/0/n","ko":"Amazon Builders' Library. 응답을 기다리는 동안 스레드·연결 같은 자원을 점유하므로 타임아웃을 두고, 부작용이 있는 API는 멱등성이 보장될 때만 재시도","t":"Amazon Builders' Library。等待响应期间会占用线程、连接等资源，所以要设超时；有副作用的 API 只在保证幂等时才重试"},
     {"ctx":"causes/in-external/ref/1/n","ko":"실패할 가능성이 큰 호출은 타임아웃까지 기다리지 않고 바로 거부해 응답 시간을 지킴","t":"很可能失败的调用不等到超时，直接拒绝，以保住响应时间"},
     {"ctx":"causes/in-external/ref/2/n","ko":"AWS Well-Architected. 의존 서비스가 장애여도 약간 오래된 데이터로라도 핵심 기능을 유지(인증 결과 캐시의 근거)","t":"AWS Well-Architected。依赖的服务故障时，即使用稍旧的数据也要保住核心功能（缓存认证结果的依据）"},
@@ -222,6 +222,7 @@
   ],
   "stale": [
     {"ctx":"causes/in-cert/chk/look","ko":"openssl s_client -connect 주소:443 -showcerts로 서버가 실제로 보내는 인증서 목록을 보고, 각 인증서의 만료일(notAfter)을 openssl x509 -noout -enddate로 확인. 로드밸런서에서 TLS를 끝낸다면 TLS 협상 오류 수(AWS ALB·NLB는 ClientTLSNegotiationErrorCount)와 로그인 성공 수","t":"用 openssl s_client -connect 地址:443 -showcerts 查看服务器实际发送的证书列表，用 openssl x509 -noout -enddate 确认各证书的到期日（notAfter）。在负载均衡器上终止 TLS 时，看 TLS 协商错误数（AWS ALB、NLB 为 ClientTLSNegotiationErrorCount）和登录成功数"},
-    {"ctx":"causes/in-cert/ref/2/n","ko":"기본 유효 기간을 2027년 2월 64일, 2028년 2월 45일로 단축, 60일 고정 간격 갱신으로는 부족해져 유효 기간의 약 3분의 2 시점 갱신 권장","t":"默认有效期在 2027 年 2 月缩短为 64 天、2028 年 2 月缩短为 45 天，固定 60 天间隔续期将不够用，建议在有效期约三分之二时续期"}
+    {"ctx":"causes/in-cert/ref/2/n","ko":"기본 유효 기간을 2027년 2월 64일, 2028년 2월 45일로 단축, 60일 고정 간격 갱신으로는 부족해져 유효 기간의 약 3분의 2 시점 갱신 권장","t":"默认有效期在 2027 年 2 月缩短为 64 天、2028 年 2 月缩短为 45 天，固定 60 天间隔续期将不够用，建议在有效期约三分之二时续期"},
+    {"ctx":"causes/in-external/chk/no","ko":"외부 호출은 정상인데 로그인이 막히면 로그인 서버 자체(스레드 풀 고갈, DB)나 접속 대기열 쪽","t":"外部调用正常却登录不了，看登录服务器本身（线程池耗尽、DB）或连接队列（backlog）"}
   ]
 }

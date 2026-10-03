@@ -123,7 +123,7 @@
     {"ctx":"causes/db-cold-cache/c/0","ko":"점검으로 DB 재시작","t":"DB-Neustart wegen Wartung"},
     {"ctx":"causes/db-cold-cache/c/1","ko":"자주 쓰던 데이터가 메모리에 없어 디스크에서 읽음","t":"Häufig genutzte Daten liegen nicht im Arbeitsspeicher und werden vom Datenträger gelesen"},
     {"ctx":"causes/db-cold-cache/c/2","ko":"점검 직후 한동안 로그인·로딩이 느림","t":"Direkt nach der Wartung sind Login und Laden eine Zeit lang langsam"},
-    {"ctx":"causes/db-cold-cache/act/game","ko":"점진적 오픈(접속 대기열로 로그인 인원을 단계적으로 늘리기).","t":"Schrittweise öffnen (die Zahl der Logins über eine Login-Warteschlange stufenweise erhöhen)."},
+    {"ctx":"causes/db-cold-cache/act/game","ko":"점진적 오픈(로그인 대기열로 로그인 인원을 단계적으로 늘리기).","t":"Schrittweise öffnen (die Zahl der Logins über eine Login-Warteschlange stufenweise erhöhen)."},
     {"ctx":"causes/db-cold-cache/act/infra","ko":"재시작 후 캐시 예열(워밍, 버퍼 풀 저장·복원 설정 확인), 스냅샷으로 되살린 DB는 디스크도 미리 읽기.","t":"Cache nach dem Neustart vorwärmen (Warm-up, Einstellungen zum Sichern und Wiederherstellen des Buffer Pools prüfen), bei aus Snapshots wiederhergestellten DBs auch den Datenträger vorab lesen."},
     {"ctx":"causes/db-cold-cache/more","ko":"MySQL은 꺼질 때 버퍼 풀의 페이지 목록을 저장했다가 켜질 때 백그라운드에서 다시 읽어 오지만, 다 채우기까지는 시간이 걸립니다. 클라우드에서 DB를 스냅샷(디스크 사본)으로 되살렸다면 디스크 자체도 처음 읽는 블록마다 느려서 더 오래 갑니다.","t":"MySQL speichert beim Herunterfahren die Seitenliste des Buffer Pools und liest die Seiten beim Start im Hintergrund wieder ein. Bis der Pool wieder voll ist, dauert es aber. Wurde die DB in der Cloud aus einem Snapshot (Kopie eines Datenträgers) wiederhergestellt, ist auch der Datenträger selbst bei jedem erstmals gelesenen Block langsam, und es dauert noch länger."},
     {"ctx":"causes/db-cold-cache/sig/g","ko":"디스크 읽기, 버퍼 캐시 적중률","t":"Disk-Lesezugriffe, Trefferquote des Buffer-Caches"},
@@ -140,7 +140,7 @@
     {"ctx":"causes/db-login-storm/c/0","ko":"캐릭터 로딩 때 아이템·스킬·퀘스트를 따로따로 조회","t":"Beim Laden des Charakters werden Items, Skills und Quests jeweils einzeln abgefragt"},
     {"ctx":"causes/db-login-storm/c/1","ko":"점검 직후 동시 로그인으로 쿼리 폭증","t":"Gleichzeitige Logins direkt nach der Wartung lassen die Query-Zahl explodieren"},
     {"ctx":"causes/db-login-storm/c/2","ko":"로그인 무한 로딩, 게임 중인 사람의 저장까지 밀림","t":"Endlos-Laden beim Login, selbst das Speichern von Spielern im laufenden Spiel stockt"},
-    {"ctx":"causes/db-login-storm/act/game","ko":"한 번에 묶어서 조회, 접속 대기열, 캐시, ORM 지연 로딩이 만드는 조회 수 점검.","t":"Daten gebündelt abfragen, Login-Warteschlange einsetzen, cachen, die durch Lazy Loading im ORM erzeugte Zahl der Abfragen prüfen."},
+    {"ctx":"causes/db-login-storm/act/game","ko":"한 번에 묶어서 조회, 로그인 대기열, 캐시, ORM 지연 로딩이 만드는 조회 수 점검.","t":"Daten gebündelt abfragen, Login-Warteschlange einsetzen, cachen, die durch Lazy Loading im ORM erzeugte Zahl der Abfragen prüfen."},
     {"ctx":"causes/db-login-storm/act/infra","ko":"호출 횟수가 많은 쿼리 순위를 뽑아 공유, 점검 직후 로그인 시간대의 쿼리 수·커넥션 수 모니터링.","t":"Rangliste der am häufigsten aufgerufenen Queries erstellen und weitergeben, Query- und Verbindungszahl im Login-Zeitraum direkt nach der Wartung überwachen."},
     {"ctx":"causes/db-login-storm/more","ko":"ORM(DB 조회를 대신 만들어 주는 라이브러리)의 지연 로딩이 개발자도 모르는 사이 이런 조회를 만듭니다. 개발 서버에서는 캐릭터 몇 개라 티가 안 나고, 라이브의 동시 로그인에서 처음 드러납니다.","t":"Lazy Loading im ORM (einer Bibliothek, die DB-Abfragen automatisch erzeugt) produziert solche Abfragen, ohne dass es den Entwicklern auffällt. Auf dem Entwicklungsserver mit wenigen Charakteren merkt man nichts davon. Sichtbar wird es erst bei gleichzeitigen Logins im Live-Betrieb."},
     {"ctx":"causes/db-login-storm/sig/g","ko":"DB 초당 쿼리 수, 로그인 수","t":"DB-Queries pro Sekunde, Logins"},
@@ -295,5 +295,9 @@
     {"ctx":"causes/db-ddl-lock/ref/5/n","ko":"메타데이터 잠금을 기다리는 세션(waiting_query)과 막고 있는 세션(blocking_pid)","t":"Auf einen Metadata Lock wartende Session (waiting_query) und blockierende Session (blocking_pid)"},
     {"ctx":"causes/db-ddl-lock/ref/6/n","ko":"granted가 false면 잠금을 기다리는 중, mode에 AccessExclusiveLock 같은 잠금 종류","t":"granted = false: Der Lock wird noch erwartet; mode enthält den Lock-Typ, z. B. AccessExclusiveLock"},
     {"ctx":"causes/db-ddl-lock/ref/7/n","ko":"pg_blocking_pids(): 지정한 세션이 잠금을 못 얻게 막고 있는 세션 목록","t":"pg_blocking_pids(): Liste der Sessions, die verhindern, dass die angegebene Session einen Lock bekommt"}
+  ],
+  "stale": [
+    {"ctx":"causes/db-cold-cache/act/game","ko":"점진적 오픈(접속 대기열로 로그인 인원을 단계적으로 늘리기).","t":"Schrittweise öffnen (die Zahl der Logins über eine Login-Warteschlange stufenweise erhöhen)."},
+    {"ctx":"causes/db-login-storm/act/game","ko":"한 번에 묶어서 조회, 접속 대기열, 캐시, ORM 지연 로딩이 만드는 조회 수 점검.","t":"Daten gebündelt abfragen, Login-Warteschlange einsetzen, cachen, die durch Lazy Loading im ORM erzeugte Zahl der Abfragen prüfen."}
   ]
 }

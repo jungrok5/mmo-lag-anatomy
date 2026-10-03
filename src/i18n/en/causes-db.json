@@ -123,7 +123,7 @@
     {"ctx":"causes/db-cold-cache/c/0","ko":"점검으로 DB 재시작","t":"The DB restarts for maintenance"},
     {"ctx":"causes/db-cold-cache/c/1","ko":"자주 쓰던 데이터가 메모리에 없어 디스크에서 읽음","t":"Frequently used data isn’t in memory, so it’s read from disk"},
     {"ctx":"causes/db-cold-cache/c/2","ko":"점검 직후 한동안 로그인·로딩이 느림","t":"Logins and loading are slow for a while right after maintenance"},
-    {"ctx":"causes/db-cold-cache/act/game","ko":"점진적 오픈(접속 대기열로 로그인 인원을 단계적으로 늘리기).","t":"Open gradually (use a login queue to ramp up the number of players logging in step by step)."},
+    {"ctx":"causes/db-cold-cache/act/game","ko":"점진적 오픈(로그인 대기열로 로그인 인원을 단계적으로 늘리기).","t":"Open gradually (use a login queue to ramp up the number of players logging in step by step)."},
     {"ctx":"causes/db-cold-cache/act/infra","ko":"재시작 후 캐시 예열(워밍, 버퍼 풀 저장·복원 설정 확인), 스냅샷으로 되살린 DB는 디스크도 미리 읽기.","t":"Warm the cache after a restart (check the buffer pool save/restore settings), pre-read the disk too on a DB restored from a snapshot."},
     {"ctx":"causes/db-cold-cache/more","ko":"MySQL은 꺼질 때 버퍼 풀의 페이지 목록을 저장했다가 켜질 때 백그라운드에서 다시 읽어 오지만, 다 채우기까지는 시간이 걸립니다. 클라우드에서 DB를 스냅샷(디스크 사본)으로 되살렸다면 디스크 자체도 처음 읽는 블록마다 느려서 더 오래 갑니다.","t":"MySQL saves the list of buffer pool pages at shutdown and reloads them in the background at startup, but filling the pool takes time. If a cloud DB was restored from a snapshot (a copy of a disk), the disk itself is also slow for every block read for the first time, so the slowdown lasts even longer."},
     {"ctx":"causes/db-cold-cache/sig/g","ko":"디스크 읽기, 버퍼 캐시 적중률","t":"Disk reads, buffer cache hit ratio"},
@@ -140,7 +140,7 @@
     {"ctx":"causes/db-login-storm/c/0","ko":"캐릭터 로딩 때 아이템·스킬·퀘스트를 따로따로 조회","t":"Character loading queries items, skills, and quests one by one"},
     {"ctx":"causes/db-login-storm/c/1","ko":"점검 직후 동시 로그인으로 쿼리 폭증","t":"Simultaneous logins right after maintenance make the query count explode"},
     {"ctx":"causes/db-login-storm/c/2","ko":"로그인 무한 로딩, 게임 중인 사람의 저장까지 밀림","t":"Infinite loading at login, and even saves for players already in the game get held up"},
-    {"ctx":"causes/db-login-storm/act/game","ko":"한 번에 묶어서 조회, 접속 대기열, 캐시, ORM 지연 로딩이 만드는 조회 수 점검.","t":"Fetch in batched queries, use a login queue and caching, check how many queries ORM lazy loading generates."},
+    {"ctx":"causes/db-login-storm/act/game","ko":"한 번에 묶어서 조회, 로그인 대기열, 캐시, ORM 지연 로딩이 만드는 조회 수 점검.","t":"Fetch in batched queries, use a login queue and caching, check how many queries ORM lazy loading generates."},
     {"ctx":"causes/db-login-storm/act/infra","ko":"호출 횟수가 많은 쿼리 순위를 뽑아 공유, 점검 직후 로그인 시간대의 쿼리 수·커넥션 수 모니터링.","t":"Pull a ranking of the most frequently called queries and share it, monitor query and connection counts during the login window right after maintenance."},
     {"ctx":"causes/db-login-storm/more","ko":"ORM(DB 조회를 대신 만들어 주는 라이브러리)의 지연 로딩이 개발자도 모르는 사이 이런 조회를 만듭니다. 개발 서버에서는 캐릭터 몇 개라 티가 안 나고, 라이브의 동시 로그인에서 처음 드러납니다.","t":"Lazy loading in an ORM (a library that builds DB queries for you) generates queries like these without developers even noticing. On a dev server with only a few characters it goes unnoticed, and it first shows up with simultaneous logins on live servers."},
     {"ctx":"causes/db-login-storm/sig/g","ko":"DB 초당 쿼리 수, 로그인 수","t":"DB queries per second, login count"},
@@ -295,5 +295,9 @@
     {"ctx":"causes/db-ddl-lock/ref/5/n","ko":"메타데이터 잠금을 기다리는 세션(waiting_query)과 막고 있는 세션(blocking_pid)","t":"The session waiting on a metadata lock (waiting_query) and the blocking session (blocking_pid)"},
     {"ctx":"causes/db-ddl-lock/ref/6/n","ko":"granted가 false면 잠금을 기다리는 중, mode에 AccessExclusiveLock 같은 잠금 종류","t":"granted false means waiting for the lock; mode shows the lock type, such as AccessExclusiveLock"},
     {"ctx":"causes/db-ddl-lock/ref/7/n","ko":"pg_blocking_pids(): 지정한 세션이 잠금을 못 얻게 막고 있는 세션 목록","t":"pg_blocking_pids(): list of sessions blocking the given session from acquiring a lock"}
+  ],
+  "stale": [
+    {"ctx":"causes/db-cold-cache/act/game","ko":"점진적 오픈(접속 대기열로 로그인 인원을 단계적으로 늘리기).","t":"Open gradually (use a login queue to ramp up the number of players logging in step by step)."},
+    {"ctx":"causes/db-login-storm/act/game","ko":"한 번에 묶어서 조회, 접속 대기열, 캐시, ORM 지연 로딩이 만드는 조회 수 점검.","t":"Fetch in batched queries, use a login queue and caching, check how many queries ORM lazy loading generates."}
   ]
 }

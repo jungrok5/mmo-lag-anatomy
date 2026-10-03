@@ -8,7 +8,7 @@
     {"ctx":"src/sims/frames.js:10","ko":"<b>GC 스파이크</b>를 누르고 아래 달리는 캐릭터를 지켜보세요. 몇 초마다 멈췄다가 앞으로 툭 튀어 나갑니다(순간이동). 위 차트에는 빨간 막대가 솟습니다.","t":"Clique em <b>Pico de GC</b> e observe o personagem correndo abaixo. A cada alguns segundos, ele para e depois pula para a frente (teleporte). No gráfico acima, aparecem barras vermelhas."},
     {"ctx":"src/sims/frames.js:11","ko":"그 상태에서 <b>점진적 GC</b>를 켜 보세요. 큰 멈춤 한 번을 3ms(유니티 기본값)짜리 작은 단위 여러 번으로 나눠 처리합니다. 가비지 생성을 500KB로 올리면 수집 속도가 못 따라가 다시 큰 멈춤이 나옵니다.","t":"Nesse estado, ligue o <b>GC incremental</b>. Uma pausa grande é dividida em várias fatias pequenas de 3 ms (padrão do Unity). Se você subir a geração de lixo para 500 KB, a coleta não acompanha, e as pausas grandes voltam."},
     {"ctx":"src/sims/frames.js:12","ko":"<b>V-Sync 경계 (17ms)</b>를 누르세요. 일이 16.7ms를 1ms 넘겼을 뿐인데 한 프레임에 33.3ms가 걸립니다. FPS가 60과 30 사이를 오가며 움직임이 들쭉날쭉해집니다.","t":"Clique em <b>Limite do V-Sync (17 ms)</b>. O trabalho passa só 1 ms dos 16,7 ms, mas um frame leva 33,3 ms. O FPS oscila entre 60 e 30, e o movimento fica irregular."},
-    {"ctx":"src/sims/frames.js:13","ko":"<b>새 지역 로딩</b>을 켠 채 <b>밀린 시간 처리</b>를 하나씩 바꿔 보세요. 한 번에 점프하면 순간이동, 고정 스텝으로 따라잡으면 긴 프레임이 줄줄이(뚝뚝 끊김), 상한을 두면 넘친 시간이 버려져 슬로우모션이 됩니다.","t":"Com <b>Carregamento de nova área</b> ligado, troque uma a uma as opções de <b>Recuperação do tempo atrasado</b>. Saltar de uma vez dá teleporte; recuperar com passo fixo dá uma sequência de frames longos (engasgos); com limite, o tempo excedente é descartado e o jogo fica em câmera lenta."},
+    {"ctx":"src/sims/frames.js:13","ko":"<b>새 지역 진입 시 동기 로딩</b>을 켠 채 <b>밀린 시간 처리</b>를 하나씩 바꿔 보세요. 한 번에 점프하면 순간이동, 고정 스텝으로 따라잡으면 긴 프레임이 줄줄이(뚝뚝 끊김), 상한을 두면 넘친 시간이 버려져 슬로우모션이 됩니다.","t":"Com <b>Carregamento síncrono ao entrar em nova área</b> ligado, troque uma a uma as opções de <b>Recuperação do tempo atrasado</b>. Saltar de uma vez dá teleporte; recuperar com passo fixo dá uma sequência de frames longos (engasgos); com limite, o tempo excedente é descartado e o jogo fica em câmera lenta."},
     {"ctx":"src/sims/frames.js:24","ko":"로딩","t":"Loading"},
     {"ctx":"src/sims/frames.js:24","ko":"따라잡기","t":"Recuperação"},
     {"ctx":"src/sims/frames.js:30","ko":"프레임 시간","t":"Frame time"},
@@ -83,5 +83,8 @@
     {"ctx":"src/sims/frames.js:401","ko":"{0}가비지가 <b>{1}MB</b> 쌓였습니다. {2}MB가 되면 한꺼번에 수집하느라 게임이 잠깐 멈춥니다. 지금은 한 프레임 작업이 {3}라 매끄럽습니다.","t":"{0}Há <b>{1} MB</b> de lixo acumulado. Ao chegar a {2} MB, o jogo para por um instante para coletar tudo de uma vez. Por enquanto, o trabalho de cada frame leva {3}, e tudo roda liso."},
     {"ctx":"src/sims/frames.js:402","ko":"{0}한 프레임 작업이 평균 <b>{1}</b>로 16.7ms 안에 넉넉히 끝납니다. 캐릭터가 매끄럽게 달리고, 누른 키는 {2} 뒤에 화면에 나타납니다.","t":"{0}O trabalho de cada frame leva em média <b>{1}</b> e termina com folga dentro de 16,7 ms. O personagem corre liso, e a tecla apertada aparece na tela depois de {2}."},
     {"ctx":"src/sims/frames.js:411","ko":"꺼짐","t":"Desligado"}
+  ],
+  "stale": [
+    {"ctx":"src/sims/frames.js:13","ko":"<b>새 지역 로딩</b>을 켠 채 <b>밀린 시간 처리</b>를 하나씩 바꿔 보세요. 한 번에 점프하면 순간이동, 고정 스텝으로 따라잡으면 긴 프레임이 줄줄이(뚝뚝 끊김), 상한을 두면 넘친 시간이 버려져 슬로우모션이 됩니다.","t":"Com <b>Carregamento de nova área</b> ligado, troque uma a uma as opções de <b>Recuperação do tempo atrasado</b>. Saltar de uma vez dá teleporte; recuperar com passo fixo dá uma sequência de frames longos (engasgos); com limite, o tempo excedente é descartado e o jogo fica em câmera lenta."}
   ]
 }

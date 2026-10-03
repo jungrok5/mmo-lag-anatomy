@@ -123,7 +123,7 @@
     {"ctx":"causes/db-cold-cache/c/0","ko":"점검으로 DB 재시작","t":"因維護而重新啟動 DB"},
     {"ctx":"causes/db-cold-cache/c/1","ko":"자주 쓰던 데이터가 메모리에 없어 디스크에서 읽음","t":"常用資料不在記憶體中，只能從磁碟讀取"},
     {"ctx":"causes/db-cold-cache/c/2","ko":"점검 직후 한동안 로그인·로딩이 느림","t":"維護剛結束的一段時間內，登入、載入很慢"},
-    {"ctx":"causes/db-cold-cache/act/game","ko":"점진적 오픈(접속 대기열로 로그인 인원을 단계적으로 늘리기).","t":"逐步開放（用登入排隊分階段增加登入人數）。"},
+    {"ctx":"causes/db-cold-cache/act/game","ko":"점진적 오픈(로그인 대기열로 로그인 인원을 단계적으로 늘리기).","t":"逐步開放（用登入排隊分階段增加登入人數）。"},
     {"ctx":"causes/db-cold-cache/act/infra","ko":"재시작 후 캐시 예열(워밍, 버퍼 풀 저장·복원 설정 확인), 스냅샷으로 되살린 DB는 디스크도 미리 읽기.","t":"重新啟動後預熱快取（warm-up，確認 buffer pool 的儲存與還原設定），從快照還原的 DB 也要預先讀取磁碟。"},
     {"ctx":"causes/db-cold-cache/more","ko":"MySQL은 꺼질 때 버퍼 풀의 페이지 목록을 저장했다가 켜질 때 백그라운드에서 다시 읽어 오지만, 다 채우기까지는 시간이 걸립니다. 클라우드에서 DB를 스냅샷(디스크 사본)으로 되살렸다면 디스크 자체도 처음 읽는 블록마다 느려서 더 오래 갑니다.","t":"MySQL 關閉時會儲存 buffer pool 的頁面清單，啟動時在背景重新讀回，但要全部填滿仍需要時間。在雲端上從快照（磁碟副本）還原的 DB，磁碟本身在每個區塊第一次讀取時也很慢，變慢的時間會拖得更久。"},
     {"ctx":"causes/db-cold-cache/sig/g","ko":"디스크 읽기, 버퍼 캐시 적중률","t":"磁碟讀取、緩衝快取命中率"},
@@ -140,7 +140,7 @@
     {"ctx":"causes/db-login-storm/c/0","ko":"캐릭터 로딩 때 아이템·스킬·퀘스트를 따로따로 조회","t":"載入角色時，道具、技能、任務各自分開查詢"},
     {"ctx":"causes/db-login-storm/c/1","ko":"점검 직후 동시 로그인으로 쿼리 폭증","t":"維護剛結束時大量同時登入，查詢暴增"},
     {"ctx":"causes/db-login-storm/c/2","ko":"로그인 무한 로딩, 게임 중인 사람의 저장까지 밀림","t":"登入時無限讀取，連正在遊戲中的玩家存檔都被拖慢"},
-    {"ctx":"causes/db-login-storm/act/game","ko":"한 번에 묶어서 조회, 접속 대기열, 캐시, ORM 지연 로딩이 만드는 조회 수 점검.","t":"合併成一次查詢、登入排隊、快取，並檢查 ORM 延遲載入產生的查詢數。"},
+    {"ctx":"causes/db-login-storm/act/game","ko":"한 번에 묶어서 조회, 로그인 대기열, 캐시, ORM 지연 로딩이 만드는 조회 수 점검.","t":"合併成一次查詢、登入排隊、快取，並檢查 ORM 延遲載入產生的查詢數。"},
     {"ctx":"causes/db-login-storm/act/infra","ko":"호출 횟수가 많은 쿼리 순위를 뽑아 공유, 점검 직후 로그인 시간대의 쿼리 수·커넥션 수 모니터링.","t":"列出呼叫次數最多的查詢排行並分享，監控維護剛結束的登入時段的查詢數與連線數。"},
     {"ctx":"causes/db-login-storm/more","ko":"ORM(DB 조회를 대신 만들어 주는 라이브러리)의 지연 로딩이 개발자도 모르는 사이 이런 조회를 만듭니다. 개발 서버에서는 캐릭터 몇 개라 티가 안 나고, 라이브의 동시 로그인에서 처음 드러납니다.","t":"ORM（代為產生 DB 查詢的函式庫）的延遲載入，會在開發者沒察覺的情況下產生這類查詢。開發伺服器上只有幾個角色，看不出差異，要到正式環境大量同時登入時才會浮現。"},
     {"ctx":"causes/db-login-storm/sig/g","ko":"DB 초당 쿼리 수, 로그인 수","t":"DB 每秒查詢數、登入數"},
@@ -295,5 +295,9 @@
     {"ctx":"causes/db-ddl-lock/ref/5/n","ko":"메타데이터 잠금을 기다리는 세션(waiting_query)과 막고 있는 세션(blocking_pid)","t":"等待中繼資料鎖定的 session（waiting_query）與造成阻擋的 session（blocking_pid）"},
     {"ctx":"causes/db-ddl-lock/ref/6/n","ko":"granted가 false면 잠금을 기다리는 중, mode에 AccessExclusiveLock 같은 잠금 종류","t":"granted 為 false 表示正在等待鎖定，mode 顯示 AccessExclusiveLock 等鎖定種類"},
     {"ctx":"causes/db-ddl-lock/ref/7/n","ko":"pg_blocking_pids(): 지정한 세션이 잠금을 못 얻게 막고 있는 세션 목록","t":"pg_blocking_pids()：阻擋指定 session 取得鎖定的 session 清單"}
+  ],
+  "stale": [
+    {"ctx":"causes/db-cold-cache/act/game","ko":"점진적 오픈(접속 대기열로 로그인 인원을 단계적으로 늘리기).","t":"逐步開放（用登入排隊分階段增加登入人數）。"},
+    {"ctx":"causes/db-login-storm/act/game","ko":"한 번에 묶어서 조회, 접속 대기열, 캐시, ORM 지연 로딩이 만드는 조회 수 점검.","t":"合併成一次查詢、登入排隊、快取，並檢查 ORM 延遲載入產生的查詢數。"}
   ]
 }

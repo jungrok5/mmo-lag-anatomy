@@ -8,7 +8,7 @@
     {"ctx":"causes/co-background/c/1","ko":"게임 스레드가 스케줄링 대기","t":"The game thread waits for CPU time"},
     {"ctx":"causes/co-background/c/2","ko":"프레임이 늦고 받은 패킷 처리도 늦어짐","t":"Frames come late, and received packets are processed late too"},
     {"ctx":"causes/co-background/num","ko":"윈도우는 보통 한 번에 수 ms~수십 ms씩 코어를 넘겨줍니다. 스케줄링에서 한 번만 밀려도 한 프레임이 사라집니다.","t":"Windows usually hands out a core for a few ms to tens of ms at a time. Getting passed over by the scheduler just once is enough to lose a frame."},
-    {"ctx":"causes/co-background/act/game","ko":"게임 스레드 우선순위 조정, 끊김 로그에 PC 전체 CPU 사용률을 함께 남겨 다른 프로그램 탓인지 구분.","t":"Adjust game thread priority, log whole-PC CPU usage alongside stutter logs to tell whether another program is to blame."},
+    {"ctx":"causes/co-background/act/game","ko":"게임 스레드 우선순위 조정, 뚝뚝 끊김이 생긴 때의 로그에 PC 전체 CPU 사용률을 함께 남겨 다른 프로그램 탓인지 구분.","t":"Adjust game thread priority; record whole-PC CPU usage in the logs taken when stutter happens, to tell whether another program is to blame."},
     {"ctx":"causes/co-background/act/ext","ko":"유저에게 윈도우 게임 모드 켜기, 게임 중 불필요한 프로그램(백신 검사·윈도우 업데이트·방송 프로그램·브라우저 영상) 종료 안내.","t":"Tell players to turn on Windows Game Mode and to close unneeded programs while playing (antivirus scans, Windows Update, streaming software, browser videos)."},
     {"ctx":"causes/co-background/more","ko":"윈도우는 앞에 띄운 창(포그라운드)의 프로그램에 우선순위를 조금 더 주지만, 코어보다 바쁜 일이 많으면 게임도 기다립니다. 백신은 CPU를 쓰는 것보다 “실시간 감시”로 더 자주 끼어듭니다. 게임이 파일을 열 때마다 검사해서, 에셋을 읽는 순간의 멈춤이 길어집니다.","t":"Windows gives the program in the front window (foreground) a little extra priority, but when there’s more work than there are cores, the game waits too. Antivirus software gets in the way through “real-time protection” more often than through CPU use. It scans every time the game opens a file, so the freezes while assets load get longer."},
     {"ctx":"causes/co-background/sig/g","ko":"PC 전체 CPU 사용률, 프레임 시간","t":"Whole-PC CPU usage, frame time"},
@@ -219,7 +219,7 @@
     {"ctx":"causes/co-overlay/c/0","ko":"메신저·게임 런처·그래픽카드 도구·녹화 프로그램의 오버레이가 켜져 있음","t":"Overlays from chat apps, game launchers, graphics card tools, or recording software are turned on"},
     {"ctx":"causes/co-overlay/c/1","ko":"프레임을 화면에 내보낼 때마다 오버레이가 끼어들어 자기 UI를 덧그림","t":"Every time a frame goes out to the screen, the overlay steps in and draws its own UI on top"},
     {"ctx":"causes/co-overlay/c/2","ko":"프레임이 조금씩 늦고, 알림이 뜨는 순간 멈칫하거나 그래픽 오류·강제 종료(플레이어에게는 접속 끊김처럼 보임)","t":"Frames get slightly later, and when a notification pops up the game hitches, shows graphics glitches, or crashes (looks like a disconnect to the player)"},
-    {"ctx":"causes/co-overlay/act/game","ko":"크래시·끊김 리포트에 실행 중인 오버레이 목록을 함께 모으기.","t":"Collect the list of running overlays along with crash and stutter reports."},
+    {"ctx":"causes/co-overlay/act/game","ko":"크래시 리포트와 뚝뚝 끊김 로그에 실행 중인 오버레이 목록을 함께 모으기.","t":"Collect the list of running overlays along with crash reports and stutter logs."},
     {"ctx":"causes/co-overlay/act/ext","ko":"제보가 오면 유저에게 오버레이를 모두 끄고 다시 시험하도록 안내.","t":"When reports come in, tell players to turn off all overlays and test again."},
     {"ctx":"causes/co-overlay/more","ko":"특정 사람만 뚝뚝 끊기거나 게임이 꺼지고 사양으로는 설명이 안 될 때, 오버레이와 게임 보안 모듈의 충돌을 먼저 의심합니다.","t":"When only certain players stutter or crash and their specs don’t explain it, suspect a conflict between an overlay and the anti-cheat module first."},
     {"ctx":"causes/co-overlay/sig/g","ko":"프레임 시간·크래시 수(오버레이를 켠 유저)","t":"Frame time and crash count (players with overlays on)"},
@@ -252,6 +252,8 @@
     {"ctx":"causes/co-display-input/ref/8/n","ko":"게임처럼 지연이 중요한 창은 디스플레이에 최소 영상 처리를 요청, HDMI 연결이면 ALLM·Game Content Type 신호를 보내 TV를 저지연 모드로 바꿈","t":"Latency-sensitive windows such as games request minimal video processing from the display; over HDMI, the ALLM and Game Content Type signals switch the TV to low-latency mode"}
   ],
   "stale": [
-    {"ctx":"causes/co-display-input/num","ko":"60Hz 화면은 프레임 하나를 보내는 데만 16.6ms, 120Hz면 8.3ms가 걸립니다. 예전 Xbox 컨트롤러는 입력을 8ms마다 읽어 보냈습니다. TV 영상 처리가 더하는 지연은 기기마다 달라 한 숫자로 말하기 어렵고, 게임 모드는 이 처리를 줄이는 설정입니다. 프레임 생성은 AMD가 생성 전 프레임률 60FPS 이상에서 쓰도록 권장합니다.","t":"Just sending one frame takes 16.6 ms on a 60 Hz screen and 8.3 ms at 120 Hz. Older Xbox controllers read and sent input every 8 ms. The delay added by a TV’s video processing varies by device, so no single number fits; game mode is the setting that cuts down this processing. AMD recommends using frame generation at a frame rate of 60 FPS or higher before generation."}
+    {"ctx":"causes/co-display-input/num","ko":"60Hz 화면은 프레임 하나를 보내는 데만 16.6ms, 120Hz면 8.3ms가 걸립니다. 예전 Xbox 컨트롤러는 입력을 8ms마다 읽어 보냈습니다. TV 영상 처리가 더하는 지연은 기기마다 달라 한 숫자로 말하기 어렵고, 게임 모드는 이 처리를 줄이는 설정입니다. 프레임 생성은 AMD가 생성 전 프레임률 60FPS 이상에서 쓰도록 권장합니다.","t":"Just sending one frame takes 16.6 ms on a 60 Hz screen and 8.3 ms at 120 Hz. Older Xbox controllers read and sent input every 8 ms. The delay added by a TV’s video processing varies by device, so no single number fits; game mode is the setting that cuts down this processing. AMD recommends using frame generation at a frame rate of 60 FPS or higher before generation."},
+    {"ctx":"causes/co-background/act/game","ko":"게임 스레드 우선순위 조정, 끊김 로그에 PC 전체 CPU 사용률을 함께 남겨 다른 프로그램 탓인지 구분.","t":"Adjust game thread priority, log whole-PC CPU usage alongside stutter logs to tell whether another program is to blame."},
+    {"ctx":"causes/co-overlay/act/game","ko":"크래시·끊김 리포트에 실행 중인 오버레이 목록을 함께 모으기.","t":"Collect the list of running overlays along with crash and stutter reports."}
   ]
 }

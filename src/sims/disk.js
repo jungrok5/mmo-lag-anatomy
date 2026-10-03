@@ -210,7 +210,7 @@ K.register('disk', function (root) {
     if (s < 3600) return K.n(Math.floor(s / 60)) + TR`분 ` + K.n(Math.round(s % 60)) + TR`초`;
     return K.n(s / 3600, 1) + TR` 시간`;
   }
-  const LAT = ['0.01', '0.1', '1', '10', '100', TR`1초`, TR`10초`];
+  const LAT = [K.nr(0.01, 2), K.nr(0.1), '1', '10', '100', TR`1초`, TR`10초`];
   const lg = v => Math.log10(K.clamp(v, 0.01, 10000));
   function segs(pts, ok) { const out = []; let cur = []; for (const p of pts) { if (ok(p)) cur.push(p); else if (cur.length) { out.push(cur); cur = []; } } if (cur.length) out.push(cur); return out; }
   const agoFmt = x1 => v => { const m = Math.round((x1 - v) / 60); return m === 0 ? TR`지금` : m + TR`분 전`; };

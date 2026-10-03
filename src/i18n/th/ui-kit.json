@@ -11,7 +11,7 @@
     {"ctx":"src/js/kit.js:299","ko":"좋음","t":"ดี"},
     {"ctx":"src/js/kit.js:300","ko":"주의","t":"ระวัง"},
     {"ctx":"src/js/kit.js:301","ko":"나쁨","t":"แย่"},
-    {"ctx":"src/js/kit.js:607","ko":"<p class=\"sim-error\">시뮬레이션 “{0}”를 찾지 못했습니다.</p>","t":"<p class=\"sim-error\">ไม่พบการจำลอง “{0}”</p>"},
-    {"ctx":"src/js/kit.js:609","ko":"<p class=\"sim-error\">시뮬레이션 “{0}”를 불러오다 오류가 났습니다: {1}</p>","t":"<p class=\"sim-error\">เกิดข้อผิดพลาดขณะโหลดการจำลอง “{0}”: {1}</p>"}
+    {"ctx":"src/js/kit.js:612","ko":"<p class=\"sim-error\">시뮬레이션 “{0}”를 찾지 못했습니다.</p>","t":"<p class=\"sim-error\">ไม่พบการจำลอง “{0}”</p>"},
+    {"ctx":"src/js/kit.js:614","ko":"<p class=\"sim-error\">시뮬레이션 “{0}”를 불러오다 오류가 났습니다: {1}</p>","t":"<p class=\"sim-error\">เกิดข้อผิดพลาดขณะโหลดการจำลอง “{0}”: {1}</p>"}
   ]
 }

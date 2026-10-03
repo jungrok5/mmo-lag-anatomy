@@ -219,7 +219,7 @@
     {"ctx":"secRefs/retrans/30/n","ko":"RACK과 tcp_recovery 도입(리눅스 4.4), 처음에는 기존 방식의 보조로 동작","t":"Einführung von RACK und tcp_recovery (Linux 4.4), anfangs als Ergänzung zum bisherigen Verfahren"},
     {"ctx":"secRefs/retrans/31/n","ko":"RACK을 기본 손실 감지로 바꿈(2018년, 리눅스 4.18)","t":"RACK wird zur Standard-Verlusterkennung (2018, Linux 4.18)"},
     {"ctx":"secRefs/retrans/32/n","ko":"RFC6675 손실 복구 코드 삭제(리눅스 6.17), RACK-TLP가 2018년부터 기본이었다는 설명","t":"Entfernung des Codes zur Verlustwiederherstellung nach RFC6675 (Linux 6.17), mit dem Hinweis, dass RACK-TLP seit 2018 Standard ist"},
-    {"ctx":"secRefs/retrans/33/n","ko":"SYN RTO의 처음 4번 백오프를 두 배로 늘리지 않음(1, 1, 1, 1, 1, 2, 4초 …, 리눅스 6.5)","t":"Die ersten 4 Backoffs des SYN-RTO werden nicht verdoppelt (1, 1, 1, 1, 1, 2, 4 s …, Linux 6.5)"},
+    {"ctx":"secRefs/retrans/33/n","ko":"SYN RTO의 처음 4번 백오프를 두 배로 늘리지 않음(첫 RTO 1초 뒤 네 번 더 1초씩, 그다음부터 2, 4초 …, 리눅스 6.5)","t":"Die ersten 4 Backoffs des SYN-RTO werden nicht verdoppelt (nach dem ersten RTO von 1 s noch viermal je 1 s, danach 2, 4 s …, Linux 6.5)"},
     {"ctx":"secRefs/retrans/34/n","ko":"서버 전체 RTO 최소값 tcp_rto_min_us(리눅스 6.11)","t":"Serverweites RTO-Minimum tcp_rto_min_us (Linux 6.11)"},
     {"ctx":"secRefs/retrans/35/n","ko":"TCP_RTO_MAX_MS 소켓 옵션, 1~120초(리눅스 6.15)","t":"Socket-Option TCP_RTO_MAX_MS, 1–120 s (Linux 6.15)"},
     {"ctx":"secRefs/retrans/36/n","ko":"연결마다 RTO 최소값을 정하는 TCP_RTO_MIN_US 소켓 옵션(리눅스 6.15)","t":"Socket-Option TCP_RTO_MIN_US für ein RTO-Minimum pro Verbindung (Linux 6.15)"},
@@ -280,5 +280,8 @@
     {"ctx":"secRefs/l-infra/6/n","ko":"배포·재시작: lame duck 상태로 새 요청을 돌린 뒤 종료, 재시작 직후 예열","t":"Deployment und Neustart: im Lame-Duck-Zustand neue Anfragen umleiten, dann beenden, direkt nach dem Neustart aufwärmen"},
     {"ctx":"secRefs/l-infra/7/n","ko":"확장·축소 때 인스턴스를 대기 상태로 두고 준비·정리 작업을 마침(기본 1시간까지)","t":"Bei Scale-out und Scale-in Instanzen in einen Wartezustand versetzen und Vorbereitungs- und Aufräumarbeiten abschließen (standardmäßig bis zu 1 Stunde)"},
     {"ctx":"secRefs/l-infra/8/n","ko":"구성도 실험의 워치독: 살아 있다는 신호가 끊긴 서비스를 종료하고 자동 재시작","t":"Watchdog im Architektur-Experiment: Dienste, deren Lebenszeichen ausbleibt, werden beendet und automatisch neu gestartet"}
+  ],
+  "stale": [
+    {"ctx":"secRefs/retrans/33/n","ko":"SYN RTO의 처음 4번 백오프를 두 배로 늘리지 않음(1, 1, 1, 1, 1, 2, 4초 …, 리눅스 6.5)","t":"Die ersten 4 Backoffs des SYN-RTO werden nicht verdoppelt (1, 1, 1, 1, 1, 2, 4 s …, Linux 6.5)"}
   ]
 }

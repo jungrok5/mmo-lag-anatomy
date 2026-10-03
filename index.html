@@ -2328,7 +2328,12 @@ dt[id]:target, .pb-steps li:target { background: var(--accent-soft); border-radi
       }
     }
     if (o.yTicks) {
-      for (const t of o.yTicks) K.text(ctx, o.yFmt ? o.yFmt(t) : String(t), box.x - 6, sc.y(t), { align: 'right', size: 10.5, mono: true, color: K.C.muted });
+      // 번역판의 긴 숫자(100 mil 등)가 왼쪽 여백을 넘으면 글자를 줄인다
+      const ys = o.yTicks.map(t => (o.yFmt ? o.yFmt(t) : String(t)));
+      ctx.font = K.font(10.5, 400, true);
+      const wMax = Math.max(0, ...ys.map(s => ctx.measureText(s).width));
+      const fs = wMax > box.x - 8 ? Math.max(8, 10.5 * (box.x - 8) / wMax) : 10.5;
+      o.yTicks.forEach((t, i) => K.text(ctx, ys[i], box.x - 6, sc.y(t), { align: 'right', size: fs, mono: true, color: K.C.muted }));
     }
     if (o.xTicks) {
       // 글자가 캔버스 밖으로 나가면 안쪽으로 당기고, 앞 눈금 글자와 겹치면 건너뛴다(번역판의 긴 단위)
@@ -3047,7 +3052,7 @@ window.SIGDRAW = (function () {
       sym: ['stutter', 'burst'], fx: ['stall'], who: ['me'], when: ['random', 'periodic'],
       num: '윈도우는 보통 한 번에 수 ms~수십 ms씩 코어를 넘겨줍니다. 스케줄링에서 한 번만 밀려도 한 프레임이 사라집니다.',
       own: ['ext', 'cli'],
-      act: { game: '게임 스레드 우선순위 조정, 끊김 로그에 PC 전체 CPU 사용률을 함께 남겨 다른 프로그램 탓인지 구분.', ext: '유저에게 윈도우 게임 모드 켜기, 게임 중 불필요한 프로그램(백신 검사·윈도우 업데이트·방송 프로그램·브라우저 영상) 종료 안내.' },
+      act: { game: '게임 스레드 우선순위 조정, 뚝뚝 끊김이 생긴 때의 로그에 PC 전체 CPU 사용률을 함께 남겨 다른 프로그램 탓인지 구분.', ext: '유저에게 윈도우 게임 모드 켜기, 게임 중 불필요한 프로그램(백신 검사·윈도우 업데이트·방송 프로그램·브라우저 영상) 종료 안내.' },
       more: '윈도우는 앞에 띄운 창(포그라운드)의 프로그램에 우선순위를 조금 더 주지만, 코어보다 바쁜 일이 많으면 게임도 기다립니다. 백신은 CPU를 쓰는 것보다 “실시간 감시”로 더 자주 끼어듭니다. 게임이 파일을 열 때마다 검사해서, 에셋을 읽는 순간의 멈춤이 길어집니다.',
       sim: 'cpu',
       sig: { k: 'random', g: 'PC 전체 CPU 사용률, 프레임 시간' },
@@ -3322,7 +3327,7 @@ window.SIGDRAW = (function () {
       c: ['메신저·게임 런처·그래픽카드 도구·녹화 프로그램의 오버레이가 켜져 있음', '프레임을 화면에 내보낼 때마다 오버레이가 끼어들어 자기 UI를 덧그림', '프레임이 조금씩 늦고, 알림이 뜨는 순간 멈칫하거나 그래픽 오류·강제 종료(플레이어에게는 접속 끊김처럼 보임)'],
       sym: ['stutter', 'freeze', 'disconnect'], fx: ['stall'], who: ['me'], when: ['always', 'random'],
       own: ['ext', 'cli'],
-      act: { game: '크래시·끊김 리포트에 실행 중인 오버레이 목록을 함께 모으기.', ext: '제보가 오면 유저에게 오버레이를 모두 끄고 다시 시험하도록 안내.' },
+      act: { game: '크래시 리포트와 뚝뚝 끊김 로그에 실행 중인 오버레이 목록을 함께 모으기.', ext: '제보가 오면 유저에게 오버레이를 모두 끄고 다시 시험하도록 안내.' },
       more: '특정 사람만 뚝뚝 끊기거나 게임이 꺼지고 사양으로는 설명이 안 될 때, 오버레이와 게임 보안 모듈의 충돌을 먼저 의심합니다.',
       sig: { k: 'outlier', g: '프레임 시간·크래시 수(오버레이를 켠 유저)' },
       chk: {
@@ -3527,7 +3532,7 @@ window.SIGDRAW = (function () {
       sym: ['stutter', 'teleport', 'freeze'], fx: ['jit', 'loss'], who: ['me'], when: ['random', 'moving'],
       num: '전환 한 번에 수십~수백 ms. 국내 5G는 대부분 LTE와 함께 묶어 쓰는 방식(NSA)이라 5G 쪽만 붙었다 떨어졌다 하기 쉽습니다.',
       own: ['ext', 'cli'],
-      act: { game: '지터가 늘면 보간 버퍼 길이를 자동으로 늘리기, 끊김 로그에 망 종류(5G·LTE) 변화를 함께 남겨 원인 구분.', ext: '유저에게 설정에서 LTE 우선 모드로 바꿔 비교해 보도록 안내, 와이파이 사용 권장.' },
+      act: { game: '지터가 늘면 보간 버퍼 길이를 자동으로 늘리기, 렉이 생긴 때의 로그에 망 종류(5G·LTE) 변화를 함께 남겨 원인 구분.', ext: '유저에게 설정에서 LTE 우선 모드로 바꿔 비교해 보도록 안내, 와이파이 사용 권장.' },
       sig: { k: 'random', g: 'RTT, 망 종류(5G·LTE) 변화' },
       chk: {
         look: '폰 설정을 LTE 우선으로 바꿔 같은 자리에서 비교. 클라이언트가 안드로이드 TelephonyDisplayInfo의 망 표시(OVERRIDE_NETWORK_TYPE_NR_NSA 등) 변화를 RTT와 함께 기록하면 더 확실함',
@@ -5755,7 +5760,7 @@ window.SIGDRAW = (function () {
       c: ['점검으로 DB 재시작', '자주 쓰던 데이터가 메모리에 없어 디스크에서 읽음', '점검 직후 한동안 로그인·로딩이 느림'],
       sym: ['noconnect', 'delay'], fx: ['lat'], who: ['server'], when: ['login'],
       own: ['dba', 'srv'],
-      act: { game: '점진적 오픈(접속 대기열로 로그인 인원을 단계적으로 늘리기).', infra: '재시작 후 캐시 예열(워밍, 버퍼 풀 저장·복원 설정 확인), 스냅샷으로 되살린 DB는 디스크도 미리 읽기.' },
+      act: { game: '점진적 오픈(로그인 대기열로 로그인 인원을 단계적으로 늘리기).', infra: '재시작 후 캐시 예열(워밍, 버퍼 풀 저장·복원 설정 확인), 스냅샷으로 되살린 DB는 디스크도 미리 읽기.' },
       more: 'MySQL은 꺼질 때 버퍼 풀의 페이지 목록을 저장했다가 켜질 때 백그라운드에서 다시 읽어 오지만, 다 채우기까지는 시간이 걸립니다. 클라우드에서 DB를 스냅샷(디스크 사본)으로 되살렸다면 디스크 자체도 처음 읽는 블록마다 느려서 더 오래 갑니다.',
       sig: { k: 'surge', g: '디스크 읽기, 버퍼 캐시 적중률' },
       chk: {
@@ -5776,7 +5781,7 @@ window.SIGDRAW = (function () {
       c: ['캐릭터 로딩 때 아이템·스킬·퀘스트를 따로따로 조회', '점검 직후 동시 로그인으로 쿼리 폭증', '로그인 무한 로딩, 게임 중인 사람의 저장까지 밀림'],
       sym: ['noconnect', 'delay'], fx: ['stall', 'lat'], who: ['server'], when: ['login'],
       own: ['srv', 'dba'],
-      act: { game: '한 번에 묶어서 조회, 접속 대기열, 캐시, ORM 지연 로딩이 만드는 조회 수 점검.', infra: '호출 횟수가 많은 쿼리 순위를 뽑아 공유, 점검 직후 로그인 시간대의 쿼리 수·커넥션 수 모니터링.' },
+      act: { game: '한 번에 묶어서 조회, 로그인 대기열, 캐시, ORM 지연 로딩이 만드는 조회 수 점검.', infra: '호출 횟수가 많은 쿼리 순위를 뽑아 공유, 점검 직후 로그인 시간대의 쿼리 수·커넥션 수 모니터링.' },
       more: 'ORM(DB 조회를 대신 만들어 주는 라이브러리)의 지연 로딩이 개발자도 모르는 사이 이런 조회를 만듭니다. 개발 서버에서는 캐릭터 몇 개라 티가 안 나고, 라이브의 동시 로그인에서 처음 드러납니다.',
       sim: 'dbpool',
       sig: { k: 'surge', g: 'DB 초당 쿼리 수, 로그인 수' },
@@ -6168,7 +6173,7 @@ window.SIGDRAW = (function () {
       chk: {
         look: '플랫폼 로그인·결제·본인 인증 같은 외부 호출별 응답 시간·오류율·타임아웃 수와 사업자의 상태 페이지',
         yes: '로그인·결제 실패가 몰린 시각부터 특정 외부 호출의 오류·타임아웃만 한 단계 올라 머물고, 사업자 상태 페이지에 같은 시각의 장애가 있음',
-        no: '외부 호출은 정상인데 로그인이 막히면 로그인 서버 자체(스레드 풀 고갈, DB)나 접속 대기열 쪽',
+        no: '외부 호출은 정상인데 로그인이 막히면 로그인 서버 자체(스레드 풀 고갈, DB)나 운영체제의 접속 대기열(backlog) 쪽',
         by: 'code',
       },
       ref: [
@@ -7885,7 +7890,7 @@ Object.assign(DATA.secRefs, {
     { t: 'tcp: use RACK to detect losses', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4f41b1c58a32537542f14c1150099131613a5e8a', p: 'Linux kernel', n: 'RACK과 tcp_recovery 도입(리눅스 4.4), 처음에는 기존 방식의 보조로 동작' },
     { t: 'tcp: disable RFC6675 loss detection', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b38a51fec1c1f693f03b1aa19d0622123634d4b7', p: 'Linux kernel', n: 'RACK을 기본 손실 감지로 바꿈(2018년, 리눅스 4.18)' },
     { t: 'tcp: remove obsolete and unused RFC3517/RFC6675 loss recovery code', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1c120191dcec510cc17d587ece48a7ae875a90c5', p: 'Linux kernel', n: 'RFC6675 손실 복구 코드 삭제(리눅스 6.17), RACK-TLP가 2018년부터 기본이었다는 설명' },
-    { t: 'tcp: make the first N SYN RTO backoffs linear', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ccce324dabfe2143519daf50ed8b1ef1d0c542f7', p: 'Linux kernel', n: 'SYN RTO의 처음 4번 백오프를 두 배로 늘리지 않음(1, 1, 1, 1, 1, 2, 4초 …, 리눅스 6.5)' },
+    { t: 'tcp: make the first N SYN RTO backoffs linear', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ccce324dabfe2143519daf50ed8b1ef1d0c542f7', p: 'Linux kernel', n: 'SYN RTO의 처음 4번 백오프를 두 배로 늘리지 않음(첫 RTO 1초 뒤 네 번 더 1초씩, 그다음부터 2, 4초 …, 리눅스 6.5)' },
     { t: 'tcp: add sysctl_tcp_rto_min_us', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f086edef71be7174a16c1ed67ac65a085cda28b1', p: 'Linux kernel', n: '서버 전체 RTO 최소값 tcp_rto_min_us(리눅스 6.11)' },
     { t: 'tcp: add the ability to control max RTO', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=54a378f43425085d0684679d99735696b69165bc', p: 'Linux kernel', n: 'TCP_RTO_MAX_MS 소켓 옵션, 1~120초(리눅스 6.15)' },
     { t: 'tcp: support TCP_RTO_MIN_US for set/getsockopt use', u: 'https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f38805c5d26fe4af97837c10d58074a7496638bf', p: 'Linux kernel', n: '연결마다 RTO 최소값을 정하는 TCP_RTO_MIN_US 소켓 옵션(리눅스 6.15)' },
@@ -10264,7 +10269,7 @@ K.register('disk', function (root) {
     if (s < 3600) return K.n(Math.floor(s / 60)) + TR`분 ` + K.n(Math.round(s % 60)) + TR`초`;
     return K.n(s / 3600, 1) + TR` 시간`;
   }
-  const LAT = ['0.01', '0.1', '1', '10', '100', TR`1초`, TR`10초`];
+  const LAT = [K.nr(0.01, 2), K.nr(0.1), '1', '10', '100', TR`1초`, TR`10초`];
   const lg = v => Math.log10(K.clamp(v, 0.01, 10000));
   function segs(pts, ok) { const out = []; let cur = []; for (const p of pts) { if (ok(p)) cur.push(p); else if (cur.length) { out.push(cur); cur = []; } } if (cur.length) out.push(cur); return out; }
   const agoFmt = x1 => v => { const m = Math.round((x1 - v) / 60); return m === 0 ? TR`지금` : m + TR`분 전`; };
@@ -10834,7 +10839,7 @@ K.register('frames', function (root) {
       TR`<b>GC 스파이크</b>를 누르고 아래 달리는 캐릭터를 지켜보세요. 몇 초마다 멈췄다가 앞으로 툭 튀어 나갑니다(순간이동). 위 차트에는 빨간 막대가 솟습니다.`,
       TR`그 상태에서 <b>점진적 GC</b>를 켜 보세요. 큰 멈춤 한 번을 3ms(유니티 기본값)짜리 작은 단위 여러 번으로 나눠 처리합니다. 가비지 생성을 500KB로 올리면 수집 속도가 못 따라가 다시 큰 멈춤이 나옵니다.`,
       TR`<b>V-Sync 경계 (17ms)</b>를 누르세요. 일이 16.7ms를 1ms 넘겼을 뿐인데 한 프레임에 33.3ms가 걸립니다. FPS가 60과 30 사이를 오가며 움직임이 들쭉날쭉해집니다.`,
-      TR`<b>새 지역 로딩</b>을 켠 채 <b>밀린 시간 처리</b>를 하나씩 바꿔 보세요. 한 번에 점프하면 순간이동, 고정 스텝으로 따라잡으면 긴 프레임이 줄줄이(뚝뚝 끊김), 상한을 두면 넘친 시간이 버려져 슬로우모션이 됩니다.`,
+      TR`<b>새 지역 진입 시 동기 로딩</b>을 켠 채 <b>밀린 시간 처리</b>를 하나씩 바꿔 보세요. 한 번에 점프하면 순간이동, 고정 스텝으로 따라잡으면 긴 프레임이 줄줄이(뚝뚝 끊김), 상한을 두면 넘친 시간이 버려져 슬로우모션이 됩니다.`,
     ],
     layout: 'side',
   });
@@ -13120,7 +13125,7 @@ K.register('lab', function (root) {
     // 레일
     ctx.strokeStyle = Cc.line; ctx.lineWidth = 1;
     [yS, yC].forEach(y => { ctx.beginPath(); ctx.moveTo(L, y + 0.5); ctx.lineTo(R, y + 0.5); ctx.stroke(); });
-    K.text(ctx, TR`서버`, L - 8, yS, { align: 'right', size: 11, weight: 600, color: Cc.ink2 });
+    K.text(ctx, TR`서버@@타임라인 줄 이름(좁은 칸, 짧게)`, L - 8, yS, { align: 'right', size: 11, weight: 600, color: Cc.ink2 });
     K.text(ctx, TR`내 PC`, L - 8, yC, { align: 'right', size: 11, weight: 600, color: Cc.ink2 });
     // 시간 눈금
     for (let s = 0; s <= 3; s++) {

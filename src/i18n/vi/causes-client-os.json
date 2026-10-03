@@ -8,7 +8,7 @@
     {"ctx":"causes/co-background/c/1","ko":"게임 스레드가 스케줄링 대기","t":"Game thread phải chờ được lập lịch"},
     {"ctx":"causes/co-background/c/2","ko":"프레임이 늦고 받은 패킷 처리도 늦어짐","t":"Khung hình bị trễ, việc xử lý gói tin đã nhận cũng trễ theo"},
     {"ctx":"causes/co-background/num","ko":"윈도우는 보통 한 번에 수 ms~수십 ms씩 코어를 넘겨줍니다. 스케줄링에서 한 번만 밀려도 한 프레임이 사라집니다.","t":"Windows thường giao core cho mỗi thread vài ms đến vài chục ms một lần. Chỉ cần bị lỡ một lượt lập lịch là mất một khung hình."},
-    {"ctx":"causes/co-background/act/game","ko":"게임 스레드 우선순위 조정, 끊김 로그에 PC 전체 CPU 사용률을 함께 남겨 다른 프로그램 탓인지 구분.","t":"Điều chỉnh mức ưu tiên của game thread, ghi kèm mức dùng CPU của toàn PC vào log giật để phân biệt có phải do chương trình khác hay không."},
+    {"ctx":"causes/co-background/act/game","ko":"게임 스레드 우선순위 조정, 뚝뚝 끊김이 생긴 때의 로그에 PC 전체 CPU 사용률을 함께 남겨 다른 프로그램 탓인지 구분.","t":"Điều chỉnh mức ưu tiên của game thread, ghi kèm mức dùng CPU của toàn PC vào log lúc xảy ra giật để phân biệt có phải do chương trình khác hay không."},
     {"ctx":"causes/co-background/act/ext","ko":"유저에게 윈도우 게임 모드 켜기, 게임 중 불필요한 프로그램(백신 검사·윈도우 업데이트·방송 프로그램·브라우저 영상) 종료 안내.","t":"Hướng dẫn người chơi bật Game Mode của Windows, tắt các chương trình không cần thiết khi chơi (quét virus, Windows Update, phần mềm livestream, video trên trình duyệt)."},
     {"ctx":"causes/co-background/more","ko":"윈도우는 앞에 띄운 창(포그라운드)의 프로그램에 우선순위를 조금 더 주지만, 코어보다 바쁜 일이 많으면 게임도 기다립니다. 백신은 CPU를 쓰는 것보다 “실시간 감시”로 더 자주 끼어듭니다. 게임이 파일을 열 때마다 검사해서, 에셋을 읽는 순간의 멈춤이 길어집니다.","t":"Windows ưu tiên hơn một chút cho chương trình ở cửa sổ đang hiện phía trước (foreground), nhưng khi số việc cần chạy nhiều hơn số core thì game vẫn phải chờ. Với phần mềm diệt virus, tính năng “giám sát thời gian thực” còn hay chen vào hơn cả việc dùng CPU. Nó quét mỗi lần game mở file, nên những lần dừng lúc đọc asset kéo dài hơn."},
     {"ctx":"causes/co-background/sig/g","ko":"PC 전체 CPU 사용률, 프레임 시간","t":"Mức dùng CPU của toàn PC, frame time"},
@@ -219,7 +219,7 @@
     {"ctx":"causes/co-overlay/c/0","ko":"메신저·게임 런처·그래픽카드 도구·녹화 프로그램의 오버레이가 켜져 있음","t":"Overlay của phần mềm nhắn tin, launcher game, công cụ card đồ họa hoặc phần mềm quay màn hình đang bật"},
     {"ctx":"causes/co-overlay/c/1","ko":"프레임을 화면에 내보낼 때마다 오버레이가 끼어들어 자기 UI를 덧그림","t":"Mỗi lần khung hình được đẩy ra màn hình, overlay chen vào để vẽ đè UI của nó"},
     {"ctx":"causes/co-overlay/c/2","ko":"프레임이 조금씩 늦고, 알림이 뜨는 순간 멈칫하거나 그래픽 오류·강제 종료(플레이어에게는 접속 끊김처럼 보임)","t":"Khung hình trễ đi một chút, lúc có thông báo hiện lên thì khựng, hoặc lỗi đồ họa, game bị tắt đột ngột (người chơi thấy giống mất kết nối)"},
-    {"ctx":"causes/co-overlay/act/game","ko":"크래시·끊김 리포트에 실행 중인 오버레이 목록을 함께 모으기.","t":"Thu thập kèm danh sách overlay đang chạy trong crash report và báo cáo giật."},
+    {"ctx":"causes/co-overlay/act/game","ko":"크래시 리포트와 뚝뚝 끊김 로그에 실행 중인 오버레이 목록을 함께 모으기.","t":"Thu thập kèm danh sách overlay đang chạy trong crash report và log giật."},
     {"ctx":"causes/co-overlay/act/ext","ko":"제보가 오면 유저에게 오버레이를 모두 끄고 다시 시험하도록 안내.","t":"Khi có báo cáo, hướng dẫn người chơi tắt hết overlay rồi thử lại."},
     {"ctx":"causes/co-overlay/more","ko":"특정 사람만 뚝뚝 끊기거나 게임이 꺼지고 사양으로는 설명이 안 될 때, 오버레이와 게임 보안 모듈의 충돌을 먼저 의심합니다.","t":"Khi chỉ một số người bị giật khựng hoặc văng game mà cấu hình máy không giải thích được, hãy nghi trước tiên xung đột giữa overlay và module bảo mật game."},
     {"ctx":"causes/co-overlay/sig/g","ko":"프레임 시간·크래시 수(오버레이를 켠 유저)","t":"Frame time, số lần crash (người chơi bật overlay)"},
@@ -252,6 +252,8 @@
     {"ctx":"causes/co-display-input/ref/8/n","ko":"게임처럼 지연이 중요한 창은 디스플레이에 최소 영상 처리를 요청, HDMI 연결이면 ALLM·Game Content Type 신호를 보내 TV를 저지연 모드로 바꿈","t":"Cửa sổ cần độ trễ thấp như game sẽ yêu cầu màn hình xử lý hình ảnh ở mức tối thiểu; nếu kết nối HDMI thì gửi tín hiệu ALLM và Game Content Type để chuyển TV sang chế độ độ trễ thấp"}
   ],
   "stale": [
-    {"ctx":"causes/co-display-input/num","ko":"60Hz 화면은 프레임 하나를 보내는 데만 16.6ms, 120Hz면 8.3ms가 걸립니다. 예전 Xbox 컨트롤러는 입력을 8ms마다 읽어 보냈습니다. TV 영상 처리가 더하는 지연은 기기마다 달라 한 숫자로 말하기 어렵고, 게임 모드는 이 처리를 줄이는 설정입니다. 프레임 생성은 AMD가 생성 전 프레임률 60FPS 이상에서 쓰도록 권장합니다.","t":"Riêng việc gửi một khung hình đã mất 16,6 ms ở màn hình 60 Hz và 8,3 ms ở 120 Hz. Tay cầm Xbox đời cũ đọc và gửi input 8 ms một lần. Độ trễ do xử lý hình ảnh của TV khác nhau tùy thiết bị nên khó nói bằng một con số; chế độ game là thiết lập giảm phần xử lý này. Với tạo khung hình, AMD khuyến nghị chỉ dùng khi tốc độ khung hình trước khi tạo từ 60 FPS trở lên."}
+    {"ctx":"causes/co-display-input/num","ko":"60Hz 화면은 프레임 하나를 보내는 데만 16.6ms, 120Hz면 8.3ms가 걸립니다. 예전 Xbox 컨트롤러는 입력을 8ms마다 읽어 보냈습니다. TV 영상 처리가 더하는 지연은 기기마다 달라 한 숫자로 말하기 어렵고, 게임 모드는 이 처리를 줄이는 설정입니다. 프레임 생성은 AMD가 생성 전 프레임률 60FPS 이상에서 쓰도록 권장합니다.","t":"Riêng việc gửi một khung hình đã mất 16,6 ms ở màn hình 60 Hz và 8,3 ms ở 120 Hz. Tay cầm Xbox đời cũ đọc và gửi input 8 ms một lần. Độ trễ do xử lý hình ảnh của TV khác nhau tùy thiết bị nên khó nói bằng một con số; chế độ game là thiết lập giảm phần xử lý này. Với tạo khung hình, AMD khuyến nghị chỉ dùng khi tốc độ khung hình trước khi tạo từ 60 FPS trở lên."},
+    {"ctx":"causes/co-background/act/game","ko":"게임 스레드 우선순위 조정, 끊김 로그에 PC 전체 CPU 사용률을 함께 남겨 다른 프로그램 탓인지 구분.","t":"Điều chỉnh mức ưu tiên của game thread, ghi kèm mức dùng CPU của toàn PC vào log giật để phân biệt có phải do chương trình khác hay không."},
+    {"ctx":"causes/co-overlay/act/game","ko":"크래시·끊김 리포트에 실행 중인 오버레이 목록을 함께 모으기.","t":"Thu thập kèm danh sách overlay đang chạy trong crash report và báo cáo giật."}
   ]
 }
