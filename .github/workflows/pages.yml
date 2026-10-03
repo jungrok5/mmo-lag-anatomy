@@ -25,9 +25,6 @@ jobs:
       - uses: actions/checkout@v7
       - name: 데이터 검사
         run: node tools/validate.cjs
-      - name: 한국어 문체 검사
-        # 번역투·기계 문체의 '오류' 규칙(docs/KO_STYLE.md)이 하나라도 걸리면 멈춘다
-        run: node tools/ko-style.cjs --strict
       - name: 번역 검사
         # 화면 글자가 모두 TR로 감싸였는지, 번역의 자리표시·태그가 원문과 맞는지. 빈 번역은 한국어로 보이고 경고만 남긴다
         run: |
@@ -35,6 +32,9 @@ jobs:
           node tools/i18n-wrap.cjs --check
           node tools/i18n.cjs check
           node tools/i18n.cjs status | sed 's/^/::notice::번역 /'
+      - name: 한국어 문체 검사
+        # 번역투·기계 문체의 '오류' 규칙(docs/KO_STYLE.md)이 하나라도 걸리면 멈춘다. 앞 단계에서 설치한 typescript로 코드의 TR 문자열을 읽는다
+        run: node tools/ko-style.cjs --strict
       - name: 빌드
         run: |
           python3 build.py
