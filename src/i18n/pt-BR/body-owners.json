@@ -84,7 +84,7 @@
     {"ctx":"#owners td","ko":"초당 패킷 수, 장비 CPU·드롭, 지역·통신사별 접속 실패율(오탐 확인)","t":"Pacotes por segundo, CPU e descartes nos equipamentos, taxa de falha de conexão por região e operadora (para checar falsos positivos)"},
     {"ctx":"#owners td","ko":"유저 와이파이·PC 문제","t":"Problemas no Wi-Fi ou no PC do jogador"},
     {"ctx":"#owners div","ko":"<span class=\"k\">먼저</span><span class=\"own own-ext\"><span class=\"tm\">외부</span>유저·통신사·클라우드</span><span class=\"own own-game\"><span class=\"tm\">게임개발팀</span>클라이언트</span>","t":"<span class=\"k\">Primeiro</span><span class=\"own own-ext\"><span class=\"tm\">Externo</span>Jogadores/operadoras/nuvem</span><span class=\"own own-game\"><span class=\"tm\">Equipe de desenvolvimento</span>Cliente</span>"},
-    {"ctx":"#owners td","ko":"게임 안 네트워크 상태 표시(핑·손실), 지터에 따라 보간 버퍼 길이 자동 조절, 끊김 로그에 망 종류·PC CPU 사용률 남기기, 유선 연결 등 안내 문구","t":"Indicador do estado da rede dentro do jogo (ping, perda), ajuste automático do buffer de interpolação conforme o jitter, registro do tipo de rede e do uso de CPU do PC nos logs de desconexão, mensagens de orientação (como usar conexão por cabo)"},
+    {"ctx":"#owners td","ko":"게임 안 네트워크 상태 표시(핑·손실), 지터에 따라 보간 버퍼 길이 자동 조절, 렉이 생긴 때의 로그에 망 종류·PC CPU 사용률 남기기, 유선 연결 등 안내 문구","t":"Indicador do estado da rede dentro do jogo (ping, perda), ajuste automático do buffer de interpolação conforme o jitter, registro do tipo de rede e do uso de CPU do PC nos logs gerados quando há lag, mensagens de orientação (como usar conexão por cabo)"},
     {"ctx":"#owners td","ko":"직접 고칠 수 없음. 같은 통신사·지역에 제보가 몰리면 회선 문제로 다시 분류","t":"Não dá para corrigir diretamente. Se os reports se concentram em uma operadora ou região, reclassificar como problema de conexão"},
     {"ctx":"#owners td","ko":"제보의 회선·기기 정보, 같은 통신사·지역 비율","t":"Informações de conexão e dispositivo nos reports, proporção na mesma operadora ou região"},
     {"ctx":"#owners-handoff","ko":"넘길 때 챙길 정보","t":"O que incluir ao repassar o caso"},
@@ -105,5 +105,8 @@
     {"ctx":"#owners li","ko":"원인 구간과 결론, 재발 방지 계획","t":"Trecho onde estava a causa, conclusão e plano para evitar que se repita"},
     {"ctx":"#owners li","ko":"게임 쪽에 필요한 조치(하트비트 간격, 재시도 방식, 연결 수 제한 등)","t":"Ações necessárias do lado do jogo (intervalo de heartbeat, estratégia de novas tentativas, limite de conexões etc.)"},
     {"ctx":"#owners p","ko":"<b>두 팀 공통</b>: 장애 대응 책임자 한 명을 정해 한 채널에 시간순 기록을 남기고, 다음 공유 시각을 미리 알립니다. 주 담당이 다른 팀으로 바뀌면 이 기록을 함께 넘겨 같은 확인을 되풀이하지 않게 합니다. 끝나면 같은 기록으로 해당 원인 카드의 담당과 할 일을 고칩니다.","t":"<b>Para as duas equipes</b>: definir um único responsável pelo incidente, manter um registro em ordem cronológica em um único canal e avisar com antecedência o horário da próxima atualização. Se o responsável principal passar para outra equipe, entregar esse registro junto, para não repetir as mesmas verificações. No fim, usar o mesmo registro para corrigir o responsável e o que fazer no card da causa."}
+  ],
+  "stale": [
+    {"ctx":"#owners td","ko":"게임 안 네트워크 상태 표시(핑·손실), 지터에 따라 보간 버퍼 길이 자동 조절, 끊김 로그에 망 종류·PC CPU 사용률 남기기, 유선 연결 등 안내 문구","t":"Indicador do estado da rede dentro do jogo (ping, perda), ajuste automático do buffer de interpolação conforme o jitter, registro do tipo de rede e do uso de CPU do PC nos logs de desconexão, mensagens de orientação (como usar conexão por cabo)"}
   ]
 }

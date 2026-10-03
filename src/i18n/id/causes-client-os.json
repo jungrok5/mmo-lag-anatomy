@@ -8,7 +8,7 @@
     {"ctx":"causes/co-background/c/1","ko":"게임 스레드가 스케줄링 대기","t":"Thread game menunggu jatah CPU"},
     {"ctx":"causes/co-background/c/2","ko":"프레임이 늦고 받은 패킷 처리도 늦어짐","t":"Frame terlambat dan pemrosesan paket yang diterima juga terlambat"},
     {"ctx":"causes/co-background/num","ko":"윈도우는 보통 한 번에 수 ms~수십 ms씩 코어를 넘겨줍니다. 스케줄링에서 한 번만 밀려도 한 프레임이 사라집니다.","t":"Windows biasanya memberikan core sekali jalan selama beberapa ms hingga puluhan ms. Tertunda sekali saja dalam penjadwalan sudah membuat satu frame hilang."},
-    {"ctx":"causes/co-background/act/game","ko":"게임 스레드 우선순위 조정, 끊김 로그에 PC 전체 CPU 사용률을 함께 남겨 다른 프로그램 탓인지 구분.","t":"Sesuaikan prioritas thread game, sertakan pemakaian CPU seluruh PC di log saat terjadi patah-patah untuk membedakan apakah penyebabnya program lain."},
+    {"ctx":"causes/co-background/act/game","ko":"게임 스레드 우선순위 조정, 뚝뚝 끊김이 생긴 때의 로그에 PC 전체 CPU 사용률을 함께 남겨 다른 프로그램 탓인지 구분.","t":"Sesuaikan prioritas thread game, sertakan pemakaian CPU seluruh PC di log saat terjadi patah-patah untuk membedakan apakah penyebabnya program lain."},
     {"ctx":"causes/co-background/act/ext","ko":"유저에게 윈도우 게임 모드 켜기, 게임 중 불필요한 프로그램(백신 검사·윈도우 업데이트·방송 프로그램·브라우저 영상) 종료 안내.","t":"Imbau pemain untuk mengaktifkan Mode Game di Windows dan menutup program yang tidak perlu selama bermain (pemindaian antivirus, Windows Update, program streaming, video di browser)."},
     {"ctx":"causes/co-background/more","ko":"윈도우는 앞에 띄운 창(포그라운드)의 프로그램에 우선순위를 조금 더 주지만, 코어보다 바쁜 일이 많으면 게임도 기다립니다. 백신은 CPU를 쓰는 것보다 “실시간 감시”로 더 자주 끼어듭니다. 게임이 파일을 열 때마다 검사해서, 에셋을 읽는 순간의 멈춤이 길어집니다.","t":"Windows memberi prioritas sedikit lebih tinggi pada program di jendela yang sedang aktif di depan (foreground), tetapi jika pekerjaan lebih banyak daripada core yang ada, game pun harus menunggu. Antivirus lebih sering mengganggu lewat “pemantauan real-time” daripada lewat pemakaian CPU. Setiap kali game membuka file, antivirus memeriksanya sehingga jeda saat membaca aset makin panjang."},
     {"ctx":"causes/co-background/sig/g","ko":"PC 전체 CPU 사용률, 프레임 시간","t":"Pemakaian CPU seluruh PC, frame time"},
@@ -219,7 +219,7 @@
     {"ctx":"causes/co-overlay/c/0","ko":"메신저·게임 런처·그래픽카드 도구·녹화 프로그램의 오버레이가 켜져 있음","t":"Overlay dari messenger, launcher game, tools kartu grafis, atau program perekam aktif"},
     {"ctx":"causes/co-overlay/c/1","ko":"프레임을 화면에 내보낼 때마다 오버레이가 끼어들어 자기 UI를 덧그림","t":"Setiap kali frame dikirim ke layar, overlay menyela untuk menggambar UI-nya"},
     {"ctx":"causes/co-overlay/c/2","ko":"프레임이 조금씩 늦고, 알림이 뜨는 순간 멈칫하거나 그래픽 오류·강제 종료(플레이어에게는 접속 끊김처럼 보임)","t":"Frame sedikit demi sedikit terlambat, dan saat notifikasi muncul game tersendat sesaat, mengalami error grafis, atau tertutup paksa (bagi pemain terlihat seperti disconnect)"},
-    {"ctx":"causes/co-overlay/act/game","ko":"크래시·끊김 리포트에 실행 중인 오버레이 목록을 함께 모으기.","t":"Kumpulkan daftar overlay yang sedang berjalan bersama laporan crash dan patah-patah."},
+    {"ctx":"causes/co-overlay/act/game","ko":"크래시 리포트와 뚝뚝 끊김 로그에 실행 중인 오버레이 목록을 함께 모으기.","t":"Kumpulkan daftar overlay yang sedang berjalan bersama laporan crash dan log patah-patah."},
     {"ctx":"causes/co-overlay/act/ext","ko":"제보가 오면 유저에게 오버레이를 모두 끄고 다시 시험하도록 안내.","t":"Jika ada laporan, imbau pemain untuk mematikan semua overlay lalu mencoba lagi."},
     {"ctx":"causes/co-overlay/more","ko":"특정 사람만 뚝뚝 끊기거나 게임이 꺼지고 사양으로는 설명이 안 될 때, 오버레이와 게임 보안 모듈의 충돌을 먼저 의심합니다.","t":"Jika hanya pemain tertentu yang mengalami patah-patah atau game tertutup dan spesifikasinya tidak bisa menjelaskan hal itu, curigai lebih dulu bentrokan antara overlay dan modul keamanan game."},
     {"ctx":"causes/co-overlay/sig/g","ko":"프레임 시간·크래시 수(오버레이를 켠 유저)","t":"Frame time dan jumlah crash (pemain yang menyalakan overlay)"},
@@ -250,5 +250,9 @@
     {"ctx":"causes/co-display-input/ref/6/n","ko":"MsAllInputToPhotonLatency(입력~화면 지연), DisplayLatency(프레임 제출~모니터로 내보내기), FrameType(앱이 그린 프레임과 드라이버·SDK가 보간한 프레임 구분)","t":"MsAllInputToPhotonLatency (latensi input hingga layar), DisplayLatency (frame diserahkan hingga dikirim ke monitor), FrameType (membedakan frame yang digambar aplikasi dan frame hasil interpolasi driver atau SDK)"},
     {"ctx":"causes/co-display-input/ref/7/n","ko":"MsAllInputToPhotonLatency는 키보드·마우스 입력 기준, FrameType은 앱·드라이버가 Intel-PresentMon 이벤트를 내보내야 기록됨(--track_frame_type)","t":"MsAllInputToPhotonLatency diukur dari input keyboard dan mouse, FrameType hanya tercatat jika aplikasi atau driver mengirim event Intel-PresentMon (--track_frame_type)"},
     {"ctx":"causes/co-display-input/ref/8/n","ko":"게임처럼 지연이 중요한 창은 디스플레이에 최소 영상 처리를 요청, HDMI 연결이면 ALLM·Game Content Type 신호를 보내 TV를 저지연 모드로 바꿈","t":"Jendela yang sensitif terhadap latensi seperti game meminta pemrosesan gambar minimum pada layar; pada koneksi HDMI, sinyal ALLM dan Game Content Type dikirim untuk mengalihkan TV ke mode latensi rendah"}
+  ],
+  "stale": [
+    {"ctx":"causes/co-background/act/game","ko":"게임 스레드 우선순위 조정, 끊김 로그에 PC 전체 CPU 사용률을 함께 남겨 다른 프로그램 탓인지 구분.","t":"Sesuaikan prioritas thread game, sertakan pemakaian CPU seluruh PC di log saat terjadi patah-patah untuk membedakan apakah penyebabnya program lain."},
+    {"ctx":"causes/co-overlay/act/game","ko":"크래시·끊김 리포트에 실행 중인 오버레이 목록을 함께 모으기.","t":"Kumpulkan daftar overlay yang sedang berjalan bersama laporan crash dan patah-patah."}
   ]
 }

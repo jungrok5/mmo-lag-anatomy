@@ -123,7 +123,7 @@
     {"ctx":"causes/hn-5g-flip/c/1","ko":"폰이 5G와 LTE 사이를 수시로 전환하며 그때마다 짧은 공백이 생김","t":"Ponsel sering berpindah antara 5G dan LTE, dan setiap kali itu muncul jeda singkat"},
     {"ctx":"causes/hn-5g-flip/c/2","ko":"가만히 있어도 규칙 없이 핑이 튀고, 가끔 멈춤·순간이동","t":"Ping melonjak tanpa pola walau diam, sesekali freeze atau teleport"},
     {"ctx":"causes/hn-5g-flip/num","ko":"전환 한 번에 수십~수백 ms. 국내 5G는 대부분 LTE와 함께 묶어 쓰는 방식(NSA)이라 5G 쪽만 붙었다 떨어졌다 하기 쉽습니다.","t":"Satu kali perpindahan memakan puluhan hingga ratusan ms. 5G di Korea kebanyakan memakai cara yang digabung dengan LTE (NSA), sehingga koneksi 5G-nya mudah tersambung dan terlepas."},
-    {"ctx":"causes/hn-5g-flip/act/game","ko":"지터가 늘면 보간 버퍼 길이를 자동으로 늘리기, 끊김 로그에 망 종류(5G·LTE) 변화를 함께 남겨 원인 구분.","t":"Perpanjang buffer interpolasi secara otomatis saat jitter bertambah, sertakan perubahan jenis jaringan (5G/LTE) di log saat terjadi lag untuk membedakan penyebabnya."},
+    {"ctx":"causes/hn-5g-flip/act/game","ko":"지터가 늘면 보간 버퍼 길이를 자동으로 늘리기, 렉이 생긴 때의 로그에 망 종류(5G·LTE) 변화를 함께 남겨 원인 구분.","t":"Perpanjang buffer interpolasi secara otomatis saat jitter bertambah, sertakan perubahan jenis jaringan (5G/LTE) di log saat terjadi lag untuk membedakan penyebabnya."},
     {"ctx":"causes/hn-5g-flip/act/ext","ko":"유저에게 설정에서 LTE 우선 모드로 바꿔 비교해 보도록 안내, 와이파이 사용 권장.","t":"Imbau pemain untuk beralih ke mode yang mengutamakan LTE di pengaturan sebagai pembanding, sarankan memakai Wi-Fi."},
     {"ctx":"causes/hn-5g-flip/sig/g","ko":"RTT, 망 종류(5G·LTE) 변화","t":"RTT, perubahan jenis jaringan (5G/LTE)"},
     {"ctx":"causes/hn-5g-flip/chk/look","ko":"폰 설정을 LTE 우선으로 바꿔 같은 자리에서 비교. 클라이언트가 안드로이드 TelephonyDisplayInfo의 망 표시(OVERRIDE_NETWORK_TYPE_NR_NSA 등) 변화를 RTT와 함께 기록하면 더 확실함","t":"Ubah pengaturan ponsel agar mengutamakan LTE lalu bandingkan di tempat yang sama. Lebih pasti jika klien mencatat perubahan indikator jaringan di TelephonyDisplayInfo Android (OVERRIDE_NETWORK_TYPE_NR_NSA dan sebagainya) bersama RTT"},
@@ -145,5 +145,8 @@
     {"ctx":"causes/hn-captive/chk/no","ko":"어느 망에서도 실패하면 계정·서버·“DNS 장애·지연” 쪽. 특정 국가·통신사 전체에서 실패하면 “국가·통신사 단위 UDP 제한·패킷 검사”","t":"Gagal di jaringan mana pun: mengarah ke akun, server, atau “Gangguan dan latensi DNS”. Gagal di seluruh negara atau ISP tertentu: lebih mungkin “Pembatasan UDP dan inspeksi paket per negara atau ISP”"},
     {"ctx":"causes/hn-captive/ref/0/n","ko":"캡티브 포털: 약관 동의·인증 같은 요구 조건을 채울 때까지 접속이 제한되는 네트워크","t":"Captive portal: jaringan yang membatasi akses sampai syarat seperti persetujuan ketentuan atau autentikasi dipenuhi"},
     {"ctx":"causes/hn-captive/ref/1/n","ko":"측정 연구상 네트워크의 3~5%는 UDP를 모두 막으므로, UDP 기반 앱은 TCP(TLS) 대체 경로를 준비해야 함","t":"Menurut studi pengukuran, 3–5% jaringan memblokir UDP sepenuhnya, sehingga aplikasi berbasis UDP harus menyiapkan rute cadangan TCP (TLS)"}
+  ],
+  "stale": [
+    {"ctx":"causes/hn-5g-flip/act/game","ko":"지터가 늘면 보간 버퍼 길이를 자동으로 늘리기, 끊김 로그에 망 종류(5G·LTE) 변화를 함께 남겨 원인 구분.","t":"Perpanjang buffer interpolasi secara otomatis saat jitter bertambah, sertakan perubahan jenis jaringan (5G/LTE) di log saat terjadi lag untuk membedakan penyebabnya."}
   ]
 }

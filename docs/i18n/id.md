@@ -364,7 +364,7 @@ Labels: 누가 겪나 → "Siapa yang mengalami", 누가 → "Siapa", 언제 →
 | 선입력 / 선입력 허용 시간 | input buffering / batas waktu input buffering | |
 | 서버 입력 버퍼 | buffer input di server | |
 | 선연출 | feedback sisi klien | animations/effects played before the server confirms |
-| 판정 | keputusan server; 공격 판정 → hit registration; 이동 검증 → validasi gerakan | 판정 시점 → waktu penilaian |
+| 판정 | keputusan server; 공격 판정 → hit registration; 이동 검증 → validasi gerakan | 판정 시점 → waktu keputusan server (never "penilaian") |
 | 판정 구간 / 허용 시간 / 패링 판정 | timing window / batas waktu / parry window | |
 | 스킬 씹힘 | skill tidak keluar | |
 | 시야 / 시야 계산 / AOI | jarak pandang / perhitungan jarak pandang / AOI (area of interest) | 셀 / 격자(그리드) → sel / grid |
@@ -663,7 +663,7 @@ Terms settled by the translators and reviewers after the first pass. They overri
 | 멈춤 (server, GC, TCP stall; chk/num text) | jeda, berhenti, koneksi berhenti | the symptom name Freeze only for what the player sees on screen |
 | 입력 지연 (lockstep/rollback setting) | input delay | the symptom stays Input lag |
 | 멈춤 (sim-nagle playback speed) | Jeda | |
-| 판정 (hit judgment in tables and headings) | hit registration; keputusan server | 판정 시점 stays waktu penilaian |
+| 판정 (hit judgment in tables and headings) | hit registration; keputusan server | 판정 시점 → waktu keputusan server |
 | 텔레포트 (game feature) | teleportasi | the symptom stays Teleport |
 | 접속 대기열(backlog) / 로그인 대기열 | antrean koneksi (backlog) / antrean login | |
 | PC방 | warnet | |
@@ -716,3 +716,7 @@ Terms settled by the translators and reviewers after the first pass. They overri
 | 글로벌 쿨다운 / 세대 번호 / 저사양 모드 | global cooldown / nomor generasi / mode grafis rendah | |
 | 큰 페이지 (THP) | halaman besar (THP) | |
 | 영어 그대로 두는 DB 용어 | sharp checkpoint, adaptive flushing, log shipping, parameter sniffing, plan hint/forcing, Query Store, lazy/eager loading, gap/next-key/metadata lock, isolation level | |
+| 트래픽 | trafik | not "traffic" in prose |
+| 게임 스레드 | thread game | |
+| 통신사 공유기 (CGNAT) | NAT ISP (CGNAT), short: CGNAT ISP | not "Router ISP" (reads as the home router the ISP supplies) |
+| 넘치다 (spelling) | membeludak | not "membludak" |
