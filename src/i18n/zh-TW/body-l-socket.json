@@ -8,7 +8,7 @@
     {"ctx":"#l-socket p","ko":"<b>소켓 옵션</b>은 이 동작의 세부 설정입니다. 작은 패킷을 모았다 보낼지(<code>TCP_NODELAY</code>), 송수신 버퍼를 얼마나 둘지(<code>SO_SNDBUF</code>, <code>SO_RCVBUF</code>), 죽은 연결을 언제 알아챌지(<code>SO_KEEPALIVE</code>, <code>TCP_USER_TIMEOUT</code>), 닫을 때 남은 데이터를 어떻게 할지(<code>SO_LINGER</code>). 기본값은 대부분 큰 데이터를 적은 패킷으로 효율 있게 보내는 쪽에 맞춰져 있어, 작은 패킷을 자주 주고받는 게임에는 불리한 경우가 많습니다.","t":"<b>Socket 選項</b>是這些行為的細部設定：小封包要不要累積後再送（<code>TCP_NODELAY</code>）、收送緩衝區要多大（<code>SO_SNDBUF</code>、<code>SO_RCVBUF</code>）、何時察覺失效的連線（<code>SO_KEEPALIVE</code>、<code>TCP_USER_TIMEOUT</code>）、關閉時剩下的資料怎麼處理（<code>SO_LINGER</code>）。預設值大多是為了用較少的封包有效率地傳送大量資料，對頻繁收送小封包的遊戲往往不利。"},
     {"ctx":"#l-socket div","ko":"<span class=\"tag\">핵심</span>","t":"<span class=\"tag\">重點</span>"},
     {"ctx":"#l-socket p","ko":"TCP는 받은 데이터를 <b>보낸 순서대로만</b> 게임에 넘겨줍니다. 17번 패킷이 사라지면 18~30번이 이미 도착해 있어도, 17번이 다시 올 때까지 모두 기다립니다(HOL 블로킹). UDP는 <b>도착하는 대로</b> 넘겨주므로 17번이 끝내 오지 않아도 나머지는 제때 처리됩니다.","t":"TCP 只會<b>依送出的順序</b>把收到的資料交給遊戲。17 號封包遺失時，即使 18～30 號已經抵達，也全部要等到 17 號重新送達（HOL 阻塞）。UDP 是<b>一抵達就交出</b>，所以即使 17 號始終沒來，其餘的也能及時處理。"},
-    {"ctx":"#l-socket p","ko":"재전송이 <b>왜 생기는지</b>(와이파이, 혼잡, MTU 블랙홀, 불필요한 재전송 등)와 원인을 찾는 방법은 <a href=\"#retrans\">06 TCP 재전송</a>에서 원인별로 다룹니다.","t":"重傳<b>為什麼會發生</b>（Wi-Fi、壅塞、MTU 黑洞、不必要的重傳等）以及找出原因的方法，在<a href=\"#retrans\">06 TCP 重傳剖析</a>中依原因分別說明。"},
+    {"ctx":"#l-socket p","ko":"재전송이 <b>왜 생기는지</b>(와이파이, 혼잡, MTU 블랙홀, 불필요한 재전송 등)와 원인을 찾는 방법은 <a href=\"#retrans\">06 TCP 재전송</a>에서 원인별로 다룹니다.","t":"重傳<b>為什麼會發生</b>（Wi-Fi、壅塞、MTU 黑洞、不必要的重傳等）以及找出原因的方法，在 <a href=\"#retrans\">06 TCP 重傳</a>中依原因分別說明。"},
     {"ctx":"#l-socket-causes","ko":"이 층에서 렉을 만드는 원인","t":"這一層造成 lag 的原因"}
   ]
 }

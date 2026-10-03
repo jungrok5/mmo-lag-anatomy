@@ -3,7 +3,7 @@
   "group": "sim-nic",
   "entries": [
     {"ctx":"src/sims/nic.js:6","ko":"레이어 6 · 서버 NIC","t":"Layer 6 · Server network card"},
-    {"ctx":"src/sims/nic.js:7","ko":"서버 네트워크 카드가 패킷을 버리는 조건","t":"The moment the server’s network card drops packets"},
+    {"ctx":"src/sims/nic.js:7","ko":"서버 네트워크 카드가 패킷을 버리는 조건","t":"When the server’s network card drops packets"},
     {"ctx":"src/sims/nic.js:8","ko":"네트워크 카드(NIC)는 받은 패킷을 링 버퍼(수신 슬롯 묶음)에 넣고 인터럽트로 CPU에 알립니다. RSS는 패킷을 여러 수신 큐로 나눠 여러 CPU 코어가 처리하게 하는 기능입니다. 코어가 꺼내는 속도보다 빨리 쌓이면 슬롯이 다 차고 그 뒤에 온 패킷은 버려집니다. 네트워크 카드 통계의 숫자만 올라갈 뿐 게임 서버 로그에는 아무 기록도 남지 않습니다.","t":"The network card (NIC) puts received packets into a ring buffer (a set of receive slots) and notifies the CPU with an interrupt. RSS spreads packets across several receive queues so that several CPU cores can process them. If packets pile up faster than the cores take them out, the slots fill up and every packet after that is dropped. Only a counter in the network card’s stats goes up; the game server logs show nothing at all."},
     {"ctx":"src/sims/nic.js:10","ko":"<b>월드 보스 (150만 pps, RSS 1개)</b>를 누르세요(게이트웨이 규모의 극단적인 예). 코어 하나가 100%에 붙고 링 버퍼가 넘쳐 초당 수십만 개가 버려집니다.","t":"Click <b>World boss (1.5M pps, 1 RSS queue)</b> (an extreme, gateway-scale example). One core pins at 100%, the ring buffer overflows, and hundreds of thousands of packets per second are dropped."},
     {"ctx":"src/sims/nic.js:11","ko":"이어서 <b>RSS 큐 수</b>를 8로 올려 보세요. 같은 양을 코어 8개가 나눠 받아 버림이 0이 됩니다.","t":"Then raise <b>RSS queues</b> to 8. Eight cores share the same load, and drops fall to 0."},

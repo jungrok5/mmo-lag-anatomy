@@ -2,7 +2,7 @@
   "lang": "en",
   "group": "sim-npcmissing",
   "entries": [
-    {"ctx":"src/sims/npcmissing.js:5","ko":"영향 범위 · 한쪽 클라만 이상할 때","t":"How far it spreads · When only one client acts up"},
+    {"ctx":"src/sims/npcmissing.js:5","ko":"영향 범위 · 한쪽 클라만 이상할 때","t":"Scope of impact · When only one client misbehaves"},
     {"ctx":"src/sims/npcmissing.js:6","ko":"같은 PC의 두 클라이언트, 한쪽만 NPC가 안 보인다면","t":"Two clients on the same PC: NPCs missing on only one"},
     {"ctx":"src/sims/npcmissing.js:7","ko":"같은 PC, 같은 회선이니 회선 탓은 거의 아닙니다. 서버가 그 클라이언트에게 무엇을 보냈는지, 클라이언트가 받은 것을 제대로 처리했는지, 두 클라이언트가 자원을 두고 부딪히는지 순서로 좁혀 갑니다. 위 타임라인은 가장 흔한 원인 하나를 보여 줍니다. 아래 질문에 답하면 후보가 좁혀집니다.","t":"Same PC, same connection, so the connection is almost never to blame. Narrow it down in this order: what the server sent to that client, whether the client properly processed what it received, and whether the two clients are fighting over resources. The timeline above shows the most common cause, and answering the questions below narrows down the candidates."},
     {"ctx":"src/sims/npcmissing.js:10","ko":"<b>클라 2 로딩 시간</b>을 400ms로 줄여 보세요. 등장 알림이 로딩이 끝난 뒤 도착해 NPC가 보입니다. 반대로 <b>서버 입장 처리 시간</b>을 100ms로 줄이면 클라 1도 알림을 놓칩니다. 서버가 빨라져서 생기는 버그입니다.","t":"Cut <b>Client 2 loading time</b> to 400 ms. The spawn messages now arrive after loading finishes, and the NPCs appear. Cut <b>Server entry processing time</b> to 100 ms instead, and client 1 misses the messages too. This bug appears when the server gets faster."},

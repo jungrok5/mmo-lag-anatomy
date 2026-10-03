@@ -2,8 +2,8 @@
   "lang": "en",
   "group": "sim-oneslow",
   "entries": [
-    {"ctx":"src/sims/oneslow.js:6","ko":"영향 범위 · 한 명만 느릴 때","t":"How far it spreads · When only one player is slow"},
-    {"ctx":"src/sims/oneslow.js:7","ko":"느린 한 사람이 다른 사람의 화면과 게임에 주는 영향","t":""},
+    {"ctx":"src/sims/oneslow.js:6","ko":"영향 범위 · 한 명만 느릴 때","t":"Scope of impact · When only one player is slow"},
+    {"ctx":"src/sims/oneslow.js:7","ko":"느린 한 사람이 다른 사람의 화면과 게임에 주는 영향","t":"How one slow player affects other players’ screens and the game"},
     {"ctx":"src/sims/oneslow.js:8","ko":"같은 서버에 A와 B가 있습니다. A만 회선이 나쁩니다. 세 화면(서버, A의 화면, B의 화면)을 나란히 놓고 서버가 입력을 처리하는 방식을 바꿔 보세요. 대부분의 방식에서 렉은 A에게만 나타나고 B는 “A가 이상하게 움직이는 것”만 봅니다. 어떤 방식에서는 A 한 사람 때문에 모두가 멈춥니다.","t":"A and B are on the same server. Only A has a bad connection. With three screens side by side (the server, A’s screen, B’s screen), change how the server processes input. With most methods, lag shows up only for A, and B just sees “A moving strangely.” But with one method, that one player makes everyone freeze."},
     {"ctx":"src/sims/oneslow.js:11","ko":"<b>틱마다 모아서</b> 방식에서 B의 화면을 보세요. A(파랑)는 멈칫했다가 한 번에 여러 걸음을 가지만 몬스터와 B 자신은 멀쩡합니다. 아래 표에서 “B의 화면 → A의 모습”만 빨갛습니다. 지터와 손실을 0으로 내리면 핑이 높아도 A는 매끄럽게 보입니다. 핑보다 지터와 손실이 남의 눈에 렉으로 보이게 합니다.","t":"In <b>Batch per tick</b> mode, watch B’s screen. A (blue) hitches, then takes several steps at once, while the monster and B are fine. In the table below, only “B’s screen → A on screen” is red. Lower jitter and loss to 0, and A looks smooth even with high ping. What makes a player look laggy to others is jitter and loss more than ping."},
     {"ctx":"src/sims/oneslow.js:12","ko":"<b>도착 즉시</b>로 바꾸면 서버가 A의 입력을 도착한 시각대로 알립니다. 이동은 조금 덜 튀지만 빨라졌다 느려졌다 하고 스킬처럼 한 번에 끝나는 행동은 몰려 온 만큼 한순간에 실행됩니다.","t":"Switch to <b>On arrival</b>, and the server broadcasts A’s input at the time it arrives. Movement jumps a little less but speeds up and slows down, and one-shot actions such as skills all fire in the same instant, however many arrived together."},
