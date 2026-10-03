@@ -2,11 +2,11 @@
   "lang": "es",
   "group": "body-cases",
   "entries": [
-    {"ctx":"#cases div","ko":"<span class=\"idx\">T3</span>도구","t":""},
-    {"ctx":"#cases h2","ko":"사례와 절차","t":""},
-    {"ctx":"#cases p","ko":"자주 만나는 두 상황의 확인 순서와, 원개발사·운영사가 직접 공개한 실제 장애 사례를 모았습니다. 단계와 사례마다 관련 원인 카드로 이어집니다.","t":""},
+    {"ctx":"#cases div","ko":"<span class=\"idx\">T3</span>도구","t":"<span class=\"idx\">T3</span>Herramientas"},
+    {"ctx":"#cases h2","ko":"사례와 절차","t":"Casos y procedimientos"},
+    {"ctx":"#cases p","ko":"자주 만나는 두 상황의 확인 순서와, 원개발사·운영사가 직접 공개한 실제 장애 사례를 모았습니다. 단계와 사례마다 관련 원인 카드로 이어집니다.","t":"Aquí se reúnen los pasos de revisión para dos situaciones frecuentes e incidentes reales publicados por los propios desarrolladores originales y operadores. Cada paso y cada caso enlaza con las fichas de las causas relacionadas."},
     {"ctx":"#cases-playbooks","ko":"상황별 절차","t":"Procedimientos por situación"},
     {"ctx":"#cases-list","ko":"실제 장애 사례","t":"Incidentes reales"},
-    {"ctx":"#cases p","ko":"게임사와 인프라 회사가 스스로 공개한 사후 분석(포스트모템)만 골랐습니다. 요약은 원문이 밝힌 내용 안에서 썼고, 자세한 경위는 원문을 보세요.","t":""}
+    {"ctx":"#cases p","ko":"게임사와 인프라 회사가 스스로 공개한 사후 분석(포스트모템)만 골랐습니다. 요약은 원문이 밝힌 내용 안에서 썼고, 자세한 경위는 원문을 보세요.","t":"Solo se han elegido postmortems publicados por las propias empresas de juegos e infraestructura. Los resúmenes se limitan a lo que dice la publicación original; para conocer los detalles, consulta la publicación original."}
   ]
 }
