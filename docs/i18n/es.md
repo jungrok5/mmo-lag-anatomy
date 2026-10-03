@@ -699,3 +699,4 @@ Settled by the translators and the reviewers after the first pass. They extend s
 | 타임스탬프 (TCP option) | marcas de tiempo | |
 | 한 자릿수 ms | unos pocos milisegundos (menos de 10 ms) | |
 | 150번 남짓 (and other …남짓) | algo más de 150 | Keep “a little over”; “unas 150” loses it |
+| 코어망 (통신사) | núcleo de red (core) | not "red troncal" (that is the backbone) |

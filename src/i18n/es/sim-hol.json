@@ -43,15 +43,15 @@
     {"ctx":"src/sims/hol.js:193","ko":"서버의 실제 위치","t":"Posición real en el servidor"},
     {"ctx":"src/sims/hol.js:193","ko":"내 화면","t":"Tu pantalla"},
     {"ctx":"src/sims/hol.js:193","ko":"내 화면 속 캐릭터","t":"Personaje en tu pantalla"},
-    {"ctx":"src/sims/hol.js:202","ko":"보냄","t":"Envío"},
+    {"ctx":"src/sims/hol.js:202","ko":"보냄","t":"Sale"},
     {"ctx":"src/sims/hol.js:202","ko":"도착","t":"Llega"},
-    {"ctx":"src/sims/hol.js:202","ko":"전달","t":"Juego"},
+    {"ctx":"src/sims/hol.js:202","ko":"전달","t":"Pasa"},
     {"ctx":"src/sims/hol.js:202","ko":"위치","t":"Pos."},
     {"ctx":"src/sims/hol.js:202","ko":"서버 보냄","t":"Servidor envía"},
     {"ctx":"src/sims/hol.js:202","ko":"내 PC 도착","t":"Llega a tu PC"},
     {"ctx":"src/sims/hol.js:202","ko":"게임에 전달","t":"Pasa al juego"},
     {"ctx":"src/sims/hol.js:202","ko":"캐릭터 위치","t":"Posición"},
-    {"ctx":"src/sims/hol.js:224, src/sims/hol.js:330","ko":"멈춤 ","t":"Congelado "},
+    {"ctx":"src/sims/hol.js:224, src/sims/hol.js:330","ko":"멈춤 ","t":"Detenido "},
     {"ctx":"src/sims/hol.js:250, src/sims/hol.js:251","ko":"개 대기","t":" en espera"},
     {"ctx":"src/sims/hol.js:259","ko":"개 대기 중","t":" en espera ahora"},
     {"ctx":"src/sims/hol.js:331","ko":"몰아치기 ×","t":"Cámara rápida ×"},
@@ -94,6 +94,6 @@
     {"ctx":"src/sims/hol.js:468","ko":"1초에 {0}개꼴로","t":"unas {0} veces por segundo"},
     {"ctx":"src/sims/hol.js:468","ko":"{0}초에 한 번꼴로","t":"más o menos una vez cada {0} s"},
     {"ctx":"src/sims/hol.js:469","ko":"4초마다 “{0}” 사건이 다시 일어납니다.","t":"El evento “{0}” se repite cada 4 segundos."},
-    {"ctx":"src/sims/hol.js:470","ko":"{0}지금은 잠잠합니다. {1} 패킷이 사라질 때마다 TCP는 핑 한 번 이상 <b>멈춤</b> 뒤 <b>몰아치기</b>를 하고, UDP는 하나를 건너뜁니다. 그래서 액션·FPS 게임은 UDP 위에 “꼭 필요한 것만 다시 보내는” 자체 규칙을 구현해 씁니다.","t":"{0}Ahora está tranquilo. {1} Cada vez que se pierde un paquete, TCP sufre un <b>congelamiento</b> de al menos un ping seguido de <b>cámara rápida</b>, mientras que UDP se salta una actualización. Por eso los juegos de acción y los FPS implementan sobre UDP sus propias reglas para “reenviar solo lo imprescindible”."}
+    {"ctx":"src/sims/hol.js:470","ko":"{0}지금은 잠잠합니다. {1} 패킷이 사라질 때마다 TCP는 핑 한 번 이상 <b>멈춤</b> 뒤 <b>몰아치기</b>를 하고, UDP는 하나를 건너뜁니다. 그래서 액션·FPS 게임은 UDP 위에 “꼭 필요한 것만 다시 보내는” 자체 규칙을 구현해 씁니다.","t":"{0}Ahora está tranquilo. {1} Cada vez que se pierde un paquete, con TCP se ve un <b>congelamiento</b> de al menos un ping seguido de <b>cámara rápida</b>, mientras que con UDP solo se salta una actualización. Por eso los juegos de acción y los FPS implementan sobre UDP sus propias reglas para “reenviar solo lo imprescindible”."}
   ]
 }
