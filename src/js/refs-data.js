@@ -7,7 +7,7 @@ Object.assign(DATA.secRefs, {
     { t: 'IP Sysctl', u: 'https://docs.kernel.org/networking/ip-sysctl.html', p: 'Linux kernel', n: 'tcp_rto_min_us 기본 200,000µs: 리눅스 TCP 재전송 최소 대기 200ms(표의 TCP 재전송 줄)' },
     { t: 'What is NUMA?', u: 'https://docs.kernel.org/mm/numa.html', p: 'Linux kernel', n: '다른 CPU 쪽(원격) 메모리는 로컬보다 접근이 느리고 대역폭이 낮음(표의 NUMA 줄)' },
     { t: 'JEP 439: Generational ZGC', u: 'https://openjdk.org/jeps/439', p: 'OpenJDK', n: 'G1 멈춤은 수 ms~수 초, ZGC 멈춤은 1ms 이하(본문의 힙 전체 GC 수백 ms~수 초, 표의 큰 힙 GC 1초)' },
-    { t: 'Available Collectors', u: 'https://docs.oracle.com/en/java/javase/25/gctuning/available-collectors.html', p: 'Oracle', n: 'ZGC는 처리량을 조금 내주고 최대 멈춤을 1ms 미만으로, 멈춤은 힙 크기와 무관' },
+    { t: 'Available Collectors', u: 'https://docs.oracle.com/en/java/javase/25/gctuning/available-collectors.html', p: 'Oracle', n: 'ZGC는 처리량을 조금 내주는 대신 최대 멈춤을 1ms 미만으로 줄이며 멈춤 시간은 힙 크기와 무관' },
     { t: 'Garbage Collector Implementation', u: 'https://docs.oracle.com/en/java/javase/25/gctuning/garbage-collector-implementation.html', p: 'Oracle', n: '세대별 수집: Young만 도는 minor 수집은 짧고 힙 전체를 도는 major 수집은 훨씬 오래 걸림(GC 실험의 세대별 모드)' },
     { t: 'The Z Garbage Collector', u: 'https://docs.oracle.com/en/java/javase/25/gctuning/z-garbage-collector1.html', p: 'Oracle', n: 'ZGC는 비싼 일을 동시에 해 1ms 넘게 멈추지 않지만 회수가 모자라면 애플리케이션이 GC를 기다리며 멈출 수 있음(GC 실험의 동시 수행 모드)' },
     { t: 'A Guide to the Go Garbage Collector', u: 'https://go.dev/doc/gc-guide', p: 'Go', n: 'GC 표시 단계가 CPU의 25%를 써서 그동안 프로그램이 느려지고 할당이 많으면 고루틴이 GC를 돕느라(assist) 지연(GC 실험의 동시 수행 모드)' },

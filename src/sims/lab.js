@@ -784,7 +784,7 @@ K.register('lab', function (root) {
     } else if (fps < 25) {
       msg = TR`${K.flag('warn')}<b>뚝뚝 끊김 (화면)</b>: 네트워크는 멀쩡하지만 화면을 초당 ${fps}번만 그립니다. 궤적 점 간격이 넓고 일정합니다.`;
     } else if (underRatio > 0.25 && (P.mode === 'interp' || P.mode === 'queue')) {
-      msg = TR`${K.flag('warn')}<b>뚝뚝 끊김</b>: 보간 버퍼(${P.interp}ms)가 자주 바닥납니다(프레임의 ${Math.round(underRatio * 100)}%). 다음 패킷이 제때 안 와서 상대가 잠깐씩 멈춥니다. 버퍼를 늘리면 매끄러워지지만 그만큼 더 과거를 보게 됩니다.`;
+      msg = TR`${K.flag('warn')}<b>뚝뚝 끊김</b>: 보간 버퍼(${P.interp}ms)가 자주 바닥납니다(프레임의 ${Math.round(underRatio * 100)}%). 다음 패킷이 제때 안 와서 상대가 잠깐씩 멈춥니다. 버퍼를 늘리면 매끄러워지지만 그만큼 더 과거를 봅니다.`;
     } else if (P.mode === 'extrap' && P.jitter > 30) {
       msg = TR`${K.flag('warn')}<b>뚝뚝 끊김</b>: 외삽은 마지막 속도로 앞질러 그리므로, 패킷이 들쭉날쭉(지터 ${P.jitter}ms) 오면 앞서 나갔다가 다음 패킷에 당겨지기를 반복해 상대가 떨리듯 움직입니다.`;
     } else if (P.mode === 'snap' && (P.jitter > 30 || P.tick < 15)) {

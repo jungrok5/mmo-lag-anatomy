@@ -1,7 +1,7 @@
 /* 장별 출처: 관측으로 판정하기 */
 Object.assign(DATA.secRefs, {
   judge: [
-    { t: 'Service Level Objectives (Site Reliability Engineering, ch. 4)', u: 'https://sre.google/sre-book/service-level-objectives/', p: 'Google', n: '평균 대신 백분위수(50·95·99번째)로 지연 분포의 모양과 꼬리를 본다' },
+    { t: 'Service Level Objectives (Site Reliability Engineering, ch. 4)', u: 'https://sre.google/sre-book/service-level-objectives/', p: 'Google', n: '평균 대신 백분위수(50·95·99번째)로 지연 분포의 모양과 꼬리를 봄' },
     { t: 'The Tail at Scale', u: 'https://research.google/pubs/the-tail-at-scale/', p: 'Google', n: '가끔 생기는 긴 지연(꼬리 지연)이 규모가 커질수록 전체 서비스 체감을 좌우함' },
     { t: 'RFC 3550: RTP, A Transport Protocol for Real-Time Applications', u: 'https://www.rfc-editor.org/rfc/rfc3550', p: 'IETF', n: '도착 간격 지터(interarrival jitter)의 정의와 계산' },
     { t: 'RFC 1812: Requirements for IP Version 4 Routers', u: 'https://www.rfc-editor.org/rfc/rfc1812', p: 'IETF', n: '라우터는 Time Exceeded 등 ICMP 오류 메시지의 발생 빈도를 제한할 수 있어야 하고, Echo Reply도 제한할 수 있음(mtr·ping 해석 주의)' },

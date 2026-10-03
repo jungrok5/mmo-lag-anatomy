@@ -355,7 +355,7 @@ K.register('disk', function (root) {
         flag = 'warn';
         msg = TR`게임 스레드가 직접 쓰지만 OS가 쓰기를 메모리(페이지 캐시)에 먼저 받아 주어 한 건이 <b>${K.ms(cur.L)}</b>에 끝납니다. 다만 디스크가 못 따라가 OS 메모리에 <b>${K.n(cur.pend)}건</b>(약 ${mbT}, ${dur(cur.behind)}치)이 밀려 있습니다. 밀린 양이 한도에 닿으면 OS가 게임 스레드를 멈춰 세웁니다. 서버 전원이 갑자기 꺼지면 이만큼이 사라질 수 있습니다.`;
       } else {
-        msg = TR`게임 스레드가 직접 쓰지만 OS가 쓰기를 메모리(페이지 캐시)에 먼저 받아 두고 나중에 디스크에 기록해서, 한 건이 <b>${K.ms(cur.L)}</b>에 끝납니다. 대신 서버 전원이 갑자기 꺼지면 아직 디스크에 기록되지 않은 몇 초치가 사라질 수 있습니다. 확실히 저장하려고 fsync를 켜면 게임 스레드가 디스크를 직접 기다리게 됩니다.`;
+        msg = TR`게임 스레드가 직접 쓰지만 OS가 쓰기를 메모리(페이지 캐시)에 먼저 받아 두고 나중에 디스크에 기록해서, 한 건이 <b>${K.ms(cur.L)}</b>에 끝납니다. 대신 서버 전원이 갑자기 꺼지면 아직 디스크에 기록되지 않은 몇 초치가 사라질 수 있습니다. 확실히 저장하려고 fsync를 켜면 게임 스레드가 디스크를 직접 기다립니다.`;
       }
     } else if (P.mode === 'sync') {
       const n = K.n(cur.lam / 20, 0);
@@ -395,7 +395,7 @@ K.register('disk', function (root) {
         if (flag === 'good') flag = 'warn';
       }
     }
-    if (P.backup) extra.push(TR`백업이 디스크 처리 능력의 70%를 차지하고 있습니다. 매일 같은 시각에 렉이 난다면 이런 예약 작업을 먼저 의심합니다.`);
+    if (P.backup) extra.push(TR`백업이 디스크 처리 능력의 70%를 차지합니다. 매일 같은 시각에 렉이 난다면 이런 예약 작업을 먼저 의심합니다.`);
     if (P.fsync && flag !== 'good') extra.push(TR`fsync 때문에 한 건이 ${K.ms(D.svc)}에서 ${K.ms(D.fs)}로 늘고, 디스크가 할 일도 약 2배입니다.`);
     F.say(K.flag(flag) + msg + (extra.length ? K.sp + K.sentences(extra) : ''));
   }

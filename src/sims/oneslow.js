@@ -381,7 +381,7 @@ K.register('oneslow', function (root) {
     const stalled = lockStallFrac() > 0.12;
     stSelf.set(lock ? `${K.n(P.ping + TICK * 2)}ms+` : TR`즉시`, lock ? 'bad' : 'good', P.mode === 'buffer' ? TR`이동은 예측으로 즉시, 서버 확정은 버퍼만큼 더 늦음` : lock ? TR`예측 없이 턴을 기다림. B도 A를 기다리느라 늦게 반영` : TR`이동은 예측으로 즉시, 스킬 결과는 약 ${K.n(P.ping + (P.mode === 'event' ? 0 : TICK / 2))}ms 뒤`);
     stUnder.set(P.mode === 'buffer' ? String(S.p.A.under) : '—', P.mode === 'buffer' && S.p.A.under > 10 ? 'warn' : null, P.mode === 'buffer' ? TR`A의 버퍼가 비어 제자리` : TR`입력 버퍼 방식에서만`);
-    const steady = TR`A는 핑이 ${K.n(P.ping)}ms라도 지터와 손실이 적어 입력이 고르게 도착하므로 B의 화면에서 A는 <b>${bA.label}</b>입니다. 조금 과거의 위치에 보일 뿐입니다. 핑보다 지터와 손실이 남의 눈에 이상하게 보이게 만듭니다.`;
+    const steady = TR`A는 핑이 ${K.n(P.ping)}ms라도 지터와 손실이 적어 입력이 고르게 도착하므로 B의 화면에서 <b>${bA.label}</b>입니다. 조금 과거의 위치에 보일 뿐입니다. 핑보다 지터와 손실이 남의 눈에 이상하게 보이게 만듭니다.`;
     let msg;
     if (P.ping <= 60 && P.jitter <= 10 && P.loss === 0) msg = TR`${K.flag('good')}A와 B 모두 회선이 좋습니다. 세 화면이 거의 같게 움직입니다.`;
     else if (lock && stalled) msg = TR`${K.flag('bad')}<b>락스텝</b>: 다음 턴을 계산하려면 A의 입력이 꼭 있어야 합니다. A의 입력이 늦을 때마다 서버, A, B, 몬스터가 <b>모두 멈춥니다</b>. 느린 한 사람의 렉이 전원에게 번지는 대표적인 구조입니다.`;

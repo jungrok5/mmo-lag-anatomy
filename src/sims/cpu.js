@@ -307,7 +307,7 @@ K.register('cpu', function (root) {
     const s = ST, bgOn = P.av || P.upd || P.obs || P.web, need = P.W / sp;
     const miss = K.pct(s.miss, 1), got = K.pct(s.got);
     if (P.timer && s.miss > 0.04) {
-      return TR`${K.flag(s.miss > 0.15 ? 'bad' : 'warn')}CPU는 한가합니다(사용률 ${K.pct(s.util)}). 그런데 게임이 16.7ms 뒤에 깨어나도록 예약하고 잠들어도 윈도우 기본 타이머는 15.6ms 단위로만 깨웁니다. 어떤 프레임은 늦게 시작하고 어떤 프레임은 곧바로 이어 시작해 프레임 간격이 들쭉날쭉합니다. 화면 갱신의 <b>${miss}</b>를 놓쳐 <b>뚝뚝 끊김</b>으로 보입니다. 게임이 타이머를 1ms로 바꾸면 사라집니다.`;
+      return TR`${K.flag(s.miss > 0.15 ? 'bad' : 'warn')}CPU는 한가합니다(사용률 ${K.pct(s.util)}). 그런데 게임이 16.7ms 뒤에 깨어나도록 예약하고 잠들어도 윈도우 기본 타이머는 15.6ms 단위로만 깨웁니다. 어떤 프레임은 늦게 시작하고 어떤 프레임은 곧바로 이어 시작해 프레임 간격이 들쭉날쭉합니다. 화면 갱신의 <b>${miss}</b>를 놓쳐 <b>뚝뚝 끊김</b>이 생깁니다. 게임이 타이머를 1ms로 바꾸면 사라집니다.`;
     }
     if (need > VB * 0.98 && s.miss > 0.02) {
       const why = P.power === 'heat'

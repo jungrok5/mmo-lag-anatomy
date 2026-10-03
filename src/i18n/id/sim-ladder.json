@@ -18,7 +18,7 @@
     {"ctx":"src/sims/ladder.js:27","ko":"L2 캐시 읽기","t":"Baca cache L2"},
     {"ctx":"src/sims/ladder.js:27","ko":"L1보다 조금 크고 조금 느린 캐시입니다. 그래도 L1의 4배밖에 걸리지 않습니다.","t":"Cache yang sedikit lebih besar dan sedikit lebih lambat dari L1. Meski begitu, waktunya hanya 4 kali L1."},
     {"ctx":"src/sims/ladder.js:28","ko":"메모리(RAM) 읽기","t":"Baca memori (RAM)"},
-    {"ctx":"src/sims/ladder.js:28","ko":"RAM에서 한 번 읽는 동안 CPU는 L1 캐시를 <b>100번</b> 읽을 수 있어요. 그래서 자주 쓰는 데이터는 캐시에 올라가도록 모아 둡니다. 스왑된 메모리를 읽으면 여기서 다시 <b>1,000배</b>가 걸립니다.","t":"Selama satu kali baca dari RAM, CPU bisa membaca cache L1 <b>100 kali</b>. Karena itu, data yang sering dipakai dikumpulkan agar masuk ke cache. Membaca memori yang di-swap butuh <b>1.000 kali</b> lebih lama lagi dari ini."},
+    {"ctx":"src/sims/ladder.js:28","ko":"RAM에서 한 번 읽는 동안 CPU는 L1 캐시를 <b>100번</b> 읽을 수 있습니다. 그래서 자주 쓰는 데이터는 캐시에 올라가도록 모아 둡니다. 스왑된 메모리를 읽으면 여기서 다시 <b>1,000배</b>가 걸립니다.","t":"Selama satu kali baca dari RAM, CPU bisa membaca cache L1 <b>100 kali</b>. Karena itu, data yang sering dipakai dikumpulkan agar masuk ke cache. Membaca memori yang di-swap butuh <b>1.000 kali</b> lebih lama lagi dari ini."},
     {"ctx":"src/sims/ladder.js:29","ko":"다른 CPU 쪽 메모리(NUMA)","t":"Memori di CPU lain (NUMA)"},
     {"ctx":"src/sims/ladder.js:29","ko":"CPU가 두 개인 서버에서 옆 CPU에 붙은 메모리를 읽으면 1.5배쯤 더 걸립니다. 스레드가 CPU를 옮겨 다니면 이런 손해가 쌓입니다.","t":"Di server dengan dua CPU, membaca memori yang terpasang di CPU sebelah butuh waktu sekitar 1,5 kali lebih lama. Jika thread berpindah-pindah CPU, kerugian seperti ini menumpuk."},
     {"ctx":"src/sims/ladder.js:30","ko":"컨텍스트 스위칭(스레드 전환)","t":"Context switching (pergantian thread)"},

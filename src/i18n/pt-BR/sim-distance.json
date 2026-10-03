@@ -83,6 +83,6 @@
     {"ctx":"src/sims/distance.js:325","ko":" 액션 전투에도 충분히 빠릅니다.","t":" É rápido o bastante até para combate de ação."},
     {"ctx":"src/sims/distance.js:326","ko":" 스킬 반응이 조금 늦게 느껴지는 입력 지연이 있고 가까운 서버의 플레이어보다 판정에서 불리합니다.","t":" Há algum input lag (as skills parecem responder um pouco tarde), e você fica em desvantagem no registro de acerto contra jogadores mais perto do servidor."},
     {"ctx":"src/sims/distance.js:327","ko":" 입력 지연이 커서 회피·타이밍 판정에서 크게 불리합니다.","t":" O input lag é grande e deixa você em grande desvantagem na esquiva e nas janelas de tempo."},
-    {"ctx":"src/sims/distance.js:328","ko":" 서버 성능을 아무리 올려도 이 거리는 줄일 수 없습니다. 그래서 게임사는 지역마다 서버(리전)를 따로 둡니다.","t":" Por mais que se aumente o desempenho do servidor, essa distância não diminui. Por isso as empresas de jogos mantêm servidores separados por região."}
+    {"ctx":"src/sims/distance.js:328","ko":" 서버 성능을 아무리 올려도 이 거리는 줄일 수 없어서 게임사는 지역마다 서버(리전)를 따로 둡니다.","t":" Por mais que se aumente o desempenho do servidor, essa distância não diminui. Por isso as empresas de jogos mantêm servidores separados por região."}
   ]
 }

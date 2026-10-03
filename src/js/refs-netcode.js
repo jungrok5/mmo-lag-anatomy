@@ -38,7 +38,7 @@ Object.assign(DATA.secRefs, {
   ],
   'sync': [
     { t: 'Latency Compensating Methods in Client/Server In-game Protocol Design and Optimization (Yahn W. Bernier, GDC 2001)', u: 'https://web.cs.wpi.edu/~claypool/courses/4513-B03/papers/games/bernier.pdf', p: 'Valve', n: '권위 서버, 클라이언트 예측·보정, 보간, 지연 보상의 원리와 “코너 뒤에서 맞음” 같은 절충' },
-    { t: 'What Every Programmer Needs To Know About Game Networking', u: 'https://gafferongames.com/post/what_every_programmer_needs_to_know_about_game_networking/', p: 'Gaffer On Games', n: 'P2P 락스텝에서 클라이언트/서버, 클라이언트 예측으로 이어진 넷코드의 발전' },
+    { t: 'What Every Programmer Needs To Know About Game Networking', u: 'https://gafferongames.com/post/what_every_programmer_needs_to_know_about_game_networking/', p: 'Gaffer On Games', n: '넷코드가 P2P 락스텝에서 클라이언트/서버를 거쳐 클라이언트 예측으로 발전해 온 과정' },
     { t: 'Using Gameplay Abilities in Unreal Engine', u: 'https://dev.epicgames.com/documentation/en-us/unreal-engine/using-gameplay-abilities-in-unreal-engine', p: 'Epic Games', n: 'Local Predicted와 Server Initiated의 반응성·정확성 절충' },
     { t: 'Peeking into VALORANT\'s Netcode', u: 'https://www.riotgames.com/en/news/peeking-valorants-netcode', p: 'Riot Games', n: '서버 권위·예측·버퍼링·되감기 판정과 되감기 한도' },
     { t: 'NetworkTime and ticks (Netcode for GameObjects 2.5)', u: 'https://docs.unity3d.com/Packages/com.unity.netcode.gameobjects@2.5/manual/advanced-topics/networktime-ticks.html', p: 'Unity', n: '서버 시각에 맞춰 이벤트를 예약해 재생하는 방법' },

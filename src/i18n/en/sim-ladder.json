@@ -18,7 +18,7 @@
     {"ctx":"src/sims/ladder.js:27","ko":"L2 캐시 읽기","t":"L2 cache read"},
     {"ctx":"src/sims/ladder.js:27","ko":"L1보다 조금 크고 조금 느린 캐시입니다. 그래도 L1의 4배밖에 걸리지 않습니다.","t":"A cache a little larger and a little slower than L1. Even so, it takes only 4 times as long as L1."},
     {"ctx":"src/sims/ladder.js:28","ko":"메모리(RAM) 읽기","t":"Memory (RAM) read"},
-    {"ctx":"src/sims/ladder.js:28","ko":"RAM에서 한 번 읽는 동안 CPU는 L1 캐시를 <b>100번</b> 읽을 수 있어요. 그래서 자주 쓰는 데이터는 캐시에 올라가도록 모아 둡니다. 스왑된 메모리를 읽으면 여기서 다시 <b>1,000배</b>가 걸립니다.","t":"In the time it takes to read RAM once, the CPU could read the L1 cache <b>100 times</b>. That’s why frequently used data is kept together so it stays in the cache. Reading swapped-out memory takes another <b>1,000 times</b> longer than this."},
+    {"ctx":"src/sims/ladder.js:28","ko":"RAM에서 한 번 읽는 동안 CPU는 L1 캐시를 <b>100번</b> 읽을 수 있습니다. 그래서 자주 쓰는 데이터는 캐시에 올라가도록 모아 둡니다. 스왑된 메모리를 읽으면 여기서 다시 <b>1,000배</b>가 걸립니다.","t":"In the time it takes to read RAM once, the CPU could read the L1 cache <b>100 times</b>. That’s why frequently used data is kept together so it stays in the cache. Reading swapped-out memory takes another <b>1,000 times</b> longer than this."},
     {"ctx":"src/sims/ladder.js:29","ko":"다른 CPU 쪽 메모리(NUMA)","t":"Memory on the other CPU (NUMA)"},
     {"ctx":"src/sims/ladder.js:29","ko":"CPU가 두 개인 서버에서 옆 CPU에 붙은 메모리를 읽으면 1.5배쯤 더 걸립니다. 스레드가 CPU를 옮겨 다니면 이런 손해가 쌓입니다.","t":"On a server with two CPUs, reading memory attached to the other CPU takes about 1.5 times as long. When threads hop between CPUs, these losses add up."},
     {"ctx":"src/sims/ladder.js:30","ko":"컨텍스트 스위칭(스레드 전환)","t":"Context switch (thread switch)"},

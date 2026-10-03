@@ -2,7 +2,7 @@
    본문·표와 시뮬레이션 journey·bloat·distance·timeouts의 근거 */
 Object.assign(DATA.secRefs, {
   'journey': [
-    { t: 'ITU-T G.114: One-way transmission time', u: 'https://www.itu.int/rec/T-REC-G.114-200305-I/en', p: 'ITU', n: '광케이블 전송 지연 5µs/km(1,000km 편도 5ms), 편도 150ms 이하면 대부분 응용에 거의 투명하지만 상호작용이 강한 작업은 100ms 아래에서도 영향' },
+    { t: 'ITU-T G.114: One-way transmission time', u: 'https://www.itu.int/rec/T-REC-G.114-200305-I/en', p: 'ITU', n: '광케이블 전송 지연 5µs/km(1,000km 편도 5ms), 편도 150ms 이하면 대부분 응용에서 지연을 거의 느끼지 못하지만 상호작용이 강한 작업은 100ms 아래에서도 영향을 받음' },
     { t: 'Azure network round-trip latency statistics', u: 'https://learn.microsoft.com/en-us/azure/networking/azure-network-latency', p: 'Microsoft Azure', n: '실험의 서버 위치별 인터넷 구간 규모: 서울 기준 부산 지역 8ms, 도쿄 30ms, 싱가포르 68ms, 미국 서부 124~136ms, 유럽 234~244ms(왕복 중앙값)' },
     { t: 'The Internet at the Speed of Light (HotNets 2014)', u: 'https://conferences.sigcomm.org/hotnets/2014/papers/hotnets-XIII-final111.pdf', p: 'ACM', n: '실험의 경로 배수 1.5: 실제 라우터 경로는 광케이블 직선 대비 중앙값 약 1.5배' },
     { t: 'Report ITU-R M.2134: Requirements related to technical performance for IMT-Advanced radio interface(s)', u: 'https://www.itu.int/pub/R-REP-M.2134-2008', p: 'ITU', n: 'LTE-Advanced 무선 구간 한 방향 지연 요구치 10ms 미만(무부하·작은 패킷 기준, 실험의 LTE 값은 여기에 부하와 스케줄링 대기를 더한 가정)' },
@@ -28,7 +28,7 @@ Object.assign(DATA.secRefs, {
     { t: 'Azure network round-trip latency statistics', u: 'https://learn.microsoft.com/en-us/azure/networking/azure-network-latency', p: 'Microsoft Azure', n: '서울 기준 실측 왕복 중앙값: 도쿄 30ms, 미국 서부 124~136ms, 유럽 234~244ms(한국–유럽은 광케이블 직선의 약 2.8배)' },
     { t: 'AAE-1 & SMW5 cable cuts impact millions of users across multiple countries', u: 'https://blog.cloudflare.com/aae-1-smw5-cable-cuts/', p: 'Cloudflare', n: '유럽–아시아 트래픽은 대개 이집트를 지나고 해저 케이블 수리는 며칠~몇 주' },
     { t: 'Quantifying the Causes of Path Inflation (SIGCOMM 2003)', u: 'https://conferences.sigcomm.org/sigcomm/2003/papers/p113-spring.pdf', p: 'ACM', n: '통신사 사이 피어링 정책과 도메인 간 라우팅이 경로를 크게 늘림' },
-    { t: 'Inferring Persistent Interdomain Congestion (SIGCOMM 2018)', u: 'https://www.caida.org/catalog/papers/2018_inferring_persistent_interdomain_congestion/inferring_persistent_interdomain_congestion.pdf', p: 'ACM', n: '일부 통신사 간 연결 구간은 매일 피크 시간마다 지연과 손실이 오르는 반복 혼잡을 보임' },
+    { t: 'Inferring Persistent Interdomain Congestion (SIGCOMM 2018)', u: 'https://www.caida.org/catalog/papers/2018_inferring_persistent_interdomain_congestion/inferring_persistent_interdomain_congestion.pdf', p: 'ACM', n: '일부 통신사 간 연결 구간에서는 매일 피크 시간마다 지연과 손실이 오르는 혼잡이 되풀이됨' },
     { t: 'RFC 4271: A Border Gateway Protocol 4 (BGP-4)', u: 'https://www.rfc-editor.org/rfc/rfc4271', p: 'IETF', n: '인터넷 경로 정보를 주고받는 BGP, 홀드 타임 권장 기본값 90초' },
     { t: 'BGP updates in 2024', u: 'https://blog.apnic.net/2025/01/07/bgp-updates-in-2024/', p: 'APNIC', n: '경로가 바뀐 뒤 라우팅이 다시 안정되기까지 걸리는 시간의 하루 평균이 IPv4 25~35초, IPv6 40~50초' },
     { t: 'Delayed Internet Routing Convergence (SIGCOMM 2000)', u: 'https://conferences.sigcomm.org/sigcomm/2000/conf/paper/sigcomm2000-5-2.pdf', p: 'ACM', n: '경로 장애 뒤 수렴에 수 분까지 걸리고 그동안 손실·지연이 늘어남(2000년 당시 측정)' },
@@ -38,7 +38,7 @@ Object.assign(DATA.secRefs, {
     { t: 'Data Center TCP (DCTCP) (SIGCOMM 2010)', u: 'https://conferences.sigcomm.org/sigcomm/2010/papers/sigcomm/p63.pdf', p: 'ACM', n: '범용 스위치는 여러 포트가 얕은 버퍼를 나눠 쓰고 짧은 순간 여러 흐름이 한 포트로 몰리면 버퍼가 넘쳐 손실' },
     { t: 'Netfilter Conntrack Sysfs variables', u: 'https://docs.kernel.org/networking/nf_conntrack-sysctl.html', p: 'Linux kernel', n: '연결 추적 테이블의 최대 항목 수와 유지 시간 기본값(UDP 30초·스트림 120초, 성립된 TCP 5일)' },
     { t: 'Edit attributes for your Application Load Balancer', u: 'https://docs.aws.amazon.com/elasticloadbalancing/latest/application/edit-load-balancer-attributes.html', p: 'AWS', n: 'ALB 유휴 타임아웃 기본 60초, 시간이 되면 로드밸런서가 연결을 닫음' },
-    { t: 'Network Load Balancers', u: 'https://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html', p: 'AWS', n: '실험의 로드밸런서 기본값: NLB TCP 350초, UDP 120초(변경 불가), 유휴 뒤에는 조용히 추적을 멈춤' },
+    { t: 'Network Load Balancers', u: 'https://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html', p: 'AWS', n: '실험의 로드밸런서 기본값: NLB TCP 350초, UDP 120초(변경 불가), 유휴 시간이 지나면 조용히 추적을 멈춤' },
     { t: 'Configure load balancer TCP reset and idle timeout', u: 'https://learn.microsoft.com/en-us/azure/load-balancer/load-balancer-tcp-idle-timeout', p: 'Microsoft Azure', n: 'Azure Load Balancer 유휴 타임아웃 기본 4분' },
     { t: 'Amazon EC2 security group connection tracking', u: 'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/security-group-connection-tracking.html', p: 'AWS', n: '보안 그룹 연결 추적 기본값, 로드밸런서·방화벽의 TCP 유휴 타임아웃은 흔히 60~90분이라는 설명' },
     { t: 'Flow-Based Sessions', u: 'https://www.juniper.net/documentation/us/en/software/junos/flow-packet-processing/topics/topic-map/security-flow-based-session-for-srx-series-devices.html', p: 'Juniper Networks', n: '실험의 회사 방화벽: SRX 방화벽 기본 세션 타임아웃 TCP 1,800초(30분), UDP 60초' },

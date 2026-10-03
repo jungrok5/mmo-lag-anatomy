@@ -395,7 +395,7 @@ K.register('frames', function (root) {
     if (S.fps < 45) {
       return TR`${K.flag(S.fps < 25 ? 'bad' : 'warn')}한 프레임 작업이 평균 <b>${K.ms(S.work)}</b>입니다. 캐릭터 ${K.n(P.chars)}명을 그리고 패킷 ${K.n(P.chars * 0.5)}개를 처리${P.mode !== 'var' && S.steps > 1.3 ? TR`하고 밀린 시간을 메우려 게임 계산을 한 프레임에 평균 ${K.n(S.steps, 1)}번 되풀이` : ''}하느라 1초에 <b>${K.n(S.fps)}프레임</b>밖에 못 그립니다. 화면은 <b>뚝뚝 끊김</b>, 누른 키는 ${K.ms(S.lat)} 뒤에야 보입니다(<b>입력 지연</b>).` + CLIENT;
     }
-    if (P.load) return TR`${K.flag('warn')}지금은 한 프레임 작업이 ${K.ms(S.work)}라 매끄럽습니다. 하지만 몇 초마다 새 지역에 들어서며 게임 스레드가 에셋을 직접 읽습니다. 곧 화면이 <b>멈춤</b> 뒤 <b>순간이동</b>합니다.`;
+    if (P.load) return TR`${K.flag('warn')}지금은 한 프레임 작업이 ${K.ms(S.work)}라 매끄럽지만 몇 초마다 새 지역에 들어서며 게임 스레드가 에셋을 직접 읽습니다. 곧 화면이 <b>멈춤</b> 뒤 <b>순간이동</b>합니다.`;
     if (P.gc && P.inc && incLeft > 0) return TR`${K.flag('good')}점진적 GC가 프레임마다 ${SLICE}ms씩 가비지를 나눠 수집하는 중입니다. 큰 멈춤 없이 매끄럽게 달립니다.`;
     if (P.gc && P.inc && P.garbage > 0) return TR`${K.flag('good')}가비지가 <b>${K.n(heap)}MB</b> 쌓였습니다. ${INC_START}MB가 되면 점진적 GC가 프레임마다 ${SLICE}ms씩 나눠 수집하기 시작합니다. 가비지를 너무 빨리 만들면 다 수집하지 못하고 ${HEAPMAX}MB에서 결국 한 번에 멈춥니다.`;
     if (P.gc && P.garbage > 0) return TR`${K.flag('warn')}가비지가 <b>${K.n(heap)}MB</b> 쌓였습니다. ${HEAPMAX}MB가 되면 한꺼번에 수집하느라 게임이 잠깐 멈춥니다. 지금은 한 프레임 작업이 ${K.ms(S.work)}라 매끄럽습니다.`;

@@ -75,7 +75,7 @@
     {"ctx":"causes/cg-crowd/c/0","ko":"한 화면에 수백 명과 이펙트가 겹침","t":"Hunderte Spieler und Effekte gleichzeitig auf einem Bildschirm"},
     {"ctx":"causes/cg-crowd/c/1","ko":"애니메이션·그림자·이름표·이펙트 비용이 인원에 비례해 증가","t":"Kosten für Animationen, Schatten, Namensschilder und Effekte steigen mit der Spielerzahl"},
     {"ctx":"causes/cg-crowd/c/2","ko":"FPS가 60 → 15로 떨어져 모든 움직임이 뚝뚝 끊기고 입력도 늦음","t":"FPS fallen (60 → 15), jede Bewegung ruckelt, auch Eingaben kommen verzögert an"},
-    {"ctx":"causes/cg-crowd/num","ko":"캐릭터 1명당 0.02~0.1ms라도 300명이면 6~30ms. 이것만으로 프레임 예산을 넘습니다.","t":"Selbst 0,02–0,1 ms pro Charakter ergeben bei 300 Charakteren 6–30 ms. Das allein sprengt schon das Frame-Budget."},
+    {"ctx":"causes/cg-crowd/num","ko":"캐릭터 1명당 0.02~0.1ms라도 300명이면 6~30ms. 60FPS의 프레임 예산이 16.7ms이므로 이것만으로 예산의 3분의 1 넘게 쓰고 많으면 예산을 넘깁니다.","t":"Selbst 0,02–0,1 ms pro Charakter ergeben bei 300 Charakteren 6–30 ms. Bei 60 FPS beträgt das Frame-Budget 16,7 ms; das allein verbraucht also mehr als 1/3 davon und sprengt es im ungünstigen Fall."},
     {"ctx":"causes/cg-crowd/act/game","ko":"거리별 간소화(LOD), 표시 인원 상한, 이펙트 간소화 옵션, 애니메이션 갱신 주기 낮추기.","t":"Vereinfachung nach Entfernung (LOD), Obergrenze für angezeigte Spieler, Option für vereinfachte Effekte, Animationen seltener aktualisieren."},
     {"ctx":"causes/cg-crowd/sig/g","ko":"프레임 시간, 화면 안 캐릭터 수","t":"Frametime, Anzahl der Charaktere im Bild"},
     {"ctx":"causes/cg-crowd/chk/look","ko":"PresentMon의 프레임 시간과 CPUBusy·GPUBusy를 공성전·월드 보스 전후로 비교. 개발 빌드는 언리얼 stat Unit(게임 스레드·렌더링 스레드·GPU 시간)","t":"Frametime sowie CPUBusy und GPUBusy aus PresentMon vor und nach Belagerungen oder Weltbossen vergleichen. In Development-Builds stat Unit in Unreal (Zeiten von Game-Thread, Render-Thread und GPU)"},
@@ -245,6 +245,7 @@
   ],
   "stale": [
     {"ctx":"causes/cg-asset-stream/c/0","ko":"탈것·순간이동으로 빠르게 이동하거나 사람 많은 곳에 들어가 새 텍스처·모델이 한꺼번에 필요해짐","t":"Schnelle Fortbewegung per Reittier oder Teleport oder Betreten eines belebten Orts, viele neue Texturen und Modelle auf einmal nötig"},
-    {"ctx":"causes/cg-float-time/num","ko":"32비트 float는 유효 숫자가 7자리 남짓이라, 켜 둔 지 하루(약 86,400초)면 시간 해상도가 약 8ms, 일주일이면 약 60ms가 됩니다. 60FPS의 한 프레임(16.7ms)에 맞먹거나 더 큽니다.","t":"Ein 32-Bit-float hat gut 7 signifikante Stellen. Nach einem Tag Laufzeit (etwa 86.400 s) liegt die Zeitauflösung bei etwa 8 ms, nach einer Woche bei etwa 60 ms. Das entspricht etwa einem Frame bei 60 FPS (16,7 ms) oder liegt sogar darüber."}
+    {"ctx":"causes/cg-float-time/num","ko":"32비트 float는 유효 숫자가 7자리 남짓이라, 켜 둔 지 하루(약 86,400초)면 시간 해상도가 약 8ms, 일주일이면 약 60ms가 됩니다. 60FPS의 한 프레임(16.7ms)에 맞먹거나 더 큽니다.","t":"Ein 32-Bit-float hat gut 7 signifikante Stellen. Nach einem Tag Laufzeit (etwa 86.400 s) liegt die Zeitauflösung bei etwa 8 ms, nach einer Woche bei etwa 60 ms. Das entspricht etwa einem Frame bei 60 FPS (16,7 ms) oder liegt sogar darüber."},
+    {"ctx":"causes/cg-crowd/num","ko":"캐릭터 1명당 0.02~0.1ms라도 300명이면 6~30ms. 이것만으로 프레임 예산을 넘습니다.","t":"Selbst 0,02–0,1 ms pro Charakter ergeben bei 300 Charakteren 6–30 ms. Das allein sprengt schon das Frame-Budget."}
   ]
 }

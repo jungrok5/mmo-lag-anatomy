@@ -77,7 +77,7 @@ Object.assign(DATA.secRefs, {
     { t: 'TcpMaxConnectRetransmissions', u: 'https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-2000-server/cc938209(v=technet.10)', p: 'Microsoft', n: '예전 윈도우 SYN 재전송: 3초부터 두 배씩 2번' },
   ],
   'owners': [
-    { t: 'RFC 4787: Network Address Translation (NAT) Behavioral Requirements for Unicast UDP', u: 'https://www.rfc-editor.org/rfc/rfc4787', p: 'IETF', n: 'NAT 매핑은 안에서 나가는 패킷으로 반드시 갱신되고(REQ-6), 밖에서 들어오는 패킷의 갱신은 선택 사항(UDP 기준). 그래서 하트비트는 클라이언트가 보냄' },
+    { t: 'RFC 4787: Network Address Translation (NAT) Behavioral Requirements for Unicast UDP', u: 'https://www.rfc-editor.org/rfc/rfc4787', p: 'IETF', n: 'NAT 매핑은 안에서 나가는 패킷으로 반드시 갱신되고(REQ-6), 밖에서 들어오는 패킷의 갱신은 선택 사항(UDP 기준)이라 하트비트는 클라이언트가 보냄' },
     { t: 'RFC 5382: NAT Behavioral Requirements for TCP', u: 'https://www.rfc-editor.org/rfc/rfc5382', p: 'IETF', n: 'NAT는 유휴 TCP 세션을 지울 수 있으며 권고 유휴 타임아웃은 2시간 4분 이상(장비마다 설정이 다를 수 있음)' },
     { t: 'Amazon EC2 security group connection tracking', u: 'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/security-group-connection-tracking.html', p: 'AWS', n: '보안 그룹 연결 추적의 TCP 유휴 타임아웃(Nitro v6 인스턴스 유형 350초, 그 밖 5일, 60초~5일로 조정), 5분보다 짧은 keepalive 권고, NLB를 거치는 TCP는 350초' },
     { t: 'Control subnet traffic with network access control lists', u: 'https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html', p: 'AWS', n: '네트워크 ACL은 상태를 저장하지 않아(연결 추적 없음) 응답 트래픽도 규칙으로 따로 허용해야 함' },

@@ -7,7 +7,7 @@ Object.assign(DATA.secRefs, {
     { t: 'Interface statistics', u: 'https://docs.kernel.org/networking/statistics.html', p: 'Linux kernel', n: '버퍼가 없어 장치가 버린 패킷(rx_missed_errors)과 ethtool -S의 드라이버별 통계' },
     { t: 'ethtool(8) — Linux manual page', u: 'https://man7.org/linux/man-pages/man8/ethtool.8.html', p: 'ethtool', n: '링 버퍼(-G), 인터럽트 병합(-C), 수신 해시(-N), 통계(-S) 설정·확인' },
     { t: 'How to receive a million packets per second', u: 'https://blog.cloudflare.com/how-to-receive-a-million-packets/', p: 'Cloudflare', n: '큐 하나·코어 하나로는 초당 약 35만~43만 패킷에서 막히고 큐와 코어를 늘려야 100만 pps를 받는 측정(시뮬레이션은 코어당 처리량을 이보다 넉넉한 70만 pps로 가정)' },
-    { t: 'Monitor network performance for ENA settings on your EC2 instance', u: 'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-network-performance-ena.html', p: 'AWS', n: '클라우드 인스턴스의 대역폭·PPS·연결 추적 한도를 넘으면 인스턴스 밖에서 큐잉 후 폐기, 한도 초과 카운터' },
+    { t: 'Monitor network performance for ENA settings on your EC2 instance', u: 'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-network-performance-ena.html', p: 'AWS', n: '클라우드 인스턴스의 대역폭·PPS·연결 추적 한도를 넘으면 패킷이 인스턴스 밖 대기열에 쌓였다가 버려짐, 한도 초과 카운터' },
   ],
   'l-server-os': [
     { t: 'listen(2) — Linux manual page', u: 'https://man7.org/linux/man-pages/man2/listen.2.html', p: 'Linux man-pages', n: '접속 대기열(backlog)과 somaxconn 상한(5.4부터 기본 4,096, 전에는 128)' },

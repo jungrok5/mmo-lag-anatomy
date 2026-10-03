@@ -83,7 +83,7 @@
     {"ctx":"src/sims/distance.js:325","ko":" 액션 전투에도 충분히 빠릅니다.","t":" Đủ nhanh cho cả chiến đấu hành động."},
     {"ctx":"src/sims/distance.js:326","ko":" 스킬 반응이 조금 늦게 느껴지는 입력 지연이 있고 가까운 서버의 플레이어보다 판정에서 불리합니다.","t":" Có trễ thao tác khiến skill phản hồi hơi chậm, và bạn bị bất lợi về phán định so với người chơi ở gần server."},
     {"ctx":"src/sims/distance.js:327","ko":" 입력 지연이 커서 회피·타이밍 판정에서 크게 불리합니다.","t":" Trễ thao tác lớn nên bạn bị bất lợi nặng ở các phán định né tránh và canh thời điểm."},
-    {"ctx":"src/sims/distance.js:328","ko":" 서버 성능을 아무리 올려도 이 거리는 줄일 수 없습니다. 그래서 게임사는 지역마다 서버(리전)를 따로 둡니다.","t":" Nâng cấp server mạnh đến đâu cũng không rút ngắn được khoảng cách này. Vì vậy công ty game đặt server riêng cho từng khu vực (region)."}
+    {"ctx":"src/sims/distance.js:328","ko":" 서버 성능을 아무리 올려도 이 거리는 줄일 수 없어서 게임사는 지역마다 서버(리전)를 따로 둡니다.","t":" Nâng cấp server mạnh đến đâu cũng không rút ngắn được khoảng cách này. Vì vậy công ty game đặt server riêng cho từng khu vực (region)."}
   ],
   "stale": [
     {"ctx":"src/sims/distance.js:28","ko":"은","t":" "},

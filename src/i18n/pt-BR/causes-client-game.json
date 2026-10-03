@@ -75,7 +75,7 @@
     {"ctx":"causes/cg-crowd/c/0","ko":"한 화면에 수백 명과 이펙트가 겹침","t":"Centenas de personagens e efeitos se sobrepõem na mesma tela"},
     {"ctx":"causes/cg-crowd/c/1","ko":"애니메이션·그림자·이름표·이펙트 비용이 인원에 비례해 증가","t":"O custo de animações, sombras, nomes acima dos personagens e efeitos cresce com o número de jogadores"},
     {"ctx":"causes/cg-crowd/c/2","ko":"FPS가 60 → 15로 떨어져 모든 움직임이 뚝뚝 끊기고 입력도 늦음","t":"O FPS cai (60 → 15), todos os movimentos engasgam e os comandos também respondem com atraso"},
-    {"ctx":"causes/cg-crowd/num","ko":"캐릭터 1명당 0.02~0.1ms라도 300명이면 6~30ms. 이것만으로 프레임 예산을 넘습니다.","t":"Mesmo com 0,02–0,1 ms por personagem, 300 personagens somam 6–30 ms. Só isso já estoura o orçamento do frame."},
+    {"ctx":"causes/cg-crowd/num","ko":"캐릭터 1명당 0.02~0.1ms라도 300명이면 6~30ms. 60FPS의 프레임 예산이 16.7ms이므로 이것만으로 예산의 3분의 1 넘게 쓰고 많으면 예산을 넘깁니다.","t":"Mesmo com 0,02–0,1 ms por personagem, 300 personagens somam 6–30 ms. O orçamento do frame a 60 FPS é de 16,7 ms, então só isso já consome mais de 1/3 dele e, no pior caso, estoura."},
     {"ctx":"causes/cg-crowd/act/game","ko":"거리별 간소화(LOD), 표시 인원 상한, 이펙트 간소화 옵션, 애니메이션 갱신 주기 낮추기.","t":"Usar simplificação por distância (LOD), limitar o número de personagens exibidos, oferecer opção de efeitos simplificados, reduzir a frequência de atualização das animações."},
     {"ctx":"causes/cg-crowd/sig/g","ko":"프레임 시간, 화면 안 캐릭터 수","t":"Frame time, número de personagens na tela"},
     {"ctx":"causes/cg-crowd/chk/look","ko":"PresentMon의 프레임 시간과 CPUBusy·GPUBusy를 공성전·월드 보스 전후로 비교. 개발 빌드는 언리얼 stat Unit(게임 스레드·렌더링 스레드·GPU 시간)","t":"Comparar o frame time e o CPUBusy/GPUBusy do PresentMon antes e depois de uma guerra de castelo ou world boss. Em build de desenvolvimento, stat Unit no Unreal (tempo da game thread, da render thread e da GPU)"},
@@ -244,6 +244,7 @@
     {"ctx":"causes/cg-anticheat/ref/0/n","ko":"서버가 정해진 시간(RegisterTimeout) 안에 클라이언트의 안티치트 메시지를 못 받으면 인증 시간 초과로 내보냄(로딩으로 멈춘 클라이언트가 흔한 원인), 최근 모듈 업데이트가 문제면 이전 모듈로 되돌림","t":"Se o servidor não recebe a mensagem do anti-cheat do cliente dentro do tempo definido (RegisterTimeout), ele expulsa o cliente por timeout de autenticação (causa comum: cliente parado em um carregamento); se o problema vier de uma atualização recente do módulo, voltar para o módulo anterior"}
   ],
   "stale": [
-    {"ctx":"causes/cg-float-time/num","ko":"32비트 float는 유효 숫자가 7자리 남짓이라, 켜 둔 지 하루(약 86,400초)면 시간 해상도가 약 8ms, 일주일이면 약 60ms가 됩니다. 60FPS의 한 프레임(16.7ms)에 맞먹거나 더 큽니다.","t":"Um float de 32 bits tem pouco mais de 7 dígitos significativos; com o jogo aberto há um dia (cerca de 86.400 s), a resolução temporal fica em torno de 8 ms e, em uma semana, em torno de 60 ms. É comparável a um frame a 60 FPS (16,7 ms) ou maior que ele."}
+    {"ctx":"causes/cg-float-time/num","ko":"32비트 float는 유효 숫자가 7자리 남짓이라, 켜 둔 지 하루(약 86,400초)면 시간 해상도가 약 8ms, 일주일이면 약 60ms가 됩니다. 60FPS의 한 프레임(16.7ms)에 맞먹거나 더 큽니다.","t":"Um float de 32 bits tem pouco mais de 7 dígitos significativos; com o jogo aberto há um dia (cerca de 86.400 s), a resolução temporal fica em torno de 8 ms e, em uma semana, em torno de 60 ms. É comparável a um frame a 60 FPS (16,7 ms) ou maior que ele."},
+    {"ctx":"causes/cg-crowd/num","ko":"캐릭터 1명당 0.02~0.1ms라도 300명이면 6~30ms. 이것만으로 프레임 예산을 넘습니다.","t":"Mesmo com 0,02–0,1 ms por personagem, 300 personagens somam 6–30 ms. Só isso já estoura o orçamento do frame."}
   ]
 }

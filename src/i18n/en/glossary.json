@@ -38,7 +38,7 @@
     {"ctx":"glossary/g-lag-compensation/0","ko":"지연 보상","t":"Lag compensation"},
     {"ctx":"glossary/g-lag-compensation/2","ko":"서버가 공격 판정을 할 때 공격자가 보던 과거 시점으로 되감아 맞았는지 확인하는 기술. 맞는 쪽이 억울하지 않게 되감는 폭에 상한을 둡니다. 경쟁 슈팅 게임은 0.2~0.25초 안팎이 흔하고 소스 엔진 기본값처럼 1초까지 되감는 경우도 있습니다.","t":"When the server judges an attack, it rewinds to the moment the attacker was seeing and checks whether the attack hit. To keep things fair for the player being hit, the rewind is capped: 0.2–0.25 s is common in competitive shooters, and some games rewind as far as 1 s, like the Source engine default."},
     {"ctx":"glossary/g-authoritative-server/0","ko":"권위 서버","t":"Authoritative server"},
-    {"ctx":"glossary/g-authoritative-server/2","ko":"최종 판정은 서버만 한다는 설계. 치팅을 막지만 모든 결과가 서버 왕복을 거칩니다. 이 기다림은 예측·선연출로 가립니다.","t":"A design in which only the server makes final decisions. It stops cheating, but every outcome needs a round trip to the server, so prediction and client-side feedback hide the wait."},
+    {"ctx":"glossary/g-authoritative-server/2","ko":"최종 판정은 서버만 한다는 설계. 치팅을 막지만 모든 결과가 서버 왕복을 거칩니다. 왕복을 기다리는 시간은 예측·선연출로 가립니다.","t":"A design in which only the server makes final decisions. It stops cheating, but every outcome needs a round trip to the server, so prediction and client-side feedback hide the wait."},
     {"ctx":"glossary/g-deterministic-lockstep/0","ko":"락스텝","t":"Lockstep"},
     {"ctx":"glossary/g-deterministic-lockstep/2","ko":"모두가 입력만 주고받고 같은 턴에 똑같이 계산하는 방식. 입력에 일정한 지연을 붙이고 누구 하나의 입력이 늦으면 모두가 기다립니다.","t":"Everyone exchanges only inputs and runs the exact same computation on the same turn. Inputs get a fixed delay, and if anyone’s input is late, everyone waits."},
     {"ctx":"glossary/g-server-side-input-buffer/0","ko":"서버 입력 버퍼","t":"Server-side input buffer"},

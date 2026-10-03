@@ -29,7 +29,7 @@
     {"ctx":"#top h1","ko":"게임 렉<br><span class=\"ping\">백서</span>","t":"游戏卡顿<br><span class=\"ping\">白皮书</span>"},
     {"ctx":"#top p","ko":"화면이 뚝뚝 끊기고 캐릭터가 순간이동하고 갑자기 한꺼번에 몰아서 움직이고 결국 접속이 끊기는 이유. 내 게임 화면에서 서버의 데이터베이스까지 13개 층을 차례로 열어 보고 직접 망가뜨려 보며 이해합니다. MMO 사례를 중심으로 썼지만 대부분은 장르와 상관없이 온라인 게임 전반에 해당합니다.","t":"画面一卡一卡、角色瞬移、动作突然像快进一样一下子涌过来，最后干脆掉线，这些到底是为什么？本白皮书从自己的游戏画面一直到服务器的数据库，把 13 层逐一拆开来看，并亲手制造故障来理解原理。内容以 MMO 案例为主，但大部分与游戏类型无关，适用于各类网络游戏。"},
     {"ctx":"#top p","ko":"게임 렉 백서 · 수치는 일반적인 서비스 환경의 대표값이며 실제 값은 게임과 인프라마다 다릅니다.","t":"游戏卡顿白皮书 · 文中数值是一般线上服务环境的典型值，实际数值因游戏和基础设施而异。"},
-    {"ctx":"#top p","ko":"시뮬레이션은 원리를 보여 주기 위해 단순화한 모델입니다. 실제 장애 분석은 게임개발팀·인프라팀의 모니터링 지표와 함께 보세요.","t":"模拟是为了说明原理而简化的模型。分析真实故障时，请结合研发团队和运维团队的监控指标一起看。"},
+    {"ctx":"#top p","ko":"시뮬레이션은 원리를 보여 주려고 단순화한 모델입니다. 실제 장애 분석은 게임개발팀·인프라팀의 모니터링 지표와 함께 보세요.","t":"模拟是为了说明原理而简化的模型。分析真实故障时，请结合研发团队和运维团队的监控指标一起看。"},
     {"ctx":"#top p","ko":"자바스크립트 없이 읽는 <a href=\"%SITE%text.html\">텍스트 판</a>(원인마다 따로 된 페이지 포함), 전체 내용 마크다운 <a href=\"%SITE%llms-full.txt\">llms-full.txt</a>, AI용 안내 <a href=\"%SITE%llms.txt\">llms.txt</a>.","t":"不需要 JavaScript 也能阅读的<a href=\"%SITE%text.html\">纯文本版</a>（含每个原因的单独页面），Markdown 格式的完整内容 <a href=\"%SITE%llms-full.txt\">llms-full.txt</a>，面向 AI 的说明 <a href=\"%SITE%llms.txt\">llms.txt</a>。"},
     {"ctx":"#top p","ko":"MIT 라이선스로 공개합니다. 글꼴(<span class=\"fontlist\">IBM Plex Sans KR, IBM Plex Mono</span>)은 SIL Open Font License 1.1을 따릅니다.","t":"以 MIT 许可证发布。字体（<span class=\"fontlist\">IBM Plex Sans KR, IBM Plex Mono</span>）采用 SIL Open Font License 1.1。"}
   ],

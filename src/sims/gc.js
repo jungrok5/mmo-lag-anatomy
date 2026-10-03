@@ -312,7 +312,7 @@ K.register('gc', function (root) {
     const who = TR`이 서버 프로세스에 붙어 있는 <b>모든 플레이어가 같은 순간에</b> 겪습니다.`;
     if (P.mode === 'stw') {
       const st = fp >= 300 ? 'bad' : fp >= B ? 'warn' : 'good';
-      return TR`${K.flag(st)} GC는 더 안 쓰는 메모리를 모아 회수하는 작업입니다. <b>전체 멈춤</b>(Stop-the-world) 방식은 GC가 도는 동안 게임 스레드까지 모두 멈춥니다. 힙 ${P.H}GB의 90%가 차는 <b>${fmtDur(a.interval)}마다</b> GC를 하고 살아 있는 데이터 ${K.n(P.L, 1)}GB를 훑는 데 <b>${K.ms(fp)}</b>가 걸립니다. 그동안 틱 ${missed}개가 밀립니다. 플레이어는 게임이 <b>멈춤</b> 상태가 된 뒤, 밀린 틱이 한꺼번에 처리되며 몬스터가 순간이동하듯 움직이고 스킬이 한꺼번에 터지는 <b>몰아치기</b>를 봅니다. ${who} ${fix}`;
+      return TR`${K.flag(st)} GC는 더 안 쓰는 메모리를 모아 회수하는 작업입니다. <b>전체 멈춤</b>(Stop-the-world) 방식은 GC가 도는 동안 게임 스레드까지 모두 멈춥니다. 힙 ${P.H}GB의 90%가 차는 <b>${fmtDur(a.interval)}마다</b> GC를 하고 살아 있는 데이터 ${K.n(P.L, 1)}GB를 훑는 데 <b>${K.ms(fp)}</b>가 걸립니다. 그동안 틱 ${missed}개가 밀립니다. 플레이어 화면에서는 게임이 먼저 <b>멈춤</b> 상태가 됩니다. 이어서 밀린 틱이 한꺼번에 처리되며 몬스터가 순간이동하듯 움직이고 스킬이 한꺼번에 터지는 <b>몰아치기</b>가 옵니다. ${who} ${fix}`;
     }
     if (P.mode === 'gen') {
       const st = a.fullI < 300 && fp >= 300 ? 'bad' : fp >= B ? 'warn' : 'good';
@@ -323,12 +323,12 @@ K.register('gc', function (root) {
       return TR`${K.flag(st)} <b>세대별</b> GC는 새로 만든 객체만 모아 두는 작은 영역(Young 영역 ${K.n(young() / GB, 1)}GB)을 <b>${fmtDur(a.interval)}마다 ${K.ms(a.youngP)}</b>씩 짧게 수집합니다. ${absorb} 다만 GC에서 살아남은 2%가 Old 영역에 쌓이면 <b>${fmtDur(a.fullI)}마다</b> Full GC가 필요하고 그때는 <b>${K.ms(a.maxP)}</b> 동안 <b>멈춤</b>, 이어서 <b>몰아치기</b>가 옵니다. ${who} ${st === 'good' ? '' : fix}`;
     }
     if (a.fallback) {
-      return TR`${K.flag('bad')} <b>동시 수행</b> GC는 게임이 도는 동안 별도 스레드에서 메모리를 회수하지만 초당 ${K.n(P.A)}MB를 새로 쓰면 GC(${K.n(markDur() / 1000, 1)}초)가 끝나기 전에 힙이 가득 찹니다. 결국 전체 멈춤으로 넘어가 <b>${K.ms(fp)}</b> 동안 서버가 멈춥니다(<b>멈춤</b> 뒤 <b>몰아치기</b>). 실제 GC마다 동작은 달라서, G1은 Full GC로 넘어가고 ZGC는 메모리를 요청한 스레드를 GC가 끝날 때까지 멈춥니다. 어느 쪽이든 게임 스레드가 멈춥니다. ${who} ${fix}`;
+      return TR`${K.flag('bad')} <b>동시 수행</b> GC는 게임이 도는 동안 별도 스레드에서 메모리를 회수하지만 초당 ${K.n(P.A)}MB를 새로 쓰면 GC(${K.n(markDur() / 1000, 1)}초)가 끝나기 전에 힙이 가득 찹니다. 그 순간 전체 멈춤으로 넘어가 <b>${K.ms(fp)}</b> 동안 서버가 멈춥니다(<b>멈춤</b> 뒤 <b>몰아치기</b>). 실제 GC마다 동작은 달라서, G1은 Full GC로 넘어가고 ZGC는 메모리를 요청한 스레드를 GC가 끝날 때까지 멈춥니다. 어느 쪽이든 게임 스레드가 멈춥니다. ${who} ${fix}`;
     }
     const work = baseWork();
     const slow = work * 1.25;
     const st = slow > B * 0.9 ? 'warn' : 'good';
-    return TR`${K.flag(st)} <b>동시 수행</b> GC는 게임이 도는 동안 별도 스레드에서 메모리를 회수합니다. 멈춤은 한 번에 <b>${K.ms(a.maxP)}</b> 이하라 거의 느낄 수 없습니다. 대신 GC가 도는 동안(시간의 ${K.pct(a.markShare)}) CPU를 나눠 써서 틱이 평소 ${K.ms(work)}에서 <b>${K.ms(slow)}</b>로 25% 느려집니다. ${slow > B * 0.9 ? TR`예산 50ms에 가까워서 조금만 더 바빠지면 <b>슬로우모션</b>이 됩니다.` : TR`예산 안이라 플레이어는 차이를 거의 못 느낍니다.`} 할당이 GC 속도를 넘으면 결국 전체 멈춤으로 넘어간다는 점은 기억하세요.`;
+    return TR`${K.flag(st)} <b>동시 수행</b> GC는 게임이 도는 동안 별도 스레드에서 메모리를 회수합니다. 멈춤은 한 번에 <b>${K.ms(a.maxP)}</b> 이하라 거의 느낄 수 없습니다. 대신 GC가 도는 동안(시간의 ${K.pct(a.markShare)}) CPU를 나눠 써서 틱이 평소 ${K.ms(work)}에서 <b>${K.ms(slow)}</b>로 25% 느려집니다. ${slow > B * 0.9 ? TR`예산 50ms에 가까워서 조금만 더 바빠지면 <b>슬로우모션</b>이 됩니다.` : TR`예산 안이라 플레이어는 차이를 거의 못 느낍니다.`} 할당이 GC 속도를 넘으면 결국 전체 멈춤으로 넘어갑니다.`;
   }
 
   K.loop(root, dt => {
