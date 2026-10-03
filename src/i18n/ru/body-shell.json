@@ -12,14 +12,14 @@
     {"ctx":"#nav li","ko":"<a href=\"#symptoms\">증상 사전</a>","t":"<a href=\"#symptoms\">Каталог симптомов</a>"},
     {"ctx":"#nav li","ko":"<a href=\"#sync\">동기화 방식과 체감</a>","t":"<a href=\"#sync\">Модели синхронизации и ощущения</a>"},
     {"ctx":"#nav li","ko":"<a href=\"#partial\">한 명만·한쪽만 이상할 때</a>","t":"<a href=\"#partial\">Тормозит один игрок или сбоит одна сторона</a>"},
-    {"ctx":"#nav li","ko":"<a href=\"#retrans\">TCP 재전송 해부</a>","t":"<a href=\"#retrans\">Разбор повторных передач TCP</a>"},
+    {"ctx":"#nav li","ko":"<a href=\"#retrans\">TCP 재전송</a>","t":"<a href=\"#retrans\">Разбор повторных передач TCP</a>"},
     {"ctx":"#nav li","ko":"<a href=\"#owners\">게임개발팀·인프라팀 담당 구분</a>","t":"<a href=\"#owners\">Кто отвечает: разработка или инфраструктура</a>"},
     {"ctx":"#nav div","ko":"레이어 (패킷이 지나가는 순서)","t":"Слои (в порядке прохождения пакета)"},
     {"ctx":"#nav div","ko":"도구","t":"Инструменты"},
     {"ctx":"#nav li","ko":"<a href=\"#triage\">진단 도우미</a>","t":"<a href=\"#triage\">Помощник диагностики</a>"},
     {"ctx":"#nav li","ko":"<a href=\"#judge\">관측으로 판정하기</a>","t":"<a href=\"#judge\">Диагностика по метрикам</a>"},
     {"ctx":"#nav li","ko":"<a href=\"#cases\">사례와 절차</a>","t":"<a href=\"#cases\">Инциденты и инструкции</a>"},
-    {"ctx":"#nav li","ko":"<a href=\"#report\">렉 제보 잘하는 법</a>","t":"<a href=\"#report\">Как правильно сообщить о лагах</a>"},
+    {"ctx":"#nav li","ko":"<a href=\"#report\">렉 제보 가이드</a>","t":""},
     {"ctx":"#nav li","ko":"<a href=\"#glossary\">용어 사전</a>","t":"<a href=\"#glossary\">Словарь терминов</a>"},
     {"ctx":"#nav li","ko":"<a href=\"#refs\">참고 문헌</a>","t":"<a href=\"#refs\">Список литературы</a>"},
     {"ctx":"#nav div@aria-label","ko":"화면 테마","t":"Тема оформления"},
@@ -27,13 +27,15 @@
     {"ctx":"#nav button","ko":"밝게","t":"Светлая"},
     {"ctx":"#nav button","ko":"어둡게","t":"Тёмная"},
     {"ctx":"#top h1","ko":"게임 렉<br><span class=\"ping\">백서</span>","t":"Анатомия<br><span class=\"ping\">игровых лагов</span>"},
-    {"ctx":"#top p","ko":"화면이 뚝뚝 끊기고 캐릭터가 순간이동하고 갑자기 한꺼번에 몰아서 움직이고 결국 접속이 끊기는 이유. 내 게임 화면에서 서버의 데이터베이스까지 13개 층을 차례로 열어 보고 직접 망가뜨려 보며 이해합니다. MMO 사례를 중심으로 썼지만 대부분은 장르와 상관없이 온라인 게임 전반에 해당합니다.","t":"Почему возникают микрофризы, персонажи телепортируются, всё вдруг уходит в перемотку, а в итоге игрока выкидывает из игры. Здесь можно по очереди открыть 13 слоёв, от экрана игрока до базы данных на сервере, и разобраться в них, ломая всё своими руками. Примеры взяты в основном из MMO, но почти всё относится к онлайн-играм любого жанра."},
+    {"ctx":"#top p","ko":"화면이 뚝뚝 끊기거나 캐릭터가 순간이동하거나 접속이 끊기는 원인을 내 게임 화면부터 서버의 데이터베이스까지 13개 층으로 나눠 설명합니다. 원인마다 확인 방법과 담당 팀을 적었고 실험에서 조건을 바꿔 보며 확인할 수 있습니다. MMO 사례를 중심으로 썼지만 대부분은 장르와 상관없이 온라인 게임 전반에 해당합니다.","t":"Почему возникают микрофризы, персонажи телепортируются, всё вдруг уходит в перемотку, а в итоге игрока выкидывает из игры. Здесь можно по очереди открыть 13 слоёв, от экрана игрока до базы данных на сервере, и разобраться в них, ломая всё своими руками. Примеры взяты в основном из MMO, но почти всё относится к онлайн-играм любого жанра."},
     {"ctx":"#top p","ko":"게임 렉 백서 · 수치는 일반적인 서비스 환경의 대표값이며 실제 값은 게임과 인프라마다 다릅니다.","t":"Анатомия игровых лагов · Цифры показывают типичные значения для обычных игровых сервисов. Реальные значения зависят от игры и инфраструктуры."},
     {"ctx":"#top p","ko":"시뮬레이션은 원리를 보여 주려고 단순화한 모델입니다. 실제 장애 분석은 게임개발팀·인프라팀의 모니터링 지표와 함께 보세요.","t":"Симуляции упрощены, чтобы показать принцип. Реальный инцидент разбирайте вместе с метриками мониторинга команды разработки и команды инфраструктуры."},
     {"ctx":"#top p","ko":"자바스크립트 없이 읽는 <a href=\"%SITE%text.html\">텍스트 판</a>(원인마다 따로 된 페이지 포함), 전체 내용 마크다운 <a href=\"%SITE%llms-full.txt\">llms-full.txt</a>, AI용 안내 <a href=\"%SITE%llms.txt\">llms.txt</a>.","t":"<a href=\"%SITE%text.html\">Текстовая версия</a> для чтения без JavaScript (с отдельной страницей для каждой причины), всё содержимое в формате Markdown: <a href=\"%SITE%llms-full.txt\">llms-full.txt</a>, руководство для ИИ: <a href=\"%SITE%llms.txt\">llms.txt</a>."},
-    {"ctx":"#top p","ko":"MIT 라이선스로 공개합니다. 글꼴(<span class=\"fontlist\">IBM Plex Sans KR, IBM Plex Mono</span>)은 SIL Open Font License 1.1을 따릅니다.","t":"Опубликовано под лицензией MIT. Шрифты (<span class=\"fontlist\">IBM Plex Sans KR, IBM Plex Mono</span>) распространяются по лицензии SIL Open Font License 1.1."}
+    {"ctx":"#top p","ko":"만든 사람: 오정록(Jeongrok Oh) · <a href=\"%RESUME%\">이력서</a> · <a href=\"https://github.com/jungrok5/mmo-lag-anatomy\">GitHub 저장소</a>","t":""},
+    {"ctx":"#top p","ko":"<a href=\"https://github.com/jungrok5/mmo-lag-anatomy/blob/main/LICENSE\">MIT 라이선스</a>로 공개합니다. 글꼴(<span class=\"fontlist\">IBM Plex Sans KR, IBM Plex Mono</span>)은 SIL Open Font License 1.1을 따릅니다.","t":""}
   ],
   "stale": [
-    {"ctx":"#top p","ko":"MIT 라이선스로 공개합니다. 글꼴(<span class=\"fontlist\">IBM Plex Sans KR, IBM Plex Mono, Black Han Sans</span>)은 SIL Open Font License 1.1을 따릅니다.","t":"Опубликовано под лицензией MIT. Шрифты (<span class=\"fontlist\">IBM Plex Sans KR, IBM Plex Mono, Black Han Sans</span>) распространяются по лицензии SIL Open Font License 1.1."}
+    {"ctx":"#top p","ko":"MIT 라이선스로 공개합니다. 글꼴(<span class=\"fontlist\">IBM Plex Sans KR, IBM Plex Mono, Black Han Sans</span>)은 SIL Open Font License 1.1을 따릅니다.","t":"Опубликовано под лицензией MIT. Шрифты (<span class=\"fontlist\">IBM Plex Sans KR, IBM Plex Mono, Black Han Sans</span>) распространяются по лицензии SIL Open Font License 1.1."},
+    {"ctx":"#nav li","ko":"<a href=\"#report\">렉 제보 잘하는 법</a>","t":"<a href=\"#report\">Как правильно сообщить о лагах</a>"}
   ]
 }

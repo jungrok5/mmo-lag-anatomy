@@ -2,8 +2,8 @@
   "lang": "vi",
   "group": "sim-oneslow",
   "entries": [
-    {"ctx":"src/sims/oneslow.js:6","ko":"누구에게 번지나 · 한 명만 느릴 때","t":"Ảnh hưởng lan đến ai · Khi chỉ một người chậm"},
-    {"ctx":"src/sims/oneslow.js:7","ko":"느린 한 사람은 남의 화면에서 어떻게 보이고 남에게 번질까","t":"Một người chậm trông ra sao trên màn hình người khác, và có lan sang người khác không"},
+    {"ctx":"src/sims/oneslow.js:6","ko":"영향 범위 · 한 명만 느릴 때","t":"Ảnh hưởng lan đến ai · Khi chỉ một người chậm"},
+    {"ctx":"src/sims/oneslow.js:7","ko":"느린 한 사람이 다른 사람의 화면과 게임에 주는 영향","t":""},
     {"ctx":"src/sims/oneslow.js:8","ko":"같은 서버에 A와 B가 있습니다. A만 회선이 나쁩니다. 세 화면(서버, A의 화면, B의 화면)을 나란히 놓고 서버가 입력을 처리하는 방식을 바꿔 보세요. 대부분의 방식에서 렉은 A에게만 나타나고 B는 “A가 이상하게 움직이는 것”만 봅니다. 어떤 방식에서는 A 한 사람 때문에 모두가 멈춥니다.","t":"A và B ở cùng một server. Chỉ A có đường truyền kém. Hãy đặt ba màn hình (server, màn hình của A, màn hình của B) cạnh nhau và đổi cách server xử lý input. Với phần lớn cách xử lý, lag chỉ xuất hiện ở A, còn B chỉ thấy “A di chuyển lạ”. Nhưng có một cách mà chỉ vì một mình A, tất cả mọi người đều đứng hình."},
     {"ctx":"src/sims/oneslow.js:11","ko":"<b>틱마다 모아서</b> 방식에서 B의 화면을 보세요. A(파랑)는 멈칫했다가 한 번에 여러 걸음을 가지만 몬스터와 B 자신은 멀쩡합니다. 아래 표에서 “B의 화면 → A의 모습”만 빨갛습니다. 지터와 손실을 0으로 내리면 핑이 높아도 A는 매끄럽게 보입니다. 핑보다 지터와 손실이 남의 눈에 렉으로 보이게 합니다.","t":"Ở chế độ <b>Gom theo tick</b>, hãy xem màn hình của B. A (xanh dương) khựng lại rồi đi mấy bước một lúc, nhưng quái và chính B vẫn bình thường. Trong bảng bên dưới, chỉ ô giao giữa hàng “Màn hình của B” và cột “A trên màn hình” có màu đỏ. Hạ jitter và mất gói về 0 thì dù ping cao, A vẫn trông mượt. Thứ làm một người trông như bị lag trong mắt người khác là jitter và mất gói, hơn là ping."},
     {"ctx":"src/sims/oneslow.js:12","ko":"<b>도착 즉시</b>로 바꾸면 서버가 A의 입력을 도착한 시각대로 알립니다. 이동은 조금 덜 튀지만 빨라졌다 느려졌다 하고 스킬처럼 한 번에 끝나는 행동은 몰려 온 만큼 한순간에 실행됩니다.","t":"Chuyển sang <b>Xử lý ngay khi đến</b> thì server báo input của A theo đúng thời điểm nhận được. Di chuyển bớt nhảy cóc hơn một chút nhưng lúc nhanh lúc chậm, còn những hành động kết thúc trong một lần như skill thì dồn đến bao nhiêu sẽ được thực hiện trong cùng một khoảnh khắc bấy nhiêu."},
@@ -66,7 +66,7 @@
     {"ctx":"src/sims/oneslow.js:382","ko":"이동은 예측으로 즉시, 스킬 결과는 약 {0}ms 뒤","t":"Di chuyển tức thì nhờ dự đoán, kết quả skill sau khoảng {0} ms"},
     {"ctx":"src/sims/oneslow.js:383","ko":"A의 버퍼가 비어 제자리","t":"Bộ đệm của A rỗng nên A đứng yên"},
     {"ctx":"src/sims/oneslow.js:383","ko":"입력 버퍼 방식에서만","t":"Chỉ ở chế độ bộ đệm input"},
-    {"ctx":"src/sims/oneslow.js:384","ko":"A는 핑이 {0}ms라도 지터와 손실이 적어 입력이 고르게 도착하므로 B의 화면에서 A는 <b>{1}</b>입니다. 조금 과거의 위치에 보일 뿐입니다. 핑보다 지터와 손실이 남의 눈에 이상하게 보이게 만듭니다.","t":"Dù ping của A là {0} ms, jitter và mất gói thấp nên input đến đều đặn. Vì vậy A trên màn hình của B: <b>{1}</b>. A chỉ hiện ở vị trí hơi lùi về quá khứ một chút. Thứ làm một người trông bất thường trong mắt người khác là jitter và mất gói, hơn là ping."},
+    {"ctx":"src/sims/oneslow.js:384","ko":"A는 핑이 {0}ms라도 지터와 손실이 적어 입력이 고르게 도착하므로 B의 화면에서 <b>{1}</b>입니다. 조금 과거의 위치에 보일 뿐입니다. 핑보다 지터와 손실이 남의 눈에 이상하게 보이게 만듭니다.","t":"Dù ping của A là {0} ms, jitter và mất gói thấp nên input đến đều đặn. Vì vậy A trên màn hình của B: <b>{1}</b>. A chỉ hiện ở vị trí hơi lùi về quá khứ một chút. Thứ làm một người trông bất thường trong mắt người khác là jitter và mất gói, hơn là ping."},
     {"ctx":"src/sims/oneslow.js:386","ko":"{0}A와 B 모두 회선이 좋습니다. 세 화면이 거의 같게 움직입니다.","t":"{0}Cả A và B đều có đường truyền tốt. Ba màn hình chuyển động gần như giống hệt nhau."},
     {"ctx":"src/sims/oneslow.js:387","ko":"{0}<b>락스텝</b>: 다음 턴을 계산하려면 A의 입력이 꼭 있어야 합니다. A의 입력이 늦을 때마다 서버, A, B, 몬스터가 <b>모두 멈춥니다</b>. 느린 한 사람의 렉이 전원에게 번지는 대표적인 구조입니다.","t":"{0}<b>Lockstep</b>: muốn tính lượt tiếp theo thì bắt buộc phải có input của A. Mỗi lần input của A đến muộn, server, A, B và quái <b>đều đứng hình</b>. Đây là kiến trúc tiêu biểu khiến lag của một người chậm lan sang tất cả mọi người."},
     {"ctx":"src/sims/oneslow.js:388","ko":"{0}<b>락스텝</b>: A의 입력이 늦지만 일정하게 와서 턴은 정해진 주기대로 돕니다. 대신 서버는 A의 입력이 올 때까지 B의 입력도 대기시킵니다. B도 자기 핑보다 늦게, A의 입력이 서버에 닿는 시간에 맞춰 반영되는 <b>입력 지연</b>을 겪습니다. 지터나 손실을 올리면 전원이 <b>멈춥니다</b>.","t":"{0}<b>Lockstep</b>: input của A đến muộn nhưng đều nên các lượt vẫn chạy đúng chu kỳ. Đổi lại, server bắt input của B cũng phải chờ đến khi input của A tới. Vì vậy B cũng gặp <b>trễ thao tác</b>: input của B được áp dụng muộn hơn ping của chính B, theo thời gian input của A tới server. Tăng jitter hoặc mất gói lên thì tất cả <b>đứng hình</b>."},
@@ -81,6 +81,7 @@
     {"ctx":"src/sims/oneslow.js:392","ko":" <b>엄격한 이동 검증</b> 때문에 A 본인의 화면에서 A가 <b>고무줄</b>처럼 끌려갑니다. 한 틱에 몰려 도착한 정상 입력을 서버가 과속으로 보고 거절했기 때문입니다.","t":" Do <b>kiểm tra di chuyển nghiêm ngặt</b>, trên chính màn hình của A, A bị <b>kéo ngược</b> lại. Lý do là server coi các input hợp lệ đến dồn vào cùng một tick là chạy quá tốc độ và đã từ chối chúng."}
   ],
   "stale": [
-    {"ctx":"src/sims/oneslow.js:370","ko":"의 모습","t":" trên màn hình"}
+    {"ctx":"src/sims/oneslow.js:370","ko":"의 모습","t":" trên màn hình"},
+    {"ctx":"src/sims/oneslow.js:7","ko":"느린 한 사람은 남의 화면에서 어떻게 보이고 남에게 번질까","t":"Một người chậm trông ra sao trên màn hình người khác, và có lan sang người khác không"}
   ]
 }

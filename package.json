@@ -1,7 +1,7 @@
 {
   "name": "mmo-lag-anatomy",
   "private": true,
-  "description": "게임 렉 백서: 온라인 게임 렉 원인 시청각 백과(MMO 사례 중심)",
+  "description": "게임 렉 백서: 온라인 게임 렉 원인 백과(MMO 사례 중심)",
   "homepage": "https://jungrok5.github.io/mmo-lag-anatomy/",
   "repository": {
     "type": "git",
@@ -22,11 +22,15 @@
     "Korean"
   ],
   "license": "MIT",
+  "author": {
+    "name": "Jeongrok Oh",
+    "url": "https://jungrok5.github.io/resume/"
+  },
   "scripts": {
     "build": "python3 build.py",
     "validate": "node tools/validate.cjs",
     "check": "mkdir -p build && node tools/check.cjs index.html build/p.png 1280 && node tools/check.cjs index.html build/m.png 390 --dark",
-    "test": "npm run build && npm run validate && node tools/i18n-wrap.cjs --check && node tools/i18n.cjs check && npm run check",
+    "test": "npm run build && npm run validate && node tools/ko-style.cjs --strict && node tools/i18n-wrap.cjs --check && node tools/i18n.cjs check && npm run check",
     "links": "python3 tools/linkcheck.py",
     "export": "node tools/export.cjs",
     "site": "python3 build.py && node tools/site.cjs",

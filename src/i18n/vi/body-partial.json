@@ -2,7 +2,7 @@
   "lang": "vi",
   "group": "body-partial",
   "entries": [
-    {"ctx":"#partial div","ko":"<span class=\"idx\">05</span>누구에게 번지나","t":"<span class=\"idx\">05</span>Ảnh hưởng lan tới ai"},
+    {"ctx":"#partial div","ko":"<span class=\"idx\">05</span>영향 범위","t":""},
     {"ctx":"#partial h2","ko":"한 명만 느릴 때, 한쪽만 이상할 때","t":"Khi chỉ một người chậm, khi chỉ một bên bất thường"},
     {"ctx":"#partial p","ko":"렉 제보에서 가장 헷갈리는 경우는 몇 사람만, 또는 한쪽만 겪을 때입니다. 느린 한 사람이 다른 사람 눈에 어떻게 보이는지, 그 사람 때문에 다른 사람까지 느려지는지는 서버가 입력을 처리하는 방식과 동기화 방식에 따라 완전히 달라집니다. 같은 PC에서 띄운 두 클라이언트 중 한쪽만 NPC가 안 보이는 현상도 이 장에서 다룹니다.","t":"Trường hợp khó hiểu nhất trong các báo cáo lag là khi chỉ vài người, hoặc chỉ một bên gặp phải. Một người chậm hiện ra trong mắt người khác thế nào, và người đó có kéo cả người khác chậm theo hay không, hoàn toàn phụ thuộc vào cách server xử lý input và cơ chế đồng bộ. Chương này cũng bàn về hiện tượng hai client mở trên cùng một PC mà chỉ một bên không thấy NPC."},
     {"ctx":"#partial-oneuser","ko":"특정 유저, 특정 회선만 느리면","t":"Khi chỉ một số người chơi, một số đường truyền bị chậm"},
@@ -58,5 +58,8 @@
     {"ctx":"#partial li","ko":"<b>받았는데 그리지 못했다</b>: 두 클라이언트가 같은 캐시 파일을 동시에 써서 모델 로딩 실패, 그래픽 메모리(VRAM) 부족, 표시 인원 제한 같은 옵션 차이, 버전·데이터 불일치.","t":"<b>Đã nhận nhưng không vẽ được</b>: hai client cùng ghi một file cache một lúc nên tải model thất bại; thiếu bộ nhớ đồ họa (VRAM); khác tùy chọn như giới hạn số người hiển thị; không khớp phiên bản hoặc dữ liệu."},
     {"ctx":"#partial p","ko":"먼저 볼 단서는 세 가지입니다. <b>이름표는 있는데 캐릭터 모델만 없는가</b>(서버는 보냈고 그리기 실패), <b>시야를 벗어났다 돌아오면 보이는가</b>(등장 알림 하나가 빠짐), 그리고 <b>안 보이는 쪽 창을 앞으로 가져오면 나아지는가</b>(백그라운드 창의 처리 제한). 반대로 이미 죽은 몬스터가 내 화면에만 서 있는 “유령 개체”는 퇴장 알림이 빠져서 생깁니다.","t":"Có ba manh mối mạnh nhất: <b>có bảng tên mà không có model nhân vật không</b> (server đã gửi, vẽ thất bại), <b>ra khỏi tầm nhìn rồi quay lại thì có thấy không</b> (thiếu một thông báo xuất hiện), và <b>đưa cửa sổ bị lỗi lên phía trước thì có đỡ hơn không</b> (giới hạn xử lý của cửa sổ chạy nền). Ngược lại, “đối tượng ma”, chẳng hạn con quái đã chết vẫn đứng trên màn hình của riêng bạn, là do thiếu thông báo rời đi."},
     {"ctx":"#partial-causes","ko":"일부에게만 생기는 문제","t":"Sự cố chỉ một số người gặp"}
+  ],
+  "stale": [
+    {"ctx":"#partial div","ko":"<span class=\"idx\">05</span>누구에게 번지나","t":"<span class=\"idx\">05</span>Ảnh hưởng lan tới ai"}
   ]
 }

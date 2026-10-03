@@ -282,7 +282,7 @@ function checkEntry(e, isAttr) {
   if (phs(e.ko).join() !== phs(e.t).join()) errs.push(`자리표시 ${phs(e.ko).join(' ')} ≠ ${phs(e.t).join(' ')}`);
   const a = tagsOf(e.ko).join('|'), b = tagsOf(e.t).join('|');
   if (a !== b) errs.push(`태그가 다름: ${a.slice(0, 160)} ≠ ${b.slice(0, 160)}`);
-  for (const tok of ['%SITE%']) if (e.ko.split(tok).length !== e.t.split(tok).length) errs.push(tok + ' 빠짐');
+  for (const tok of ['%SITE%', '%RESUME%']) if (e.ko.split(tok).length !== e.t.split(tok).length) errs.push(tok + ' 빠짐');
   if (isAttr && /["<>]/.test(e.t)) errs.push('속성 번역에 " < > 를 쓸 수 없음');
   if (e.t.includes('@@')) errs.push('원문 끝의 @@설명은 번역에 넣지 않음(번역하는 사람에게만 보이는 뜻 구분)');
   if (HAN.test(e.t)) warns.push('번역에 한글이 남음');

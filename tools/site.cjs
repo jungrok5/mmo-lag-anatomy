@@ -40,7 +40,10 @@ const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&am
 const html = s => esc(s).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
 const txt = s => String(s == null ? '' : s).replace(/\*\*/g, '');
 const ld = o => `<script type="application/ld+json">${JSON.stringify(o).replace(/</g, '\\u003c')}</script>`;
-const who = { '@type': 'Person', name: 'jungrok5', url: 'https://github.com/jungrok5' };
+// 만든 사람: 이력서는 package.json의 author.url. 번역판은 영문 이력서(/en/)로 잇는다
+const RESUME = (PKG.author && PKG.author.url) || 'https://jungrok5.github.io/resume/';
+const resumeOf = L => L.code === 'ko' ? RESUME : RESUME + 'en/';
+const whoOf = L => Object.assign({ '@type': 'Person', name: TR`오정록`, url: resumeOf(L), sameAs: ['https://github.com/jungrok5', 'https://www.linkedin.com/in/jungrok5'] }, L.code === 'ko' && PKG.author ? { alternateName: PKG.author.name } : {});
 const crumbs = list => ({ '@type': 'BreadcrumbList', itemListElement: list.map(([name, url], i) => ({ '@type': 'ListItem', position: i + 1, name, item: url })) });
 
 // 언어별 본문 글꼴(style.css의 :lang과 같은 값). 한국어는 단어 중간에서 줄을 바꾸지 않게 keep-all
@@ -142,7 +145,7 @@ ${ld({ '@context': 'https://schema.org', '@graph': [website, ...graph] })}
 <body>
 ${LANGS.length > 1 ? langLinks(rel) : ''}
 ${body}
-<footer><p class="meta">${esc(NAME)} · ${TR`갱신 ${today}`} · ${TR`MIT 라이선스`} · <a href="${up}text.html">${TR`전체 텍스트 판`}</a> · <a href="${up || './'}">${TR`그림과 실험이 있는 원본`}</a>${REPO ? ` · <a href="${REPO}">GitHub</a>` : ''}<br>${TR`수치는 일반적인 서비스 환경의 대표값이며 실제 값은 게임과 인프라마다 다릅니다.`}</p></footer>
+<footer><p class="meta">${esc(NAME)} · ${TR`갱신 ${today}`} · ${TR`만든 사람: 오정록`} (<a href="${resumeOf(L)}">${TR`이력서`}</a>) · ${TR`MIT 라이선스`} · <a href="${up}text.html">${TR`전체 텍스트 판`}</a> · <a href="${up || './'}">${TR`그림과 실험이 있는 원본`}</a>${REPO ? ` · <a href="${REPO}">GitHub</a>` : ''}<br>${TR`수치는 일반적인 서비스 환경의 대표값이며 실제 값은 게임과 인프라마다 다릅니다.`}</p></footer>
 </body>
 </html>
 `;
@@ -192,7 +195,7 @@ ${related.length ? `<h3>${TR`같은 증상(${esc(SYM[sym0].name)})의 다른 층
       rel, title: TR`${c.name} (${c.en}): 렉 원인 | 게임 렉 백서`, description, body,
       graph: [
         { '@type': 'TechArticle', '@id': BASE + rel + '#article', url: BASE + rel, headline: c.name, alternativeHeadline: c.en, description: txt(c.summary),
-          inLanguage: L.code, dateModified: today, isPartOf: { '@id': BASE + '#website' }, author: who, license: 'https://opensource.org/licenses/MIT', image: ogImage(L),
+          inLanguage: L.code, dateModified: today, isPartOf: { '@id': BASE + '#website' }, author: whoOf(L), license: 'https://opensource.org/licenses/MIT', image: ogImage(L),
           about: c.symptoms.map(s => s.name), keywords: [c.name, c.en, ...c.symptoms.map(s => s.name), TR`렉`, l.name].join(', '),
           citation: c.sources.map(r => ({ '@type': 'CreativeWork', name: r.t, url: r.u, publisher: { '@type': 'Organization', name: r.p } })), ...tx(rel) },
         crumbs([[NAME, BASE], [layerName(l), BASE + 'text.html#' + l.anchor], [c.name, BASE + rel]]),
@@ -219,7 +222,7 @@ ${groups.map(([l, g]) => `<h3>${esc(layerName(l))}</h3><ul>${g.map(c => `<li><a 
     fs.writeFileSync(path.join(O, rel), page({
       rel, title: TR`${s.name} 원인: 게임 렉 증상별 원인과 담당 | 게임 렉 백서`, description, body,
       graph: [
-        { '@type': 'TechArticle', '@id': BASE + rel + '#article', url: BASE + rel, headline: TR`${s.name}: 원인과 담당`, description: txt(s.what), inLanguage: L.code, dateModified: today, isPartOf: { '@id': BASE + '#website' }, author: who, license: 'https://opensource.org/licenses/MIT', image: ogImage(L), ...tx(rel) },
+        { '@type': 'TechArticle', '@id': BASE + rel + '#article', url: BASE + rel, headline: TR`${s.name}: 원인과 담당`, description: txt(s.what), inLanguage: L.code, dateModified: today, isPartOf: { '@id': BASE + '#website' }, author: whoOf(L), license: 'https://opensource.org/licenses/MIT', image: ogImage(L), ...tx(rel) },
         { '@type': 'ItemList', name: TR`${s.name}의 원인`, itemListElement: list.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, url: BASE + `c/${c.id}.html` })) },
         crumbs([[NAME, BASE], [TR`증상별로 찾기`, BASE + 'text.html#symptoms'], [s.name, BASE + rel]]),
       ],
@@ -238,14 +241,14 @@ ${groups.map(([l, g]) => `<h3>${esc(layerName(l))}</h3><ul>${g.map(c => `<li><a 
 <p>${esc(textDesc)}</p>
 <p>${TR`그림과 직접 조작하는 실험이 있는 원본은 <a href="./">게임 렉 백서</a>입니다. 이 판은 같은 원인·용어·출처를 자바스크립트 없이 한 페이지에서 읽을 수 있게 모았습니다. 원인마다 따로 된 페이지(<code>c/ID.html</code>)도 있습니다. 마크다운 한 파일로는 <a href="llms-full.txt">llms-full.txt</a>에 있습니다.`}</p>
 <nav class="toc" aria-label="${TR`목차`}"><h2>${TR`목차`}</h2><ul>
-<li><a href="#symptoms">${TR`증상별로 찾기`}</a></li><li><a href="#owners">${TR`누가 고치나: 담당 코드`}</a></li>
+<li><a href="#symptoms">${TR`증상별로 찾기`}</a></li><li><a href="#owners">${TR`담당 팀과 담당 코드`}</a></li>
 ${layers.map(l => `<li><a href="#${l.anchor}">${esc(layerName(l))} (${byLayer[l.id].length})</a></li>`).join('\n')}
 <li><a href="#playbooks">${TR`상황별 절차`}</a></li><li><a href="#cases">${TR`실제 장애 사례`}</a></li>
 <li><a href="#glossary">${TR`용어 사전`}</a></li><li><a href="#refs">${TR`참고 문헌`}</a></li></ul></nav>
 <h2 id="symptoms">${TR`증상별로 찾기`}</h2>
 <p>${TR`렉은 네 가지 요인에서 시작합니다:`} ${K.factors.map(f => TR`<b>${esc(f.name)}</b>(${html(f.desc)})`).join(' ')}</p>
 <ul>${K.symptoms.map(s => `<li><a href="s/${s.id}.html">${esc(s.name)}</a> (${TR`원인 ${bySym[s.id].length}가지`}): ${html(s.what)}</li>`).join('')}</ul>
-<h2 id="owners">${TR`누가 고치나: 담당 코드`}</h2>
+<h2 id="owners">${TR`담당 팀과 담당 코드`}</h2>
 <table><thead><tr><th>${TR`코드`}</th><th>${TR`팀`}</th><th>${TR`담당`}</th><th>${TR`범위`}</th></tr></thead><tbody>
 ${K.owners.map(o => `<tr><td><code>${o.id}</code></td><td>${esc(K.teams[o.team].name)}</td><td>${esc(o.name)}</td><td>${html(o.desc)}</td></tr>`).join('\n')}
 </tbody></table>
@@ -267,7 +270,7 @@ ${pubs.map(([p, list]) => `<h3>${esc(p)} <span class="n">${list.length}</span></
   fs.writeFileSync(path.join(O, 'text.html'), page({
     rel: 'text.html', title: TR`게임 렉 백서 텍스트 판: 온라인 게임 렉 원인 ${K.causes.length}가지`, description: textDesc, body: textBody,
     graph: [
-      { '@type': 'TechArticle', '@id': BASE + 'text.html#article', url: BASE + 'text.html', headline: TR`게임 렉 백서 텍스트 판`, alternativeHeadline: 'Game Lag White Paper: online game lag causes (text edition)', description: textDesc, inLanguage: L.code, dateModified: today, isPartOf: { '@id': BASE + '#website' }, author: who, license: 'https://opensource.org/licenses/MIT', image: ogImage(L), ...tx('text.html') },
+      { '@type': 'TechArticle', '@id': BASE + 'text.html#article', url: BASE + 'text.html', headline: TR`게임 렉 백서 텍스트 판`, alternativeHeadline: 'Game Lag White Paper: online game lag causes (text edition)', description: textDesc, inLanguage: L.code, dateModified: today, isPartOf: { '@id': BASE + '#website' }, author: whoOf(L), license: 'https://opensource.org/licenses/MIT', image: ogImage(L), ...tx('text.html') },
       { '@type': 'DefinedTermSet', '@id': BASE + 'text.html#glossary', name: TR`게임 렉 백서 용어 사전`, inLanguage: L.code, hasDefinedTerm: K.glossary.map(g => ({ '@type': 'DefinedTerm', name: g.term, alternateName: g.en, description: txt(g.def) })) },
     ],
   }));
@@ -329,6 +332,7 @@ ${others.map(l => `- [${l.name === l.en ? l.name : `${l.name} (${l.en})`}](${bas
 ## Optional
 
 - [${TR`GitHub 저장소`}](${REPO || 'https://github.com/jungrok5/mmo-lag-anatomy'}): ${TR`소스, 데이터 형식, 기여 방법`}
+- [${TR`만든 사람: 오정록`}](${resumeOf(L)}): ${TR`이력서`}
 `;
   fs.writeFileSync(path.join(O, 'llms.txt'), llms);
   fs.writeFileSync(path.join(O, 'llms-full.txt'), `${TR`원본: ${BASE}`}\n${TR`원인 페이지: ${BASE}c/[원인 ID].html`}\n\n` + MD);

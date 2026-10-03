@@ -60,7 +60,7 @@
 - 그래프 모양·확인 방법은 `docs/CHECKS_GUIDE.md`를 따른다. 특정 조직의 지표·도구 이름은 쓰지 않는다.
 - 출처는 `docs/SOURCES_GUIDE.md`를 따른다. 공신력 있는 자료만 쓰고 직접 열어 그 문장을 뒷받침하는지 확인한 것만 넣는다.
 - 고친 뒤 확인
-  - `npm test`: 빌드, 데이터 검사, 1280px·390px 다크 화면 점검. `node tools/validate.cjs`의 `probs`는 `[]`여야 한다.
+  - `npm test`: 빌드, 데이터 검사, 한국어 문체 검사(`tools/ko-style.cjs --strict`), 번역 검사, 1280px·390px 다크 화면 점검. `node tools/validate.cjs`의 `probs`는 `[]`여야 한다.
   - 출처를 바꿨으면 `npm run links`로 주소를 점검한다.
 
 ## 번역
@@ -74,7 +74,7 @@
 ## 명령
 
 ```bash
-npm test              # 빌드 + 데이터 검사 + 화면 점검
+npm test              # 빌드 + 데이터 검사 + 문체 검사 + 화면 점검
 python3 build.py      # index.html 만들기 (글꼴까지 넣은 파일 하나)
 npm run validate      # 원인 데이터 검사
 node tools/ko-style.cjs   # 한국어 문체 검사(번역투·기계 문체, docs/KO_STYLE.md)

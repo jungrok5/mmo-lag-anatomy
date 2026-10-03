@@ -3,7 +3,7 @@
   "group": "sim-bloat",
   "entries": [
     {"ctx":"src/sims/bloat.js:6","ko":"레이어 3 · 집 네트워크","t":"Capa 3 · Red doméstica"},
-    {"ctx":"src/sims/bloat.js:7","ko":"동생이 영상을 올리면 내 핑이 튀는 이유 (버퍼블로트)","t":"Por qué tu ping se dispara cuando tu hermano sube un video (bufferbloat)"},
+    {"ctx":"src/sims/bloat.js:7","ko":"업로드가 몰리면 핑이 튀는 현상(버퍼블로트)","t":"Por qué tu ping se dispara cuando tu hermano sube un video (bufferbloat)"},
     {"ctx":"src/sims/bloat.js:8","ko":"집 공유기는 인터넷으로 올려 보낼 패킷을 대기열 하나에 순서대로 쌓아 둡니다. 누군가 큰 영상을 올리기 시작하면 이 대기열이 꽉 차고 작은 게임 패킷도 그 맨 뒤에서 기다려야 합니다. 대기열이 길어진 만큼 핑이 오릅니다. 와이파이 재전송까지 겹치면 핑은 들쭉날쭉해집니다.","t":"El router de casa pone en una sola cola, por orden, todos los paquetes que salen hacia internet. Cuando alguien empieza a subir un video grande, esa cola se llena y hasta los pequeños paquetes del juego tienen que esperar al final de la fila. Cuanto más larga es la cola, más sube el ping. Si además se suman reintentos del Wi-Fi, el ping se vuelve irregular."},
     {"ctx":"src/sims/bloat.js:10","ko":"<b>다른 기기 업로드</b>를 “없음”으로 내렸다가 다시 “최대”로 올려 보세요. 몇 초에 걸쳐 대기열이 차오르고 핑이 따라 오릅니다.","t":"Baja <b>Subida de otros dispositivos</b> a “Ninguna” y vuelve a subirla a “Máxima”. En unos segundos la cola se llena y el ping sube con ella."},
     {"ctx":"src/sims/bloat.js:11","ko":"<b>SQM</b>을 켜 보세요. 업로드는 그대로인데 게임 핑은 기본 핑 근처로 돌아옵니다.","t":"Activa <b>SQM</b>. La subida sigue igual, pero el ping del juego vuelve a estar cerca del ping base."},

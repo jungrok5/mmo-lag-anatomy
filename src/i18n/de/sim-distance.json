@@ -3,7 +3,7 @@
   "group": "sim-distance",
   "entries": [
     {"ctx":"src/sims/distance.js:6","ko":"레이어 4 · 인터넷 회선","t":"Schicht 4 · Internetleitung"},
-    {"ctx":"src/sims/distance.js:7","ko":"빛보다 빠른 패킷은 없다: 거리·경로·저녁 시간","t":"Kein Paket ist schneller als das Licht: Entfernung, Route und Abendstunden"},
+    {"ctx":"src/sims/distance.js:7","ko":"거리·경로·시간대에 따른 핑","t":""},
     {"ctx":"src/sims/distance.js:8","ko":"패킷은 광케이블 속을 빛의 속도로 달리지만 광케이블 안의 빛은 초속 20만 km라 1,000km를 가는 데 5ms가 걸립니다. 실제 케이블은 바다와 국경을 따라 돌아가고 저녁에는 국제 구간이 붐빕니다. 서버 위치와 시간을 바꿔 보며 핑의 최솟값과 최댓값이 어떻게 정해지는지 보세요.","t":"Pakete laufen mit Lichtgeschwindigkeit durch die Glasfaser. Licht in der Glasfaser schafft aber nur 200.000 km pro Sekunde, für 1.000 km braucht es also 5 ms. Echte Kabel machen Umwege entlang von Küsten und Grenzen, und abends sind die internationalen Strecken überlastet. Ändern Sie Serverstandort und Uhrzeit und sehen Sie, was den kleinsten und den größten Ping bestimmt."},
     {"ctx":"src/sims/distance.js:10","ko":"<b>서버 위치</b>를 미국 서부로 바꿔 보세요. 지도 위 패킷이 한참 걸려 건너가고 빛의 한계만으로도 왕복 80ms가 넘습니다.","t":"Stellen Sie den <b>Serverstandort</b> auf US-Westküste. Das Paket ist auf der Karte lange unterwegs, und schon die Lichtgeschwindigkeit allein ergibt über 80 ms für den Round Trip."},
     {"ctx":"src/sims/distance.js:11","ko":"<b>시각</b>을 오후에서 밤 10시로 옮겨 보세요. 평균보다 “최악 핑”이 훨씬 크게 오릅니다. 국제 구간이 붐비는 시간입니다.","t":"Schieben Sie die <b>Uhrzeit</b> vom Nachmittag auf 22 Uhr. Der „schlechteste Ping“ steigt viel stärker als der Mittelwert. Das ist die Zeit, in der die internationalen Strecken am vollsten sind."},
@@ -84,5 +84,8 @@
     {"ctx":"src/sims/distance.js:326","ko":" 스킬 반응이 조금 늦게 느껴지는 입력 지연이 있고 가까운 서버의 플레이어보다 판정에서 불리합니다.","t":" Es gibt etwas Input-Lag: Skills reagieren leicht verzögert, und bei der Trefferabfrage ist man gegenüber Spielern näher am Server im Nachteil."},
     {"ctx":"src/sims/distance.js:327","ko":" 입력 지연이 커서 회피·타이밍 판정에서 크게 불리합니다.","t":" Der Input-Lag ist groß, bei Ausweichen und zeitkritischen Trefferabfragen ist man deutlich im Nachteil."},
     {"ctx":"src/sims/distance.js:328","ko":" 서버 성능을 아무리 올려도 이 거리는 줄일 수 없어서 게임사는 지역마다 서버(리전)를 따로 둡니다.","t":" Diese Entfernung lässt sich durch keine Serverleistung verkürzen. Deshalb betreiben Spielefirmen in verschiedenen Teilen der Welt eigene Server (Regionen)."}
+  ],
+  "stale": [
+    {"ctx":"src/sims/distance.js:7","ko":"빛보다 빠른 패킷은 없다: 거리·경로·저녁 시간","t":"Kein Paket ist schneller als das Licht: Entfernung, Route und Abendstunden"}
   ]
 }

@@ -3,7 +3,7 @@
   "group": "sim-dbpool",
   "entries": [
     {"ctx":"src/sims/dbpool.js:6","ko":"레이어 12 · 데이터베이스","t":"Tầng 12 · Cơ sở dữ liệu"},
-    {"ctx":"src/sims/dbpool.js:7","ko":"DB 앞에도 대기열이 생긴다: 커넥션 풀·인덱스·핫 로우 잠금","t":"Trước DB cũng có hàng đợi: connection pool, index, khóa hot row"},
+    {"ctx":"src/sims/dbpool.js:7","ko":"DB 대기열: 커넥션 풀·인덱스·핫 로우 잠금","t":"Trước DB cũng có hàng đợi: connection pool, index, khóa hot row"},
     {"ctx":"src/sims/dbpool.js:8","ko":"게임 서버는 DB와 미리 열어 둔 연결(커넥션) 몇 개로만 통신합니다. 커넥션이 모두 사용 중이면 요청은 대기열에서 기다리고 쿼리가 느리거나 핫 로우(모두가 동시에 고치려는 행)가 생기면 커넥션이 오래 묶입니다. 대기 시간이 타임아웃보다 길어지면 요청은 실패합니다.","t":"Server game chỉ giao tiếp với DB qua một số kết nối (connection) đã mở sẵn. Khi mọi kết nối đều đang bận, yêu cầu phải chờ trong hàng đợi; nếu query chậm hoặc xuất hiện hot row (dòng mà ai cũng muốn sửa cùng lúc), kết nối bị giữ rất lâu. Khi thời gian chờ dài hơn timeout, yêu cầu thất bại."},
     {"ctx":"src/sims/dbpool.js:10","ko":"<b>인덱스 빠진 쿼리 배포</b>를 눌러 보세요. 쿼리 하나가 2ms에서 150ms가 되자 커넥션 32개가 순식간에 차고 5초 뒤부터 실패가 쏟아집니다.","t":"Bấm <b>Triển khai query thiếu index</b>. Một query tăng từ 2 ms lên 150 ms, 32 kết nối đầy ngay lập tức, và sau 5 giây yêu cầu bắt đầu thất bại hàng loạt."},
     {"ctx":"src/sims/dbpool.js:11","ko":"<b>경매장 인기템 (핫 로우)</b>를 눌러 보세요. DB CPU는 한가한데 줄무늬 칸(행 잠금 기다림)이 커넥션을 차지해 평범한 요청까지 막힙니다.","t":"Bấm <b>Vật phẩm hot ở nhà đấu giá (hot row)</b>. CPU của DB vẫn rảnh, nhưng các ô sọc (chờ khóa dòng) chiếm hết kết nối nên cả những yêu cầu bình thường cũng bị chặn."},

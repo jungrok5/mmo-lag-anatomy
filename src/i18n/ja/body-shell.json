@@ -12,14 +12,14 @@
     {"ctx":"#nav li","ko":"<a href=\"#symptoms\">증상 사전</a>","t":"<a href=\"#symptoms\">症状辞典</a>"},
     {"ctx":"#nav li","ko":"<a href=\"#sync\">동기화 방식과 체감</a>","t":"<a href=\"#sync\">同期方式と体感</a>"},
     {"ctx":"#nav li","ko":"<a href=\"#partial\">한 명만·한쪽만 이상할 때</a>","t":"<a href=\"#partial\">一人だけ・片方だけおかしいとき</a>"},
-    {"ctx":"#nav li","ko":"<a href=\"#retrans\">TCP 재전송 해부</a>","t":"<a href=\"#retrans\">TCP再送の解剖</a>"},
+    {"ctx":"#nav li","ko":"<a href=\"#retrans\">TCP 재전송</a>","t":"<a href=\"#retrans\">TCP再送の解剖</a>"},
     {"ctx":"#nav li","ko":"<a href=\"#owners\">게임개발팀·인프라팀 담당 구분</a>","t":"<a href=\"#owners\">ゲーム開発チーム・インフラチームの担当分け</a>"},
     {"ctx":"#nav div","ko":"레이어 (패킷이 지나가는 순서)","t":"レイヤー（パケットが通る順）"},
     {"ctx":"#nav div","ko":"도구","t":"ツール"},
     {"ctx":"#nav li","ko":"<a href=\"#triage\">진단 도우미</a>","t":"<a href=\"#triage\">診断ツール</a>"},
     {"ctx":"#nav li","ko":"<a href=\"#judge\">관측으로 판정하기</a>","t":"<a href=\"#judge\">観測データで切り分ける</a>"},
     {"ctx":"#nav li","ko":"<a href=\"#cases\">사례와 절차</a>","t":"<a href=\"#cases\">事例と手順</a>"},
-    {"ctx":"#nav li","ko":"<a href=\"#report\">렉 제보 잘하는 법</a>","t":"<a href=\"#report\">伝わるラグ報告の書き方</a>"},
+    {"ctx":"#nav li","ko":"<a href=\"#report\">렉 제보 가이드</a>","t":""},
     {"ctx":"#nav li","ko":"<a href=\"#glossary\">용어 사전</a>","t":"<a href=\"#glossary\">用語集</a>"},
     {"ctx":"#nav li","ko":"<a href=\"#refs\">참고 문헌</a>","t":"<a href=\"#refs\">参考文献</a>"},
     {"ctx":"#nav div@aria-label","ko":"화면 테마","t":"表示テーマ"},
@@ -27,15 +27,17 @@
     {"ctx":"#nav button","ko":"밝게","t":"ライト"},
     {"ctx":"#nav button","ko":"어둡게","t":"ダーク"},
     {"ctx":"#top h1","ko":"게임 렉<br><span class=\"ping\">백서</span>","t":"ゲームラグ<br><span class=\"ping\">白書</span>"},
-    {"ctx":"#top p","ko":"화면이 뚝뚝 끊기고 캐릭터가 순간이동하고 갑자기 한꺼번에 몰아서 움직이고 결국 접속이 끊기는 이유. 내 게임 화면에서 서버의 데이터베이스까지 13개 층을 차례로 열어 보고 직접 망가뜨려 보며 이해합니다. MMO 사례를 중심으로 썼지만 대부분은 장르와 상관없이 온라인 게임 전반에 해당합니다.","t":"画面がカクつき、キャラクターがワープし、急にまとめて早送りのように動き、最後には接続が切れる。その理由を、自分のゲーム画面からサーバーのデータベースまで13の層を順に開き、自分の手で壊してみながら理解します。MMOの事例を中心に書いていますが、ほとんどはジャンルを問わずオンラインゲーム全般に当てはまります。"},
+    {"ctx":"#top p","ko":"화면이 뚝뚝 끊기거나 캐릭터가 순간이동하거나 접속이 끊기는 원인을 내 게임 화면부터 서버의 데이터베이스까지 13개 층으로 나눠 설명합니다. 원인마다 확인 방법과 담당 팀을 적었고 실험에서 조건을 바꿔 보며 확인할 수 있습니다. MMO 사례를 중심으로 썼지만 대부분은 장르와 상관없이 온라인 게임 전반에 해당합니다.","t":"画面がカクつき、キャラクターがワープし、急にまとめて早送りのように動き、最後には接続が切れる。その理由を、自分のゲーム画面からサーバーのデータベースまで13の層を順に開き、自分の手で壊してみながら理解します。MMOの事例を中心に書いていますが、ほとんどはジャンルを問わずオンラインゲーム全般に当てはまります。"},
     {"ctx":"#top p","ko":"게임 렉 백서 · 수치는 일반적인 서비스 환경의 대표값이며 실제 값은 게임과 인프라마다 다릅니다.","t":"ゲームラグ白書 · 数値は一般的なサービス環境での代表値です。実際の値はゲームやインフラによって異なります。"},
     {"ctx":"#top p","ko":"시뮬레이션은 원리를 보여 주려고 단순화한 모델입니다. 실제 장애 분석은 게임개발팀·인프라팀의 모니터링 지표와 함께 보세요.","t":"シミュレーションは原理を示すために単純化したモデルです。実際の障害分析は、ゲーム開発チーム・インフラチームの監視メトリクスと合わせて確認してください。"},
     {"ctx":"#top p","ko":"자바스크립트 없이 읽는 <a href=\"%SITE%text.html\">텍스트 판</a>(원인마다 따로 된 페이지 포함), 전체 내용 마크다운 <a href=\"%SITE%llms-full.txt\">llms-full.txt</a>, AI용 안내 <a href=\"%SITE%llms.txt\">llms.txt</a>.","t":"JavaScriptなしで読める<a href=\"%SITE%text.html\">テキスト版</a>（原因ごとの個別ページを含む）、全内容のMarkdown版<a href=\"%SITE%llms-full.txt\">llms-full.txt</a>、AI向けの案内<a href=\"%SITE%llms.txt\">llms.txt</a>。"},
-    {"ctx":"#top p","ko":"MIT 라이선스로 공개합니다. 글꼴(<span class=\"fontlist\">IBM Plex Sans KR, IBM Plex Mono</span>)은 SIL Open Font License 1.1을 따릅니다.","t":"MITライセンスで公開しています。フォント（<span class=\"fontlist\">IBM Plex Sans KR, IBM Plex Mono</span>）はSIL Open Font License 1.1に従います。"}
+    {"ctx":"#top p","ko":"만든 사람: 오정록(Jeongrok Oh) · <a href=\"%RESUME%\">이력서</a> · <a href=\"https://github.com/jungrok5/mmo-lag-anatomy\">GitHub 저장소</a>","t":""},
+    {"ctx":"#top p","ko":"<a href=\"https://github.com/jungrok5/mmo-lag-anatomy/blob/main/LICENSE\">MIT 라이선스</a>로 공개합니다. 글꼴(<span class=\"fontlist\">IBM Plex Sans KR, IBM Plex Mono</span>)은 SIL Open Font License 1.1을 따릅니다.","t":""}
   ],
   "stale": [
     {"ctx":"#nav li","ko":"<a href=\"#owners\">게임팀·인프라팀 담당 구분</a>","t":"<a href=\"#owners\">ゲーム開発・インフラの担当分け</a>"},
     {"ctx":"#top p","ko":"MIT 라이선스로 공개합니다. 글꼴(IBM Plex Sans KR, IBM Plex Mono, Black Han Sans)은 SIL Open Font License 1.1을 따릅니다.","t":"MITライセンスで公開しています。フォント（IBM Plex Sans KR、IBM Plex Mono、Black Han Sans）はSIL Open Font License 1.1に従います。"},
-    {"ctx":"#top p","ko":"MIT 라이선스로 공개합니다. 글꼴(<span class=\"fontlist\">IBM Plex Sans KR, IBM Plex Mono, Black Han Sans</span>)은 SIL Open Font License 1.1을 따릅니다.","t":"MITライセンスで公開しています。フォント（<span class=\"fontlist\">IBM Plex Sans KR, IBM Plex Mono, Black Han Sans</span>）はSIL Open Font License 1.1に従います。"}
+    {"ctx":"#top p","ko":"MIT 라이선스로 공개합니다. 글꼴(<span class=\"fontlist\">IBM Plex Sans KR, IBM Plex Mono, Black Han Sans</span>)은 SIL Open Font License 1.1을 따릅니다.","t":"MITライセンスで公開しています。フォント（<span class=\"fontlist\">IBM Plex Sans KR, IBM Plex Mono, Black Han Sans</span>）はSIL Open Font License 1.1に従います。"},
+    {"ctx":"#nav li","ko":"<a href=\"#report\">렉 제보 잘하는 법</a>","t":"<a href=\"#report\">伝わるラグ報告の書き方</a>"}
   ]
 }

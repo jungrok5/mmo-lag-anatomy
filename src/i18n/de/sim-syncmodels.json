@@ -3,7 +3,7 @@
   "group": "sim-syncmodels",
   "entries": [
     {"ctx":"src/sims/syncmodels.js:5","ko":"동기화 방식 · 비교","t":"Synchronisationsmodelle · Vergleich"},
-    {"ctx":"src/sims/syncmodels.js:6","ko":"버튼 한 번, 다섯 가지 반응","t":"Ein Tastendruck, fünf Reaktionen"},
+    {"ctx":"src/sims/syncmodels.js:6","ko":"동기화 방식 다섯 가지의 반응 비교","t":""},
     {"ctx":"src/sims/syncmodels.js:7","ko":"같은 회선에서 같은 버튼을 눌렀을 때 방식마다 내 화면이 언제 반응하고 서버나 상대는 언제 아는지 나란히 봅니다. 핑을 올려 보세요. 어떤 방식은 반응이 핑만큼 늦어지고 어떤 방식은 핑과 상관없이 바로 반응하는 대신 다른 대가를 치릅니다.","t":"Gleiche Leitung, gleicher Tastendruck: Hier sehen Sie nebeneinander, wann der eigene Bildschirm je nach Modell reagiert und wann der Server oder der andere Spieler davon erfährt. Erhöhen Sie den Ping. Bei manchen Modellen kommt die Reaktion um den vollen Ping später. Andere reagieren unabhängig vom Ping sofort, zahlen dafür aber einen anderen Preis."},
     {"ctx":"src/sims/syncmodels.js:10","ko":"<b>핑</b>을 30 → 150 → 300ms로 올리며 각 줄의 ▼(누름)와 ●(내 화면 반응) 사이 거리를 비교하세요. 요청-응답은 핑만큼 거리가 늘어납니다. 300ms에서는 상대 입력이 닿는 데 입력 지연보다 오래 걸려 락스텝도 가끔 멈춥니다.","t":"Erhöhen Sie den <b>Ping</b> schrittweise (30 → 150 → 300 ms) und vergleichen Sie in jeder Zeile den Abstand zwischen ▼ (Tastendruck) und ● (Reaktion auf dem eigenen Bildschirm). Bei Request-Response wächst der Abstand um den Ping. Bei 300 ms braucht die Eingabe des anderen Spielers länger als das Input-Delay, deshalb bleibt gelegentlich auch Lockstep stehen."},
     {"ctx":"src/sims/syncmodels.js:11","ko":"<b>다음 행동은 서버가 거절</b>을 누르세요. 요청-응답은 늦게 “불가” 안내만, 예측은 먼저 보여 줬다가 취소(고무줄), 클라이언트 권위는 검증 없이 통과합니다.","t":"Klicken Sie auf <b>Server lehnt nächste Aktion ab</b>. Request-Response zeigt nur spät den Hinweis „Nicht möglich“. Die Vorhersage zeigt die Aktion zuerst an und nimmt sie dann zurück (Rubberbanding). Bei Client-Autorität geht sie ungeprüft durch."},
@@ -62,5 +62,8 @@
     {"ctx":"src/sims/syncmodels.js:282","ko":"{0}핑 {1}ms에서는 요청-응답도 {2}ms로 크게 굼뜨지 않습니다. 핑을 150ms 이상으로 올리면 방식 사이의 차이가 뚜렷해집니다.","t":"{0}Bei einem Ping von {1} ms ist auch Request-Response mit {2} ms nicht besonders träge. Erhöhen Sie den Ping auf mindestens 150 ms, dann werden die Unterschiede zwischen den Modellen deutlich."},
     {"ctx":"src/sims/syncmodels.js:283","ko":" <b>락스텝</b>은 입력 지연({0}ms)이 입력이 상대에게 닿는 시간(핑의 절반)+지터({1}ms)보다 짧아 최근 8초 동안 {2}번 <b>모두가 멈췄습니다</b>.","t":" Bei <b>Lockstep</b> ist das Input-Delay ({0} ms) kürzer als die Zeit, die eine Eingabe bis zum anderen Spieler braucht (halber Ping), plus Jitter ({1} ms). Deshalb sind in den letzten 8 s {2}-mal <b>alle stehen geblieben</b>."},
     {"ctx":"src/sims/syncmodels.js:284","ko":" <b>락스텝</b>은 핑과 무관하게 입력 지연({0}ms, 턴 단위로 올리면 최대 {1}ms)만큼 일정하게 늦습니다.","t":" <b>Lockstep</b> ist unabhängig vom Ping immer um das Input-Delay verzögert ({0} ms, auf ganze Züge aufgerundet bis zu {1} ms)."}
+  ],
+  "stale": [
+    {"ctx":"src/sims/syncmodels.js:6","ko":"버튼 한 번, 다섯 가지 반응","t":"Ein Tastendruck, fünf Reaktionen"}
   ]
 }

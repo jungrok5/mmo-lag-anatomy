@@ -2,8 +2,8 @@
   "lang": "id",
   "group": "body-retrans",
   "entries": [
-    {"ctx":"#retrans div","ko":"<span class=\"idx\">06</span>자주 보는 원인 해부","t":"<span class=\"idx\">06</span>Membedah penyebab yang sering muncul"},
-    {"ctx":"#retrans h2","ko":"TCP 재전송: 왜 생기고 왜 이렇게 느려지나","t":"Retransmisi TCP: mengapa terjadi dan mengapa begitu lambat"},
+    {"ctx":"#retrans div","ko":"<span class=\"idx\">06</span>자주 보는 원인","t":"<span class=\"idx\">06</span>Membedah penyebab yang sering muncul"},
+    {"ctx":"#retrans h2","ko":"TCP 재전송: 생기는 원인과 지연이 커지는 이유","t":""},
     {"ctx":"#retrans p","ko":"서버 지표에 “TCP 재전송(Retransmission)”이 늘면 렉 제보도 함께 느는 경우가 많습니다. 재전송은 “패킷이 사라졌다” 또는 “사라졌다고 잘못 판단했다”는 신호입니다. 원인은 와이파이부터 서버 네트워크 카드까지 경로 어디에나 있고 게임처럼 작은 패킷을 드문드문 보내는 연결에서는 패킷 하나만 잃어도 수백 ms 멈춤으로 번집니다. 이 장은 재전송의 근본 원인, 원인을 찾는 방법, 해결 방향을 정리합니다.","t":"Saat “retransmisi TCP (Retransmission)” di metrik server naik, laporan lag sering ikut naik. Retransmisi adalah tanda bahwa “paket hilang” atau “paket salah dianggap hilang”. Penyebabnya bisa ada di mana saja di sepanjang rute, dari Wi-Fi sampai kartu jaringan server, dan pada koneksi yang mengirim paket kecil secara jarang seperti game, satu paket yang hilang saja bisa berujung jeda ratusan ms. Bab ini merangkum akar penyebab retransmisi, cara menemukan penyebabnya, dan arah penyelesaiannya."},
     {"ctx":"#retrans svg@aria-label","ko":"TCP 재전송 타임라인: 3번 패킷이 사라지면 4·5·6번이 도착해도 게임에 넘어가지 않고 재전송 타이머가 끝나 3번이 다시 도착한 뒤 한꺼번에 넘어간다","t":"Timeline retransmisi TCP: jika paket 3 hilang, paket 4, 5, dan 6 tidak diteruskan ke game meskipun sudah tiba; setelah timer retransmisi habis dan paket 3 tiba lagi, semuanya diteruskan sekaligus"},
     {"ctx":"#retrans text","ko":"서버가 보냄","t":"Server mengirim"},
@@ -13,7 +13,7 @@
     {"ctx":"#retrans text","ko":"게임에는 아무것도 안 옴: 멈춤","t":"Tidak ada yang sampai ke game: freeze"},
     {"ctx":"#retrans text","ko":"3·4·5·6이 한꺼번에: 몰아치기","t":"3, 4, 5, 6 sekaligus: fast forward"},
     {"ctx":"#retrans figcaption","ko":"50ms마다 보내는 연결에서 3번 하나가 사라진 경우입니다. TCP는 순서대로만 넘겨주므로 4·5·6번이 도착해도 3번을 다시 받을 때까지 게임에 넘기지 않습니다. 그래서 손실 하나가 <b>멈춤</b>과 그 뒤의 <b>몰아치기</b>가 됩니다. 다시 보내는 시점은 복구 방식에 따라 왕복 한 번 안팎에서 “왕복 시간 + 최소 200ms”(재전송 타이머)까지 달라집니다(아래 “재전송의 종류”).","t":"Ini kasus pada koneksi yang mengirim paket setiap 50 ms, ketika satu paket nomor 3 hilang. TCP hanya meneruskan data sesuai urutan, jadi meskipun paket 4, 5, dan 6 sudah tiba, semuanya tidak diteruskan ke game sampai paket 3 diterima ulang. Karena itu, satu paket yang hilang menjadi <b>freeze</b> yang disusul <b>fast forward</b>. Kapan paket dikirim ulang tergantung cara pemulihannya, mulai dari sekitar satu kali pulang-pergi sampai “round-trip time + minimal 200 ms” dengan timer retransmisi. Lihat “Jenis retransmisi” di bawah."},
-    {"ctx":"#retrans-why","ko":"재전송이 게임을 유난히 느리게 만드는 네 가지 이유","t":"Empat alasan retransmisi membuat game terasa sangat lambat"},
+    {"ctx":"#retrans-why","ko":"재전송이 게임을 느리게 만드는 네 가지 이유","t":"Empat alasan retransmisi membuat game terasa sangat lambat"},
     {"ctx":"#retrans li","ko":"<b>순서 대기(HOL 블로킹)</b>: TCP는 잃어버린 하나를 다시 받을 때까지 뒤에 도착한 패킷을 게임에 넘기지 않습니다. 하나를 잃으면 그 뒤 전부가 함께 멈췄다가 한꺼번에 풀립니다(<b>멈춤</b> 뒤 <b>몰아치기</b>).","t":"<b>Menunggu urutan (HOL blocking)</b>: TCP tidak meneruskan paket yang tiba belakangan ke game sampai satu paket yang hilang diterima ulang. Jika satu paket hilang, semua paket di belakangnya ikut tertahan lalu dilepas sekaligus (<b>freeze</b> yang disusul <b>fast forward</b>)."},
     {"ctx":"#retrans li","ko":"<b>재전송 대기 시간</b>: 보내는 쪽은 재전송 타이머(RTO)가 끝나야 다시 보냅니다. 리눅스 기준으로 “왕복 시간 + 최소 200ms”입니다. 다시 보낸 것도 잃으면 기다림이 두 배씩 늘어납니다(0.3초 → 0.6초 → 1.2초 …).","t":"<b>Waktu tunggu retransmisi</b>: pengirim baru mengirim ulang setelah timer retransmisi (RTO) habis. Di Linux, nilainya “round-trip time + minimal 200 ms”. Jika paket yang dikirim ulang juga hilang, waktu tunggunya berlipat dua setiap kali (0,3 detik → 0,6 detik → 1,2 detik …)."},
     {"ctx":"#retrans li","ko":"<b>thin stream</b>(작은 패킷을 드문드문 보내는 연결): 빠른 재전송은 받는 쪽이 “뒤따르는 패킷 3개가 도착했다”고 알리는 신호(중복 ACK 3개. ACK는 “받았다”는 확인)로 작동합니다. 게임 패킷은 50~200ms에 하나씩이라 신호가 모이기 전에 RTO가 먼저 오는 경우가 많습니다. 대용량 다운로드는 잘 버티는데 게임만 유독 멈추는 이유입니다. 최신 리눅스의 RACK은 뒤따르는 패킷 하나만 도착해도 판단해 이 차이를 크게 줄이지만, 패킷 간격이 200ms 안팎으로 길면 RACK도 RTO보다 빠르지 않습니다.","t":"<b>Thin stream</b> (koneksi yang mengirim paket kecil secara jarang): fast retransmit bekerja berdasarkan sinyal dari penerima bahwa “3 paket berikutnya sudah tiba” (3 duplicate ACK; ACK adalah konfirmasi “sudah diterima”). Paket game hanya datang satu setiap 50–200 ms, sehingga RTO sering habis lebih dulu sebelum sinyalnya terkumpul. Inilah alasan download besar tetap lancar, tetapi hanya game yang sering terhenti. RACK di Linux terbaru sudah bisa memutuskan begitu satu paket berikutnya tiba sehingga selisih ini jauh berkurang, tetapi jika jarak antarpaket panjang, sekitar 200 ms, RACK pun tidak lebih cepat dari RTO."},
@@ -108,7 +108,7 @@
     {"ctx":"#retrans li","ko":"채팅·거래처럼 순서가 필요한 것과 실시간 패킷을 다른 흐름으로 분리(QUIC 스트림, TCP 연결 나누기 등). 한쪽의 손실이 다른 쪽을 막지 않음","t":"Pisahkan data yang butuh urutan, seperti chat dan trade, dari paket real-time ke aliran yang berbeda (stream QUIC, memisahkan koneksi TCP, dan sebagainya). Packet loss di satu aliran tidak menghambat aliran lain"},
     {"ctx":"#retrans li","ko":"TCP를 계속 쓴다면 보내기 버퍼에 옛 위치를 쌓지 말고 최신 상태로 덮어쓰기(<code>TCP_NOTSENT_LOWAT</code> 등). 긴 멈춤 뒤 몰아치기가 짧아짐","t":"Jika tetap memakai TCP, timpa posisi lama di buffer kirim dengan state terbaru agar tidak menumpuk (<code>TCP_NOTSENT_LOWAT</code> dan sebagainya). Fast forward setelah freeze panjang menjadi lebih singkat"},
     {"ctx":"#retrans li","ko":"보간 버퍼와 예측으로 짧은 멈칫을 화면에서 가리기. 수백 ms짜리 RTO 멈춤까지 가리기는 어려움","t":"Gunakan buffer interpolasi dan prediksi agar jeda singkat tidak terlihat di layar. Jeda RTO yang ratusan ms sulit ditutupi"},
-    {"ctx":"#retrans-settings","ko":"설정 이름 정리: 무엇을 켜고 무엇과 헷갈리나","t":"Daftar nama pengaturan: apa yang diaktifkan dan apa yang sering tertukar"},
+    {"ctx":"#retrans-settings","ko":"설정 이름 정리: 켤 설정과 헷갈리기 쉬운 설정","t":"Daftar nama pengaturan: apa yang diaktifkan dan apa yang sering tertukar"},
     {"ctx":"#retrans p","ko":"재전송 복구에 관련된 설정은 대부분 <b>운영체제(커널) 설정</b>이고 게임 연결에만 따로 켤 수 있는 소켓 옵션은 몇 개뿐입니다. 이름 때문에 자주 헷갈리는 <code>TCP_NODELAY</code>는 복구를 빠르게 하는 설정은 아닙니다. 다만 켜지 않으면(Nagle 사용) 복구 중에 새 패킷이 더 늦어집니다. 아래는 리눅스 기준이며 윈도우는 이름과 지원 범위가 다릅니다.","t":"Sebagian besar pengaturan yang berkaitan dengan pemulihan retransmisi adalah <b>pengaturan sistem operasi (kernel)</b>, dan hanya sedikit opsi socket yang bisa diaktifkan khusus untuk koneksi game. <code>TCP_NODELAY</code>, yang sering disalahpahami karena namanya, tidak mempercepat pemulihan. Namun, jika tidak diaktifkan (Nagle dipakai), paket baru makin terlambat selama pemulihan. Tabel berikut berlaku untuk Linux; di Windows, nama dan cakupan dukungannya berbeda."},
     {"ctx":"#retrans th","ko":"설정","t":"Pengaturan"},
     {"ctx":"#retrans th","ko":"어디서","t":"Di mana"},
@@ -145,5 +145,8 @@
     {"ctx":"#retrans td","ko":"패킷을 고르게 나눠 보내 버스트(한꺼번에 몰아 보냄)로 인한 손실을 줄임","t":"Mengirim paket secara merata untuk mengurangi packet loss akibat burst (pengiriman yang menumpuk sekaligus)"},
     {"ctx":"#retrans td","ko":"손실을 “예방”하는 쪽. 복구 속도와는 별개","t":"Termasuk upaya “mencegah” packet loss. Terpisah dari kecepatan pemulihan"},
     {"ctx":"#retrans-causes","ko":"TCP 재전송의 근본 원인","t":"Akar penyebab retransmisi TCP"}
+  ],
+  "stale": [
+    {"ctx":"#retrans h2","ko":"TCP 재전송: 왜 생기고 왜 이렇게 느려지나","t":"Retransmisi TCP: mengapa terjadi dan mengapa begitu lambat"}
   ]
 }

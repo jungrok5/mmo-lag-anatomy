@@ -3,7 +3,7 @@
   "group": "sim-sndbuf",
   "entries": [
     {"ctx":"src/sims/sndbuf.js:7","ko":"소켓과 프로토콜 · 송신 버퍼","t":"Socket dan protokol · Buffer kirim"},
-    {"ctx":"src/sims/sndbuf.js:8","ko":"느린 클라이언트 하나가 모두를 느리게 만드는 법","t":"Bagaimana satu klien yang lambat memperlambat semua klien"},
+    {"ctx":"src/sims/sndbuf.js:8","ko":"느린 클라이언트 하나가 모두를 느리게 만드는 과정","t":"Bagaimana satu klien yang lambat memperlambat semua klien"},
     {"ctx":"src/sims/sndbuf.js:9","ko":"서버는 틱마다 클라이언트 8개에게 업데이트를 보냅니다. 보낸 데이터는 먼저 클라이언트마다 있는 <b>송신 버퍼</b>(운영체제가 연결마다 잡아 둔 전송 대기 메모리)에 담겼다가 회선 속도만큼 빠져나갑니다. 회선이 느린 클라이언트는 이 버퍼가 금방 가득 찹니다. 그때 서버 코드가 어떻게 하느냐에 따라 그 클라이언트만 불편하거나, 서버 전체가 렉에 빠집니다.","t":"Setiap tick, server mengirim update ke 8 klien. Data yang dikirim lebih dulu masuk ke <b>buffer kirim</b> milik tiap klien (memori antrean kirim yang disiapkan sistem operasi untuk setiap koneksi), lalu keluar secepat koneksi klien itu. Pada klien dengan koneksi lambat, buffer ini cepat penuh. Apa yang dilakukan kode server saat itu menentukan apakah hanya klien itu yang terganggu atau seluruh server mengalami lag."},
     {"ctx":"src/sims/sndbuf.js:11","ko":"처음 화면(느린 클라이언트 1개 + 블로킹)에서 <b>서버 스레드</b> 줄의 빨간 구간을 보세요. 한 클라이언트에게 보내느라 서버가 멈춰 서 있고 정상 클라이언트 7개의 지연도 함께 올라갑니다.","t":"Di layar awal (1 klien lambat + blocking), perhatikan bagian merah di baris <b>Thread server</b>. Server tertahan karena sibuk mengirim ke satu klien, dan latensi 7 klien normal ikut naik."},
     {"ctx":"src/sims/sndbuf.js:12","ko":"<b>가득 찼을 때</b>를 “최신만 남기기”로 바꿔 보세요. 느린 클라이언트만 뚝뚝 끊기고 서버 틱과 나머지 클라이언트는 멀쩡해집니다.","t":"Ubah <b>Saat penuh</b> menjadi “Simpan terbaru saja”. Hanya klien lambat yang patah-patah, sedangkan tick server dan klien lainnya kembali normal."},

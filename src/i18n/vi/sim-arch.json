@@ -3,7 +3,7 @@
   "group": "sim-arch",
   "entries": [
     {"ctx":"src/sims/arch.js:6","ko":"레이어 13 · 서버 구성과 운영","t":"Tầng 13 · Kiến trúc và vận hành server"},
-    {"ctx":"src/sims/arch.js:7","ko":"서버 하나에 장애가 나면 누가 무엇을 겪나","t":"Một server gặp sự cố thì ai gặp chuyện gì"},
+    {"ctx":"src/sims/arch.js:7","ko":"서버 하나에 장애가 났을 때 유저가 겪는 일","t":""},
     {"ctx":"src/sims/arch.js:8","ko":"MMO는 대개 역할이 다른 여러 서버가 서로 부르며 돌아갑니다. 상자를 누르면 그 서버가 느려지거나 멈춥니다. 장애가 어디까지 번지는지, 플레이어는 누가 무엇을 겪는지 아래 목록에서 확인하세요. 같은 고장도 “기다리는 방식”에 따라 영향 범위가 크게 달라집니다.","t":"MMO thường vận hành bằng nhiều server với vai trò khác nhau, gọi qua lại lẫn nhau. Bấm vào một ô thì server đó sẽ chậm lại hoặc bị đứng. Hãy xem ở danh sách bên dưới sự cố lan tới đâu và người chơi nào gặp chuyện gì. Cùng một hỏng hóc nhưng phạm vi ảnh hưởng khác hẳn tùy theo “cách chờ”."},
     {"ctx":"src/sims/arch.js:10","ko":"<b>DB 느려짐 (동기 호출)</b>을 눌러 보세요. DB 하나가 느려졌을 뿐인데 모든 필드와 던전의 틱이 늦어져 슬로우모션·뚝뚝 끊김에 빠집니다.","t":"Bấm <b>DB chậm (gọi đồng bộ)</b>. Chỉ một DB chậm mà tick của mọi bản đồ và phó bản đều trễ, rơi vào quay chậm và giật khựng."},
     {"ctx":"src/sims/arch.js:11","ko":"같은 고장에서 <b>비동기</b>로 바꾸고 <b>서킷 브레이커</b>를 켜 보세요. 영향이 “저장이 늦음”으로 줄어듭니다.","t":"Với cùng hỏng hóc đó, đổi sang <b>bất đồng bộ</b> và bật <b>circuit breaker</b>. Ảnh hưởng thu hẹp lại còn “lưu bị chậm”."},
@@ -222,6 +222,7 @@
     {"ctx":"src/sims/arch.js:242","ko":"에 있는 사람","t":" (người chơi đang ở đó)"},
     {"ctx":"src/sims/arch.js:456","ko":"<b>서킷 브레이커</b>: {0}{1} 1초까지만 기다리고 실패가 이어지면 아예 부르지 않아, 게임 서버가 오래 멈추지 않습니다. 기다리는 그 1초 동안은 틱이 멈추므로 비동기가 더 안전합니다.","t":"<b>Circuit breaker</b>: chỉ chờ {0}{1}tối đa 1 giây, nếu lỗi liên tiếp thì thôi không gọi nữa, nên game server không bị đứng lâu. Nhưng trong 1 giây chờ đó tick vẫn dừng, nên bất đồng bộ an toàn hơn."},
     {"ctx":"src/sims/arch.js:456","ko":"을","t":" "},
-    {"ctx":"src/sims/arch.js:456","ko":"를","t":" "}
+    {"ctx":"src/sims/arch.js:456","ko":"를","t":" "},
+    {"ctx":"src/sims/arch.js:7","ko":"서버 하나에 장애가 나면 누가 무엇을 겪나","t":"Một server gặp sự cố thì ai gặp chuyện gì"}
   ]
 }

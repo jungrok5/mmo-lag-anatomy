@@ -3,7 +3,7 @@
   "group": "sim-ladder",
   "entries": [
     {"ctx":"src/sims/ladder.js:6","ko":"레이어 10 · 메모리 · 숫자 감각","t":"Layer 10 · Memory · Latency numbers"},
-    {"ctx":"src/sims/ladder.js:7","ko":"컴퓨터의 시간을 사람의 시간으로 늘려 보면","t":"Computer time, stretched to human time"},
+    {"ctx":"src/sims/ladder.js:7","ko":"컴퓨터 작업 시간을 사람 시간으로 환산하기","t":"Computer time, stretched to human time"},
     {"ctx":"src/sims/ladder.js:8","ko":"컴퓨터 안의 시간은 너무 짧아 감이 오지 않습니다. 나노초(10억분의 1초)부터 초까지, 서버가 흔히 기다리는 일들을 한 줄로 세웠습니다. 막대는 로그 눈금이라 눈금 한 칸마다 10배씩 길어집니다. 줄을 눌러 보세요.","t":"Time inside a computer is too short to get a feel for. Here are the things servers commonly wait on, from nanoseconds (billionths of a second) to seconds, lined up in one list. The bars use a log scale, so each gridline marks a value 10 times the one before. Click a row."},
     {"ctx":"src/sims/ladder.js:10","ko":"<b>메모리(RAM) 읽기</b>를 눌러 보세요. CPU 입장에서 RAM은 L1 캐시보다 100배 먼 곳입니다.","t":"Click <b>Memory (RAM) read</b>. From the CPU’s point of view, RAM is 100 times farther away than the L1 cache."},
     {"ctx":"src/sims/ladder.js:11","ko":"<b>눈금</b>을 “1나노초를 1초로 늘리면”으로 바꿔 보세요. RAM 읽기는 1분 40초, 스왑된 메모리 되읽기는 약 1.2일이 됩니다.","t":"Switch <b>Scale</b> to “Stretch 1 ns to 1 s”. A RAM read becomes 1 minute 40 seconds, and reading back swapped-out memory becomes about 1.2 days."},

@@ -12,14 +12,14 @@
     {"ctx":"#nav li","ko":"<a href=\"#symptoms\">증상 사전</a>","t":"<a href=\"#symptoms\">พจนานุกรมอาการ</a>"},
     {"ctx":"#nav li","ko":"<a href=\"#sync\">동기화 방식과 체감</a>","t":"<a href=\"#sync\">รูปแบบการซิงก์และฟีลการเล่น</a>"},
     {"ctx":"#nav li","ko":"<a href=\"#partial\">한 명만·한쪽만 이상할 때</a>","t":"<a href=\"#partial\">เมื่อผิดปกติแค่คนเดียวหรือฝั่งเดียว</a>"},
-    {"ctx":"#nav li","ko":"<a href=\"#retrans\">TCP 재전송 해부</a>","t":"<a href=\"#retrans\">เจาะลึกการส่งซ้ำของ TCP</a>"},
+    {"ctx":"#nav li","ko":"<a href=\"#retrans\">TCP 재전송</a>","t":"<a href=\"#retrans\">เจาะลึกการส่งซ้ำของ TCP</a>"},
     {"ctx":"#nav li","ko":"<a href=\"#owners\">게임개발팀·인프라팀 담당 구분</a>","t":"<a href=\"#owners\">แบ่งหน้าที่ทีมพัฒนาเกมและทีมอินฟรา</a>"},
     {"ctx":"#nav div","ko":"레이어 (패킷이 지나가는 순서)","t":"ชั้น (ตามลำดับที่แพ็กเก็ตผ่าน)"},
     {"ctx":"#nav div","ko":"도구","t":"เครื่องมือ"},
     {"ctx":"#nav li","ko":"<a href=\"#triage\">진단 도우미</a>","t":"<a href=\"#triage\">ตัวช่วยวิเคราะห์อาการ</a>"},
     {"ctx":"#nav li","ko":"<a href=\"#judge\">관측으로 판정하기</a>","t":"<a href=\"#judge\">ชี้สาเหตุจากข้อมูลที่วัดได้</a>"},
     {"ctx":"#nav li","ko":"<a href=\"#cases\">사례와 절차</a>","t":"<a href=\"#cases\">กรณีศึกษาและขั้นตอน</a>"},
-    {"ctx":"#nav li","ko":"<a href=\"#report\">렉 제보 잘하는 법</a>","t":"<a href=\"#report\">วิธีแจ้งปัญหาแลคให้ได้ผล</a>"},
+    {"ctx":"#nav li","ko":"<a href=\"#report\">렉 제보 가이드</a>","t":""},
     {"ctx":"#nav li","ko":"<a href=\"#glossary\">용어 사전</a>","t":"<a href=\"#glossary\">อภิธานศัพท์</a>"},
     {"ctx":"#nav li","ko":"<a href=\"#refs\">참고 문헌</a>","t":"<a href=\"#refs\">เอกสารอ้างอิง</a>"},
     {"ctx":"#nav div@aria-label","ko":"화면 테마","t":"ธีมหน้าจอ"},
@@ -27,14 +27,16 @@
     {"ctx":"#nav button","ko":"밝게","t":"สว่าง"},
     {"ctx":"#nav button","ko":"어둡게","t":"มืด"},
     {"ctx":"#top h1","ko":"게임 렉<br><span class=\"ping\">백서</span>","t":"คู่มือ<br><span class=\"ping\">เกมแลค</span>"},
-    {"ctx":"#top p","ko":"화면이 뚝뚝 끊기고 캐릭터가 순간이동하고 갑자기 한꺼번에 몰아서 움직이고 결국 접속이 끊기는 이유. 내 게임 화면에서 서버의 데이터베이스까지 13개 층을 차례로 열어 보고 직접 망가뜨려 보며 이해합니다. MMO 사례를 중심으로 썼지만 대부분은 장르와 상관없이 온라인 게임 전반에 해당합니다.","t":"ทำไมภาพถึงกระตุก ตัวละครวาร์ป จู่ ๆ ทุกอย่างก็ขยับรวดเดียวแบบกรอเร็ว จนสุดท้ายก็หลุดจากเกม คู่มือนี้ไล่เปิดดูทีละชั้นทั้ง 13 ชั้น ตั้งแต่หน้าจอเกมของเราไปจนถึงฐานข้อมูลของเซิร์ฟเวอร์ และให้ลองทำให้พังด้วยตัวเองเพื่อให้เข้าใจ เนื้อหาเน้นกรณีของเกม MMO แต่ส่วนใหญ่ใช้ได้กับเกมออนไลน์ทั่วไปไม่ว่าจะเป็นแนวไหน"},
+    {"ctx":"#top p","ko":"화면이 뚝뚝 끊기거나 캐릭터가 순간이동하거나 접속이 끊기는 원인을 내 게임 화면부터 서버의 데이터베이스까지 13개 층으로 나눠 설명합니다. 원인마다 확인 방법과 담당 팀을 적었고 실험에서 조건을 바꿔 보며 확인할 수 있습니다. MMO 사례를 중심으로 썼지만 대부분은 장르와 상관없이 온라인 게임 전반에 해당합니다.","t":"ทำไมภาพถึงกระตุก ตัวละครวาร์ป จู่ ๆ ทุกอย่างก็ขยับรวดเดียวแบบกรอเร็ว จนสุดท้ายก็หลุดจากเกม คู่มือนี้ไล่เปิดดูทีละชั้นทั้ง 13 ชั้น ตั้งแต่หน้าจอเกมของเราไปจนถึงฐานข้อมูลของเซิร์ฟเวอร์ และให้ลองทำให้พังด้วยตัวเองเพื่อให้เข้าใจ เนื้อหาเน้นกรณีของเกม MMO แต่ส่วนใหญ่ใช้ได้กับเกมออนไลน์ทั่วไปไม่ว่าจะเป็นแนวไหน"},
     {"ctx":"#top p","ko":"게임 렉 백서 · 수치는 일반적인 서비스 환경의 대표값이며 실제 값은 게임과 인프라마다 다릅니다.","t":"คู่มือเกมแลค · ตัวเลขเป็นค่าตัวแทนของสภาพแวดล้อมการให้บริการทั่วไป ค่าจริงต่างกันไปตามเกมและอินฟราของแต่ละที่"},
     {"ctx":"#top p","ko":"시뮬레이션은 원리를 보여 주려고 단순화한 모델입니다. 실제 장애 분석은 게임개발팀·인프라팀의 모니터링 지표와 함께 보세요.","t":"การจำลองเป็นโมเดลที่ทำให้ง่ายลงเพื่อแสดงหลักการ การวิเคราะห์เหตุขัดข้องจริงควรดูควบคู่กับเมตริกจากการมอนิเตอร์ของทีมพัฒนาเกมและทีมอินฟรา"},
     {"ctx":"#top p","ko":"자바스크립트 없이 읽는 <a href=\"%SITE%text.html\">텍스트 판</a>(원인마다 따로 된 페이지 포함), 전체 내용 마크다운 <a href=\"%SITE%llms-full.txt\">llms-full.txt</a>, AI용 안내 <a href=\"%SITE%llms.txt\">llms.txt</a>.","t":"<a href=\"%SITE%text.html\">ฉบับข้อความ</a> ที่อ่านได้โดยไม่ต้องใช้ JavaScript (มีหน้าแยกของแต่ละสาเหตุ), เนื้อหาทั้งหมดในรูปแบบ Markdown <a href=\"%SITE%llms-full.txt\">llms-full.txt</a> และคำแนะนำสำหรับ AI <a href=\"%SITE%llms.txt\">llms.txt</a>"},
-    {"ctx":"#top p","ko":"MIT 라이선스로 공개합니다. 글꼴(<span class=\"fontlist\">IBM Plex Sans KR, IBM Plex Mono</span>)은 SIL Open Font License 1.1을 따릅니다.","t":"เผยแพร่ภายใต้สัญญาอนุญาต MIT ส่วนฟอนต์ (<span class=\"fontlist\">IBM Plex Sans KR, IBM Plex Mono</span>) ใช้สัญญาอนุญาต SIL Open Font License 1.1"}
+    {"ctx":"#top p","ko":"만든 사람: 오정록(Jeongrok Oh) · <a href=\"%RESUME%\">이력서</a> · <a href=\"https://github.com/jungrok5/mmo-lag-anatomy\">GitHub 저장소</a>","t":""},
+    {"ctx":"#top p","ko":"<a href=\"https://github.com/jungrok5/mmo-lag-anatomy/blob/main/LICENSE\">MIT 라이선스</a>로 공개합니다. 글꼴(<span class=\"fontlist\">IBM Plex Sans KR, IBM Plex Mono</span>)은 SIL Open Font License 1.1을 따릅니다.","t":""}
   ],
   "stale": [
     {"ctx":"#top p","ko":"MIT 라이선스로 공개합니다. 글꼴(IBM Plex Sans KR, IBM Plex Mono, Black Han Sans)은 SIL Open Font License 1.1을 따릅니다.","t":"เผยแพร่ภายใต้สัญญาอนุญาต MIT ส่วนฟอนต์ (IBM Plex Sans KR, IBM Plex Mono, Black Han Sans) ใช้สัญญาอนุญาต SIL Open Font License 1.1"},
-    {"ctx":"#top p","ko":"MIT 라이선스로 공개합니다. 글꼴(<span class=\"fontlist\">IBM Plex Sans KR, IBM Plex Mono, Black Han Sans</span>)은 SIL Open Font License 1.1을 따릅니다.","t":"เผยแพร่ภายใต้สัญญาอนุญาต MIT ส่วนฟอนต์ (<span class=\"fontlist\">IBM Plex Sans KR, IBM Plex Mono, Black Han Sans</span>) ใช้สัญญาอนุญาต SIL Open Font License 1.1"}
+    {"ctx":"#top p","ko":"MIT 라이선스로 공개합니다. 글꼴(<span class=\"fontlist\">IBM Plex Sans KR, IBM Plex Mono, Black Han Sans</span>)은 SIL Open Font License 1.1을 따릅니다.","t":"เผยแพร่ภายใต้สัญญาอนุญาต MIT ส่วนฟอนต์ (<span class=\"fontlist\">IBM Plex Sans KR, IBM Plex Mono, Black Han Sans</span>) ใช้สัญญาอนุญาต SIL Open Font License 1.1"},
+    {"ctx":"#nav li","ko":"<a href=\"#report\">렉 제보 잘하는 법</a>","t":"<a href=\"#report\">วิธีแจ้งปัญหาแลคให้ได้ผล</a>"}
   ]
 }

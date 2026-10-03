@@ -3,7 +3,7 @@
   "group": "sim-queue",
   "entries": [
     {"ctx":"src/sims/queue.js:6","ko":"기본 원리 · 대기열","t":"Nguyên lý cơ bản · Hàng đợi"},
-    {"ctx":"src/sims/queue.js:7","ko":"워커가 바쁠수록 대기열은 “갑자기” 길어진다","t":"Worker càng bận, hàng đợi càng dài ra “đột ngột”"},
+    {"ctx":"src/sims/queue.js:7","ko":"이용률이 높아질수록 급격히 길어지는 대기열","t":""},
     {"ctx":"src/sims/queue.js:8","ko":"패킷·쿼리·디스크 요청·CPU 작업은 모두 워커(요청을 처리하는 주체) 앞 대기열에 쌓입니다. 요청이 오는 속도를 올려 보세요. 워커가 하나면 70%쯤 바쁠 때까지는 대기가 처리 시간의 2배 남짓이지만 90%면 9배, 95%면 19배로 급격히 솟습니다. 렉은 대부분 어딘가의 대기열이 이 곡선의 오른쪽 끝에 올라탔을 때 생깁니다.","t":"Gói tin, query, yêu cầu ổ đĩa và tác vụ CPU đều dồn vào hàng đợi trước worker (thành phần xử lý yêu cầu). Hãy tăng tốc độ yêu cầu đến. Với một worker, cho đến khi bận khoảng 70%, thời gian chờ chỉ hơn gấp 2 lần thời gian xử lý một chút, nhưng ở 90% là 9 lần, ở 95% là 19 lần, tăng vọt rất nhanh. Phần lớn lag là do một chỗ nào đó đã leo lên đầu mút bên phải của đường cong này."},
     {"ctx":"src/sims/queue.js:10","ko":"<b>도착 속도</b>를 천천히 올리며 오른쪽 곡선 위의 점이 어디서 급하게 꺾이는지 보세요.","t":"Tăng dần <b>Tốc độ đến</b> và quan sát điểm trên đường cong bên phải bẻ gắt lên ở đâu."},
     {"ctx":"src/sims/queue.js:11","ko":"<b>이용률 95%</b> 근처에서 도착 속도를 아주 조금만 더 올려 보세요. 대기가 몇 배로 늘어납니다.","t":"Ở gần <b>mức sử dụng 95%</b>, hãy tăng tốc độ đến thêm một chút xíu. Thời gian chờ tăng lên gấp mấy lần."},
@@ -46,5 +46,8 @@
     {"ctx":"src/sims/queue.js:210","ko":"(무작위 도착일 때 이론값)","t":" (lý thuyết khi đến ngẫu nhiên)"},
     {"ctx":"src/sims/queue.js:211","ko":"{0}이용률 <b>{1}%</b>. 곡선이 꺾이기 시작하는 구간입니다. 평소엔 괜찮지만 이벤트처럼 요청이 몰리면 바로 대기가 길어집니다.","t":"{0}Mức sử dụng <b>{1}%</b>. Đây là vùng đường cong bắt đầu bẻ lên. Bình thường thì ổn, nhưng khi yêu cầu dồn tới, như lúc có sự kiện, thì thời gian chờ dài ra ngay."},
     {"ctx":"src/sims/queue.js:212","ko":"{0}이용률 <b>{1}%</b>. 워커에 여유가 있어 대부분 바로 처리됩니다. 대기열이 생겨도 금방 비워집니다.","t":"{0}Mức sử dụng <b>{1}%</b>. Worker còn dư nên phần lớn yêu cầu được xử lý ngay. Có hàng đợi thì cũng nhanh chóng được giải phóng hết."}
+  ],
+  "stale": [
+    {"ctx":"src/sims/queue.js:7","ko":"워커가 바쁠수록 대기열은 “갑자기” 길어진다","t":"Worker càng bận, hàng đợi càng dài ra “đột ngột”"}
   ]
 }

@@ -3,7 +3,7 @@
   "group": "sim-ladder",
   "entries": [
     {"ctx":"src/sims/ladder.js:6","ko":"레이어 10 · 메모리 · 숫자 감각","t":"Lapisan 10 · Memori · Skala angka"},
-    {"ctx":"src/sims/ladder.js:7","ko":"컴퓨터의 시간을 사람의 시간으로 늘려 보면","t":"Jika waktu komputer direntangkan menjadi waktu manusia"},
+    {"ctx":"src/sims/ladder.js:7","ko":"컴퓨터 작업 시간을 사람 시간으로 환산하기","t":"Jika waktu komputer direntangkan menjadi waktu manusia"},
     {"ctx":"src/sims/ladder.js:8","ko":"컴퓨터 안의 시간은 너무 짧아 감이 오지 않습니다. 나노초(10억분의 1초)부터 초까지, 서버가 흔히 기다리는 일들을 한 줄로 세웠습니다. 막대는 로그 눈금이라 눈금 한 칸마다 10배씩 길어집니다. 줄을 눌러 보세요.","t":"Waktu di dalam komputer terlalu singkat untuk dibayangkan. Di sini, hal-hal yang biasa ditunggu server dijajarkan dalam satu baris, dari nanodetik (sepersemiliar detik) sampai detik. Batangnya memakai skala log, jadi setiap satu kotak skala berarti 10 kali lebih panjang. Klik salah satu baris."},
     {"ctx":"src/sims/ladder.js:10","ko":"<b>메모리(RAM) 읽기</b>를 눌러 보세요. CPU 입장에서 RAM은 L1 캐시보다 100배 먼 곳입니다.","t":"Klik <b>Baca memori (RAM)</b>. Dari sudut pandang CPU, RAM 100 kali lebih jauh daripada cache L1."},
     {"ctx":"src/sims/ladder.js:11","ko":"<b>눈금</b>을 “1나노초를 1초로 늘리면”으로 바꿔 보세요. RAM 읽기는 1분 40초, 스왑된 메모리 되읽기는 약 1.2일이 됩니다.","t":"Ganti <b>Skala</b> ke “Jika 1 nanodetik = 1 detik”. Baca RAM menjadi 1 menit 40 detik, dan baca ulang memori yang di-swap menjadi sekitar 1,2 hari."},

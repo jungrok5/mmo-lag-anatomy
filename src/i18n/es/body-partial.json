@@ -2,7 +2,7 @@
   "lang": "es",
   "group": "body-partial",
   "entries": [
-    {"ctx":"#partial div","ko":"<span class=\"idx\">05</span>누구에게 번지나","t":"<span class=\"idx\">05</span>Hasta dónde se extiende"},
+    {"ctx":"#partial div","ko":"<span class=\"idx\">05</span>영향 범위","t":""},
     {"ctx":"#partial h2","ko":"한 명만 느릴 때, 한쪽만 이상할 때","t":"Cuando solo va lento un jugador o falla un solo cliente"},
     {"ctx":"#partial p","ko":"렉 제보에서 가장 헷갈리는 경우는 몇 사람만, 또는 한쪽만 겪을 때입니다. 느린 한 사람이 다른 사람 눈에 어떻게 보이는지, 그 사람 때문에 다른 사람까지 느려지는지는 서버가 입력을 처리하는 방식과 동기화 방식에 따라 완전히 달라집니다. 같은 PC에서 띄운 두 클라이언트 중 한쪽만 NPC가 안 보이는 현상도 이 장에서 다룹니다.","t":"Los reportes de lag más confusos son los que afectan solo a unas pocas personas o solo a uno de los clientes. Cómo ven los demás a un jugador lento, y si ese jugador también hace ir lentos a los demás, depende por completo de cómo procesa el servidor los inputs y del modelo de netcode. Este capítulo también trata el caso de dos clientes abiertos en la misma computadora en el que solo uno no ve los NPC."},
     {"ctx":"#partial-oneuser","ko":"특정 유저, 특정 회선만 느리면","t":"Si solo va lento un jugador o una conexión concreta"},
@@ -58,5 +58,8 @@
     {"ctx":"#partial li","ko":"<b>받았는데 그리지 못했다</b>: 두 클라이언트가 같은 캐시 파일을 동시에 써서 모델 로딩 실패, 그래픽 메모리(VRAM) 부족, 표시 인원 제한 같은 옵션 차이, 버전·데이터 불일치.","t":"<b>Lo recibió, pero no pudo dibujarlo</b>: los dos clientes escriben a la vez en el mismo archivo de caché y falla la carga del modelo, falta memoria gráfica (VRAM), las opciones de visualización son distintas (por ejemplo, el límite de personajes mostrados) o no coinciden la versión o los datos."},
     {"ctx":"#partial p","ko":"먼저 볼 단서는 세 가지입니다. <b>이름표는 있는데 캐릭터 모델만 없는가</b>(서버는 보냈고 그리기 실패), <b>시야를 벗어났다 돌아오면 보이는가</b>(등장 알림 하나가 빠짐), 그리고 <b>안 보이는 쪽 창을 앞으로 가져오면 나아지는가</b>(백그라운드 창의 처리 제한). 반대로 이미 죽은 몬스터가 내 화면에만 서 있는 “유령 개체”는 퇴장 알림이 빠져서 생깁니다.","t":"Hay tres pistas muy claras: <b>¿se ve el nombre sobre el personaje pero no su modelo?</b> (el servidor lo envió y falló el dibujo), <b>¿aparece si sales del rango de visión y vuelves?</b> (se perdió un mensaje de aparición) y <b>¿mejora si traes al frente la ventana del cliente que no lo ve?</b> (procesamiento limitado de las ventanas en segundo plano). En cambio, una “entidad fantasma”, como un monstruo ya muerto que sigue de pie solo en tu pantalla, indica que se perdió el mensaje de desaparición."},
     {"ctx":"#partial-causes","ko":"일부에게만 생기는 문제","t":"Problemas que solo afectan a algunos"}
+  ],
+  "stale": [
+    {"ctx":"#partial div","ko":"<span class=\"idx\">05</span>누구에게 번지나","t":"<span class=\"idx\">05</span>Hasta dónde se extiende"}
   ]
 }

@@ -3,7 +3,10 @@
   "group": "body-report",
   "entries": [
     {"ctx":"#report div","ko":"<span class=\"idx\">T4</span>도구","t":"<span class=\"idx\">T4</span>Ferramenta"},
-    {"ctx":"#report h2","ko":"렉 제보 잘하는 법","t":"Como reportar lag do jeito certo"},
+    {"ctx":"#report h2","ko":"렉 제보 가이드","t":""},
     {"ctx":"#report p","ko":"게임개발팀·인프라팀이 원인을 찾는 데 가장 오래 걸리는 부분은 “언제, 어디서, 누가”를 알아내는 일입니다. 아래 항목을 채워 주면 로그와 그래프에서 그 순간을 바로 찾을 수 있습니다.","t":"O que mais demora quando as equipes de desenvolvimento e de infraestrutura procuram a causa é descobrir “quando, onde e quem”. Com os itens abaixo preenchidos, dá para achar aquele momento nos logs e gráficos na hora."}
+  ],
+  "stale": [
+    {"ctx":"#report h2","ko":"렉 제보 잘하는 법","t":"Como reportar lag do jeito certo"}
   ]
 }

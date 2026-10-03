@@ -3,7 +3,7 @@
   "group": "sim-sndbuf",
   "entries": [
     {"ctx":"src/sims/sndbuf.js:7","ko":"소켓과 프로토콜 · 송신 버퍼","t":"Sockets and protocols · Send buffer"},
-    {"ctx":"src/sims/sndbuf.js:8","ko":"느린 클라이언트 하나가 모두를 느리게 만드는 법","t":"How one slow client slows everyone down"},
+    {"ctx":"src/sims/sndbuf.js:8","ko":"느린 클라이언트 하나가 모두를 느리게 만드는 과정","t":"How one slow client slows everyone down"},
     {"ctx":"src/sims/sndbuf.js:9","ko":"서버는 틱마다 클라이언트 8개에게 업데이트를 보냅니다. 보낸 데이터는 먼저 클라이언트마다 있는 <b>송신 버퍼</b>(운영체제가 연결마다 잡아 둔 전송 대기 메모리)에 담겼다가 회선 속도만큼 빠져나갑니다. 회선이 느린 클라이언트는 이 버퍼가 금방 가득 찹니다. 그때 서버 코드가 어떻게 하느냐에 따라 그 클라이언트만 불편하거나, 서버 전체가 렉에 빠집니다.","t":"Every tick, the server sends updates to 8 clients. The data first goes into each client’s <b>send buffer</b> (memory the operating system sets aside per connection for data waiting to go out), then drains at the speed of the connection. On a slow connection, this buffer fills up quickly. What the server code does at that point decides whether only that client suffers or the whole server lags."},
     {"ctx":"src/sims/sndbuf.js:11","ko":"처음 화면(느린 클라이언트 1개 + 블로킹)에서 <b>서버 스레드</b> 줄의 빨간 구간을 보세요. 한 클라이언트에게 보내느라 서버가 멈춰 서 있고 정상 클라이언트 7개의 지연도 함께 올라갑니다.","t":"On the starting screen (1 slow client + blocking), look at the red stretches on the <b>Server thread</b> row. The server is stuck sending to one client, and the delay for the 7 normal clients goes up with it."},
     {"ctx":"src/sims/sndbuf.js:12","ko":"<b>가득 찼을 때</b>를 “최신만 남기기”로 바꿔 보세요. 느린 클라이언트만 뚝뚝 끊기고 서버 틱과 나머지 클라이언트는 멀쩡해집니다.","t":"Set <b>When full</b> to “Keep latest only”. Only the slow client stutters, and the server tick and the other clients recover."},

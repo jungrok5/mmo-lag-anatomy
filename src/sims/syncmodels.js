@@ -3,7 +3,7 @@ K.register('syncmodels', function (root) {
   const TR = I18N.tr('sim-syncmodels');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`동기화 방식 · 비교`,
-    title: TR`버튼 한 번, 다섯 가지 반응`,
+    title: TR`동기화 방식 다섯 가지의 반응 비교`,
     lead: TR`같은 회선에서 같은 버튼을 눌렀을 때 방식마다 내 화면이 언제 반응하고 서버나 상대는 언제 아는지 나란히 봅니다. 핑을 올려 보세요. 어떤 방식은 반응이 핑만큼 늦어지고 어떤 방식은 핑과 상관없이 바로 반응하는 대신 다른 대가를 치릅니다.`,
     layout: 'stack',
     tries: [

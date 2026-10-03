@@ -17,7 +17,7 @@
         <li><a href="#symptoms">증상 사전</a></li>
         <li><a href="#sync">동기화 방식과 체감</a></li>
         <li><a href="#partial">한 명만·한쪽만 이상할 때</a></li>
-        <li><a href="#retrans">TCP 재전송 해부</a></li>
+        <li><a href="#retrans">TCP 재전송</a></li>
         <li><a href="#owners">게임개발팀·인프라팀 담당 구분</a></li>
       </ol>
     </div>
@@ -31,7 +31,7 @@
         <li><a href="#triage">진단 도우미</a></li>
         <li><a href="#judge">관측으로 판정하기</a></li>
         <li><a href="#cases">사례와 절차</a></li>
-        <li><a href="#report">렉 제보 잘하는 법</a></li>
+        <li><a href="#report">렉 제보 가이드</a></li>
         <li><a href="#glossary">용어 사전</a></li>
         <li><a href="#refs">참고 문헌</a></li>
       </ol>
@@ -51,7 +51,7 @@
         <div class="hero-top">
           <div>
             <h1>게임 렉<br><span class="ping">백서</span></h1>
-            <p class="hero-lede">화면이 뚝뚝 끊기고 캐릭터가 순간이동하고 갑자기 한꺼번에 몰아서 움직이고 결국 접속이 끊기는 이유. 내 게임 화면에서 서버의 데이터베이스까지 13개 층을 차례로 열어 보고 직접 망가뜨려 보며 이해합니다. MMO 사례를 중심으로 썼지만 대부분은 장르와 상관없이 온라인 게임 전반에 해당합니다.</p>
+            <p class="hero-lede">화면이 뚝뚝 끊기거나 캐릭터가 순간이동하거나 접속이 끊기는 원인을 내 게임 화면부터 서버의 데이터베이스까지 13개 층으로 나눠 설명합니다. 원인마다 확인 방법과 담당 팀을 적었고 실험에서 조건을 바꿔 보며 확인할 수 있습니다. MMO 사례를 중심으로 썼지만 대부분은 장르와 상관없이 온라인 게임 전반에 해당합니다.</p>
           </div>
           <div class="thesis" id="thesis"></div>
         </div>
@@ -62,7 +62,7 @@
       <section class="chapter" id="basics">
         <div class="ch-head">
           <div class="ch-kicker"><span class="idx">00</span>시작하기</div>
-          <h2>렉은 네 가지 요인으로 만들어진다</h2>
+          <h2>렉을 만드는 네 가지 요인</h2>
           <p class="lede">원인은 백 가지가 넘지만 렉을 만드는 요인은 네 가지로 묶입니다. 패킷이 <b>늦게</b> 오거나, <b>들쭉날쭉</b> 오거나, <b>아예 안</b> 오거나, 누군가 계산을 <b>멈추는</b> 경우입니다. 게임은 이 요인들을 가리려고 여러 기술을 쓰는데 가리다 실패한 흔적이 우리가 보는 렉의 “모양”입니다.</p>
         </div>
 
@@ -85,7 +85,7 @@
           </table>
         </div>
 
-        <h3 class="sec" id="basics-law">모든 층에 공통인 법칙 하나</h3>
+        <h3 class="sec" id="basics-law">모든 층에 공통인 대기열의 성질</h3>
         <div class="prose">
           <p>CPU, 디스크, 데이터베이스, 공유기, 통신사 회선. 층은 달라도 구조는 같습니다. 요청을 처리하는 <b>워커</b>(CPU 코어, 스레드, DB 커넥션 등)가 있고 그 앞에 <b>대기열</b>이 생깁니다. 워커가 한가하면 대기열이 비어 있지만 바쁜 정도(이용률)가 80~90%를 넘어서면 대기열이 급격히 길어집니다. 워커 하나에 요청이 무작위로 올 때, 평균 대기는 이용률 50%에서 처리 시간만큼, 80%에서 4배, 90%에서 9배가 됩니다. “CPU가 아직 10% 남았는데 왜 렉이죠?”의 답이 여기 있습니다. 게다가 모니터링 화면의 CPU 수치는 보통 여러 코어와 1~5분을 평균한 값이라, 코어 하나만 100%인 상황이나 몇 초 동안만 몰린 순간을 가립니다.</p>
         </div>
@@ -98,7 +98,7 @@
       <section class="chapter" id="journey">
         <div class="ch-head">
           <div class="ch-kicker"><span class="idx">01</span>전체 지도</div>
-          <h2>패킷의 이동 경로: 내 손가락에서 서버의 DB까지</h2>
+          <h2>패킷의 이동 경로: 입력에서 서버 DB까지</h2>
           <p class="lede">스킬 버튼을 누르면 그 신호는 내 PC와 집, 통신사, 데이터센터를 지나 서버에 닿습니다. 서버 안의 여러 층에서 처리된 결과는 같은 층들을 거꾸로 지나 화면에 그려집니다. 모두 13개 층이고 어느 층이든 막히면 렉입니다. 아래 지도에서 층을 누르면 해당 장으로 이동합니다.</p>
         </div>
         <div id="layer-map" class="layer-map"></div>
@@ -110,7 +110,7 @@
         <div class="ch-head">
           <div class="ch-kicker"><span class="idx">02</span>직접 해보기</div>
           <h2>렉 실험실</h2>
-          <p class="lede">서버 한 대, 회선 하나, 내 PC 하나로 이루어진 작은 시뮬레이션입니다. 조건을 하나씩 망가뜨리며 뚝뚝 끊김, 순간이동, 고무줄, 몰아치기, 슬로우모션, 입력 지연, 멈춤, 접속 끊김이 각각 어떻게 만들어지는지 보세요. 패킷 타임라인은 패킷이 언제 보내지고 언제 도착했는지를 선으로 보여 줍니다. 선이 기울수록 오래 걸린 것이고 ×는 사라진 패킷입니다.</p>
+          <p class="lede">서버 한 대, 회선 하나, 내 PC 하나로 이루어진 작은 시뮬레이션입니다. 조건을 하나씩 바꾸며 뚝뚝 끊김, 순간이동, 고무줄, 몰아치기, 슬로우모션, 입력 지연, 멈춤, 접속 끊김이 각각 어떻게 만들어지는지 보세요. 패킷 타임라인은 패킷이 언제 보내지고 언제 도착했는지를 선으로 보여 줍니다. 선이 기울수록 오래 걸린 것이고 ×는 사라진 패킷입니다.</p>
         </div>
         <div data-sim="lab" id="sim-lab"></div>
       </section>
@@ -129,8 +129,8 @@
       <!-- ===================== 동기화 방식 ===================== -->
       <section class="chapter" id="sync" data-sync="1">
         <div class="ch-head">
-          <div class="ch-kicker"><span class="idx">04</span>설계가 만드는 체감</div>
-          <h2>같은 핑, 다른 체감: 동기화 방식</h2>
+          <div class="ch-kicker"><span class="idx">04</span>동기화 설계</div>
+          <h2>동기화 방식과 체감</h2>
           <p class="lede">어떤 게임은 핑 150ms에서도 아무렇지 않고 어떤 게임은 60ms에서도 굼뜹니다. 같은 회선이라면 이 차이는 대개 <b>클라이언트와 서버가 “무엇을, 언제, 누가 결정하느냐”를 정해 둔 방식</b>인 동기화 설계에서 나옵니다. 핑에 민감한 설계 가운데 일부는 의도된 선택이고 일부는 잘못 만든 결과입니다.</p>
         </div>
 
@@ -183,7 +183,7 @@
         <div data-sim="windows" id="sim-windows"></div>
         <div data-sim="chain" id="sim-chain"></div>
 
-        <h3 class="sec" id="sync-sensitive">민감한 건 잘못 만든 걸까?</h3>
+        <h3 class="sec" id="sync-sensitive">의도한 설계와 잘못 만든 설계 구분하기</h3>
         <div class="prose">
           <p>핑에 민감한 이유는 의도한 설계일 때도 있고 잘못 만든 탓일 때도 있습니다.</p>
         </div>
@@ -214,7 +214,7 @@
       <!-- ===================== 일부에게만 ===================== -->
       <section class="chapter" id="partial">
         <div class="ch-head">
-          <div class="ch-kicker"><span class="idx">05</span>누구에게 번지나</div>
+          <div class="ch-kicker"><span class="idx">05</span>영향 범위</div>
           <h2>한 명만 느릴 때, 한쪽만 이상할 때</h2>
           <p class="lede">렉 제보에서 가장 헷갈리는 경우는 몇 사람만, 또는 한쪽만 겪을 때입니다. 느린 한 사람이 다른 사람 눈에 어떻게 보이는지, 그 사람 때문에 다른 사람까지 느려지는지는 서버가 입력을 처리하는 방식과 동기화 방식에 따라 완전히 달라집니다. 같은 PC에서 띄운 두 클라이언트 중 한쪽만 NPC가 안 보이는 현상도 이 장에서 다룹니다.</p>
         </div>
@@ -274,8 +274,8 @@
       <!-- ===================== TCP 재전송 ===================== -->
       <section class="chapter" id="retrans">
         <div class="ch-head">
-          <div class="ch-kicker"><span class="idx">06</span>자주 보는 원인 해부</div>
-          <h2>TCP 재전송: 왜 생기고 왜 이렇게 느려지나</h2>
+          <div class="ch-kicker"><span class="idx">06</span>자주 보는 원인</div>
+          <h2>TCP 재전송: 생기는 원인과 지연이 커지는 이유</h2>
           <p class="lede">서버 지표에 “TCP 재전송(Retransmission)”이 늘면 렉 제보도 함께 느는 경우가 많습니다. 재전송은 “패킷이 사라졌다” 또는 “사라졌다고 잘못 판단했다”는 신호입니다. 원인은 와이파이부터 서버 네트워크 카드까지 경로 어디에나 있고 게임처럼 작은 패킷을 드문드문 보내는 연결에서는 패킷 하나만 잃어도 수백 ms 멈춤으로 번집니다. 이 장은 재전송의 근본 원인, 원인을 찾는 방법, 해결 방향을 정리합니다.</p>
         </div>
 
@@ -283,7 +283,7 @@
           <div class="fig-scroll"><svg class="tcpfig" viewBox="0 0 640 214" role="img" aria-label="TCP 재전송 타임라인: 3번 패킷이 사라지면 4·5·6번이 도착해도 게임에 넘어가지 않고 재전송 타이머가 끝나 3번이 다시 도착한 뒤 한꺼번에 넘어간다"><text class="lb" x="8" y="54">서버가 보냄</text><text class="lb" x="8" y="164">게임이 받음</text><line class="axis" x1="96" y1="50" x2="610" y2="50"/><line class="axis" x1="96" y1="160" x2="610" y2="160"/><g class="pk"><rect x="99" y="39" width="22" height="22" rx="4"/><text x="110" y="54">1</text></g><path class="arr" d="M110 62 L150 148"/><g class="pk"><rect x="149" y="39" width="22" height="22" rx="4"/><text x="160" y="54">2</text></g><path class="arr" d="M160 62 L200 148"/><g class="pk lost"><rect x="199" y="39" width="22" height="22" rx="4"/><text x="210" y="54">3</text></g><path class="arr lost" d="M210 62 L224 104"/><text class="x" x="228" y="112">×</text><text class="note" x="240" y="112">사라짐</text><g class="pk"><rect x="249" y="39" width="22" height="22" rx="4"/><text x="260" y="54">4</text></g><path class="arr" d="M260 62 L300 148"/><g class="pk"><rect x="299" y="39" width="22" height="22" rx="4"/><text x="310" y="54">5</text></g><path class="arr" d="M310 62 L350 148"/><g class="pk"><rect x="349" y="39" width="22" height="22" rx="4"/><text x="360" y="54">6</text></g><path class="arr" d="M360 62 L400 148"/><g class="pk got"><rect x="139" y="149" width="22" height="22" rx="4"/><text x="150" y="164">1</text></g><g class="pk got"><rect x="189" y="149" width="22" height="22" rx="4"/><text x="200" y="164">2</text></g><g class="pk held"><rect x="289" y="149" width="22" height="22" rx="4"/><text x="300" y="164">4</text></g><g class="pk held"><rect x="339" y="149" width="22" height="22" rx="4"/><text x="350" y="164">5</text></g><g class="pk held"><rect x="389" y="149" width="22" height="22" rx="4"/><text x="400" y="164">6</text></g><g class="pk resend"><rect x="479" y="39" width="22" height="22" rx="4"/><text x="490" y="54">3</text></g><path class="arr" d="M490 62 L530 148"/><path class="span" d="M210 30 L210 24 L490 24 L490 30"/><text class="note" x="350" y="18" text-anchor="middle">다시 보낼 때까지 기다림 (복구 방식에 따라 다름)</text><g class="pk got"><rect x="519" y="149" width="22" height="22" rx="4"/><text x="530" y="164">3</text></g><path class="span bad" d="M206 186 L206 192 L520 192 L520 186"/><text class="note bad" x="363" y="206" text-anchor="middle">게임에는 아무것도 안 옴: 멈춤</text><text class="note" x="634" y="182" text-anchor="end">3·4·5·6이 한꺼번에: 몰아치기</text></svg></div>
           <figcaption>50ms마다 보내는 연결에서 3번 하나가 사라진 경우입니다. TCP는 순서대로만 넘겨주므로 4·5·6번이 도착해도 3번을 다시 받을 때까지 게임에 넘기지 않습니다. 그래서 손실 하나가 <b>멈춤</b>과 그 뒤의 <b>몰아치기</b>가 됩니다. 다시 보내는 시점은 복구 방식에 따라 왕복 한 번 안팎에서 “왕복 시간 + 최소 200ms”(재전송 타이머)까지 달라집니다(아래 “재전송의 종류”).</figcaption>
         </figure>
-        <h3 class="sec" id="retrans-why">재전송이 게임을 유난히 느리게 만드는 네 가지 이유</h3>
+        <h3 class="sec" id="retrans-why">재전송이 게임을 느리게 만드는 네 가지 이유</h3>
         <div class="prose">
           <ol>
             <li><b>순서 대기(HOL 블로킹)</b>: TCP는 잃어버린 하나를 다시 받을 때까지 뒤에 도착한 패킷을 게임에 넘기지 않습니다. 하나를 잃으면 그 뒤 전부가 함께 멈췄다가 한꺼번에 풀립니다(<b>멈춤</b> 뒤 <b>몰아치기</b>).</li>
@@ -376,7 +376,7 @@
           </div>
         </div>
 
-        <h3 class="sec" id="retrans-settings">설정 이름 정리: 무엇을 켜고 무엇과 헷갈리나</h3>
+        <h3 class="sec" id="retrans-settings">설정 이름 정리: 켤 설정과 헷갈리기 쉬운 설정</h3>
         <div class="prose"><p>재전송 복구에 관련된 설정은 대부분 <b>운영체제(커널) 설정</b>이고 게임 연결에만 따로 켤 수 있는 소켓 옵션은 몇 개뿐입니다. 이름 때문에 자주 헷갈리는 <code>TCP_NODELAY</code>는 복구를 빠르게 하는 설정은 아닙니다. 다만 켜지 않으면(Nagle 사용) 복구 중에 새 패킷이 더 늦어집니다. 아래는 리눅스 기준이며 윈도우는 이름과 지원 범위가 다릅니다.</p></div>
         <div class="table-wrap">
           <table class="nums sync-table">
@@ -404,8 +404,8 @@
       <!-- ===================== 레이어 1 ===================== -->
       <section class="chapter" id="owners">
         <div class="ch-head">
-          <div class="ch-kicker"><span class="idx">07</span>누가 고치나</div>
-          <h2>게임개발팀이 고칠 것, 인프라팀이 고칠 것</h2>
+          <div class="ch-kicker"><span class="idx">07</span>담당 구분</div>
+          <h2>게임개발팀과 인프라팀의 담당</h2>
           <p class="lede">같은 렉이라도 고치는 곳이 다릅니다. 클라이언트·서버 코드와 동기화 설계는 <b>게임개발팀</b>이, 회선·네트워크 장비·서버 장비·DB 장비는 <b>인프라팀</b>이 맡습니다. 유저의 PC와 집 네트워크, 통신사 구간, 클라우드 사업자 쪽 문제는 두 팀 모두 직접 고칠 수 없어 안내하거나 요청하거나 우회합니다. 모든 원인 카드에 <b>주 담당</b>과 <b>함께 대응할 곳</b>을 표시했고 카드의 “수치 감각·확인 방법·팀별 대응”을 펼치면 팀마다 할 일이 나뉘어 있습니다.</p>
         </div>
         <figure class="fig">
@@ -501,7 +501,7 @@
         <div class="ch-head">
           <div class="ch-kicker"></div>
           <h2>클라이언트 게임 프로세스</h2>
-          <p class="lede">플레이어 PC나 폰에서 돌아가는 게임 프로그램 그 자체입니다. 네트워크가 완벽해도 여기서 프레임이 늦으면 화면이 뚝뚝 끊깁니다. 네트워크가 나쁠 때 그걸 얼마나 잘 가려 주느냐도 여기서 결정됩니다.</p>
+          <p class="lede">플레이어 PC나 폰에서 돌아가는 게임 프로그램 그 자체입니다. 네트워크에 문제가 없어도 여기서 프레임이 늦으면 화면이 뚝뚝 끊깁니다. 네트워크가 나쁠 때 그걸 얼마나 잘 가려 주느냐도 여기서 결정됩니다.</p>
         </div>
         <div class="prose">
           <p>게임은 1초에 60번쯤 같은 일을 반복합니다. 입력을 읽고 받은 패킷을 처리하고 게임 상태를 한 단계 갱신하고 화면을 그립니다. 이 루프 한 번이 <b>프레임</b>이고 60FPS라면 한 프레임에 <b>16.7ms</b>가 주어집니다(30FPS로 도는 폰 게임은 33.3ms). 한 프레임이 늦어지면 그만큼 화면이 멈췄다가, 다음 프레임에서 밀린 만큼 한 번에 움직입니다.</p>
@@ -628,7 +628,7 @@
           <p><b>소켓 옵션</b>은 이 동작의 세부 설정입니다. 작은 패킷을 모았다 보낼지(<code>TCP_NODELAY</code>), 송수신 버퍼를 얼마나 둘지(<code>SO_SNDBUF</code>, <code>SO_RCVBUF</code>), 죽은 연결을 언제 알아챌지(<code>SO_KEEPALIVE</code>, <code>TCP_USER_TIMEOUT</code>), 닫을 때 남은 데이터를 어떻게 할지(<code>SO_LINGER</code>). 기본값은 대부분 큰 데이터를 적은 패킷으로 효율 있게 보내는 쪽에 맞춰져 있어, 작은 패킷을 자주 주고받는 게임에는 불리한 경우가 많습니다.</p>
         </div>
         <div class="analogy"><span class="tag">핵심</span><p>TCP는 받은 데이터를 <b>보낸 순서대로만</b> 게임에 넘겨줍니다. 17번 패킷이 사라지면 18~30번이 이미 도착해 있어도, 17번이 다시 올 때까지 모두 기다립니다(HOL 블로킹). UDP는 <b>도착하는 대로</b> 넘겨주므로 17번이 끝내 오지 않아도 나머지는 제때 처리됩니다.</p></div>
-        <p class="note" style="max-width:var(--prose)">재전송이 <b>왜 생기는지</b>(와이파이, 혼잡, MTU 블랙홀, 불필요한 재전송 등)와 원인을 찾는 방법은 <a href="#retrans">06 TCP 재전송 해부</a>에서 원인별로 다룹니다.</p>
+        <p class="note" style="max-width:var(--prose)">재전송이 <b>왜 생기는지</b>(와이파이, 혼잡, MTU 블랙홀, 불필요한 재전송 등)와 원인을 찾는 방법은 <a href="#retrans">06 TCP 재전송</a>에서 원인별로 다룹니다.</p>
         <div data-sim="hol" id="sim-hol"></div>
         <div data-sim="nagle" id="sim-nagle"></div>
         <div data-sim="sndbuf" id="sim-sndbuf"></div>
@@ -645,7 +645,7 @@
         </div>
         <div class="prose">
           <p>서버는 정해진 틱 간격으로 게임 상태를 계산합니다. 20틱 서버라면 50ms마다 한 번, 그 안에 모든 플레이어의 입력을 적용하고 몬스터를 움직이고 누가 누구를 볼 수 있는지 계산하고(<b>시야, AOI</b>), 변한 내용을 볼 수 있는 모두에게 보냅니다. 이 50ms가 <b>틱 예산</b>입니다. 예산을 넘기면 다음 틱이 늦어집니다. 틱마다 게임 시간을 정해진 만큼만 진행하는 서버는 게임 속 시간 전체가 느리게 흐르고(슬로우모션), 실제로 흐른 시간만큼 한 번에 진행하는 서버는 속도는 지키는 대신 패킷이 드물어져 뚝뚝 끊기고 순간이동합니다. 어느 쪽이든 반응은 늦어집니다. 게임 스레드 하나가 서버(채널) 전체를 맡으면 그 서버의 모두가, 지역마다 스레드를 나눴다면 그 지역 사람들이 함께 겪습니다.</p>
-          <p>인원이 많을수록 틱 예산이 빠듯해집니다. 모두끼리 비교하면 100명은 약 1만 번, 1,000명은 약 100만 번을 매 틱 따져야 합니다. 그래서 서버는 맵을 격자(그리드)로 나눠 가까운 셀끼리만 비교합니다. 하지만 월드 보스, 공성전, 마을 광장 이벤트처럼 모두가 한 셀 근처에 몰리면 격자의 효과가 줄고 계산량과 보낼 데이터가 폭발합니다. 여기에 여러 스레드가 같은 데이터를 두고 기다리는 <b>락</b>, 틱 도중 DB 응답을 기다리는 <b>동기 호출</b>이 더해지면, 기다리는 동안 그 스레드가 맡은 모두가 함께 멈춥니다.</p>
+          <p>인원이 많을수록 틱 예산이 빠듯해집니다. 모두끼리 비교하면 100명은 약 1만 번, 1,000명은 약 100만 번을 매 틱 따져야 합니다. 그래서 서버는 맵을 격자(그리드)로 나눠 가까운 셀끼리만 비교합니다. 하지만 월드 보스, 공성전, 마을 광장 이벤트처럼 모두가 한 셀 근처에 몰리면 격자의 효과가 줄고 계산량과 보낼 데이터가 급격히 늘어납니다. 여기에 여러 스레드가 같은 데이터를 두고 기다리는 <b>락</b>, 틱 도중 DB 응답을 기다리는 <b>동기 호출</b>이 더해지면, 기다리는 동안 그 스레드가 맡은 모두가 함께 멈춥니다.</p>
         </div>
         <div class="analogy"><span class="tag">비유</span><p>서버의 틱은 <b>지휘자의 박자</b>입니다. 오케스트라 단원(플레이어)이 늘수록 한 박자 안에 챙겨야 할 악보가 늘어나고, 박자를 놓치면 곡 전체가 느려집니다. 누군가 악보 한 장을 찾으러 창고(DB)에 가 버리면 모두가 그 사람을 기다립니다.</p></div>
         <div data-sim="tick" id="sim-tick"></div>
@@ -867,7 +867,7 @@
       <section class="chapter" id="report">
         <div class="ch-head">
           <div class="ch-kicker"><span class="idx">T4</span>도구</div>
-          <h2>렉 제보 잘하는 법</h2>
+          <h2>렉 제보 가이드</h2>
           <p class="lede">게임개발팀·인프라팀이 원인을 찾는 데 가장 오래 걸리는 부분은 “언제, 어디서, 누가”를 알아내는 일입니다. 아래 항목을 채워 주면 로그와 그래프에서 그 순간을 바로 찾을 수 있습니다.</p>
         </div>
         <div class="two-col" id="report-cols"></div>
@@ -899,7 +899,8 @@
         <p>게임 렉 백서 · 수치는 일반적인 서비스 환경의 대표값이며 실제 값은 게임과 인프라마다 다릅니다.</p>
         <p>시뮬레이션은 원리를 보여 주려고 단순화한 모델입니다. 실제 장애 분석은 게임개발팀·인프라팀의 모니터링 지표와 함께 보세요.</p>
         <p>자바스크립트 없이 읽는 <a href="%SITE%text.html">텍스트 판</a>(원인마다 따로 된 페이지 포함), 전체 내용 마크다운 <a href="%SITE%llms-full.txt">llms-full.txt</a>, AI용 안내 <a href="%SITE%llms.txt">llms.txt</a>.</p>
-        <p>MIT 라이선스로 공개합니다. 글꼴(<span class="fontlist">IBM Plex Sans KR, IBM Plex Mono</span>)은 SIL Open Font License 1.1을 따릅니다.</p>
+        <p>만든 사람: 오정록(Jeongrok Oh) · <a href="%RESUME%">이력서</a> · <a href="https://github.com/jungrok5/mmo-lag-anatomy">GitHub 저장소</a></p>
+        <p><a href="https://github.com/jungrok5/mmo-lag-anatomy/blob/main/LICENSE">MIT 라이선스</a>로 공개합니다. 글꼴(<span class="fontlist">IBM Plex Sans KR, IBM Plex Mono</span>)은 SIL Open Font License 1.1을 따릅니다.</p>
         <!--LANGLIST-->
       </footer>
     </div>

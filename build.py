@@ -30,7 +30,9 @@ def read(rel):
 
 
 # 사이트 주소와 제목. 주소는 package.json의 homepage 하나에만 적는다(본문의 %SITE%도 이 값으로 바뀐다)
-SITE = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))["homepage"].rstrip("/") + "/"
+PKG = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))
+SITE = PKG["homepage"].rstrip("/") + "/"
+AUTHOR = PKG["author"]  # {"name", "url"}: 꼬리말의 이력서 링크(%RESUME%)와 구조화 데이터의 author
 
 # ---------- 언어 ----------
 # 한국어가 원문이고 사이트 맨 위(/)에 있다. 번역판은 /<dir>/ 에 있다(src/i18n/langs.json).
@@ -97,6 +99,20 @@ def og_image(l=None):
     return SITE + ("og.png" if l["code"] == "ko" else f"og-{l['dir']}.png")
 
 
+def resume(l=None):
+    """만든 사람의 이력서(package.json의 author.url). 번역판은 영문 이력서로 잇는다."""
+    l = l or LANG
+    return AUTHOR["url"] + ("" if l["code"] == "ko" else "en/")
+
+
+def author():
+    p = {"@type": "Person", "name": tr("오정록"), "url": resume(),
+         "sameAs": ["https://github.com/jungrok5", "https://www.linkedin.com/in/jungrok5"]}
+    if LANG["code"] == "ko":
+        p["alternateName"] = AUTHOR["name"]
+    return p
+
+
 def seo(head):
     """완성본에만 넣는 검색엔진·AI·링크 미리보기용 정보."""
     desc = html.unescape(re.search(r'<meta name="description" content="([^"]*)">', head).group(1))
@@ -106,7 +122,7 @@ def seo(head):
         "alternativeHeadline": "Game Lag White Paper: an interactive guide to online game lag causes, with MMO case studies",
         "description": desc, "inLanguage": LANG["code"], "isPartOf": {"@id": url + "#website"},
         "image": og_image(), "license": "https://opensource.org/licenses/MIT", "isAccessibleForFree": True,
-        "author": {"@type": "Person", "name": "jungrok5", "url": "https://github.com/jungrok5"},
+        "author": author(),
         "about": [tr("게임 렉"), tr("네트워크 지연"), tr("지터"), tr("패킷 손실"), tr("넷코드"), tr("TCP 재전송"), tr("게임 서버 성능"), "MMO"],
         "keywords": tr("렉 원인, 게임 렉, 핑, 끊김, 순간이동, 고무줄, 입력 지연, 접속 끊김, 서버 렉, 넷코드, TCP 재전송, 게임개발팀, 인프라팀"),
     }
@@ -276,7 +292,7 @@ def assemble(body, js_files, fragment, embed_fonts=False):
                 .replace("<!--SEO-->", seo(head) if full else "")
                 .replace("<!--FONTS-->", fonts_inline() if embed_fonts else FONTS_LINK))
     # 조각본(다른 곳에 옮겨 붙이는 사본)의 언어 링크는 사이트 주소 그대로
-    body = (body.replace("%SITE%", base())
+    body = (body.replace("%SITE%", base()).replace("%RESUME%", resume())
                 .replace("<!--LANGS-->", lang_switch(absolute=fragment))
                 .replace("<!--LANGLIST-->", f'<p class="foot-langs" translate="no">{" · ".join(lang_links(absolute=fragment))}</p>' if len(available_langs()) > 1 else ""))
     css = read("style.css")

@@ -2,7 +2,7 @@
 K.register('npcmissing', function (root) {
   const TR = I18N.tr('sim-npcmissing');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
-    kicker: TR`누구에게 번지나 · 한쪽 클라만 이상할 때`,
+    kicker: TR`영향 범위 · 한쪽 클라만 이상할 때`,
     title: TR`같은 PC의 두 클라이언트, 한쪽만 NPC가 안 보인다면`,
     lead: TR`같은 PC, 같은 회선이니 회선 탓은 거의 아닙니다. 서버가 그 클라이언트에게 무엇을 보냈는지, 클라이언트가 받은 것을 제대로 처리했는지, 두 클라이언트가 자원을 두고 부딪히는지 순서로 좁혀 갑니다. 위 타임라인은 가장 흔한 원인 하나를 보여 줍니다. 아래 질문에 답하면 후보가 좁혀집니다.`,
     layout: 'side',

@@ -4,6 +4,6 @@
   "entries": [
     {"ctx":"#lab div","ko":"<span class=\"idx\">02</span>직접 해보기","t":"<span class=\"idx\">02</span>Tự tay thử"},
     {"ctx":"#lab h2","ko":"렉 실험실","t":"Phòng thí nghiệm lag"},
-    {"ctx":"#lab p","ko":"서버 한 대, 회선 하나, 내 PC 하나로 이루어진 작은 시뮬레이션입니다. 조건을 하나씩 망가뜨리며 뚝뚝 끊김, 순간이동, 고무줄, 몰아치기, 슬로우모션, 입력 지연, 멈춤, 접속 끊김이 각각 어떻게 만들어지는지 보세요. 패킷 타임라인은 패킷이 언제 보내지고 언제 도착했는지를 선으로 보여 줍니다. 선이 기울수록 오래 걸린 것이고 ×는 사라진 패킷입니다.","t":"Đây là một mô phỏng nhỏ gồm một server, một đường truyền và một PC. Hãy lần lượt làm hỏng từng điều kiện để xem giật khựng, dịch chuyển tức thời, kéo ngược, tua nhanh, quay chậm, trễ thao tác, đứng hình và mất kết nối hình thành ra sao. Dòng thời gian gói tin vẽ mỗi gói thành một đường nối từ lúc gửi đến lúc nhận. Đường càng nghiêng thì gói đi càng lâu, còn dấu × là gói bị mất."}
+    {"ctx":"#lab p","ko":"서버 한 대, 회선 하나, 내 PC 하나로 이루어진 작은 시뮬레이션입니다. 조건을 하나씩 바꾸며 뚝뚝 끊김, 순간이동, 고무줄, 몰아치기, 슬로우모션, 입력 지연, 멈춤, 접속 끊김이 각각 어떻게 만들어지는지 보세요. 패킷 타임라인은 패킷이 언제 보내지고 언제 도착했는지를 선으로 보여 줍니다. 선이 기울수록 오래 걸린 것이고 ×는 사라진 패킷입니다.","t":"Đây là một mô phỏng nhỏ gồm một server, một đường truyền và một PC. Hãy lần lượt làm hỏng từng điều kiện để xem giật khựng, dịch chuyển tức thời, kéo ngược, tua nhanh, quay chậm, trễ thao tác, đứng hình và mất kết nối hình thành ra sao. Dòng thời gian gói tin vẽ mỗi gói thành một đường nối từ lúc gửi đến lúc nhận. Đường càng nghiêng thì gói đi càng lâu, còn dấu × là gói bị mất."}
   ]
 }

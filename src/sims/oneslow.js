@@ -3,8 +3,8 @@
 K.register('oneslow', function (root) {
   const TR = I18N.tr('sim-oneslow');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
-    kicker: TR`누구에게 번지나 · 한 명만 느릴 때`,
-    title: TR`느린 한 사람은 남의 화면에서 어떻게 보이고 남에게 번질까`,
+    kicker: TR`영향 범위 · 한 명만 느릴 때`,
+    title: TR`느린 한 사람이 다른 사람의 화면과 게임에 주는 영향`,
     lead: TR`같은 서버에 A와 B가 있습니다. A만 회선이 나쁩니다. 세 화면(서버, A의 화면, B의 화면)을 나란히 놓고 서버가 입력을 처리하는 방식을 바꿔 보세요. 대부분의 방식에서 렉은 A에게만 나타나고 B는 “A가 이상하게 움직이는 것”만 봅니다. 어떤 방식에서는 A 한 사람 때문에 모두가 멈춥니다.`,
     layout: 'stack',
     tries: [

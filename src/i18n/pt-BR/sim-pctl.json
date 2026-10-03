@@ -3,7 +3,7 @@
   "group": "sim-pctl",
   "entries": [
     {"ctx":"src/sims/pctl.js:6","ko":"관측으로 판정하기 · 숫자 읽는 법","t":"Diagnóstico pelo monitoramento · Como ler os números"},
-    {"ctx":"src/sims/pctl.js:7","ko":"평균은 괜찮은데 왜 렉이라고 할까","t":"A média parece boa, então por que os jogadores reclamam de lag?"},
+    {"ctx":"src/sims/pctl.js:7","ko":"평균은 정상인데 렉이 나는 이유: 백분위 읽기","t":""},
     {"ctx":"src/sims/pctl.js:8","ko":"1초에 20번 잰 지연 값을 1분 동안 모았습니다. 서버 틱 시간이나 유저의 핑이라고 생각하면 됩니다. 가끔 튀는 값은 평균과 긴 간격의 평균 그래프에서는 거의 보이지 않지만 p99와 최댓값에는 그대로 드러납니다.","t":"Aqui está 1 minuto de medições de latência, feitas 20 vezes por segundo. Pense nelas como o tempo de tick do servidor ou o ping de um jogador. Os picos ocasionais quase não aparecem na média nem em gráficos com médias de intervalos longos, mas aparecem inteiros no p99 e no valor máximo."},
     {"ctx":"src/sims/pctl.js:10","ko":"<b>튀는 비율</b>을 1%에 두고 평균과 p99를 비교해 보세요. 평균은 평소와 비슷한데 p99는 튄 값 근처입니다.","t":"Deixe <b>Taxa de picos</b> em 1% e compare a média com o p99. A média fica parecida com o normal, mas o p99 fica perto dos valores de pico."},
     {"ctx":"src/sims/pctl.js:11","ko":"<b>집계 간격</b>을 60초로 바꿔 보세요. 굵은 평균선이 평평해져서 그래프만 보면 아무 일도 없어 보입니다.","t":"Mude <b>Intervalo de agregação</b> para 60 segundos. A linha grossa da média fica plana e, olhando só o gráfico, parece que nada aconteceu."},
@@ -38,5 +38,8 @@
     {"ctx":"src/sims/pctl.js:111","ko":"{0}평균은 <b>{1}</b>로 평소({2}ms)보다 조금 높을 뿐이지만 p99는 <b>{3}</b>, 최댓값은 <b>{4}</b>입니다. 1초에 20번 재는 값 중 {5}%가 튀면 {6} 멈칫하고 유저는 이 순간을 렉으로 기억합니다. {7}초 평균선(굵은 선)에서는 튄 값이 {8}개 값에 섞여 {9}.","t":"{0}A média é <b>{1}</b>, só um pouco acima do normal ({2} ms), mas o p99 é <b>{3}</b> e o máximo é <b>{4}</b>. Se {5}% das 20 medições por segundo dão pico, há um engasgo {6}, e os jogadores lembram desses momentos como lag. Na linha da média de {7} s (a linha grossa), cada pico se mistura com {8} valores e {9}."},
     {"ctx":"src/sims/pctl.js:111","ko":"거의 보이지 않습니다","t":"quase não aparece"},
     {"ctx":"src/sims/pctl.js:111","ko":"조금 드러납니다","t":"aparece um pouco"}
+  ],
+  "stale": [
+    {"ctx":"src/sims/pctl.js:7","ko":"평균은 괜찮은데 왜 렉이라고 할까","t":"A média parece boa, então por que os jogadores reclamam de lag?"}
   ]
 }

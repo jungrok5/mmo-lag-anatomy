@@ -4,7 +4,7 @@ K.register('ladder', function (root) {
   const TR = I18N.tr('sim-ladder');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
     kicker: TR`레이어 10 · 메모리 · 숫자 감각`,
-    title: TR`컴퓨터의 시간을 사람의 시간으로 늘려 보면`,
+    title: TR`컴퓨터 작업 시간을 사람 시간으로 환산하기`,
     lead: TR`컴퓨터 안의 시간은 너무 짧아 감이 오지 않습니다. 나노초(10억분의 1초)부터 초까지, 서버가 흔히 기다리는 일들을 한 줄로 세웠습니다. 막대는 로그 눈금이라 눈금 한 칸마다 10배씩 길어집니다. 줄을 눌러 보세요.`,
     tries: [
       TR`<b>메모리(RAM) 읽기</b>를 눌러 보세요. CPU 입장에서 RAM은 L1 캐시보다 100배 먼 곳입니다.`,

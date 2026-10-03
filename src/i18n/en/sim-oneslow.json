@@ -2,8 +2,8 @@
   "lang": "en",
   "group": "sim-oneslow",
   "entries": [
-    {"ctx":"src/sims/oneslow.js:6","ko":"누구에게 번지나 · 한 명만 느릴 때","t":"How far it spreads · When only one player is slow"},
-    {"ctx":"src/sims/oneslow.js:7","ko":"느린 한 사람은 남의 화면에서 어떻게 보이고 남에게 번질까","t":"How one slow player looks on other screens, and whether it spreads"},
+    {"ctx":"src/sims/oneslow.js:6","ko":"영향 범위 · 한 명만 느릴 때","t":"How far it spreads · When only one player is slow"},
+    {"ctx":"src/sims/oneslow.js:7","ko":"느린 한 사람이 다른 사람의 화면과 게임에 주는 영향","t":""},
     {"ctx":"src/sims/oneslow.js:8","ko":"같은 서버에 A와 B가 있습니다. A만 회선이 나쁩니다. 세 화면(서버, A의 화면, B의 화면)을 나란히 놓고 서버가 입력을 처리하는 방식을 바꿔 보세요. 대부분의 방식에서 렉은 A에게만 나타나고 B는 “A가 이상하게 움직이는 것”만 봅니다. 어떤 방식에서는 A 한 사람 때문에 모두가 멈춥니다.","t":"A and B are on the same server. Only A has a bad connection. With three screens side by side (the server, A’s screen, B’s screen), change how the server processes input. With most methods, lag shows up only for A, and B just sees “A moving strangely.” But with one method, that one player makes everyone freeze."},
     {"ctx":"src/sims/oneslow.js:11","ko":"<b>틱마다 모아서</b> 방식에서 B의 화면을 보세요. A(파랑)는 멈칫했다가 한 번에 여러 걸음을 가지만 몬스터와 B 자신은 멀쩡합니다. 아래 표에서 “B의 화면 → A의 모습”만 빨갛습니다. 지터와 손실을 0으로 내리면 핑이 높아도 A는 매끄럽게 보입니다. 핑보다 지터와 손실이 남의 눈에 렉으로 보이게 합니다.","t":"In <b>Batch per tick</b> mode, watch B’s screen. A (blue) hitches, then takes several steps at once, while the monster and B are fine. In the table below, only “B’s screen → A on screen” is red. Lower jitter and loss to 0, and A looks smooth even with high ping. What makes a player look laggy to others is jitter and loss more than ping."},
     {"ctx":"src/sims/oneslow.js:12","ko":"<b>도착 즉시</b>로 바꾸면 서버가 A의 입력을 도착한 시각대로 알립니다. 이동은 조금 덜 튀지만 빨라졌다 느려졌다 하고 스킬처럼 한 번에 끝나는 행동은 몰려 온 만큼 한순간에 실행됩니다.","t":"Switch to <b>On arrival</b>, and the server broadcasts A’s input at the time it arrives. Movement jumps a little less but speeds up and slows down, and one-shot actions such as skills all fire in the same instant, however many arrived together."},
@@ -66,7 +66,7 @@
     {"ctx":"src/sims/oneslow.js:382","ko":"이동은 예측으로 즉시, 스킬 결과는 약 {0}ms 뒤","t":"Movement instant via prediction; skill results after about {0} ms"},
     {"ctx":"src/sims/oneslow.js:383","ko":"A의 버퍼가 비어 제자리","t":"A’s buffer ran empty, so A stood still"},
     {"ctx":"src/sims/oneslow.js:383","ko":"입력 버퍼 방식에서만","t":"Input buffer mode only"},
-    {"ctx":"src/sims/oneslow.js:384","ko":"A는 핑이 {0}ms라도 지터와 손실이 적어 입력이 고르게 도착하므로 B의 화면에서 A는 <b>{1}</b>입니다. 조금 과거의 위치에 보일 뿐입니다. 핑보다 지터와 손실이 남의 눈에 이상하게 보이게 만듭니다.","t":"Even with {0} ms ping, A has little jitter and loss, so inputs arrive evenly. What B sees of A: <b>{1}</b>. A simply appears slightly in the past. What makes a player look strange to others is jitter and loss more than ping."},
+    {"ctx":"src/sims/oneslow.js:384","ko":"A는 핑이 {0}ms라도 지터와 손실이 적어 입력이 고르게 도착하므로 B의 화면에서 <b>{1}</b>입니다. 조금 과거의 위치에 보일 뿐입니다. 핑보다 지터와 손실이 남의 눈에 이상하게 보이게 만듭니다.","t":"Even with {0} ms ping, A has little jitter and loss, so inputs arrive evenly. What B sees of A: <b>{1}</b>. A simply appears slightly in the past. What makes a player look strange to others is jitter and loss more than ping."},
     {"ctx":"src/sims/oneslow.js:386","ko":"{0}A와 B 모두 회선이 좋습니다. 세 화면이 거의 같게 움직입니다.","t":"{0}Both A and B have good connections. All three screens move almost identically."},
     {"ctx":"src/sims/oneslow.js:387","ko":"{0}<b>락스텝</b>: 다음 턴을 계산하려면 A의 입력이 꼭 있어야 합니다. A의 입력이 늦을 때마다 서버, A, B, 몬스터가 <b>모두 멈춥니다</b>. 느린 한 사람의 렉이 전원에게 번지는 대표적인 구조입니다.","t":"{0}<b>Lockstep</b>: the next turn can’t be computed without A’s input. Every time A’s input is late, the server, A, B, and the monster <b>all freeze</b>. This is the classic design where one slow player’s lag spreads to everyone."},
     {"ctx":"src/sims/oneslow.js:388","ko":"{0}<b>락스텝</b>: A의 입력이 늦지만 일정하게 와서 턴은 정해진 주기대로 돕니다. 대신 서버는 A의 입력이 올 때까지 B의 입력도 대기시킵니다. B도 자기 핑보다 늦게, A의 입력이 서버에 닿는 시간에 맞춰 반영되는 <b>입력 지연</b>을 겪습니다. 지터나 손실을 올리면 전원이 <b>멈춥니다</b>.","t":"{0}<b>Lockstep</b>: A’s input is late but steady, so turns still run on schedule. However, the server holds B’s input until A’s input arrives. So B gets <b>input lag</b> too: B’s input takes effect later than B’s own ping would suggest, in step with the time A’s input takes to reach the server. Raise jitter or loss, and everyone <b>freezes</b>."},
@@ -81,6 +81,7 @@
     {"ctx":"src/sims/oneslow.js:392","ko":" <b>엄격한 이동 검증</b> 때문에 A 본인의 화면에서 A가 <b>고무줄</b>처럼 끌려갑니다. 한 틱에 몰려 도착한 정상 입력을 서버가 과속으로 보고 거절했기 때문입니다.","t":" Because of <b>strict movement validation</b>, A <b>rubber-bands</b> on A’s own screen. The server saw legitimate inputs that arrived bunched into one tick as speeding and rejected them."}
   ],
   "stale": [
-    {"ctx":"src/sims/oneslow.js:370","ko":"의 모습","t":" on screen"}
+    {"ctx":"src/sims/oneslow.js:370","ko":"의 모습","t":" on screen"},
+    {"ctx":"src/sims/oneslow.js:7","ko":"느린 한 사람은 남의 화면에서 어떻게 보이고 남에게 번질까","t":"How one slow player looks on other screens, and whether it spreads"}
   ]
 }
