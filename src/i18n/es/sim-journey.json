@@ -163,11 +163,11 @@
     {"ctx":"src/sims/journey.js:357","ko":"내 입력 기준","t":"Según tu input"},
     {"ctx":"src/sims/journey.js:363","ko":"플레이어는 누르자마자 스킬이 나가는 것처럼 느낍니다.","t":"El jugador siente que la habilidad sale en cuanto presiona."},
     {"ctx":"src/sims/journey.js:364","ko":"플레이어는 버튼을 누르고 조금 늦게 반응하는 입력 지연을 느낍니다. 회피 타이밍이 조금씩 밀립니다.","t":"El jugador nota input lag: el botón responde un poco tarde. El momento de esquivar se retrasa un poco."},
-    {"ctx":"src/sims/journey.js:365","ko":"입력 지연이 커서 스킬과 회피가 한참 늦게 나갑니다. 연타하면 씹힘·롤백처럼 보이고, 판정에서 계속 불리해집니다.","t":"El input lag es grande y las habilidades y esquivas salen muy tarde. Al presionar repetidamente parece que hay acciones perdidas o rollback, y en el registro de impactos sale perdiendo una y otra vez."},
+    {"ctx":"src/sims/journey.js:365","ko":"입력 지연이 커서 스킬과 회피가 한참 늦게 나갑니다. 연타하면 씹힘·롤백처럼 보이고, 판정에서 계속 불리해집니다.","t":"El input lag es grande y las habilidades y esquivas salen muy tarde. Al presionar repetidamente parece que hay acciones perdidas o rollback, y en el registro de impactos sales perdiendo una y otra vez."},
     {"ctx":"src/sims/journey.js:367","ko":"다른 플레이어는 실제보다 약 {0}ms 전의 모습으로 보입니다. ","t":"Los demás jugadores se ven como estaban hace unos {0} ms. "},
     {"ctx":"src/sims/journey.js:367","ko":"대부분의 전투에서 티가 나지 않습니다.","t":"En la mayoría de los combates no se nota."},
     {"ctx":"src/sims/journey.js:368","ko":"분명히 피했는데 맞았다는 판정이 가끔 생깁니다.","t":"De vez en cuando te golpean aunque esquivaste claramente."},
-    {"ctx":"src/sims/journey.js:368","ko":"피했는데 맞는 일이 잦고, 상대가 순간이동하듯 보이기도 합니다.","t":"Que te golpeen tras esquivar es frecuente, y el rival puede parecer que se teletransporta."},
+    {"ctx":"src/sims/journey.js:368","ko":"피했는데 맞는 일이 잦고, 상대가 순간이동하듯 보이기도 합니다.","t":"A menudo te golpean aunque esquivaste, y a veces parece que el rival se teletransporta."},
     {"ctx":"src/sims/journey.js:371","ko":" 서버가 틱 안에 계산을 끝내지 못해 모든 플레이어의 반응이 함께 늦어집니다(입력 지연. 틱마다 정해진 시간만큼 움직이는 서버라면 슬로우모션까지).","t":" El servidor no termina su cálculo dentro del tick y las respuestas de todos los jugadores se retrasan a la vez (input lag; en un servidor que avanza una cantidad fija por tick, también cámara lenta)."},
     {"ctx":"src/sims/journey.js:372","ko":"{0}총 <b>{1}ms</b> 중 가장 큰 비중은 <b>{2}</b>({3}{4}, {5}%)이고, 그다음은 <b>{6}</b>({7}{8})입니다. {9}{10} {11}{12}","t":"{0}Del total de <b>{1} ms</b>, lo que más pesa es <b>{2}</b> ({3}{4}, {5}%), y después <b>{6}</b> ({7}{8}). {9}{10} {11}{12}"},
     {"ctx":"src/sims/journey.js:372","ko":" <b>도움이 되는 것:</b> ","t":" <b>Qué ayuda:</b> "}

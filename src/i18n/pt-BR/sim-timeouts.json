@@ -63,7 +63,7 @@
     {"ctx":"src/sims/timeouts.js:212","ko":"지나가는 패킷","t":"Pacotes passando"},
     {"ctx":"src/sims/timeouts.js:216","ko":"앱 정지 (백그라운드)","t":"App suspenso (segundo plano)"},
     {"ctx":"src/sims/timeouts.js:218","ko":"하트비트 없음: 아무 패킷도 지나가지 않음","t":"Sem heartbeat: nenhum pacote passa"},
-    {"ctx":"src/sims/timeouts.js:239","ko":"판정 안 함: 서버는 입력 없는 플레이어를 내보내지 않음","t":"Desligado: o servidor não desconecta jogadores sem input"},
+    {"ctx":"src/sims/timeouts.js:239","ko":"판정 안 함: 서버는 입력 없는 플레이어를 내보내지 않음","t":"Desligado: jogador sem input não é desconectado"},
     {"ctx":"src/sims/timeouts.js:259","ko":"확인 실패: 서버가 감지함","t":"Verificação falhou: servidor detecta"},
     {"ctx":"src/sims/timeouts.js:259","ko":"확인 패킷 무응답","t":"Sem resposta à verificação"},
     {"ctx":"src/sims/timeouts.js:262","ko":"서버가 내보냄","t":"Servidor desconecta"},

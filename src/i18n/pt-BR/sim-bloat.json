@@ -49,7 +49,7 @@
     {"ctx":"src/sims/bloat.js:84","ko":"대기열 채움","t":"Ocupação da fila"},
     {"ctx":"src/sims/bloat.js:238","ko":"대기열 {0} KB = {1}","t":"Fila: {0} KB = {1}"},
     {"ctx":"src/sims/bloat.js:239","ko":"앞의 패킷이 다 나가야 뒤의 패킷이 출발합니다","t":"Um pacote só sai depois que todos os da frente saírem"},
-    {"ctx":"src/sims/bloat.js:243","ko":"내 PC","t":"Seu PC"},
+    {"ctx":"src/sims/bloat.js:243","ko":"내 PC","t":"PC"},
     {"ctx":"src/sims/bloat.js:257","ko":"재전송","t":"Reenvios"},
     {"ctx":"src/sims/bloat.js:257","ko":"와이파이 재전송","t":"Retransmissões do Wi-Fi"},
     {"ctx":"src/sims/bloat.js:268","ko":"다른 트래픽 대기열 (5ms 안팎)","t":"Fila do outro tráfego (cerca de 5 ms)"},

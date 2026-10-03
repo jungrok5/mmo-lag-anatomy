@@ -67,7 +67,7 @@
     {"ctx":"src/sims/cpu.js:260","ko":"{0}ms 전","t":"{0} ms atrás"},
     {"ctx":"src/sims/cpu.js:261","ko":"지금","t":"Agora"},
     {"ctx":"src/sims/cpu.js:261","ko":"지금 (20배 느리게 재생)","t":"Agora (20× mais lento)"},
-    {"ctx":"src/sims/cpu.js:264","ko":"제때","t":"A tempo"},
+    {"ctx":"src/sims/cpu.js:264","ko":"제때","t":"Novo"},
     {"ctx":"src/sims/cpu.js:264","ko":"제때 새 프레임","t":"Frame novo a tempo"},
     {"ctx":"src/sims/cpu.js:266","ko":"놓침","t":"Perdido"},
     {"ctx":"src/sims/cpu.js:266","ko":"놓침(이전 프레임 반복)","t":"Perdido (repete o anterior)"},
