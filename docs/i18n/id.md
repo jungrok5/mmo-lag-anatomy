@@ -648,3 +648,71 @@ How they are used:
 - `meta` about 155 characters, key search phrase first.
 - No reduplication after numbers; no English plural -s on loanwords.
 - Run `node tools/i18n.cjs check id --warn` and `--conflicts`; number warnings are fine only where a Korean number word became Indonesian words or digits.
+
+## 12. Decisions added during review
+
+Terms settled by the translators and reviewers after the first pass. They override any older variant still found in the text.
+
+| Korean | Indonesian | Note |
+|---|---|---|
+| 드물게 | dalam kasus yang jarang | never "kadang" or "jarang" alone for the rare-case sense; "lebih jarang" stays for "less often" (update frequency) |
+| 국내 (from the Korean operator's view) | di Korea | "di Korea lancar, tetapi …" |
+| 세션 토큰 | token sesi | same pattern as tabel sesi, ID sesi; never "session token" |
+| 기준 스냅샷 | snapshot baseline | cause pt-baseline "Snapshot baseline hilang" |
+| 멈춤 뒤 몰아치기 | Freeze lalu fast forward | symptom sequence; no comma |
+| 멈춤 (server, GC, TCP stall; chk/num text) | jeda, berhenti, koneksi berhenti | the symptom name Freeze only for what the player sees on screen |
+| 입력 지연 (lockstep/rollback setting) | input delay | the symptom stays Input lag |
+| 멈춤 (sim-nagle playback speed) | Jeda | |
+| 판정 (hit judgment in tables and headings) | hit registration; keputusan server | 판정 시점 stays waktu penilaian |
+| 텔레포트 (game feature) | teleportasi | the symptom stays Teleport |
+| 접속 대기열(backlog) / 로그인 대기열 | antrean koneksi (backlog) / antrean login | |
+| PC방 | warnet | |
+| 경매장 / 거래소 | balai lelang / market | tight sim box label "Server lelang" (sim-arch) is acceptable |
+| 전지적 시점 | omnipresent | sudut pandang omnipresent |
+| 대체 경로, 우회 경로 (fallback route: second CDN, TCP 443) | rute cadangan | "rute memutar" stays for a detour on the internet path |
+| 게임팀 (short form) | Tim Pengembang Game | team names always in full, title case |
+| Source 엔진 | Source engine | product name, like Unreal Engine |
+| 회고 (postmortem article) | tulisan retrospektif | the glossary term 사후 분석 stays postmortem |
+| 예고 (boss attack warning) | telegraph (tanda serangan) | |
+| 락스텝 턴 | giliran | |
+| 유령 접속 | sesi hantu | |
+| 서버 무응답 판정 | timeout tanpa respons (server) | |
+| keepalive 확인 패킷 | paket probe | |
+| 재연결 유예 | masa tenggang reconnect | |
+| 트래픽 지문 | profil trafik | |
+| 대조군 / 카나리 | kelompok kontrol / canary | |
+| 부가 DB / 공유 자원 | DB pendukung / sumber daya bersama | |
+| 파티장 / 파티 기믹 | ketua party / mekanik party | |
+| 성계 (EVE Online) | sistem bintang | |
+| 고객 지원 | tim CS | |
+| 관리형 서비스 / 관리형 DB | layanan terkelola (managed service) / DB terkelola | |
+| 잠재된 결함 | cacat tersembunyi | |
+| 중간 장비 | perangkat perantara | |
+| 동기화 항목 | data sinkronisasi | |
+| 비정상 종료 | terminasi abnormal | |
+| 음영 지역 | area blank spot | |
+| 간섭 (radio) | interferensi | gangguan is reserved for 장애 |
+| 기지국 간 핸드오버 | handover antar-BTS | |
+| 저장장치 | storage | |
+| 보안 프로그램 | program keamanan | |
+| 코어망 / 가입자망 / 국사 | jaringan inti operator / jaringan akses ISP / kantor sentral ISP | |
+| 접속 거점 / 스크러빙 거점 | titik akses (edge) / lokasi scrubbing | |
+| 회선 사업자 / 요금제 | penyedia jalur / langganan ISP (data: kuota, paket data) | |
+| 허용 목록 | allowlist | |
+| 초과 카운터 (allowance exceeded) | counter pelampauan | |
+| 명령 예산 | budget perintah | |
+| 해외 지점 (measurement) | titik ukur | |
+| 폐기 (NIC, interface counter) | drop di NIC/interface | |
+| 틱 공백 | jeda tick | |
+| 실선 / 점선 / 옅은 점선 | garis solid / garis putus-putus / garis putus-putus samar | |
+| 핵심 (tag) | Inti | |
+| 번짐 (table) | menjalar | |
+| 주의 (table header) | Waspada | shared key with the sim rating Baik / Waspada / Buruk |
+| 증상 재현 | reproduksi gejala | |
+| 입력 중복 전송 | pengiriman input ganda | |
+| 상대 (opponent) | lawan | |
+| 대화창 | jendela dialog | |
+| 몰이 사냥 | mob pulling | |
+| 글로벌 쿨다운 / 세대 번호 / 저사양 모드 | global cooldown / nomor generasi / mode grafis rendah | |
+| 큰 페이지 (THP) | halaman besar (THP) | |
+| 영어 그대로 두는 DB 용어 | sharp checkpoint, adaptive flushing, log shipping, parameter sniffing, plan hint/forcing, Query Store, lazy/eager loading, gap/next-key/metadata lock, isolation level | |

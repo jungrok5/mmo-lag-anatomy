@@ -49,7 +49,7 @@
     {"ctx":"src/sims/leak.js:144","ko":"시간","t":" h"},
     {"ctx":"src/sims/leak.js:165","ko":"점검","t":"Manutenção"},
     {"ctx":"src/sims/leak.js:194","ko":"사용량 (GB)","t":"Uso (GB)"},
-    {"ctx":"src/sims/leak.js:199","ko":"스왑 구간: 디스크를 메모리처럼","t":"Zona de swap: disco usado como memória"},
+    {"ctx":"src/sims/leak.js:199","ko":"스왑 구간: 디스크를 메모리처럼","t":"Swap: disco como memória"},
     {"ctx":"src/sims/leak.js:207","ko":"넘으면 강제 종료","t":"Acima disto: encerrado (OOM)"},
     {"ctx":"src/sims/leak.js:225","ko":"틱 처리 시간 (ms)","t":"Tempo de tick (ms)"},
     {"ctx":"src/sims/leak.js:243","ko":"최대 {0} ▲","t":"Máx. {0} ▲"},

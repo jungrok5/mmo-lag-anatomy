@@ -38,7 +38,7 @@
     {"ctx":"tools/site.cjs:190","ko":"그림과 실험이 있는 원본 카드 보기","t":"Lihat kartu interaktif dengan gambar dan simulasi"},
     {"ctx":"tools/site.cjs:192","ko":"{0} ({1}): 렉 원인 | 게임 렉 백서","t":"{0} ({1}): penyebab lag game | Buku Putih Lag Game"},
     {"ctx":"tools/site.cjs:196","ko":"렉","t":"lag"},
-    {"ctx":"tools/site.cjs:208","ko":"게임에서 {0}({1}) 현상이 생기는 원인 {2}가지와 담당 팀. {3}","t":"{2} penyebab {0} ({1}) di game online dan tim penanggung jawabnya. {3}"},
+    {"ctx":"tools/site.cjs:208","ko":"게임에서 {0}({1}) 현상이 생기는 원인 {2}가지와 담당 팀. {3}","t":"{0} ({1}) di game online: {2} penyebab dan tim penanggung jawabnya. {3}"},
     {"ctx":"tools/site.cjs:209, tools/site.cjs:224, tools/site.cjs:241, tools/site.cjs:245","ko":"증상별로 찾기","t":"Cari berdasarkan gejala"},
     {"ctx":"tools/site.cjs:210","ko":"{0}: 원인 {1}가지와 담당","t":"{0}: {1} penyebab dan penanggung jawabnya"},
     {"ctx":"tools/site.cjs:211","ko":"다른 말: {0}","t":"Disebut juga: {0}"},

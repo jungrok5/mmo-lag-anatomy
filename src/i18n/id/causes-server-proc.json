@@ -68,7 +68,7 @@
     {"ctx":"causes/sp-hotzone/ref/1/n","ko":"프로세서별 사용률과 전체 평균을 따로 보여 줌(-P ALL), %soft는 소프트웨어 인터럽트 처리에 쓴 시간 비율","t":"Menampilkan utilisasi per prosesor dan rata-rata keseluruhan secara terpisah (-P ALL); %soft adalah persentase waktu untuk memproses software interrupt"},
     {"ctx":"causes/sp-lock/t","ko":"락 경합","t":"Perebutan lock"},
     {"ctx":"causes/sp-lock/s","ko":"여러 스레드가 같은 데이터를 쓰려고 락 하나를 기다리면, 스레드를 늘려도 한 번에 하나씩만 실행됩니다.","t":"Jika beberapa thread menunggu satu lock untuk menulis data yang sama, walaupun thread ditambah, hanya satu yang berjalan pada satu waktu."},
-    {"ctx":"causes/sp-lock/c/0","ko":"경매장·길드 창고처럼 공용 데이터를 여러 스레드가 동시에 사용","t":"Beberapa thread memakai data bersama secara bersamaan, misalnya auction house atau gudang guild"},
+    {"ctx":"causes/sp-lock/c/0","ko":"경매장·길드 창고처럼 공용 데이터를 여러 스레드가 동시에 사용","t":"Beberapa thread memakai data bersama secara bersamaan, misalnya balai lelang atau gudang guild"},
     {"ctx":"causes/sp-lock/c/1","ko":"락을 잡은 스레드가 끝날 때까지 나머지는 대기","t":"Thread lain menunggu sampai thread yang memegang lock selesai"},
     {"ctx":"causes/sp-lock/c/2","ko":"특정 기능만 느림, 심하면 전체 틱 지연","t":"Hanya fitur tertentu yang lambat; jika parah, tick seluruh server tertunda"},
     {"ctx":"causes/sp-lock/num","ko":"락 안의 일이 작업의 20%면 스레드를 아무리 늘려도 처리량은 1개일 때의 최대 5배, 40%면 2.5배에서 멈춥니다.","t":"Jika pekerjaan di dalam lock 20% dari total, throughput maksimal hanya 5 kali throughput satu thread berapa pun thread ditambah; jika 40%, berhenti di 2,5 kali."},

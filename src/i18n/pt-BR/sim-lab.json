@@ -136,7 +136,7 @@
     {"ctx":"src/sims/lab.js:641","ko":"회선 끊김","t":"Queda"},
     {"ctx":"src/sims/lab.js:643","ko":"클라 멈춤","t":"Cliente parado"},
     {"ctx":"src/sims/lab.js:644","ko":"연결 없음","t":"Sem conexão"},
-    {"ctx":"src/sims/lab.js:649","ko":"내 PC","t":"Seu PC"},
+    {"ctx":"src/sims/lab.js:649","ko":"내 PC","t":"PC"},
     {"ctx":"src/sims/lab.js:653","ko":"지금","t":"Agora"},
     {"ctx":"src/sims/lab.js:653","ko":"-{0}초","t":"-{0} s"},
     {"ctx":"src/sims/lab.js:747","ko":"끊김","t":"Caiu"},

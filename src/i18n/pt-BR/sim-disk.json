@@ -76,7 +76,7 @@
     {"ctx":"src/sims/disk.js:285","ko":"틱 막힘 0ms (비동기)","t":"Tick bloqueado 0 ms (assíncrono)"},
     {"ctx":"src/sims/disk.js:285","ko":"틱 막힘 0ms: 게임 스레드가 디스크를 기다리지 않음","t":"Tick bloqueado 0 ms: a thread do jogo não espera o disco"},
     {"ctx":"src/sims/disk.js:317","ko":"최근 1초 동안 틱 {0}번 (정상 20번)","t":"Último 1 s: {0} ticks (normal: 20)"},
-    {"ctx":"src/sims/disk.js:318","ko":"늦은 틱 {0}번","t":"Ticks atrasados: {0}"},
+    {"ctx":"src/sims/disk.js:318","ko":"늦은 틱 {0}번","t":"Atrasados: {0}"},
     {"ctx":"src/sims/disk.js:318","ko":"50ms를 넘긴 틱 {0}번 · 게임 시간이 {1}% 속도로 흐름","t":"Ticks acima de 50 ms: {0} · o tempo do jogo corre a {1}% da velocidade"},
     {"ctx":"src/sims/disk.js:319","ko":"1초 전","t":"1 s atrás"},
     {"ctx":"src/sims/disk.js:321","ko":"칸 하나 = 틱 한 번 (예산 50ms, 넘치면 다음 틱이 밀림)","t":"Cada caixa = 1 tick (orçamento de 50 ms; se estoura, o próximo tick atrasa)"},

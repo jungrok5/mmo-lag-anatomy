@@ -98,7 +98,7 @@
     {"ctx":"causes/rt-physical/ref/1/n","ko":"-S로 NIC·드라이버별 통계, -m으로 광모듈(SFP+·QSFP) EEPROM과 광 진단 정보 확인","t":"-S untuk statistik per NIC dan driver, -m untuk EEPROM modul optik (SFP+, QSFP) dan informasi diagnostik optik"},
     {"ctx":"causes/rt-physical/ref/2/n","ko":"스위치 포트의 FCS 오류(dot3StatsFCSErrors), 이 오류는 입력 오류(ifInErrors)로 합산","t":"Error FCS pada port switch (dot3StatsFCSErrors); error ini ikut dijumlahkan ke error input (ifInErrors)"},
     {"ctx":"causes/rt-duplex/t","ko":"듀플렉스 불일치","t":"Duplex mismatch"},
-    {"ctx":"causes/rt-duplex/s","ko":"한쪽은 자동 협상, 다른 쪽은 속도·듀플렉스를 고정해 두면 한쪽이 반이중으로 동작하며 부하가 걸릴 때마다 충돌로 패킷을 잃습니다.","t":"Jika satu sisi memakai autonegotiation sedangkan sisi lain mengunci kecepatan dan duplex, salah satu sisi berjalan dalam mode half duplex dan kehilangan paket akibat collision setiap kali beban naik."},
+    {"ctx":"causes/rt-duplex/s","ko":"한쪽은 자동 협상, 다른 쪽은 속도·듀플렉스를 고정해 두면 한쪽이 반이중으로 동작하며 부하가 걸릴 때마다 충돌로 패킷을 잃습니다.","t":"Jika satu sisi memakai autonegotiation sedangkan sisi lain mengunci kecepatan dan duplex, salah satu sisi berjalan dalam mode half duplex, dan paket hilang akibat collision setiap kali beban naik."},
     {"ctx":"causes/rt-duplex/c/0","ko":"장비 한쪽만 속도·듀플렉스를 고정 설정","t":"Kecepatan dan duplex dikunci hanya di salah satu perangkat"},
     {"ctx":"causes/rt-duplex/c/1","ko":"한쪽은 전이중, 다른 쪽은 반이중으로 동작해 충돌·늦은 충돌 발생","t":"Satu sisi berjalan full duplex, sisi lain half duplex, sehingga terjadi collision dan late collision"},
     {"ctx":"causes/rt-duplex/c/2","ko":"평소엔 멀쩡하다가 트래픽이 늘면 그 장비를 지나는 사람 모두가 멈췄다 몰아치기","t":"Biasanya normal, tetapi saat trafik naik, semua pemain yang melewati perangkat itu mengalami freeze lalu fast forward"},
