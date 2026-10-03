@@ -45,7 +45,7 @@
     {"ctx":"src/sims/timeouts.js:129, src/sims/timeouts.js:132, src/sims/timeouts.js:237","ko":"끔","t":"Desactivado"},
     {"ctx":"src/sims/timeouts.js:129","ko":"하트비트: 할 일이 없어도 “살아 있어요”라고 보내는 작은 패킷","t":"Heartbeat: un paquete pequeño que dice “sigo vivo” aunque no haya nada más que enviar"},
     {"ctx":"src/sims/timeouts.js:130","ko":"타임아웃 설정","t":"Configuración de timeouts"},
-    {"ctx":"src/sims/timeouts.js:131","ko":"로드밸런서 유휴 타임아웃","t":"Timeout por inactividad del balanceador"},
+    {"ctx":"src/sims/timeouts.js:131","ko":"로드밸런서 유휴 타임아웃","t":"Timeout por inactividad del balanceador de carga"},
     {"ctx":"src/sims/timeouts.js:131","ko":"알리지 않고 지우는 방식 기준입니다. 기본값 예: AWS NLB는 TCP 350초·UDP 120초(UDP는 바꿀 수 없음), Azure Load Balancer는 TCP 4분. AWS ALB(60초)는 시간이 되면 서버 쪽 연결도 닫아 서버가 곧 압니다.","t":"Supone que borra las conexiones sin avisar. Valores por defecto de ejemplo: AWS NLB, TCP 350 s y UDP 120 s (el de UDP no se puede cambiar); Azure Load Balancer, TCP 4 min. AWS ALB (60 s), al cumplirse el tiempo, también cierra la conexión del lado del servidor, así que el servidor se entera enseguida."},
     {"ctx":"src/sims/timeouts.js:132","ko":"서버 무응답 판정","t":"Timeout de respuesta del servidor"},
     {"ctx":"src/sims/timeouts.js:132","ko":"게임 서버가 하트비트·입력을 이만큼 못 받으면 접속을 정리합니다.","t":"Si el servidor de juego no recibe heartbeats ni inputs durante este tiempo, cierra la sesión."},
