@@ -15,10 +15,10 @@ Object.assign(DATA.secRefs, {
     { t: 'RFC 7323: TCP Extensions for High Performance', u: 'https://www.rfc-editor.org/rfc/rfc7323', p: 'IETF', n: '타임스탬프·윈도우 스케일 옵션, 스케일이 없으면 윈도우는 최대 64KiB' },
     { t: 'RFC 6937: Proportional Rate Reduction for TCP', u: 'https://www.rfc-editor.org/rfc/rfc6937', p: 'IETF', n: 'PRR: 복구 중 보내는 양을 새로 전달된 양에 맞춰 줄임(시뮬레이션의 복구 중 전송 한도)' },
     { t: 'RFC 9438: CUBIC for Fast and Long-Distance Networks', u: 'https://www.rfc-editor.org/rfc/rfc9438', p: 'IETF', n: 'CUBIC은 손실 때 혼잡 윈도우를 0.7배로 줄임(시뮬레이션의 30% 축소)' },
-    { t: 'RFC 9293: Transmission Control Protocol (TCP)', u: 'https://www.rfc-editor.org/rfc/rfc9293', p: 'IETF', n: '제로 윈도우 프로브: 윈도우가 0이어도 프로브를 보내고, 간격은 지수적으로 늘림' },
+    { t: 'RFC 9293: Transmission Control Protocol (TCP)', u: 'https://www.rfc-editor.org/rfc/rfc9293', p: 'IETF', n: '제로 윈도우 프로브: 윈도우가 0이어도 프로브를 보내고 간격은 지수적으로 늘림' },
     { t: 'RFC 9000: QUIC: A UDP-Based Multiplexed and Secure Transport', u: 'https://www.rfc-editor.org/rfc/rfc9000', p: 'IETF', n: 'QUIC은 손실이 그 패킷에 담긴 스트림만 막아 다른 스트림은 계속 진행(흐름 분리)' },
     /* 표준: 손실을 줄이는 쪽 */
-    { t: 'RFC 2475: An Architecture for Differentiated Services', u: 'https://www.rfc-editor.org/rfc/rfc2475', p: 'IETF', n: '셰이핑은 패킷을 늦추고, 폴리싱은 초과분을 버린다는 정의' },
+    { t: 'RFC 2475: An Architecture for Differentiated Services', u: 'https://www.rfc-editor.org/rfc/rfc2475', p: 'IETF', n: '셰이핑은 패킷을 늦추고 폴리싱은 초과분을 버린다는 정의' },
     { t: 'RFC 3168: The Addition of Explicit Congestion Notification (ECN) to IP', u: 'https://www.rfc-editor.org/rfc/rfc3168', p: 'IETF', n: 'ECN: 패킷을 버리지 않고 혼잡을 알림' },
     { t: 'Smart Queue Management', u: 'https://www.bufferbloat.net/projects/cerowrt/wiki/Smart_Queue_Management/', p: 'Bufferbloat.net', n: '공유기 SQM: 흐름별 스케줄링·AQM·셰이핑으로 대기열 넘침과 버퍼블로트를 줄임' },
     { t: 'RFC 1191: Path MTU discovery', u: 'https://www.rfc-editor.org/rfc/rfc1191', p: 'IETF', n: '크기 초과 알림 ICMP(유형 3 코드 4)로 경로 MTU를 찾음' },
@@ -78,7 +78,7 @@ Object.assign(DATA.secRefs, {
   ],
   'owners': [
     { t: 'RFC 4787: Network Address Translation (NAT) Behavioral Requirements for Unicast UDP', u: 'https://www.rfc-editor.org/rfc/rfc4787', p: 'IETF', n: 'NAT 매핑은 안에서 나가는 패킷으로 반드시 갱신되고(REQ-6), 밖에서 들어오는 패킷의 갱신은 선택 사항(UDP 기준). 그래서 하트비트는 클라이언트가 보냄' },
-    { t: 'RFC 5382: NAT Behavioral Requirements for TCP', u: 'https://www.rfc-editor.org/rfc/rfc5382', p: 'IETF', n: 'NAT는 유휴 TCP 세션을 지울 수 있으며, 권고 유휴 타임아웃은 2시간 4분 이상(장비마다 설정이 다를 수 있음)' },
+    { t: 'RFC 5382: NAT Behavioral Requirements for TCP', u: 'https://www.rfc-editor.org/rfc/rfc5382', p: 'IETF', n: 'NAT는 유휴 TCP 세션을 지울 수 있으며 권고 유휴 타임아웃은 2시간 4분 이상(장비마다 설정이 다를 수 있음)' },
     { t: 'Amazon EC2 security group connection tracking', u: 'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/security-group-connection-tracking.html', p: 'AWS', n: '보안 그룹 연결 추적의 TCP 유휴 타임아웃(Nitro v6 인스턴스 유형 350초, 그 밖 5일, 60초~5일로 조정), 5분보다 짧은 keepalive 권고, NLB를 거치는 TCP는 350초' },
     { t: 'Control subnet traffic with network access control lists', u: 'https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html', p: 'AWS', n: '네트워크 ACL은 상태를 저장하지 않아(연결 추적 없음) 응답 트래픽도 규칙으로 따로 허용해야 함' },
     { t: 'Monitor network performance for ENA settings on your EC2 instance', u: 'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-network-performance-ena.html', p: 'AWS', n: '인스턴스의 연결 추적·초당 패킷 한도 초과 카운터(conntrack_allowance_exceeded, pps_allowance_exceeded)' },

@@ -4,7 +4,7 @@
   "entries": [
     {"ctx":"#judge div","ko":"<span class=\"idx\">T2</span>도구","t":"<span class=\"idx\">T2</span>Ferramenta"},
     {"ctx":"#judge h2","ko":"관측으로 판정하기","t":"Diagnóstico pelo monitoramento"},
-    {"ctx":"#judge p","ko":"제보나 경보가 오면 <b>범위 → 시점 → 계층</b> 순서로 좁힙니다. 이상이 어디에 몰렸는지가 담당을 가장 크게 가르고, 무엇과 겹쳤는지가 원인을 좁히며, 어느 계층의 지표가 비정상인지로 확인합니다. 원인 카드마다 있는 “그래프에서는”과 “확인 방법”을 함께 쓰면, 그래프 모양으로 후보를 고르고 확인할 곳을 바로 찾을 수 있습니다.","t":"Quando chega um report ou um alerta, afunile na ordem <b>escopo → momento → camada</b>. Onde o problema se concentra é o que mais define o responsável; com o que ele coincide estreita a causa; e a camada cujas métricas estão anormais confirma o diagnóstico. Usando junto o “No gráfico” e o “Como confirmar” de cada card de causa, você escolhe os candidatos pelo formato do gráfico e acha na hora onde olhar."},
+    {"ctx":"#judge p","ko":"제보나 경보가 오면 <b>범위 → 시점 → 계층</b> 순서로 좁힙니다. 이상이 어디에 몰렸는지가 담당을 가장 크게 가르고 무엇과 겹쳤는지가 원인을 좁히며 어느 계층의 지표가 비정상인지로 확인합니다. 원인 카드마다 있는 “그래프에서는”과 “확인 방법”을 함께 쓰면, 그래프 모양으로 후보를 고르고 확인할 곳을 바로 찾을 수 있습니다.","t":"Quando chega um report ou um alerta, afunile na ordem <b>escopo → momento → camada</b>. Onde o problema se concentra é o que mais define o responsável; com o que ele coincide estreita a causa; e a camada cujas métricas estão anormais confirma o diagnóstico. Usando junto o “No gráfico” e o “Como confirmar” de cada card de causa, você escolhe os candidatos pelo formato do gráfico e acha na hora onde olhar."},
     {"ctx":"#judge-flow","ko":"판정 흐름","t":"Fluxo de diagnóstico"},
     {"ctx":"#judge div","ko":"1 범위","t":"1 Escopo"},
     {"ctx":"#judge p","ko":"이상이 어디에 몰렸나","t":"Onde o problema se concentra"},

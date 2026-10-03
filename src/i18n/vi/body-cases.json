@@ -7,6 +7,6 @@
     {"ctx":"#cases p","ko":"자주 만나는 두 상황의 확인 순서와, 원개발사·운영사가 직접 공개한 실제 장애 사례를 모았습니다. 단계와 사례마다 관련 원인 카드로 이어집니다.","t":"Tập hợp trình tự kiểm tra cho hai tình huống thường gặp, cùng các sự cố thực tế do chính nhà phát triển gốc và đơn vị vận hành công bố. Mỗi bước và mỗi sự cố đều dẫn tới các thẻ nguyên nhân liên quan."},
     {"ctx":"#cases-playbooks","ko":"상황별 절차","t":"Quy trình theo tình huống"},
     {"ctx":"#cases-list","ko":"실제 장애 사례","t":"Sự cố thực tế"},
-    {"ctx":"#cases p","ko":"게임사와 인프라 회사가 스스로 공개한 사후 분석(포스트모템)만 골랐습니다. 요약은 원문이 밝힌 내용 안에서 썼고, 자세한 경위는 원문을 보세요.","t":"Chỉ chọn các bản phân tích sau sự cố (postmortem) do chính công ty game và công ty hạ tầng công bố. Phần tóm tắt chỉ viết trong phạm vi những gì bài gốc nêu; hãy xem bài gốc để biết diễn biến chi tiết."}
+    {"ctx":"#cases p","ko":"게임사와 인프라 회사가 스스로 공개한 사후 분석(포스트모템)만 골랐습니다. 요약은 원문이 밝힌 내용 안에서 썼고 자세한 경위는 원문을 보세요.","t":"Chỉ chọn các bản phân tích sau sự cố (postmortem) do chính công ty game và công ty hạ tầng công bố. Phần tóm tắt chỉ viết trong phạm vi những gì bài gốc nêu; hãy xem bài gốc để biết diễn biến chi tiết."}
   ]
 }

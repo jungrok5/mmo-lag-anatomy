@@ -4,6 +4,6 @@
   "entries": [
     {"ctx":"#journey div","ko":"<span class=\"idx\">01</span>전체 지도","t":"<span class=\"idx\">01</span>Mapa completo"},
     {"ctx":"#journey h2","ko":"패킷의 이동 경로: 내 손가락에서 서버의 DB까지","t":"El recorrido del paquete: de tu dedo a la base de datos del servidor"},
-    {"ctx":"#journey p","ko":"스킬 버튼을 누르면 그 신호는 내 PC와 집, 통신사, 데이터센터를 지나 서버에 닿습니다. 서버 안의 여러 층에서 처리된 결과는 같은 층들을 거꾸로 지나 화면에 그려집니다. 모두 13개 층이고, 어느 층이든 막히면 렉입니다. 아래 지도에서 층을 누르면 해당 장으로 이동합니다.","t":"Cuando presionas el botón de una habilidad, esa señal pasa por tu PC, tu casa, el ISP y el centro de datos hasta llegar al servidor. El resultado, procesado en varias capas dentro del servidor, recorre esas mismas capas en sentido inverso y se dibuja en tu pantalla. Son 13 capas en total, y basta con que cualquiera de ellas se atasque para que haya lag. Haz clic en una capa del mapa de abajo para ir a su capítulo."}
+    {"ctx":"#journey p","ko":"스킬 버튼을 누르면 그 신호는 내 PC와 집, 통신사, 데이터센터를 지나 서버에 닿습니다. 서버 안의 여러 층에서 처리된 결과는 같은 층들을 거꾸로 지나 화면에 그려집니다. 모두 13개 층이고 어느 층이든 막히면 렉입니다. 아래 지도에서 층을 누르면 해당 장으로 이동합니다.","t":"Cuando presionas el botón de una habilidad, esa señal pasa por tu PC, tu casa, el ISP y el centro de datos hasta llegar al servidor. El resultado, procesado en varias capas dentro del servidor, recorre esas mismas capas en sentido inverso y se dibuja en tu pantalla. Son 13 capas en total, y basta con que cualquiera de ellas se atasque para que haya lag. Haz clic en una capa del mapa de abajo para ir a su capítulo."}
   ]
 }

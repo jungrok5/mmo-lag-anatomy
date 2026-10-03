@@ -1,5 +1,5 @@
 /* 장비별 유휴 타임아웃: 가만히 있는 연결은 길 위의 장비들이 하나씩 잊는다.
-   가장 짧은 유휴 타임아웃이 범인이고, 서버가 모르면 유령 접속이 남는다. 레이어 5(네트워크 장비) 장에서 쓴다. */
+   가장 짧은 유휴 타임아웃이 범인이고 서버가 모르면 유령 접속이 남는다. 레이어 5(네트워크 장비) 장에서 쓴다. */
 K.register('timeouts', function (root) {
   const TR = I18N.tr('sim-timeouts');   // 이 실험 묶음의 사전을 먼저 본다(i18n.js)
   const F = K.frame(root, {
@@ -122,7 +122,7 @@ K.register('timeouts', function (root) {
     if (P.lb === LB_DEF[P.proto]) { P.lb = LB_DEF[v]; sLb.set(P.lb, false); }   // 기본값이면 프로토콜에 맞는 기본값으로
     P.proto = v; changed();
   } });
-  const cLink = K.choice(g1, { label: TR`연결 방식`, value: P.link, options: [['home', TR`유선·와이파이`], ['mobile', TR`모바일`]], onChange: v => { P.link = v; changed(); }, hint: TR`실험 값: 가정 공유기 UDP 1분·TCP 1시간, 통신사 공유기(CGNAT) UDP 30초·TCP 10분. 실제 값은 기기·통신사마다 다르고, 측정 연구에서 UDP는 30초~3분이 흔했습니다.` });
+  const cLink = K.choice(g1, { label: TR`연결 방식`, value: P.link, options: [['home', TR`유선·와이파이`], ['mobile', TR`모바일`]], onChange: v => { P.link = v; changed(); }, hint: TR`실험 값: 가정 공유기 UDP 1분·TCP 1시간, 통신사 공유기(CGNAT) UDP 30초·TCP 10분. 실제 값은 기기·통신사마다 다르고 측정 연구에서 UDP는 30초~3분이 흔했습니다.` });
   const tBg = K.toggle(g1, { label: TR`백그라운드 전환 (모바일)`, value: P.bg, onChange: v => { P.bg = v; changed(); }, hint: TR`게임 루프에서 하트비트를 보내면 앱을 내리는 즉시 멈춥니다(유니티 등 엔진은 내리면 루프를 멈춤). 이 실험은 하트비트를 따로 보내는 네트워크 스레드가 있어, OS가 앱을 일시 정지하는 10초 뒤까지 버틴다고 둡니다(안드로이드 14 이상 약 10초, iOS는 몇 초~몇십 초).` });
   const tFw = K.toggle(g1, { label: TR`회사·PC방 방화벽 거침`, value: P.fw, onChange: v => { P.fw = v; changed(); }, hint: TR`이 실험 값은 UDP 2분, TCP 5분입니다(TCP를 짧게 설정한 곳). 기본값은 장비마다 달라 UDP 30초~3분, TCP 30~90분이 흔합니다.` });
   const g2 = K.group(F.controls, TR`클라이언트`);
@@ -355,7 +355,7 @@ K.register('timeouts', function (root) {
       return (byKa
         ? TR`${flag}운영체제의 TCP keepalive 확인 패킷이 ${fmtT(60)}마다 지나가서 모든 장비의 타이머가 가득 차기 전에 0으로 돌아갑니다. 가장 짧은 타임아웃은 <b>${m.name} ${fmtT(m.T)}</b>입니다. `
         : TR`${flag}하트비트가 ${fmtT(P.hb)}마다 지나가서 모든 장비의 타이머가 가득 차기 전에 0으로 돌아갑니다. 가장 짧은 타임아웃은 <b>${m.name} ${fmtT(m.T)}</b>입니다. `) +
-        (safe ? TR`간격이 그 절반 이하라 패킷 하나가 늦거나 사라져도 버팁니다.` : TR`간격이 그 절반을 넘어서, 패킷 하나만 늦거나 사라져도 끊길 수 있습니다. ${fmtT(rec)} 이하로 줄이는 편이 안전합니다.`) +
+        (safe ? TR`간격이 그 절반 이하라 패킷 하나가 늦거나 사라져도 버팁니다.` : TR`간격이 그 절반을 넘어서 패킷 하나만 늦거나 사라져도 끊길 수 있습니다. ${fmtT(rec)} 이하로 줄이는 편이 안전합니다.`) +
         (byKa ? TR` 다만 keepalive는 운영체제가 보내므로 게임이 멈춰도 계속 나갑니다. 게임이 살아 있는지는 하트비트로 따로 확인해야 합니다.` : '');
     }
     let why;
@@ -367,10 +367,10 @@ K.register('timeouts', function (root) {
         (bgStop ? TR`백그라운드에서는 하트비트를 보낼 수 없으니, 복귀하면 자동으로 빠르게 재접속하는 흐름을 만들어 두어야 합니다.` : TR`<b>해결:</b> 하트비트를 가장 짧은 타임아웃의 절반 이하, 예를 들어 ${fmtT(rec)}마다 보내세요.`);
     }
     let s = TR`${K.flag('bad')}${why} <b>${fmtT(A.Tc)}</b>에 ${`<b>${c.name}</b>${K.pp(c.name, 'ga')}`} 이 연결을 세션 테이블에서 지웠습니다. 플레이어는 가만히 있다가 다시 움직이는 순간 반응이 없다가 <b>접속 끊김</b>을 겪습니다. `;
-    if (A.ghost) s += TR`그런데 서버는 ${Number.isFinite(A.notice) ? TR`${fmtT(A.notice - A.Tc)} 동안(${A.noticeBy === 'ka' ? TR`TCP keepalive 확인이 실패할 때까지` : TR`무응답 판정까지`})` : TR`끝까지`} 이 사실을 모릅니다. 서버에는 캐릭터가 그대로 남아(유령 접속) 재접속하면 “이미 접속 중” 오류가 나고, 필드에 가만히 선 캐릭터가 공격받기도 합니다. `;
+    if (A.ghost) s += TR`그런데 서버는 ${Number.isFinite(A.notice) ? TR`${fmtT(A.notice - A.Tc)} 동안(${A.noticeBy === 'ka' ? TR`TCP keepalive 확인이 실패할 때까지` : TR`무응답 판정까지`})` : TR`끝까지`} 이 사실을 모릅니다. 서버에는 캐릭터가 그대로 남아(유령 접속) 재접속하면 “이미 접속 중” 오류가 나고 필드에 가만히 선 캐릭터가 공격받기도 합니다. `;
     else s += TR`서버는 ${fmtT(A.notice)}에 ${A.noticeBy === 'ka' ? TR`TCP keepalive 확인으로` : TR`무응답 판정으로`} 감지하고 캐릭터를 정리합니다. `;
     s += bgStop ? TR`백그라운드에서는 하트비트를 보낼 수 없으니, 복귀하면 자동 재접속하고 서버는 짧은 무응답 판정으로 캐릭터를 정리해야 합니다.`
-      : TR`<b>해결:</b> 하트비트를 가장 짧은 타임아웃(${m.name} ${fmtT(m.T)})의 절반 이하, 예를 들어 ${fmtT(rec)}마다 보내고, 서버도 무응답 판정을 켜 두세요.`;
+      : TR`<b>해결:</b> 하트비트를 가장 짧은 타임아웃(${m.name} ${fmtT(m.T)})의 절반 이하, 예를 들어 ${fmtT(rec)}마다 보내고 서버도 무응답 판정을 켜 두세요.`;
     return s;
   }
   changed();

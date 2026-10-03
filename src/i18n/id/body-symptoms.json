@@ -4,6 +4,6 @@
   "entries": [
     {"ctx":"#symptoms div","ko":"<span class=\"idx\">03</span>보이는 모양으로 찾기","t":"<span class=\"idx\">03</span>Cari dari bentuk yang terlihat"},
     {"ctx":"#symptoms h2","ko":"증상 사전","t":"Kamus gejala"},
-    {"ctx":"#symptoms p","ko":"플레이어는 “렉 걸려요”라고만 말하지만, 렉의 모양은 원인을 꽤 많이 알려 줍니다. 각 증상의 작은 그림은 화면 속 캐릭터가 지나간 자리입니다. 점이 겹치면 멈춘 것, 벌어지면 빨라지거나 건너뛴 것입니다.","t":"Pemain biasanya hanya bilang “lag”, tetapi bentuk lag memberi cukup banyak petunjuk tentang penyebabnya. Gambar kecil di setiap gejala adalah jejak yang dilewati karakter di layar. Titik yang menumpuk berarti karakter berhenti; titik yang merenggang berarti karakter bergerak lebih cepat atau melompati sebagian jalan."}
+    {"ctx":"#symptoms p","ko":"플레이어는 “렉 걸려요”라고만 말하지만 렉의 모양은 원인을 꽤 많이 알려 줍니다. 각 증상의 작은 그림은 화면 속 캐릭터가 지나간 자리입니다. 점이 겹치면 멈춘 것, 벌어지면 빨라지거나 건너뛴 것입니다.","t":"Pemain biasanya hanya bilang “lag”, tetapi bentuk lag memberi cukup banyak petunjuk tentang penyebabnya. Gambar kecil di setiap gejala adalah jejak yang dilewati karakter di layar. Titik yang menumpuk berarti karakter berhenti; titik yang merenggang berarti karakter bergerak lebih cepat atau melompati sebagian jalan."}
   ]
 }

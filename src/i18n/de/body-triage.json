@@ -4,6 +4,6 @@
   "entries": [
     {"ctx":"#triage div","ko":"<span class=\"idx\">T1</span>도구","t":"<span class=\"idx\">T1</span>Werkzeug"},
     {"ctx":"#triage h2","ko":"진단 도우미","t":"Diagnosehilfe"},
-    {"ctx":"#triage p","ko":"렉 제보를 받았을 때 “누가, 언제, 어떤 모양으로” 세 가지만 골라 보세요. 이 백서에 실린 원인 중 가장 잘 맞는 후보를 점수 순으로 보여 줍니다. 확정 진단은 아니지만, 어느 팀에 먼저 물어볼지 정하는 데 충분합니다.","t":"Wählen Sie bei einer Lag-Meldung nur drei Dinge aus: „wer, wann, in welcher Form“. Die Diagnosehilfe zeigt die passendsten Ursachen aus diesem Whitepaper nach Punktzahl sortiert. Das ist keine endgültige Diagnose, reicht aber, um zu entscheiden, welches Team man zuerst fragt."}
+    {"ctx":"#triage p","ko":"렉 제보를 받았을 때 “누가, 언제, 어떤 모양으로” 세 가지만 골라 보세요. 이 백서에 실린 원인 중 가장 잘 맞는 후보를 점수 순으로 보여 줍니다. 확정 진단은 아니지만 어느 팀에 먼저 물어볼지 정하는 데 충분합니다.","t":"Wählen Sie bei einer Lag-Meldung nur drei Dinge aus: „wer, wann, in welcher Form“. Die Diagnosehilfe zeigt die passendsten Ursachen aus diesem Whitepaper nach Punktzahl sortiert. Das ist keine endgültige Diagnose, reicht aber, um zu entscheiden, welches Team man zuerst fragt."}
   ]
 }

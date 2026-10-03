@@ -16,7 +16,7 @@
   1. 증상 이름을 `data.js`의 `symptoms` id로 바꾼다.
   2. `sym`에 그 id가 있는 원인을 모은다.
   3. `who`(누가 겪나: 나만, 특정 지역·통신사, 서버 전체 …)와 `when`(언제: 저녁 피크, 접속 직후, 일정한 주기 …)으로 순위를 매긴다. “누가”가 가장 강한 단서다. 각 목록의 첫 값이 그 원인의 대표 특징이다.
-- 담당을 물으면 `own[0]`이 주 담당(근본 원인을 없애는 곳)이고, 나머지는 함께 할 일이 있는 곳이다. 팀별 할 일은 `act.game`·`act.infra`·`act.ext`에 있다. 경계가 애매하면 `docs/OWNERS_GUIDE.md`의 규칙을 따른다.
+- 담당을 물으면 `own[0]`이 주 담당(근본 원인을 없애는 곳)이고 나머지는 함께 할 일이 있는 곳이다. 팀별 할 일은 `act.game`·`act.infra`·`act.ext`에 있다. 경계가 애매하면 `docs/OWNERS_GUIDE.md`의 규칙을 따른다.
 - 장애 기록·티켓과 대조할 때:
   1. 기록에서 다섯 가지를 뽑는다: 증상, 범위(한 명·지역·채널·서버 전체), 시간 패턴, 직전 변경(패치·배포·설정 변경·국가 추가), 이미 본 지표.
   2. 위 방식으로 후보 원인을 2~5개 고른다.
@@ -55,9 +55,10 @@
   - 증상은 `data.js`의 증상 이름 그대로 쓴다(뚝뚝 끊김, 순간이동, 고무줄, 몰아치기, 슬로우모션, 입력 지연, 멈춤, 씹힘·롤백, 접속 끊김, 접속 불가·무한 로딩, 안 보임·유령 개체).
   - 문장 가운데에 대시(—)로 설명을 끼워 넣지 않는다.
   - “A가 아니라 B” 꼴의 문장을 쓰지 않는다.
+  - 번역투(~에 있어, ~에 의해, ~을 가지고 있다 …), 분열문(“문제는 ~입니다”), 수사 의문·대구, 한 문자열 안의 “~다.”·“~니다.” 섞기, 연결어미 바로 뒤 쉼표를 피한다. 규칙과 근거는 `docs/KO_STYLE.md`, 검사는 `node tools/ko-style.cjs`(오류 0).
 - 담당은 `docs/OWNERS_GUIDE.md`를 따른다.
 - 그래프 모양·확인 방법은 `docs/CHECKS_GUIDE.md`를 따른다. 특정 조직의 지표·도구 이름은 쓰지 않는다.
-- 출처는 `docs/SOURCES_GUIDE.md`를 따른다. 공신력 있는 자료만 쓰고, 직접 열어 그 문장을 뒷받침하는지 확인한 것만 넣는다.
+- 출처는 `docs/SOURCES_GUIDE.md`를 따른다. 공신력 있는 자료만 쓰고 직접 열어 그 문장을 뒷받침하는지 확인한 것만 넣는다.
 - 고친 뒤 확인
   - `npm test`: 빌드, 데이터 검사, 1280px·390px 다크 화면 점검. `node tools/validate.cjs`의 `probs`는 `[]`여야 한다.
   - 출처를 바꿨으면 `npm run links`로 주소를 점검한다.
@@ -67,6 +68,7 @@
 - 한국어가 원문이다. 번역은 `src/i18n/<언어>/*.json`에 있고 규칙은 `docs/I18N_GUIDE.md`, 언어별 용어는 `docs/i18n/<언어>.md`.
 - 화면에 나오는 한국어 글자(코드 안)는 모두 TR`…`로 감싼다. `node tools/i18n-wrap.cjs --check`가 빠진 곳을 찾는다.
 - 한국어 문장을 고치면 `node tools/i18n.cjs sync`를 돌린다. 바뀐 항목은 번역이 빈 칸이 되고(그동안 그 자리는 한국어로 보인다) 옛 번역은 `stale`에 남는다. 번역을 채운 뒤 `node tools/i18n.cjs check`.
+- 뜻은 그대로 두고 문체만 다듬었으면 `node tools/i18n.cjs restore`로 옛 번역을 되살린다(같은 자리에서 원문이 가장 비슷한 stale). 뜻이 바뀐 항목은 새로 번역한다.
 - 원인 ID·장·절 ID는 언어마다 같다. 번역판 주소는 `/<언어 폴더>/`(예: `/en/c/mem-gc.html`).
 
 ## 명령
@@ -75,6 +77,7 @@
 npm test              # 빌드 + 데이터 검사 + 화면 점검
 python3 build.py      # index.html 만들기 (글꼴까지 넣은 파일 하나)
 npm run validate      # 원인 데이터 검사
+node tools/ko-style.cjs   # 한국어 문체 검사(번역투·기계 문체, docs/KO_STYLE.md)
 npm run links         # 출처 주소 점검 (실패한 주소만 출력)
 npm run export        # build/lag-anatomy.md, build/lag-anatomy.json (Claude 프로젝트 업로드·다른 도구용)
 npm run site          # 배포본을 build/site/에 만들기(언어마다 원인·증상별 페이지, 텍스트 판, llms.txt / sitemap.xml)

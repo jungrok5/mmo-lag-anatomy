@@ -5,11 +5,11 @@ K.register('bloat', function (root) {
   const F = K.frame(root, {
     kicker: TR`레이어 3 · 집 네트워크`,
     title: TR`동생이 영상을 올리면 내 핑이 튀는 이유 (버퍼블로트)`,
-    lead: TR`집 공유기는 인터넷으로 올려 보낼 패킷을 대기열 하나에 순서대로 쌓아 둡니다. 누군가 큰 영상을 올리기 시작하면 이 대기열이 꽉 차고, 작은 게임 패킷도 그 맨 뒤에서 기다려야 합니다. 대기열이 길어진 만큼 핑이 오릅니다. 와이파이 재전송까지 겹치면 핑은 들쭉날쭉해집니다.`,
+    lead: TR`집 공유기는 인터넷으로 올려 보낼 패킷을 대기열 하나에 순서대로 쌓아 둡니다. 누군가 큰 영상을 올리기 시작하면 이 대기열이 꽉 차고 작은 게임 패킷도 그 맨 뒤에서 기다려야 합니다. 대기열이 길어진 만큼 핑이 오릅니다. 와이파이 재전송까지 겹치면 핑은 들쭉날쭉해집니다.`,
     tries: [
       TR`<b>다른 기기 업로드</b>를 “없음”으로 내렸다가 다시 “최대”로 올려 보세요. 몇 초에 걸쳐 대기열이 차오르고 핑이 따라 오릅니다.`,
       TR`<b>SQM</b>을 켜 보세요. 업로드는 그대로인데 게임 핑은 기본 핑 근처로 돌아옵니다.`,
-      TR`<b>버퍼 크기</b>를 가장 작게 줄여 보세요. 대기열이 짧아져 핑은 내려가지만, 넘치는 패킷은 버려집니다.`,
+      TR`<b>버퍼 크기</b>를 가장 작게 줄여 보세요. 대기열이 짧아져 핑은 내려가지만 넘치는 패킷은 버려집니다.`,
       TR`업로드를 없음으로 두고 <b>와이파이 신호</b>를 “매우 약함”으로 옮겨 보세요. 차트의 스파이크(뾰족하게 튄 부분)는 재전송, × 표시는 끝내 사라진 패킷입니다.`,
     ],
     layout: 'side',
@@ -42,7 +42,7 @@ K.register('bloat', function (root) {
     onInput: v => { P.bufV = v; trimToBuffer(); },
     hint: TR`버퍼가 꽉 찼을 때 대기열을 다 비우는 데 걸리는 시간(ms)도 함께 표시합니다.`,
   });
-  const tSqm = K.toggle(g1, { label: TR`SQM (스마트 대기열 관리: fq_codel/CAKE)`, value: P.sqm, onChange: v => { P.sqm = v; switchMode(); }, hint: TR`흐름마다 대기열을 따로 두고, 큰 흐름의 대기열은 5ms 안팎으로 짧게 유지합니다. 실제 공유기에서는 속도를 회선의 90~95%로 맞춰야 대기열이 공유기 안에 생겨 효과가 납니다.` });
+  const tSqm = K.toggle(g1, { label: TR`SQM (스마트 대기열 관리: fq_codel/CAKE)`, value: P.sqm, onChange: v => { P.sqm = v; switchMode(); }, hint: TR`흐름마다 대기열을 따로 두고 큰 흐름의 대기열은 5ms 안팎으로 짧게 유지합니다. 실제 공유기에서는 속도를 회선의 90~95%로 맞춰야 대기열이 공유기 안에 생겨 효과가 납니다.` });
   const g2 = K.group(F.controls, TR`다른 트래픽`);
   const sUp = K.slider(g2, {
     label: TR`다른 기기 업로드`, min: 0, max: 100, step: 5, value: P.up,
@@ -53,8 +53,8 @@ K.register('bloat', function (root) {
   const g3 = K.group(F.controls, TR`와이파이`);
   const sigName = v => v < 25 ? TR`좋음` : v < 55 ? TR`보통` : v < 85 ? TR`약함` : TR`매우 약함`;
   const pFail = v => 0.02 + 0.58 * v / 100;
-  const sSig = K.slider(g3, { label: TR`와이파이 신호`, min: 0, max: 100, step: 5, value: P.sig, fmt: v => TR`${sigName(v)} · 실패 ${Math.round(pFail(v) * 100)}%`, onInput: v => { P.sig = v; }, hint: TR`한 번 보낼 때 실패할 확률. 실패하면 잠깐 쉬었다 다시 보내고, 8번 모두 실패하면 패킷을 잃습니다.` });
-  const tIntf = K.toggle(g3, { label: TR`전자레인지·이웃 공유기 간섭`, value: P.intf, onChange: v => { P.intf = v; }, hint: TR`2.5초마다 0.3초씩 전파가 거의 막힌다고 단순화했습니다. 실제 전자레인지는 돌아가는 내내 2.4GHz 와이파이를 방해하고, 5GHz는 영향을 거의 받지 않습니다.` });
+  const sSig = K.slider(g3, { label: TR`와이파이 신호`, min: 0, max: 100, step: 5, value: P.sig, fmt: v => TR`${sigName(v)} · 실패 ${Math.round(pFail(v) * 100)}%`, onInput: v => { P.sig = v; }, hint: TR`한 번 보낼 때 실패할 확률. 실패하면 잠깐 쉬었다 다시 보내고 8번 모두 실패하면 패킷을 잃습니다.` });
+  const tIntf = K.toggle(g3, { label: TR`전자레인지·이웃 공유기 간섭`, value: P.intf, onChange: v => { P.intf = v; }, hint: TR`2.5초마다 0.3초씩 전파가 거의 막힌다고 단순화했습니다. 실제 전자레인지는 돌아가는 내내 2.4GHz 와이파이를 방해하고 5GHz는 영향을 거의 받지 않습니다.` });
 
   const ctlSet = () => { sCap.set(P.cap, false); sBuf.set(P.bufV, false); tSqm.set(P.sqm, false); sUp.set(P.up, false); sSig.set(P.sig, false); tIntf.set(P.intf, false); };
   const bv = k => Math.round(Math.log2(k / 16) / 8 * 100);
@@ -371,7 +371,7 @@ K.register('bloat', function (root) {
     } else if (P.up >= 100 && P.sqm) {
       parts.push(TR`SQM이 켜져 있어 업로드는 계속되지만 그 대기열은 5ms 안팎으로 짧게 유지되고, 게임 패킷은 전용 대기열로 바로 나갑니다. 핑 <b>${K.ms(M.last)}</b>, 버퍼 크기와 상관없이 기본 핑 근처입니다.`);
     } else if (P.up >= 100) {
-      parts.push(TR`버퍼가 작아 대기열이 금방 넘칩니다. 대기는 <b>${K.ms(M.qms)}</b>로 짧지만, 넘친 패킷은 버려지고 업로드는 속도를 30%쯤 줄였다 다시 올리기를 반복합니다. 다만 버퍼 크기 하나로는 회선 속도와 상황마다 알맞게 맞추기 어렵고, 더 줄이면 업로드가 회선 속도를 다 쓰지 못합니다. 그래서 답은 작은 버퍼보다 SQM입니다.`);
+      parts.push(TR`버퍼가 작아 대기열이 금방 넘칩니다. 대기는 <b>${K.ms(M.qms)}</b>로 짧지만 넘친 패킷은 버려지고 업로드는 속도를 30%쯤 줄였다 다시 올리기를 반복합니다. 다만 버퍼 크기 하나로는 회선 속도와 상황마다 알맞게 맞추기 어렵고 더 줄이면 업로드가 회선 속도를 다 쓰지 못합니다. 그래서 답은 작은 버퍼보다 SQM입니다.`);
     } else if (P.up > 0) {
       parts.push(TR`업로드가 회선의 ${P.up}%만 씁니다. 몰려 들어온 패킷이 대기열에 잠깐 쌓였다가 금방 빠져서 대기는 평균 ${K.ms(Math.max(0, (M.ok.reduce((a, h) => a + h.lat, 0) / Math.max(1, M.ok.length)) - BASE - M.wifiMs))} 정도입니다. 회선이 거의 꽉 찰수록 지터가 커집니다.`);
     } else {

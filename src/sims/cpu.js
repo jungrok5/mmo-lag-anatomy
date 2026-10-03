@@ -52,7 +52,7 @@ K.register('cpu', function (root) {
     }
     function finish(th, t) {
       th.state = 'sleep';
-      if (th.kind === 'main') {         // 계산 끝 → 렌더 스레드에 넘기고, 다음 장 시각까지 잠든다
+      if (th.kind === 'main') {         // 계산 끝 → 렌더 스레드에 넘기고 다음 장 시각까지 잠든다
         rend.jobs++;
         if (rend.state === 'sleep') { rend.rem = 4; ready(rend, t); }
         let Tn = S.T + VB, wake;
@@ -316,12 +316,12 @@ K.register('cpu', function (root) {
       return TR`${K.flag('bad')}CPU 속도가 <b>${K.pct(sp)}</b>로 떨어져 ${K.n(P.W, 1)}ms짜리 계산에 <b>${K.ms(need)}</b>가 걸립니다. 16.7ms 안에 못 끝내 화면 갱신의 <b>${miss}</b>를 놓칩니다(<b>뚝뚝 끊김</b>).${why}`;
     }
     if (bgOn && s.got < 0.9) {
-      return TR`${K.flag(s.miss > 0.05 || s.got < 0.7 ? 'bad' : 'warn')}게임 스레드가 코어를 얻으려고 대기열에서 기다립니다. 다른 프로그램도 코어를 5ms씩 번갈아 쓰니, 게임이 원할 때 바로 CPU를 받은 비율이 <b>${got}</b>뿐입니다. 메인 스레드는 한 프레임마다 평균 <b>${K.ms(s.mainWait)}</b> 기다리고, 화면 갱신의 <b>${miss}</b>를 놓칩니다(<b>뚝뚝 끊김</b>). 네트워크 스레드도 패킷을 평균 <b>${K.ms(s.netWait)}</b> 늦게 읽습니다. 이 정도는 보간 버퍼가 가려 주지만, 기다림이 수십 ms로 길어지면 다른 캐릭터 움직임이 뭉쳤다 풀립니다(<b>몰아치기</b>). 회선과 서버는 멀쩡합니다.`;
+      return TR`${K.flag(s.miss > 0.05 || s.got < 0.7 ? 'bad' : 'warn')}게임 스레드가 코어를 얻으려고 대기열에서 기다립니다. 다른 프로그램도 코어를 5ms씩 번갈아 쓰니, 게임이 원할 때 바로 CPU를 받은 비율이 <b>${got}</b>뿐입니다. 메인 스레드는 한 프레임마다 평균 <b>${K.ms(s.mainWait)}</b> 기다리고 화면 갱신의 <b>${miss}</b>를 놓칩니다(<b>뚝뚝 끊김</b>). 네트워크 스레드도 패킷을 평균 <b>${K.ms(s.netWait)}</b> 늦게 읽습니다. 이 정도는 보간 버퍼가 가려 주지만 기다림이 수십 ms로 길어지면 다른 캐릭터 움직임이 뭉쳤다 풀립니다(<b>몰아치기</b>). 회선과 서버는 멀쩡합니다.`;
     }
     if (bgOn && P.prio) return TR`${K.flag('good')}게임 스레드가 대기열에 들어오면 다른 프로그램을 먼저 내리므로 게임은 거의 기다리지 않습니다(바로 받은 비율 ${got}). 대신 백신·방송 같은 프로그램이 그만큼 느려집니다.`;
     if (P.power === 'heat' && sp < 0.97) return need > VB
       ? TR`${K.flag('warn')}폰이 뜨거워지며 CPU 속도가 <b>${K.pct(sp)}</b>까지 내려왔습니다. 계산이 ${K.ms(need)}로 16.7ms를 막 넘어, 화면 갱신을 가끔 놓치기 시작했습니다(${miss}). 더 뜨거워지면 <b>뚝뚝 끊김</b>이 뚜렷해집니다.`
-      : TR`${K.flag('warn')}폰이 뜨거워지며 CPU 속도가 <b>${K.pct(sp)}</b>까지 내려왔습니다. 지금은 계산이 ${K.ms(need)}라 버티지만, 16.7ms를 넘는 순간부터 <b>뚝뚝 끊김</b>이 시작됩니다.`;
+      : TR`${K.flag('warn')}폰이 뜨거워지며 CPU 속도가 <b>${K.pct(sp)}</b>까지 내려왔습니다. 지금은 계산이 ${K.ms(need)}라 버티지만 16.7ms를 넘는 순간부터 <b>뚝뚝 끊김</b>이 시작됩니다.`;
     if (bgOn) return TR`${K.flag('good')}다른 프로그램이 돌고 있지만 코어 ${P.cores}개가 넉넉해 게임 스레드는 거의 기다리지 않습니다(바로 받은 비율 ${got}, 전체 사용률 ${K.pct(s.util)}).`;
     return TR`${K.flag('good')}게임 스레드가 코어를 기다리지 않고 바로 돕니다. 계산 ${K.ms(need)} + 렌더 4ms가 제시간에 끝나 화면이 바뀔 때마다 새 프레임이 나갑니다.`;
   }

@@ -5,7 +5,7 @@ K.register('rush', function (root) {
   const F = K.frame(root, {
     kicker: TR`레이어 7 · 서버 OS`,
     title: TR`점검 끝! 10만 명이 동시에 접속 버튼을 누르면`,
-    lead: TR`서버 운영체제는 새 접속을 받아 줄 때까지 “접속 대기열(listen backlog)”에 넣어 둡니다. 대기열이 꽉 차면 리눅스는 새 접속 요청을 응답 없이 버리고, 클라이언트는 기다리다 다시 시도합니다. 다시 시도하는 방식에 따라 같은 서버가 1분 만에 모두를 받기도 하고, 몇 분 동안 헛돌기도 합니다. 이 실험의 서버는 로그인을 처리할 수 있는 만큼만 접속을 받아 갑니다.`,
+    lead: TR`서버 운영체제는 새 접속을 받아 줄 때까지 “접속 대기열(listen backlog)”에 넣어 둡니다. 대기열이 꽉 차면 리눅스는 새 접속 요청을 응답 없이 버리고 클라이언트는 기다리다 다시 시도합니다. 다시 시도하는 방식에 따라 같은 서버가 1분 만에 모두를 받기도 하고 몇 분 동안 헛돌기도 합니다. 이 실험의 서버는 로그인을 처리할 수 있는 만큼만 접속을 받아 갑니다.`,
     tries: [
       TR`<b>재시도 폭풍</b>을 누르고 파란 선(시도)과 주황 선(성공)의 간격을 보세요. 시도는 초당 10만 번을 넘는데 성공은 처리 능력의 절반도 안 됩니다.`,
       TR`같은 상황에서 <b>재시도 방식</b>을 “지수 백오프 + 무작위”로 바꿔 보세요. 시도가 확 줄고 서버 효율이 올라갑니다.`,
@@ -113,8 +113,8 @@ K.register('rush', function (root) {
   const cBl = K.choice(g2, { label: TR`listen backlog (접속 대기열)`, value: P.backlog, options: [[128, '128'], [4096, '4,096'], [65535, '65,535']], onChange: v => { P.backlog = +v; recalc(); }, hint: TR`리눅스 커널 상한(somaxconn) 기본값은 5.4부터 4,096, 그 전에는 128입니다. 서버 코드가 listen에 더 작은 값을 주면 그 값이 한도입니다.` });
   const cFd = K.choice(g2, { label: TR`동시 접속 한도 (파일 디스크립터)`, value: P.fd, options: [[1024, '1,024'], [65535, '65,535'], [1000000, TR`100만`]], onChange: v => { P.fd = +v; recalc(); }, hint: TR`접속 하나에 파일 디스크립터 하나. 1,024는 리눅스에서 서비스 설정을 안 바꾸면 흔히 걸리는 값입니다.` });
   const g3 = K.group(F.controls, TR`게임 클라이언트`);
-  const cRe = K.choice(g3, { label: TR`재시도 방식`, value: P.retry, options: [['now', TR`즉시 재시도`], ['fixed', TR`5초마다`], ['backoff', TR`지수 백오프 + 무작위`]], onChange: v => { P.retry = v; recalc(); }, hint: TR`백오프: 실패할 때마다 2초, 4초, 8초… 최대 60초에 무작위를 섞어 기다립니다. 이 실험은 거절 처리에 드는 서버 부담을 크게 잡았습니다. 실제 효율 저하는 반쯤 처리한 로그인이 클라이언트 타임아웃으로 버려지는 헛일에서 주로 옵니다.` });
-  const tQ = K.toggle(g3, { label: TR`접속 대기열 시스템 (대기 순번 발급)`, value: P.queue, onChange: v => { P.queue = v; recalc(); }, hint: TR`누르면 바로 대기 순번을 받고, 서버가 처리할 수 있는 만큼만 차례로 들여보냅니다.` });
+  const cRe = K.choice(g3, { label: TR`재시도 방식`, value: P.retry, options: [['now', TR`즉시 재시도`], ['fixed', TR`5초마다`], ['backoff', TR`지수 백오프 + 무작위`]], onChange: v => { P.retry = v; recalc(); }, hint: TR`백오프: 실패할 때마다 2초, 4초, 8초… 최대 60초에 무작위를 섞어 기다립니다. 이 실험은 거절 처리에 드는 서버 부담을 크게 잡았습니다. 실제로는 반쯤 처리한 로그인이 클라이언트 타임아웃으로 버려지는 헛일 때문에 주로 효율이 떨어집니다.` });
+  const tQ = K.toggle(g3, { label: TR`접속 대기열 시스템 (대기 순번 발급)`, value: P.queue, onChange: v => { P.queue = v; recalc(); }, hint: TR`누르면 바로 대기 순번을 받고 서버가 처리할 수 있는 만큼만 차례로 들여보냅니다.` });
 
   const stIn = K.stat(F.stats, { label: TR`접속 완료 인원`, unit: TR`명` });
   const stDone = K.stat(F.stats, { label: TR`전원 접속까지` });
@@ -243,13 +243,13 @@ K.register('rush', function (root) {
     }
     if (R.fdT <= s * DT + DT) return TR`${K.flag('bad')}동시 접속 한도(파일 디스크립터 ${K.n(P.fd)}개)에 걸렸습니다. 서버는 접속 하나마다 파일 디스크립터를 하나씩 씁니다. ${K.n(fdMax())}명이 들어온 뒤로는 서버가 새 접속을 받을 때마다 “Too many open files” 오류가 나서, 나머지 <b>${K.n(rem)}명</b>은 <b>접속 불가·무한 로딩</b>입니다. 처리 능력은 남아도는데 아무도 못 들어오는, 설정 한 줄(ulimit) 실수로 생기는 장애입니다.`;
     if (P.queue) return TR`${K.flag('good')}모두 대기 순번을 받고 기다립니다. 서버는 초당 ${K.n(P.rate)}명씩 정확히 들여보내 헛일이 없습니다(효율 ${K.pct(Math.min(1, good))}). 플레이어 화면에는 “대기 순번 · 예상 시간”이 보입니다. 기다리긴 해도 “서버에 연결할 수 없습니다”를 수십 번 보는 일은 없습니다.`;
-    if (s * DT < 3) return TR`${K.flag('warn')}점검이 끝나자마자 ${K.n(N)}명이 거의 동시에 접속 버튼을 눌렀습니다. 서버는 1초에 ${K.n(P.rate)}명을 받는데, 첫 2초 동안 초당 <b>${K.n(N / 2)}번</b>이 몰립니다. 접속 대기열(backlog, ${K.n(P.backlog)}개)이 순식간에 찹니다.`;
+    if (s * DT < 3) return TR`${K.flag('warn')}점검이 끝나자마자 ${K.n(N)}명이 거의 동시에 접속 버튼을 눌렀습니다. 서버는 1초에 ${K.n(P.rate)}명을 받는데 첫 2초 동안 초당 <b>${K.n(N / 2)}번</b>이 몰립니다. 접속 대기열(backlog, ${K.n(P.backlog)}개)이 순식간에 찹니다.`;
     const tail = TR`플레이어는 로딩이 끝나지 않거나 “서버에 연결할 수 없습니다”를 보고 다시 누릅니다(<b>접속 불가·무한 로딩</b>).`;
     if (P.retry === 'backoff') return TR`${K.flag(good < 0.5 ? 'bad' : 'warn')}실패한 사람은 2초, 4초, 8초… 점점 더 오래, 저마다 다른 시각에 다시 시도합니다. 시도가 초당 ${K.n(att)}번으로 줄어 서버가 거절 처리에 쓰는 자원이 줄었습니다. 대신 운 나쁜 사람은 수십 초를 기다립니다. 남은 사람 ${K.n(rem)}명.`;
     if (att > P.rate * 4 || good < 0.6) {
       const how = P.retry === 'now'
-        ? TR`버려진 요청이 1초 만에 다시 들어오면서 시도가 눈덩이처럼 불어나고, 서버는 몰려드는 요청과 클라이언트 타임아웃으로 끊긴 로그인을 반쯤 처리하는 헛일에 자원을 빼앗겨`
-        : TR`5초마다 모두 한꺼번에 다시 누르니 시도가 주기적으로 몰렸다 빠집니다. 몰릴 때는 버려지고, 그 사이엔 대기열이 비어 서버가 쉬고`;
+        ? TR`버려진 요청이 1초 만에 다시 들어오면서 시도가 눈덩이처럼 불어나고 서버는 몰려드는 요청과 클라이언트 타임아웃으로 끊긴 로그인을 반쯤 처리하는 헛일에 자원을 빼앗겨`
+        : TR`5초마다 모두 한꺼번에 다시 누르니 시도가 주기적으로 몰렸다 빠집니다. 몰릴 때는 버려지고 그 사이엔 대기열이 비어 서버가 쉬고`;
       return TR`${K.flag('bad')}초당 <b>${K.n(att)}번</b> 접속을 시도하지만 접속 대기열(backlog)은 ${K.n(P.backlog)}개뿐이라 대부분 바로 버려집니다. ${how}, 실제로는 초당 <b>${K.n(okps)}명</b>(처리 능력의 ${K.pct(Math.min(1, good))})만 들어갑니다. ${tail}`;
     }
     return TR`${K.flag('warn')}접속 진행 중: 초당 ${K.n(okps)}명씩 들어가고 <b>${K.n(rem)}명</b>이 남았습니다. 초당 시도 ${K.n(att)}번.`;

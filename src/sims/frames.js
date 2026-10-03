@@ -5,7 +5,7 @@ K.register('frames', function (root) {
   const F = K.frame(root, {
     kicker: TR`레이어 1 · 클라이언트 게임`,
     title: TR`프레임이 늦으면 화면이 멈췄다 튄다`,
-    lead: TR`게임은 1초에 60번, 16.7ms마다 “계산하고 그리기”를 되풀이합니다. 한 프레임이라도 늦으면 그동안 화면은 멈춰 있고, 다음 프레임에서 캐릭터가 한꺼번에 이동합니다. 이 렉은 내 컴퓨터 안에서 생깁니다. 회선과 서버는 멀쩡하고, 다른 플레이어 화면 속의 나는 대개 평소처럼 움직입니다.`,
+    lead: TR`게임은 1초에 60번, 16.7ms마다 “계산하고 그리기”를 되풀이합니다. 한 프레임이라도 늦으면 그동안 화면은 멈춰 있고 다음 프레임에서 캐릭터가 한꺼번에 이동합니다. 이 렉은 내 컴퓨터 안에서 생깁니다. 회선과 서버는 멀쩡하고 다른 플레이어 화면 속의 나는 대개 평소처럼 움직입니다.`,
     tries: [
       TR`<b>GC 스파이크</b>를 누르고 아래 달리는 캐릭터를 지켜보세요. 몇 초마다 멈췄다가 앞으로 툭 튀어 나갑니다(순간이동). 위 차트에는 빨간 막대가 솟습니다.`,
       TR`그 상태에서 <b>점진적 GC</b>를 켜 보세요. 큰 멈춤 한 번을 3ms(유니티 기본값)짜리 작은 단위 여러 번으로 나눠 처리합니다. 가비지 생성을 500KB로 올리면 수집 속도가 못 따라가 다시 큰 멈춤이 나옵니다.`,
@@ -376,8 +376,8 @@ K.register('frames', function (root) {
   function jumpText(e) {
     const d = lastJump && !lastJump.rubber && now - lastJump.t < 3000 ? lastJump.d : Math.min(e.ms, P.mode === 'cap' ? 5 * VB : e.ms) * SPEED;
     if (P.mode === 'var') return TR`풀리는 순간 캐릭터가 <b>${K.n(d, 1)}m 순간이동</b>합니다.`;
-    if (P.mode === 'fixed') return TR`풀리면 밀린 계산을 몰아서 돌려 <b>${K.n(d, 1)}m 순간이동</b>하고, 몰아 돌린 계산 때문에 다음 프레임도 늦어집니다.`;
-    return TR`따라잡기를 5번에서 멈추니 이동은 ${K.n(d, 1)}m에 그치지만, 나머지 시간은 버려져 게임 시계가 그만큼 뒤처집니다(<b>슬로우모션</b>).`;
+    if (P.mode === 'fixed') return TR`풀리면 밀린 계산을 몰아서 돌려 <b>${K.n(d, 1)}m 순간이동</b>하고 몰아 돌린 계산 때문에 다음 프레임도 늦어집니다.`;
+    return TR`따라잡기를 5번에서 멈추니 이동은 ${K.n(d, 1)}m에 그치지만 나머지 시간은 버려져 게임 시계가 그만큼 뒤처집니다(<b>슬로우모션</b>).`;
   }
   function explain() {
     if (!S) return '';
@@ -393,13 +393,13 @@ K.register('frames', function (root) {
     }
     if (S.mixed) return TR`${K.flag('warn')}한 프레임 작업이 평균 <b>${K.ms(S.work)}</b>로 16.7ms 언저리입니다. V-Sync는 16.7ms 간격에 맞춰 내보내므로 어떤 프레임은 16.7ms, 어떤 프레임은 33.3ms가 걸립니다. FPS가 60과 30 사이를 오가 움직임이 들쭉날쭉합니다(<b>뚝뚝 끊김</b>). GC·로딩을 뺀 가장 무거운 프레임이 ${K.ms(S.wmax)}이니, 작업을 ${K.ms(Math.max(0.5, S.wmax - VB + 0.3))}쯤 줄여 모든 프레임이 16.7ms 안에 끝나면 60에 고정됩니다.`;
     if (S.fps < 45) {
-      return TR`${K.flag(S.fps < 25 ? 'bad' : 'warn')}한 프레임 작업이 평균 <b>${K.ms(S.work)}</b>입니다. 캐릭터 ${K.n(P.chars)}명을 그리고 패킷 ${K.n(P.chars * 0.5)}개를 처리${P.mode !== 'var' && S.steps > 1.3 ? TR`하고, 밀린 시간을 메우려 게임 계산을 한 프레임에 평균 ${K.n(S.steps, 1)}번 되풀이` : ''}하느라 1초에 <b>${K.n(S.fps)}프레임</b>밖에 못 그립니다. 화면은 <b>뚝뚝 끊김</b>, 누른 키는 ${K.ms(S.lat)} 뒤에야 보입니다(<b>입력 지연</b>).` + CLIENT;
+      return TR`${K.flag(S.fps < 25 ? 'bad' : 'warn')}한 프레임 작업이 평균 <b>${K.ms(S.work)}</b>입니다. 캐릭터 ${K.n(P.chars)}명을 그리고 패킷 ${K.n(P.chars * 0.5)}개를 처리${P.mode !== 'var' && S.steps > 1.3 ? TR`하고 밀린 시간을 메우려 게임 계산을 한 프레임에 평균 ${K.n(S.steps, 1)}번 되풀이` : ''}하느라 1초에 <b>${K.n(S.fps)}프레임</b>밖에 못 그립니다. 화면은 <b>뚝뚝 끊김</b>, 누른 키는 ${K.ms(S.lat)} 뒤에야 보입니다(<b>입력 지연</b>).` + CLIENT;
     }
     if (P.load) return TR`${K.flag('warn')}지금은 한 프레임 작업이 ${K.ms(S.work)}라 매끄럽습니다. 하지만 몇 초마다 새 지역에 들어서며 게임 스레드가 에셋을 직접 읽습니다. 곧 화면이 <b>멈춤</b> 뒤 <b>순간이동</b>합니다.`;
     if (P.gc && P.inc && incLeft > 0) return TR`${K.flag('good')}점진적 GC가 프레임마다 ${SLICE}ms씩 가비지를 나눠 수집하는 중입니다. 큰 멈춤 없이 매끄럽게 달립니다.`;
     if (P.gc && P.inc && P.garbage > 0) return TR`${K.flag('good')}가비지가 <b>${K.n(heap)}MB</b> 쌓였습니다. ${INC_START}MB가 되면 점진적 GC가 프레임마다 ${SLICE}ms씩 나눠 수집하기 시작합니다. 가비지를 너무 빨리 만들면 다 수집하지 못하고 ${HEAPMAX}MB에서 결국 한 번에 멈춥니다.`;
     if (P.gc && P.garbage > 0) return TR`${K.flag('warn')}가비지가 <b>${K.n(heap)}MB</b> 쌓였습니다. ${HEAPMAX}MB가 되면 한꺼번에 수집하느라 게임이 잠깐 멈춥니다. 지금은 한 프레임 작업이 ${K.ms(S.work)}라 매끄럽습니다.`;
-    return TR`${K.flag('good')}한 프레임 작업이 평균 <b>${K.ms(S.work)}</b>로 16.7ms 안에 넉넉히 끝납니다. 캐릭터가 매끄럽게 달리고, 누른 키는 ${K.ms(S.lat)} 뒤에 화면에 나타납니다.`;
+    return TR`${K.flag('good')}한 프레임 작업이 평균 <b>${K.ms(S.work)}</b>로 16.7ms 안에 넉넉히 끝납니다. 캐릭터가 매끄럽게 달리고 누른 키는 ${K.ms(S.lat)} 뒤에 화면에 나타납니다.`;
   }
 
   K.loop(root, dt => {

@@ -35,7 +35,7 @@
     {"ctx":"src/sims/timeouts.js:125","ko":"연결 방식","t":"Jenis koneksi"},
     {"ctx":"src/sims/timeouts.js:125","ko":"유선·와이파이","t":"Kabel/Wi-Fi"},
     {"ctx":"src/sims/timeouts.js:125","ko":"모바일","t":"Seluler"},
-    {"ctx":"src/sims/timeouts.js:125","ko":"실험 값: 가정 공유기 UDP 1분·TCP 1시간, 통신사 공유기(CGNAT) UDP 30초·TCP 10분. 실제 값은 기기·통신사마다 다르고, 측정 연구에서 UDP는 30초~3분이 흔했습니다.","t":"Nilai simulasi: router rumah UDP 1 menit, TCP 1 jam; NAT ISP (CGNAT) UDP 30 detik, TCP 10 menit. Nilai sebenarnya berbeda menurut perangkat dan ISP, dan dalam studi pengukuran UDP umumnya 30 detik sampai 3 menit."},
+    {"ctx":"src/sims/timeouts.js:125","ko":"실험 값: 가정 공유기 UDP 1분·TCP 1시간, 통신사 공유기(CGNAT) UDP 30초·TCP 10분. 실제 값은 기기·통신사마다 다르고 측정 연구에서 UDP는 30초~3분이 흔했습니다.","t":"Nilai simulasi: router rumah UDP 1 menit, TCP 1 jam; NAT ISP (CGNAT) UDP 30 detik, TCP 10 menit. Nilai sebenarnya berbeda menurut perangkat dan ISP, dan dalam studi pengukuran UDP umumnya 30 detik sampai 3 menit."},
     {"ctx":"src/sims/timeouts.js:126","ko":"백그라운드 전환 (모바일)","t":"Pindah ke latar belakang (seluler)"},
     {"ctx":"src/sims/timeouts.js:126","ko":"게임 루프에서 하트비트를 보내면 앱을 내리는 즉시 멈춥니다(유니티 등 엔진은 내리면 루프를 멈춤). 이 실험은 하트비트를 따로 보내는 네트워크 스레드가 있어, OS가 앱을 일시 정지하는 10초 뒤까지 버틴다고 둡니다(안드로이드 14 이상 약 10초, iOS는 몇 초~몇십 초).","t":"Jika heartbeat dikirim dari game loop, heartbeat langsung berhenti begitu aplikasi masuk ke latar belakang (engine seperti Unity menghentikan loop saat itu). Simulasi ini menganggap ada network thread terpisah yang mengirim heartbeat, sehingga heartbeat bertahan sampai OS menangguhkan aplikasi 10 detik kemudian (sekitar 10 detik di Android 14 ke atas, beberapa hingga puluhan detik di iOS)."},
     {"ctx":"src/sims/timeouts.js:127","ko":"회사·PC방 방화벽 거침","t":"Melewati firewall kantor/warnet"},
@@ -112,7 +112,7 @@
     {"ctx":"src/sims/timeouts.js:356","ko":"{0}운영체제의 TCP keepalive 확인 패킷이 {1}마다 지나가서 모든 장비의 타이머가 가득 차기 전에 0으로 돌아갑니다. 가장 짧은 타임아웃은 <b>{2} {3}</b>입니다. ","t":"{0}Paket probe TCP keepalive dari sistem operasi lewat setiap {1}, sehingga timer semua perangkat kembali ke 0 sebelum penuh. Timeout terpendek adalah <b>{2} {3}</b>. "},
     {"ctx":"src/sims/timeouts.js:357","ko":"{0}하트비트가 {1}마다 지나가서 모든 장비의 타이머가 가득 차기 전에 0으로 돌아갑니다. 가장 짧은 타임아웃은 <b>{2} {3}</b>입니다. ","t":"{0}Heartbeat lewat setiap {1}, sehingga timer semua perangkat kembali ke 0 sebelum penuh. Timeout terpendek adalah <b>{2} {3}</b>. "},
     {"ctx":"src/sims/timeouts.js:358","ko":"간격이 그 절반 이하라 패킷 하나가 늦거나 사라져도 버팁니다.","t":"Intervalnya tidak lebih dari separuh nilai itu, jadi koneksi tetap bertahan walaupun satu paket terlambat atau hilang."},
-    {"ctx":"src/sims/timeouts.js:358","ko":"간격이 그 절반을 넘어서, 패킷 하나만 늦거나 사라져도 끊길 수 있습니다. {0} 이하로 줄이는 편이 안전합니다.","t":"Intervalnya lebih dari separuh nilai itu, jadi satu paket saja yang terlambat atau hilang bisa membuat koneksi putus. Lebih aman jika diturunkan menjadi {0} atau kurang."},
+    {"ctx":"src/sims/timeouts.js:358","ko":"간격이 그 절반을 넘어서 패킷 하나만 늦거나 사라져도 끊길 수 있습니다. {0} 이하로 줄이는 편이 안전합니다.","t":"Intervalnya lebih dari separuh nilai itu, jadi satu paket saja yang terlambat atau hilang bisa membuat koneksi putus. Lebih aman jika diturunkan menjadi {0} atau kurang."},
     {"ctx":"src/sims/timeouts.js:359","ko":" 다만 keepalive는 운영체제가 보내므로 게임이 멈춰도 계속 나갑니다. 게임이 살아 있는지는 하트비트로 따로 확인해야 합니다.","t":" Namun, keepalive dikirim oleh sistem operasi, jadi tetap terkirim walaupun game hang. Apakah game masih hidup harus diperiksa terpisah dengan heartbeat."},
     {"ctx":"src/sims/timeouts.js:362","ko":"휴대폰이 백그라운드로 가고 10초 뒤 OS가 앱을 멈춰 하트비트가 끊겼습니다. 그 뒤로 유휴 시간이 {0} 넘자@@문장 앞부분. 뒤에 ‘N초에 (장비)가 연결을 지웠습니다’ 또는 ‘서버가 내보냈습니다’가 이어짐","t":"Ponsel masuk ke latar belakang, dan 10 detik kemudian OS menangguhkan aplikasi sehingga heartbeat berhenti. Setelah itu, begitu waktu idle melewati {0},"},
     {"ctx":"src/sims/timeouts.js:363","ko":"하트비트가 없어 이 연결에는 {0} 동안 아무 패킷도 지나가지 않았고, 그러자@@문장 앞부분. 뒤에 ‘N초에 (장비)가 연결을 지웠습니다’ 또는 ‘서버가 내보냈습니다’가 이어짐","t":"Tanpa heartbeat, tidak ada paket yang lewat di koneksi ini selama {0}, sehingga"},
@@ -123,7 +123,7 @@
     {"ctx":"src/sims/timeouts.js:367","ko":"백그라운드에서는 하트비트를 보낼 수 없으니, 복귀하면 자동으로 빠르게 재접속하는 흐름을 만들어 두어야 합니다.","t":"Heartbeat tidak bisa dikirim dari latar belakang, jadi siapkan alur reconnect otomatis yang cepat saat pemain kembali."},
     {"ctx":"src/sims/timeouts.js:367","ko":"<b>해결:</b> 하트비트를 가장 짧은 타임아웃의 절반 이하, 예를 들어 {0}마다 보내세요.","t":"<b>Solusi:</b> kirim heartbeat dengan interval maksimal separuh timeout terpendek, misalnya setiap {0}."},
     {"ctx":"src/sims/timeouts.js:369","ko":"{0}{1} <b>{2}</b>에 {3} 이 연결을 세션 테이블에서 지웠습니다. 플레이어는 가만히 있다가 다시 움직이는 순간 반응이 없다가 <b>접속 끊김</b>을 겪습니다. ","t":"{0}{1} pada <b>{2}</b> {3} menghapus koneksi ini dari tabel sesi. Pemain yang tadinya diam tidak mendapat respons saat bergerak lagi, lalu mengalami <b>disconnect</b>. "},
-    {"ctx":"src/sims/timeouts.js:370","ko":"그런데 서버는 {0} 이 사실을 모릅니다. 서버에는 캐릭터가 그대로 남아(유령 접속) 재접속하면 “이미 접속 중” 오류가 나고, 필드에 가만히 선 캐릭터가 공격받기도 합니다. ","t":"Namun server tidak mengetahui hal ini {0}. Karakter tetap ada di server (sesi hantu), sehingga saat reconnect muncul error “sudah login”, dan karakter yang berdiri diam di field bahkan bisa diserang. "},
+    {"ctx":"src/sims/timeouts.js:370","ko":"그런데 서버는 {0} 이 사실을 모릅니다. 서버에는 캐릭터가 그대로 남아(유령 접속) 재접속하면 “이미 접속 중” 오류가 나고 필드에 가만히 선 캐릭터가 공격받기도 합니다. ","t":"Namun server tidak mengetahui hal ini {0}. Karakter tetap ada di server (sesi hantu), sehingga saat reconnect muncul error “sudah login”, dan karakter yang berdiri diam di field bahkan bisa diserang. "},
     {"ctx":"src/sims/timeouts.js:370","ko":"{0} 동안({1})","t":"selama {0} ({1})"},
     {"ctx":"src/sims/timeouts.js:370","ko":"TCP keepalive 확인이 실패할 때까지","t":"sampai probe TCP keepalive gagal"},
     {"ctx":"src/sims/timeouts.js:370","ko":"무응답 판정까지","t":"sampai timeout tanpa respons"},
@@ -132,6 +132,6 @@
     {"ctx":"src/sims/timeouts.js:371","ko":"TCP keepalive 확인으로","t":"lewat probe TCP keepalive"},
     {"ctx":"src/sims/timeouts.js:371","ko":"무응답 판정으로","t":"lewat timeout tanpa respons"},
     {"ctx":"src/sims/timeouts.js:372","ko":"백그라운드에서는 하트비트를 보낼 수 없으니, 복귀하면 자동 재접속하고 서버는 짧은 무응답 판정으로 캐릭터를 정리해야 합니다.","t":"Heartbeat tidak bisa dikirim dari latar belakang, jadi klien harus reconnect otomatis saat pemain kembali, dan server harus membersihkan karakter dengan timeout tanpa respons yang pendek."},
-    {"ctx":"src/sims/timeouts.js:373","ko":"<b>해결:</b> 하트비트를 가장 짧은 타임아웃({0} {1})의 절반 이하, 예를 들어 {2}마다 보내고, 서버도 무응답 판정을 켜 두세요.","t":"<b>Solusi:</b> kirim heartbeat dengan interval maksimal separuh timeout terpendek ({0} {1}), misalnya setiap {2}, dan aktifkan juga timeout tanpa respons di server."}
+    {"ctx":"src/sims/timeouts.js:373","ko":"<b>해결:</b> 하트비트를 가장 짧은 타임아웃({0} {1})의 절반 이하, 예를 들어 {2}마다 보내고 서버도 무응답 판정을 켜 두세요.","t":"<b>Solusi:</b> kirim heartbeat dengan interval maksimal separuh timeout terpendek ({0} {1}), misalnya setiap {2}, dan aktifkan juga timeout tanpa respons di server."}
   ]
 }

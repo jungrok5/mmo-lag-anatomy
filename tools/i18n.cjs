@@ -5,6 +5,7 @@
 //   node tools/i18n.cjs check [언어…]           자리표시·태그·링크·숫자 검사. 오류가 있으면 종료 코드 1 (--strict: 빈 항목도 오류)
 //   node tools/i18n.cjs show <언어> <묶음> [--empty] [--from N] [--count M]   번역할 항목을 번호와 함께 보기
 //   node tools/i18n.cjs fill <언어> <묶음> <파일.json>   {"번호": "번역", …} 또는 {"원문": "번역", …}을 t에 채운다
+//   node tools/i18n.cjs restore [언어…] [--dry]   뜻은 그대로 두고 한국어 문장만 다듬었을 때: 빈 항목을 같은 자리(ctx)의 가장 비슷한 stale 번역으로 되살린다
 //   node tools/i18n.cjs pack <언어> <폴더>       빌드용: ui.json(화면 글자 사전), data.js(번역한 DATA), body.html, head.html, strings.json
 //
 // 번역 단위(원문 문자열)가 사전의 열쇠다. 원문이 바뀌면 열쇠가 바뀌어 그 항목은 빈 칸(또는 stale)이 되므로, 번역이 낡은 채 섞이지 않는다.
@@ -310,6 +311,41 @@ function check(lang, units, strict) {
   return out;
 }
 
+// ---------------------------------------------------------------- 문체만 고친 원문의 번역 되살리기
+// 같은 ctx(예: "#sync p")가 여럿이면 원문이 가장 비슷한 stale을 고르고(글자 2-gram 겹침), 쓴 stale은 지운다.
+// 원문의 뜻이 바뀐 항목에는 쓰지 않는다. 그런 항목은 빈 칸으로 두고 새로 번역한다.
+const bigrams = s => { const t = s.replace(/<[^>]+>/g, '').replace(/\s+/g, ''); const m = new Map(); for (let i = 0; i < t.length - 1; i++) { const g = t.slice(i, i + 2); m.set(g, (m.get(g) || 0) + 1); } return m; };
+function similarity(a, b) {
+  const A = bigrams(a), B = bigrams(b);
+  let inter = 0, n = 0;
+  for (const v of A.values()) n += v;
+  for (const v of B.values()) n += v;
+  for (const [g, v] of A) if (B.has(g)) inter += Math.min(v, B.get(g));
+  return n ? 2 * inter / n : 0;
+}
+function restore(lang, dry) {
+  const out = { filled: 0, left: [] };
+  for (const g of groupsOf(lang)) {
+    const j = readGroup(lang, g);
+    const empty = j.entries.filter(e => !e.t);
+    if (!empty.length || !j.stale.length) { empty.forEach(e => out.left.push(`${g}: ${e.ctx} | ${e.ko.slice(0, 70)}`)); continue; }
+    const pairs = [];
+    for (const e of empty) j.stale.forEach((s, si) => {
+      if (!s.t) return;
+      const near = e.ctx.split(', ').some(c => s.ctx.split(', ').includes(c));
+      const d = similarity(e.ko, s.ko);
+      if ((near && d >= 0.45) || d >= 0.8) pairs.push({ e, si, d: d + (near ? 1 : 0) });
+    });
+    pairs.sort((a, b) => b.d - a.d);
+    const done = new Set(), used = new Set();
+    for (const { e, si } of pairs) if (!done.has(e) && !used.has(si)) { e.t = j.stale[si].t; done.add(e); used.add(si); }
+    empty.filter(e => !done.has(e)).forEach(e => out.left.push(`${g}: ${e.ctx} | ${e.ko.slice(0, 70)}`));
+    out.filled += done.size;
+    if (!dry && done.size) { j.stale = j.stale.filter((_, i) => !used.has(i)); writeGroup(lang, j); }
+  }
+  return out;
+}
+
 // ---------------------------------------------------------------- 빌드용 묶음
 // byGroup(있으면): 묶음별 사전. 같은 글자라도 그 장(body-<장>)의 번역을 먼저 쓴다
 function translateHTML(src, dict, byGroup = {}) {
@@ -403,6 +439,12 @@ if (require.main === module) {
       bad += r.errors.length;
     }
     process.exitCode = bad ? 1 : 0;
+  } else if (cmd === 'restore') {
+    for (const l of targets(pos)) {
+      const r = restore(l, flags.has('--dry'));
+      console.log(`${l.code}: ${r.filled}개 되살림, 빈 항목 ${r.left.length}개 남음`);
+      r.left.slice(0, flags.has('--all') ? 1e9 : 10).forEach(x => console.log('  ' + x));
+    }
   } else if (cmd === 'show') {
     const [code, group] = pos;
     const j = readGroup(langOf(code), group);

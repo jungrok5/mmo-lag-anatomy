@@ -4,6 +4,6 @@
   "entries": [
     {"ctx":"#triage div","ko":"<span class=\"idx\">T1</span>도구","t":"<span class=\"idx\">T1</span>Tools"},
     {"ctx":"#triage h2","ko":"진단 도우미","t":"Triage helper"},
-    {"ctx":"#triage p","ko":"렉 제보를 받았을 때 “누가, 언제, 어떤 모양으로” 세 가지만 골라 보세요. 이 백서에 실린 원인 중 가장 잘 맞는 후보를 점수 순으로 보여 줍니다. 확정 진단은 아니지만, 어느 팀에 먼저 물어볼지 정하는 데 충분합니다.","t":"When a lag report comes in, pick just three things: “who, when, and what it looks like.” The helper shows the causes in this white paper that fit best, ranked by score. It isn’t a definitive diagnosis, but it’s enough to decide which team to ask first."}
+    {"ctx":"#triage p","ko":"렉 제보를 받았을 때 “누가, 언제, 어떤 모양으로” 세 가지만 골라 보세요. 이 백서에 실린 원인 중 가장 잘 맞는 후보를 점수 순으로 보여 줍니다. 확정 진단은 아니지만 어느 팀에 먼저 물어볼지 정하는 데 충분합니다.","t":"When a lag report comes in, pick just three things: “who, when, and what it looks like.” The helper shows the causes in this white paper that fit best, ranked by score. It isn’t a definitive diagnosis, but it’s enough to decide which team to ask first."}
   ]
 }

@@ -2,6 +2,6 @@
   "lang": "id",
   "group": "meta",
   "entries": [
-    {"ctx":" meta@content","ko":"온라인 게임에서 화면이 끊기고, 순간이동하고, 접속이 끊기는 원인을 내 화면부터 서버 데이터베이스까지 층별로 해부하고 직접 조작하며 이해하는 백서. MMO 사례를 중심으로, 원인마다 담당 팀(게임개발팀·인프라팀)과 공신력 있는 출처를 담았습니다.","t":"Penyebab lag game online (patah-patah, teleport, disconnect) dibedah lapis demi lapis secara interaktif, lengkap dengan tim penanggung jawab dan sumbernya."}
+    {"ctx":" meta@content","ko":"온라인 게임에서 화면이 끊기거나 순간이동하거나 접속이 끊기는 원인을 내 화면부터 서버 데이터베이스까지 층별로 해부하고 직접 조작하며 이해하는 백서. MMO 사례를 중심으로, 원인마다 담당 팀(게임개발팀·인프라팀)과 공신력 있는 출처를 담았습니다.","t":"Penyebab lag game online (patah-patah, teleport, disconnect) dibedah lapis demi lapis secara interaktif, lengkap dengan tim penanggung jawab dan sumbernya."}
   ]
 }

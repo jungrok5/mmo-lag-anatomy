@@ -2,7 +2,7 @@
    본문·표와 시뮬레이션 frames·cpu의 근거 */
 Object.assign(DATA.secRefs, {
   'l-client-game': [
-    { t: 'Slow rendering', u: 'https://developer.android.com/topic/performance/vitals/render', p: 'Android (Google)', n: '60FPS를 내려면 한 프레임을 16ms 안에 그려야 하고, 늦으면 프레임을 건너뛰어 끊김으로 보임' },
+    { t: 'Slow rendering', u: 'https://developer.android.com/topic/performance/vitals/render', p: 'Android (Google)', n: '60FPS를 내려면 한 프레임을 16ms 안에 그려야 하고 늦으면 프레임을 건너뛰어 끊김으로 보임' },
     { t: 'Interpolation and extrapolation (Netcode for Entities 6.5)', u: 'https://docs.unity3d.com/Packages/com.unity.netcode@6.5/manual/interpolation.html', p: 'Unity', n: '띄엄띄엄 오는 스냅샷 사이를 이어 그리는 보간, 데이터가 늦으면 같은 방향·속도로 이어 가는 외삽과 그 상한' },
     { t: 'Introduction to prediction (Netcode for Entities 6.5)', u: 'https://docs.unity3d.com/Packages/com.unity.netcode@6.5/manual/intro-to-prediction.html', p: 'Unity', n: '클라이언트가 서버 결과를 기다리지 않고 자기 입력으로 먼저 움직이는 예측, 서버와 다르면 보정' },
     { t: 'Peeking into VALORANT\'s Netcode', u: 'https://technology.riotgames.com/news/peeking-valorants-netcode', p: 'Riot Games', n: '들쭉날쭉 오는 데이터를 버퍼로 고르게 만들면 매끄럽지만 그만큼 지연이 늘고, 추측이 틀리면 캐릭터가 튀거나 미끄러짐' },

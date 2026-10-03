@@ -4,7 +4,7 @@ K.register('syncmodels', function (root) {
   const F = K.frame(root, {
     kicker: TR`동기화 방식 · 비교`,
     title: TR`버튼 한 번, 다섯 가지 반응`,
-    lead: TR`같은 회선에서 같은 버튼을 눌렀을 때 방식마다 내 화면이 언제 반응하고, 서버나 상대는 언제 알게 되는지 나란히 봅니다. 핑을 올려 보세요. 어떤 방식은 반응이 핑만큼 늦어지고, 어떤 방식은 핑과 상관없이 바로 반응하는 대신 다른 대가를 치릅니다.`,
+    lead: TR`같은 회선에서 같은 버튼을 눌렀을 때 방식마다 내 화면이 언제 반응하고 서버나 상대는 언제 아는지 나란히 봅니다. 핑을 올려 보세요. 어떤 방식은 반응이 핑만큼 늦어지고 어떤 방식은 핑과 상관없이 바로 반응하는 대신 다른 대가를 치릅니다.`,
     layout: 'stack',
     tries: [
       TR`<b>핑</b>을 30 → 150 → 300ms로 올리며 각 줄의 ▼(누름)와 ●(내 화면 반응) 사이 거리를 비교하세요. 요청-응답은 핑만큼 거리가 늘어납니다. 300ms에서는 상대 입력이 닿는 데 입력 지연보다 오래 걸려 락스텝도 가끔 멈춥니다.`,
@@ -278,7 +278,7 @@ K.register('syncmodels', function (root) {
     const lockStalls = LS.stalls.filter(s => s[1] > t - 8000).length;
     const rrMs = out.rr;
     let msg;
-    if (P.rtt >= 120) msg = TR`${K.flag(rrMs > 250 ? 'bad' : 'warn')}핑 ${P.rtt}ms에서 <b>요청-응답</b>은 누르고 약 <b>${K.n(rrMs)}ms</b> 뒤에야 반응합니다(입력 지연). <b>예측·클라이언트 권위·롤백</b>은 핑과 상관없이 한 프레임(17ms) 만에 반응하지만, 각각 보정(고무줄), 화면 불일치·해킹, 되감기(순간이동)라는 대가가 있습니다.`;
+    if (P.rtt >= 120) msg = TR`${K.flag(rrMs > 250 ? 'bad' : 'warn')}핑 ${P.rtt}ms에서 <b>요청-응답</b>은 누르고 약 <b>${K.n(rrMs)}ms</b> 뒤에야 반응합니다(입력 지연). <b>예측·클라이언트 권위·롤백</b>은 핑과 상관없이 한 프레임(17ms) 만에 반응하지만 각각 보정(고무줄), 화면 불일치·해킹, 되감기(순간이동)라는 대가가 있습니다.`;
     else msg = TR`${K.flag('good')}핑 ${P.rtt}ms에서는 요청-응답도 ${K.n(rrMs)}ms로 크게 굼뜨지 않습니다. 핑을 150ms 이상으로 올리면 방식 사이의 차이가 뚜렷해집니다.`;
     if (lockStalls >= 2) msg += TR` <b>락스텝</b>은 입력 지연(${P.lockDelay}ms)이 입력이 상대에게 닿는 시간(핑의 절반)+지터(${Math.round(P.rtt / 2 + P.jitter)}ms)보다 짧아 최근 8초 동안 ${lockStalls}번 <b>모두가 멈췄습니다</b>.`;
     else msg += TR` <b>락스텝</b>은 핑과 무관하게 입력 지연(${P.lockDelay}ms, 턴 단위로 올리면 최대 ${lockTurns() * tickT()}ms)만큼 일정하게 늦습니다.`;

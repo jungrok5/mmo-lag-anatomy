@@ -5,7 +5,7 @@ K.register('nic', function (root) {
   const F = K.frame(root, {
     kicker: TR`레이어 6 · 서버 NIC`,
     title: TR`서버 네트워크 카드가 패킷을 버리는 순간`,
-    lead: TR`네트워크 카드(NIC)는 받은 패킷을 링 버퍼(수신 슬롯 묶음)에 넣고 인터럽트로 CPU에 알립니다. RSS는 패킷을 여러 수신 큐로 나눠 여러 CPU 코어가 처리하게 하는 기능입니다. 코어가 꺼내는 속도보다 빨리 쌓이면 슬롯이 다 차고, 그 뒤에 온 패킷은 버려집니다. 네트워크 카드 통계의 숫자만 올라갈 뿐 게임 서버 로그에는 아무 기록도 남지 않습니다.`,
+    lead: TR`네트워크 카드(NIC)는 받은 패킷을 링 버퍼(수신 슬롯 묶음)에 넣고 인터럽트로 CPU에 알립니다. RSS는 패킷을 여러 수신 큐로 나눠 여러 CPU 코어가 처리하게 하는 기능입니다. 코어가 꺼내는 속도보다 빨리 쌓이면 슬롯이 다 차고 그 뒤에 온 패킷은 버려집니다. 네트워크 카드 통계의 숫자만 올라갈 뿐 게임 서버 로그에는 아무 기록도 남지 않습니다.`,
     tries: [
       TR`<b>월드 보스 (150만 pps, RSS 1개)</b>를 누르세요(게이트웨이 규모의 극단적인 예). 코어 하나가 100%에 붙고 링 버퍼가 넘쳐 초당 수십만 개가 버려집니다.`,
       TR`이어서 <b>RSS 큐 수</b>를 8로 올려 보세요. 같은 양을 코어 8개가 나눠 받아 버림이 0이 됩니다.`,
@@ -47,7 +47,7 @@ K.register('nic', function (root) {
   const g1 = K.group(F.controls, TR`들어오는 패킷`);
   const sPps = K.slider(g1, { label: TR`초당 들어오는 패킷(PPS)`, min: 0, max: PPS.length - 1, step: 1, value: PPS.indexOf(P.pps), fmt: i => fmtP(PPS[i]) + TR`/초`, onInput: i => { P.pps = PPS[i]; }, hint: TR`유저 1명이 초당 20~30개를 보냅니다. 150만 pps ≈ 5만~7만 명분이라 게임 서버 한 대보다는 게이트웨이·프록시 한 대가 받는 규모입니다.` });
   const sBurst = K.slider(g1, { label: TR`몰림 정도`, min: 0, max: 100, step: 5, value: P.burst, unit: '%', onInput: v => { P.burst = v; }, hint: TR`평균은 같아도 짧은 순간에 몰려 들어옵니다(보스 등장, 광역 스킬).` });
-  const tCloud = K.toggle(g1, { label: TR`클라우드 인스턴스 PPS 한도 (100만 pps)`, value: P.cloud, onChange: v => { P.cloud = v; }, hint: TR`이 실험은 한도를 100만 pps로 가정합니다(실제 한도는 인스턴스마다 다르고 공개하지 않는 경우가 많음). 넘은 패킷은 NIC에 닿기 전에 버려지고, AWS라면 ethtool -S의 pps_allowance_exceeded에만 남습니다.` });
+  const tCloud = K.toggle(g1, { label: TR`클라우드 인스턴스 PPS 한도 (100만 pps)`, value: P.cloud, onChange: v => { P.cloud = v; }, hint: TR`이 실험은 한도를 100만 pps로 가정합니다(실제 한도는 인스턴스마다 다르고 공개하지 않는 경우가 많음). 넘은 패킷은 NIC에 닿기 전에 버려지고 AWS라면 ethtool -S의 pps_allowance_exceeded에만 남습니다.` });
   const g2 = K.group(F.controls, TR`네트워크 카드 설정`);
   const cRing = K.choice(g2, { label: TR`링 버퍼 크기`, value: P.ring, options: [[256, TR`256개`], [1024, TR`1024개`], [4096, TR`4096개`]], onChange: v => { P.ring = +v; } });
   const sRss = K.slider(g2, { label: TR`RSS 큐 수`, min: 1, max: 16, step: 1, value: P.rss, unit: TR`개`, onInput: v => { P.rss = v; setup(); }, hint: TR`1개면 모든 인터럽트가 코어 하나로 갑니다. 이 실험은 코어 하나가 초당 약 70만 개를 꺼낸다고 가정합니다(실측 예는 35만~43만, CPU·설정에 따라 다름).` });
@@ -239,11 +239,11 @@ K.register('nic', function (root) {
   function explain(r) {
     const cap = capMs() * 1000;
     if (r.cloud > 1000) return TR`${K.flag('bad')}클라우드가 이 서버에 허용한 한도는 초당 100만 패킷입니다. 넘친 <b>${fmtP(r.cloud)}개/초</b>는 네트워크 카드에 닿기도 전에 조용히 버려집니다. 서버 CPU와 링 버퍼는 멀쩡해 보여 평소 지표로는 원인을 찾기 어렵습니다. AWS라면 ethtool -S의 pps_allowance_exceeded 카운터로 확인합니다. ${SYM} 더 큰 인스턴스를 쓰거나 서버를 나눠야 합니다.`;
-    if (r.drop > 100 && P.skew && P.rss > 1) return TR`${K.flag('bad')}큐는 ${P.rss}개인데 해시가 한쪽으로 쏠려 70%가 1번 큐로 몰렸습니다. 1번 코어는 꽉 찼고 나머지는 한가합니다. 1번 큐의 링 버퍼만 넘쳐 초당 <b>${fmtP(r.drop)}개</b>가 버려집니다. ${SYM} 큐를 늘려도 소용없고, 연결을 나누거나 해시 방식을 바꿔야 합니다.`;
+    if (r.drop > 100 && P.skew && P.rss > 1) return TR`${K.flag('bad')}큐는 ${P.rss}개인데 해시가 한쪽으로 쏠려 70%가 1번 큐로 몰렸습니다. 1번 코어는 꽉 찼고 나머지는 한가합니다. 1번 큐의 링 버퍼만 넘쳐 초당 <b>${fmtP(r.drop)}개</b>가 버려집니다. ${SYM} 큐를 늘려도 소용없고 연결을 나누거나 해시 방식을 바꿔야 합니다.`;
     if (r.drop > 100 && P.rss === 1) return TR`${K.flag('bad')}모든 패킷이 코어 하나로만 들어갑니다(RSS 1개). 코어 하나는 초당 약 ${fmtP(cap)}개까지만 꺼내는데 ${fmtP(P.pps)}개가 들어옵니다. 링 버퍼(${K.n(P.ring)}개)가 넘쳐 초당 <b>${fmtP(r.drop)}개</b>가 게임 서버 로그에 아무 흔적 없이 버려집니다. ${SYM} RSS 큐를 늘려 여러 코어가 나눠 받게 하세요.`;
     if (r.drop > 100 && r.util < 0.9) return TR`${K.flag('warn')}평균으로는 코어에 여유가 있지만(최대 ${K.pct(r.util)}), 패킷이 몰려 들어오는 순간 링 버퍼 슬롯(${K.n(P.ring)}개)이 모자라 초당 <b>${fmtP(r.drop)}개</b>가 버려집니다. 링 버퍼를 키우면 줄어듭니다. 대신 대기열이 길어져 지연이 조금 늘어납니다.`;
     if (r.drop > 100) return TR`${K.flag('bad')}코어 ${P.rss}개가 모두 한계에 가깝습니다. 들어오는 ${fmtP(r.arr)}개/초를 다 못 꺼내 초당 <b>${fmtP(r.drop)}개</b>가 버려집니다. ${SYM}`;
-    if (P.coal >= 120 && r.util < 0.5) return TR`${K.flag('warn')}인터럽트 병합을 ${P.coal}µs로 크게 잡았습니다. 패킷이 어느 정도 쌓일 때까지 기다렸다가 인터럽트를 한 번에 보내는 방식입니다. CPU는 아끼지만(처리 능력 +${K.pct(gain())}), 패킷마다 평균 <b>${fmtLat(r.lat)}</b>를 더 기다립니다. 지금처럼 한가할 땐 손해만 있습니다. 이것만으로 플레이어가 느끼진 않지만, 서버 안 여러 단계에서 이런 지연이 쌓입니다.`;
+    if (P.coal >= 120 && r.util < 0.5) return TR`${K.flag('warn')}인터럽트 병합을 ${P.coal}µs로 크게 잡았습니다. 패킷이 어느 정도 쌓일 때까지 기다렸다가 인터럽트를 한 번에 보내는 방식입니다. CPU는 아끼지만(처리 능력 +${K.pct(gain())}), 패킷마다 평균 <b>${fmtLat(r.lat)}</b>를 더 기다립니다. 지금처럼 한가할 땐 손해만 있습니다. 이것만으로 플레이어가 느끼진 않지만 서버 안 여러 단계에서 이런 지연이 쌓입니다.`;
     if (r.util > 0.8) return TR`${K.flag('warn')}가장 바쁜 코어가 <b>${K.pct(r.util)}</b>입니다. 아직 버림은 없지만 조금만 더 몰리면 링 버퍼가 넘칩니다. 추가 지연 ${fmtLat(r.lat)}.`;
     return TR`${K.flag('good')}도착한 패킷을 코어 ${P.rss}개가 나눠 받아 링 버퍼가 거의 비어 있습니다(가장 바쁜 코어 ${K.pct(r.util)}). NIC에서 생기는 추가 지연은 ${fmtLat(r.lat)}로 플레이어가 느낄 수 없는 수준입니다.`;
   }
