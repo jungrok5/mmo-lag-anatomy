@@ -645,7 +645,7 @@ Settled by the translators and the reviewers after the first pass. They extend s
 | 접속 대기열(backlog) | cola de conexiones pendientes (backlog) | The kernel accept queue. Never shortened to “cola de conexiones” |
 | 로그인 대기열 / 접속 대기열 시스템 (queue numbers) | cola de inicio de sesión | The game’s waiting line with positions |
 | 순간이동 (game feature: 텔레포트, warp) | teletransportación; verb “teletransportarse” | The symptom stays “Teletransporte” |
-| 재전송 | retransmisión: transport protocols only (TCP; the retransmission rules of reliable UDP) | Wi-Fi/radio link retries (무선 구간 재전송, 재시도) → “reenvíos” / “reintentos”. Relay → “servidor intermedio (relay)”, never “retransmisión” |
+| 재전송 | retransmisión: transport protocols only (TCP; the retransmission rules of reliable UDP) | Wi-Fi/radio link-layer retries (무선 구간 재전송, 재시도) → “reintentos” (“reintentos de la capa de enlace”, “Reintentos Wi-Fi”). Relay → “servidor intermedio (relay)”, never “retransmisión” |
 | 음영 지역 | zona sin cobertura | |
 | 간섭 (radio, software) | interferencias | Plural; “fuentes de interferencia” is fine |
 | 가입자 | abonado | “varios abonados comparten una IP” |
@@ -697,3 +697,5 @@ Settled by the translators and the reviewers after the first pass. They extend s
 | 저사양 모드 | modo de bajos requisitos | |
 | 아파트 단지 (analogy) | conjunto residencial | |
 | 타임스탬프 (TCP option) | marcas de tiempo | |
+| 한 자릿수 ms | unos pocos milisegundos (menos de 10 ms) | |
+| 150번 남짓 (and other …남짓) | algo más de 150 | Keep “a little over”; “unas 150” loses it |

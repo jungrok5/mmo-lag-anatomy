@@ -11,7 +11,7 @@
     {"ctx":"layers/client-os/what","ko":"CPU 스케줄링, 수신 버퍼, 전원 관리, 백그라운드 앱 일시 정지","t":"Planificación de CPU, búfer de recepción, gestión de energía, suspensión de apps en segundo plano"},
     {"ctx":"layers/home/name","ko":"집 네트워크","t":"Red doméstica"},
     {"ctx":"layers/home/short","ko":"와이파이·공유기","t":"Wi-Fi/router"},
-    {"ctx":"layers/home/what","ko":"무선 구간 재전송, 공유기 대기열, NAT 테이블","t":"Reenvíos en el tramo inalámbrico, cola del router, tabla NAT"},
+    {"ctx":"layers/home/what","ko":"무선 구간 재전송, 공유기 대기열, NAT 테이블","t":"Reintentos en el tramo inalámbrico, cola del router, tabla NAT"},
     {"ctx":"layers/isp/name","ko":"인터넷 회선","t":"Ruta por internet"},
     {"ctx":"layers/isp/short","ko":"통신사·해외","t":"ISP/internacional"},
     {"ctx":"layers/isp/side","ko":"가는 길","t":"En tránsito"},
