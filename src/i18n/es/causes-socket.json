@@ -18,7 +18,7 @@
     {"ctx":"causes/sk-hol/ref/2/n","ko":"재전송 타이머가 만료될 때마다 두 배로 늘리는 백오프","t":"Backoff que duplica el temporizador de retransmisión cada vez que expira"},
     {"ctx":"causes/sk-hol/ref/3/n","ko":"nstat이 보여 주는 카운터 이름: Tcp 그룹의 RetransSegs(재전송한 세그먼트 수)","t":"Nombres de contador que muestra nstat: RetransSegs (segmentos retransmitidos) del grupo Tcp"},
     {"ctx":"causes/sk-rto/t","ko":"TCP RTO와 지수 백오프","t":"RTO de TCP y backoff exponencial"},
-    {"ctx":"causes/sk-rto/s","ko":"재전송이 또 실패할 때마다 기다리는 시간이 두 배로 늘어, 짧은 회선 끊김이 긴 멈춤이 됩니다.","t":"Cada vez que una retransmisión vuelve a fallar, la espera se duplica, así que un corte breve de la conexión se convierte en un congelamiento largo."},
+    {"ctx":"causes/sk-rto/s","ko":"재전송이 또 실패할 때마다 기다리는 시간이 두 배로 늘어, 짧은 회선 끊김이 긴 멈춤이 됩니다.","t":"Cada vez que una retransmisión vuelve a fallar, la espera se duplica, así que un corte breve de la conexión se convierte en una detención larga."},
     {"ctx":"causes/sk-rto/c/0","ko":"회선이 잠깐 끊겨 재전송도 연달아 실패","t":"La conexión se corta un momento y las retransmisiones también fallan una tras otra"},
     {"ctx":"causes/sk-rto/c/1","ko":"다음 시도까지 0.3 → 0.6 → 1.2 → 2.4초처럼 두 배씩 늘어남(핑 100ms 기준)","t":"La espera hasta el siguiente intento se duplica cada vez: 0.3 → 0.6 → 1.2 → 2.4 s (con un ping de 100 ms)"},
     {"ctx":"causes/sk-rto/c/2","ko":"회선은 1초 끊겼는데 게임은 2초 넘게 멈춤. 더 길게 끊기면 결국 접속 끊김","t":"La conexión se cortó 1 segundo, pero el juego se congela más de 2. Si el corte dura más, acaba en desconexión"},
