@@ -21,7 +21,7 @@
     {"ctx":"src/sims/nic.js:48","ko":"/초","t":"/s"},
     {"ctx":"src/sims/nic.js:48","ko":"유저 1명이 초당 20~30개를 보냅니다. 150만 pps ≈ 5만~7만 명분이라 게임 서버 한 대보다는 게이트웨이·프록시 한 대가 받는 규모입니다.","t":"Cada jugador envía 20–30 por segundo. 1.5 millones de pps ≈ 50,000–70,000 jugadores: es la carga que recibe un gateway o un proxy, más que un solo servidor de juego."},
     {"ctx":"src/sims/nic.js:49","ko":"몰림 정도","t":"Intensidad de ráfagas"},
-    {"ctx":"src/sims/nic.js:49","ko":"평균은 같아도 짧은 순간에 몰려 들어옵니다(보스 등장, 광역 스킬).","t":"Mismo promedio, pero los paquetes llegan concentrados en instantes cortos (aparición de un boss, habilidades de área)."},
+    {"ctx":"src/sims/nic.js:49","ko":"평균은 같아도 짧은 순간에 몰려 들어옵니다(보스 등장, 광역 스킬).","t":"Mismo promedio, pero los paquetes llegan concentrados en instantes cortos (aparición de un jefe, habilidades de área)."},
     {"ctx":"src/sims/nic.js:50","ko":"클라우드 인스턴스 PPS 한도 (100만 pps)","t":"Límite de PPS de la instancia en la nube (1 millón de pps)"},
     {"ctx":"src/sims/nic.js:50","ko":"이 실험은 한도를 100만 pps로 가정합니다(실제 한도는 인스턴스마다 다르고 공개하지 않는 경우가 많음). 넘은 패킷은 NIC에 닿기 전에 버려지고, AWS라면 ethtool -S의 pps_allowance_exceeded에만 남습니다.","t":"Esta simulación supone un límite de 1 millón de pps (el límite real varía según la instancia y a menudo no se publica). Los paquetes que lo superan se descartan antes de llegar a la NIC; en AWS solo quedan registrados en pps_allowance_exceeded de ethtool -S."},
     {"ctx":"src/sims/nic.js:51","ko":"네트워크 카드 설정","t":"Configuración de la tarjeta de red"},

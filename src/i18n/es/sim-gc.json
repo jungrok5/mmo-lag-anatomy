@@ -35,7 +35,7 @@
     {"ctx":"src/sims/gc.js:58","ko":"개","t":" "},
     {"ctx":"src/sims/gc.js:59","ko":"1분당 멈춤 총합","t":"Pausa total por minuto"},
     {"ctx":"src/sims/gc.js:60","ko":"체감","t":"Sensación"},
-    {"ctx":"src/sims/gc.js:141","ko":"GC 1번에 ","t":"Cada GC: "},
+    {"ctx":"src/sims/gc.js:141","ko":"GC 1번에 ","t":"Pausa por GC: "},
     {"ctx":"src/sims/gc.js:146","ko":"Full GC는 {0}마다","t":"Full GC cada {0}"},
     {"ctx":"src/sims/gc.js:152","ko":"GC가 할당을 못 따라잡음","t":"El GC no sigue el ritmo de asignación"},
     {"ctx":"src/sims/gc.js:155","ko":"이 중 {0}초는 틱이 25% 느림","t":"Durante {0} s, ticks un 25% más lentos"},

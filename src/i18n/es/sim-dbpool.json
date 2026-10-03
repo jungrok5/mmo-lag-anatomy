@@ -95,7 +95,7 @@
     {"ctx":"src/sims/dbpool.js:335","ko":"커넥션 {0}개 중 평균 {1}개만 바쁩니다. 쿼리가 {2} 금방 끝나고, 핫 로우 잠금에도 여유가 있습니다. 요청 대부분이 <b>{3}</b> 안에 돌아옵니다.","t":"Conexiones ocupadas en promedio: solo {1} de {0}. Las consultas terminan enseguida porque {2}, y el bloqueo de la fila caliente tiene margen. La mayoría de las solicitudes vuelve en menos de <b>{3}</b>."},
     {"ctx":"src/sims/dbpool.js:335","ko":"인덱스를 타서","t":"usan el índice"},
     {"ctx":"src/sims/dbpool.js:335","ko":"풀 스캔인데도 요청이 적어","t":"hay pocas solicitudes, aunque se haga un escaneo completo"},
-    {"ctx":"src/sims/dbpool.js:349","ko":"잠금 기다림 {0}건 포함","t":"Esperando un bloqueo: {0}"},
+    {"ctx":"src/sims/dbpool.js:349","ko":"잠금 기다림 {0}건 포함","t":"Incluye {0} esperando un bloqueo"},
     {"ctx":"src/sims/dbpool.js:349","ko":"커넥션 기다림","t":"Esperando conexión"},
     {"ctx":"src/sims/dbpool.js:350","ko":"{0} 넘게 기다림","t":"Esperas de más de {0}"},
     {"ctx":"src/sims/dbpool.js:351","ko":"{0}개 중 평균 {1}개","t":"En promedio, {1} de {0}"}

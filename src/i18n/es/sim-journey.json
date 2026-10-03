@@ -142,7 +142,7 @@
     {"ctx":"src/sims/journey.js:203","ko":"월드 보스 (서버 과부하)","t":"World boss (servidor sobrecargado)"},
     {"ctx":"src/sims/journey.js:204","ko":"아이템 사용 + DB 혼잡","t":"Usar un objeto + BD saturada"},
     {"ctx":"src/sims/journey.js:207","ko":"총 지연","t":"Latencia total"},
-    {"ctx":"src/sims/journey.js:208","ko":"가장 큰 원인","t":"Mayor causa"},
+    {"ctx":"src/sims/journey.js:208","ko":"가장 큰 원인","t":"Causa principal"},
     {"ctx":"src/sims/journey.js:209","ko":"네트워크 비중","t":"Peso de la red"},
     {"ctx":"src/sims/journey.js:209","ko":"집 회선 + 인터넷","t":"Conexión de casa + internet"},
     {"ctx":"src/sims/journey.js:210","ko":"체감 등급","t":"Sensación"},

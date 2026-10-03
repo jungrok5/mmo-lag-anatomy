@@ -629,3 +629,71 @@ These Korean strings exist as whole entries both in the phase-1 groups (`data`, 
 - tú forms only; no vos, no usted, no vosotros; no regional slang; regional choices from section 4.
 - No article or agreeing adjective in front of a placeholder that receives a name; no gendered article with “PC”.
 - Run `node tools/i18n.cjs check es --warn` and `--conflicts`; number warnings are fine only where a Korean number word became digits or words.
+
+## 18. Decisions added during review
+
+Settled by the translators and the reviewers after the first pass. They extend sections 3 to 16; use them everywhere.
+
+| Korean | Spanish | Note |
+|---|---|---|
+| PC (내 PC, 유저 PC) | PC without article: “tu PC”, “en tu PC”, “su PC” | Never “el PC”, “la PC”, “del PC”, “un/una PC”, “mismo PC”. If an article is unavoidable: “la computadora” (“en la misma computadora”) |
+| 노트북 | computadora portátil | Feminine everywhere; “laptop” changes gender by country. Applies to sims too (sim-cpu) |
+| 국내 | en Corea | “en Corea va bien, pero …”, “servidor en Corea”. Never “en el país”, “nacional” |
+| 입력 지연 (lockstep/rollback setting) | retardo de input | “1–3 frames de retardo de input”. The symptom stays “Input lag” |
+| 서버·GC·VM·NIC·TCP가 멈춤 (the system stops) | pausa / detención / corte; verbs “se detiene”, “se pausa” | “Congelamiento” only for what the player sees (symptom name, `c` on-screen fragment, bold 멈춤 in tables) |
+| GC 전체 멈춤 | pausa stop-the-world del GC | As in the mem-gc title |
+| 접속 대기열(backlog) | cola de conexiones pendientes (backlog) | The kernel accept queue. Never shortened to “cola de conexiones” |
+| 로그인 대기열 / 접속 대기열 시스템 (queue numbers) | cola de inicio de sesión | The game’s waiting line with positions |
+| 순간이동 (game feature: 텔레포트, warp) | teletransportación; verb “teletransportarse” | The symptom stays “Teletransporte” |
+| 재전송 | retransmisión: transport protocols only (TCP; the retransmission rules of reliable UDP) | Wi-Fi/radio link retries (무선 구간 재전송, 재시도) → “reenvíos” / “reintentos”. Relay → “servidor intermedio (relay)”, never “retransmisión” |
+| 음영 지역 | zona sin cobertura | |
+| 간섭 (radio, software) | interferencias | Plural; “fuentes de interferencia” is fine |
+| 가입자 | abonado | “varios abonados comparten una IP” |
+| 페이즈 | phasing | Never “fase” for the feature |
+| 백본 / 가입자망 | red troncal / red de acceso | |
+| 스크러빙 센터 | centro de depuración (scrubbing) | |
+| 우회 라우팅 | enrutamiento con rodeos | “ruta alternativa (desvío)” stays for 우회 경로 |
+| 전파 지연 | retardo de propagación | |
+| 주소 체계 (IPv4/IPv6) | familia de direcciones | |
+| 인터넷 거점 | nodos de internet; PoP for a provider’s 거점 | |
+| 리졸버 | resolver de DNS | |
+| 기능 플래그 / 카나리 / 대조군 | feature flag / canario (despliegue canario) / grupo de control | |
+| 트래픽 지문 | huella del tráfico | |
+| 리스 (lease) | concesión (lease) | |
+| 경쟁 상태 | condición de carrera (race condition) | |
+| 대역 외 접속 | acceso fuera de banda (out-of-band) | |
+| 성능 분석 도구 | herramientas de perfilado | |
+| 로비 서버 / 월드 | servidores de lobby / mundos (Worlds) | |
+| 태평양 표준시 / 서머타임 | hora estándar del Pacífico / hora de verano del Pacífico | 12-hour clock with “a. m./p. m.” |
+| 확인 신호 / 먼저 부를 곳 (cases, playbooks) | Señales que revisar: / A quién llamar primero: | |
+| 통신사 에스컬레이션 | escalado de incidencias al ISP | |
+| 먼저 (owners table) | Primero | |
+| 주의 (#retrans settings table header) | Precauciones | Exception to “Atención” |
+| 시간 (time table header) | Tiempo | |
+| 누구에게 번지나 (#partial label) | Hasta dónde se extiende | |
+| 도구 (T1–T6 labels) | Herramientas | |
+| 용어 검색 안내 | “Escribe en el buscador en español o en inglés” | |
+| PC방 | cibercafé | |
+| 경매장 / 거래소 / 길드 / 던전 / 제작 / 우편함 | casa de subastas / mercado / gremio / mazmorra / fabricación / buzón | |
+| 보스 / 전멸 / 장비 (gear) / 소환물 | jefe (world boss stays) / wipe / equipamiento / invocaciones | |
+| 자동 사냥 | combate automático | |
+| 세션 키 버그 / 유령 접속 | sesión identificada por IP o dispositivo / sesión fantasma | |
+| 그래픽카드 메모리 / PC 메모리 | VRAM / RAM del sistema | |
+| 마우스 / TV / 패드 | mouse / televisor / controlador (driver = “driver”) | |
+| 게이밍 모니터 | monitor gaming | |
+| 개발 빌드 / 소크 테스트 / 프레임 페이싱 | build de desarrollo / soak tests / frame pacing | |
+| 저메모리 킬러 | low memory killer | |
+| 고정 타임스텝 따라잡기 폭주 | espiral de recuperación | |
+| 슬로 스타트 / 리슨 소켓 | slow start / socket de escucha | |
+| 스레드 덤프 / 코어 덤프 | volcado de hilos / core dump, crash dump | |
+| 라이브니스 검사 / 레디니스 | sonda de liveness / readiness probe | |
+| 포트 없음 (ICMP) | puerto inalcanzable | |
+| 반이중 / 자동 협상 / 늦은 충돌 | semidúplex / autonegociación / colisiones tardías | full-duplex stays |
+| MSS 조정 / TCP 정규화 / 경로 MTU 탐색 | ajuste de MSS (clamping) / normalización TCP / PMTUD, sondeo de MTU | |
+| 할당기 / 버퍼 풀 / 배치 | asignador / buffer pool / procesos batch | |
+| 성능 보장형 디스크 / 버스트하는 인스턴스 | IOPS aprovisionadas / instancias de rendimiento ampliable | |
+| 서비스 메시 / 인증서 고정 | malla de servicios / fijación de certificados (pinning) | |
+| 세대 번호 (entity ID) | número de generación | |
+| 저사양 모드 | modo de bajos requisitos | |
+| 아파트 단지 (analogy) | conjunto residencial | |
+| 타임스탬프 (TCP option) | marcas de tiempo | |

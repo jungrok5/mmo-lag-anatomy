@@ -2,6 +2,6 @@
   "lang": "es",
   "group": "meta",
   "entries": [
-    {"ctx":" meta@content","ko":"온라인 게임에서 화면이 끊기고, 순간이동하고, 접속이 끊기는 원인을 내 화면부터 서버 데이터베이스까지 층별로 해부하고 직접 조작하며 이해하는 백서. MMO 사례를 중심으로, 원인마다 담당 팀(게임개발팀·인프라팀)과 공신력 있는 출처를 담았습니다.","t":"Libro blanco sobre las causas del lag en juegos online: por qué hay tirones, teletransportes y desconexiones, analizado capa por capa desde tu pantalla hasta la base de datos del servidor y con simulaciones interactivas. Con casos de MMO, el equipo responsable de cada causa (desarrollo o infraestructura) y fuentes confiables."}
+    {"ctx":" meta@content","ko":"온라인 게임에서 화면이 끊기고, 순간이동하고, 접속이 끊기는 원인을 내 화면부터 서버 데이터베이스까지 층별로 해부하고 직접 조작하며 이해하는 백서. MMO 사례를 중심으로, 원인마다 담당 팀(게임개발팀·인프라팀)과 공신력 있는 출처를 담았습니다.","t":"Libro blanco sobre las causas del lag en juegos online: tirones, teletransportes y desconexiones, capa por capa, con casos de MMO y quién lo soluciona."}
   ]
 }

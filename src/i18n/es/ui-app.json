@@ -9,7 +9,7 @@
     {"ctx":"src/js/app.js:16","ko":"CPU 스케줄러 실험","t":"Simulación del planificador de CPU"},
     {"ctx":"src/js/app.js:16","ko":"버퍼블로트 실험","t":"Simulación de bufferbloat"},
     {"ctx":"src/js/app.js:17","ko":"거리·경로 실험","t":"Simulación de distancia y ruta"},
-    {"ctx":"src/js/app.js:17","ko":"장비별 유휴 타임아웃 실험","t":"Timeouts por inactividad de cada dispositivo"},
+    {"ctx":"src/js/app.js:17","ko":"장비별 유휴 타임아웃 실험","t":"Simulación de timeouts por inactividad"},
     {"ctx":"src/js/app.js:17","ko":"NIC 실험","t":"Simulación de la NIC"},
     {"ctx":"src/js/app.js:17","ko":"접속 폭주 실험","t":"Simulación de avalancha de conexiones"},
     {"ctx":"src/js/app.js:17","ko":"TCP vs UDP 실험","t":"Simulación TCP vs UDP"},
