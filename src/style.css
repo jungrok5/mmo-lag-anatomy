@@ -173,7 +173,12 @@ button { font: inherit; color: inherit; }
     transform: translateX(-102%); transition: transform .22s ease, visibility 0s linear .22s; box-shadow: 0 0 0 100vmax transparent;
     visibility: hidden; /* 닫힌 목차의 링크로 키보드 초점이 들어가지 않게 */
     padding-top: calc(22px + env(safe-area-inset-top, 0px));
+    /* 폰 브라우저의 100vh는 주소창이 숨었을 때 높이라 목차 끝(테마 단추)이 화면 밖으로 밀린다. 보이는 영역 기준(dvh)으로 맞추고 홈 바 영역만큼 더 띄운다 */
+    height: 100vh; height: 100dvh;
+    padding-bottom: calc(48px + env(safe-area-inset-bottom, 0px));
   }
+  /* dvh를 모르는 옛 브라우저: 주소창 높이만큼 끝에 여백을 더 둬서 마지막 단추까지 스크롤된다 */
+  @supports not (height: 100dvh) { .nav { padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px)); } }
   .nav.is-open { transform: none; box-shadow: 0 0 0 100vmax rgba(5, 10, 16, .45); visibility: visible; transition-delay: 0s; }
   .topbar {
     display: flex; align-items: center; gap: 12px;
