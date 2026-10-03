@@ -218,7 +218,7 @@
     {"ctx":"causes/isp-vpn/chk/yes","ko":"VPN·가속기를 켰을 때만 RTT·손실이 늘거나 접속이 막히고, traceroute에 중계 서버를 거치는 구간이 보임","t":"Solo con la VPN o el acelerador activado suben el RTT y la pérdida o se bloquea la conexión, y en traceroute aparecen saltos por el servidor intermedio"},
     {"ctx":"causes/isp-vpn/chk/no","ko":"끄고 켜도 같으면 회선·통신사 구간. 켰을 때 더 좋아지면 원래 통신사 경로(“우회 라우팅”, “피크 시간 피어링 구간 혼잡”) 문제","t":"Si da igual activarlo o no, apunta a la conexión o al tramo del ISP. Si con él activado va mejor, a un problema en la ruta original del ISP (“Enrutamiento con rodeos”, “Congestión del peering en horas pico”)"},
     {"ctx":"causes/isp-vpn/ref/0/n","ko":"망 중간 터널의 캡슐화 헤더 때문에 보낼 수 있는 크기가 줄어 생기는 단편화·경로 MTU 문제","t":"Problemas de fragmentación y de MTU de la ruta que aparecen cuando las cabeceras de encapsulación de los túneles dentro de la red reducen el tamaño que se puede enviar"},
-    {"ctx":"causes/isp-vpn/ref/1/n","ko":"UDP 같은 데이터그램 전송의 기본 안전 크기(BASE_PLPMTU)로 1,200바이트 권장","t":"Recomienda 1,200 bytes como tamaño seguro por defecto (BASE_PLPMTU) para transportes de datagramas como UDP"},
+    {"ctx":"causes/isp-vpn/ref/1/n","ko":"UDP 같은 데이터그램 전송의 기본 안전 크기(BASE_PLPMTU)로 1,200바이트 권장","t":"Se recomiendan 1,200 bytes como tamaño seguro básico (BASE_PLPMTU) para transportes de datagramas como UDP"},
     {"ctx":"causes/isp-vpn/ref/2/n","ko":"다른 나라 거점을 거칠 때 더해지는 왕복 지연 규모: 서울–도쿄 30ms, 서울–홍콩 39ms, 서울–싱가포르 68ms","t":"Latencia de ida y vuelta que se suma al pasar por un punto de presencia en otro país: Seúl–Tokio 30 ms, Seúl–Hong Kong 39 ms, Seúl–Singapur 68 ms"}
   ]
 }

@@ -55,7 +55,7 @@
     {"ctx":"causes/in-subservice/s","ko":"채팅·파티·경매장처럼 게임 서버와 따로 도는 서버에 장애가 나면 그 기능만 동작하지 않습니다.","t":"Jika server yang berjalan terpisah dari server game, seperti server chat, party, atau balai lelang, mengalami gangguan, hanya fitur itu yang tidak berfungsi."},
     {"ctx":"causes/in-subservice/c/0","ko":"기능 전용 서버가 느려지거나 죽음","t":"Server khusus fitur melambat atau mati"},
     {"ctx":"causes/in-subservice/c/1","ko":"해당 기능 요청만 응답 없음","t":"Hanya permintaan untuk fitur itu yang tidak mendapat respons"},
-    {"ctx":"causes/in-subservice/c/2","ko":"채팅 안 됨, 파티 초대 무반응, 거래소 무한 로딩(전투는 정상)","t":"Chat tidak jalan, undangan party tidak direspons, bursa loading tanpa henti (pertempuran tetap normal)"},
+    {"ctx":"causes/in-subservice/c/2","ko":"채팅 안 됨, 파티 초대 무반응, 거래소 무한 로딩(전투는 정상)","t":"Chat tidak jalan, undangan party tidak direspons, market loading tanpa henti (pertempuran tetap normal)"},
     {"ctx":"causes/in-subservice/act/game","ko":"실패해도 게임은 계속되게 설계, 기능별 상태 표시, 여러 기능을 중앙 서버 한 대에 몰지 않기.","t":"Rancang agar game tetap berjalan meskipun fitur itu gagal, tampilkan status per fitur, jangan memusatkan banyak fitur di satu server pusat."},
     {"ctx":"causes/in-subservice/act/infra","ko":"부가 서버별 헬스체크·경보, 이중화와 자동 재시작.","t":"Pasang health check dan alert per server pendukung, siapkan redundansi dan restart otomatis."},
     {"ctx":"causes/in-subservice/more","ko":"파티·길드·귓속말·서버 간 이동을 한 대의 중앙 서버(월드·매니저 서버)가 모두 중계하는 구조라면, 그 서버 하나가 느려질 때 여러 기능이 한꺼번에 멈춥니다.","t":"Jika satu server pusat (server world atau server manager) menjadi perantara untuk party, guild, whisper, dan perpindahan antarserver sekaligus, banyak fitur berhenti bersamaan saat server itu saja melambat."},
